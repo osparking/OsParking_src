@@ -1,0 +1,20 @@
+JCalendar Project
+
+/* 
+ * Whole JCalendar Project Original Writer
+ *
+ *  Copyright (C) 2006 Kai Toedter
+ *  kai@toedter.com
+ *  www.toedter.com
+ */
+
+/*
+ * Modified partly and became part of OSParking (Parking Lot Management Software) Simulator Package
+ * 
+ * Modified by: Open Source Parking, Inc.
+ * 
+ * Phone: 82-2-858-9168
+ * E-mail: jbpark03@gmail.com
+ * Address: (2nd FLR) 10, Gangnam-daero 45-gil, Secho-gu, Seoul, S.Korea(Zip 06729) 
+Homepage: http://www.osparking.com/
+ */

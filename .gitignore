@@ -1,0 +1,38 @@
+﻿#
+### Java ###
+*.class
+#
+# Package Files # -- patterns w/o slash applies everywhere in this directory and below.
+*.jar
+*.war
+*.ear
+*.log
+*.swp
+ANPRS*.*
+# Don't ignore the following jar file.
+!/lib/rs2xml.jar
+#
+# Mobile Tools for Java (J2ME)
+.mtj.tmp/
+#
+# specific file at specific location
+/OSParking/nbactions.xml
+#
+#
+# specific file everywhere
+#
+**/nbactions.xml
+#
+#
+# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
+hs_err_pid*
+#
+#
+# any directories named 'log' or 'target'
+log/
+target/
+#
+#
+# current directory specific folder
+/Statistics/lib
+#
