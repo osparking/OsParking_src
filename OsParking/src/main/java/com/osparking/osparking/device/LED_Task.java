@@ -129,8 +129,9 @@ public class LED_Task extends TimerTask {
                                 gateDeviceTypes[gateNo].cameraType == OSP_enums.CameraType.Blackfly)
                         {
                             BlackFlyManager bfMan = (BlackFlyManager)deviceManagers[typeNo][gateNo];
-                            bfMan.findCamera(); //  connectCamera(gateNo);
-                            bfMan.initBusanANPR();
+                            if (bfMan.findCamera() > 0) {
+                                bfMan.initBusanANPR();
+                            }
                         }
                     }
                     //</editor-fold>
