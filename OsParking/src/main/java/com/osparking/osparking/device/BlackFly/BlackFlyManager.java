@@ -16,6 +16,7 @@
  */
 package com.osparking.osparking.device.BlackFly;
 
+import static com.osparking.global.Globals.DEBUG;
 import static com.osparking.global.Globals.gfinishConnection;
 import static com.osparking.global.Globals.logParkingException;
 import static com.osparking.global.Globals.logParkingOperation;
@@ -32,6 +33,7 @@ import com.sun.jna.Platform;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.UnsupportedEncodingException;
+import java.lang.reflect.Field;
 import java.net.Socket;
 import java.util.Arrays;
 import java.util.logging.Level;
@@ -62,9 +64,6 @@ public class BlackFlyManager extends Thread implements
     PGRGuid guid = new PGRGuid(); //It is used to uniquely identify a camera. 
     GigECamera camera = new GigECamera();
     static BusManager busMgr = new BusManager(); 
-    static {
-        System.out.println("java.library.path" + System.getProperty("java.library.path"));
-    }
     static int[] numCameras = new int[1];
     boolean neverBeenConnected = true;
     public Object takePicture = new Object();
@@ -123,7 +122,8 @@ public class BlackFlyManager extends Thread implements
      */
     static final double V_TILT_ANGLE = 0.0;   
     
-    static final String LPR_FOLDER = "C:/osparking/LIB/";
+    static final String LPR_FOLDER = 
+            System.getProperty("user.dir") + File.separator + "LIB";
     
     public BlackFlyManager(ControlGUI mainForm, byte cameraID) {
         super("osp_Camera_" + cameraID + "_Manager");
@@ -131,24 +131,39 @@ public class BlackFlyManager extends Thread implements
         this.cameraID = cameraID;
         
         fw = mainForm.getIDLogFile()[Camera.ordinal()][cameraID];
-        String dllPath = "";
+        String dllName = "";
         if (Platform.isWindows())
-            dllPath = LPR_FOLDER + "ANPRS_OCR";
+            dllName = "ANPRS_OCR";
         else
-            dllPath = LPR_FOLDER + "ANPRS_OCR_Linux";
+            dllName = "ANPRS_OCR_Linux";
         
-        String dllPathExt = dllPath + ".dll";
+        String dllPathExt = LPR_FOLDER + File.separator + dllName + ".dll";
         File dF = new File(dllPathExt);
         
         if (dF.exists() && !dF.isDirectory()) { 
             try {
-                recognizer = (LPR_DLL) Native.loadLibrary(dllPath, LPR_DLL.class);
+                if (DEBUG) {
+                    System.setProperty("jna.debug_load", "true");
+                    System.setProperty("jna.debug_load.jna", "true");
+                }
+//                System.setProperty("jna.platform.library.path", LPR_FOLDER);
+                System.setProperty("jna.library.path", LPR_FOLDER);
+                if (DEBUG) {
+                    System.setProperty("java.library.path", LPR_FOLDER);
+//                    System.loadLibrary(dllName);
+                }
+                recognizer = (LPR_DLL) Native.loadLibrary(dllName, LPR_DLL.class);
                 if (this.cameraID <= numCameras[0]) {
-                    findCamera();
-                    initBusanANPR();
+                    if (findCamera() > 0) {
+                        initBusanANPR();
+                    }
                 } else {
                     logParkingException(Level.WARNING, null, 
                             "Connected camera is not enough", cameraID);
+                    String msg = "Connected camera is not enough" + System.lineSeparator() +
+                            System.lineSeparator() + "※OsParking has trouble in starting";
+                    JOptionPane.showMessageDialog(mainForm, msg,
+                            ERROR_DIALOGTITLE.getContent(), JOptionPane.WARNING_MESSAGE);                    
                 }
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(mainForm, "LPR, excep: " + ex.getMessage());
@@ -157,11 +172,11 @@ public class BlackFlyManager extends Thread implements
             String msg = FILE_PATH.getContent() + dllPathExt + System.lineSeparator() +
                     System.lineSeparator() + "※LPR would not function properly";
             JOptionPane.showMessageDialog(mainForm, msg,
-                            MISSING_FILE_DIALOGTITLE.getContent(), 
-                            JOptionPane.WARNING_MESSAGE);               
+                            MISSING_FILE_DIALOGTITLE.getContent(),
+                            JOptionPane.WARNING_MESSAGE);
         }
     }
-    
+
     public void run() {
         Error error = camera.StartCapture();
         
@@ -299,7 +314,7 @@ public class BlackFlyManager extends Thread implements
         final int SY_V_ANGLE = 2; // vertical angle
         boolean r1 = false, r2 = false, r3 = false, r4 = false;
 
-        String datPathExt = LPR_FOLDER + "ANPRS.dat";
+        String datPathExt = LPR_FOLDER + File.separator + "ANPRS.dat";
         File dF = new File(datPathExt);
         
         if (dF.exists() && !dF.isDirectory()) 
@@ -330,18 +345,24 @@ public class BlackFlyManager extends Thread implements
                     logParkingException(Level.SEVERE, null, "LPR module init failure", cameraID);
                 }
             } else {
-                String msg = "ANPRS Initialization Failure" + System.lineSeparator() +
-                        System.lineSeparator() + "※LPR would not function properly";
-                JOptionPane.showMessageDialog(mainForm, msg,
-                        ERROR_DIALOGTITLE.getContent(), JOptionPane.WARNING_MESSAGE);
+                if (datFileMissingWarningPopupCount++ < 2) {
+                    String msg = "ANPRS Initialization Failure" + System.lineSeparator() +
+                            System.lineSeparator() + "※LPR would not function properly";
+                    JOptionPane.showMessageDialog(mainForm, msg,
+                            ERROR_DIALOGTITLE.getContent(), JOptionPane.WARNING_MESSAGE);
+                }
             }
         } else {
-            String msg = FILE_PATH.getContent() + datPathExt + System.lineSeparator() +
-                    System.lineSeparator() + "※LPR would not function properly";
-            JOptionPane.showMessageDialog(mainForm, msg,
-                    MISSING_FILE_DIALOGTITLE.getContent(), JOptionPane.WARNING_MESSAGE);
+            if (datFileMissingWarningPopupCount++ < 2) {
+                String msg = FILE_PATH.getContent() + datPathExt + System.lineSeparator() +
+                        System.lineSeparator() + "※LPR would not function properly";
+                JOptionPane.showMessageDialog(mainForm, msg,
+                        MISSING_FILE_DIALOGTITLE.getContent(), JOptionPane.WARNING_MESSAGE);
+            }
         }
     }
+    
+    static int datFileMissingWarningPopupCount = 0;
 
     /**
      * @return the disconnected
@@ -361,12 +382,12 @@ public class BlackFlyManager extends Thread implements
         return takePicture;
     }
 
-    public void findCamera() {
+    public int findCamera() {
         int[] numCameras = new int[1];
         busMgr.GetNumOfCameras(numCameras);
-        int NumOfCameras = numCameras[0];
+        int numOfCameras = numCameras[0];
 
-        if (NumOfCameras == 0) {
+        if (numOfCameras == 0) {
             logParkingException(Level.WARNING, null, "카메라가 보이지 않습니다.", cameraID);
         } else {
             for (int i = 0; i < numCameras[0]; i++) {
@@ -389,6 +410,7 @@ public class BlackFlyManager extends Thread implements
                 }                
             }
         }
+        return numOfCameras;
     }
 
     private String convert2string(byte[] carTagArr) {
