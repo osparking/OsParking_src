@@ -1,0 +1,3 @@
+Main Class : com.osparking.osparking.ControlGUI
+Arguments : -classpath %classpath com.osparking.osparking.ControlGUI -debug -version:develop -random_attendant
+VM Options: -Xmx260m -Xms120m -Xmn180m -XX:+UseConcMarkSweepGC -XX:ParallelCMSThreads=2
