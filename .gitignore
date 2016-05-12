@@ -28,9 +28,10 @@ ANPRS*.*
 hs_err_pid*
 #
 #
-# any directories named 'log' or 'target'
+# any directories named 'log', 'target', or 'LIB'
 log/
 target/
+LIB/
 #
 #
 # current directory specific folder
