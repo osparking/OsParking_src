@@ -32,4 +32,4 @@ Additionally Needed Softwares for the Developers
 
 4. (Optionally) Toad for MySQL 7.5.0 or later
 
-Detailed [Installation Instruction!](http://www.osparking.com/bbs/board.php?tbl=bbs3&mode=VIEW&num=60&category=&findType=&findWord=&sort1=&sort2=&it_id=&shop_flag=&mobile_flag=&page=1) is available only in Korean as of May 13, 2016.
+Detailed [Installation Instruction](http://www.osparking.com/bbs/board.php?tbl=bbs3&mode=VIEW&num=60&category=&findType=&findWord=&sort1=&sort2=&it_id=&shop_flag=&mobile_flag=&page=1) is available only in Korean as of May 13, 2016.
