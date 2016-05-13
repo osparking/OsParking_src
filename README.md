@@ -20,6 +20,8 @@ Softwares Needed to Run OsParkingCam
 
 3. ANPRS LPR module (Proprietary S/W, need to be purchased seperately)
 
+4. Point Grey SDK 
+
 Additionally Needed Softwares for the Developers
 
 1. IDE used: netbeans 8.0.2 or later
@@ -30,11 +32,4 @@ Additionally Needed Softwares for the Developers
 
 4. (Optionally) Toad for MySQL 7.5.0 or later
 
--
-
-After the Maven is installed, the rs2xml.jar need to be registered manually as follows(this jar file is in 'lib' folder of this repository):
-
->C:\DOS> // first move to the directory where this jar file exists
-
->C:\DOS> mvn install:install-file -Dfile=rs2xml.jar -DgroupId=net.proteanit.sql -DartifactId=rs2xml -Dversion=1.0 -Dpackaging=jar
-.
+Detailed [Installation Instruction!](http://www.osparking.com/bbs/board.php?tbl=bbs3&mode=VIEW&num=60&category=&findType=&findWord=&sort1=&sort2=&it_id=&shop_flag=&mobile_flag=&page=1) is available only in Korean as of May 13, 2016.
