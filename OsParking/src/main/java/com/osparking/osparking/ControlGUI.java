@@ -94,6 +94,8 @@ import com.osparking.global.names.IDevice;
 import com.osparking.global.names.IDevice.IE_Board;
 import static com.osparking.global.names.OSP_enums.GateBarType.NaraBar;
 import com.osparking.osparking.device.BlackFly.BlackFlyManager;
+import static com.osparking.osparking.device.BlackFly.BlackFlyManager.ImgHeight;
+import static com.osparking.osparking.device.BlackFly.BlackFlyManager.ImgWidth;
 import com.osparking.osparking.device.LED_Task;
 import com.osparking.osparking.device.LEDnotice.FinishLEDnoticeIntrTask;
 import com.osparking.osparking.device.LEDnotice.LEDnoticeManager;
@@ -163,6 +165,7 @@ import javax.swing.border.TitledBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import org.bytedeco.javacpp.FlyCapture2;
+import static org.bytedeco.javacpp.FlyCapture2.PIXEL_FORMAT_BGR;
 
 /**
  * Main GUI of OsParking -- Open Source Parking Lot Management Program which is
@@ -1866,8 +1869,8 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
             }
     }
 
-    public void processCarEntry(byte gateNo, int imageID, String tagRecognized, BufferedImage carImage, 
-            FlyCapture2.Image blackFlyImage) 
+    public void processCarEntry(byte gateNo, int imageID, String tagRecognized, 
+            BufferedImage carImage, FlyCapture2.Image blackFlyImage) 
     {
         Date arrivalTime = Calendar.getInstance().getTime();
         StringBuffer tagRegistered = new StringBuffer();
@@ -1934,10 +1937,11 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
         int[] bandMasks = {0xFF};
         WritableRaster ras = Raster.createPackedRaster(
                 buffer, width, height, width, bandMasks, null);
-                
+
         rawImage.GetData().get(pxBytes);
         for (int i = 0; i < pxBytes.length; i++) {
-            pxInts[i] = pxBytes[i];
+            // Reverse pixel order to display image naturally
+            pxInts[i] = pxBytes[pxBytes.length - i - 1];
         }
         ras.setPixels(0, 0, width, height, pxInts);
         bufferedImage.setData(ras);   

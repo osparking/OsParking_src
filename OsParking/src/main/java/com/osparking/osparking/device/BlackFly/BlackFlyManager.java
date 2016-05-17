@@ -347,7 +347,7 @@ public class BlackFlyManager extends Thread implements
             } else {
                 if (datFileMissingWarningPopupCount++ < 2) {
                     String msg = "ANPRS Initialization Failure" + System.lineSeparator() +
-                            System.lineSeparator() + "※LPR would not function properly";
+                            System.lineSeparator() + "※Check if USB keylock inserted";
                     JOptionPane.showMessageDialog(mainForm, msg,
                             ERROR_DIALOGTITLE.getContent(), JOptionPane.WARNING_MESSAGE);
                 }
@@ -484,16 +484,12 @@ public class BlackFlyManager extends Thread implements
         
         FlyCapture2.Image bgrImage = new FlyCapture2.Image();
         byte[] imageBytes = new byte[ImgWidth * ImgHeight * 3];  
-        byte[] imageBytesRvd = new byte[ImgWidth * ImgHeight * 3];
                 
         rawImage.Convert(PIXEL_FORMAT_BGR , bgrImage);
         bgrImage.GetData().get(imageBytes);
-        for (int i=0; i < imageBytes.length; i++) {
-            imageBytesRvd[i] = imageBytes[imageBytes.length - 1 - i];
-        }
 
         // record start time here
-        recognizer.syExec_ANPRSm(imageBytesRvd, ImgWidth, ImgHeight, 
+        recognizer.syExec_ANPRSm(imageBytes, ImgWidth, ImgHeight, 
                 carTagArr, iPlateType, iLeft, iTop, iRight, iBottom);
 
         // determine the length of pure car tag number
