@@ -1,8 +1,5 @@
 #OsParkingCam- Korean, English, 3 real devices
 
-Incorporated newly applied camera firmware which makes image byte order reversing needless.
-However, the new firmware isn't yet publicly announced. Still, I want to save the upgrade in Github.
-
 OsParkingCam- supports both English & Korean GUI, simulator and real hardware idevice support fo 3 kinds of devices(camera, E-board and gate bari), needs OsParking-DB(another OsParking repository)
 
 OsParking (pronounced 'Oz' Parking, as in The Wizard of Oz) is an Open Source Parking Lot Management Software. In an extended sense, it is a term which describes a simulation package that includes OsParking(manager) and three device simulators(Camera, E-Board, GateBar).
