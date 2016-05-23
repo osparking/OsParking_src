@@ -2,7 +2,7 @@
 
 OsParking(ff) supports both English & Korean GUI, simulator and real hardware idevice support fo 3 kinds of devices(camera, E-board and gate bari), needs OsParking-DB(another OsParking repository)
 
-OsParking (\ˈäz...\)pronounced 'Oz'Parking, as in The Wizard of Oz) is an Open Source Parking Lot Management Software. In an extended sense, it is a term which describes a simulation package that includes OsParking(manager) and three device simulators(Camera, E-Board, GateBar).
+OsParking (\ˈäz...\ˈ)pronounced 'Oz'Parking, as in The Wizard of Oz) is an Open Source Parking Lot Management Software. In an extended sense, it is a term which describes a simulation package that includes OsParking(manager) and three device simulators(Camera, E-Board, GateBar).
 
 OsParking software assumes the use of LPR (License Plate Recognition) module to recognize car tag numbers.
 
