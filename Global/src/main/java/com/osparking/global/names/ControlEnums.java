@@ -80,7 +80,6 @@ public class ControlEnums {
         REQUIRED1_LABEL(": 필수",  ": Required"), 
         REQUIRED2_LABEL(": 최소 1",  ": Choose 1"),
         USER_ID_LABEL("사용자 ID: ",  "My ID: "),
-        ADMIN_LABEL("매니저",  "Manager"),
         NAME_LABEL("이름",  "Name"),
         CELL_PHONE_LABEL("휴대전화",  "Cell Phone"),
         PHONE_LABEL("유선전화",  "Phone"),

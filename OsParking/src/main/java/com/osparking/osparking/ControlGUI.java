@@ -38,6 +38,7 @@ import static com.osparking.global.names.ControlEnums.MenuITemTypes.DRIVERS_MENU
 import static com.osparking.global.names.ControlEnums.MenuITemTypes.LOGIN_MENU;
 import static com.osparking.global.names.ControlEnums.MenuITemTypes.LOGIN_MENU_ITEM;
 import static com.osparking.global.names.ControlEnums.MenuITemTypes.LOGIN_RECORD_MENU_ITEM;
+import static com.osparking.global.names.ControlEnums.MenuITemTypes.LOGOUT_MENU;
 import static com.osparking.global.names.ControlEnums.MenuITemTypes.LOGOUT_MENU_ITEM;
 import static com.osparking.global.names.ControlEnums.MenuITemTypes.MANAGER_MANU;
 import static com.osparking.global.names.ControlEnums.MenuITemTypes.MANAGE_MENU_ITEM;
@@ -558,13 +559,13 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
     private void changeLogIOitemVisibility() {
         if (Globals.loginID == null) {
             MenuItems_setEnabled(false);
-            LogInOutMenu.setText("<HTML>Log <U>I</U>n</HTML>");
+            LogInOutMenu.setText(LOGIN_MENU.getContent()); 
             UserIDLabelMenu.setText(IDBeforeLogin);
-            IsManagerLabelMenu.setText("Manager : -  ");
+            IsManagerLabelMenu.setText("Manager : X  ");
         } else {
             MenuItems_setEnabled(true);
             
-            LogInOutMenu.setText("<HTML>Log <U>O</U>ut</HTML>");
+            LogInOutMenu.setText(LOGOUT_MENU.getContent());
             UserIDLabelMenu.setText("ID: " + Globals.loginID);
             if(isManager)
                 IsManagerLabelMenu.setText("Manager : O  ");

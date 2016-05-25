@@ -418,7 +418,7 @@ public class AttListForm extends javax.swing.JFrame {
         topInPanel.add(filler2);
 
         adminAuth2CheckBox.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        adminAuth2CheckBox.setText(ADMIN_LABEL.getContent());
+        adminAuth2CheckBox.setText(MANAGER_HEADER.getContent());
         adminAuth2CheckBox.setToolTipText("");
         adminAuth2CheckBox.setEnabled(false);
         adminAuth2CheckBox.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
@@ -570,7 +570,7 @@ public class AttListForm extends javax.swing.JFrame {
 
         adminAuthLabel.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         adminAuthLabel.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        adminAuthLabel.setText(ADMIN_LABEL.getContent());
+        adminAuthLabel.setText(MANAGER_HEADER.getContent());
         adminAuthLabel.setToolTipText("");
         adminAuthLabel.setMaximumSize(new java.awt.Dimension(130, 21));
         adminAuthLabel.setMinimumSize(new java.awt.Dimension(130, 21));
