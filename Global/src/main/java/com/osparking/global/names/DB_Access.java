@@ -298,16 +298,6 @@ public class DB_Access {
                 EBD_flowCycle = rs.getInt("EBD_flow_cycle");
                 EBD_blinkCycle = rs.getInt("EBD_blink_cycle");
             }
-
-//            for(int i = 0; i < tableHeader.length; i++){
-//                inData = tableHeader[i];
-//                TableHeaderList.add(i, inData);
-//            }
-
-//            for(int i = 0; i < comboBoxItem.length; i++){
-//                inData = comboBoxItem[i];
-//                ComboBoxItemList.add(i, inData);
-//            }
         } catch (SQLException ex) {
             logParkingException(Level.SEVERE, ex, "(Loading System Settings from the DB)");
         } finally {

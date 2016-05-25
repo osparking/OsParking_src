@@ -2644,6 +2644,10 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
      * @return the loginForm
      */
     public LoginForm getLoginForm() {
+        if (loginForm != null) {
+            loginForm.getPassword().setText("");
+            loginForm.getUserIDText().setText("");
+        }
         return loginForm;
     }
 

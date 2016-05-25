@@ -223,18 +223,18 @@ public class LoginForm extends JFrame {
     {
         //<editor-fold defaultstate="collapsed" desc="-- Request ID and PW textboxes be filled">
         // Check if both user ID and password were entered.
-        if (userIDText.getText().length() == 0)            
+        if (getUserIDText().getText().length() == 0)            
         {
             showMessageDialog(null, INPUT_ID_DIALOG.getContent());
             return;
-        } else if (password.getPassword().length== 0) 
+        } else if (getPassword().getPassword().length== 0) 
         {
             showMessageDialog(null, INPUT_PW_DIALOG.getContent());
             return;            
         }        
         //</editor-fold>
         
-        boolean checkGood = loginCheckGood(userIDText.getText(), new String(password.getPassword()));
+        boolean checkGood = loginCheckGood(getUserIDText().getText(), new String(getPassword().getPassword()));
 
         if (checkGood) {
             dispose();
@@ -351,4 +351,18 @@ public class LoginForm extends JFrame {
     private javax.swing.JPasswordField password;
     private javax.swing.JTextField userIDText;
     // End of variables declaration//GEN-END:variables
+
+    /**
+     * @return the password
+     */
+    public javax.swing.JPasswordField getPassword() {
+        return password;
+    }
+
+    /**
+     * @return the userIDText
+     */
+    public javax.swing.JTextField getUserIDText() {
+        return userIDText;
+    }
 }
