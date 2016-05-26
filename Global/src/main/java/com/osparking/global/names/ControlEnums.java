@@ -35,6 +35,7 @@ public class ControlEnums {
     }
     
     public enum TitleTypes {
+        LOGIN_DIALOG_TITLE("오즈파킹 로그인", "OsParking Login"),
         LOGIN_FRAME_TITLE("주차관리 로그인", "Attendant Login"),
         ATTLIST_FRAME_TITLE("사용자 정보관리 및 목록", "User List Management"),
         AFFILI_BUILD_FRAME_TITLE("소속 및 건물", "Affiliation and Building"),
