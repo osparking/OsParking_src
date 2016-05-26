@@ -93,6 +93,7 @@ public class LoginDialog extends javax.swing.JDialog {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         userIDText.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        userIDText.setText("admin");
         userIDText.setPreferredSize(new java.awt.Dimension(80, 30));
 
         ID_Label.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
@@ -139,6 +140,7 @@ public class LoginDialog extends javax.swing.JDialog {
         });
 
         password.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        password.setText("1234");
         password.setPreferredSize(new java.awt.Dimension(80, 30));
         password.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
@@ -279,6 +281,7 @@ public class LoginDialog extends javax.swing.JDialog {
             System.exit(0);
         }        
     }
+    
     private void closeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_closeButtonActionPerformed
         disposeAndOptionalExit();
     }//GEN-LAST:event_closeButtonActionPerformed

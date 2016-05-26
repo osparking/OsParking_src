@@ -120,6 +120,7 @@ public class AttListForm extends javax.swing.JFrame {
     private static Logger logOperation = null;
     private PasswordValidator pwValidator; 
     ParentGUI mainGUI;
+    boolean isStandalone = false;
     
     /**
      * Creates new form AttListForm
@@ -1447,9 +1448,16 @@ public class AttListForm extends javax.swing.JFrame {
     private void closeFormButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_closeFormButtonActionPerformed
         if (mainGUI != null)
             mainGUI.clearAttendantManageForm();
-        dispose();
+        disposeAndOptionalExit();
     }//GEN-LAST:event_closeFormButtonActionPerformed
 
+    private void disposeAndOptionalExit() {
+        dispose();
+        if (isStandalone) {
+            System.exit(0);
+        }        
+    }    
+    
     private void saveTextFileButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveTextFileButtonActionPerformed
         try {
             saveFileName.setSelectedFile(new File("User List"));
@@ -2071,6 +2079,7 @@ public class AttListForm extends javax.swing.JFrame {
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         if (mainGUI != null)
             mainGUI.clearAttendantManageForm();
+        disposeAndOptionalExit();        
     }//GEN-LAST:event_formWindowClosing
 
     private void CreateAttendantListTextFile(String filename) {
@@ -2927,11 +2936,11 @@ public class AttListForm extends javax.swing.JFrame {
             public void run() {
                 try {
                     storePassingDelay = true;
-                    LoginDialog loginDialog = new LoginDialog(new javax.swing.JFrame(), true);
+                    shortLicenseDialog(null, "Attendant Program", "upper left");
+                    LoginDialog loginDialog = new LoginDialog(null, true);
                     loginDialog.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
                     loginDialog.addLoginEventListener(new LoginEventListener() {
                         public void loginEventOccurred(LoginWindowEvent w) {
-
                             Globals.loginID = w.getUID();
                             Globals.loginPW = w.getPW();
                             Globals.isManager = w.getIsManager();
@@ -2942,36 +2951,14 @@ public class AttListForm extends javax.swing.JFrame {
                                 public void windowOpened( WindowEvent e ){
                                     attendantsForm.searchText.requestFocus();
                                 }
-                            });                            
-                            
+                            }); 
+                            attendantsForm.isStandalone = true;
                             attendantsForm.setVisible(true); 
                         }
                     });
+                    loginDialog.setLocationRelativeTo(null);
                     loginDialog.setVisible(true);
-                    shortLicenseDialog(null, "Attendant Program", "upper left");                    
                     storePassingDelay = true;
-//                    LoginForm loginForm = new LoginForm();
-//                    loginForm.setDefaultCloseOperation(EXIT_ON_CLOSE);
-//                    loginForm.setVisible(true);
-//                    loginForm.addLoginEventListener(new LoginEventListener() {
-//                        public void loginEventOccurred(LoginWindowEvent w) {
-//
-//                            Globals.loginID = w.getUID();
-//                            Globals.loginPW = w.getPW();
-//                            Globals.isManager = w.getIsManager();
-//                            final AttListForm attendantsForm = new AttListForm(null,
-//                                    Globals.loginID, Globals.loginPW, Globals.isManager);
-//                            attendantsForm.setDefaultCloseOperation(EXIT_ON_CLOSE);
-//                            attendantsForm.addWindowListener( new WindowAdapter() {
-//                                public void windowOpened( WindowEvent e ){
-//                                    attendantsForm.searchText.requestFocus();
-//                                }
-//                            });                            
-//                            
-//                            attendantsForm.setVisible(true); 
-//                        }
-//                    });
-//                    shortLicenseDialog(loginForm, "Attendant Program", "upper left");
                 } catch (Exception ex) {
                 }
             }
