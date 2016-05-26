@@ -523,7 +523,7 @@ public class ControlEnums {
         CURRENT_DIALOG("변경 전", "Current"),
         MODIFY_DIALOG("변경 후", "Modified"),
         SAVE_DIALOG("저장되었습니다.", "Saved"),
-        LOGIN_FAIL_DIALOG("아이디 혹은 비밀번호가 일치 하지 않습니다..", "ID or Password is wrong!"),
+        LOGIN_WRONG_DIALOG("아이디 혹은 비밀번호가 틀립니다!", "ID or Password is wrong!"),
         INPUT_ID_DIALOG("\"아이디\"를 입력하세요.", "Enter \'Login ID\'!"),
         INPUT_PW_DIALOG("\"비밀번호\"를 입력하세요.", "Enter \'Password\'"),
         

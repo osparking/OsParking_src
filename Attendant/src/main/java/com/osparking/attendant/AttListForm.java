@@ -2891,35 +2891,6 @@ public class AttListForm extends javax.swing.JFrame {
         SetAColumnWidth(tcm.getColumn(6), 10, 120, 32767); // 6: Latest modification date and time
     }
     
-//    private String getTextFor(ControlEnums.DialogMSGTypes msgType, String str) {
-//    private String getTextFor(AttListDialogType dialogType, String str) {
-//        String label = null;
-//        
-//        switch (dialogType) {
-//           
-//            case SAVE_AS_FILE_FAILURE_DIALOG:
-//            switch (parkingLotLocale.getLanguage()) {
-//                case "ko":
-//                    label = SAVE_AS_EXIST_DIALOG.getContent() + System.lineSeparator() +
-//                            str + System.lineSeparator() + 
-//                            SAVE_OVERWRITE_DIALOG.getContent();
-//                    break;
-//                default:
-//                    label = "A folder(=directory) of same name exists" +
-//                            System.lineSeparator() + 
-//                            str + "\nChange file name to a different one";
-//                    break;
-//                }
-//                break;                        
-//
-//            default :
-//                break;
-//            
-//        
-//        }
-//        return label;
-//    }
-    
     /**
      * @param args the command line arguments
      */
@@ -2956,10 +2927,9 @@ public class AttListForm extends javax.swing.JFrame {
             public void run() {
                 try {
                     storePassingDelay = true;
-                    LoginForm loginForm = new LoginForm();
-                    loginForm.setDefaultCloseOperation(EXIT_ON_CLOSE);
-                    loginForm.setVisible(true);
-                    loginForm.addLoginEventListener(new LoginEventListener() {
+                    LoginDialog loginDialog = new LoginDialog(new javax.swing.JFrame(), true);
+                    loginDialog.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+                    loginDialog.addLoginEventListener(new LoginEventListener() {
                         public void loginEventOccurred(LoginWindowEvent w) {
 
                             Globals.loginID = w.getUID();
@@ -2977,7 +2947,31 @@ public class AttListForm extends javax.swing.JFrame {
                             attendantsForm.setVisible(true); 
                         }
                     });
-                    shortLicenseDialog(loginForm, "Attendant Program", "upper left");
+                    loginDialog.setVisible(true);
+                    shortLicenseDialog(null, "Attendant Program", "upper left");                    
+                    storePassingDelay = true;
+//                    LoginForm loginForm = new LoginForm();
+//                    loginForm.setDefaultCloseOperation(EXIT_ON_CLOSE);
+//                    loginForm.setVisible(true);
+//                    loginForm.addLoginEventListener(new LoginEventListener() {
+//                        public void loginEventOccurred(LoginWindowEvent w) {
+//
+//                            Globals.loginID = w.getUID();
+//                            Globals.loginPW = w.getPW();
+//                            Globals.isManager = w.getIsManager();
+//                            final AttListForm attendantsForm = new AttListForm(null,
+//                                    Globals.loginID, Globals.loginPW, Globals.isManager);
+//                            attendantsForm.setDefaultCloseOperation(EXIT_ON_CLOSE);
+//                            attendantsForm.addWindowListener( new WindowAdapter() {
+//                                public void windowOpened( WindowEvent e ){
+//                                    attendantsForm.searchText.requestFocus();
+//                                }
+//                            });                            
+//                            
+//                            attendantsForm.setVisible(true); 
+//                        }
+//                    });
+//                    shortLicenseDialog(loginForm, "Attendant Program", "upper left");
                 } catch (Exception ex) {
                 }
             }

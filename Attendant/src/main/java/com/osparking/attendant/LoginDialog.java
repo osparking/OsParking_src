@@ -29,7 +29,8 @@ import static com.osparking.global.names.ControlEnums.ButtonTypes.CLOSE_BTN;
 import static com.osparking.global.names.ControlEnums.ButtonTypes.LOGIN_BTN;
 import static com.osparking.global.names.ControlEnums.DialogMSGTypes.INPUT_ID_DIALOG;
 import static com.osparking.global.names.ControlEnums.DialogMSGTypes.INPUT_PW_DIALOG;
-import static com.osparking.global.names.ControlEnums.DialogMSGTypes.LOGIN_FAIL_DIALOG;
+import static com.osparking.global.names.ControlEnums.DialogMSGTypes.LOGIN_WRONG_DIALOG;
+import static com.osparking.global.names.ControlEnums.DialogTitleTypes.ERROR_DIALOGTITLE;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.WARING_DIALOGTITLE;
 import static com.osparking.global.names.ControlEnums.LabelContent.LOGIN_ID_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.PW_LABEL;
@@ -206,7 +207,7 @@ public class LoginDialog extends javax.swing.JDialog {
     {
         //<editor-fold defaultstate="collapsed" desc="-- Request ID and PW textboxes be filled">
         // Check if both user ID and password were entered.
-        if (getUserIDText().getText().length() == 0)            
+        if (getUserIDText().getText().trim().length() == 0)            
         {
             showMessageDialog(null, INPUT_ID_DIALOG.getContent());
             return;
@@ -223,9 +224,10 @@ public class LoginDialog extends javax.swing.JDialog {
             System.out.println("Login Success");
             disposeAndOptionalExit();
         } else {
-            showMessageDialog(null, LOGIN_FAIL_DIALOG.ordinal(),
-                    WARING_DIALOGTITLE.getContent(), 
-                    JOptionPane.INFORMATION_MESSAGE);
+//            showMessageDialog(null, LOGIN_FAIL_DIALOG.ordinal(),
+            showMessageDialog(null, LOGIN_WRONG_DIALOG.getContent(),
+                    ERROR_DIALOGTITLE.getContent(), 
+                    JOptionPane.ERROR_MESSAGE);
         }
     }    
         

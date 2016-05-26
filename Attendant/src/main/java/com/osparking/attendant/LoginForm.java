@@ -41,7 +41,7 @@ import static com.osparking.global.Globals.language;
 import static com.osparking.global.Globals.logParkingException;
 import static com.osparking.global.names.ControlEnums.DialogMSGTypes.INPUT_ID_DIALOG;
 import static com.osparking.global.names.ControlEnums.DialogMSGTypes.INPUT_PW_DIALOG;
-import static com.osparking.global.names.ControlEnums.DialogMSGTypes.LOGIN_FAIL_DIALOG;
+import static com.osparking.global.names.ControlEnums.DialogMSGTypes.LOGIN_WRONG_DIALOG;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.WARING_DIALOGTITLE;
 import static com.osparking.global.names.ControlEnums.LabelContent.LOGIN_ID_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.PW_LABEL;
@@ -239,7 +239,7 @@ public class LoginForm extends JFrame {
         if (checkGood) {
             dispose();
         } else {
-            showMessageDialog(null, LOGIN_FAIL_DIALOG.ordinal(),
+            showMessageDialog(null, LOGIN_WRONG_DIALOG.ordinal(),
                     WARING_DIALOGTITLE.getContent(), 
                     JOptionPane.INFORMATION_MESSAGE);
         }
