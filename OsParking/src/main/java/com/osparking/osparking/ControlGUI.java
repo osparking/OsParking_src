@@ -17,8 +17,8 @@
 package com.osparking.osparking;
 
 import com.osparking.attendant.AttListForm;
+import com.osparking.attendant.LoginDialog;
 import com.osparking.attendant.LoginEventListener;
-import com.osparking.attendant.LoginForm;
 import com.osparking.attendant.LoginWindowEvent;
 import com.osparking.global.Globals;
 import static com.osparking.global.Globals.*;
@@ -175,7 +175,7 @@ import org.bytedeco.javacpp.FlyCapture2;
  */
 public final class ControlGUI extends javax.swing.JFrame implements ActionListener, ManagerGUI, ParentGUI {
     
-    private LoginForm loginForm = null;
+    private LoginDialog loginDialog = null;
     AttListForm attendantsListForm = null;
     AffiliationBuildingForm affiliationBuildingForm = null;
     Rectangle rect = new Rectangle();
@@ -322,7 +322,7 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
         } catch (IOException e){
         }
         setTitle("OsParking(" + this.prop.getProperty("osparking.current.version") 
-                + ")--" + MAIN_GUI_TITLE.getContent());   
+                + ")--" + MAIN_GUI_TITLE.getContent() + "(http://www.osparking.com)");
         
         String processName = ManagementFactory.getRuntimeMXBean().getName();
         PID_Label.setText("(PID:" + processName.substring(0, processName.indexOf("@")) + ")");        
@@ -1413,10 +1413,11 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
     }//GEN-LAST:event_processAttendantList
 
     private void processLogIn(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_processLogIn
-        if (getLoginForm() == null) {
+        if (getLoginDialog() == null) {
             try {
-                setLoginForm(new LoginForm());
-                getLoginForm().addLoginEventListener(new LoginEventListener() {
+                setLoginDialog(new LoginDialog(null, true));
+                getLoginDialog().setLocationRelativeTo(null);
+                getLoginDialog().addLoginEventListener(new LoginEventListener() {
                     public void loginEventOccurred(LoginWindowEvent e) {
                         Globals.loginID = e.getUID();
                         Globals.loginPW = e.getPW();
@@ -1432,17 +1433,17 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
             } catch (Exception ex) {
                 logParkingException(Level.SEVERE, ex, "(user login processing)");
             }
-        }  
-         
-        getLoginForm().setVisible(true);        
+        }
+
+        getLoginDialog().setVisible(true);
 
         // <editor-fold defaultstate="collapsed" desc="-- automatic login during development">        
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-//                loginForm.handleLoginAttempt();       
+//        java.awt.EventQueue.invokeLater(new Runnable() {
+//            public void run() {
+//                loginDialog.handleLoginAttempt();       
 //                SettingsItemActionPerformed(null);
-            }
-        });  
+//            }
+//        });  
         //</editor-fold>        
     }//GEN-LAST:event_processLogIn
     
@@ -1473,8 +1474,6 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
     
     private void processVehicleList(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_processVehicleList
         (new VehiclesForm()).setVisible(true);                
-//        VehiclesForm vehicleManageForm = new VehiclesForm();
-//        vehicleManageForm.setVisible(true);                
     }//GEN-LAST:event_processVehicleList
 
     private void VehiclesButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_VehiclesButtonActionPerformed
@@ -2512,7 +2511,6 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
             stmt.setString(index++, arrivalTmStr);
             stmt.setString(index++, tagRecognized);
             stmt.setString(index++, tagEnteredAs);
-//            stmt.setString(index++, imageFilename);
 
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             ImageIO.write(bufferedImage, "jpg", baos);
@@ -2641,21 +2639,21 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
     }
 
     /**
-     * @return the loginForm
+     * @return the loginDialog
      */
-    public LoginForm getLoginForm() {
-        if (loginForm != null) {
-            loginForm.getPassword().setText("");
-            loginForm.getUserIDText().setText("");
+    public LoginDialog getLoginDialog() {
+        if (loginDialog != null) {
+            loginDialog.getPassword().setText("");
+            loginDialog.getUserIDText().setText("");
         }
-        return loginForm;
+        return loginDialog;
     }
 
     /**
-     * @param loginForm the loginForm to set
+     * @param loginDialog the loginDialog to set
      */
-    public void setLoginForm(LoginForm loginForm) {
-        this.loginForm = loginForm;
+    public void setLoginDialog(LoginDialog loginDialog) {
+        this.loginDialog = loginDialog;
     }
 
     public JLabel[][] getDeviceConnectionLEDs() {
@@ -3119,11 +3117,11 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 testUniqueness("ParkingLotManager", "OsParking");
+                Globals.shortLicenseDialog(null);
                 ControlGUI mainForm = new ControlGUI();
                 parentGUI = mainForm;
                 mainForm.recordSystemStart();
                 mainForm.setVisible(true);
-                Globals.shortLicenseDialog(mainForm);
             }
         });
     }

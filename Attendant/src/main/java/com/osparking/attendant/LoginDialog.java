@@ -64,10 +64,6 @@ public class LoginDialog extends javax.swing.JDialog {
         setTitle(LOGIN_DIALOG_TITLE.getContent());
         initComponents();
         setIconImages(OSPiconList); 
-        
-        // delete this line and following 2 more lines
-        this.getRootPane().setDefaultButton(loginButton);
-//        loginButton.requestFocus();        
     }
 
     public void addLoginEventListener(LoginEventListener listener) {
@@ -127,7 +123,7 @@ public class LoginDialog extends javax.swing.JDialog {
         closeButton.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         closeButton.setMnemonic('C');
         closeButton.setText(CLOSE_BTN.getContent());
-        closeButton.setPreferredSize(new java.awt.Dimension(90, 35));
+        closeButton.setPreferredSize(new java.awt.Dimension(100, 35));
         closeButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 closeButtonActionPerformed(evt);
@@ -226,7 +222,6 @@ public class LoginDialog extends javax.swing.JDialog {
             System.out.println("Login Success");
             disposeAndOptionalExit();
         } else {
-//            showMessageDialog(null, LOGIN_FAIL_DIALOG.ordinal(),
             showMessageDialog(null, LOGIN_WRONG_DIALOG.getContent(),
                     ERROR_DIALOGTITLE.getContent(), 
                     JOptionPane.ERROR_MESSAGE);
