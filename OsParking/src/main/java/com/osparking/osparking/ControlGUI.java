@@ -182,8 +182,6 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
     private Settings_System configureSettingsForm = null;
     RunRecordList showRunRecordForm = null;
     LoginRecordList showLoginRecordForm = null;
-    static int count = 0;
-    static boolean resizedEventDisabled = false;
     ListSelectionModel[] listSelectionModel = null;
     private static int[] shownImageRow = new int[5];
     java.util.Timer hwSimulationTimer = null;
@@ -1511,22 +1509,16 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
         
     private void formComponentResized(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentResized
 
-        // get the size of this frame
-        if (resizedEventDisabled) {
-            return;
-        } else {
-            resizedEventDisabled = true;
-        }
-
         java.awt.EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
                 long startMil = System.currentTimeMillis();
                 Dimension contentPanel = getContentPane().getSize();
+                if (contentPanel.width == 0) 
+                    return;
                 Dimension gatesPanelSize = new Dimension(contentPanel.width - 290, contentPanel.height - 68);
 
                 getGatePanel().resizeComponents(gatesPanelSize);
-                resizedEventDisabled = false;
             }
         });                
     }//GEN-LAST:event_formComponentResized
@@ -2998,7 +2990,6 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
                     getShownImageRow()[gateNo] = getGatePanel().getEntryList(gateNo).getSelectedIndex();
 
                     JLabel picLabel = getGatePanel().getCarPicLabels()[gateNo];
-//                    System.out.println("gate: " + gateNo + ", w: " + picLabel.getSize().width + ", h: " + picLabel.getHeight());
                     CarAdmission carEntry = (CarAdmission)getGatePanel().getEntryList(gateNo).getSelectedValue();
 
                     String sql = new String( "Select imageblob from car_arrival where ArrSeqNo = ?");

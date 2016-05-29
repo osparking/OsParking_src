@@ -158,6 +158,7 @@ public class PanelFor1Gate extends GatePanel {
         }           
     }//GEN-LAST:event_formComponentResized
 
+    static int count = 0;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel CarPicLabel1;
     public javax.swing.JList List_Gate1;
@@ -185,7 +186,7 @@ public class PanelFor1Gate extends GatePanel {
         } 
 
         picHeightNew = picWidthNew * PIC_HEIGHT / PIC_WIDTH;
-
+        
         // when car entry list box height isn't enough, reduce picture height and then width
         // Calculate Picture Frame Size
         if (gatesPanelSize.height - picHeightNew - 10 < LIST_HEIGHT_MIN) {
@@ -194,7 +195,7 @@ public class PanelFor1Gate extends GatePanel {
         } 
 
         this.Panel_Gate1.setPreferredSize(
-                new Dimension(picWidthNew, gatesPanelSize.height));
+                new Dimension(picWidthNew + 28, gatesPanelSize.height));
         this.Panel_Gate1.revalidate();
 
         setComponentSize(getCarPicLabels()[1], new Dimension(picWidthNew, picHeightNew));
