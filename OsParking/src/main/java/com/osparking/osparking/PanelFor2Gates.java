@@ -31,6 +31,8 @@ import static com.osparking.global.names.DB_Access.PIC_HEIGHT;
 import static com.osparking.global.names.DB_Access.PIC_WIDTH;
 import com.osparking.global.names.GatePanel;
 import static com.osparking.global.Globals.*;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 
 /**
  *
@@ -43,6 +45,7 @@ public class PanelFor2Gates extends GatePanel {
     DefaultListModel models[] = new DefaultListModel[5];
     private JPanel[] Panel_Gates = new JPanel[5];
     private JLabel[] CarPicLabels = new JLabel[3];
+    private Dimension prevSize = null;
 
     /**
      * Creates new form PanelFor2Gates
@@ -57,6 +60,32 @@ public class PanelFor2Gates extends GatePanel {
         models[2] = model_2;
         Panel_Gates[1] = Panel_Gate1;
         Panel_Gates[2] = Panel_Gate2;
+          
+        addComponentListener(new ComponentAdapter() {
+            public void componentResized(ComponentEvent evt) {
+                
+                java.awt.EventQueue.invokeLater(new Runnable() {
+                    public void run() {
+
+                        if (Panel_Gate1.getSize().equals(prevSize)) {
+                            return;
+                        } else {
+                            prevSize = Panel_Gate1.getSize();
+                        }
+                        
+                        for (int gateNo = 1; gateNo <= 2; gateNo++) {
+                            if (getEntryList(gateNo).getModel().getSize() > 0) 
+                            {
+                                if (getEntryList(gateNo).getSelectedIndex() == -1) {
+                                    getEntryList(gateNo).setSelectedIndex(0);
+                                }
+                                ControlGUI.showImage(gateNo);
+                            }
+                        }
+                    }
+                });                
+            }
+        });        
     }
     
     int prevWidth = 0;
@@ -147,11 +176,6 @@ public class PanelFor2Gates extends GatePanel {
         MarginLabel = new javax.swing.JLabel();
 
         setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        addComponentListener(new java.awt.event.ComponentAdapter() {
-            public void componentResized(java.awt.event.ComponentEvent evt) {
-                formComponentResized(evt);
-            }
-        });
         setLayout(new javax.swing.BoxLayout(this, javax.swing.BoxLayout.LINE_AXIS));
 
         Panel_Gate1.setBackground(MainBackground);
@@ -271,15 +295,6 @@ public class PanelFor2Gates extends GatePanel {
     private void CarPicLabel2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_CarPicLabel2MouseClicked
         show100percentSizeImageOfGate(2, getGateImages()[2]);
     }//GEN-LAST:event_CarPicLabel2MouseClicked
-
-    private void formComponentResized(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentResized
-        for (int gateNo = 1; gateNo <= 2; gateNo++)
-            if (getEntryList(gateNo).getModel().getSize() > 0) 
-            {
-                getEntryList(gateNo).setSelectedIndex(0);
-                ControlGUI.showImage(gateNo);
-            }        
-    }//GEN-LAST:event_formComponentResized
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     public javax.swing.JLabel CarPicLabel1;

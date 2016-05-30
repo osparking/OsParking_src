@@ -73,7 +73,7 @@ public class PanelFor1Gate extends GatePanel {
                         }
                         if (getEntryList(1).getModel().getSize() > 0) 
                         {
-                            if (getGatePanel().getEntryList(1).getSelectedIndex() == -1) {
+                            if (getEntryList(1).getSelectedIndex() == -1) {
                                 getEntryList(1).setSelectedIndex(0);
                             }
                             ControlGUI.showImage(1);
