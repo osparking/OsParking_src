@@ -184,42 +184,42 @@ public class PanelFor1Gate extends GatePanel {
 
     @Override
     public void resizeComponents(Dimension gatesPanelSize) {
-
+        int boxMargin = 10;
+        int widthMargin = 28;
         setPreferredSize(gatesPanelSize);
         setSize(gatesPanelSize);
-        revalidate();          
         
         // <editor-fold defaultstate="collapsed" desc="-- stretch image for each window resizing">
         int picWidthNew = 0, picHeightNew = 0;
 
         // Calculate Picture Frame Initial Size
-        if (gatesPanelSize.width >= PIC_WIDTH + 10) {
+        if (gatesPanelSize.width >= PIC_WIDTH + boxMargin + widthMargin) {
             picWidthNew = PIC_WIDTH;
         } else {
-            picWidthNew = gatesPanelSize.width - 10;
+            picWidthNew = gatesPanelSize.width - (boxMargin + widthMargin);
         } 
 
         picHeightNew = picWidthNew * PIC_HEIGHT / PIC_WIDTH;
         
         // when car entry list box height isn't enough, reduce picture height and then width
         // Calculate Picture Frame Size
-        if (gatesPanelSize.height - picHeightNew - 10 < LIST_HEIGHT_MIN) {
-            picHeightNew = gatesPanelSize.height - LIST_HEIGHT_MIN - 10;
+        if (gatesPanelSize.height - picHeightNew - boxMargin * 2 < LIST_HEIGHT_MIN) {
+            picHeightNew = gatesPanelSize.height - LIST_HEIGHT_MIN - boxMargin * 2;
             picWidthNew =  picHeightNew * PIC_WIDTH / PIC_HEIGHT;
         } 
 
         this.Panel_Gate1.setPreferredSize(
-                new Dimension(picWidthNew + 28, gatesPanelSize.height));
+                new Dimension(picWidthNew + boxMargin * 2, gatesPanelSize.height));
+        this.Panel_Gate1.setSize(
+                new Dimension(picWidthNew + boxMargin * 2, gatesPanelSize.height));
         this.Panel_Gate1.revalidate();
 
         setComponentSize(getCarPicLabels()[1], new Dimension(picWidthNew, picHeightNew));
-
         getCarPicLabels()[1].revalidate();
-        revalidate();
         // </editor-fold>
 
-        int width = gatesPanelSize.width - picWidthNew;
-        if (width > 20)
+        int width = gatesPanelSize.width - Panel_Gate1.getWidth(); 
+        if (width > 50)
         {   // PanelRestArea
             add(PanelRestArea,  java.awt.BorderLayout.CENTER);
             try {

@@ -1516,7 +1516,8 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
                 Dimension contentPanel = getContentPane().getSize();
                 if (contentPanel.width == 0) 
                     return;
-                Dimension gatesPanelSize = new Dimension(contentPanel.width - 290, contentPanel.height - 68);
+                Dimension gatesPanelSize = new Dimension(contentPanel.width - 290, 
+                        contentPanel.height - 68);
 
                 getGatePanel().resizeComponents(gatesPanelSize);
             }
