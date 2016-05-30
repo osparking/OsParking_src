@@ -2982,58 +2982,53 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
     }
 
     public static void showImage(final int gateNo) {
-        SwingUtilities.invokeLater(new Runnable(){
-            public void run() 
-            {
-                if (getGatePanel().getEntryList(gateNo).getSelectedIndex() > -1) 
-                {
-                    getShownImageRow()[gateNo] = getGatePanel().getEntryList(gateNo).getSelectedIndex();
+        if (getGatePanel().getEntryList(gateNo).getSelectedIndex() > -1) 
+        {
+            getShownImageRow()[gateNo] = getGatePanel().getEntryList(gateNo).getSelectedIndex();
 
-                    JLabel picLabel = getGatePanel().getCarPicLabels()[gateNo];
-                    CarAdmission carEntry = (CarAdmission)getGatePanel().getEntryList(gateNo).getSelectedValue();
+            JLabel picLabel = getGatePanel().getCarPicLabels()[gateNo];
+            CarAdmission carEntry = (CarAdmission)getGatePanel().getEntryList(gateNo).getSelectedValue();
 
-                    String sql = new String( "Select imageblob from car_arrival where ArrSeqNo = ?");
-                    Connection conn = null;
-                    PreparedStatement pStmt = null;    
-                    ResultSet rs = null;
+            String sql = new String( "Select imageblob from car_arrival where ArrSeqNo = ?");
+            Connection conn = null;
+            PreparedStatement pStmt = null;    
+            ResultSet rs = null;
+            try {
+                // <editor-fold defaultstate="collapsed" desc="-- Fetch image from the DB and show it ">
+                conn = JDBCMySQL.getConnection();
+                pStmt = conn.prepareStatement(sql);
+                pStmt.setLong(1, carEntry.getArrSeqNo());
+                rs = pStmt.executeQuery();
+                if (rs.next()) {
                     try {
-                        // <editor-fold defaultstate="collapsed" desc="-- Fetch image from the DB and show it ">
-                        conn = JDBCMySQL.getConnection();
-                        pStmt = conn.prepareStatement(sql);
-                        pStmt.setLong(1, carEntry.getArrSeqNo());
-                        rs = pStmt.executeQuery();
-                        if (rs.next()) {
-                            try {
-                                InputStream imageInStream = rs.getBinaryStream("ImageBlob");
-                                
-                                if (imageInStream == null) {
+                        InputStream imageInStream = rs.getBinaryStream("ImageBlob");
+
+                        if (imageInStream == null) {
 //                                    picLabel.setIcon(createStretchedIcon(picLabel.getSize(), noPictureImg, false));
 //                                    originalImgWidth[gateNo] = noPictureImg.getWidth(); 
-                                    picLabel.setIcon(null);
-                                    picLabel.setText("No Image Exists");
-                                } else {
-                                    picLabel.setText(null);
-                                    BufferedImage imageRead = ImageIO.read(imageInStream);
-                                    picLabel.setIcon(createStretchedIcon(picLabel.getSize(), imageRead, false));
-                                    closeInputStream(imageInStream, "(image loading from DB)");
-                                    originalImgWidth[gateNo] = imageRead.getWidth(); 
-                                    gatePanel.setGateImage((byte)gateNo, imageRead);
-                                }
-                            } catch (IOException ex) {
-                                logParkingException(Level.SEVERE, ex, "(image loading from DB)");
-                            }
+                            picLabel.setIcon(null);
+                            picLabel.setText("No Image Exists");
+                        } else {
+                            picLabel.setText(null);
+                            BufferedImage imageRead = ImageIO.read(imageInStream);
+                            picLabel.setIcon(createStretchedIcon(picLabel.getSize(), imageRead, false));
+                            closeInputStream(imageInStream, "(image loading from DB)");
+                            originalImgWidth[gateNo] = imageRead.getWidth(); 
+                            gatePanel.setGateImage((byte)gateNo, imageRead);
                         }
-                        // </editor-fold>
-                    }
-                    catch(Exception e) {
-                        logParkingException(Level.SEVERE, e, "(in car arrival image display routine)");
-                    }
-                    finally {
-                        closeDBstuff(conn, pStmt, rs, "(in car arrival image resource )");
+                    } catch (IOException ex) {
+                        logParkingException(Level.SEVERE, ex, "(image loading from DB)");
                     }
                 }
+                // </editor-fold>
             }
-        });
+            catch(Exception e) {
+                logParkingException(Level.SEVERE, e, "(in car arrival image display routine)");
+            }
+            finally {
+                closeDBstuff(conn, pStmt, rs, "(in car arrival image resource )");
+            }
+        }
     }
     
     private void formMessageExceptCheckShort(byte code, byte[] lenBytes, EBD_Row row, int msgSN, 

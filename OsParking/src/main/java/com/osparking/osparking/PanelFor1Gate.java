@@ -32,6 +32,10 @@ import static com.osparking.global.names.DB_Access.PIC_HEIGHT;
 import static com.osparking.global.names.DB_Access.PIC_WIDTH;
 import com.osparking.global.names.GatePanel;
 import static com.osparking.global.Globals.*;
+import static com.osparking.osparking.ControlGUI.getGatePanel;
+import java.awt.Toolkit;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 
 /**
  *
@@ -44,6 +48,7 @@ public class PanelFor1Gate extends GatePanel {
     
     private BufferedImage gateImages[] = new BufferedImage[2]; 
     private JLabel[] CarPicLabels = new JLabel[2];
+    private Dimension prevSize = null;
     
     /**
      * Creates new form PanelFor1Gate
@@ -52,9 +57,33 @@ public class PanelFor1Gate extends GatePanel {
         initComponents();
         CarPicLabels[1] = CarPicLabel1;  
         entryList[1] = List_Gate1;
-        models[1] = model_1;                
-    }
+        models[1] = model_1;    
+        Toolkit.getDefaultToolkit().setDynamicLayout( false );        
+        
+        addComponentListener(new ComponentAdapter() {
+            public void componentResized(ComponentEvent evt) {
+                
+                java.awt.EventQueue.invokeLater(new Runnable() {
+                    public void run() {
 
+                        if (Panel_Gate1.getSize().equals(prevSize)) {
+                            return;
+                        } else {
+                            prevSize = Panel_Gate1.getSize();
+                        }
+                        if (getEntryList(1).getModel().getSize() > 0) 
+                        {
+                            if (getGatePanel().getEntryList(1).getSelectedIndex() == -1) {
+                                getEntryList(1).setSelectedIndex(0);
+                            }
+                            ControlGUI.showImage(1);
+                        }                  
+                    }
+                });                
+            }
+        });
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -72,11 +101,6 @@ public class PanelFor1Gate extends GatePanel {
         PanelRestArea = new javax.swing.JPanel();
         RestAreaPicLabel = new javax.swing.JLabel();
 
-        addComponentListener(new java.awt.event.ComponentAdapter() {
-            public void componentResized(java.awt.event.ComponentEvent evt) {
-                formComponentResized(evt);
-            }
-        });
         setLayout(new java.awt.BorderLayout());
 
         Panel_Gate1.setBackground(MainBackground);
@@ -148,17 +172,6 @@ public class PanelFor1Gate extends GatePanel {
         show100percentSizeImageOfGate(1, getGateImages()[1]);
     }//GEN-LAST:event_CarPicLabel1MouseClicked
 
-    private void formComponentResized(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentResized
-        int gateNo = 1;
-        
-        if (getEntryList(gateNo).getModel().getSize() > 0) 
-        {
-            getEntryList(gateNo).setSelectedIndex(0);
-            ControlGUI.showImage(gateNo);
-        }           
-    }//GEN-LAST:event_formComponentResized
-
-    static int count = 0;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel CarPicLabel1;
     public javax.swing.JList List_Gate1;
@@ -176,6 +189,7 @@ public class PanelFor1Gate extends GatePanel {
         setSize(gatesPanelSize);
         revalidate();          
         
+        // <editor-fold defaultstate="collapsed" desc="-- stretch image for each window resizing">
         int picWidthNew = 0, picHeightNew = 0;
 
         // Calculate Picture Frame Initial Size
@@ -200,7 +214,6 @@ public class PanelFor1Gate extends GatePanel {
 
         setComponentSize(getCarPicLabels()[1], new Dimension(picWidthNew, picHeightNew));
 
-        // <editor-fold defaultstate="collapsed" desc="-- stretch image for each window resizing">
         getCarPicLabels()[1].revalidate();
         revalidate();
         // </editor-fold>
