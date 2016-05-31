@@ -52,8 +52,6 @@ public class JDBCMySQL {
             logParkingException(Level.SEVERE, e, "failed in creating DB connection ");
             JOptionPane.showMessageDialog(null, "Connection creation Failure for" + System.lineSeparator() 
                     + "user ID: " + USER, "OsParking Failure", JOptionPane.ERROR_MESSAGE);
-//            JOptionPane.showConfirmDialog(null, "Connection creation Failure for" + System.lineSeparator() 
-//                    + "user ID: " + USER, "OsParking Failure", YES_OPTION, WARNING_MESSAGE);
             System.exit(-1);
         }
         return connection;        

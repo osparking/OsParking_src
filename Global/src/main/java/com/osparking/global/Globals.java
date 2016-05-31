@@ -137,7 +137,7 @@ public class Globals {
     public static SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");    
     public static int SIX_HOURS = 3600 * 1000 * 6;
     
-    public static final int boxMargin = 10;
+    public static final int boxMargin = 12;
     public static final int widthMargin = 28;    
     
     public static void augmentComponentMap(Object component, HashMap<String, Component> componentMap) {
@@ -780,8 +780,8 @@ public class Globals {
         
         // When car entry list box height isn't enough, reduce picture height and 
         // propagate the change to the width.
-        if (panelSize.height - picHeightNew - boxMargin + widthMargin < LIST_HEIGHT_MIN) {
-            picHeightNew = panelSize.height - LIST_HEIGHT_MIN - boxMargin * 2;
+        if (panelSize.height - picHeightNew - boxMargin - widthMargin < LIST_HEIGHT_MIN) {
+            picHeightNew = panelSize.height - LIST_HEIGHT_MIN - boxMargin - widthMargin;
             picWidthNew =  picHeightNew * PIC_WIDTH / PIC_HEIGHT;
         }
         
@@ -792,7 +792,8 @@ public class Globals {
             // Label for one car image display
             setComponentSize(gatePanel.getCarPicLabels()[gate], 
                     new Dimension(picWidthNew, picHeightNew));
-            System.out.println("fixed frame: " + picWidthNew + ", " + picHeightNew);
+            System.out.println("WIDTH panel: " + (picWidthNew + boxMargin)
+                    + ", label: " + picWidthNew);
         }
     }    
     
