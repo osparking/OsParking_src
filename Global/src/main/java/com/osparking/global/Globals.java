@@ -18,6 +18,7 @@ package com.osparking.global;
 
 import com.osparking.global.names.ControlEnums.Languages;
 import static com.osparking.global.names.ControlEnums.Languages.KOREAN;
+import static com.osparking.global.names.DB_Access.PIC_HEIGHT;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -78,7 +79,6 @@ import com.osparking.global.names.JDBCMySQL;
 import com.osparking.global.names.JustOneLock;
 import com.osparking.global.names.LogFileHandler;
 import com.osparking.global.names.Manager;
-import static com.osparking.global.names.DB_Access.PIC_HEIGHT;
 import static com.osparking.global.names.DB_Access.PIC_WIDTH;
 import static com.osparking.global.names.DB_Access.deviceIP;
 import static com.osparking.global.names.DB_Access.devicePort;
@@ -87,6 +87,7 @@ import static com.osparking.global.names.DB_Access.gateCount;
 import static com.osparking.global.names.DB_Access.gateNames;
 import static com.osparking.global.names.DB_Access.maxMessageLines;
 import static com.osparking.global.names.DB_Access.opLoggingIndex;
+import com.osparking.global.names.GatePanel;
 import com.osparking.global.names.OSP_enums;
 import com.osparking.global.names.OSP_enums.CameraType;
 import com.osparking.global.names.OSP_enums.E_BoardType;
@@ -135,6 +136,9 @@ public class Globals {
     public static SimpleDateFormat timeFormatMMSS = new SimpleDateFormat("mm_ss"); 
     public static SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");    
     public static int SIX_HOURS = 3600 * 1000 * 6;
+    
+    public static final int boxMargin = 10;
+    public static final int widthMargin = 28;    
     
     public static void augmentComponentMap(Object component, HashMap<String, Component> componentMap) {
         String name = null;
@@ -755,11 +759,49 @@ public class Globals {
         }   
     } 
     
+    /**
+     * Adjust Dimension of Panel for a specific Gate
+     * @param gatePanel panel for every gates monitored
+     * @param panelSize dimension of the panel containing all gates
+     */
+    public static void fixPanelDimemsion(GatePanel gatePanel, Dimension panelSize) {
+        int picWidthNew = 0, picHeightNew = 0;
+
+        // Limit picture label width to max pixel count of image.
+        int gateWidth = (panelSize.width - (boxMargin + widthMargin))/gateCount;
+        
+        if (PIC_WIDTH < gateWidth) {
+            picWidthNew = PIC_WIDTH;
+        } else {
+            picWidthNew = gateWidth;
+        } 
+
+        picHeightNew = picWidthNew * PIC_HEIGHT / PIC_WIDTH;
+        
+        // When car entry list box height isn't enough, reduce picture height and 
+        // propagate the change to the width.
+        if (panelSize.height - picHeightNew - boxMargin + widthMargin < LIST_HEIGHT_MIN) {
+            picHeightNew = panelSize.height - LIST_HEIGHT_MIN - boxMargin * 2;
+            picWidthNew =  picHeightNew * PIC_WIDTH / PIC_HEIGHT;
+        }
+        
+        for (int gate = 1; gate <= gateCount; gate++) {
+            // A tall panel for one gate which includes car image and arrival list
+            setComponentSize(gatePanel.getPanel_Gate(gate), 
+                    new Dimension(picWidthNew + boxMargin, panelSize.height));
+            // Label for one car image display
+            setComponentSize(gatePanel.getCarPicLabels()[gate], 
+                    new Dimension(picWidthNew, picHeightNew));
+            System.out.println("fixed frame: " + picWidthNew + ", " + picHeightNew);
+        }
+    }    
+    
     public static void setComponentSize(JComponent component, Dimension dim) 
     {
         component.setPreferredSize(dim);
-        component.setMinimumSize(dim);
         component.setMaximumSize(dim);
+        component.setMinimumSize(dim);
+        component.setSize(dim);
     }
     
     public static String getSizeString(JComponent component) {
@@ -864,7 +906,7 @@ public class Globals {
             }
         } catch (Exception ex) {
             logParkingException(Level.SEVERE, ex, "(Stretching Car Image)");
-        } finally {
+        } finally {         
             return new javax.swing.ImageIcon(stretchedImg);
         }
     }          

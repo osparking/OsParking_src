@@ -27,10 +27,9 @@ import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import com.osparking.global.names.CarAdmission;
-import static com.osparking.global.names.DB_Access.PIC_HEIGHT;
-import static com.osparking.global.names.DB_Access.PIC_WIDTH;
 import com.osparking.global.names.GatePanel;
 import static com.osparking.global.Globals.*;
+import static com.osparking.global.names.DB_Access.gateCount;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 
@@ -94,47 +93,14 @@ public class PanelFor2Gates extends GatePanel {
     public void resizeComponents(Dimension gatesPanelSize) 
     {
         setComponentSize(this, gatesPanelSize);
+        fixPanelDimemsion(this, gatesPanelSize);
         
-        int picWidthNew = 0, picHeightNew = 0;
-
-        // Calculate Picture Frame Initial Size
-        if (gatesPanelSize.width >= PIC_WIDTH * 2 + 58) {
-            picWidthNew = PIC_WIDTH;
-        } else {
-            picWidthNew = (gatesPanelSize.width - 58) / 2;
-        } 
-
-        picHeightNew = picWidthNew * PIC_HEIGHT / PIC_WIDTH;
-
-        // in case of car entry list box height isn't enough adjust picture size by reducing
-        // its width
-        if (gatesPanelSize.height - picHeightNew - 10 < LIST_HEIGHT_MIN) {
-            picHeightNew = gatesPanelSize.height - LIST_HEIGHT_MIN - 10;
-            picWidthNew =  picHeightNew * PIC_WIDTH / PIC_HEIGHT;
-        } 
-
-        setComponentSize(Panel_Gate1, 
-                new Dimension(picWidthNew + 23, gatesPanelSize.height));
-        setComponentSize(Panel_Gate2, 
-                new Dimension(picWidthNew + 23, gatesPanelSize.height));           
-
-        if ((int)gatesPanelSize.getWidth() != prevWidth) {
-            prevWidth = (int)gatesPanelSize.getWidth();
-            
-            for (int gateNo = 1; gateNo <= 2; gateNo++)
-            {
-                setComponentSize(getCarPicLabels()[gateNo], new Dimension(picWidthNew, picHeightNew));
-            }
-        }
-        revalidate();
-        int width = gatesPanelSize.width - picWidthNew * 2;
-
-        if (width > 60)
+        int width = gatesPanelSize.width - Panel_Gate1.getWidth() * gateCount;
+        if (width > 50)
         { // PanelRestArea
             add(PanelMargin);
             try {
                 setComponentSize(MarginLabel, new Dimension(width - 58, getSize().height));
-                revalidate();
 
                 BufferedImage originalImg 
                         = ImageIO.read(getClass().getResourceAsStream(restAreaImage));
@@ -150,6 +116,7 @@ public class PanelFor2Gates extends GatePanel {
         {
             remove(PanelMargin);
         }
+        revalidate();
     }
     
     private BufferedImage gateImages[] = new BufferedImage[3];
@@ -175,6 +142,7 @@ public class PanelFor2Gates extends GatePanel {
         PanelMargin = new javax.swing.JPanel();
         MarginLabel = new javax.swing.JLabel();
 
+        setBackground(MainBackground);
         setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         setLayout(new javax.swing.BoxLayout(this, javax.swing.BoxLayout.LINE_AXIS));
 

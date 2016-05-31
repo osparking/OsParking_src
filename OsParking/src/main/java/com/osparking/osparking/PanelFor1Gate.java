@@ -28,11 +28,8 @@ import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import com.osparking.global.names.CarAdmission;
-import static com.osparking.global.names.DB_Access.PIC_HEIGHT;
-import static com.osparking.global.names.DB_Access.PIC_WIDTH;
 import com.osparking.global.names.GatePanel;
 import static com.osparking.global.Globals.*;
-import static com.osparking.osparking.ControlGUI.getGatePanel;
 import java.awt.Toolkit;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
@@ -101,6 +98,7 @@ public class PanelFor1Gate extends GatePanel {
         PanelRestArea = new javax.swing.JPanel();
         RestAreaPicLabel = new javax.swing.JLabel();
 
+        setBackground(MainBackground);
         setLayout(new java.awt.BorderLayout());
 
         Panel_Gate1.setBackground(MainBackground);
@@ -182,41 +180,15 @@ public class PanelFor1Gate extends GatePanel {
     private javax.swing.Box.Filler filler1;
     // End of variables declaration//GEN-END:variables
 
+    /**
+     * Adjust Rest Area Picture Size
+     * @param gatesPanelSize 
+     */
     @Override
     public void resizeComponents(Dimension gatesPanelSize) {
-        int boxMargin = 10;
-        int widthMargin = 28;
-        setPreferredSize(gatesPanelSize);
-        setSize(gatesPanelSize);
         
-        // <editor-fold defaultstate="collapsed" desc="-- stretch image for each window resizing">
-        int picWidthNew = 0, picHeightNew = 0;
-
-        // Calculate Picture Frame Initial Size
-        if (gatesPanelSize.width >= PIC_WIDTH + boxMargin + widthMargin) {
-            picWidthNew = PIC_WIDTH;
-        } else {
-            picWidthNew = gatesPanelSize.width - (boxMargin + widthMargin);
-        } 
-
-        picHeightNew = picWidthNew * PIC_HEIGHT / PIC_WIDTH;
-        
-        // when car entry list box height isn't enough, reduce picture height and then width
-        // Calculate Picture Frame Size
-        if (gatesPanelSize.height - picHeightNew - boxMargin * 2 < LIST_HEIGHT_MIN) {
-            picHeightNew = gatesPanelSize.height - LIST_HEIGHT_MIN - boxMargin * 2;
-            picWidthNew =  picHeightNew * PIC_WIDTH / PIC_HEIGHT;
-        } 
-
-        this.Panel_Gate1.setPreferredSize(
-                new Dimension(picWidthNew + boxMargin * 2, gatesPanelSize.height));
-        this.Panel_Gate1.setSize(
-                new Dimension(picWidthNew + boxMargin * 2, gatesPanelSize.height));
-        this.Panel_Gate1.revalidate();
-
-        setComponentSize(getCarPicLabels()[1], new Dimension(picWidthNew, picHeightNew));
-        getCarPicLabels()[1].revalidate();
-        // </editor-fold>
+        setComponentSize(this, gatesPanelSize); // Whole gates panel        
+        fixPanelDimemsion(this, gatesPanelSize);
 
         int width = gatesPanelSize.width - Panel_Gate1.getWidth(); 
         if (width > 50)
@@ -240,6 +212,7 @@ public class PanelFor1Gate extends GatePanel {
         {
             remove(PanelRestArea);
         }
+        revalidate();
     }
 
     @Override

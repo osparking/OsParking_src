@@ -495,7 +495,9 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
         LED_Timer = new Timer("ospLEDtimer", true);
         LED_Timer.schedule(new LED_Task(this, getDeviceManagers()), 0, LED_PERIOD);
         
-        processLogIn(null); // shortcut
+        if (!DEBUG) {
+            processLogIn(null); // shortcut
+        }
     }
     
     private void prepareIDLogFile(DeviceType devType, int gateNo) {
@@ -2455,7 +2457,7 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
                 suffix = "(stopped)";
             }
             // add a row to the recent entry list for the gate
-           listModel.add(0, new CarAdmission("-" + tmDisplay + tagRecognized + suffix, 
+            listModel.add(0, new CarAdmission("-" + tmDisplay + tagRecognized + suffix, 
                    arrSeqNo));
             
             // display entry image on the label for the gate
@@ -2988,6 +2990,7 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
             getShownImageRow()[gateNo] = getGatePanel().getEntryList(gateNo).getSelectedIndex();
 
             JLabel picLabel = getGatePanel().getCarPicLabels()[gateNo];
+            System.out.println("frame " + gateNo + " size: " + picLabel.getSize());
             CarAdmission carEntry = (CarAdmission)getGatePanel().getEntryList(gateNo).getSelectedValue();
 
             String sql = new String( "Select imageblob from car_arrival where ArrSeqNo = ?");
@@ -3012,6 +3015,8 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
                         } else {
                             picLabel.setText(null);
                             BufferedImage imageRead = ImageIO.read(imageInStream);
+                            System.out.println("image size: " + imageRead.getWidth() + ", " + 
+                                    imageRead.getHeight());
                             picLabel.setIcon(createStretchedIcon(picLabel.getSize(), imageRead, false));
                             closeInputStream(imageInStream, "(image loading from DB)");
                             originalImgWidth[gateNo] = imageRead.getWidth(); 
@@ -3104,7 +3109,9 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 testUniqueness("ParkingLotManager", "OsParking");
-                Globals.shortLicenseDialog(null);
+                if (!DEBUG) {
+                    Globals.shortLicenseDialog(null);
+                }
                 ControlGUI mainForm = new ControlGUI();
                 parentGUI = mainForm;
                 mainForm.recordSystemStart();
