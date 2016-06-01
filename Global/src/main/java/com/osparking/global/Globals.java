@@ -87,7 +87,6 @@ import static com.osparking.global.names.DB_Access.gateCount;
 import static com.osparking.global.names.DB_Access.gateNames;
 import static com.osparking.global.names.DB_Access.maxMessageLines;
 import static com.osparking.global.names.DB_Access.opLoggingIndex;
-import com.osparking.global.names.GatePanel;
 import com.osparking.global.names.OSP_enums;
 import com.osparking.global.names.OSP_enums.CameraType;
 import com.osparking.global.names.OSP_enums.E_BoardType;
@@ -136,9 +135,6 @@ public class Globals {
     public static SimpleDateFormat timeFormatMMSS = new SimpleDateFormat("mm_ss"); 
     public static SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");    
     public static int SIX_HOURS = 3600 * 1000 * 6;
-    
-    public static final int panelMargin = 12;
-    public static final int imageMargin = 28;    
     
     public static void augmentComponentMap(Object component, HashMap<String, Component> componentMap) {
         String name = null;

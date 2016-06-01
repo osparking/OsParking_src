@@ -17,16 +17,13 @@
 package com.osparking.osparking;
 
 import static com.osparking.global.Globals.LIST_HEIGHT_MIN;
-import static com.osparking.global.Globals.panelMargin;
 import static com.osparking.global.Globals.createStretchedIcon;
 import static com.osparking.global.Globals.logParkingException;
 import static com.osparking.global.Globals.restAreaImage;
 import static com.osparking.global.Globals.setComponentSize;
-import static com.osparking.global.Globals.imageMargin;
 import static com.osparking.global.names.DB_Access.PIC_HEIGHT;
 import static com.osparking.global.names.DB_Access.PIC_WIDTH;
 import static com.osparking.global.names.DB_Access.gateCount;
-import com.osparking.global.names.GatePanel;
 import java.awt.Dimension;
 import java.awt.image.BufferedImage;
 import java.util.logging.Level;
@@ -37,7 +34,9 @@ import javax.imageio.ImageIO;
  * @author Jongbum Park
  */
 public class Common {
-
+    public static final int panelMargin = 3;
+    public static final int imageMargin = 28;    
+    
     /**
      * Adjust Dimension of Panel for a specific Gate
      * @param gatePanel panel for every gates monitored
@@ -84,9 +83,8 @@ public class Common {
         System.out.print("Total: " + gatesPanelSize.width + ", gatePan: " + panWidth);
         
         try {
-//            int mWidth = width - 2;
             System.out.println(", margin: " + width);
-            if (width > 10) {
+            if (width >= 0) {
                 setComponentSize(gatePanel.getMarginLabel(), 
                         new Dimension(width, gatePanel.getSize().height));
                 BufferedImage marginImage 
@@ -107,5 +105,17 @@ public class Common {
             logParkingException(Level.SEVERE, e, "(Margin area updater)");
         }
         //</editor-fold>
+    }    
+    
+
+    /**
+     * Adjust Rest Area Picture Size
+     * @param gatesPanelSize 
+     */
+    public static void resizeComponents(GatePanel gPanel, Dimension gatesPanelSize) {
+        setComponentSize(gPanel, gatesPanelSize); // Whole gates panel      
+        gPanel.revalidate();
+        gatesPanelSize = gPanel.getSize();        
+        fixPanelDimemsion(gPanel, gatesPanelSize);
     }    
 }

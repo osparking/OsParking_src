@@ -19,16 +19,12 @@ package com.osparking.osparking;
 import static com.osparking.osparking.ControlGUI.show100percentSizeImageOfGate;
 import java.awt.Dimension;
 import java.awt.image.BufferedImage;
-import java.util.logging.Level;
-import javax.imageio.ImageIO;
 import javax.swing.DefaultListModel;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import com.osparking.global.names.CarAdmission;
-import com.osparking.global.names.GatePanel;
 import static com.osparking.global.Globals.*;
-import static com.osparking.global.names.DB_Access.gateCount;
 import static com.osparking.osparking.Common.fixPanelDimemsion;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
@@ -89,60 +85,13 @@ public class PanelFor2Gates extends GatePanel {
     
     int prevWidth = 0;
 
-    @Override
     public void resizeComponents(Dimension gatesPanelSize) 
     {
         setComponentSize(this, gatesPanelSize);
+        revalidate();
         gatesPanelSize = getSize();
-        System.out.println("after gates panel size fixing: " + getSize());
+//        System.out.println("after gates panel size fixing: " + getSize());
         fixPanelDimemsion(this, gatesPanelSize);
-        revalidate();
-        
-//        int width = gatesPanelSize.width - (Panel_Gate1.getWidth() + panelMargin) * gateCount;
-//        System.out.print("Total: " + gatesPanelSize.width + ", gatePan: " +
-//                Panel_Gate1.getSize().width);
-//        
-//        { // PanelRestArea
-//            try {
-//                int mWidth = width - 2;
-//                setComponentSize(MarginLabel, new Dimension(mWidth, getSize().height));
-//                System.out.println(", margin: " + mWidth);
-//                
-//                if (width > 10) {
-//                    BufferedImage marginImage 
-//                            = ImageIO.read(getClass().getResourceAsStream(restAreaImage));
-//                    MarginLabel.setIcon(
-//                            createStretchedIcon(MarginLabel.getSize(), marginImage, true));
-//                    MarginLabel.revalidate();
-//                }
-//            } catch (Exception e) {
-//                logParkingException(Level.SEVERE, e, "(Margin area updater)");
-//            }
-//            add(getMarginLabel());
-//        }
-        
-//        if (width > 10)
-//        { // PanelRestArea
-//            try {
-//                int mWidth = width - 2;
-//                setComponentSize(MarginLabel, new Dimension(mWidth, getSize().height));
-//                System.out.println(", margin: " + mWidth);
-//                
-//                BufferedImage marginImage 
-//                        = ImageIO.read(getClass().getResourceAsStream(restAreaImage));
-//                MarginLabel.setIcon(
-//                        createStretchedIcon(MarginLabel.getSize(), marginImage, true));
-//                MarginLabel.revalidate();
-//            } catch (Exception e) {
-//                logParkingException(Level.SEVERE, e, "(Margin area updater)");
-//            }
-//            add(getRightMargin());
-//        }
-//        else
-//        {
-//            remove(getRightMargin());
-//        }
-        revalidate();
     }
     
     private BufferedImage gateImages[] = new BufferedImage[3];

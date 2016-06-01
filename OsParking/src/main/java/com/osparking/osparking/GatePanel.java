@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.osparking.global.names;
+package com.osparking.osparking;
 
 import java.awt.Dimension;
 import java.awt.image.BufferedImage;
@@ -29,9 +29,7 @@ import javax.swing.JPanel;
  */
 public abstract class GatePanel extends javax.swing.JPanel{
     public abstract JLabel[] getCarPicLabels();
-
     public abstract JPanel getPanel_Gate(int gateNo);
-    public abstract void resizeComponents(Dimension panelSize);
     public abstract void displaySizes();
     public abstract JList getEntryList(int gateNo);
     public abstract DefaultListModel getDefaultListModel(int gateNo);

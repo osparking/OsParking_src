@@ -56,7 +56,6 @@ import static com.osparking.global.names.DB_Access.gateNames;
 import static com.osparking.global.names.DB_Access.readEBoardSettings;
 import static com.osparking.global.names.DB_Access.readSettings;
 import com.osparking.global.names.EBD_DisplaySetting;
-import com.osparking.global.names.GatePanel;
 import com.osparking.global.names.ImageDisplay;
 import com.osparking.global.names.JDBCMySQL;
 import com.osparking.global.names.ManagerGUI;

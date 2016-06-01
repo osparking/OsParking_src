@@ -19,18 +19,13 @@ package com.osparking.osparking;
 import static com.osparking.osparking.ControlGUI.show100percentSizeImageOfGate;
 import java.awt.Dimension;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.util.logging.Level;
-import javax.imageio.ImageIO;
 import javax.swing.DefaultListModel;
 import javax.swing.JLabel;
 import javax.swing.JList;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import com.osparking.global.names.CarAdmission;
-import com.osparking.global.names.GatePanel;
 import static com.osparking.global.Globals.*;
-import static com.osparking.osparking.Common.fixPanelDimemsion;
+import static com.osparking.osparking.Common.resizeComponents;
 import java.awt.Toolkit;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
@@ -60,24 +55,22 @@ public class PanelFor1Gate extends GatePanel {
         
         addComponentListener(new ComponentAdapter() {
             public void componentResized(ComponentEvent evt) {
-                
-                java.awt.EventQueue.invokeLater(new Runnable() {
-                    public void run() {
+                Dimension gatesPanelSize = getSize();
+                resizeComponents((GatePanel)evt.getSource(), gatesPanelSize);
 
-                        if (Panel_Gate1.getSize().equals(prevSize)) {
-                            return;
-                        } else {
-                            prevSize = Panel_Gate1.getSize();
-                        }
-                        if (getEntryList(1).getModel().getSize() > 0) 
+                if (Panel_Gate1.getSize().equals(prevSize)) {
+                    return;
+                } else {
+                    prevSize = Panel_Gate1.getSize();
+                    if (getEntryList(1).getModel().getSize() > 0) 
+                    {
+                        if (getEntryList(1).getSelectedIndex() == -1) 
                         {
-                            if (getEntryList(1).getSelectedIndex() == -1) {
-                                getEntryList(1).setSelectedIndex(0);
-                            }
-                            ControlGUI.showImage(1);
-                        }                  
-                    }
-                });                
+                            getEntryList(1).setSelectedIndex(0);
+                        }
+                        ControlGUI.showImage(1);
+                    }                  
+                }
             }
         });
     }
@@ -101,11 +94,6 @@ public class PanelFor1Gate extends GatePanel {
 
         setBackground(MainBackground);
         setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        addComponentListener(new java.awt.event.ComponentAdapter() {
-            public void componentResized(java.awt.event.ComponentEvent evt) {
-                formComponentResized(evt);
-            }
-        });
         setLayout(new java.awt.BorderLayout());
 
         Panel_Gate1.setBackground(MainBackground);
@@ -151,7 +139,7 @@ public class PanelFor1Gate extends GatePanel {
 
         Panel_Gate1.add(ScrollPane_Gate1);
 
-        add(Panel_Gate1, java.awt.BorderLayout.WEST);
+        add(Panel_Gate1, java.awt.BorderLayout.LINE_START);
 
         RightMargin.setBackground(MainBackground);
         RightMargin.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 1, 1, 1));
@@ -170,38 +158,14 @@ public class PanelFor1Gate extends GatePanel {
 
         /*
 
-        add(RightMargin, java.awt.BorderLayout.CENTER);
+        add(RightMargin, java.awt.BorderLayout.LINE_END);
         */
     }// </editor-fold>//GEN-END:initComponents
 
     private void CarPicLabel1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_CarPicLabel1MouseClicked
         show100percentSizeImageOfGate(1, getGateImages()[1]);
     }//GEN-LAST:event_CarPicLabel1MouseClicked
-
-    private void formComponentResized(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentResized
-        int i = 145;
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                long startMil = System.currentTimeMillis();
-//                Dimension contentPanel = getContentPane().getSize();
-                Dimension gatesPanelSize = getSize();
-                if (gatesPanelSize.width == 0) 
-                    return;
-//                Dimension gatesPanelSize = new Dimension(contentPanel.width - 290, 
-//                Dimension gatesPanelSize = new Dimension(gatesPanelSize.width - 310, 
-//                        gatesPanelSize.height - 68);
-                System.out.println("Cont Pane: " + gatesPanelSize.width);
-//                + ", msg area: " +
-//                        MessageTextArea.getSize().width);
-//                getGatePanel().resizeComponents(gatesPanelSize);
-                resizeComponents(gatesPanelSize);
-//                gatePanel.displaySizes();
-                displaySizes();
-            }
-        });         
-    }//GEN-LAST:event_formComponentResized
-
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel CarPicLabel1;
     public javax.swing.JList List_Gate1;
@@ -211,43 +175,6 @@ public class PanelFor1Gate extends GatePanel {
     private javax.swing.JScrollPane ScrollPane_Gate1;
     private javax.swing.Box.Filler filler1;
     // End of variables declaration//GEN-END:variables
-
-    /**
-     * Adjust Rest Area Picture Size
-     * @param gatesPanelSize 
-     */
-    @Override
-    public void resizeComponents(Dimension gatesPanelSize) {
-        
-        setComponentSize(this, gatesPanelSize); // Whole gates panel      
-        revalidate();
-        gatesPanelSize = getSize();        
-        fixPanelDimemsion(this, gatesPanelSize);
-
-//        int width = gatesPanelSize.width - Panel_Gate1.getWidth(); 
-//        if (width > 50)
-//        {   // PanelRestArea
-//            add(getMarginLabel(),  java.awt.BorderLayout.CENTER);
-//            try {
-////                MarginLabel.setPreferredSize(new Dimension(width, getSize().height));
-////                MarginLabel.revalidate();
-//                setComponentSize(MarginLabel, new Dimension(width, getSize().height));
-//
-//                BufferedImage marginImage 
-//                        = ImageIO.read(getClass().getResourceAsStream(restAreaImage));
-//                
-//                MarginLabel.setIcon(
-//                        createStretchedIcon(MarginLabel.getPreferredSize(), marginImage, true));
-//                MarginLabel.revalidate();
-//            } catch (IOException e) {
-//                logParkingException(Level.SEVERE, e, "(Margin area updater)");
-//            }
-//        }  
-//        else
-//        {
-//            remove(getMarginLabel());
-//        }
-    }
 
     @Override
     public void displaySizes() {
