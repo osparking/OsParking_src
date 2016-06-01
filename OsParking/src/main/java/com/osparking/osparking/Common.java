@@ -85,20 +85,27 @@ public class Common {
         
         try {
 //            int mWidth = width - 2;
-            setComponentSize(gatePanel.getMarginLabel(), 
-                    new Dimension(width, gatePanel.getSize().height));
             System.out.println(", margin: " + width);
             if (width > 10) {
+                setComponentSize(gatePanel.getMarginLabel(), 
+                        new Dimension(width, gatePanel.getSize().height));
                 BufferedImage marginImage 
                         = ImageIO.read(gatePanel.getClass().getResourceAsStream(restAreaImage));
                 gatePanel.getMarginLabel().setIcon(
                         createStretchedIcon(gatePanel.getMarginLabel().getSize(), marginImage, true));
                 gatePanel.getMarginLabel().revalidate();
+                gatePanel.add(gatePanel.getMarginLabel());
+                System.out.println("yes margin image");
+            } else {
+                width = 0;
+                setComponentSize(gatePanel.getMarginLabel(), 
+                        new Dimension(width, gatePanel.getSize().height));
+                gatePanel.getMarginLabel().setIcon(null);
+                System.out.println("no margin image");
             }
         } catch (Exception e) {
             logParkingException(Level.SEVERE, e, "(Margin area updater)");
         }
-        //gatePanel.add(gatePanel.getMarginLabel());
         //</editor-fold>
     }    
 }

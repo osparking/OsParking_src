@@ -684,11 +684,6 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
         setBackground(MainBackground);
         setFocusCycleRoot(false);
         setMinimumSize(new java.awt.Dimension(930, 640));
-        addComponentListener(new java.awt.event.ComponentAdapter() {
-            public void componentResized(java.awt.event.ComponentEvent evt) {
-                formComponentResized(evt);
-            }
-        });
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 closeButtonClicked(evt);
@@ -1517,27 +1512,7 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
         showLoginRecordForm.getDatesRefreshTable();
         showLoginRecordForm.setVisible(true);        
     }//GEN-LAST:event_LoginRecordItemActionPerformed
-        
-    private void formComponentResized(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentResized
-
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                long startMil = System.currentTimeMillis();
-                Dimension contentPanel = getContentPane().getSize();
-                if (contentPanel.width == 0) 
-                    return;
-//                Dimension gatesPanelSize = new Dimension(contentPanel.width - 290, 
-                Dimension gatesPanelSize = new Dimension(contentPanel.width - 310, 
-                        contentPanel.height - 68);
-                System.out.println("Cont Pane: " + contentPanel.width + ", msg area: " +
-                        MessageTextArea.getSize().width);
-                getGatePanel().resizeComponents(gatesPanelSize);
-                gatePanel.displaySizes();
-            }
-        });                
-    }//GEN-LAST:event_formComponentResized
-
+           
     public static int manualSimulationImageID = 0;
     private void carEntryButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_carEntryButtonActionPerformed
         Random randomInteger = new Random();

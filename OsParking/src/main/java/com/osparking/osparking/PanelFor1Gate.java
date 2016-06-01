@@ -101,6 +101,11 @@ public class PanelFor1Gate extends GatePanel {
 
         setBackground(MainBackground);
         setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        addComponentListener(new java.awt.event.ComponentAdapter() {
+            public void componentResized(java.awt.event.ComponentEvent evt) {
+                formComponentResized(evt);
+            }
+        });
         setLayout(new java.awt.BorderLayout());
 
         Panel_Gate1.setBackground(MainBackground);
@@ -172,6 +177,30 @@ public class PanelFor1Gate extends GatePanel {
     private void CarPicLabel1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_CarPicLabel1MouseClicked
         show100percentSizeImageOfGate(1, getGateImages()[1]);
     }//GEN-LAST:event_CarPicLabel1MouseClicked
+
+    private void formComponentResized(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentResized
+        int i = 145;
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                long startMil = System.currentTimeMillis();
+//                Dimension contentPanel = getContentPane().getSize();
+                Dimension gatesPanelSize = getSize();
+                if (gatesPanelSize.width == 0) 
+                    return;
+//                Dimension gatesPanelSize = new Dimension(contentPanel.width - 290, 
+//                Dimension gatesPanelSize = new Dimension(gatesPanelSize.width - 310, 
+//                        gatesPanelSize.height - 68);
+                System.out.println("Cont Pane: " + gatesPanelSize.width);
+//                + ", msg area: " +
+//                        MessageTextArea.getSize().width);
+//                getGatePanel().resizeComponents(gatesPanelSize);
+                resizeComponents(gatesPanelSize);
+//                gatePanel.displaySizes();
+                displaySizes();
+            }
+        });         
+    }//GEN-LAST:event_formComponentResized
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel CarPicLabel1;
