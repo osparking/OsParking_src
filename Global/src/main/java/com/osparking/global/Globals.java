@@ -137,8 +137,8 @@ public class Globals {
     public static SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");    
     public static int SIX_HOURS = 3600 * 1000 * 6;
     
-    public static final int boxMargin = 12;
-    public static final int widthMargin = 28;    
+    public static final int panelMargin = 12;
+    public static final int imageMargin = 28;    
     
     public static void augmentComponentMap(Object component, HashMap<String, Component> componentMap) {
         String name = null;
@@ -758,44 +758,6 @@ public class Globals {
             }
         }   
     } 
-    
-    /**
-     * Adjust Dimension of Panel for a specific Gate
-     * @param gatePanel panel for every gates monitored
-     * @param panelSize dimension of the panel containing all gates
-     */
-    public static void fixPanelDimemsion(GatePanel gatePanel, Dimension panelSize) {
-        int picWidthNew = 0, picHeightNew = 0;
-
-        // Limit picture label width to max pixel count of image.
-        int gateWidth = (panelSize.width - (boxMargin + widthMargin))/gateCount;
-        
-        if (PIC_WIDTH < gateWidth) {
-            picWidthNew = PIC_WIDTH;
-        } else {
-            picWidthNew = gateWidth;
-        } 
-
-        picHeightNew = picWidthNew * PIC_HEIGHT / PIC_WIDTH;
-        
-        // When car entry list box height isn't enough, reduce picture height and 
-        // propagate the change to the width.
-        if (panelSize.height - picHeightNew - boxMargin - widthMargin < LIST_HEIGHT_MIN) {
-            picHeightNew = panelSize.height - LIST_HEIGHT_MIN - boxMargin - widthMargin;
-            picWidthNew =  picHeightNew * PIC_WIDTH / PIC_HEIGHT;
-        }
-        
-        for (int gate = 1; gate <= gateCount; gate++) {
-            // A tall panel for one gate which includes car image and arrival list
-            setComponentSize(gatePanel.getPanel_Gate(gate), 
-                    new Dimension(picWidthNew + boxMargin, panelSize.height));
-            // Label for one car image display
-            setComponentSize(gatePanel.getCarPicLabels()[gate], 
-                    new Dimension(picWidthNew, picHeightNew));
-            System.out.println("WIDTH panel: " + (picWidthNew + boxMargin)
-                    + ", label: " + picWidthNew);
-        }
-    }    
     
     public static void setComponentSize(JComponent component, Dimension dim) 
     {

@@ -37,4 +37,5 @@ public abstract class GatePanel extends javax.swing.JPanel{
     public abstract DefaultListModel getDefaultListModel(int gateNo);
     public abstract BufferedImage[] getGateImages();
     public abstract void setGateImage(byte gateNo, BufferedImage gateImage);
+    public abstract javax.swing.JLabel getMarginLabel();
 }

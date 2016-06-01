@@ -24,12 +24,12 @@ import javax.imageio.ImageIO;
 import javax.swing.DefaultListModel;
 import javax.swing.JLabel;
 import javax.swing.JList;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import com.osparking.global.names.CarAdmission;
 import com.osparking.global.names.GatePanel;
 import static com.osparking.global.Globals.*;
 import static com.osparking.global.names.DB_Access.gateCount;
+import static com.osparking.osparking.Common.fixPanelDimemsion;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 
@@ -93,29 +93,55 @@ public class PanelFor2Gates extends GatePanel {
     public void resizeComponents(Dimension gatesPanelSize) 
     {
         setComponentSize(this, gatesPanelSize);
+        gatesPanelSize = getSize();
+        System.out.println("after gates panel size fixing: " + getSize());
         fixPanelDimemsion(this, gatesPanelSize);
+        revalidate();
         
-        int width = gatesPanelSize.width - Panel_Gate1.getWidth() * gateCount;
-        if (width > 50)
-        { // PanelRestArea
-            add(PanelMargin);
-            try {
-                setComponentSize(MarginLabel, new Dimension(width - 58, getSize().height));
-
-                BufferedImage originalImg 
-                        = ImageIO.read(getClass().getResourceAsStream(restAreaImage));
-                MarginLabel.setIcon(null);
-                MarginLabel.revalidate();
-                MarginLabel.setIcon(
-                        createStretchedIcon(MarginLabel.getSize(), originalImg, true));
-            } catch (Exception e) {
-                logParkingException(Level.SEVERE, e, "(Window size update event handler)");
-            }
-        }
-        else
-        {
-            remove(PanelMargin);
-        }
+//        int width = gatesPanelSize.width - (Panel_Gate1.getWidth() + panelMargin) * gateCount;
+//        System.out.print("Total: " + gatesPanelSize.width + ", gatePan: " +
+//                Panel_Gate1.getSize().width);
+//        
+//        { // PanelRestArea
+//            try {
+//                int mWidth = width - 2;
+//                setComponentSize(MarginLabel, new Dimension(mWidth, getSize().height));
+//                System.out.println(", margin: " + mWidth);
+//                
+//                if (width > 10) {
+//                    BufferedImage marginImage 
+//                            = ImageIO.read(getClass().getResourceAsStream(restAreaImage));
+//                    MarginLabel.setIcon(
+//                            createStretchedIcon(MarginLabel.getSize(), marginImage, true));
+//                    MarginLabel.revalidate();
+//                }
+//            } catch (Exception e) {
+//                logParkingException(Level.SEVERE, e, "(Margin area updater)");
+//            }
+//            add(getMarginLabel());
+//        }
+        
+//        if (width > 10)
+//        { // PanelRestArea
+//            try {
+//                int mWidth = width - 2;
+//                setComponentSize(MarginLabel, new Dimension(mWidth, getSize().height));
+//                System.out.println(", margin: " + mWidth);
+//                
+//                BufferedImage marginImage 
+//                        = ImageIO.read(getClass().getResourceAsStream(restAreaImage));
+//                MarginLabel.setIcon(
+//                        createStretchedIcon(MarginLabel.getSize(), marginImage, true));
+//                MarginLabel.revalidate();
+//            } catch (Exception e) {
+//                logParkingException(Level.SEVERE, e, "(Margin area updater)");
+//            }
+//            add(getRightMargin());
+//        }
+//        else
+//        {
+//            remove(getRightMargin());
+//        }
         revalidate();
     }
     
@@ -139,7 +165,7 @@ public class PanelFor2Gates extends GatePanel {
         filler4 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 10), new java.awt.Dimension(0, 10), new java.awt.Dimension(32767, 10));
         ScrollPane_Gate2 = new javax.swing.JScrollPane();
         List_Gate2 = new javax.swing.JList();
-        PanelMargin = new javax.swing.JPanel();
+        RightMargin = new javax.swing.JPanel();
         MarginLabel = new javax.swing.JLabel();
 
         setBackground(MainBackground);
@@ -234,11 +260,11 @@ public class PanelFor2Gates extends GatePanel {
 
         add(Panel_Gate2);
 
-        PanelMargin.setBackground(MainBackground);
-        PanelMargin.setMaximumSize(new Dimension(Short.MAX_VALUE, Short.MAX_VALUE));
-        PanelMargin.setMinimumSize(new java.awt.Dimension(145, 111));
-        PanelMargin.setPreferredSize(new java.awt.Dimension(245, 261));
-        PanelMargin.setLayout(new javax.swing.BoxLayout(PanelMargin, javax.swing.BoxLayout.Y_AXIS));
+        RightMargin.setBackground(MainBackground);
+        RightMargin.setMaximumSize(new Dimension(Short.MAX_VALUE, Short.MAX_VALUE));
+        RightMargin.setMinimumSize(new java.awt.Dimension(145, 111));
+        RightMargin.setPreferredSize(new java.awt.Dimension(0, 0));
+        RightMargin.setLayout(new javax.swing.BoxLayout(RightMargin, javax.swing.BoxLayout.Y_AXIS));
 
         MarginLabel.setBackground(new java.awt.Color(255, 153, 153));
         MarginLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -248,11 +274,11 @@ public class PanelFor2Gates extends GatePanel {
         MarginLabel.setName(""); // NOI18N
         MarginLabel.setPreferredSize(new java.awt.Dimension(500, 250));
         MarginLabel.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
-        PanelMargin.add(MarginLabel);
+        RightMargin.add(MarginLabel);
 
         /*
 
-        add(PanelMargin);
+        add(RightMargin);
         */
     }// </editor-fold>//GEN-END:initComponents
 
@@ -270,9 +296,9 @@ public class PanelFor2Gates extends GatePanel {
     public javax.swing.JList List_Gate1;
     public javax.swing.JList List_Gate2;
     public javax.swing.JLabel MarginLabel;
-    public javax.swing.JPanel PanelMargin;
     public javax.swing.JPanel Panel_Gate1;
     public javax.swing.JPanel Panel_Gate2;
+    public javax.swing.JPanel RightMargin;
     private javax.swing.JScrollPane ScrollPane_Gate1;
     private javax.swing.JScrollPane ScrollPane_Gate2;
     private javax.swing.Box.Filler filler2;
@@ -325,16 +351,14 @@ public class PanelFor2Gates extends GatePanel {
         sb.append("Margin");         
         sb.append(System.lineSeparator());
         sb.append("Pan = ");        
-        sb.append(getSizeString(PanelMargin ));
+        sb.append(getSizeString(getMarginLabel()));
         sb.append(System.lineSeparator());
         sb.append(System.lineSeparator());        
         sb.append("PIC = ");        
         sb.append(getSizeString(MarginLabel));
         sb.append(System.lineSeparator());
         sb.append(System.lineSeparator());        
-                
-        JOptionPane.showMessageDialog(null,
-            sb.toString(), "InfoBox: CarPicLabel", JOptionPane.INFORMATION_MESSAGE);        
+        System.out.println(sb.toString());
     }    
 
     @Override
@@ -367,5 +391,13 @@ public class PanelFor2Gates extends GatePanel {
     @Override
     public JLabel[] getCarPicLabels() {
         return CarPicLabels;
+    }
+
+    /**
+     * @return the RightMargin
+     */
+    @Override
+    public javax.swing.JLabel getMarginLabel() {
+        return MarginLabel;
     }
 }

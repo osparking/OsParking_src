@@ -30,6 +30,7 @@ import javax.swing.JPanel;
 import com.osparking.global.names.CarAdmission;
 import com.osparking.global.names.GatePanel;
 import static com.osparking.global.Globals.*;
+import static com.osparking.osparking.Common.fixPanelDimemsion;
 import java.awt.Toolkit;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
@@ -95,10 +96,11 @@ public class PanelFor1Gate extends GatePanel {
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 10), new java.awt.Dimension(0, 10), new java.awt.Dimension(32767, 10));
         ScrollPane_Gate1 = new javax.swing.JScrollPane();
         List_Gate1 = new javax.swing.JList();
-        PanelRestArea = new javax.swing.JPanel();
-        RestAreaPicLabel = new javax.swing.JLabel();
+        RightMargin = new javax.swing.JPanel();
+        MarginLabel = new javax.swing.JLabel();
 
         setBackground(MainBackground);
+        setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         setLayout(new java.awt.BorderLayout());
 
         Panel_Gate1.setBackground(MainBackground);
@@ -146,23 +148,24 @@ public class PanelFor1Gate extends GatePanel {
 
         add(Panel_Gate1, java.awt.BorderLayout.WEST);
 
-        PanelRestArea.setBackground(MainBackground);
-        PanelRestArea.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 1, 1, 1));
-        PanelRestArea.setMaximumSize(new Dimension(Short.MAX_VALUE, Short.MAX_VALUE));
-        PanelRestArea.setLayout(new javax.swing.BoxLayout(PanelRestArea, javax.swing.BoxLayout.Y_AXIS));
+        RightMargin.setBackground(MainBackground);
+        RightMargin.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 1, 1, 1));
+        RightMargin.setMaximumSize(new Dimension(Short.MAX_VALUE, Short.MAX_VALUE));
+        RightMargin.setPreferredSize(new java.awt.Dimension(0, 0));
+        RightMargin.setLayout(new javax.swing.BoxLayout(RightMargin, javax.swing.BoxLayout.Y_AXIS));
 
-        RestAreaPicLabel.setBackground(new java.awt.Color(255, 153, 153));
-        RestAreaPicLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        RestAreaPicLabel.setVerticalAlignment(javax.swing.SwingConstants.TOP);
-        RestAreaPicLabel.setMaximumSize(new Dimension(Short.MAX_VALUE, Short.MAX_VALUE));
-        RestAreaPicLabel.setName(""); // NOI18N
-        RestAreaPicLabel.setPreferredSize(new java.awt.Dimension(200, 500));
-        RestAreaPicLabel.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
-        PanelRestArea.add(RestAreaPicLabel);
+        MarginLabel.setBackground(new java.awt.Color(255, 153, 153));
+        MarginLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        MarginLabel.setVerticalAlignment(javax.swing.SwingConstants.TOP);
+        MarginLabel.setMaximumSize(new Dimension(Short.MAX_VALUE, Short.MAX_VALUE));
+        MarginLabel.setName(""); // NOI18N
+        MarginLabel.setPreferredSize(new java.awt.Dimension(200, 500));
+        MarginLabel.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
+        RightMargin.add(MarginLabel);
 
         /*
 
-        add(PanelRestArea, java.awt.BorderLayout.CENTER);
+        add(RightMargin, java.awt.BorderLayout.CENTER);
         */
     }// </editor-fold>//GEN-END:initComponents
 
@@ -173,9 +176,9 @@ public class PanelFor1Gate extends GatePanel {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel CarPicLabel1;
     public javax.swing.JList List_Gate1;
-    private javax.swing.JPanel PanelRestArea;
+    private javax.swing.JLabel MarginLabel;
     private javax.swing.JPanel Panel_Gate1;
-    private javax.swing.JLabel RestAreaPicLabel;
+    private javax.swing.JPanel RightMargin;
     private javax.swing.JScrollPane ScrollPane_Gate1;
     private javax.swing.Box.Filler filler1;
     // End of variables declaration//GEN-END:variables
@@ -187,32 +190,34 @@ public class PanelFor1Gate extends GatePanel {
     @Override
     public void resizeComponents(Dimension gatesPanelSize) {
         
-        setComponentSize(this, gatesPanelSize); // Whole gates panel        
+        setComponentSize(this, gatesPanelSize); // Whole gates panel      
+        revalidate();
+        gatesPanelSize = getSize();        
         fixPanelDimemsion(this, gatesPanelSize);
 
-        int width = gatesPanelSize.width - Panel_Gate1.getWidth(); 
-        if (width > 50)
-        {   // PanelRestArea
-            add(PanelRestArea,  java.awt.BorderLayout.CENTER);
-            try {
-                RestAreaPicLabel.setPreferredSize(new Dimension(width, this.getSize().height));
-                RestAreaPicLabel.revalidate();
-
-                BufferedImage spaceImage;
-                spaceImage = ImageIO.read(getClass().getResourceAsStream(restAreaImage));
-                
-                RestAreaPicLabel.setIcon(
-                        createStretchedIcon(RestAreaPicLabel.getPreferredSize(), spaceImage, true));
-                RestAreaPicLabel.revalidate();
-            } catch (IOException e) {
-                logParkingException(Level.SEVERE, e, "(Car Arrival Event Handler)");
-            }
-        }  
-        else
-        {
-            remove(PanelRestArea);
-        }
-        revalidate();
+//        int width = gatesPanelSize.width - Panel_Gate1.getWidth(); 
+//        if (width > 50)
+//        {   // PanelRestArea
+//            add(getMarginLabel(),  java.awt.BorderLayout.CENTER);
+//            try {
+////                MarginLabel.setPreferredSize(new Dimension(width, getSize().height));
+////                MarginLabel.revalidate();
+//                setComponentSize(MarginLabel, new Dimension(width, getSize().height));
+//
+//                BufferedImage marginImage 
+//                        = ImageIO.read(getClass().getResourceAsStream(restAreaImage));
+//                
+//                MarginLabel.setIcon(
+//                        createStretchedIcon(MarginLabel.getPreferredSize(), marginImage, true));
+//                MarginLabel.revalidate();
+//            } catch (IOException e) {
+//                logParkingException(Level.SEVERE, e, "(Margin area updater)");
+//            }
+//        }  
+//        else
+//        {
+//            remove(getMarginLabel());
+//        }
     }
 
     @Override
@@ -245,17 +250,17 @@ public class PanelFor1Gate extends GatePanel {
         sb.append("Margin");         
         sb.append(System.lineSeparator());
         sb.append("Pan = ");        
-        sb.append(getSizeString(PanelRestArea ));
+        sb.append(getSizeString(getMarginLabel()));
         sb.append(System.lineSeparator());
         sb.append(System.lineSeparator());        
         sb.append("PIC = ");        
-        sb.append(getSizeString(RestAreaPicLabel));
+        sb.append(getSizeString(MarginLabel));
         sb.append(System.lineSeparator());
         sb.append(System.lineSeparator());        
                 
-        JOptionPane.showMessageDialog(null,
-            sb.toString(), "InfoBox: CarPicLabel", JOptionPane.INFORMATION_MESSAGE);              
-        
+//        JOptionPane.showMessageDialog(null,
+//            sb.toString(), "InfoBox: CarPicLabel", JOptionPane.INFORMATION_MESSAGE);   
+        System.out.println(sb.toString());
     }
 
     @Override
@@ -286,5 +291,10 @@ public class PanelFor1Gate extends GatePanel {
     @Override
     public JLabel[] getCarPicLabels() {
         return CarPicLabels;
+    }
+
+    @Override
+    public JLabel getMarginLabel() {
+        return MarginLabel;
     }
 }
