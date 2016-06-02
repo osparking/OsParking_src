@@ -117,11 +117,14 @@ import com.osparking.vehicle.driver.ManageDrivers;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.font.FontRenderContext;
+import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import static java.awt.image.BufferedImage.TYPE_BYTE_GRAY;
 import java.awt.image.DataBufferInt;
@@ -157,13 +160,11 @@ import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.Box;
 import javax.swing.DefaultListModel;
-import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.ListSelectionModel;
-import javax.swing.SwingUtilities;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -559,23 +560,45 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
         }
     }   
     
-    private void changeLogIOitemVisibility() {
+    private int getStringWidth(String loginID) {
+        AffineTransform affinetransform = new AffineTransform();     
+        FontRenderContext frc = new FontRenderContext(affinetransform, true, true);     
+        Font font = UserIDLabelMenu.getFont();
+        return (int)((font.getStringBounds(loginID, frc)).getWidth());
+    }
+    
+    /**
+     * Changes login menu item, login userID, whether user is a administrator 
+     * or not.
+     */
+    private void changeUserID_etc() {
+        String loginID;
+        
         if (Globals.loginID == null) {
             MenuItems_setEnabled(false);
             LogInOutMenu.setText(LOGIN_MENU.getContent()); 
-            UserIDLabelMenu.setText(ID_DEFAULT.getContent());
             IsManagerLabelMenu.setText("N");
+            AttendantTask_setEnabled(false);
+            loginID = ID_DEFAULT.getContent();
         } else {
             MenuItems_setEnabled(true);
-            
             LogInOutMenu.setText(LOGOUT_MENU.getContent());
-            UserIDLabelMenu.setText(Globals.loginID);
-            if(isManager)
-                IsManagerLabelMenu.setText("Y");
-            else
-                IsManagerLabelMenu.setText("N");
+            IsManagerLabelMenu.setText(isManager ? "Y" : "N");
             AttendantTask_setEnabled(true);
+            loginID = Globals.loginID;
         }
+        
+        int minW = UserIDLabelMenu.getMinimumSize().width, w;
+        
+        if (getStringWidth(loginID) + 10 > minW) {
+            w = UserIDLabelMenu.getMaximumSize().width;
+        } else {
+            w = minW;
+        }
+        Dimension idLabelDim = new Dimension(w, UserIDLabelMenu.getPreferredSize().height);
+        UserIDLabelMenu.setSize(idLabelDim);
+        UserIDLabelMenu.setPreferredSize(idLabelDim);
+        UserIDLabelMenu.setText(loginID);
     }    
     
     public void actionPerformed(ActionEvent e) {
@@ -1376,6 +1399,8 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
         IsManagerLabelMenu.setText("N");
         IsManagerLabelMenu.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         IsManagerLabelMenu.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+        IsManagerLabelMenu.setMinimumSize(new java.awt.Dimension(20, 0));
+        IsManagerLabelMenu.setPreferredSize(new java.awt.Dimension(20, 19));
 
         managerLabel.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
 
@@ -1393,7 +1418,7 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
         UserIDLabelMenu.setHideActionText(true);
         UserIDLabelMenu.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
         UserIDLabelMenu.setInheritsPopupMenu(true);
-        UserIDLabelMenu.setMaximumSize(new java.awt.Dimension(160, 32767));
+        UserIDLabelMenu.setMaximumSize(new java.awt.Dimension(120, 32767));
         UserIDLabelMenu.setMinimumSize(new java.awt.Dimension(90, 0));
         UserIDLabelMenu.setPreferredSize(new java.awt.Dimension(90, 24));
 
@@ -1440,7 +1465,7 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
                         if (Globals.isManager) {
                             enableAdminOnlyItem(true);
                         }
-                        changeLogIOitemVisibility();
+                        changeUserID_etc();
                         recordLogin();
                         addMessageLine(MessageTextArea, "User '" + Globals.loginID + "' logged in" );
                     }
@@ -2277,7 +2302,7 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
         Globals.loginID = null;
         Globals.loginPW = null;
         Globals.isManager = false;
-        changeLogIOitemVisibility();
+        changeUserID_etc();
         AttendantTask_setEnabled(false);
     }
 
