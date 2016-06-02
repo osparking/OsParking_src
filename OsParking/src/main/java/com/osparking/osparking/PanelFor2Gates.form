@@ -71,6 +71,7 @@
             </Property>
             <Property name="horizontalTextPosition" type="int" value="0"/>
             <Property name="iconTextGap" type="int" value="0"/>
+            <Property name="inheritsPopupMenu" type="boolean" value="false"/>
             <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
               <Connection code="new Dimension(Short.MAX_VALUE, Short.MAX_VALUE)" type="code"/>
             </Property>

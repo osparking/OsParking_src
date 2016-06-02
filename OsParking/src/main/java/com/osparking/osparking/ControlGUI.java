@@ -634,7 +634,6 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
         carEntryButton = new javax.swing.JButton();
         filler7 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 15), new java.awt.Dimension(0, 15), new java.awt.Dimension(32767, 15));
         showStatisticsBtn = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
         status_botPanel = new javax.swing.JPanel();
         statusPanelGate1 = new javax.swing.JPanel();
         labelCamera1 = new javax.swing.JLabel();
@@ -989,14 +988,6 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
         });
         jPanel2.add(showStatisticsBtn);
 
-        jButton1.setText("jButton1");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
-        jPanel2.add(jButton1);
-
         status_topPanel.add(jPanel2);
         jPanel2.getAccessibleContext().setAccessibleName("");
 
@@ -1157,7 +1148,8 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
         statusTextField.setText("<Critical Status Information>");
         statusTextField.setToolTipText("");
         statusTextField.setMargin(new java.awt.Insets(0, 5, 0, 5));
-        statusTextField.setPreferredSize(new java.awt.Dimension(166, 25));
+        statusTextField.setMinimumSize(new java.awt.Dimension(100, 32));
+        statusTextField.setPreferredSize(new java.awt.Dimension(166, 32));
         statusTextPanel.add(statusTextField, java.awt.BorderLayout.PAGE_END);
 
         fullPanel.add(statusTextPanel, java.awt.BorderLayout.PAGE_END);
@@ -1720,11 +1712,6 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
         new ManageArrivalList().run();
     }//GEN-LAST:event_CarIOListButtonActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        gatePanel.displaySizes();
-// TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
-
     LedProtocol ledNoticeProtocol = new LedProtocol(); 
 
     private String getDevType(DeviceType type, byte gateNo) {
@@ -1997,7 +1984,6 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
     private javax.swing.Box.Filler filler9;
     private javax.swing.Box.Filler fillerLeft;
     private javax.swing.JPanel fullPanel;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;

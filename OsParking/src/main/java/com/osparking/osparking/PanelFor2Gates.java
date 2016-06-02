@@ -58,40 +58,24 @@ public class PanelFor2Gates extends GatePanel {
           
         addComponentListener(new ComponentAdapter() {
             public void componentResized(ComponentEvent evt) {
+                fixPanelDimemsion((GatePanel)evt.getSource(), getSize());
                 
-                java.awt.EventQueue.invokeLater(new Runnable() {
-                    public void run() {
-
-                        if (Panel_Gate1.getSize().equals(prevSize)) {
-                            return;
-                        } else {
-                            prevSize = Panel_Gate1.getSize();
-                        }
-                        
-                        for (int gateNo = 1; gateNo <= 2; gateNo++) {
-                            if (getEntryList(gateNo).getModel().getSize() > 0) 
-                            {
-                                if (getEntryList(gateNo).getSelectedIndex() == -1) {
-                                    getEntryList(gateNo).setSelectedIndex(0);
-                                }
-                                ControlGUI.showImage(gateNo);
+                if (Panel_Gate1.getSize().equals(prevSize)) {
+                    return;
+                } else {
+                    prevSize = Panel_Gate1.getSize();
+                    for (int gateNo = 1; gateNo <= 2; gateNo++) {
+                        if (getEntryList(gateNo).getModel().getSize() > 0) 
+                        {
+                            if (getEntryList(gateNo).getSelectedIndex() == -1) {
+                                getEntryList(gateNo).setSelectedIndex(0);
                             }
+                            ControlGUI.showImage(gateNo);
                         }
                     }
-                });                
+                }
             }
-        });        
-    }
-    
-    int prevWidth = 0;
-
-    public void resizeComponents(Dimension gatesPanelSize) 
-    {
-        setComponentSize(this, gatesPanelSize);
-        revalidate();
-        gatesPanelSize = getSize();
-//        System.out.println("after gates panel size fixing: " + getSize());
-        fixPanelDimemsion(this, gatesPanelSize);
+        });
     }
     
     private BufferedImage gateImages[] = new BufferedImage[3];
@@ -135,6 +119,7 @@ public class PanelFor2Gates extends GatePanel {
         CarPicLabel1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         CarPicLabel1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         CarPicLabel1.setIconTextGap(0);
+        CarPicLabel1.setInheritsPopupMenu(false);
         CarPicLabel1.setMaximumSize(new Dimension(Short.MAX_VALUE, Short.MAX_VALUE));
         CarPicLabel1.setMinimumSize(new java.awt.Dimension(200, 200));
         CarPicLabel1.setName(""); // NOI18N

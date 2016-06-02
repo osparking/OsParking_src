@@ -25,8 +25,8 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import com.osparking.global.names.CarAdmission;
 import static com.osparking.global.Globals.*;
-import static com.osparking.osparking.Common.resizeComponents;
 import java.awt.Toolkit;
+import static com.osparking.osparking.Common.fixPanelDimemsion;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 
@@ -55,8 +55,7 @@ public class PanelFor1Gate extends GatePanel {
         
         addComponentListener(new ComponentAdapter() {
             public void componentResized(ComponentEvent evt) {
-                Dimension gatesPanelSize = getSize();
-                resizeComponents((GatePanel)evt.getSource(), gatesPanelSize);
+                fixPanelDimemsion((GatePanel)evt.getSource(), getSize());
 
                 if (Panel_Gate1.getSize().equals(prevSize)) {
                     return;
@@ -214,8 +213,6 @@ public class PanelFor1Gate extends GatePanel {
         sb.append(System.lineSeparator());
         sb.append(System.lineSeparator());        
                 
-//        JOptionPane.showMessageDialog(null,
-//            sb.toString(), "InfoBox: CarPicLabel", JOptionPane.INFORMATION_MESSAGE);   
         System.out.println(sb.toString());
     }
 
