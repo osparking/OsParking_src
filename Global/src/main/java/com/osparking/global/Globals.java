@@ -18,6 +18,7 @@ package com.osparking.global;
 
 import com.osparking.global.names.ControlEnums.Languages;
 import static com.osparking.global.names.ControlEnums.Languages.KOREAN;
+import static com.osparking.global.names.ControlEnums.MenuITemTypes.MANAGER_MANU;
 import static com.osparking.global.names.DB_Access.PIC_HEIGHT;
 import java.awt.Color;
 import java.awt.Component;
@@ -492,7 +493,7 @@ public class Globals {
     public static String font_Type = "SansSerif";
     public static int font_Size = 14;
     public static int font_Style = BOLD;        
-            
+        
     /**
      * a sample car tag image file full path name
      */
@@ -501,7 +502,7 @@ public class Globals {
     /**
      * an initial value of the ID label on the main form
      */
-    public static String IDBeforeLogin = "ID: (n/a)";
+//    public static String IDBeforeLogin = "(n/a)";
     
     /**
      * As a single user program, this variable('loginID') stores the user ID of current user.

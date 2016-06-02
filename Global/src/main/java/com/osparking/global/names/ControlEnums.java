@@ -244,7 +244,9 @@ public class ControlEnums {
     public enum MsgContent {  
         RECENT_WORD("최근 ", "Recent "),
         AVERAGE_WORDS(" 대 평균 통과시간: ", " car passing delay average: "),
-        FILE_PATH("파일경로: ", "File path: ");
+        FILE_PATH("파일경로: ", "File path: "),
+        SYSTEM_START("오즈파킹 가동 시작", "OsParking started"),
+        SYSTEM_STOP("오즈파킹 가동 중지", "OsParking started");
         
         MsgContent(String korean, String english) {
             contents[KOREAN.ordinal()] = korean;
@@ -806,7 +808,9 @@ public class ControlEnums {
         LOGOUT_MENU("<HTML>로그아웃(<U>O</U>)</HTML>", "<HTML>Log <U>O</U>ut</HTML>"),
         LOGIN_MENU_ITEM("로그인", "Log In"),
         LOGOUT_MENU_ITEM("로그아웃", "Log Out"),
-        MANAGER_MANU("매니저 :", "Manager :");
+        MANAGER_MANU("매니저 :", "Manager :"),
+        ID_LABEL_STR("아이디 :", "ID :"),
+        ID_DEFAULT("(없음)", "(N/A)");
         
         MenuITemTypes(String korean, String english) {
             contents[KOREAN.ordinal()] = korean;

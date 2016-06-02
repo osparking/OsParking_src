@@ -165,6 +165,7 @@
                 <configuration> 
                     <archive> 
                         <manifest> 
+                            <addClasspath>true</addClasspath>
                             <mainClass>com.osparking.osparking.ControlGUI</mainClass> 
                         </manifest> 
                     </archive> 

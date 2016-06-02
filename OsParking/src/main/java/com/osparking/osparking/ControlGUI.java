@@ -35,6 +35,8 @@ import static com.osparking.global.names.ControlEnums.MenuITemTypes.AFFILIATION_
 import static com.osparking.global.names.ControlEnums.MenuITemTypes.ARRIVAL_MENU_ITEM;
 import static com.osparking.global.names.ControlEnums.MenuITemTypes.BOOTING_MENU_ITEM;
 import static com.osparking.global.names.ControlEnums.MenuITemTypes.DRIVERS_MENU_ITEM;
+import static com.osparking.global.names.ControlEnums.MenuITemTypes.ID_DEFAULT;
+import static com.osparking.global.names.ControlEnums.MenuITemTypes.ID_LABEL_STR;
 import static com.osparking.global.names.ControlEnums.MenuITemTypes.LOGIN_MENU;
 import static com.osparking.global.names.ControlEnums.MenuITemTypes.LOGIN_MENU_ITEM;
 import static com.osparking.global.names.ControlEnums.MenuITemTypes.LOGIN_RECORD_MENU_ITEM;
@@ -49,6 +51,8 @@ import static com.osparking.global.names.ControlEnums.MenuITemTypes.SYSTEM_MENU;
 import static com.osparking.global.names.ControlEnums.MenuITemTypes.USERS_MENU;
 import static com.osparking.global.names.ControlEnums.MenuITemTypes.VEHICLE_MANAGE_MENU_ITEM;
 import static com.osparking.global.names.ControlEnums.MenuITemTypes.VEHICLE_MENU;
+import static com.osparking.global.names.ControlEnums.MsgContent.SYSTEM_START;
+import static com.osparking.global.names.ControlEnums.MsgContent.SYSTEM_STOP;
 import static com.osparking.global.names.DB_Access.deviceType;
 import static com.osparking.global.names.DB_Access.enteranceAllowed;
 import static com.osparking.global.names.DB_Access.gateCount;
@@ -153,6 +157,7 @@ import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.Box;
 import javax.swing.DefaultListModel;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -342,9 +347,8 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
         // Info' make below lines comments after ths camera-less simulation phase completes
         formCameraMessageArray();
         addMessageLine(MessageTextArea, "" );
-        String message = "System started";
-        addMessageLine(MessageTextArea, message);
-        logParkingOperation(OpLogLevel.LogAlways, message);
+        addMessageLine(MessageTextArea, SYSTEM_START.getContent());
+        logParkingOperation(OpLogLevel.LogAlways, SYSTEM_START.getContent());
         
         int deviceCount = DeviceType.values().length; // dc: Device (type)  Count
         tolerance = new ToleranceLevel[deviceCount][gateCount + 1];
@@ -559,17 +563,17 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
         if (Globals.loginID == null) {
             MenuItems_setEnabled(false);
             LogInOutMenu.setText(LOGIN_MENU.getContent()); 
-            UserIDLabelMenu.setText(IDBeforeLogin);
-            IsManagerLabelMenu.setText("Manager : X  ");
+            UserIDLabelMenu.setText(ID_DEFAULT.getContent());
+            IsManagerLabelMenu.setText("N");
         } else {
             MenuItems_setEnabled(true);
             
             LogInOutMenu.setText(LOGOUT_MENU.getContent());
-            UserIDLabelMenu.setText("ID: " + Globals.loginID);
+            UserIDLabelMenu.setText(Globals.loginID);
             if(isManager)
-                IsManagerLabelMenu.setText("Manager : O  ");
+                IsManagerLabelMenu.setText("Y");
             else
-                IsManagerLabelMenu.setText("Manager : X  ");
+                IsManagerLabelMenu.setText("N");
             AttendantTask_setEnabled(true);
         }
     }    
@@ -591,6 +595,7 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        manager_ID_gap = new javax.swing.Box.Filler(new java.awt.Dimension(45, 0), new java.awt.Dimension(45, 0), new java.awt.Dimension(45, 32767));
         fullPanel = new javax.swing.JPanel();
         PanelMainTop = new javax.swing.JPanel();
         MainToolBar = new javax.swing.JToolBar();
@@ -1364,15 +1369,23 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
         });
         LogInOutMenu.add(LogoutUser);
 
+        visibleMenuBar.add(Box.createHorizontalGlue());
+
         visibleMenuBar.add(LogInOutMenu);
 
-        IsManagerLabelMenu.setText(MANAGER_MANU.getContent());
+        IsManagerLabelMenu.setText("N");
         IsManagerLabelMenu.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         IsManagerLabelMenu.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+
+        managerLabel.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+
+        visibleMenuBar.add(managerLabel);
+
         visibleMenuBar.add(IsManagerLabelMenu);
+        visibleMenuBar.add(manager_ID_gap);
 
         UserIDLabelMenu.setBackground(MainBackground);
-        UserIDLabelMenu.setText(IDBeforeLogin);
+        UserIDLabelMenu.setText(ID_DEFAULT.getContent());
         UserIDLabelMenu.setToolTipText("");
         UserIDLabelMenu.setAlignmentX(0.0F);
         UserIDLabelMenu.setFocusPainted(true);
@@ -1380,9 +1393,14 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
         UserIDLabelMenu.setHideActionText(true);
         UserIDLabelMenu.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
         UserIDLabelMenu.setInheritsPopupMenu(true);
-        UserIDLabelMenu.setMaximumSize(new java.awt.Dimension(140, 32767));
-        UserIDLabelMenu.setMinimumSize(new java.awt.Dimension(140, 0));
-        UserIDLabelMenu.setPreferredSize(new java.awt.Dimension(140, 24));
+        UserIDLabelMenu.setMaximumSize(new java.awt.Dimension(160, 32767));
+        UserIDLabelMenu.setMinimumSize(new java.awt.Dimension(90, 0));
+        UserIDLabelMenu.setPreferredSize(new java.awt.Dimension(90, 24));
+
+        ID_Label.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+
+        visibleMenuBar.add(ID_Label);
+
         visibleMenuBar.add(UserIDLabelMenu);
 
         setJMenuBar(visibleMenuBar);
@@ -1391,6 +1409,8 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
           
+
+    
     private void closeButtonClicked(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_closeButtonClicked
         askUserIntentionOnProgramStop(false);
     }//GEN-LAST:event_closeButtonClicked
@@ -2004,6 +2024,7 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
     private javax.swing.JLabel labelE_Board2;
     private javax.swing.JLabel labelE_Board3;
     private javax.swing.JMenuItem licenseMenuItem;
+    private javax.swing.Box.Filler manager_ID_gap;
     public javax.swing.JButton showStatisticsBtn;
     private javax.swing.JPanel statusPanelGate1;
     private javax.swing.JPanel statusPanelGate2;
@@ -2015,6 +2036,8 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
     private javax.swing.JMenuBar visibleMenuBar;
     // End of variables declaration//GEN-END:variables
     // </editor-fold>
+    JLabel managerLabel = new JLabel(MANAGER_MANU.getContent()); 
+    JLabel ID_Label = new JLabel(ID_LABEL_STR.getContent()); 
     
     // JongbumPark's declaration
     private static GatePanel gatePanel;
@@ -2170,9 +2193,8 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
             logParkingException(Level.SEVERE, ex, logMsg);
         } finally {
             closeDBstuff(conn, stmt, null, logMsg);
-            String message = "System stopped";
-            addMessageLine(MessageTextArea, message);
-            logParkingOperation(OpLogLevel.LogAlways, message);
+            addMessageLine(MessageTextArea, SYSTEM_STOP.getContent());
+            logParkingOperation(OpLogLevel.LogAlways, SYSTEM_STOP.getContent());
 
             return result;
         }
