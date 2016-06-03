@@ -48,7 +48,7 @@ public class IDevice {
     }
     
     public static interface ISocket {
-        public void setSocket(Socket eBoardSocket);
+        public void setSocket(Socket s);
         Socket getSocket();
     }
     

@@ -64,6 +64,7 @@ import com.osparking.global.names.ChangeSettings;
 import static com.osparking.global.names.ControlEnums.ButtonTypes.CANCEL_BTN;
 import static com.osparking.global.names.ControlEnums.ButtonTypes.CLOSE_BTN;
 import static com.osparking.global.names.ControlEnums.ButtonTypes.SAVE_BTN;
+import static com.osparking.global.names.ControlEnums.DialogMSGTypes.REBOOT_MESSAGE;
 import static com.osparking.global.names.ControlEnums.LabelContent.BLINGKING_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.CAMERA_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.CYCLE_LABEL;
@@ -88,6 +89,7 @@ import static com.osparking.global.names.ControlEnums.LabelContent.VEHICLE_IMG_S
 import static com.osparking.global.names.ControlEnums.LabelContent.VEHICLE_IMG_WIDTH_LABEL;
 import static com.osparking.global.names.ControlEnums.MsgContent.AVERAGE_WORDS;
 import static com.osparking.global.names.ControlEnums.MsgContent.RECENT_WORD;
+import static com.osparking.global.names.ControlEnums.TitleTypes.REBOOT_POPUP;
 import static com.osparking.global.names.ControlEnums.ToolTipContent.*;
 import com.osparking.global.names.DB_Access;
 import static com.osparking.global.names.DB_Access.connectionType;
@@ -2157,8 +2159,6 @@ public class Settings_System extends javax.swing.JFrame {
 
     private void StatPopSizeTextFieldKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_StatPopSizeTextFieldKeyTyped
         rejectNonNumericKeys(evt);
-        
-//                ((String[])Globals.ToolTipLabels.get(SETTINGS_SAVE_TOOLTIP.getContent());
     }//GEN-LAST:event_StatPopSizeTextFieldKeyTyped
 
     private void LanguageSelectionlHelpButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LanguageSelectionlHelpButtonActionPerformed
@@ -2432,10 +2432,8 @@ public class Settings_System extends javax.swing.JFrame {
                 
                 if (mainForm != null && gateCountChanged)
                 {
-                    JOptionPane.showMessageDialog(mainForm, "After Gate count change," +
-                            System.lineSeparator() + "'OSParking' shuts down by itself." +
-                            System.lineSeparator() + "So, you need to start OSParking again.", 
-                            "Reboot System", WARNING_MESSAGE, 
+                    JOptionPane.showMessageDialog(mainForm, REBOOT_MESSAGE.getContent(), 
+                            REBOOT_POPUP.getContent(), WARNING_MESSAGE, 
                             new javax.swing.ImageIcon(mainForm.getClass().getResource("/restart.png")));
                     mainForm.askUserIntentionOnProgramStop(true);
                 }                
@@ -2503,44 +2501,23 @@ public class Settings_System extends javax.swing.JFrame {
     }//GEN-LAST:event_PWStrengthChoiceComboBoxPopupMenuWillBecomeInvisible
 
     private void MessageMaxLineComboBoxPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_MessageMaxLineComboBoxPopupMenuWillBecomeInvisible
-//        short lines = (short) Integer.parseInt((String)MessageMaxLineComboBox.getSelectedItem());
-//        if (maxMessageLines == lines) {
-//            changeEnabled_of_SaveCancelButtons(false);
-//        } else {
-//            changeEnabled_of_SaveCancelButtons(true);
-//        }            
         short lines = (short) Integer.parseInt((String)MessageMaxLineComboBox.getSelectedItem());
         ChangeSettings.changeStatus_Manager(SettingsSaveButton, SettingsCancelButton, SettingsCloseButton, 
                 changedControls, (Component) evt.getSource(), lines, maxMessageLines);        
     }//GEN-LAST:event_MessageMaxLineComboBoxPopupMenuWillBecomeInvisible
 
     private void OptnLoggingLevelComboBoxPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_OptnLoggingLevelComboBoxPopupMenuWillBecomeInvisible
-//        if (opLoggingIndex == (short)(OptnLoggingLevelComboBox.getSelectedIndex())) {
-//            changeEnabled_of_SaveCancelButtons(false);
-//        } else {
-//            changeEnabled_of_SaveCancelButtons(true);
-//        }    
         ChangeSettings.changeStatus_Manager(SettingsSaveButton, SettingsCancelButton, SettingsCloseButton, 
                 changedControls, (Component)evt.getSource(),
                 OptnLoggingLevelComboBox.getSelectedIndex(), opLoggingIndex);        
     }//GEN-LAST:event_OptnLoggingLevelComboBoxPopupMenuWillBecomeInvisible
 
     private void DateChooserLangCBoxPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_DateChooserLangCBoxPopupMenuWillBecomeInvisible
-//        if (localeIndex == (short)(DateChooserLangCBox.getSelectedIndex())) {
-//            changeEnabled_of_SaveCancelButtons(false);
-//        } else {
-//            changeEnabled_of_SaveCancelButtons(true);
-//        }   
         ChangeSettings.changeStatus_Manager(SettingsSaveButton, SettingsCancelButton, SettingsCloseButton, 
                 changedControls, (Component) evt.getSource(), DateChooserLangCBox.getSelectedIndex(), localeIndex);        
     }//GEN-LAST:event_DateChooserLangCBoxPopupMenuWillBecomeInvisible
 
     private void GateCountComboBoxPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_GateCountComboBoxPopupMenuWillBecomeInvisible
-//        if (gateCount == Integer.parseInt((String)GateCountComboBox.getSelectedItem())) {
-//            changeEnabled_of_SaveCancelButtons(false);
-//        } else {
-//            changeEnabled_of_SaveCancelButtons(true);
-//        }  
         String gateCountStr = (String)GateCountComboBox.getSelectedItem();
         ChangeSettings.changeStatus_Manager(SettingsSaveButton, SettingsCancelButton, SettingsCloseButton, 
                 changedControls, (Component) evt.getSource(), Integer.parseInt(gateCountStr), gateCount);        
@@ -2581,13 +2558,6 @@ public class Settings_System extends javax.swing.JFrame {
     }//GEN-LAST:event_lotNameTextFieldKeyReleased
 
     private void BlinkingComboBoxPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_BlinkingComboBoxPopupMenuWillBecomeInvisible
-//        String newBlinkCycleStr = ((String)BlinkingComboBox.getSelectedItem()).replace(",", "");
-//
-//        if (EBD_blinkCycle == Integer.parseInt(newBlinkCycleStr)) {
-//            changeEnabled_of_SaveCancelButtons(false);
-//        } else {
-//            changeEnabled_of_SaveCancelButtons(true);
-//        }
         String newBlinkCycleStr = ((String)BlinkingComboBox.getSelectedItem()).replace(",", "");
         ChangeSettings.changeStatus_Manager(SettingsSaveButton, SettingsCancelButton, SettingsCloseButton, 
                 changedControls, (Component) evt.getSource(), Integer.parseInt(newBlinkCycleStr), EBD_blinkCycle);        
@@ -2927,7 +2897,7 @@ public class Settings_System extends javax.swing.JFrame {
      */
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        //<editor-fold defaultstate="collapsed" desc="-- Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
          */
@@ -2947,9 +2917,6 @@ public class Settings_System extends javax.swing.JFrame {
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(Settings_System.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
         //</editor-fold>
 
         initializeLoggers();
@@ -3415,7 +3382,6 @@ public class Settings_System extends javax.swing.JFrame {
      * @param eBDsettings the eBDsettings to set
      */
     public void setEBDsettings(JFrame eBDsettings) {
-//    public void setEBDsettings(ISettings_EBoard eBDsettings) {
         this.eBDsettings = eBDsettings;
     }
 

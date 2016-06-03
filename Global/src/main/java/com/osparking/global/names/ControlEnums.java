@@ -59,6 +59,7 @@ public class ControlEnums {
         DEFAULT_PANEL_TITLE("평시", "Default"),
         VEHICLE_PANEL_TITLE("차량", "Vehicle"),
         TOP_PANEL_TITLE("상단", "TOP"), 
+        REBOOT_POPUP("자동 종료 안내", "Reboot System"), 
         BOTTOM_PANEL_TITLE("하단", "BOTTOM");
         
         TitleTypes(String korean, String english) {
@@ -611,7 +612,17 @@ public class ControlEnums {
                 "아래 파일이 이미 존재합니다.", "A folder(=directory) of same name exists"),
         
         SAVE_OVERWRITE_DIALOG(
-                "이 파일에 덮어 쓰겠습니까?", "Do you want to overwrite it?");
+                "이 파일에 덮어 쓰겠습니까?", "Do you want to overwrite it?"),
+        AUTO_LOGOUT("이 자동 로그아웃 됨!", " is forced to log out!"),
+        OSPARKING_STOPS("오즈파킹 가동이 종료됨.", "OsParking operation finishes."),
+        REBOOT_MESSAGE("입구 수 변화로 인하여," + System.getProperty("line.separator") +
+                "오즈파킹이 자동 종료됨."  + System.getProperty("line.separator") +
+                "따라서 (필요하면),"  + System.getProperty("line.separator") +
+                "오즈파킹을 재가동 할 것!", 
+                "As Gate count changed," + System.getProperty("line.separator") +
+                "OsParking shuts down by itself." + System.getProperty("line.separator") +
+                "If you need, restart OsParking!"
+        );
         
         DialogMSGTypes(String korean, String english) {
             contents[KOREAN.ordinal()] = korean;
@@ -665,6 +676,7 @@ public class ControlEnums {
         STATISTICS_INPUT_ERROR_DIALOGTITLE("통계 주기 입력 오류", "Statistics Cycle Input Error"),
         PHOTO_SIZE_INPUT_ERROR_DIALOGTITLE("사진 크기 입력 오류", "Picture Size Input Error"),
         IP_FORMAT_ERROR_DAILOGTITLE("IP주소 형식 오류", "IP address format error"),
+        SYSTEM_SHUTDOWN_CONFIRM("종료 의사 확인", "Shutdown Confirmation"),
         MAIN_GUI_TITLE("㈜오픈소스파킹", "Open Source Parking Inc.");
 
         DialogTitleTypes(String korean, String english) {

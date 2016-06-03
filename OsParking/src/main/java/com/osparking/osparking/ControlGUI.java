@@ -28,8 +28,12 @@ import static com.osparking.global.names.ControlEnums.ButtonTypes.CAR_ARRIVAL_BT
 import static com.osparking.global.names.ControlEnums.ButtonTypes.STATISTICS_BTN;
 import static com.osparking.global.names.ControlEnums.ButtonTypes.USERS_BTN;
 import static com.osparking.global.names.ControlEnums.ButtonTypes.VEHICLES_BTN;
+import static com.osparking.global.names.ControlEnums.DialogMSGTypes.AUTO_LOGOUT;
+import static com.osparking.global.names.ControlEnums.DialogMSGTypes.OSPARKING_STOPS;
+import static com.osparking.global.names.ControlEnums.DialogMSGTypes.SHUT_DOWN_CONFIRM_DIALOG;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.CONFIRM_LOGOUT;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.MAIN_GUI_TITLE;
+import static com.osparking.global.names.ControlEnums.DialogTitleTypes.SYSTEM_SHUTDOWN_CONFIRM;
 import static com.osparking.global.names.ControlEnums.LabelContent.OPEN_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.STATUS_LABEL;
 import static com.osparking.global.names.ControlEnums.MenuITemTypes.AFFILIATION_MENU;
@@ -240,6 +244,7 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
      */
     private PassingDelayStat[] passingDelayStat = null;
         
+    private final String debugPanelName = "debugPanel";
     /**
      * @return the shownImageRow
      */
@@ -303,7 +308,8 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
         statusPanels[3] = statusPanelGate3;
         for (int i = gateCount + 1; i <=MAX_GATES; i++) {
             statusPanels[i].setVisible(false);
-        }        
+        }
+        connStatusPanel.setPreferredSize(connStatusPanel.getPreferredSize());
 
         deviceConnectionLabels = new JLabel[DeviceType.values().length][MAX_GATES + 1];
         deviceConnectionLabels[DeviceType.Camera.ordinal()][1] = labelCamera1;
@@ -505,7 +511,8 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
         LED_Timer = new Timer("ospLEDtimer", true);
         LED_Timer.schedule(new LED_Task(this, getDeviceManagers()), 0, LED_PERIOD);
         
-        if (!DEBUG) {
+//        if (!DEBUG) 
+        {
             processLogIn(null); // shortcut
         }
     }
@@ -643,7 +650,7 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
         MainScrollPane = new javax.swing.JScrollPane();
         MessageTextArea = new javax.swing.JTextArea();
         Status_Panel = new javax.swing.JPanel();
-        status_topPanel = new javax.swing.JPanel();
+        debugPanel = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
         jPanel5 = new javax.swing.JPanel();
         filler12 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
@@ -668,7 +675,7 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
         carEntryButton = new javax.swing.JButton();
         filler7 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 15), new java.awt.Dimension(0, 15), new java.awt.Dimension(32767, 15));
         showStatisticsBtn = new javax.swing.JButton();
-        status_botPanel = new javax.swing.JPanel();
+        connStatusPanel = new javax.swing.JPanel();
         statusPanelGate1 = new javax.swing.JPanel();
         labelCamera1 = new javax.swing.JLabel();
         labelE_Board1 = new javax.swing.JLabel();
@@ -871,15 +878,15 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
         Panel_MainMsgList.add(MainScrollPane, java.awt.BorderLayout.CENTER);
 
         Status_Panel.setBackground(MainBackground);
-        Status_Panel.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 5, 5, 5));
+        Status_Panel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         Status_Panel.setAlignmentX(0.0F);
         Status_Panel.setMaximumSize(new Dimension(Short.MAX_VALUE, Short.MAX_VALUE));
         Status_Panel.setMinimumSize(new java.awt.Dimension(280, 180));
         Status_Panel.setPreferredSize(new java.awt.Dimension(280, 225));
         Status_Panel.setLayout(new java.awt.BorderLayout());
 
-        status_topPanel.setBackground(MainBackground);
-        status_topPanel.setLayout(new javax.swing.BoxLayout(status_topPanel, javax.swing.BoxLayout.LINE_AXIS));
+        debugPanel.setBackground(MainBackground);
+        debugPanel.setLayout(new javax.swing.BoxLayout(debugPanel, javax.swing.BoxLayout.LINE_AXIS));
 
         jPanel3.setBackground(MainBackground);
         jPanel3.setMaximumSize(new java.awt.Dimension(32882, 32767));
@@ -975,7 +982,7 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
         jPanel3.add(jPanel4);
         jPanel3.add(filler9);
 
-        status_topPanel.add(jPanel3);
+        debugPanel.add(jPanel3);
 
         jPanel2.setBackground(MainBackground);
         jPanel2.setMaximumSize(new java.awt.Dimension(32882, 12000));
@@ -1021,14 +1028,14 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
         });
         jPanel2.add(showStatisticsBtn);
 
-        status_topPanel.add(jPanel2);
+        debugPanel.add(jPanel2);
         jPanel2.getAccessibleContext().setAccessibleName("");
 
-        Status_Panel.add(status_topPanel, java.awt.BorderLayout.CENTER);
+        Status_Panel.add(debugPanel, java.awt.BorderLayout.CENTER);
 
-        status_botPanel.setBackground(MainBackground);
-        status_botPanel.setBorder(javax.swing.BorderFactory.createEmptyBorder(2, 15, 2, 2));
-        status_botPanel.setLayout(new javax.swing.BoxLayout(status_botPanel, javax.swing.BoxLayout.PAGE_AXIS));
+        connStatusPanel.setBackground(MainBackground);
+        connStatusPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        connStatusPanel.setLayout(new javax.swing.BoxLayout(connStatusPanel, javax.swing.BoxLayout.PAGE_AXIS));
 
         statusPanelGate1.setBackground(MainBackground);
 
@@ -1072,8 +1079,8 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
                     .addComponent(jLabel2)))
         );
 
-        status_botPanel.add(statusPanelGate1);
-        status_botPanel.add(filler2);
+        connStatusPanel.add(statusPanelGate1);
+        connStatusPanel.add(filler2);
 
         statusPanelGate2.setBackground(MainBackground);
 
@@ -1117,8 +1124,8 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
                     .addComponent(jLabel3)))
         );
 
-        status_botPanel.add(statusPanelGate2);
-        status_botPanel.add(filler5);
+        connStatusPanel.add(statusPanelGate2);
+        connStatusPanel.add(filler5);
 
         statusPanelGate3.setBackground(MainBackground);
 
@@ -1162,9 +1169,9 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
                     .addComponent(jLabel4)))
         );
 
-        status_botPanel.add(statusPanelGate3);
+        connStatusPanel.add(statusPanelGate3);
 
-        Status_Panel.add(status_botPanel, java.awt.BorderLayout.PAGE_END);
+        Status_Panel.add(connStatusPanel, java.awt.BorderLayout.PAGE_END);
 
         Panel_MainMsgList.add(Status_Panel, java.awt.BorderLayout.PAGE_END);
 
@@ -1501,12 +1508,12 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
         
         int result = 0;
         if (forced) {
-            JOptionPane.showMessageDialog(this, 
-                "Program stops running.");
+            JOptionPane.showMessageDialog(this, OSPARKING_STOPS.getContent());
             result = JOptionPane.YES_OPTION;
         } else {
             result = JOptionPane.showConfirmDialog(this, 
-                    "Do you want to stop the system?", "Shutdown Confirmation", JOptionPane.YES_NO_OPTION);
+                    SHUT_DOWN_CONFIRM_DIALOG.getContent(), 
+                    SYSTEM_SHUTDOWN_CONFIRM.getContent(), JOptionPane.YES_NO_OPTION);
         }
         
         if (result == JOptionPane.YES_OPTION) {
@@ -2007,6 +2014,8 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
     private javax.swing.JPanel WholePanel;
     private javax.swing.JCheckBox autoGateOpenCheckBox;
     private javax.swing.JButton carEntryButton;
+    private javax.swing.JPanel connStatusPanel;
+    private javax.swing.JPanel debugPanel;
     private javax.swing.JPanel entryPanel;
     private javax.swing.JButton errDecButton;
     private javax.swing.JButton errIncButton;
@@ -2057,8 +2066,6 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
     private javax.swing.JPanel statusPanelGate3;
     private javax.swing.JTextField statusTextField;
     private javax.swing.JPanel statusTextPanel;
-    private javax.swing.JPanel status_botPanel;
-    private javax.swing.JPanel status_topPanel;
     private javax.swing.JMenuBar visibleMenuBar;
     // End of variables declaration//GEN-END:variables
     // </editor-fold>
@@ -2933,8 +2940,7 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
         try {
             int result = 0;
             if (forced) {
-                JOptionPane.showMessageDialog(this, 
-                    "'" + Globals.loginID + "' will be logged out.");
+                JOptionPane.showMessageDialog(this, Globals.loginID + AUTO_LOGOUT.getContent());
                 result = JOptionPane.YES_OPTION;
             } else {
                 result = JOptionPane.showConfirmDialog(this, 
@@ -3095,6 +3101,13 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
         }
     }
 
+    public void removeDebugPanel() {
+        Status_Panel.remove(debugPanel);
+        validate();
+        Dimension devConnDim = connStatusPanel.getPreferredSize();
+        Status_Panel.setPreferredSize(
+                new Dimension(devConnDim.width, devConnDim.height + 2));
+    }
     /**
      * @param args the command line arguments
      */
@@ -3136,6 +3149,9 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
                     Globals.shortLicenseDialog(null);
                 }
                 ControlGUI mainForm = new ControlGUI();
+                if (!DEBUG) {
+                    mainForm.removeDebugPanel();
+                }
                 parentGUI = mainForm;
                 mainForm.recordSystemStart();
                 mainForm.setVisible(true);

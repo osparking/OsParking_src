@@ -296,12 +296,12 @@ public class BlackFlyManager extends Thread implements
 
     @Override
     public boolean isNeverConnected() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return neverBeenConnected;
     }
 
     @Override
-    public void setSocket(Socket eBoardSocket) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void setSocket(Socket s) {
+        socket = s;
     }
 
     @Override

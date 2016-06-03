@@ -31,7 +31,6 @@ import static com.osparking.global.names.ControlEnums.DialogMSGTypes.INPUT_ID_DI
 import static com.osparking.global.names.ControlEnums.DialogMSGTypes.INPUT_PW_DIALOG;
 import static com.osparking.global.names.ControlEnums.DialogMSGTypes.LOGIN_WRONG_DIALOG;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.ERROR_DIALOGTITLE;
-import static com.osparking.global.names.ControlEnums.DialogTitleTypes.WARING_DIALOGTITLE;
 import static com.osparking.global.names.ControlEnums.LabelContent.LOGIN_ID_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.PW_LABEL;
 import static com.osparking.global.names.ControlEnums.TitleTypes.LOGIN_DIALOG_TITLE;
