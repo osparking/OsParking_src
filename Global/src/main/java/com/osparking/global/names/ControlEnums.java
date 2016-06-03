@@ -243,6 +243,9 @@ public class ControlEnums {
     
     public enum MsgContent {  
         RECENT_WORD("최근 ", "Recent "),
+        LOG_IN("로그인", "Logged In"),
+        LOG_OUT("로그아웃", "Logged Out"),
+        ASK_LOGOUT(", 로그아웃 원하십니까?", ", do you want to log out?"),
         AVERAGE_WORDS(" 대 평균 통과시간: ", " car passing delay average: "),
         FILE_PATH("파일경로: ", "File path: "),
         SYSTEM_START("오즈파킹 가동 시작", "OsParking started"),
@@ -630,6 +633,7 @@ public class ControlEnums {
         ATT_USER_UPDATE_DIALOGTITLE("관리원 정보 수정 결과", "User Info Change Result"),       
         ATT_SFAVE_AS_SUCCESS_DIALOGTITLE("텍스트(.txt) 파일 생성", "Text File(*.txt) Creation"), 
         ATT_HELP_DIALOGTITLE("비밀번호 요구조건", "Password Requirements"),
+        CONFIRM_LOGOUT("로그아웃 확인", "Confirm Logout"),                
         READ_ODS_DIALOGTITLE("차트 분석 결과", "Sheet Analysis Result"),                
         READ_ODS_FAIL_DIALOGTITLE("차트 형식 오류", "Sheet Cell Data Format Error"),       
         AFFILIATION_MODIFY_DIALOGTITLE("상위 소속 변경", "Higher Affiliation Change"),  
@@ -809,6 +813,7 @@ public class ControlEnums {
         LOGIN_MENU_ITEM("로그인", "Log In"),
         LOGOUT_MENU_ITEM("로그아웃", "Log Out"),
         MANAGER_MANU("매니저 :", "Manager :"),
+        META_KEY_LABEL("메타 키: Alt", "Meta Key : Alt"),
         ID_LABEL_STR("아이디 :", "ID :"),
         ID_DEFAULT("(없음)", "(N/A)");
         

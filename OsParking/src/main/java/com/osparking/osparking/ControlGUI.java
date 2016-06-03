@@ -28,6 +28,7 @@ import static com.osparking.global.names.ControlEnums.ButtonTypes.CAR_ARRIVAL_BT
 import static com.osparking.global.names.ControlEnums.ButtonTypes.STATISTICS_BTN;
 import static com.osparking.global.names.ControlEnums.ButtonTypes.USERS_BTN;
 import static com.osparking.global.names.ControlEnums.ButtonTypes.VEHICLES_BTN;
+import static com.osparking.global.names.ControlEnums.DialogTitleTypes.CONFIRM_LOGOUT;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.MAIN_GUI_TITLE;
 import static com.osparking.global.names.ControlEnums.LabelContent.OPEN_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.STATUS_LABEL;
@@ -44,6 +45,7 @@ import static com.osparking.global.names.ControlEnums.MenuITemTypes.LOGOUT_MENU;
 import static com.osparking.global.names.ControlEnums.MenuITemTypes.LOGOUT_MENU_ITEM;
 import static com.osparking.global.names.ControlEnums.MenuITemTypes.MANAGER_MANU;
 import static com.osparking.global.names.ControlEnums.MenuITemTypes.MANAGE_MENU_ITEM;
+import static com.osparking.global.names.ControlEnums.MenuITemTypes.META_KEY_LABEL;
 import static com.osparking.global.names.ControlEnums.MenuITemTypes.QUIT_MENU_ITEM;
 import static com.osparking.global.names.ControlEnums.MenuITemTypes.RECORD_MENU;
 import static com.osparking.global.names.ControlEnums.MenuITemTypes.SETTING_MENU_ITEM;
@@ -51,6 +53,9 @@ import static com.osparking.global.names.ControlEnums.MenuITemTypes.SYSTEM_MENU;
 import static com.osparking.global.names.ControlEnums.MenuITemTypes.USERS_MENU;
 import static com.osparking.global.names.ControlEnums.MenuITemTypes.VEHICLE_MANAGE_MENU_ITEM;
 import static com.osparking.global.names.ControlEnums.MenuITemTypes.VEHICLE_MENU;
+import static com.osparking.global.names.ControlEnums.MsgContent.ASK_LOGOUT;
+import static com.osparking.global.names.ControlEnums.MsgContent.LOG_IN;
+import static com.osparking.global.names.ControlEnums.MsgContent.LOG_OUT;
 import static com.osparking.global.names.ControlEnums.MsgContent.SYSTEM_START;
 import static com.osparking.global.names.ControlEnums.MsgContent.SYSTEM_STOP;
 import static com.osparking.global.names.DB_Access.deviceType;
@@ -114,6 +119,7 @@ import com.osparking.statistics.CarArrivals;
 import com.osparking.vehicle.AffiliationBuildingForm;
 import com.osparking.vehicle.VehiclesForm;
 import com.osparking.vehicle.driver.ManageDrivers;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
@@ -699,7 +705,6 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
         SettingsItem = new javax.swing.JMenuItem();
         CloseProgramItem = new javax.swing.JMenuItem();
         licenseMenuItem = new javax.swing.JMenuItem();
-        jMenu5 = new javax.swing.JMenu();
         LogInOutMenu = new javax.swing.JMenu();
         LoginUser = new javax.swing.JMenuItem();
         LogoutUser = new javax.swing.JMenuItem();
@@ -1354,13 +1359,6 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
 
         visibleMenuBar.add(CommandMenu);
 
-        jMenu5.setBackground(MainBackground);
-        jMenu5.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        jMenu5.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jMenu5.setPreferredSize(new java.awt.Dimension(85, 24));
-        visibleMenuBar.add(jMenu5);
-        visibleMenuBar.add(Box.createHorizontalGlue());
-
         LogInOutMenu.setBackground(MainBackground);
         LogInOutMenu.setText(LOGIN_MENU.getContent());
         LogInOutMenu.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
@@ -1392,6 +1390,10 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
         });
         LogInOutMenu.add(LogoutUser);
 
+        visibleMenuBar.add(Box.createHorizontalGlue());
+        metaKeyLabel.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        metaKeyLabel.setForeground(Color.red);
+        visibleMenuBar.add(metaKeyLabel);
         visibleMenuBar.add(Box.createHorizontalGlue());
 
         visibleMenuBar.add(LogInOutMenu);
@@ -1467,7 +1469,7 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
                         }
                         changeUserID_etc();
                         recordLogin();
-                        addMessageLine(MessageTextArea, "User '" + Globals.loginID + "' logged in" );
+                        addMessageLine(MessageTextArea, Globals.loginID + " " + LOG_IN.getContent());
                     }
                 });
             } catch (Exception ex) {
@@ -2032,7 +2034,6 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JMenu jMenu5;
     private javax.swing.JMenu jMenu6;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
@@ -2061,6 +2062,7 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
     private javax.swing.JMenuBar visibleMenuBar;
     // End of variables declaration//GEN-END:variables
     // </editor-fold>
+    JLabel metaKeyLabel = new JLabel(META_KEY_LABEL.getContent()); 
     JLabel managerLabel = new JLabel(MANAGER_MANU.getContent()); 
     JLabel ID_Label = new JLabel(ID_LABEL_STR.getContent()); 
     
@@ -2298,7 +2300,8 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
 
     private void processLogoutReally() {
         recordLogout();
-        addMessageLine(MessageTextArea, "User '" + Globals.loginID + "' logged out" );
+        addMessageLine(MessageTextArea, Globals.loginID + " " + LOG_OUT.getContent());
+        
         Globals.loginID = null;
         Globals.loginPW = null;
         Globals.isManager = false;
@@ -2935,8 +2938,8 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
                 result = JOptionPane.YES_OPTION;
             } else {
                 result = JOptionPane.showConfirmDialog(this, 
-                    "Does '" + Globals.loginID + "' want to logout?",
-                    "Logout Confirmation", JOptionPane.YES_NO_OPTION);
+                    Globals.loginID + ASK_LOGOUT.getContent() + " ",
+                    CONFIRM_LOGOUT.getContent(), JOptionPane.YES_NO_OPTION);
             }
             if (result == JOptionPane.YES_OPTION) {
                 processLogoutReally();
@@ -3015,7 +3018,6 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
             getShownImageRow()[gateNo] = getGatePanel().getEntryList(gateNo).getSelectedIndex();
 
             JLabel picLabel = getGatePanel().getCarPicLabels()[gateNo];
-            System.out.println("frame " + gateNo + " size: " + picLabel.getSize());
             CarAdmission carEntry = (CarAdmission)getGatePanel().getEntryList(gateNo).getSelectedValue();
 
             String sql = new String( "Select imageblob from car_arrival where ArrSeqNo = ?");
@@ -3033,15 +3035,11 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
                         InputStream imageInStream = rs.getBinaryStream("ImageBlob");
 
                         if (imageInStream == null) {
-//                                    picLabel.setIcon(createStretchedIcon(picLabel.getSize(), noPictureImg, false));
-//                                    originalImgWidth[gateNo] = noPictureImg.getWidth(); 
                             picLabel.setIcon(null);
                             picLabel.setText("No Image Exists");
                         } else {
                             picLabel.setText(null);
                             BufferedImage imageRead = ImageIO.read(imageInStream);
-                            System.out.println("image size: " + imageRead.getWidth() + ", " + 
-                                    imageRead.getHeight());
                             picLabel.setIcon(createStretchedIcon(picLabel.getSize(), imageRead, false));
                             closeInputStream(imageInStream, "(image loading from DB)");
                             originalImgWidth[gateNo] = imageRead.getWidth(); 
