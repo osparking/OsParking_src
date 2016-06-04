@@ -738,7 +738,6 @@ public class Globals {
 
                 if (oneArg.indexOf(DEBUG_OPTION) == 0) {
                     DEBUG = true;
-
                 } else if (oneArg.indexOf(VERSION_TYPE) == 0) {
                     String version = oneArg.substring(9);
 

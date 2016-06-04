@@ -92,7 +92,6 @@ public class PanelFor1Gate extends GatePanel {
         MarginLabel = new javax.swing.JLabel();
 
         setBackground(MainBackground);
-        setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         setLayout(new java.awt.BorderLayout());
 
         Panel_Gate1.setBackground(MainBackground);
