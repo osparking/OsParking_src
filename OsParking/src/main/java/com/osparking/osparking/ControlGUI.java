@@ -34,6 +34,9 @@ import static com.osparking.global.names.ControlEnums.DialogMSGTypes.SHUT_DOWN_C
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.CONFIRM_LOGOUT;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.MAIN_GUI_TITLE;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.SYSTEM_SHUTDOWN_CONFIRM;
+import static com.osparking.global.names.ControlEnums.LabelContent.CAMERA_LABEL;
+import static com.osparking.global.names.ControlEnums.LabelContent.E_BOARD_LABEL;
+import static com.osparking.global.names.ControlEnums.LabelContent.GATE_BAR_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.OPEN_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.STATUS_LABEL;
 import static com.osparking.global.names.ControlEnums.MenuITemTypes.AFFILIATION_MENU;
@@ -1100,7 +1103,7 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
 
         labelCamera1.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         labelCamera1.setForeground(new java.awt.Color(255, 0, 0));
-        labelCamera1.setText("Camera");
+        labelCamera1.setText(CAMERA_LABEL.getContent());
         labelCamera1.setMaximumSize(new java.awt.Dimension(55, 14));
         labelCamera1.setMinimumSize(new java.awt.Dimension(55, 14));
         labelCamera1.setPreferredSize(new java.awt.Dimension(55, 14));
@@ -1109,7 +1112,7 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
 
         labelE_Board1.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         labelE_Board1.setForeground(new java.awt.Color(255, 0, 0));
-        labelE_Board1.setText("E-Board");
+        labelE_Board1.setText(E_BOARD_LABEL.getContent());
         labelE_Board1.setMaximumSize(new java.awt.Dimension(55, 14));
         labelE_Board1.setMinimumSize(new java.awt.Dimension(55, 14));
         labelE_Board1.setPreferredSize(new java.awt.Dimension(55, 14));
@@ -1118,7 +1121,7 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
 
         labelBar1.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         labelBar1.setForeground(new java.awt.Color(255, 0, 0));
-        labelBar1.setText("G-Bar");
+        labelBar1.setText(GATE_BAR_LABEL.getContent());
         labelBar1.setMaximumSize(new java.awt.Dimension(55, 14));
         labelBar1.setMinimumSize(new java.awt.Dimension(55, 14));
         labelBar1.setPreferredSize(new java.awt.Dimension(55, 14));
@@ -1146,7 +1149,7 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
 
         labelCamera2.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         labelCamera2.setForeground(new java.awt.Color(255, 0, 0));
-        labelCamera2.setText("Camera");
+        labelCamera2.setText(CAMERA_LABEL.getContent());
         labelCamera2.setMaximumSize(new java.awt.Dimension(55, 14));
         labelCamera2.setMinimumSize(new java.awt.Dimension(55, 14));
         labelCamera2.setPreferredSize(new java.awt.Dimension(55, 14));
@@ -1155,7 +1158,7 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
 
         labelE_Board2.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         labelE_Board2.setForeground(new java.awt.Color(255, 0, 0));
-        labelE_Board2.setText("E-Board");
+        labelE_Board2.setText(E_BOARD_LABEL.getContent());
         labelE_Board2.setMaximumSize(new java.awt.Dimension(55, 14));
         labelE_Board2.setMinimumSize(new java.awt.Dimension(55, 14));
         labelE_Board2.setPreferredSize(new java.awt.Dimension(55, 14));
@@ -1164,7 +1167,7 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
 
         labelBar2.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         labelBar2.setForeground(new java.awt.Color(255, 0, 0));
-        labelBar2.setText("G-Bar");
+        labelBar2.setText(GATE_BAR_LABEL.getContent());
         labelBar2.setMaximumSize(new java.awt.Dimension(55, 14));
         labelBar2.setMinimumSize(new java.awt.Dimension(55, 14));
         labelBar2.setPreferredSize(new java.awt.Dimension(55, 14));
@@ -1192,7 +1195,7 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
 
         labelCamera3.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         labelCamera3.setForeground(new java.awt.Color(255, 0, 0));
-        labelCamera3.setText("Camera");
+        labelCamera3.setText(CAMERA_LABEL.getContent());
         labelCamera3.setMaximumSize(new java.awt.Dimension(55, 14));
         labelCamera3.setMinimumSize(new java.awt.Dimension(55, 14));
         labelCamera3.setPreferredSize(new java.awt.Dimension(55, 14));
@@ -1201,7 +1204,7 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
 
         labelE_Board3.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         labelE_Board3.setForeground(new java.awt.Color(255, 0, 0));
-        labelE_Board3.setText("E-Board");
+        labelE_Board3.setText(E_BOARD_LABEL.getContent());
         labelE_Board3.setMaximumSize(new java.awt.Dimension(55, 14));
         labelE_Board3.setMinimumSize(new java.awt.Dimension(55, 14));
         labelE_Board3.setPreferredSize(new java.awt.Dimension(55, 14));
@@ -1210,7 +1213,7 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
 
         labelBar3.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         labelBar3.setForeground(new java.awt.Color(255, 0, 0));
-        labelBar3.setText("G-Bar");
+        labelBar3.setText(GATE_BAR_LABEL.getContent());
         labelBar3.setMaximumSize(new java.awt.Dimension(55, 14));
         labelBar3.setMinimumSize(new java.awt.Dimension(55, 14));
         labelBar3.setPreferredSize(new java.awt.Dimension(55, 14));
@@ -1238,7 +1241,7 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
 
         labelCamera4.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         labelCamera4.setForeground(new java.awt.Color(255, 0, 0));
-        labelCamera4.setText("Camera");
+        labelCamera4.setText(CAMERA_LABEL.getContent());
         labelCamera4.setMaximumSize(new java.awt.Dimension(55, 14));
         labelCamera4.setMinimumSize(new java.awt.Dimension(55, 14));
         labelCamera4.setPreferredSize(new java.awt.Dimension(55, 14));
@@ -1247,7 +1250,7 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
 
         labelE_Board4.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         labelE_Board4.setForeground(new java.awt.Color(255, 0, 0));
-        labelE_Board4.setText("E-Board");
+        labelE_Board4.setText(E_BOARD_LABEL.getContent());
         labelE_Board4.setMaximumSize(new java.awt.Dimension(55, 14));
         labelE_Board4.setMinimumSize(new java.awt.Dimension(55, 14));
         labelE_Board4.setPreferredSize(new java.awt.Dimension(55, 14));
@@ -1256,7 +1259,7 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
 
         labelBar4.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         labelBar4.setForeground(new java.awt.Color(255, 0, 0));
-        labelBar4.setText("G-Bar");
+        labelBar4.setText(GATE_BAR_LABEL.getContent());
         labelBar4.setMaximumSize(new java.awt.Dimension(55, 14));
         labelBar4.setMinimumSize(new java.awt.Dimension(55, 14));
         labelBar4.setPreferredSize(new java.awt.Dimension(55, 14));
