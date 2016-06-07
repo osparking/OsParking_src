@@ -317,8 +317,8 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
         statusPanels[4] = statusPanelGate4;
         for (int i = gateCount + 1; i <=MAX_GATES; i++) {
             statusPanels[i].setVisible(false);
-            reduceConnPanHt();
         }
+        reduceConnPanHt();
         connStatusPanel.setPreferredSize(connStatusPanel.getPreferredSize());
 
         deviceConnectionLabels = new JLabel[DeviceType.values().length][MAX_GATES + 1];
@@ -1076,7 +1076,7 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
 
         connStatusPanel.setBackground(MainBackground);
         connStatusPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        connStatusPanel.setMaximumSize(new java.awt.Dimension(286, 98309));
+        connStatusPanel.setMaximumSize(new java.awt.Dimension(65000, 65000));
         connStatusPanel.setMinimumSize(new java.awt.Dimension(280, 20));
         connStatusPanel.setPreferredSize(new java.awt.Dimension(300, 120));
         connStatusPanel.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 0, gateCSGap));
@@ -2075,7 +2075,8 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
     
     private void reduceConnPanHt() {
         Dimension dim = connStatusPanel.getPreferredSize();
-        Dimension dimNew = new Dimension(dim.width, dim.height - gateCSHt - gateCSGap);
+        Dimension dimNew = new Dimension(dim.width, 
+                dim.height - (gateCSHt + gateCSGap) * (MAX_GATES - gateCount) + 5);
         connStatusPanel.setPreferredSize(dimNew);
         connStatusPanel.setSize(dimNew);
         
