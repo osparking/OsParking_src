@@ -245,6 +245,10 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
     private PassingDelayStat[] passingDelayStat = null;
         
     private final String debugPanelName = "debugPanel";
+    
+    final static int gateCSHt = 20;
+    final static int gateCSGap = 8;
+    
     /**
      * @return the shownImageRow
      */
@@ -284,7 +288,8 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
     static Random gateRandomOpen = new Random(System.currentTimeMillis());
     
     Properties prop = null;
-    
+            HashMap<String, Component> connStatusMap = new HashMap<String, Component>();
+
     /**
      * Creates new form MainForm
      */
@@ -306,8 +311,10 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
         statusPanels[1] = statusPanelGate1;
         statusPanels[2] = statusPanelGate2;
         statusPanels[3] = statusPanelGate3;
+        statusPanels[4] = statusPanelGate4;
         for (int i = gateCount + 1; i <=MAX_GATES; i++) {
             statusPanels[i].setVisible(false);
+            reduceConnPanHt();
         }
         connStatusPanel.setPreferredSize(connStatusPanel.getPreferredSize());
 
@@ -324,6 +331,17 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
         deviceConnectionLabels[DeviceType.GateBar.ordinal()][2] = labelBar2;
         deviceConnectionLabels[DeviceType.GateBar.ordinal()][3] = labelBar3;
         
+        /**
+         * Set gate connection status panel row headings to given gate names
+         */
+        augmentComponentMap(connStatusPanel, connStatusMap);
+        
+        for (int gateNo = 1; gateNo <= gateCount; gateNo++) {
+            String labelControlName = "row" + gateNo + "Heading";
+            Component comp = getComponentByName(connStatusMap, labelControlName);
+            JLabel connStatLabel = (JLabel)comp;
+            connStatLabel.setText(gateNames[gateNo]);
+        }
         /**
          * Set icon for the simulated camera program
          */
@@ -484,7 +502,7 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
                     deviceManagers[type.ordinal()][gateNo].start();
                 }
             }
-        }             
+        }
 
         openCommandIssuedMs = new long[gateCount + 1];
         
@@ -677,32 +695,41 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
         entryPanel = new javax.swing.JPanel();
         connStatusPanel = new javax.swing.JPanel();
         statusPanelGate1 = new javax.swing.JPanel();
-        jLabel2 = new javax.swing.JLabel();
-        filler18 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 32767));
+        filler32 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
+        row1Heading = new javax.swing.JLabel();
+        filler18 = new javax.swing.Box.Filler(new java.awt.Dimension(7, 0), new java.awt.Dimension(7, 0), new java.awt.Dimension(7, 32767));
         labelCamera1 = new javax.swing.JLabel();
-        filler19 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 32767));
+        filler19 = new javax.swing.Box.Filler(new java.awt.Dimension(7, 0), new java.awt.Dimension(7, 0), new java.awt.Dimension(7, 32767));
         labelE_Board1 = new javax.swing.JLabel();
-        filler20 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 32767));
+        filler20 = new javax.swing.Box.Filler(new java.awt.Dimension(7, 0), new java.awt.Dimension(7, 0), new java.awt.Dimension(7, 32767));
         labelBar1 = new javax.swing.JLabel();
-        filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 3), new java.awt.Dimension(0, 3), new java.awt.Dimension(32767, 3));
         statusPanelGate2 = new javax.swing.JPanel();
-        jLabel3 = new javax.swing.JLabel();
-        filler21 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 32767));
+        filler30 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
+        row2Heading = new javax.swing.JLabel();
+        filler21 = new javax.swing.Box.Filler(new java.awt.Dimension(7, 0), new java.awt.Dimension(7, 0), new java.awt.Dimension(7, 32767));
         labelCamera2 = new javax.swing.JLabel();
-        filler22 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 32767));
+        filler22 = new javax.swing.Box.Filler(new java.awt.Dimension(7, 0), new java.awt.Dimension(7, 0), new java.awt.Dimension(7, 32767));
         labelE_Board2 = new javax.swing.JLabel();
-        filler23 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 32767));
+        filler23 = new javax.swing.Box.Filler(new java.awt.Dimension(7, 0), new java.awt.Dimension(7, 0), new java.awt.Dimension(7, 32767));
         labelBar2 = new javax.swing.JLabel();
-        filler5 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 3), new java.awt.Dimension(0, 3), new java.awt.Dimension(32767, 3));
         statusPanelGate3 = new javax.swing.JPanel();
-        jLabel4 = new javax.swing.JLabel();
-        filler24 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 32767));
+        filler31 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
+        row3Heading = new javax.swing.JLabel();
+        filler24 = new javax.swing.Box.Filler(new java.awt.Dimension(7, 0), new java.awt.Dimension(7, 0), new java.awt.Dimension(7, 32767));
         labelCamera3 = new javax.swing.JLabel();
-        filler25 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 32767));
+        filler25 = new javax.swing.Box.Filler(new java.awt.Dimension(7, 0), new java.awt.Dimension(7, 0), new java.awt.Dimension(7, 32767));
         labelE_Board3 = new javax.swing.JLabel();
-        filler26 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 32767));
+        filler26 = new javax.swing.Box.Filler(new java.awt.Dimension(7, 0), new java.awt.Dimension(7, 0), new java.awt.Dimension(7, 32767));
         labelBar3 = new javax.swing.JLabel();
-        filler28 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0));
+        statusPanelGate4 = new javax.swing.JPanel();
+        filler33 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
+        row4Heading = new javax.swing.JLabel();
+        filler28 = new javax.swing.Box.Filler(new java.awt.Dimension(7, 0), new java.awt.Dimension(7, 0), new java.awt.Dimension(7, 32767));
+        labelCamera4 = new javax.swing.JLabel();
+        filler29 = new javax.swing.Box.Filler(new java.awt.Dimension(7, 0), new java.awt.Dimension(7, 0), new java.awt.Dimension(7, 32767));
+        labelE_Board4 = new javax.swing.JLabel();
+        filler34 = new javax.swing.Box.Filler(new java.awt.Dimension(7, 0), new java.awt.Dimension(7, 0), new java.awt.Dimension(7, 32767));
+        labelBar4 = new javax.swing.JLabel();
         filler27 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 32767));
         filler6 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 3), new java.awt.Dimension(0, 3), new java.awt.Dimension(32767, 3));
         statusTextPanel = new javax.swing.JPanel();
@@ -869,7 +896,7 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
         MainScrollPane.setHorizontalScrollBar(null);
         MainScrollPane.setMaximumSize(new Dimension(Short.MAX_VALUE, Short.MAX_VALUE));
         MainScrollPane.setMinimumSize(new java.awt.Dimension(280, 6));
-        MainScrollPane.setPreferredSize(new java.awt.Dimension(286, 225));
+        MainScrollPane.setPreferredSize(new java.awt.Dimension(300, 225));
 
         MessageTextArea.setEditable(false);
         MessageTextArea.setColumns(35);
@@ -893,9 +920,12 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
         Status_Panel.setAlignmentX(0.0F);
         Status_Panel.setMaximumSize(new Dimension(Short.MAX_VALUE, Short.MAX_VALUE));
         Status_Panel.setMinimumSize(new java.awt.Dimension(280, 180));
-        Status_Panel.setPreferredSize(new java.awt.Dimension(286, 225));
+        Status_Panel.setPreferredSize(new java.awt.Dimension(300, 230));
+        Status_Panel.setLayout(new javax.swing.BoxLayout(Status_Panel, javax.swing.BoxLayout.Y_AXIS));
 
         debugPanel.setBackground(MainBackground);
+        debugPanel.setMinimumSize(new java.awt.Dimension(280, 110));
+        debugPanel.setPreferredSize(new java.awt.Dimension(300, 110));
         debugPanel.setLayout(new javax.swing.BoxLayout(debugPanel, javax.swing.BoxLayout.LINE_AXIS));
 
         jPanel3.setBackground(MainBackground);
@@ -1039,108 +1069,204 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
         debugPanel.add(jPanel2);
         jPanel2.getAccessibleContext().setAccessibleName("");
 
+        Status_Panel.add(debugPanel);
+
         connStatusPanel.setBackground(MainBackground);
         connStatusPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        connStatusPanel.setLayout(new javax.swing.BoxLayout(connStatusPanel, javax.swing.BoxLayout.Y_AXIS));
+        connStatusPanel.setMaximumSize(new java.awt.Dimension(286, 98309));
+        connStatusPanel.setMinimumSize(new java.awt.Dimension(280, 20));
+        connStatusPanel.setPreferredSize(new java.awt.Dimension(300, 120));
+        connStatusPanel.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 0, gateCSGap));
 
         statusPanelGate1.setBackground(MainBackground);
+        statusPanelGate1.setMaximumSize(new java.awt.Dimension(284, 32767));
+        statusPanelGate1.setMinimumSize(new java.awt.Dimension(284, 20));
+        statusPanelGate1.setName("statusPanelGate1"); // NOI18N
+        statusPanelGate1.setPreferredSize(new Dimension(284, gateCSHt));
+        statusPanelGate1.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 0, 5));
+        statusPanelGate1.add(filler32);
 
-        jLabel2.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        jLabel2.setText("Gate1");
-        jLabel2.setToolTipText("");
-        statusPanelGate1.add(jLabel2);
+        row1Heading.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        row1Heading.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        row1Heading.setText("Gate1");
+        row1Heading.setToolTipText("");
+        row1Heading.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+        row1Heading.setMaximumSize(new java.awt.Dimension(74, 14));
+        row1Heading.setMinimumSize(new java.awt.Dimension(74, 14));
+        row1Heading.setName("row1Heading"); // NOI18N
+        row1Heading.setPreferredSize(new java.awt.Dimension(74, 14));
+        statusPanelGate1.add(row1Heading);
         statusPanelGate1.add(filler18);
 
         labelCamera1.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         labelCamera1.setForeground(new java.awt.Color(255, 0, 0));
         labelCamera1.setText("Camera");
+        labelCamera1.setMaximumSize(new java.awt.Dimension(55, 14));
+        labelCamera1.setMinimumSize(new java.awt.Dimension(55, 14));
+        labelCamera1.setPreferredSize(new java.awt.Dimension(55, 14));
         statusPanelGate1.add(labelCamera1);
         statusPanelGate1.add(filler19);
 
         labelE_Board1.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         labelE_Board1.setForeground(new java.awt.Color(255, 0, 0));
         labelE_Board1.setText("E-Board");
+        labelE_Board1.setMaximumSize(new java.awt.Dimension(55, 14));
+        labelE_Board1.setMinimumSize(new java.awt.Dimension(55, 14));
+        labelE_Board1.setPreferredSize(new java.awt.Dimension(55, 14));
         statusPanelGate1.add(labelE_Board1);
         statusPanelGate1.add(filler20);
 
         labelBar1.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         labelBar1.setForeground(new java.awt.Color(255, 0, 0));
         labelBar1.setText("G-Bar");
+        labelBar1.setMaximumSize(new java.awt.Dimension(55, 14));
+        labelBar1.setMinimumSize(new java.awt.Dimension(55, 14));
+        labelBar1.setPreferredSize(new java.awt.Dimension(55, 14));
         statusPanelGate1.add(labelBar1);
 
         connStatusPanel.add(statusPanelGate1);
-        connStatusPanel.add(filler2);
 
         statusPanelGate2.setBackground(MainBackground);
+        statusPanelGate2.setMaximumSize(new java.awt.Dimension(284, 32767));
+        statusPanelGate2.setMinimumSize(new java.awt.Dimension(284, 20));
+        statusPanelGate2.setPreferredSize(new Dimension(284, gateCSHt));
+        statusPanelGate2.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 0, 5));
+        statusPanelGate2.add(filler30);
 
-        jLabel3.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        jLabel3.setText("Gate2");
-        statusPanelGate2.add(jLabel3);
+        row2Heading.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        row2Heading.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        row2Heading.setText("Gate2");
+        row2Heading.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+        row2Heading.setMaximumSize(new java.awt.Dimension(74, 14));
+        row2Heading.setMinimumSize(new java.awt.Dimension(74, 14));
+        row2Heading.setName("row2Heading"); // NOI18N
+        row2Heading.setPreferredSize(new java.awt.Dimension(74, 14));
+        statusPanelGate2.add(row2Heading);
         statusPanelGate2.add(filler21);
 
         labelCamera2.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         labelCamera2.setForeground(new java.awt.Color(255, 0, 0));
         labelCamera2.setText("Camera");
+        labelCamera2.setMaximumSize(new java.awt.Dimension(55, 14));
+        labelCamera2.setMinimumSize(new java.awt.Dimension(55, 14));
+        labelCamera2.setPreferredSize(new java.awt.Dimension(55, 14));
         statusPanelGate2.add(labelCamera2);
         statusPanelGate2.add(filler22);
 
         labelE_Board2.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         labelE_Board2.setForeground(new java.awt.Color(255, 0, 0));
         labelE_Board2.setText("E-Board");
+        labelE_Board2.setMaximumSize(new java.awt.Dimension(55, 14));
+        labelE_Board2.setMinimumSize(new java.awt.Dimension(55, 14));
+        labelE_Board2.setPreferredSize(new java.awt.Dimension(55, 14));
         statusPanelGate2.add(labelE_Board2);
         statusPanelGate2.add(filler23);
 
         labelBar2.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         labelBar2.setForeground(new java.awt.Color(255, 0, 0));
         labelBar2.setText("G-Bar");
+        labelBar2.setMaximumSize(new java.awt.Dimension(55, 14));
+        labelBar2.setMinimumSize(new java.awt.Dimension(55, 14));
+        labelBar2.setPreferredSize(new java.awt.Dimension(55, 14));
         statusPanelGate2.add(labelBar2);
 
         connStatusPanel.add(statusPanelGate2);
-        connStatusPanel.add(filler5);
 
         statusPanelGate3.setBackground(MainBackground);
+        statusPanelGate3.setMaximumSize(new java.awt.Dimension(284, 32767));
+        statusPanelGate3.setMinimumSize(new java.awt.Dimension(284, 20));
+        statusPanelGate3.setPreferredSize(new Dimension(284, gateCSHt));
+        statusPanelGate3.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 0, 5));
+        statusPanelGate3.add(filler31);
 
-        jLabel4.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        jLabel4.setText("Gate3");
-        statusPanelGate3.add(jLabel4);
+        row3Heading.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        row3Heading.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        row3Heading.setText("Gate3");
+        row3Heading.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+        row3Heading.setMaximumSize(new java.awt.Dimension(74, 14));
+        row3Heading.setMinimumSize(new java.awt.Dimension(74, 14));
+        row3Heading.setName("row3Heading"); // NOI18N
+        row3Heading.setPreferredSize(new java.awt.Dimension(74, 14));
+        statusPanelGate3.add(row3Heading);
         statusPanelGate3.add(filler24);
 
         labelCamera3.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         labelCamera3.setForeground(new java.awt.Color(255, 0, 0));
         labelCamera3.setText("Camera");
+        labelCamera3.setMaximumSize(new java.awt.Dimension(55, 14));
+        labelCamera3.setMinimumSize(new java.awt.Dimension(55, 14));
+        labelCamera3.setPreferredSize(new java.awt.Dimension(55, 14));
         statusPanelGate3.add(labelCamera3);
         statusPanelGate3.add(filler25);
 
         labelE_Board3.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         labelE_Board3.setForeground(new java.awt.Color(255, 0, 0));
         labelE_Board3.setText("E-Board");
+        labelE_Board3.setMaximumSize(new java.awt.Dimension(55, 14));
+        labelE_Board3.setMinimumSize(new java.awt.Dimension(55, 14));
+        labelE_Board3.setPreferredSize(new java.awt.Dimension(55, 14));
         statusPanelGate3.add(labelE_Board3);
         statusPanelGate3.add(filler26);
 
         labelBar3.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         labelBar3.setForeground(new java.awt.Color(255, 0, 0));
         labelBar3.setText("G-Bar");
+        labelBar3.setMaximumSize(new java.awt.Dimension(55, 14));
+        labelBar3.setMinimumSize(new java.awt.Dimension(55, 14));
+        labelBar3.setPreferredSize(new java.awt.Dimension(55, 14));
         statusPanelGate3.add(labelBar3);
 
         connStatusPanel.add(statusPanelGate3);
 
-        javax.swing.GroupLayout Status_PanelLayout = new javax.swing.GroupLayout(Status_Panel);
-        Status_Panel.setLayout(Status_PanelLayout);
-        Status_PanelLayout.setHorizontalGroup(
-            Status_PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(debugPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(connStatusPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
-        Status_PanelLayout.setVerticalGroup(
-            Status_PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(Status_PanelLayout.createSequentialGroup()
-                .addComponent(debugPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 139, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(connStatusPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-        );
+        statusPanelGate4.setBackground(MainBackground);
+        statusPanelGate4.setMaximumSize(new java.awt.Dimension(284, 32767));
+        statusPanelGate4.setMinimumSize(new java.awt.Dimension(284, 20));
+        statusPanelGate4.setPreferredSize(new Dimension(284, gateCSHt));
+        statusPanelGate4.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 0, 5));
+        statusPanelGate4.add(filler33);
+
+        row4Heading.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        row4Heading.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        row4Heading.setText("Gate4");
+        row4Heading.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+        row4Heading.setMaximumSize(new java.awt.Dimension(74, 14));
+        row4Heading.setMinimumSize(new java.awt.Dimension(74, 14));
+        row4Heading.setName("row3Heading"); // NOI18N
+        row4Heading.setPreferredSize(new java.awt.Dimension(74, 14));
+        statusPanelGate4.add(row4Heading);
+        statusPanelGate4.add(filler28);
+
+        labelCamera4.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        labelCamera4.setForeground(new java.awt.Color(255, 0, 0));
+        labelCamera4.setText("Camera");
+        labelCamera4.setMaximumSize(new java.awt.Dimension(55, 14));
+        labelCamera4.setMinimumSize(new java.awt.Dimension(55, 14));
+        labelCamera4.setPreferredSize(new java.awt.Dimension(55, 14));
+        statusPanelGate4.add(labelCamera4);
+        statusPanelGate4.add(filler29);
+
+        labelE_Board4.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        labelE_Board4.setForeground(new java.awt.Color(255, 0, 0));
+        labelE_Board4.setText("E-Board");
+        labelE_Board4.setMaximumSize(new java.awt.Dimension(55, 14));
+        labelE_Board4.setMinimumSize(new java.awt.Dimension(55, 14));
+        labelE_Board4.setPreferredSize(new java.awt.Dimension(55, 14));
+        statusPanelGate4.add(labelE_Board4);
+        statusPanelGate4.add(filler34);
+
+        labelBar4.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        labelBar4.setForeground(new java.awt.Color(255, 0, 0));
+        labelBar4.setText("G-Bar");
+        labelBar4.setMaximumSize(new java.awt.Dimension(55, 14));
+        labelBar4.setMinimumSize(new java.awt.Dimension(55, 14));
+        labelBar4.setPreferredSize(new java.awt.Dimension(55, 14));
+        statusPanelGate4.add(labelBar4);
+
+        connStatusPanel.add(statusPanelGate4);
+
+        Status_Panel.add(connStatusPanel);
 
         Panel_MainMsgList.add(Status_Panel, java.awt.BorderLayout.PAGE_END);
-        Panel_MainMsgList.add(filler28, java.awt.BorderLayout.LINE_END);
 
         WholePanel.add(Panel_MainMsgList, java.awt.BorderLayout.WEST);
 
@@ -1938,6 +2064,29 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
         bufferedImage.setData(ras);   
         return bufferedImage;
     }
+    
+    void setStatusPan(Dimension dim) {
+        Status_Panel.setPreferredSize(dim);
+        Status_Panel.setSize(dim);         
+    }
+    
+    private void reduceConnPanHt() {
+        Dimension dim = connStatusPanel.getPreferredSize();
+        Dimension dimNew = new Dimension(dim.width, dim.height - gateCSHt - gateCSGap);
+        connStatusPanel.setPreferredSize(dimNew);
+        connStatusPanel.setSize(dimNew);
+        
+        if (debugPanel.isVisible()) {
+            setStatusPan(addHeight(debugPanel.getPreferredSize(),
+                    connStatusPanel.getPreferredSize()));
+        } else {
+            setStatusPan(connStatusPanel.getPreferredSize());
+        }          
+    }
+    
+    private Dimension addHeight(Dimension panel1, Dimension panel2) {
+        return new Dimension(panel1.width, panel1.height + panel2.height);
+    }    
 
     class ManageArrivalList extends Thread {
         public void run() {
@@ -2000,7 +2149,6 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
     private javax.swing.Box.Filler filler17;
     private javax.swing.Box.Filler filler18;
     private javax.swing.Box.Filler filler19;
-    private javax.swing.Box.Filler filler2;
     private javax.swing.Box.Filler filler20;
     private javax.swing.Box.Filler filler21;
     private javax.swing.Box.Filler filler22;
@@ -2010,18 +2158,20 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
     private javax.swing.Box.Filler filler26;
     private javax.swing.Box.Filler filler27;
     private javax.swing.Box.Filler filler28;
+    private javax.swing.Box.Filler filler29;
     private javax.swing.Box.Filler filler3;
+    private javax.swing.Box.Filler filler30;
+    private javax.swing.Box.Filler filler31;
+    private javax.swing.Box.Filler filler32;
+    private javax.swing.Box.Filler filler33;
+    private javax.swing.Box.Filler filler34;
     private javax.swing.Box.Filler filler4;
-    private javax.swing.Box.Filler filler5;
     private javax.swing.Box.Filler filler6;
     private javax.swing.Box.Filler filler7;
     private javax.swing.Box.Filler filler8;
     private javax.swing.Box.Filler filler9;
     private javax.swing.Box.Filler fillerLeft;
     private javax.swing.JPanel fullPanel;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JMenu jMenu6;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
@@ -2031,18 +2181,26 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
     private javax.swing.JLabel labelBar1;
     private javax.swing.JLabel labelBar2;
     private javax.swing.JLabel labelBar3;
+    private javax.swing.JLabel labelBar4;
     private javax.swing.JLabel labelCamera1;
     private javax.swing.JLabel labelCamera2;
     private javax.swing.JLabel labelCamera3;
+    private javax.swing.JLabel labelCamera4;
     private javax.swing.JLabel labelE_Board1;
     private javax.swing.JLabel labelE_Board2;
     private javax.swing.JLabel labelE_Board3;
+    private javax.swing.JLabel labelE_Board4;
     private javax.swing.JMenuItem licenseMenuItem;
     private javax.swing.Box.Filler manager_ID_gap;
+    private javax.swing.JLabel row1Heading;
+    private javax.swing.JLabel row2Heading;
+    private javax.swing.JLabel row3Heading;
+    private javax.swing.JLabel row4Heading;
     public javax.swing.JButton showStatisticsBtn;
     private javax.swing.JPanel statusPanelGate1;
     private javax.swing.JPanel statusPanelGate2;
     private javax.swing.JPanel statusPanelGate3;
+    private javax.swing.JPanel statusPanelGate4;
     private javax.swing.JTextField statusTextField;
     private javax.swing.JPanel statusTextPanel;
     private javax.swing.JMenuBar visibleMenuBar;
@@ -3081,10 +3239,9 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
     }
 
     public void removeDebugPanel() {
+        Status_Panel.remove(debugPanel);
         debugPanel.setVisible(false);
-        validate();
-        Dimension devConnDim = connStatusPanel.getPreferredSize();
-        Status_Panel.setPreferredSize(new Dimension(devConnDim.width, devConnDim.height + 2));
+        Status_Panel.setPreferredSize(connStatusPanel.getPreferredSize());
     }
     /**
      * @param args the command line arguments

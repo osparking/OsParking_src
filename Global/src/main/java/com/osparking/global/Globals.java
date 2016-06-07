@@ -137,7 +137,9 @@ public class Globals {
     public static SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");    
     public static int SIX_HOURS = 3600 * 1000 * 6;
     
-    public static void augmentComponentMap(Object component, HashMap<String, Component> componentMap) {
+    public static void augmentComponentMap(
+            Object component, HashMap<String, Component> componentMap) 
+    {
         String name = null;
         if (component instanceof JTextField) {
             name = ((JTextField)component).getName();
@@ -163,6 +165,12 @@ public class Globals {
             if (name != null && name.length() > 0) {
                 componentMap.put(name, (JButton)component);
             }
+        } else if (component instanceof JLabel) {
+            name = ((JLabel)component).getName();
+
+            if (name != null && name.length() > 0) {
+                componentMap.put(name, (JLabel)component);
+            }
         } else if (component instanceof Container) {
             
             if (component instanceof JPanel) {
@@ -178,7 +186,6 @@ public class Globals {
             }
         }
     }    
-    
     
     public static Component getComponentByName(
             HashMap<String, Component> componentMap, String name) 
@@ -710,7 +717,7 @@ public class Globals {
     
     public final static String DEFAULT_MESSAGE = "<Critical Status Information>";
     public final static int MESSAGE_DISPLAY_PERIOD_IN_ms = 3 * 60 * 1000; // 3 minutes
-    public final static int MAX_GATES = 3;
+    public final static int MAX_GATES = 4;
     
     public final static int CAMERA_PORT_DEV = 6110;
     public final static int CAMERA_PORT_RUN = 6120;
