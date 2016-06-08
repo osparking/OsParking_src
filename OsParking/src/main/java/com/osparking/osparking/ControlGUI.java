@@ -768,7 +768,7 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
         });
 
         fullPanel.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 5, 1, 5));
-        fullPanel.setLayout(new java.awt.BorderLayout());
+        fullPanel.setLayout(new java.awt.BorderLayout(0, 2));
 
         PanelMainTop.setBackground(MainBackground);
         PanelMainTop.setAlignmentY(0.0F);
@@ -777,6 +777,7 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
         PanelMainTop.setLayout(new java.awt.BorderLayout());
 
         MainToolBar.setBackground(MainBackground);
+        MainToolBar.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         MainToolBar.setRollover(true);
         MainToolBar.setAlignmentX(Component.LEFT_ALIGNMENT);
         MainToolBar.setBorderPainted(false);
