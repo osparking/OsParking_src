@@ -247,8 +247,6 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
      */
     private PassingDelayStat[] passingDelayStat = null;
         
-    private final String debugPanelName = "debugPanel";
-    
     final static int gateCSHt = 20;
     final static int gateCSGap = 8;
     
@@ -1086,7 +1084,7 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
         statusPanelGate1.setMinimumSize(new java.awt.Dimension(284, 20));
         statusPanelGate1.setName("statusPanelGate1"); // NOI18N
         statusPanelGate1.setPreferredSize(new Dimension(284, gateCSHt));
-        statusPanelGate1.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 0, 5));
+        statusPanelGate1.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 0, 0));
         statusPanelGate1.add(filler32);
 
         row1Heading.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
@@ -1094,37 +1092,37 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
         row1Heading.setText("Gate1");
         row1Heading.setToolTipText("");
         row1Heading.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
-        row1Heading.setMaximumSize(new java.awt.Dimension(74, 14));
-        row1Heading.setMinimumSize(new java.awt.Dimension(74, 14));
+        row1Heading.setMaximumSize(new java.awt.Dimension(74, 18));
+        row1Heading.setMinimumSize(new java.awt.Dimension(74, 18));
         row1Heading.setName("row1Heading"); // NOI18N
-        row1Heading.setPreferredSize(new java.awt.Dimension(74, 14));
+        row1Heading.setPreferredSize(new java.awt.Dimension(74, 18));
         statusPanelGate1.add(row1Heading);
         statusPanelGate1.add(filler18);
 
         labelCamera1.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         labelCamera1.setForeground(new java.awt.Color(255, 0, 0));
         labelCamera1.setText(CAMERA_LABEL.getContent());
-        labelCamera1.setMaximumSize(new java.awt.Dimension(55, 14));
-        labelCamera1.setMinimumSize(new java.awt.Dimension(55, 14));
-        labelCamera1.setPreferredSize(new java.awt.Dimension(55, 14));
+        labelCamera1.setMaximumSize(new java.awt.Dimension(55, 18));
+        labelCamera1.setMinimumSize(new java.awt.Dimension(55, 18));
+        labelCamera1.setPreferredSize(new java.awt.Dimension(55, 18));
         statusPanelGate1.add(labelCamera1);
         statusPanelGate1.add(filler19);
 
         labelE_Board1.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         labelE_Board1.setForeground(new java.awt.Color(255, 0, 0));
         labelE_Board1.setText(E_BOARD_LABEL.getContent());
-        labelE_Board1.setMaximumSize(new java.awt.Dimension(55, 14));
-        labelE_Board1.setMinimumSize(new java.awt.Dimension(55, 14));
-        labelE_Board1.setPreferredSize(new java.awt.Dimension(55, 14));
+        labelE_Board1.setMaximumSize(new java.awt.Dimension(55, 18));
+        labelE_Board1.setMinimumSize(new java.awt.Dimension(55, 18));
+        labelE_Board1.setPreferredSize(new java.awt.Dimension(55, 18));
         statusPanelGate1.add(labelE_Board1);
         statusPanelGate1.add(filler20);
 
         labelBar1.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         labelBar1.setForeground(new java.awt.Color(255, 0, 0));
         labelBar1.setText(GATE_BAR_LABEL.getContent());
-        labelBar1.setMaximumSize(new java.awt.Dimension(55, 14));
-        labelBar1.setMinimumSize(new java.awt.Dimension(55, 14));
-        labelBar1.setPreferredSize(new java.awt.Dimension(55, 14));
+        labelBar1.setMaximumSize(new java.awt.Dimension(55, 18));
+        labelBar1.setMinimumSize(new java.awt.Dimension(55, 18));
+        labelBar1.setPreferredSize(new java.awt.Dimension(55, 18));
         statusPanelGate1.add(labelBar1);
 
         connStatusPanel.add(statusPanelGate1);
@@ -1133,44 +1131,44 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
         statusPanelGate2.setMaximumSize(new java.awt.Dimension(284, 32767));
         statusPanelGate2.setMinimumSize(new java.awt.Dimension(284, 20));
         statusPanelGate2.setPreferredSize(new Dimension(284, gateCSHt));
-        statusPanelGate2.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 0, 5));
+        statusPanelGate2.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 0, 0));
         statusPanelGate2.add(filler30);
 
         row2Heading.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         row2Heading.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         row2Heading.setText("Gate2");
         row2Heading.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
-        row2Heading.setMaximumSize(new java.awt.Dimension(74, 14));
-        row2Heading.setMinimumSize(new java.awt.Dimension(74, 14));
+        row2Heading.setMaximumSize(new java.awt.Dimension(74, 18));
+        row2Heading.setMinimumSize(new java.awt.Dimension(74, 18));
         row2Heading.setName("row2Heading"); // NOI18N
-        row2Heading.setPreferredSize(new java.awt.Dimension(74, 14));
+        row2Heading.setPreferredSize(new java.awt.Dimension(74, 18));
         statusPanelGate2.add(row2Heading);
         statusPanelGate2.add(filler21);
 
         labelCamera2.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         labelCamera2.setForeground(new java.awt.Color(255, 0, 0));
         labelCamera2.setText(CAMERA_LABEL.getContent());
-        labelCamera2.setMaximumSize(new java.awt.Dimension(55, 14));
-        labelCamera2.setMinimumSize(new java.awt.Dimension(55, 14));
-        labelCamera2.setPreferredSize(new java.awt.Dimension(55, 14));
+        labelCamera2.setMaximumSize(new java.awt.Dimension(55, 18));
+        labelCamera2.setMinimumSize(new java.awt.Dimension(55, 18));
+        labelCamera2.setPreferredSize(new java.awt.Dimension(55, 18));
         statusPanelGate2.add(labelCamera2);
         statusPanelGate2.add(filler22);
 
         labelE_Board2.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         labelE_Board2.setForeground(new java.awt.Color(255, 0, 0));
         labelE_Board2.setText(E_BOARD_LABEL.getContent());
-        labelE_Board2.setMaximumSize(new java.awt.Dimension(55, 14));
-        labelE_Board2.setMinimumSize(new java.awt.Dimension(55, 14));
-        labelE_Board2.setPreferredSize(new java.awt.Dimension(55, 14));
+        labelE_Board2.setMaximumSize(new java.awt.Dimension(55, 18));
+        labelE_Board2.setMinimumSize(new java.awt.Dimension(55, 18));
+        labelE_Board2.setPreferredSize(new java.awt.Dimension(55, 18));
         statusPanelGate2.add(labelE_Board2);
         statusPanelGate2.add(filler23);
 
         labelBar2.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         labelBar2.setForeground(new java.awt.Color(255, 0, 0));
         labelBar2.setText(GATE_BAR_LABEL.getContent());
-        labelBar2.setMaximumSize(new java.awt.Dimension(55, 14));
-        labelBar2.setMinimumSize(new java.awt.Dimension(55, 14));
-        labelBar2.setPreferredSize(new java.awt.Dimension(55, 14));
+        labelBar2.setMaximumSize(new java.awt.Dimension(55, 18));
+        labelBar2.setMinimumSize(new java.awt.Dimension(55, 18));
+        labelBar2.setPreferredSize(new java.awt.Dimension(55, 18));
         statusPanelGate2.add(labelBar2);
 
         connStatusPanel.add(statusPanelGate2);
@@ -1179,44 +1177,44 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
         statusPanelGate3.setMaximumSize(new java.awt.Dimension(284, 32767));
         statusPanelGate3.setMinimumSize(new java.awt.Dimension(284, 20));
         statusPanelGate3.setPreferredSize(new Dimension(284, gateCSHt));
-        statusPanelGate3.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 0, 5));
+        statusPanelGate3.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 0, 0));
         statusPanelGate3.add(filler31);
 
         row3Heading.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         row3Heading.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         row3Heading.setText("Gate3");
         row3Heading.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
-        row3Heading.setMaximumSize(new java.awt.Dimension(74, 14));
-        row3Heading.setMinimumSize(new java.awt.Dimension(74, 14));
+        row3Heading.setMaximumSize(new java.awt.Dimension(74, 18));
+        row3Heading.setMinimumSize(new java.awt.Dimension(74, 18));
         row3Heading.setName("row3Heading"); // NOI18N
-        row3Heading.setPreferredSize(new java.awt.Dimension(74, 14));
+        row3Heading.setPreferredSize(new java.awt.Dimension(74, 18));
         statusPanelGate3.add(row3Heading);
         statusPanelGate3.add(filler24);
 
         labelCamera3.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         labelCamera3.setForeground(new java.awt.Color(255, 0, 0));
         labelCamera3.setText(CAMERA_LABEL.getContent());
-        labelCamera3.setMaximumSize(new java.awt.Dimension(55, 14));
-        labelCamera3.setMinimumSize(new java.awt.Dimension(55, 14));
-        labelCamera3.setPreferredSize(new java.awt.Dimension(55, 14));
+        labelCamera3.setMaximumSize(new java.awt.Dimension(55, 18));
+        labelCamera3.setMinimumSize(new java.awt.Dimension(55, 18));
+        labelCamera3.setPreferredSize(new java.awt.Dimension(55, 18));
         statusPanelGate3.add(labelCamera3);
         statusPanelGate3.add(filler25);
 
         labelE_Board3.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         labelE_Board3.setForeground(new java.awt.Color(255, 0, 0));
         labelE_Board3.setText(E_BOARD_LABEL.getContent());
-        labelE_Board3.setMaximumSize(new java.awt.Dimension(55, 14));
-        labelE_Board3.setMinimumSize(new java.awt.Dimension(55, 14));
-        labelE_Board3.setPreferredSize(new java.awt.Dimension(55, 14));
+        labelE_Board3.setMaximumSize(new java.awt.Dimension(55, 18));
+        labelE_Board3.setMinimumSize(new java.awt.Dimension(55, 18));
+        labelE_Board3.setPreferredSize(new java.awt.Dimension(55, 18));
         statusPanelGate3.add(labelE_Board3);
         statusPanelGate3.add(filler26);
 
         labelBar3.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         labelBar3.setForeground(new java.awt.Color(255, 0, 0));
         labelBar3.setText(GATE_BAR_LABEL.getContent());
-        labelBar3.setMaximumSize(new java.awt.Dimension(55, 14));
-        labelBar3.setMinimumSize(new java.awt.Dimension(55, 14));
-        labelBar3.setPreferredSize(new java.awt.Dimension(55, 14));
+        labelBar3.setMaximumSize(new java.awt.Dimension(55, 18));
+        labelBar3.setMinimumSize(new java.awt.Dimension(55, 18));
+        labelBar3.setPreferredSize(new java.awt.Dimension(55, 18));
         statusPanelGate3.add(labelBar3);
 
         connStatusPanel.add(statusPanelGate3);
@@ -1225,44 +1223,44 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
         statusPanelGate4.setMaximumSize(new java.awt.Dimension(284, 32767));
         statusPanelGate4.setMinimumSize(new java.awt.Dimension(284, 20));
         statusPanelGate4.setPreferredSize(new Dimension(284, gateCSHt));
-        statusPanelGate4.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 0, 5));
+        statusPanelGate4.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 0, 0));
         statusPanelGate4.add(filler33);
 
         row4Heading.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         row4Heading.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         row4Heading.setText("Gate4");
         row4Heading.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
-        row4Heading.setMaximumSize(new java.awt.Dimension(74, 14));
-        row4Heading.setMinimumSize(new java.awt.Dimension(74, 14));
+        row4Heading.setMaximumSize(new java.awt.Dimension(74, 18));
+        row4Heading.setMinimumSize(new java.awt.Dimension(74, 18));
         row4Heading.setName("row3Heading"); // NOI18N
-        row4Heading.setPreferredSize(new java.awt.Dimension(74, 14));
+        row4Heading.setPreferredSize(new java.awt.Dimension(74, 18));
         statusPanelGate4.add(row4Heading);
         statusPanelGate4.add(filler28);
 
         labelCamera4.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         labelCamera4.setForeground(new java.awt.Color(255, 0, 0));
         labelCamera4.setText(CAMERA_LABEL.getContent());
-        labelCamera4.setMaximumSize(new java.awt.Dimension(55, 14));
-        labelCamera4.setMinimumSize(new java.awt.Dimension(55, 14));
-        labelCamera4.setPreferredSize(new java.awt.Dimension(55, 14));
+        labelCamera4.setMaximumSize(new java.awt.Dimension(55, 18));
+        labelCamera4.setMinimumSize(new java.awt.Dimension(55, 18));
+        labelCamera4.setPreferredSize(new java.awt.Dimension(55, 18));
         statusPanelGate4.add(labelCamera4);
         statusPanelGate4.add(filler29);
 
         labelE_Board4.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         labelE_Board4.setForeground(new java.awt.Color(255, 0, 0));
         labelE_Board4.setText(E_BOARD_LABEL.getContent());
-        labelE_Board4.setMaximumSize(new java.awt.Dimension(55, 14));
-        labelE_Board4.setMinimumSize(new java.awt.Dimension(55, 14));
-        labelE_Board4.setPreferredSize(new java.awt.Dimension(55, 14));
+        labelE_Board4.setMaximumSize(new java.awt.Dimension(55, 18));
+        labelE_Board4.setMinimumSize(new java.awt.Dimension(55, 18));
+        labelE_Board4.setPreferredSize(new java.awt.Dimension(55, 18));
         statusPanelGate4.add(labelE_Board4);
         statusPanelGate4.add(filler34);
 
         labelBar4.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         labelBar4.setForeground(new java.awt.Color(255, 0, 0));
         labelBar4.setText(GATE_BAR_LABEL.getContent());
-        labelBar4.setMaximumSize(new java.awt.Dimension(55, 14));
-        labelBar4.setMinimumSize(new java.awt.Dimension(55, 14));
-        labelBar4.setPreferredSize(new java.awt.Dimension(55, 14));
+        labelBar4.setMaximumSize(new java.awt.Dimension(55, 18));
+        labelBar4.setMinimumSize(new java.awt.Dimension(55, 18));
+        labelBar4.setPreferredSize(new java.awt.Dimension(55, 18));
         statusPanelGate4.add(labelBar4);
 
         connStatusPanel.add(statusPanelGate4);
@@ -1496,7 +1494,7 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
 
         visibleMenuBar.add(Box.createHorizontalGlue());
         metaKeyLabel.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        metaKeyLabel.setForeground(Color.red);
+        metaKeyLabel.setForeground(new Color(0xff, 0x85, 0x33));
         visibleMenuBar.add(metaKeyLabel);
         visibleMenuBar.add(Box.createHorizontalGlue());
 
