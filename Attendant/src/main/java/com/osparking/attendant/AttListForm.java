@@ -106,7 +106,7 @@ import javax.swing.table.DefaultTableModel;
  */
 //test git song
 public class AttListForm extends javax.swing.JFrame {
-    FormMode formMode = FormMode.NormalMode;
+    private FormMode formMode = FormMode.NormalMode;
     int selectedRowIndex = 0;  
     String loginID = null;
     String loginPW = null;
@@ -195,12 +195,7 @@ public class AttListForm extends javax.swing.JFrame {
         userID2Label.setText(USER_ID_LABEL.getContent() + loginID);
         adminAuth2CheckBox.setSelected(isManager);
         saveFileName.setDialogType(javax.swing.JFileChooser.SAVE_DIALOG);
-        legendLLabel.setText("\u203B" + REQUIRED_LABEL.getContent() + "\u2192");
-//        legendLLabel.setText("\u203B" + REQUIRED_LABEL.getContent() + "-");
         legendMLabel.setText("\u25CF");
-        legendRLabel.setText(REQUIRED1_LABEL.getContent());
-        legendMLabel2.setText("\uu25B2");
-        legendRLabel2.setText(REQUIRED2_LABEL.getContent());
         isIDreqLabel.setText("\u25CF");
         nameReqLabel.setText("\u25CF");
         cellReqLabel.setText("\u25B2");
@@ -240,10 +235,6 @@ public class AttListForm extends javax.swing.JFrame {
         filler41 = new javax.swing.Box.Filler(new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 32767));
         legendMLabel = new javax.swing.JLabel();
         filler42 = new javax.swing.Box.Filler(new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 0), new java.awt.Dimension(3, 32767));
-        legendRLabel = new javax.swing.JLabel();
-        legendMLabel2 = new javax.swing.JLabel();
-        filler78 = new javax.swing.Box.Filler(new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 0), new java.awt.Dimension(3, 32767));
-        legendRLabel2 = new javax.swing.JLabel();
         filler7 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 10), new java.awt.Dimension(0, 10), new java.awt.Dimension(32767, 10));
         loginPanel = new javax.swing.JPanel();
         filler31 = new javax.swing.Box.Filler(new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 32767));
@@ -452,7 +443,7 @@ public class AttListForm extends javax.swing.JFrame {
 
         legendLLabel.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         legendLLabel.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        legendLLabel.setText("Required");
+        legendLLabel.setText(DATA_COND.getContent());
         legendLLabel.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
         legendLLabel.setMaximumSize(new java.awt.Dimension(140, 21));
         legendLLabel.setMinimumSize(new java.awt.Dimension(140, 21));
@@ -468,31 +459,6 @@ public class AttListForm extends javax.swing.JFrame {
         legendMLabel.setPreferredSize(new java.awt.Dimension(14, 14));
         RequiredPanel1.add(legendMLabel);
         RequiredPanel1.add(filler42);
-
-        legendRLabel.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        legendRLabel.setText(": Required");
-        legendRLabel.setToolTipText("");
-        legendRLabel.setMaximumSize(new java.awt.Dimension(80, 21));
-        legendRLabel.setMinimumSize(new java.awt.Dimension(80, 21));
-        legendRLabel.setName(""); // NOI18N
-        legendRLabel.setPreferredSize(new java.awt.Dimension(80, 21));
-        RequiredPanel1.add(legendRLabel);
-
-        legendMLabel2.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        legendMLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        legendMLabel2.setText("w");
-        legendMLabel2.setToolTipText("");
-        legendMLabel2.setPreferredSize(new java.awt.Dimension(14, 14));
-        RequiredPanel1.add(legendMLabel2);
-        RequiredPanel1.add(filler78);
-
-        legendRLabel2.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        legendRLabel2.setText(": choose1");
-        legendRLabel2.setToolTipText("");
-        legendRLabel2.setMaximumSize(new java.awt.Dimension(80, 21));
-        legendRLabel2.setMinimumSize(new java.awt.Dimension(80, 21));
-        legendRLabel2.setPreferredSize(new java.awt.Dimension(80, 21));
-        RequiredPanel1.add(legendRLabel2);
 
         westPanel.add(RequiredPanel1);
         westPanel.add(filler7);
@@ -1193,7 +1159,7 @@ public class AttListForm extends javax.swing.JFrame {
             switch (formMode) {
                 case NormalMode:
                     // <editor-fold defaultstate="collapsed" desc="-- Prepare to change user information">
-                    formMode = FormMode.UpdateMode;
+                    setFormMode(FormMode.UpdateMode);
                     multiFuncButton.setText(SAVE_BTN.getContent());
                     multiFuncButton.setMnemonic('s');
                     setModificationState(true); // change to modification mode
@@ -1206,7 +1172,7 @@ public class AttListForm extends javax.swing.JFrame {
                     // <editor-fold defaultstate="collapsed" desc="-- save modified user information ">
                     if (allFieldsAreGood(errorMsg)) {
                         // each field satisfies data requirements
-                        formMode = FormMode.NormalMode;
+                        setFormMode(FormMode.NormalMode);
                         multiFuncButton.setText(MODIFY_BTN.getContent());
                         multiFuncButton.setMnemonic('m');
                         setModificationState(false);
@@ -1433,7 +1399,7 @@ public class AttListForm extends javax.swing.JFrame {
             } else if (formMode == FormMode.UpdateMode ) {
                 setModificationState(false);
                 multiFuncButton.setMnemonic('s');
-                formMode = FormMode.NormalMode;
+                setFormMode(FormMode.NormalMode);
                 multiFuncButton.setText(MODIFY_BTN.getContent());
                 multiFuncButton.setMnemonic('m');
                 createButton.setEnabled(true);
@@ -1753,10 +1719,9 @@ public class AttListForm extends javax.swing.JFrame {
     private void createButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createButtonActionPerformed
         // Prepare to accept property values for a new user to be created.
         try {
-            formMode = FormMode.CreateMode;
+            setFormMode(FormMode.CreateMode);
             usersTable.setEnabled(false);
             ID_usable = false;
-            legendLLabel.setText("\u203B"+GUIDELINE_LABEL.getContent()+"\u2212");
             // <editor-fold defaultstate="collapsed" desc="-- Enable data input fields">
             userIDText.setEnabled(true);
             userIDText.setText("");
@@ -2268,6 +2233,11 @@ public class AttListForm extends javax.swing.JFrame {
         }
     }
 
+    /**
+     * Get out of attendant creation mode.
+     * @param created tells whether a new attendant is created or not.
+     *          true: created, false: not created.
+     */
     private void revokeCreationMode(boolean created) {
         // Reset properties set for a new user as it was.
         // <editor-fold defaultstate="collapsed" desc="-- Reset Password LabelsText">
@@ -2309,7 +2279,7 @@ public class AttListForm extends javax.swing.JFrame {
         }
         
         usersTable.setEnabled(true);
-        formMode = FormMode.NormalMode;
+        setFormMode(FormMode.NormalMode);
         if(selectedRowIndex < 0)
             selectedRowIndex = 0;
         ShowAttendantDetail(usersTable.convertRowIndexToModel(selectedRowIndex));     
@@ -2321,7 +2291,7 @@ public class AttListForm extends javax.swing.JFrame {
         checkIDButton.setEnabled(false); 
         // </editor-fold>   
 
-        legendLLabel.setText("\u203B" + REQUIRED_LABEL.getContent() + "\u2212");       
+//        legendLLabel.setText(CREATE_COND.getContent());       
     }
 
     private boolean dataExistsInDB(String sql, String dataEntered) {
@@ -2503,6 +2473,8 @@ public class AttListForm extends javax.swing.JFrame {
     private void setModificationState(boolean flag) {
         boolean isAdminRerocd = (loginID.equals("admin"));
         boolean notOwnRecord = !(loginID.equals(userIDText.getText()));
+        
+//        legendLLabel.setText(DATA_COND.getContent());
         if (!isAdminRerocd && notOwnRecord) {
             // No user can change self 'admin' property
             // No user with admin right can change admin property of user 'admin'
@@ -2573,6 +2545,26 @@ public class AttListForm extends javax.swing.JFrame {
         sBuild.append(", \tModifying User ID: " + loginID + System.lineSeparator());
 
         return sBuild.toString();
+    }
+
+    /**
+     * @param formMode the formMode to set
+     */
+    public void setFormMode(FormMode formMode) {
+        this.formMode = formMode;
+        switch (formMode) {
+            case CreateMode:
+                legendLLabel.setText(CREATE_COND.getContent());
+                break;
+            case NormalMode:
+                legendLLabel.setText(DATA_COND.getContent());
+                break;
+            case UpdateMode:
+                legendLLabel.setText(MODIFY_COND.getContent());
+                break;
+            default:
+                break;
+        }
     }
 
     class TextFileOnly extends javax.swing.filechooser.FileFilter {
@@ -2701,7 +2693,6 @@ public class AttListForm extends javax.swing.JFrame {
     private javax.swing.Box.Filler filler75;
     private javax.swing.Box.Filler filler76;
     private javax.swing.Box.Filler filler77;
-    private javax.swing.Box.Filler filler78;
     private javax.swing.Box.Filler filler8;
     private javax.swing.Box.Filler filler80;
     private javax.swing.Box.Filler filler81;
@@ -2719,9 +2710,6 @@ public class AttListForm extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel legendLLabel;
     private javax.swing.JLabel legendMLabel;
-    private javax.swing.JLabel legendMLabel2;
-    private javax.swing.JLabel legendRLabel;
-    private javax.swing.JLabel legendRLabel2;
     private javax.swing.JPanel loginPanel;
     private javax.swing.JCheckBox managerAuthCheckBox;
     private javax.swing.JButton multiFuncButton;

@@ -18,7 +18,6 @@ package com.osparking.global;
 
 import com.osparking.global.names.ControlEnums.Languages;
 import static com.osparking.global.names.ControlEnums.Languages.KOREAN;
-import static com.osparking.global.names.ControlEnums.MenuITemTypes.MANAGER_MANU;
 import static com.osparking.global.names.DB_Access.PIC_HEIGHT;
 import java.awt.Color;
 import java.awt.Component;
@@ -103,7 +102,6 @@ import com.osparking.global.names.OSP_enums.VersionType;
 import com.osparking.global.names.ParkingTimer;
 import com.osparking.global.names.SocketConnStat;
 import java.awt.Container;
-import java.nio.file.Paths;
 import javax.imageio.ImageIO;
 import javax.swing.JComboBox;
 
