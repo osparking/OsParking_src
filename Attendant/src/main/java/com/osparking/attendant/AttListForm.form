@@ -2,15 +2,13 @@
 
 <Form version="1.8" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JFrameFormInfo">
   <NonVisualComponents>
-    <Component class="javax.swing.JFileChooser" name="saveFileName">
+    <Component class="javax.swing.JFileChooser" name="saveFileChooser">
       <Properties>
         <Property name="dialogType" type="int" value="1"/>
         <Property name="approveButtonText" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
           <Connection code="SAVE_BTN.getContent()" type="code"/>
         </Property>
-        <Property name="fileFilter" type="javax.swing.filechooser.FileFilter" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-          <Connection code="new TextFileOnly()" type="code"/>
-        </Property>
+        <Property name="dialogTitle" type="java.lang.String" value=""/>
         <Property name="toolTipText" type="java.lang.String" value=""/>
         <Property name="enabled" type="boolean" value="false"/>
         <Property name="name" type="java.lang.String" value="" noResource="true"/>
@@ -2526,7 +2524,7 @@
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                       <Connection code="new java.awt.Font(font_Type, font_Style, font_Size)" type="code"/>
                     </Property>
-                    <Property name="mnemonic" type="int" value="115"/>
+                    <Property name="mnemonic" type="int" value="83"/>
                     <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                       <Connection code="SEARCH_BTN.getContent()" type="code"/>
                     </Property>
@@ -2565,8 +2563,9 @@
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                       <Connection code="new java.awt.Font(font_Type, font_Style, font_Size)" type="code"/>
                     </Property>
+                    <Property name="mnemonic" type="int" value="65"/>
                     <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                      <Connection code="SAVE_AS_BTN.getContent()" type="code"/>
+                      <Connection code="SAVE_ODS_BTN.getContent()" type="code"/>
                     </Property>
                     <Property name="toolTipText" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                       <Connection code="SAVE_AS_TOOLTIP.getContent()" type="code"/>

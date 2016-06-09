@@ -16,6 +16,7 @@
  */
 package com.osparking.attendant;
 
+import static com.osparking.global.DataSheet.saveODSfile;
 import java.awt.Point;
 import java.awt.event.KeyEvent;
 import java.io.BufferedWriter;
@@ -37,7 +38,6 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import static javax.swing.JOptionPane.INFORMATION_MESSAGE;
 import static javax.swing.JOptionPane.WARNING_MESSAGE;
-import static javax.swing.JOptionPane.YES_OPTION;
 import javax.swing.JTable;
 import javax.swing.SwingUtilities;
 import javax.swing.event.RowSorterEvent;
@@ -59,15 +59,14 @@ import static com.osparking.global.names.ControlEnums.DialogTitleTypes.ATT_EMAIL
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.ATT_EMAIL_SYNTAX_CHECK_DIALOG;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.ATT_HELP_DIALOGTITLE;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.ATT_ID_DUP_CHCEK_DIALOGTITLE;
-import static com.osparking.global.names.ControlEnums.DialogTitleTypes.ATT_SAVE_AS_FAIL_DIALOGTITLE;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.ATT_SFAVE_AS_SUCCESS_DIALOGTITLE;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.ATT_USER_UPDATE_DIALOGTITLE;
-import static com.osparking.global.names.ControlEnums.DialogTitleTypes.CONFIRM_DIALOGTITLE;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.CREATION_RESULT_DIALOGTITLE;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.CREATTION_FAIL_DIALOGTITLE;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.DELETE_DIALOGTITLE;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.DELETE_FAIL_DAILOGTITLE;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.DELETE_RESULT_DIALOGTITLE;
+import static com.osparking.global.names.ControlEnums.DialogTitleTypes.WARING_DIALOGTITLE;
 import static com.osparking.global.names.ControlEnums.LabelContent.*;
 import static com.osparking.global.names.ControlEnums.TableTypes.CELL_PHONE_HEADER;
 import static com.osparking.global.names.ControlEnums.TableTypes.EMAIL_HEADER;
@@ -99,9 +98,10 @@ import java.awt.event.WindowEvent;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.JComponent;
-import javax.swing.JViewport;
 import javax.swing.KeyStroke;
 import javax.swing.table.DefaultTableModel;
+import org.jopendocument.dom.OOUtils;
+import org.jopendocument.dom.spreadsheet.SpreadSheet;
 
 /**
  *
@@ -159,7 +159,6 @@ public class AttListForm extends javax.swing.JFrame {
                 public void run()  
                 {  
                     {  
-            //            if (rowInVisible(usersTable, selectedRowIndex)) {
                         if (rowInVisible(usersTable, selectedRowIndex)) {
                             usersTable.changeSelection(selectedRowIndex, 0, false, false); 
                         } else {
@@ -220,7 +219,7 @@ public class AttListForm extends javax.swing.JFrame {
     {
         userID2Label.setText(USER_ID_LABEL.getContent() + loginID);
         adminAuth2CheckBox.setSelected(isManager);
-        saveFileName.setDialogType(javax.swing.JFileChooser.SAVE_DIALOG);
+        saveFileChooser.setDialogType(javax.swing.JFileChooser.SAVE_DIALOG);
         isIDreqLabel.setText("\u25CF");
         nameReqLabel.setText("\u25CF");
         cellReqLabel.setText("\u25B2");
@@ -239,7 +238,7 @@ public class AttListForm extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        saveFileName = new javax.swing.JFileChooser();
+        saveFileChooser = new javax.swing.JFileChooser();
         requiredNotice = new javax.swing.JLabel();
         wholePanel = new javax.swing.JPanel();
         topPanel = new javax.swing.JPanel();
@@ -396,12 +395,12 @@ public class AttListForm extends javax.swing.JFrame {
         filler83 = new javax.swing.Box.Filler(new java.awt.Dimension(20, 0), new java.awt.Dimension(40, 0), new java.awt.Dimension(20, 32767));
         spacePanel2 = new javax.swing.JPanel();
 
-        saveFileName.setDialogType(javax.swing.JFileChooser.SAVE_DIALOG);
-        saveFileName.setApproveButtonText(SAVE_BTN.getContent());
-        saveFileName.setFileFilter(new TextFileOnly());
-        saveFileName.setToolTipText("");
-        saveFileName.setEnabled(false);
-        saveFileName.setName(""); // NOI18N
+        saveFileChooser.setDialogType(javax.swing.JFileChooser.SAVE_DIALOG);
+        saveFileChooser.setApproveButtonText(SAVE_BTN.getContent());
+        saveFileChooser.setDialogTitle("");
+        saveFileChooser.setToolTipText("");
+        saveFileChooser.setEnabled(false);
+        saveFileChooser.setName(""); // NOI18N
 
         requiredNotice.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         requiredNotice.setText("X: Reauired, O :  최소 1");
@@ -1092,7 +1091,7 @@ public class AttListForm extends javax.swing.JFrame {
         btnPanel.add(filler76);
 
         searchButton.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        searchButton.setMnemonic('s');
+        searchButton.setMnemonic('S');
         searchButton.setText(SEARCH_BTN.getContent());
         searchButton.setMaximumSize(new java.awt.Dimension(80, 60));
         searchButton.setMinimumSize(new java.awt.Dimension(80, 60));
@@ -1106,7 +1105,8 @@ public class AttListForm extends javax.swing.JFrame {
         btnPanel.add(filler81);
 
         saveTextFileButton.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        saveTextFileButton.setText(SAVE_AS_BTN.getContent());
+        saveTextFileButton.setMnemonic('A');
+        saveTextFileButton.setText(SAVE_ODS_BTN.getContent());
         saveTextFileButton.setToolTipText(SAVE_AS_TOOLTIP.getContent());
         saveTextFileButton.setAutoscrolls(true);
         saveTextFileButton.setMargin(new java.awt.Insets(0, 0, 0, 0));
@@ -1244,7 +1244,6 @@ public class AttListForm extends javax.swing.JFrame {
                     if (allFieldsAreGood(errorMsg)) {
                         String newUserID = userIDText.getText().trim();
                         int result = saveCreatedRecord();
-                        
                         String dialogText = "";
                         
                         if (result == 1) {
@@ -1466,86 +1465,7 @@ public class AttListForm extends javax.swing.JFrame {
     }    
     
     private void saveTextFileButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveTextFileButtonActionPerformed
-        try {
-            saveFileName.setSelectedFile(new File("User List"));
-            int returnVal = saveFileName.showSaveDialog(this);
-            if (returnVal == JFileChooser.APPROVE_OPTION) {
-                File file = saveFileName.getSelectedFile();
-                String pathname = null;
-                try {
-                    // What to do with the file, e.g. display it in a TextArea
-                    pathname = file.getAbsolutePath();
-                    String extension = saveFileName.getFileFilter().getDescription();
-                    if (extension.indexOf("*.txt") >= 0) {
-                        // Create a text file from the attendants list
-                        int start = pathname.length() - 4;
-                        // Java doesn't have endsWithIgnoreCase. So, ...
-                        if (start < 0 || !pathname.substring(start).equalsIgnoreCase(".txt")) {
-                            //<editor-fold defaultstate="collapsed" desc="// In case pathname doesn't have ".txt" suffix">
-                            // Give it the ".txt" extension, automatically.
-                            // pure file name(except extension name) has no ".txt" suffix
-                            // So, to make it a text file, append ".txt" extension to the filename.
-                            //</editor-fold>
-                            pathname += ".txt";
-                        } else {
-                            // pathname already has ".txt" as its suffix
-                        }
-                    }
-                    // <editor-fold defaultstate="collapsed" desc="-- Close resources(rs, stmt)">
-                    File f = new File(pathname);
-                    if(f.exists()) {
-                        if (f.isDirectory()) {
-                            String dialogText = "";
-                            
-                            switch (language) {
-                                case KOREAN:
-                                    dialogText = "같은 이름의 폴더(=디렉토리)가 존재합니다.\n " + 
-                                            pathname + "\n파일의 이름을 다른 것으로 변경하십시오.";
-                                    break;
-
-                                case ENGLISH:
-                                    dialogText = "A folder(=directory) of same name exists" +
-                                            System.lineSeparator() + 
-                                            pathname + "\nChange file name to a different one";
-                                    break;
-                                default:
-                                    break;
-                            }                            
-                            
-                            JOptionPane.showConfirmDialog(this,
-                                    dialogText,
-                                    ATT_SAVE_AS_FAIL_DIALOGTITLE.getContent(),
-                                    JOptionPane.PLAIN_MESSAGE,
-                                    WARNING_MESSAGE);
-                            return;
-                        } else {
-                            String message = 
-                                    SAVE_AS_EXIST_DIALOG.getContent() + System.lineSeparator() +
-                                    pathname + System.lineSeparator() +
-                                    SAVE_OVERWRITE_DIALOG.getContent();
-                            
-                            int result = JOptionPane.showConfirmDialog(this, message,
-                                    CONFIRM_DIALOGTITLE.getContent(),
-                                    JOptionPane.YES_NO_OPTION);
-                            
-                            if (result != YES_OPTION) {
-                                return;
-                            }
-                        }
-                    }
-                    // </editor-fold>                 
-                    CreateAttendantListTextFile(pathname);
-                } catch (Exception ex) {
-                    logParkingException(Level.SEVERE, ex, 
-                            "(File: " + pathname + ")");
-                } finally {
-                }
-            } else {
-                System.out.println("Text File creation cancelled by user.");
-            } 
-        } catch (Exception ex) {
-            logParkingException(Level.SEVERE, ex, "(User action: Save user list as a text file)");      
-        }
+        saveODSfile(this, usersTable, saveFileChooser, USER_SAVE_ODS_FAIL_DIALOG.getContent());
     }//GEN-LAST:event_saveTextFileButtonActionPerformed
 
     private void deleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteButtonActionPerformed
@@ -2583,31 +2503,7 @@ public class AttListForm extends javax.swing.JFrame {
             default:
                 break;
         }
-    }
-
-    private boolean rowInVisible2(JTable table, int rowIndex) 
-    { 
-        if (!(table.getParent() instanceof JViewport)) { 
-           return false; 
-        } 
-
-        JViewport viewport = (JViewport)table.getParent(); 
-        // This rectangle is relative to the table where the 
-        // northwest corner of cell (0,0) is always (0,0) 
-
-        Rectangle rect = table.getCellRect(rowIndex, 1, true); 
-
-        // The location of the viewport relative to the table     
-        Point pt = viewport.getViewPosition(); 
-        // Translate the cell location so that it is relative 
-        // to the view, assuming the northwest corner of the 
-        // view is (0,0) 
-        rect.setLocation(rect.x-pt.x, rect.y-pt.y);
-//        rect.setLeft(0);
-//        rect.setWidth(1);
-        // Check if view completely contains the row
-        return new Rectangle(viewport.getExtentSize()).contains(rect); 
-    }     
+    } 
 
     private boolean rowInVisible(JTable usersTable, int i) {
         Rectangle vr = usersTable.getVisibleRect ();
@@ -2782,7 +2678,7 @@ public class AttListForm extends javax.swing.JFrame {
     private javax.swing.JTextField phoneText;
     private javax.swing.JPanel repeatPWD_Panel;
     private javax.swing.JLabel requiredNotice;
-    private javax.swing.JFileChooser saveFileName;
+    private javax.swing.JFileChooser saveFileChooser;
     private javax.swing.JButton saveTextFileButton;
     private javax.swing.JButton searchButton;
     private javax.swing.JComboBox searchCriteriaComboBox;

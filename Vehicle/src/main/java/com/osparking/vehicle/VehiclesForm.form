@@ -131,7 +131,7 @@
                     </Property>
                     <Property name="mnemonic" type="int" value="99"/>
                     <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                      <Connection code="((String[])Globals.ButtonLabels.get(CLOSE_BTN.ordinal()))[ourLang]" type="code"/>
+                      <Connection code="CLOSE_BTN.getContent()" type="code"/>
                     </Property>
                     <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                       <Dimension value="[90, 40]"/>
@@ -268,7 +268,7 @@
                     </Property>
                     <Property name="horizontalAlignment" type="int" value="11"/>
                     <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                      <Connection code="((String[])Globals.LabelsText.get(ORDER_LABEL.ordinal()))[ourLang]" type="code"/>
+                      <Connection code="ORDER_LABEL.getContent()" type="code"/>
                     </Property>
                     <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                       <Dimension value="[90, 27]"/>
@@ -373,7 +373,7 @@
                     </Property>
                     <Property name="horizontalAlignment" type="int" value="11"/>
                     <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                      <Connection code="((String[])Globals.LabelsText.get(CAR_TAG_LABEL.ordinal()))[ourLang]" type="code"/>
+                      <Connection code="CAR_TAG_LABEL.getContent()" type="code"/>
                     </Property>
                     <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                       <Dimension value="[90, 27]"/>
@@ -475,7 +475,7 @@
                       <Connection code="new java.awt.Font(font_Type, font_Style, font_Size)" type="code"/>
                     </Property>
                     <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                      <Connection code="((String[])Globals.ButtonLabels.get(OWNER_BTN.ordinal()))[ourLang]" type="code"/>
+                      <Connection code="OWNER_BTN.getContent()" type="code"/>
                     </Property>
                     <Property name="enabled" type="boolean" value="false"/>
                     <Property name="focusable" type="boolean" value="false"/>
@@ -591,7 +591,7 @@
                     </Property>
                     <Property name="horizontalAlignment" type="int" value="11"/>
                     <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                      <Connection code="((String[])Globals.LabelsText.get(CELL_PHONE_LABEL.ordinal()))[ourLang]" type="code"/>
+                      <Connection code="CELL_PHONE_LABEL.getContent()" type="code"/>
                     </Property>
                     <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                       <Dimension value="[90, 27]"/>
@@ -696,7 +696,7 @@
                     </Property>
                     <Property name="horizontalAlignment" type="int" value="11"/>
                     <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                      <Connection code="((String[])Globals.LabelsText.get(PHONE_LABEL.ordinal()))[ourLang]" type="code"/>
+                      <Connection code="PHONE_LABEL.getContent()" type="code"/>
                     </Property>
                     <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                       <Dimension value="[90, 27]"/>
@@ -801,7 +801,7 @@
                     </Property>
                     <Property name="horizontalAlignment" type="int" value="11"/>
                     <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                      <Connection code="((String[])Globals.LabelsText.get(MODI_DATE_LABEL.ordinal()))[ourLang]" type="code"/>
+                      <Connection code="MODI_DATE_LABEL.getContent()" type="code"/>
                     </Property>
                     <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                       <Dimension value="[90, 27]"/>
@@ -906,7 +906,7 @@
                     </Property>
                     <Property name="horizontalAlignment" type="int" value="11"/>
                     <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                      <Connection code="((String[])Globals.LabelsText.get(NOTIFICATION_LABEL.ordinal()))[ourLang]" type="code"/>
+                      <Connection code="NOTIFICATION_LABEL.getContent()" type="code"/>
                     </Property>
                     <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                       <Dimension value="[90, 27]"/>
@@ -997,7 +997,7 @@
                     </Property>
                     <Property name="horizontalAlignment" type="int" value="11"/>
                     <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                      <Connection code="((String[])Globals.LabelsText.get(EXACT_COMP_LABEL.ordinal()))[ourLang]" type="code"/>
+                      <Connection code="EXACT_COMP_LABEL.getContent()" type="code"/>
                     </Property>
                     <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                       <Dimension value="[90, 27]"/>
@@ -1104,7 +1104,7 @@
                     </Property>
                     <Property name="horizontalAlignment" type="int" value="11"/>
                     <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                      <Connection code="((String[])Globals.LabelsText.get(PARK_ALLOWED_LABEL.ordinal()))[ourLang]" type="code"/>
+                      <Connection code="PARK_ALLOWED_LABEL.getContent()" type="code"/>
                     </Property>
                     <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                       <Dimension value="[90, 27]"/>
@@ -1211,7 +1211,7 @@
                     </Property>
                     <Property name="horizontalAlignment" type="int" value="11"/>
                     <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                      <Connection code="((String[])Globals.LabelsText.get(REASON_LABEL.ordinal()))[ourLang]" type="code"/>
+                      <Connection code="REASON_LABEL.getContent()" type="code"/>
                     </Property>
                     <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                       <Dimension value="[90, 27]"/>
@@ -1314,7 +1314,7 @@
                     </Property>
                     <Property name="horizontalAlignment" type="int" value="11"/>
                     <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                      <Connection code="((String[])Globals.LabelsText.get(OTHER_INFO_LABEL.ordinal()))[ourLang]" type="code"/>
+                      <Connection code="OTHER_INFO_LABEL.getContent()" type="code"/>
                     </Property>
                     <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                       <Dimension value="[90, 27]"/>
@@ -1417,7 +1417,7 @@
                     </Property>
                     <Property name="horizontalAlignment" type="int" value="11"/>
                     <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                      <Connection code="((String[])Globals.LabelsText.get(REGI_DATE_LABEL.ordinal()))[ourLang]" type="code"/>
+                      <Connection code="REGI_DATE_LABEL.getContent()" type="code"/>
                     </Property>
                     <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                       <Dimension value="[90, 27]"/>
@@ -1519,7 +1519,7 @@
                     </Property>
                     <Property name="horizontalAlignment" type="int" value="4"/>
                     <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                      <Connection code="((String[])Globals.LabelsText.get(COUNT_LABEL.ordinal()))[ourLang]" type="code"/>
+                      <Connection code="COUNT_LABEL.getContent()" type="code"/>
                     </Property>
                     <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                       <Dimension value="[110, 27]"/>
@@ -1639,7 +1639,7 @@
                           <Connection code="new java.awt.Font(font_Type, font_Style, font_Size)" type="code"/>
                         </Property>
                         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                          <Connection code="((String[])Globals.LabelsText.get(FORM_MODE_LABEL.ordinal()))[ourLang]" type="code"/>
+                          <Connection code="FORM_MODE_LABEL.getContent()" type="code"/>
                         </Property>
                         <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                           <Dimension value="[95, 27]"/>
@@ -1674,7 +1674,7 @@
                           <Connection code="new java.awt.Font(font_Type, font_Style, font_Size)" type="code"/>
                         </Property>
                         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                          <Connection code="((String[])Globals.LabelsText.get(SEARCH_MODE_LABEL.ordinal()))[ourLang]" type="code"/>
+                          <Connection code="SEARCH_MODE_LABEL.getContent()" type="code"/>
                         </Property>
                         <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                           <Dimension value="[86, 27]"/>
@@ -1724,7 +1724,7 @@
                         </Property>
                         <Property name="horizontalAlignment" type="int" value="4"/>
                         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                          <Connection code="((String[])Globals.LabelsText.get(SEARCH_LABEL.ordinal()))[ourLang]" type="code"/>
+                          <Connection code="SEARCH_LABEL.getContent()" type="code"/>
                         </Property>
                         <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                           <Dimension value="[80, 27]"/>
@@ -1760,10 +1760,10 @@
                         </Property>
                         <Property name="horizontalAlignment" type="int" value="0"/>
                         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                          <Connection code="((String[])Globals.TextFieldList.get(CAR_TAG_TF.ordinal()))[ourLang]" type="code"/>
+                          <Connection code="CAR_TAG_TF.getContent()" type="code"/>
                         </Property>
                         <Property name="toolTipText" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                          <Connection code="((String[])Globals.ToolTipLabels.get(CAR_TAG_INPUT_TOOLTIP.ordinal()))[ourLang]" type="code"/>
+                          <Connection code="CAR_TAG_INPUT_TOOLTIP.getContent()" type="code"/>
                         </Property>
                         <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                           <Dimension value="[120, 28]"/>
@@ -1803,10 +1803,10 @@
                         </Property>
                         <Property name="horizontalAlignment" type="int" value="0"/>
                         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                          <Connection code="((String[])Globals.TextFieldList.get(DRIVER_TF.ordinal()))[ourLang]" type="code"/>
+                          <Connection code="DRIVER_TF.getContent()" type="code"/>
                         </Property>
                         <Property name="toolTipText" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                          <Connection code="((String[])Globals.ToolTipLabels.get(DRIVER_INPUT_TOOLTIP.ordinal()))[ourLang]" type="code"/>
+                          <Connection code="DRIVER_INPUT_TOOLTIP.getContent()" type="code"/>
                         </Property>
                         <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                           <Dimension value="[32767, 28]"/>
@@ -1845,7 +1845,7 @@
                           <Connection code="new java.awt.Font(font_Type, font_Style, font_Size)" type="code"/>
                         </Property>
                         <Property name="toolTipText" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                          <Connection code="((String[])Globals.ToolTipLabels.get(AFFILIATION_TOOLTIP.ordinal()))[ourLang]" type="code"/>
+                          <Connection code="AFFILIATION_TOOLTIP.getContent()" type="code"/>
                         </Property>
                         <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                           <Dimension value="[32767, 30]"/>
@@ -1883,7 +1883,7 @@
                           <Connection code="new java.awt.Font(font_Type, font_Style, font_Size)" type="code"/>
                         </Property>
                         <Property name="toolTipText" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                          <Connection code="((String[])Globals.ToolTipLabels.get(BUILDING_TOOLTIP.ordinal()))[ourLang]" type="code"/>
+                          <Connection code="BUILDING_TOOLTIP.getContent()" type="code"/>
                         </Property>
                         <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                           <Dimension value="[150, 30]"/>
@@ -1922,10 +1922,10 @@
                         </Property>
                         <Property name="horizontalAlignment" type="int" value="0"/>
                         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                          <Connection code="((String[])Globals.TextFieldList.get(OTHER_INFO_TF.ordinal()))[ourLang]" type="code"/>
+                          <Connection code="OTHER_INFO_TF.getContent()" type="code"/>
                         </Property>
                         <Property name="toolTipText" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                          <Connection code="((String[])Globals.ToolTipLabels.get(OTHER_TOOLTIP.ordinal()))[ourLang]" type="code"/>
+                          <Connection code="OTHER_TOOLTIP.getContent()" type="code"/>
                         </Property>
                         <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                           <Dimension value="[32767, 28]"/>
@@ -1962,7 +1962,7 @@
                         </Property>
                         <Property name="mnemonic" type="int" value="108"/>
                         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                          <Connection code="((String[])Globals.ButtonLabels.get(CLEAR_BTN.ordinal()))[ourLang]" type="code"/>
+                          <Connection code="CLEAR_BTN.getContent()" type="code"/>
                         </Property>
                         <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                           <Dimension value="[90, 40]"/>
@@ -2001,7 +2001,7 @@
                         </Property>
                         <Property name="mnemonic" type="int" value="115"/>
                         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                          <Connection code="((String[])Globals.ButtonLabels.get(SEARCH_BTN.ordinal()))[ourLang]" type="code"/>
+                          <Connection code="SEARCH_BTN.getContent()" type="code"/>
                         </Property>
                         <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                           <Dimension value="[90, 40]"/>
@@ -2060,7 +2060,7 @@
                   </Properties>
                   <AuxValues>
                     <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new javax.swing.JTable()"/>
-                    <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="vehiclesTable.setAutoCreateRowSorter(true);&#xa;DefaultTableModel tableModel = new DefaultTableModel(&#xa;        new Object [][] {&#xa;            {null, null, null, null, null, null, null, null, null, null, null,&#xa;                null, null, null, null},&#xa;            {null, null, null, null, null, null, null, null, null, null, null,&#xa;                null, null, null, null},&#xa;            {null, null, null, null, null, null, null, null, null, null, null,&#xa;                null, null, null, null},&#xa;            {null, null, null, null, null, null, null, null, null, null, null,&#xa;                null, null, null, null}&#xa;        },&#xa;        new String [] {&#xa;            ((String[])Globals.TableHeaderList.get(TableTypes.ORDER_HEADER.ordinal()))[ourLang], &#xa;            ((String[])Globals.TableHeaderList.get(TableTypes.CAR_TAG_HEADER.ordinal()))[ourLang], &#xa;            ((String[])Globals.TableHeaderList.get(TableTypes.DRIVER_HEADER.ordinal()))[ourLang], &#xa;            ((String[])Globals.TableHeaderList.get(TableTypes.LOW_HIGH_HEADER.ordinal()))[ourLang], &#xa;            ((String[])Globals.TableHeaderList.get(TableTypes.ROOM_BUILD_HEADER.ordinal()))[ourLang], &#xa;            ((String[])Globals.TableHeaderList.get(TableTypes.OTHER_INFO_HEDER.ordinal()))[ourLang], &#xa;            &quot;Cell Phone&quot;, &quot;Land Line&quot;,&#xa;            &quot;Notif&apos;&quot;, &quot;Exact&quot;, &quot;Allowed&quot;,&#xa;            ((String[])Globals.TableHeaderList.get(TableTypes.REASON_HEADER.ordinal()))[ourLang], &#xa;            &quot;Registered On&quot;, &#xa;            &quot;Modified On&quot;, &quot;drvSeqNo&quot;&#xa;        }        &#xa;    ) {&#xa;        @Override&#xa;        public boolean isCellEditable(int row, int column) {&#xa;           //all cells false&#xa;           return false;&#xa;        }&#xa;        @Override&#xa;        public Class getColumnClass(int column) {&#xa;            switch (column) {&#xa;                case 0:&#xa;                    return Integer.class;&#xa;                default:&#xa;                    return String.class;&#xa;            }&#xa;        }&#xa;    };"/>
+                    <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="vehiclesTable.setAutoCreateRowSorter(true);&#xa;DefaultTableModel tableModel = new DefaultTableModel(&#xa;        new Object [][] {&#xa;            {null, null, null, null, null, null, null, null, null, null, null,&#xa;                null, null, null, null},&#xa;            {null, null, null, null, null, null, null, null, null, null, null,&#xa;                null, null, null, null},&#xa;            {null, null, null, null, null, null, null, null, null, null, null,&#xa;                null, null, null, null},&#xa;            {null, null, null, null, null, null, null, null, null, null, null,&#xa;                null, null, null, null}&#xa;        },&#xa;        new String [] {&#xa;            ORDER_HEADER.getContent(),&#xa;            CAR_TAG_HEADER.getContent(),&#xa;            DRIVER_HEADER.getContent(),&#xa;            LOW_HIGH_HEADER.getContent(),&#xa;            ROOM_BUILD_HEADER.getContent(),&#xa;            OTHER_INFO_HEDER.getContent(),&#xa;            &quot;Cell Phone&quot;, &quot;Land Line&quot;,&#xa;            &quot;Notif&apos;&quot;, &quot;Exact&quot;, &quot;Allowed&quot;,&#xa;            REASON_HEADER.getContent(),&#xa;            &quot;Registered On&quot;, &#xa;            &quot;Modified On&quot;, &quot;drvSeqNo&quot;&#xa;        }        &#xa;    ) {&#xa;        @Override&#xa;        public boolean isCellEditable(int row, int column) {&#xa;           //all cells false&#xa;           return false;&#xa;        }&#xa;        @Override&#xa;        public Class getColumnClass(int column) {&#xa;            switch (column) {&#xa;                case 0:&#xa;                    return Integer.class;&#xa;                default:&#xa;                    return String.class;&#xa;            }&#xa;        }&#xa;    };"/>
                   </AuxValues>
                 </Component>
               </SubComponents>
@@ -2107,7 +2107,7 @@
                     </Property>
                     <Property name="mnemonic" type="int" value="97"/>
                     <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                      <Connection code="((String[])Globals.ButtonLabels.get(SAVE_ODS_BTN.ordinal()))[ourLang]" type="code"/>
+                      <Connection code="SAVE_ODS_BTN.getContent()" type="code"/>
                     </Property>
                     <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                       <Dimension value="[110, 40]"/>
@@ -2146,7 +2146,7 @@
                     </Property>
                     <Property name="mnemonic" type="int" value="111"/>
                     <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                      <Connection code="((String[])Globals.ButtonLabels.get(READ_ODS_BTN.ordinal()))[ourLang]" type="code"/>
+                      <Connection code="READ_ODS_BTN.getContent()" type="code"/>
                     </Property>
                     <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                       <Dimension value="[110, 40]"/>
@@ -2185,7 +2185,7 @@
                     </Property>
                     <Property name="mnemonic" type="int" value="101"/>
                     <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                      <Connection code="((String[])Globals.ButtonLabels.get(DELETE_ALL_BTN.ordinal()))[ourLang]" type="code"/>
+                      <Connection code="DELETE_ALL_BTN.getContent()" type="code"/>
                     </Property>
                     <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                       <Dimension value="[110, 40]"/>
@@ -2224,7 +2224,7 @@
                     </Property>
                     <Property name="mnemonic" type="int" value="100"/>
                     <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                      <Connection code="((String[])Globals.ButtonLabels.get(DELETE_BTN.ordinal()))[ourLang]" type="code"/>
+                      <Connection code="DELETE_BTN.getContent()" type="code"/>
                     </Property>
                     <Property name="enabled" type="boolean" value="false"/>
                     <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
@@ -2264,7 +2264,7 @@
                     </Property>
                     <Property name="mnemonic" type="int" value="109"/>
                     <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                      <Connection code="((String[])Globals.ButtonLabels.get(MODIFY_BTN.ordinal()))[ourLang]" type="code"/>
+                      <Connection code="MODIFY_BTN.getContent()" type="code"/>
                     </Property>
                     <Property name="enabled" type="boolean" value="false"/>
                     <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
@@ -2304,7 +2304,7 @@
                     </Property>
                     <Property name="mnemonic" type="int" value="114"/>
                     <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                      <Connection code="((String[])Globals.ButtonLabels.get(CREATE_BTN.ordinal()))[ourLang]" type="code"/>
+                      <Connection code="CREATE_BTN.getContent()" type="code"/>
                     </Property>
                     <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                       <Dimension value="[90, 40]"/>

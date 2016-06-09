@@ -81,7 +81,7 @@ public class ControlEnums {
         CREATE_COND("\u203B 정보 생성 조건", "\u203B Legend"), 
         DATA_COND("\u203B 필수 선택 구분", "\u203B Legend"), 
         REQUIRED1_LABEL(": 필수", ": Required"), 
-        REQUIRED2_LABEL(": 최소 1", ": 1 or more"),
+        REQUIRED2_LABEL(": 최소 1 개", ": 1 or more"),
         USER_ID_LABEL("사용자 ID: ", "My ID: "),
         NAME_LABEL("이름",  "Name"),
         CELL_PHONE_LABEL("휴대전화", "Cell Phone"),
@@ -190,12 +190,12 @@ public class ControlEnums {
         MODIFY_BTN("수정(M)", "Modify"),
         CANCEL_BTN("취소(C)", "Cancel"),
         SEARCH_BTN("검색(S)", "Search"),
-        SAVE_AS_BTN("저장", "Save As"),
+        SAVE_AS_BTN("파일저장(A)", "Save As"),
         CHECK_BTN("중복검색", "Check"),
         CLEAR_BTN("초기화(L)", "Clear"),
         DELETE_ALL_BTN("전체삭제(E)", "Delete All"),
-        READ_ODS_BTN("<HTML>ods  읽기(<U>O</U>)</HTML>", "<HTML>Read  <U>O</U>ds</HTML>"),
-        SAVE_ODS_BTN("<HTML>ods  저장(<U>A</U>)</HTML>", "<HTML>S<U>a</U>ve Ods"),
+        READ_ODS_BTN("<HTML>ods읽기(<U>O</U>)</HTML>", "<HTML>Read  <U>O</U>ds</HTML>"),
+        SAVE_ODS_BTN("<HTML>ods저장(<U>A</U>)</HTML>", "<HTML>S<U>a</U>ve Ods"),
         CREATE_NO_SHORT_BTN("생성", "Create"),
         MODIFY_NO_SHORT_BTN("수정", "Modify"),
         DELETE_NO_SHORT_BTN("삭제", "Delete"),
@@ -394,7 +394,9 @@ public class ControlEnums {
         VEHICLE_DELETE_ALL_RESULT_DAILOG(
                 "모든 차량 정보가 삭제되었습니다.", "All Vehicles are Deleted"),
         VEHICLE_SAVE_ODS_FAIL_DIALOG(
-                "등록된 차량이없습니다.", "No vehicle to save!"),
+                "등록된 차량이 없습니다.", "No vehicle to save!"),
+        USER_SAVE_ODS_FAIL_DIALOG(
+                "등록된 사용자가 없습니다.", "No user to save!"),
         DRIVER_CREATRION_FAIL_DIALOG("운전자 정보 생성 실패.", "Failed to create a owner/driver record."), 
         DRIVER_DELETE_ALL_RESULT_DAILOG("모든 운전자가 삭제되었습니다.", "All drivers were deleted"),
         DRIVER_MODIFY_FAIL_DAILOG(

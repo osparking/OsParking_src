@@ -16,6 +16,7 @@
  */
 package com.osparking.vehicle;
 
+import static com.osparking.global.DataSheet.saveODSfile;
 import com.osparking.vehicle.driver.DriverSelection;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -1279,70 +1280,7 @@ public class VehiclesForm extends javax.swing.JFrame {
     }//GEN-LAST:event_readSheet_ButtonActionPerformed
 
     private void saveSheet_ButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveSheet_ButtonActionPerformed
-        // Check the size of the list and if empty just return saying "noting to save"
-        if (vehiclesTable.getModel().getRowCount() == 0) {
-            JOptionPane.showMessageDialog(this, VEHICLE_SAVE_ODS_FAIL_DIALOG.getContent(),
-                    WARING_DIALOGTITLE.getContent(), 
-                    JOptionPane.YES_OPTION );
-            return;
-        }
-        saveFileChooser.setFileFilter(new OdsFileOnly());
-
-        int returnVal = saveFileChooser.showSaveDialog(this);
-
-        if (returnVal == JFileChooser.APPROVE_OPTION) 
-        {                
-            File file = saveFileChooser.getSelectedFile();
-            //<editor-fold desc="Make sure file extension is 'ods'">
-            String pathname = null;
-            try {
-                pathname = file.getAbsolutePath();
-                String extension = saveFileChooser.getFileFilter().getDescription();
-                if (extension.indexOf("*.ods") >= 0) {
-                    // Create a text file from the attendants list
-                    int start = pathname.length() - 4;
-                    // Java doesn't have endsWithIgnoreCase. So, ...
-                    if (start < 0 || !pathname.substring(start).equalsIgnoreCase(".ods")) {
-                        //<editor-fold defaultstate="collapsed" desc="// In case pathname doesn't have ".ods" suffix">
-                        // Give it the ".ods" extension, automatically.
-                        // pure file name(except extension name) has no ".ods" suffix
-                        // So, to make it a ods file, append ".ods" extension to the filename.
-                        //</editor-fold>
-                        pathname += ".ods";
-                        file = new File(pathname);
-                    } else {
-                        // pathname already has ".ods" as its suffix
-                    }
-                }
-            } catch (Exception ex) {
-                logParkingException(Level.SEVERE, ex, "(File: " + pathname + ")");
-            }     
-            //</editor-fold>
-            
-            
-            final Object[][] data = new Object[vehiclesTable.getModel().getRowCount()][vehiclesTable.getColumnCount()];
-            
-            for (int row = 0; row < vehiclesTable.getModel().getRowCount(); row ++) {
-                int rowM = vehiclesTable.convertRowIndexToModel(row);
-                
-                for (int col = 0; col < vehiclesTable.getColumnCount(); col++) {
-                    data[rowM][col] = vehiclesTable.getValueAt(rowM, col);
-                }
-            }
-            
-            String[] columns = new String[vehiclesTable.getColumnCount()];
-            for (int col = 0; col < vehiclesTable.getColumnCount(); col++) {
-                columns[col] = (String)vehiclesTable.getColumnModel().getColumn(col).getHeaderValue();
-            }
-            
-            TableModel model = new DefaultTableModel(data, columns);
-            try {
-                SpreadSheet.createEmpty(model).saveAs(file);
-                OOUtils.open(file);
-            } catch (IOException ex) {
-                System.out.println("File save exception: " + ex.getMessage());
-            }                
-        }
+        saveODSfile(this, vehiclesTable, saveFileChooser, VEHICLE_SAVE_ODS_FAIL_DIALOG.getContent());
     }//GEN-LAST:event_saveSheet_ButtonActionPerformed
 
     private void seeLicenseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_seeLicenseButtonActionPerformed
