@@ -195,7 +195,8 @@ public class AttListForm extends javax.swing.JFrame {
         userID2Label.setText(USER_ID_LABEL.getContent() + loginID);
         adminAuth2CheckBox.setSelected(isManager);
         saveFileName.setDialogType(javax.swing.JFileChooser.SAVE_DIALOG);
-        legendLLabel.setText("\u203B" + REQUIRED_LABEL.getContent() + "\u2212");
+        legendLLabel.setText("\u203B" + REQUIRED_LABEL.getContent() + "\u2192");
+//        legendLLabel.setText("\u203B" + REQUIRED_LABEL.getContent() + "-");
         legendMLabel.setText("\u25CF");
         legendRLabel.setText(REQUIRED1_LABEL.getContent());
         legendMLabel2.setText("\uu25B2");
