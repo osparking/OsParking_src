@@ -205,7 +205,7 @@
                     </Property>
                     <Property name="horizontalAlignment" type="int" value="2"/>
                     <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                      <Connection code="LOGIN_ID_LABEL.getContent(language) + &quot;: &quot; +loginID" type="code"/>
+                      <Connection code="LOGIN_ID_LABEL.getContent() + &quot;: &quot; +loginID" type="code"/>
                     </Property>
                   </Properties>
                 </Component>
@@ -320,41 +320,6 @@
                     </Property>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JLabel" name="Label41">
-                  <Properties>
-                    <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                      <Connection code="&quot;\u2192&quot;" type="code"/>
-                    </Property>
-                    <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                      <Dimension value="[20, 21]"/>
-                    </Property>
-                    <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                      <Dimension value="[20, 21]"/>
-                    </Property>
-                    <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                      <Dimension value="[20, 21]"/>
-                    </Property>
-                  </Properties>
-                </Component>
-                <Component class="javax.swing.JLabel" name="legendMLabel">
-                  <Properties>
-                    <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                      <Connection code="new java.awt.Font(font_Type, font_Style, font_Size)" type="code"/>
-                    </Property>
-                    <Property name="horizontalAlignment" type="int" value="0"/>
-                    <Property name="text" type="java.lang.String" value="M"/>
-                    <Property name="toolTipText" type="java.lang.String" value=""/>
-                    <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                      <Dimension value="[15, 21]"/>
-                    </Property>
-                    <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                      <Dimension value="[15, 21]"/>
-                    </Property>
-                    <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                      <Dimension value="[15, 21]"/>
-                    </Property>
-                  </Properties>
-                </Component>
                 <Component class="javax.swing.Box$Filler" name="filler42">
                   <Properties>
                     <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
@@ -370,6 +335,25 @@
                   <AuxValues>
                     <AuxValue name="classDetails" type="java.lang.String" value="Box.Filler.HorizontalStrut"/>
                   </AuxValues>
+                </Component>
+                <Component class="javax.swing.JLabel" name="jLabel1">
+                  <Properties>
+                    <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                      <Connection code="new java.awt.Font(font_Type, font_Style, font_Size)" type="code"/>
+                    </Property>
+                    <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                      <Connection code="&quot;\u25CF &quot; + REQUIRED1_LABEL.getContent() + &quot;,  \uu25B2 &quot; + REQUIRED2_LABEL.getContent()" type="code"/>
+                    </Property>
+                    <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                      <Dimension value="[1100, 30]"/>
+                    </Property>
+                    <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                      <Dimension value="[110, 21]"/>
+                    </Property>
+                    <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                      <Dimension value="[80, 21]"/>
+                    </Property>
+                  </Properties>
                 </Component>
                 <Component class="javax.swing.Box$Filler" name="filler41">
                   <Properties>
@@ -408,13 +392,13 @@
             <Container class="javax.swing.JPanel" name="loginPanel">
               <Properties>
                 <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                  <Dimension value="[32877, 28]"/>
+                  <Dimension value="[32877, 30]"/>
                 </Property>
                 <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                   <Dimension value="[300, 26]"/>
                 </Property>
                 <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                  <Dimension value="[300, 26]"/>
+                  <Dimension value="[300, 30]"/>
                 </Property>
               </Properties>
 
@@ -443,16 +427,16 @@
                     </Property>
                     <Property name="horizontalAlignment" type="int" value="4"/>
                     <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                      <Connection code="LOGIN_ID_LABEL.getContent(language)" type="code"/>
+                      <Connection code="LOGIN_ID_LABEL.getContent()" type="code"/>
                     </Property>
                     <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                      <Dimension value="[130, 21]"/>
+                      <Dimension value="[130, 26]"/>
                     </Property>
                     <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                      <Dimension value="[130, 21]"/>
+                      <Dimension value="[130, 26]"/>
                     </Property>
                     <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                      <Dimension value="[130, 21]"/>
+                      <Dimension value="[130, 26]"/>
                     </Property>
                   </Properties>
                 </Component>
@@ -481,13 +465,13 @@
                     <Property name="text" type="java.lang.String" value="M"/>
                     <Property name="toolTipText" type="java.lang.String" value=""/>
                     <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                      <Dimension value="[15, 21]"/>
+                      <Dimension value="[15, 26]"/>
                     </Property>
                     <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                       <Dimension value="[15, 21]"/>
                     </Property>
                     <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                      <Dimension value="[15, 21]"/>
+                      <Dimension value="[15, 26]"/>
                     </Property>
                   </Properties>
                 </Component>
@@ -514,7 +498,7 @@
                       <Connection code="new java.awt.Font(font_Type, font_Style, font_Size)" type="code"/>
                     </Property>
                     <Property name="toolTipText" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                      <Connection code="ID_INPUT_TOOLTIP.getContent(language)" type="code"/>
+                      <Connection code="ID_INPUT_TOOLTIP.getContent()" type="code"/>
                     </Property>
                     <Property name="disabledTextColor" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                       <Color blue="66" green="66" red="66" type="rgb"/>
@@ -524,10 +508,10 @@
                       <Dimension value="[32767, 30]"/>
                     </Property>
                     <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                      <Dimension value="[80, 21]"/>
+                      <Dimension value="[80, 26]"/>
                     </Property>
                     <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                      <Dimension value="[80, 21]"/>
+                      <Dimension value="[80, 26]"/>
                     </Property>
                   </Properties>
                   <Events>
@@ -540,10 +524,10 @@
                       <Dimension value="[40, 32767]"/>
                     </Property>
                     <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                      <Dimension value="[40, 40]"/>
+                      <Dimension value="[20, 15]"/>
                     </Property>
                     <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                      <Dimension value="[40, 40]"/>
+                      <Dimension value="[40, 30]"/>
                     </Property>
                   </Properties>
                   <AuxValues>
@@ -599,7 +583,7 @@
                       <Connection code="new java.awt.Font(font_Type, font_Style, font_Size)" type="code"/>
                     </Property>
                     <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                      <Connection code="CHECK_BTN.getContent(language)" type="code"/>
+                      <Connection code="CHECK_BTN.getContent()" type="code"/>
                     </Property>
                     <Property name="enabled" type="boolean" value="false"/>
                     <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
@@ -622,10 +606,10 @@
                       <Dimension value="[20, 32767]"/>
                     </Property>
                     <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                      <Dimension value="[20, 0]"/>
+                      <Dimension value="[20, 15]"/>
                     </Property>
                     <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                      <Dimension value="[40, 40]"/>
+                      <Dimension value="[40, 30]"/>
                     </Property>
                   </Properties>
                   <AuxValues>
@@ -643,7 +627,7 @@
                   <Dimension value="[0, 10]"/>
                 </Property>
                 <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                  <Dimension value="[0, 10]"/>
+                  <Dimension value="[0, 5]"/>
                 </Property>
               </Properties>
               <AuxValues>
@@ -748,13 +732,13 @@
             <Container class="javax.swing.JPanel" name="namePanel">
               <Properties>
                 <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                  <Dimension value="[32877, 28]"/>
+                  <Dimension value="[32877, 30]"/>
                 </Property>
                 <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                  <Dimension value="[300, 26]"/>
+                  <Dimension value="[300, 28]"/>
                 </Property>
                 <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                  <Dimension value="[300, 26]"/>
+                  <Dimension value="[300, 30]"/>
                 </Property>
               </Properties>
 
@@ -783,16 +767,16 @@
                     </Property>
                     <Property name="horizontalAlignment" type="int" value="4"/>
                     <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                      <Connection code="NAME_LABEL.getContent(language)" type="code"/>
+                      <Connection code="NAME_LABEL.getContent()" type="code"/>
                     </Property>
                     <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                      <Dimension value="[130, 21]"/>
+                      <Dimension value="[130, 26]"/>
                     </Property>
                     <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                      <Dimension value="[130, 21]"/>
+                      <Dimension value="[130, 26]"/>
                     </Property>
                     <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                      <Dimension value="[130, 21]"/>
+                      <Dimension value="[130, 26]"/>
                     </Property>
                   </Properties>
                 </Component>
@@ -820,13 +804,13 @@
                     <Property name="horizontalAlignment" type="int" value="0"/>
                     <Property name="text" type="java.lang.String" value="M"/>
                     <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                      <Dimension value="[15, 21]"/>
+                      <Dimension value="[15, 26]"/>
                     </Property>
                     <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                      <Dimension value="[15, 21]"/>
+                      <Dimension value="[15, 26]"/>
                     </Property>
                     <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                      <Dimension value="[15, 21]"/>
+                      <Dimension value="[15, 26]"/>
                     </Property>
                   </Properties>
                 </Component>
@@ -852,31 +836,31 @@
                       <Connection code="new java.awt.Font(font_Type, font_Style, font_Size)" type="code"/>
                     </Property>
                     <Property name="toolTipText" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                      <Connection code="NAME_INPUT_TOOLTIP.getContent(language)" type="code"/>
+                      <Connection code="NAME_INPUT_TOOLTIP.getContent()" type="code"/>
                     </Property>
                     <Property name="enabled" type="boolean" value="false"/>
                     <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                       <Dimension value="[32767, 30]"/>
                     </Property>
                     <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                      <Dimension value="[80, 21]"/>
+                      <Dimension value="[80, 26]"/>
                     </Property>
                     <Property name="name" type="java.lang.String" value="" noResource="true"/>
                     <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                      <Dimension value="[80, 21]"/>
+                      <Dimension value="[80, 26]"/>
                     </Property>
                   </Properties>
                 </Component>
                 <Component class="javax.swing.Box$Filler" name="filler38">
                   <Properties>
                     <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                      <Dimension value="[20, 32767]"/>
+                      <Dimension value="[40, 32767]"/>
                     </Property>
                     <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                      <Dimension value="[20, 0]"/>
+                      <Dimension value="[20, 15]"/>
                     </Property>
                     <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                      <Dimension value="[40, 40]"/>
+                      <Dimension value="[40, 30]"/>
                     </Property>
                   </Properties>
                   <AuxValues>
@@ -939,7 +923,10 @@
                     </Property>
                     <Property name="horizontalAlignment" type="int" value="4"/>
                     <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                      <Connection code="CELL_PHONE_LABEL.getContent(language)   " type="code"/>
+                      <Connection code="CELL_PHONE_LABEL.getContent()   " type="code"/>
+                    </Property>
+                    <Property name="toolTipText" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                      <Connection code="CELL_PHONE_TOOLTIP.getContent()" type="code"/>
                     </Property>
                     <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                       <Dimension value="[130, 21]"/>
@@ -975,6 +962,9 @@
                     </Property>
                     <Property name="horizontalAlignment" type="int" value="0"/>
                     <Property name="text" type="java.lang.String" value="w"/>
+                    <Property name="toolTipText" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                      <Connection code="CELL_PHONE_TOOLTIP.getContent()" type="code"/>
+                    </Property>
                     <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                       <Dimension value="[15, 21]"/>
                     </Property>
@@ -1008,7 +998,7 @@
                       <Connection code="new java.awt.Font(font_Type, font_Style, font_Size)" type="code"/>
                     </Property>
                     <Property name="toolTipText" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                      <Connection code="CELL_INPUT_TOOLTIP.getContent(language)" type="code"/>
+                      <Connection code="CELL_INPUT_TOOLTIP.getContent()" type="code"/>
                     </Property>
                     <Property name="enabled" type="boolean" value="false"/>
                     <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
@@ -1025,13 +1015,13 @@
                 <Component class="javax.swing.Box$Filler" name="filler49">
                   <Properties>
                     <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                      <Dimension value="[20, 32767]"/>
+                      <Dimension value="[40, 32767]"/>
                     </Property>
                     <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                      <Dimension value="[20, 0]"/>
+                      <Dimension value="[20, 15]"/>
                     </Property>
                     <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                      <Dimension value="[40, 40]"/>
+                      <Dimension value="[40, 30]"/>
                     </Property>
                   </Properties>
                   <AuxValues>
@@ -1094,7 +1084,10 @@
                     </Property>
                     <Property name="horizontalAlignment" type="int" value="4"/>
                     <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                      <Connection code="PHONE_LABEL.getContent(language)" type="code"/>
+                      <Connection code="PHONE_LABEL.getContent()" type="code"/>
+                    </Property>
+                    <Property name="toolTipText" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                      <Connection code="CELL_PHONE_TOOLTIP.getContent()" type="code"/>
                     </Property>
                     <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                       <Dimension value="[130, 21]"/>
@@ -1130,6 +1123,9 @@
                     </Property>
                     <Property name="horizontalAlignment" type="int" value="0"/>
                     <Property name="text" type="java.lang.String" value="w"/>
+                    <Property name="toolTipText" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                      <Connection code="CELL_PHONE_TOOLTIP.getContent()" type="code"/>
+                    </Property>
                     <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                       <Dimension value="[15, 21]"/>
                     </Property>
@@ -1163,7 +1159,7 @@
                       <Connection code="new java.awt.Font(font_Type, font_Style, font_Size)" type="code"/>
                     </Property>
                     <Property name="toolTipText" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                      <Connection code="PHONE_INPUT_TOOLTIP.getContent(language)" type="code"/>
+                      <Connection code="PHONE_INPUT_TOOLTIP.getContent()" type="code"/>
                     </Property>
                     <Property name="enabled" type="boolean" value="false"/>
                     <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
@@ -1174,13 +1170,13 @@
                 <Component class="javax.swing.Box$Filler" name="filler61">
                   <Properties>
                     <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                      <Dimension value="[20, 32767]"/>
+                      <Dimension value="[40, 32767]"/>
                     </Property>
                     <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                      <Dimension value="[20, 0]"/>
+                      <Dimension value="[20, 15]"/>
                     </Property>
                     <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                      <Dimension value="[40, 40]"/>
+                      <Dimension value="[40, 30]"/>
                     </Property>
                   </Properties>
                   <AuxValues>
@@ -1208,13 +1204,13 @@
             <Container class="javax.swing.JPanel" name="emailPanel">
               <Properties>
                 <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                  <Dimension value="[32877, 28]"/>
+                  <Dimension value="[32877, 30]"/>
                 </Property>
                 <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                   <Dimension value="[300, 26]"/>
                 </Property>
                 <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                  <Dimension value="[300, 26]"/>
+                  <Dimension value="[300, 30]"/>
                 </Property>
               </Properties>
 
@@ -1243,16 +1239,16 @@
                     </Property>
                     <Property name="horizontalAlignment" type="int" value="4"/>
                     <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                      <Connection code="EMAIL_LABEL.getContent(language)" type="code"/>
+                      <Connection code="EMAIL_LABEL.getContent()" type="code"/>
                     </Property>
                     <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                      <Dimension value="[130, 21]"/>
+                      <Dimension value="[130, 30]"/>
                     </Property>
                     <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                       <Dimension value="[130, 21]"/>
                     </Property>
                     <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                      <Dimension value="[130, 21]"/>
+                      <Dimension value="[130, 30]"/>
                     </Property>
                     <Property name="requestFocusEnabled" type="boolean" value="false"/>
                   </Properties>
@@ -1283,6 +1279,12 @@
                     <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                       <Dimension value="[32767, 30]"/>
                     </Property>
+                    <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                      <Dimension value="[80, 26]"/>
+                    </Property>
+                    <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                      <Dimension value="[80, 28]"/>
+                    </Property>
                   </Properties>
                   <Events>
                     <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="EmailTypedHandler"/>
@@ -1291,13 +1293,13 @@
                 <Component class="javax.swing.Box$Filler" name="filler66">
                   <Properties>
                     <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                      <Dimension value="[20, 32767]"/>
+                      <Dimension value="[40, 32767]"/>
                     </Property>
                     <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                      <Dimension value="[20, 0]"/>
+                      <Dimension value="[10, 15]"/>
                     </Property>
                     <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                      <Dimension value="[40, 40]"/>
+                      <Dimension value="[10, 30]"/>
                     </Property>
                   </Properties>
                   <AuxValues>
@@ -1353,7 +1355,7 @@
                       <Connection code="new java.awt.Font(font_Type, font_Style, font_Size)" type="code"/>
                     </Property>
                     <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                      <Connection code="CHECK_BTN.getContent(language)" type="code"/>
+                      <Connection code="CHECK_BTN.getContent()" type="code"/>
                     </Property>
                     <Property name="enabled" type="boolean" value="false"/>
                     <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
@@ -1376,10 +1378,10 @@
                       <Dimension value="[20, 32767]"/>
                     </Property>
                     <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                      <Dimension value="[20, 0]"/>
+                      <Dimension value="[20, 15]"/>
                     </Property>
                     <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                      <Dimension value="[40, 40]"/>
+                      <Dimension value="[40, 30]"/>
                     </Property>
                   </Properties>
                   <AuxValues>
@@ -1397,7 +1399,7 @@
                   <Dimension value="[0, 10]"/>
                 </Property>
                 <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                  <Dimension value="[0, 10]"/>
+                  <Dimension value="[0, 5]"/>
                 </Property>
               </Properties>
               <AuxValues>
@@ -1442,7 +1444,7 @@
                     </Property>
                     <Property name="horizontalAlignment" type="int" value="4"/>
                     <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                      <Connection code="CHANGE_PW_LABEL.getContent(language)" type="code"/>
+                      <Connection code="CHANGE_PW_LABEL.getContent()" type="code"/>
                     </Property>
                     <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                       <Dimension value="[130, 21]"/>
@@ -1539,7 +1541,7 @@
                     </Property>
                     <Property name="horizontalAlignment" type="int" value="4"/>
                     <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                      <Connection code="NEW_PW_LABLE.getContent(language)" type="code"/>
+                      <Connection code="NEW_PW_LABLE.getContent()" type="code"/>
                     </Property>
                     <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                       <Dimension value="[130, 21]"/>
@@ -1737,7 +1739,7 @@
                     </Property>
                     <Property name="horizontalAlignment" type="int" value="4"/>
                     <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                      <Connection code="REPEAT_PW_LABEL.getContent(language)" type="code"/>
+                      <Connection code="REPEAT_PW_LABEL.getContent()" type="code"/>
                     </Property>
                     <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                       <Dimension value="[130, 21]"/>
@@ -1805,7 +1807,7 @@
                       <Connection code="new java.awt.Font(font_Type, font_Style, font_Size)" type="code"/>
                     </Property>
                     <Property name="toolTipText" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                      <Connection code="REPEAT_PW_INPUT_TOOLTIP.getContent(language)" type="code"/>
+                      <Connection code="REPEAT_PW_INPUT_TOOLTIP.getContent()" type="code"/>
                     </Property>
                     <Property name="enabled" type="boolean" value="false"/>
                     <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
@@ -1816,13 +1818,13 @@
                 <Component class="javax.swing.Box$Filler" name="filler57">
                   <Properties>
                     <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                      <Dimension value="[20, 32767]"/>
+                      <Dimension value="[40, 32767]"/>
                     </Property>
                     <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                      <Dimension value="[20, 0]"/>
+                      <Dimension value="[20, 15]"/>
                     </Property>
                     <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                      <Dimension value="[40, 40]"/>
+                      <Dimension value="[40, 30]"/>
                     </Property>
                   </Properties>
                   <AuxValues>
@@ -1885,7 +1887,7 @@
                     </Property>
                     <Property name="horizontalAlignment" type="int" value="4"/>
                     <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                      <Connection code="MY_PW_LABEL.getContent(language)" type="code"/>
+                      <Connection code="MY_PW_LABEL.getContent()" type="code"/>
                     </Property>
                     <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                       <Dimension value="[130, 21]"/>
@@ -1955,6 +1957,7 @@
                       <Connection code="new java.awt.Font(font_Type, font_Style, font_Size)" type="code"/>
                     </Property>
                     <Property name="toolTipText" type="java.lang.String" value=""/>
+                    <Property name="enabled" type="boolean" value="false"/>
                     <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                       <Dimension value="[32767, 30]"/>
                     </Property>
@@ -1963,7 +1966,7 @@
                 <Component class="javax.swing.Box$Filler" name="filler56">
                   <Properties>
                     <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                      <Dimension value="[20, 32767]"/>
+                      <Dimension value="[40, 32767]"/>
                     </Property>
                     <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                       <Dimension value="[20, 0]"/>
@@ -2025,14 +2028,14 @@
                     <AuxValue name="classDetails" type="java.lang.String" value="Box.Filler.HorizontalStrut"/>
                   </AuxValues>
                 </Component>
-                <Component class="javax.swing.JLabel" name="userPWLabel1">
+                <Component class="javax.swing.JLabel" name="createDate">
                   <Properties>
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                       <Connection code="new java.awt.Font(font_Type, font_Style, font_Size)" type="code"/>
                     </Property>
                     <Property name="horizontalAlignment" type="int" value="4"/>
                     <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                      <Connection code="CREATION_LABEL.getContent(language)" type="code"/>
+                      <Connection code="CREATION_LABEL.getContent()" type="code"/>
                     </Property>
                     <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                       <Dimension value="[130, 21]"/>
@@ -2076,13 +2079,13 @@
                 <Component class="javax.swing.Box$Filler" name="filler50">
                   <Properties>
                     <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                      <Dimension value="[20, 32767]"/>
+                      <Dimension value="[40, 32767]"/>
                     </Property>
                     <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                      <Dimension value="[20, 0]"/>
+                      <Dimension value="[20, 15]"/>
                     </Property>
                     <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                      <Dimension value="[40, 40]"/>
+                      <Dimension value="[40, 30]"/>
                     </Property>
                   </Properties>
                   <AuxValues>
@@ -2164,7 +2167,7 @@
                       <Connection code="new java.awt.Font(font_Type, 0, font_Size)" type="code"/>
                     </Property>
                     <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                      <Connection code="new javax.swing.table.DefaultTableModel(&#xa;    new Object [][] {&#xa;        {null, null, null, null, null, null, null},&#xa;        {null, null, null, null, null, null, null},&#xa;        {null, null, null, null, null, null, null},&#xa;        {null, null, null, null, null, null, null},&#xa;    },&#xa;    new String[]{&#xa;        ((String[])Globals.TableHeaderList.get(USER_ID_HEADER.ordinal()))[ourLang],&#xa;        ((String[])Globals.TableHeaderList.get(NAME_HEADER.ordinal()))[ourLang],&#xa;        ((String[])Globals.TableHeaderList.get(MANAGER_HEADER.ordinal()))[ourLang],&#xa;        ((String[])Globals.TableHeaderList.get(CELL_PHONE_HEADER.ordinal()))[ourLang],&#xa;        ((String[])Globals.TableHeaderList.get(PHONE_HEADER.ordinal()))[ourLang],&#xa;        ((String[])Globals.TableHeaderList.get(EMAIL_HEADER.ordinal()))[ourLang],&#xa;        ((String[])Globals.TableHeaderList.get(MODIFIED_HEADER.ordinal()))[ourLang],&#xa;    }&#xa;)" type="code"/>
+                      <Connection code="new javax.swing.table.DefaultTableModel(&#xa;    new Object [][] {&#xa;        {null, null, null, null, null, null, null},&#xa;        {null, null, null, null, null, null, null},&#xa;        {null, null, null, null, null, null, null},&#xa;        {null, null, null, null, null, null, null},&#xa;    },&#xa;    new String[]{&#xa;        USER_ID_HEADER.getContent(),&#xa;        NAME_HEADER.getContent(),&#xa;        MANAGER_HEADER.getContent(),&#xa;        CELL_PHONE_HEADER.getContent(),&#xa;        PHONE_HEADER.getContent(),&#xa;        EMAIL_HEADER.getContent(),&#xa;        MODIFIED_HEADER.getContent()&#xa;    }&#xa;)" type="code"/>
                     </Property>
                     <Property name="autoResizeMode" type="int" value="4"/>
                     <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
@@ -2295,7 +2298,7 @@
                     </Property>
                     <Property name="mnemonic" type="int" value="114"/>
                     <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                      <Connection code="CREATE_BTN.getContent(language)" type="code"/>
+                      <Connection code="CREATE_BTN.getContent()" type="code"/>
                     </Property>
                     <Property name="enabled" type="boolean" value="false"/>
                     <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
@@ -2335,7 +2338,7 @@
                     </Property>
                     <Property name="mnemonic" type="int" value="100"/>
                     <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                      <Connection code="DELETE_BTN.getContent(language)" type="code"/>
+                      <Connection code="DELETE_BTN.getContent()" type="code"/>
                     </Property>
                     <Property name="enabled" type="boolean" value="false"/>
                     <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
@@ -2375,7 +2378,7 @@
                     </Property>
                     <Property name="mnemonic" type="int" value="109"/>
                     <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                      <Connection code="MODIFY_BTN.getContent(language)" type="code"/>
+                      <Connection code="MODIFY_BTN.getContent()" type="code"/>
                     </Property>
                     <Property name="enabled" type="boolean" value="false"/>
                     <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
@@ -2415,7 +2418,7 @@
                     </Property>
                     <Property name="mnemonic" type="int" value="99"/>
                     <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                      <Connection code="CANCEL_BTN.getContent(language)" type="code"/>
+                      <Connection code="CANCEL_BTN.getContent()" type="code"/>
                     </Property>
                     <Property name="enabled" type="boolean" value="false"/>
                     <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
@@ -2454,7 +2457,7 @@
                       <Connection code="new java.awt.Font(font_Type, font_Style, font_Size)" type="code"/>
                     </Property>
                     <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                      <Connection code="new javax.swing.DefaultComboBoxModel(&#xa;    new String[]{&#xa;        ((String[])Globals.LabelsText.get(NAME_LABEL.ordinal()))[ourLang],&#xa;        LOGIN_ID_LABEL.getContent()&#xa;    }&#xa;)" type="code"/>
+                      <Connection code="new javax.swing.DefaultComboBoxModel(&#xa;    new String[]{&#xa;        NAME_LABEL.getContent(),&#xa;        LOGIN_ID_LABEL.getContent()&#xa;    }&#xa;)" type="code"/>
                     </Property>
                     <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                       <Dimension value="[100, 30]"/>
@@ -2489,7 +2492,7 @@
                       <Connection code="new java.awt.Font(font_Type, font_Style, font_Size)" type="code"/>
                     </Property>
                     <Property name="toolTipText" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                      <Connection code="SEARCH_INPUT_TOOLTIP.getContent(language)" type="code"/>
+                      <Connection code="SEARCH_INPUT_TOOLTIP.getContent()" type="code"/>
                     </Property>
                     <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                       <Dimension value="[200, 30]"/>
@@ -2525,7 +2528,7 @@
                     </Property>
                     <Property name="mnemonic" type="int" value="115"/>
                     <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                      <Connection code="SEARCH_BTN.getContent(language)" type="code"/>
+                      <Connection code="SEARCH_BTN.getContent()" type="code"/>
                     </Property>
                     <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                       <Dimension value="[80, 60]"/>
@@ -2563,10 +2566,10 @@
                       <Connection code="new java.awt.Font(font_Type, font_Style, font_Size)" type="code"/>
                     </Property>
                     <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                      <Connection code="SAVE_AS_BTN.getContent(language)" type="code"/>
+                      <Connection code="SAVE_AS_BTN.getContent()" type="code"/>
                     </Property>
                     <Property name="toolTipText" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                      <Connection code="SAVE_AS_TOOLTIP.getContent(language)" type="code"/>
+                      <Connection code="SAVE_AS_TOOLTIP.getContent()" type="code"/>
                     </Property>
                     <Property name="autoscrolls" type="boolean" value="true"/>
                     <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
@@ -2609,7 +2612,7 @@
                     </Property>
                     <Property name="mnemonic" type="int" value="99"/>
                     <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                      <Connection code="CLOSE_BTN.getContent(language)" type="code"/>
+                      <Connection code="CLOSE_BTN.getContent()" type="code"/>
                     </Property>
                     <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                       <Dimension value="[80, 60]"/>

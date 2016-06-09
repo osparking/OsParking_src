@@ -78,6 +78,7 @@ import static com.osparking.global.names.ControlEnums.TableTypes.PHONE_HEADER;
 import static com.osparking.global.names.ControlEnums.TableTypes.USER_ID_HEADER;
 import static com.osparking.global.names.ControlEnums.TitleTypes.*;
 import static com.osparking.global.names.ControlEnums.ToolTipContent.CELL_INPUT_TOOLTIP;
+import static com.osparking.global.names.ControlEnums.ToolTipContent.CELL_PHONE_TOOLTIP;
 import static com.osparking.global.names.ControlEnums.ToolTipContent.ID_INPUT_TOOLTIP;
 import static com.osparking.global.names.ControlEnums.ToolTipContent.NAME_INPUT_TOOLTIP;
 import static com.osparking.global.names.ControlEnums.ToolTipContent.PHONE_INPUT_TOOLTIP;
@@ -131,7 +132,8 @@ public class AttListForm extends javax.swing.JFrame {
         try {
             initComponents();
             setIconImages(OSPiconList);
-
+            
+            userPWLabel.setText(loginID + " " + MY_PW_LABEL.getContent());
             
             this.loginID = loginID;
             this.loginPW = loginPW;
@@ -195,7 +197,6 @@ public class AttListForm extends javax.swing.JFrame {
         userID2Label.setText(USER_ID_LABEL.getContent() + loginID);
         adminAuth2CheckBox.setSelected(isManager);
         saveFileName.setDialogType(javax.swing.JFileChooser.SAVE_DIALOG);
-        legendMLabel.setText("\u25CF");
         isIDreqLabel.setText("\u25CF");
         nameReqLabel.setText("\u25CF");
         cellReqLabel.setText("\u25B2");
@@ -215,6 +216,7 @@ public class AttListForm extends javax.swing.JFrame {
     private void initComponents() {
 
         saveFileName = new javax.swing.JFileChooser();
+        requiredNotice = new javax.swing.JLabel();
         wholePanel = new javax.swing.JPanel();
         topPanel = new javax.swing.JPanel();
         filler23 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 10), new java.awt.Dimension(0, 10), new java.awt.Dimension(32767, 10));
@@ -230,11 +232,11 @@ public class AttListForm extends javax.swing.JFrame {
         westPanel = new javax.swing.JPanel();
         filler5 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 40), new java.awt.Dimension(0, 40), new java.awt.Dimension(32767, 40));
         RequiredPanel1 = new javax.swing.JPanel();
-        filler30 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 10), new java.awt.Dimension(10, 10), new java.awt.Dimension(10, 32767));
+        filler30 = new javax.swing.Box.Filler(new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 32767));
         legendLLabel = new javax.swing.JLabel();
-        filler41 = new javax.swing.Box.Filler(new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 32767));
-        legendMLabel = new javax.swing.JLabel();
-        filler42 = new javax.swing.Box.Filler(new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 0), new java.awt.Dimension(3, 32767));
+        filler42 = new javax.swing.Box.Filler(new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 32767));
+        jLabel1 = new javax.swing.JLabel();
+        filler41 = new javax.swing.Box.Filler(new java.awt.Dimension(40, 40), new java.awt.Dimension(40, 40), new java.awt.Dimension(40, 32767));
         filler7 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 10), new java.awt.Dimension(0, 10), new java.awt.Dimension(32767, 10));
         loginPanel = new javax.swing.JPanel();
         filler31 = new javax.swing.Box.Filler(new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 32767));
@@ -243,13 +245,13 @@ public class AttListForm extends javax.swing.JFrame {
         isIDreqLabel = new javax.swing.JLabel();
         filler43 = new javax.swing.Box.Filler(new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 32767));
         userIDText = new javax.swing.JTextField();
-        filler33 = new javax.swing.Box.Filler(new java.awt.Dimension(40, 40), new java.awt.Dimension(40, 40), new java.awt.Dimension(40, 32767));
+        filler33 = new javax.swing.Box.Filler(new java.awt.Dimension(20, 15), new java.awt.Dimension(40, 30), new java.awt.Dimension(40, 32767));
         filler6 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 10), new java.awt.Dimension(0, 10), new java.awt.Dimension(32767, 10));
         idCheckPanel = new javax.swing.JPanel();
         filler28 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
         checkIDButton = new javax.swing.JButton();
-        filler34 = new javax.swing.Box.Filler(new java.awt.Dimension(20, 0), new java.awt.Dimension(40, 40), new java.awt.Dimension(20, 32767));
-        filler8 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 10), new java.awt.Dimension(0, 10), new java.awt.Dimension(32767, 10));
+        filler34 = new javax.swing.Box.Filler(new java.awt.Dimension(20, 15), new java.awt.Dimension(40, 30), new java.awt.Dimension(20, 32767));
+        filler8 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 10), new java.awt.Dimension(0, 5), new java.awt.Dimension(32767, 10));
         adminPanel = new javax.swing.JPanel();
         filler32 = new javax.swing.Box.Filler(new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 32767));
         adminAuthLabel = new javax.swing.JLabel();
@@ -263,7 +265,7 @@ public class AttListForm extends javax.swing.JFrame {
         nameReqLabel = new javax.swing.JLabel();
         filler45 = new javax.swing.Box.Filler(new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 32767));
         userNameText = new javax.swing.JTextField();
-        filler38 = new javax.swing.Box.Filler(new java.awt.Dimension(20, 0), new java.awt.Dimension(40, 40), new java.awt.Dimension(20, 32767));
+        filler38 = new javax.swing.Box.Filler(new java.awt.Dimension(20, 15), new java.awt.Dimension(40, 30), new java.awt.Dimension(40, 32767));
         filler10 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 10), new java.awt.Dimension(0, 10), new java.awt.Dimension(32767, 10));
         cellPhonePanel = new javax.swing.JPanel();
         filler36 = new javax.swing.Box.Filler(new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 32767));
@@ -272,7 +274,7 @@ public class AttListForm extends javax.swing.JFrame {
         cellReqLabel = new javax.swing.JLabel();
         filler48 = new javax.swing.Box.Filler(new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 32767));
         cellPhoneText = new javax.swing.JTextField();
-        filler49 = new javax.swing.Box.Filler(new java.awt.Dimension(20, 0), new java.awt.Dimension(40, 40), new java.awt.Dimension(20, 32767));
+        filler49 = new javax.swing.Box.Filler(new java.awt.Dimension(20, 15), new java.awt.Dimension(40, 30), new java.awt.Dimension(40, 32767));
         filler11 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 10), new java.awt.Dimension(0, 10), new java.awt.Dimension(32767, 10));
         phonePanel = new javax.swing.JPanel();
         filler39 = new javax.swing.Box.Filler(new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 32767));
@@ -281,20 +283,20 @@ public class AttListForm extends javax.swing.JFrame {
         phoneReqLabel = new javax.swing.JLabel();
         filler63 = new javax.swing.Box.Filler(new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 32767));
         phoneText = new javax.swing.JTextField();
-        filler61 = new javax.swing.Box.Filler(new java.awt.Dimension(20, 0), new java.awt.Dimension(40, 40), new java.awt.Dimension(20, 32767));
+        filler61 = new javax.swing.Box.Filler(new java.awt.Dimension(20, 15), new java.awt.Dimension(40, 30), new java.awt.Dimension(40, 32767));
         filler12 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 10), new java.awt.Dimension(0, 10), new java.awt.Dimension(32767, 10));
         emailPanel = new javax.swing.JPanel();
         filler51 = new javax.swing.Box.Filler(new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 32767));
         jLabel4 = new javax.swing.JLabel();
         filler67 = new javax.swing.Box.Filler(new java.awt.Dimension(55, 0), new java.awt.Dimension(55, 0), new java.awt.Dimension(55, 32767));
         emailAddrText = new javax.swing.JTextField();
-        filler66 = new javax.swing.Box.Filler(new java.awt.Dimension(20, 0), new java.awt.Dimension(40, 40), new java.awt.Dimension(20, 32767));
+        filler66 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 15), new java.awt.Dimension(10, 30), new java.awt.Dimension(40, 32767));
         filler13 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 10), new java.awt.Dimension(0, 10), new java.awt.Dimension(32767, 10));
         emailCheckPanel = new javax.swing.JPanel();
         filler29 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
         checkEmailButton = new javax.swing.JButton();
-        filler69 = new javax.swing.Box.Filler(new java.awt.Dimension(20, 0), new java.awt.Dimension(40, 40), new java.awt.Dimension(20, 32767));
-        filler14 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 10), new java.awt.Dimension(0, 10), new java.awt.Dimension(32767, 10));
+        filler69 = new javax.swing.Box.Filler(new java.awt.Dimension(20, 15), new java.awt.Dimension(40, 30), new java.awt.Dimension(20, 32767));
+        filler14 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 10), new java.awt.Dimension(0, 5), new java.awt.Dimension(32767, 10));
         changePWD_Panel = new javax.swing.JPanel();
         filler52 = new javax.swing.Box.Filler(new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 32767));
         changePWLabel = new javax.swing.JLabel();
@@ -319,7 +321,7 @@ public class AttListForm extends javax.swing.JFrame {
         newPW2ReqLabel = new javax.swing.JLabel();
         filler60 = new javax.swing.Box.Filler(new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 32767));
         new2Password = new javax.swing.JPasswordField();
-        filler57 = new javax.swing.Box.Filler(new java.awt.Dimension(20, 0), new java.awt.Dimension(40, 40), new java.awt.Dimension(20, 32767));
+        filler57 = new javax.swing.Box.Filler(new java.awt.Dimension(20, 15), new java.awt.Dimension(40, 30), new java.awt.Dimension(40, 32767));
         filler17 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 10), new java.awt.Dimension(0, 10), new java.awt.Dimension(32767, 10));
         currentPWD_Panel = new javax.swing.JPanel();
         filler64 = new javax.swing.Box.Filler(new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 32767));
@@ -328,14 +330,14 @@ public class AttListForm extends javax.swing.JFrame {
         userPWReqLabel = new javax.swing.JLabel();
         filler55 = new javax.swing.Box.Filler(new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 32767));
         userPassword = new javax.swing.JPasswordField();
-        filler56 = new javax.swing.Box.Filler(new java.awt.Dimension(20, 0), new java.awt.Dimension(40, 40), new java.awt.Dimension(20, 32767));
+        filler56 = new javax.swing.Box.Filler(new java.awt.Dimension(20, 0), new java.awt.Dimension(40, 40), new java.awt.Dimension(40, 32767));
         filler19 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 10), new java.awt.Dimension(0, 10), new java.awt.Dimension(32767, 10));
         datePanel = new javax.swing.JPanel();
         filler65 = new javax.swing.Box.Filler(new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 32767));
-        userPWLabel1 = new javax.swing.JLabel();
+        createDate = new javax.swing.JLabel();
         filler68 = new javax.swing.Box.Filler(new java.awt.Dimension(55, 0), new java.awt.Dimension(55, 0), new java.awt.Dimension(55, 32767));
         creationDateText = new javax.swing.JTextField();
-        filler50 = new javax.swing.Box.Filler(new java.awt.Dimension(20, 0), new java.awt.Dimension(40, 40), new java.awt.Dimension(20, 32767));
+        filler50 = new javax.swing.Box.Filler(new java.awt.Dimension(20, 15), new java.awt.Dimension(40, 30), new java.awt.Dimension(40, 32767));
         filler18 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 32767));
         centerPanel = new javax.swing.JPanel();
         jLabel11 = new javax.swing.JLabel();
@@ -376,6 +378,13 @@ public class AttListForm extends javax.swing.JFrame {
         saveFileName.setToolTipText("");
         saveFileName.setEnabled(false);
         saveFileName.setName(""); // NOI18N
+
+        requiredNotice.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        requiredNotice.setText("X: Reauired, O :  최소 1");
+        requiredNotice.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        requiredNotice.setMaximumSize(new java.awt.Dimension(80, 21));
+        requiredNotice.setMinimumSize(new java.awt.Dimension(80, 21));
+        requiredNotice.setPreferredSize(new java.awt.Dimension(80, 21));
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle(ATTLIST_FRAME_TITLE.getContent()
@@ -445,36 +454,36 @@ public class AttListForm extends javax.swing.JFrame {
         legendLLabel.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         legendLLabel.setText(DATA_COND.getContent());
         legendLLabel.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
-        legendLLabel.setMaximumSize(new java.awt.Dimension(140, 21));
-        legendLLabel.setMinimumSize(new java.awt.Dimension(140, 21));
+        legendLLabel.setMaximumSize(new java.awt.Dimension(130, 21));
+        legendLLabel.setMinimumSize(new java.awt.Dimension(130, 21));
         legendLLabel.setName(""); // NOI18N
-        legendLLabel.setPreferredSize(new java.awt.Dimension(140, 21));
+        legendLLabel.setPreferredSize(new java.awt.Dimension(130, 21));
         RequiredPanel1.add(legendLLabel);
-        RequiredPanel1.add(filler41);
-
-        legendMLabel.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        legendMLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        legendMLabel.setText("M");
-        legendMLabel.setToolTipText("");
-        legendMLabel.setPreferredSize(new java.awt.Dimension(14, 14));
-        RequiredPanel1.add(legendMLabel);
         RequiredPanel1.add(filler42);
+
+        jLabel1.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        jLabel1.setText("\u25CF " + REQUIRED1_LABEL.getContent() + ",  \uu25B2 " + REQUIRED2_LABEL.getContent());
+        jLabel1.setMaximumSize(new java.awt.Dimension(1100, 30));
+        jLabel1.setMinimumSize(new java.awt.Dimension(110, 21));
+        jLabel1.setPreferredSize(new java.awt.Dimension(80, 21));
+        RequiredPanel1.add(jLabel1);
+        RequiredPanel1.add(filler41);
 
         westPanel.add(RequiredPanel1);
         westPanel.add(filler7);
 
-        loginPanel.setMaximumSize(new java.awt.Dimension(32877, 28));
+        loginPanel.setMaximumSize(new java.awt.Dimension(32877, 30));
         loginPanel.setMinimumSize(new java.awt.Dimension(300, 26));
-        loginPanel.setPreferredSize(new java.awt.Dimension(300, 26));
+        loginPanel.setPreferredSize(new java.awt.Dimension(300, 30));
         loginPanel.setLayout(new javax.swing.BoxLayout(loginPanel, javax.swing.BoxLayout.LINE_AXIS));
         loginPanel.add(filler31);
 
         userIDLabel.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         userIDLabel.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         userIDLabel.setText(LOGIN_ID_LABEL.getContent());
-        userIDLabel.setMaximumSize(new java.awt.Dimension(130, 21));
-        userIDLabel.setMinimumSize(new java.awt.Dimension(130, 21));
-        userIDLabel.setPreferredSize(new java.awt.Dimension(130, 21));
+        userIDLabel.setMaximumSize(new java.awt.Dimension(130, 26));
+        userIDLabel.setMinimumSize(new java.awt.Dimension(130, 26));
+        userIDLabel.setPreferredSize(new java.awt.Dimension(130, 26));
         loginPanel.add(userIDLabel);
         loginPanel.add(filler40);
 
@@ -482,9 +491,9 @@ public class AttListForm extends javax.swing.JFrame {
         isIDreqLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         isIDreqLabel.setText("M");
         isIDreqLabel.setToolTipText("");
-        isIDreqLabel.setMaximumSize(new java.awt.Dimension(15, 21));
+        isIDreqLabel.setMaximumSize(new java.awt.Dimension(15, 26));
         isIDreqLabel.setMinimumSize(new java.awt.Dimension(15, 21));
-        isIDreqLabel.setPreferredSize(new java.awt.Dimension(15, 21));
+        isIDreqLabel.setPreferredSize(new java.awt.Dimension(15, 26));
         loginPanel.add(isIDreqLabel);
         loginPanel.add(filler43);
 
@@ -494,8 +503,8 @@ public class AttListForm extends javax.swing.JFrame {
         userIDText.setDisabledTextColor(new java.awt.Color(102, 102, 102));
         userIDText.setEnabled(false);
         userIDText.setMaximumSize(new java.awt.Dimension(32767, 30));
-        userIDText.setMinimumSize(new java.awt.Dimension(80, 21));
-        userIDText.setPreferredSize(new java.awt.Dimension(80, 21));
+        userIDText.setMinimumSize(new java.awt.Dimension(80, 26));
+        userIDText.setPreferredSize(new java.awt.Dimension(80, 26));
         userIDText.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 newIDtyped(evt);
@@ -554,27 +563,27 @@ public class AttListForm extends javax.swing.JFrame {
         westPanel.add(adminPanel);
         westPanel.add(filler9);
 
-        namePanel.setMaximumSize(new java.awt.Dimension(32877, 28));
-        namePanel.setMinimumSize(new java.awt.Dimension(300, 26));
-        namePanel.setPreferredSize(new java.awt.Dimension(300, 26));
+        namePanel.setMaximumSize(new java.awt.Dimension(32877, 30));
+        namePanel.setMinimumSize(new java.awt.Dimension(300, 28));
+        namePanel.setPreferredSize(new java.awt.Dimension(300, 30));
         namePanel.setLayout(new javax.swing.BoxLayout(namePanel, javax.swing.BoxLayout.LINE_AXIS));
         namePanel.add(filler35);
 
         nameLabel.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         nameLabel.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         nameLabel.setText(NAME_LABEL.getContent());
-        nameLabel.setMaximumSize(new java.awt.Dimension(130, 21));
-        nameLabel.setMinimumSize(new java.awt.Dimension(130, 21));
-        nameLabel.setPreferredSize(new java.awt.Dimension(130, 21));
+        nameLabel.setMaximumSize(new java.awt.Dimension(130, 26));
+        nameLabel.setMinimumSize(new java.awt.Dimension(130, 26));
+        nameLabel.setPreferredSize(new java.awt.Dimension(130, 26));
         namePanel.add(nameLabel);
         namePanel.add(filler44);
 
         nameReqLabel.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         nameReqLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         nameReqLabel.setText("M");
-        nameReqLabel.setMaximumSize(new java.awt.Dimension(15, 21));
-        nameReqLabel.setMinimumSize(new java.awt.Dimension(15, 21));
-        nameReqLabel.setPreferredSize(new java.awt.Dimension(15, 21));
+        nameReqLabel.setMaximumSize(new java.awt.Dimension(15, 26));
+        nameReqLabel.setMinimumSize(new java.awt.Dimension(15, 26));
+        nameReqLabel.setPreferredSize(new java.awt.Dimension(15, 26));
         namePanel.add(nameReqLabel);
         namePanel.add(filler45);
 
@@ -582,9 +591,9 @@ public class AttListForm extends javax.swing.JFrame {
         userNameText.setToolTipText(NAME_INPUT_TOOLTIP.getContent());
         userNameText.setEnabled(false);
         userNameText.setMaximumSize(new java.awt.Dimension(32767, 30));
-        userNameText.setMinimumSize(new java.awt.Dimension(80, 21));
+        userNameText.setMinimumSize(new java.awt.Dimension(80, 26));
         userNameText.setName(""); // NOI18N
-        userNameText.setPreferredSize(new java.awt.Dimension(80, 21));
+        userNameText.setPreferredSize(new java.awt.Dimension(80, 26));
         namePanel.add(userNameText);
         namePanel.add(filler38);
 
@@ -600,6 +609,7 @@ public class AttListForm extends javax.swing.JFrame {
         jLabel5.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel5.setText(CELL_PHONE_LABEL.getContent()   );
+        jLabel5.setToolTipText(CELL_PHONE_TOOLTIP.getContent());
         jLabel5.setMaximumSize(new java.awt.Dimension(130, 21));
         jLabel5.setMinimumSize(new java.awt.Dimension(130, 21));
         jLabel5.setPreferredSize(new java.awt.Dimension(130, 21));
@@ -609,6 +619,7 @@ public class AttListForm extends javax.swing.JFrame {
         cellReqLabel.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         cellReqLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         cellReqLabel.setText("w");
+        cellReqLabel.setToolTipText(CELL_PHONE_TOOLTIP.getContent());
         cellReqLabel.setMaximumSize(new java.awt.Dimension(15, 21));
         cellReqLabel.setMinimumSize(new java.awt.Dimension(15, 21));
         cellReqLabel.setPreferredSize(new java.awt.Dimension(15, 21));
@@ -636,6 +647,7 @@ public class AttListForm extends javax.swing.JFrame {
         jLabel6.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel6.setText(PHONE_LABEL.getContent());
+        jLabel6.setToolTipText(CELL_PHONE_TOOLTIP.getContent());
         jLabel6.setMaximumSize(new java.awt.Dimension(130, 21));
         jLabel6.setMinimumSize(new java.awt.Dimension(130, 21));
         jLabel6.setPreferredSize(new java.awt.Dimension(130, 21));
@@ -645,6 +657,7 @@ public class AttListForm extends javax.swing.JFrame {
         phoneReqLabel.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         phoneReqLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         phoneReqLabel.setText("w");
+        phoneReqLabel.setToolTipText(CELL_PHONE_TOOLTIP.getContent());
         phoneReqLabel.setMaximumSize(new java.awt.Dimension(15, 21));
         phoneReqLabel.setMinimumSize(new java.awt.Dimension(15, 21));
         phoneReqLabel.setPreferredSize(new java.awt.Dimension(15, 21));
@@ -661,18 +674,18 @@ public class AttListForm extends javax.swing.JFrame {
         westPanel.add(phonePanel);
         westPanel.add(filler12);
 
-        emailPanel.setMaximumSize(new java.awt.Dimension(32877, 28));
+        emailPanel.setMaximumSize(new java.awt.Dimension(32877, 30));
         emailPanel.setMinimumSize(new java.awt.Dimension(300, 26));
-        emailPanel.setPreferredSize(new java.awt.Dimension(300, 26));
+        emailPanel.setPreferredSize(new java.awt.Dimension(300, 30));
         emailPanel.setLayout(new javax.swing.BoxLayout(emailPanel, javax.swing.BoxLayout.LINE_AXIS));
         emailPanel.add(filler51);
 
         jLabel4.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel4.setText(EMAIL_LABEL.getContent());
-        jLabel4.setMaximumSize(new java.awt.Dimension(130, 21));
+        jLabel4.setMaximumSize(new java.awt.Dimension(130, 30));
         jLabel4.setMinimumSize(new java.awt.Dimension(130, 21));
-        jLabel4.setPreferredSize(new java.awt.Dimension(130, 21));
+        jLabel4.setPreferredSize(new java.awt.Dimension(130, 30));
         jLabel4.setRequestFocusEnabled(false);
         emailPanel.add(jLabel4);
         emailPanel.add(filler67);
@@ -681,6 +694,8 @@ public class AttListForm extends javax.swing.JFrame {
         emailAddrText.setHorizontalAlignment(javax.swing.JTextField.LEFT);
         emailAddrText.setEnabled(false);
         emailAddrText.setMaximumSize(new java.awt.Dimension(32767, 30));
+        emailAddrText.setMinimumSize(new java.awt.Dimension(80, 26));
+        emailAddrText.setPreferredSize(new java.awt.Dimension(80, 28));
         emailAddrText.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 EmailTypedHandler(evt);
@@ -855,6 +870,7 @@ public class AttListForm extends javax.swing.JFrame {
         userPassword.setEditable(false);
         userPassword.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         userPassword.setToolTipText("");
+        userPassword.setEnabled(false);
         userPassword.setMaximumSize(new java.awt.Dimension(32767, 30));
         currentPWD_Panel.add(userPassword);
         currentPWD_Panel.add(filler56);
@@ -868,13 +884,13 @@ public class AttListForm extends javax.swing.JFrame {
         datePanel.setLayout(new javax.swing.BoxLayout(datePanel, javax.swing.BoxLayout.LINE_AXIS));
         datePanel.add(filler65);
 
-        userPWLabel1.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        userPWLabel1.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        userPWLabel1.setText(CREATION_LABEL.getContent());
-        userPWLabel1.setMaximumSize(new java.awt.Dimension(130, 21));
-        userPWLabel1.setMinimumSize(new java.awt.Dimension(130, 21));
-        userPWLabel1.setPreferredSize(new java.awt.Dimension(130, 21));
-        datePanel.add(userPWLabel1);
+        createDate.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        createDate.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        createDate.setText(CREATION_LABEL.getContent());
+        createDate.setMaximumSize(new java.awt.Dimension(130, 21));
+        createDate.setMinimumSize(new java.awt.Dimension(130, 21));
+        createDate.setPreferredSize(new java.awt.Dimension(130, 21));
+        datePanel.add(createDate);
         datePanel.add(filler68);
 
         creationDateText.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
@@ -2180,44 +2196,9 @@ public class AttListForm extends javax.swing.JFrame {
         cellPhoneText.setEnabled(b);
         phoneText.setEnabled(b);
         emailAddrText.setEnabled(b);
-        userPassword.setEnabled(b);
+//        userPassword.setEnabled(b);
     }
-
-    private void ChangeFieldEditableForManager(String rowID, boolean rowIsForA_Manager) {
-        createButton.setEnabled(true);            
-        if (rowID.equals("admin")) {
-            changeDeletableProperty(false);
-            if (loginID.equals("admin")) {
-                // admin manages self information
-                changeEnabledProperty(true);
-                multiFuncButton.setEnabled(true);  
-                //CurrentPassword.setEnabled(false);
-            } else {
-                // non-admin administrator attendant manages admin's information
-                // (cf. average attendant can be an administrator but not an 'admin'.
-                // 'admin' is a special ID which is unique in the OsParking system.
-                changeEnabledProperty(false);
-                multiFuncButton.setEnabled(false);            
-            }
-        } else if (rowID.equals(loginID)){
-            // administrator's self information management
-            // can't delete his/her own record
-            changeDeletableProperty(false);
-            changeEnabledProperty(true);
-            multiFuncButton.setEnabled(true);         
-        } else if (!rowIsForA_Manager || loginID.equals("admin")){
-            changeDeletableProperty(true);
-            changeEnabledProperty(true);
-            multiFuncButton.setEnabled(true);         
-        } else {
-            // non-admin attendant's information management by administrator
-            // : update and deletion are possible
-            changeDeletableProperty(false);
-            changeEnabledProperty(false);
-            multiFuncButton.setEnabled(false);         
-        }
-    }
-
+    
     private void ChangeFieldPropForAttendants(String rowID) {
         managerAuthCheckBox.setEnabled(false);
         createButton.setEnabled(false);            
@@ -2510,6 +2491,7 @@ public class AttListForm extends javax.swing.JFrame {
 
     private void changeDeletableProperty(boolean b) {
         deleteButton.setEnabled(b);                  
+        userPassword.setEnabled(b);
         userPassword.setEditable(b);
     }
 
@@ -2555,12 +2537,23 @@ public class AttListForm extends javax.swing.JFrame {
         switch (formMode) {
             case CreateMode:
                 legendLLabel.setText(CREATE_COND.getContent());
+                userPassword.setEnabled(true);
+                userPassword.setEditable(true);
                 break;
             case NormalMode:
                 legendLLabel.setText(DATA_COND.getContent());
+                if (isDeletableByMe(userIDText.getText())) {
+                    userPassword.setEnabled(true);
+                    userPassword.setEditable(true);
+                } else {
+                    userPassword.setEnabled(false);
+                    userPassword.setEditable(false);
+                }
                 break;
             case UpdateMode:
                 legendLLabel.setText(MODIFY_COND.getContent());
+                userPassword.setEnabled(true);
+                userPassword.setEditable(true);
                 break;
             default:
                 break;
@@ -2616,6 +2609,7 @@ public class AttListForm extends javax.swing.JFrame {
     private javax.swing.JButton checkIDButton;
     private javax.swing.JButton closeFormButton;
     private javax.swing.JButton createButton;
+    private javax.swing.JLabel createDate;
     private javax.swing.JTextField creationDateText;
     private javax.swing.JPanel currentPWD_Panel;
     private javax.swing.JPanel datePanel;
@@ -2703,13 +2697,13 @@ public class AttListForm extends javax.swing.JFrame {
     private javax.swing.Box.Filler filler9;
     private javax.swing.JPanel idCheckPanel;
     private javax.swing.JLabel isIDreqLabel;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel legendLLabel;
-    private javax.swing.JLabel legendMLabel;
     private javax.swing.JPanel loginPanel;
     private javax.swing.JCheckBox managerAuthCheckBox;
     private javax.swing.JButton multiFuncButton;
@@ -2726,6 +2720,7 @@ public class AttListForm extends javax.swing.JFrame {
     private javax.swing.JLabel phoneReqLabel;
     private javax.swing.JTextField phoneText;
     private javax.swing.JPanel repeatPWD_Panel;
+    private javax.swing.JLabel requiredNotice;
     private javax.swing.JFileChooser saveFileName;
     private javax.swing.JButton saveTextFileButton;
     private javax.swing.JButton searchButton;
@@ -2742,7 +2737,6 @@ public class AttListForm extends javax.swing.JFrame {
     private javax.swing.JTextField userIDText;
     private javax.swing.JTextField userNameText;
     private javax.swing.JLabel userPWLabel;
-    private javax.swing.JLabel userPWLabel1;
     private javax.swing.JLabel userPWReqLabel;
     private javax.swing.JPasswordField userPassword;
     private javax.swing.JTable usersTable;
@@ -2821,6 +2815,7 @@ public class AttListForm extends javax.swing.JFrame {
             }
             else{
                 emailAddrText.setText(field.toString());
+                emailAddrText.setCaretPosition(0);
             }            
             changePWCheckBox.setSelected(false);
             ChangeNewPasswordEnabled(false);
@@ -2856,13 +2851,69 @@ public class AttListForm extends javax.swing.JFrame {
             userPWLabel.setToolTipText((PW_INPUT_TOOTLTIP.getContent()));
         }
     }
-
+ 
+    /**
+     * Check if current user(loginID) can delete the attendant row under focus.
+     * @param rowID the attendant having focus currently.
+     * @return true if deletable, false otherwise.
+     */
+    private boolean isDeletableByMe(String rowID) {
+        if (loginID.equals("admin")) {
+            if (rowID.equals("admin")) {
+                return false;
+            } else {
+                return true;
+            }
+        } else {
+            if (isManager) {
+                if (!rowID.equals("admin") && rowID.equals(loginID)) {
+                    return true;
+                } else {
+                    return false;
+                }
+            } else {
+                return false;
+            }
+        }
+    }    
+    
     private void changeFieldAndButtonProperties(String rowID, boolean rowManager) {
         if (loginID == null) {
             return;
         }
         if (isManager) {            
-            ChangeFieldEditableForManager(rowID, rowManager);
+            createButton.setEnabled(true);            
+            if (rowID.equals("admin")) {
+                changeDeletableProperty(false);
+                if (loginID.equals("admin")) {
+                    // admin manages self information
+                    changeEnabledProperty(true);
+                    multiFuncButton.setEnabled(true);  
+                    //CurrentPassword.setEnabled(false);
+                } else {
+                    // non-admin administrator attendant manages admin's information
+                    // (cf. average attendant can be an administrator but not an 'admin'.
+                    // 'admin' is a special ID which is unique in the OsParking system.
+                    changeEnabledProperty(false);
+                    multiFuncButton.setEnabled(false);            
+                }
+            } else if (rowID.equals(loginID)){
+                // administrator's self information management
+                // can't delete his/her own record
+                changeDeletableProperty(false);
+                changeEnabledProperty(true);
+                multiFuncButton.setEnabled(true);         
+            } else if (!rowManager || loginID.equals("admin")){
+                changeDeletableProperty(true);
+                changeEnabledProperty(true);
+                multiFuncButton.setEnabled(true);         
+            } else {
+                // non-admin attendant's information management by administrator
+                // : update and deletion are possible
+                changeDeletableProperty(false);
+                changeEnabledProperty(false);
+                multiFuncButton.setEnabled(false);         
+            }            
         } else {
             ChangeFieldPropForAttendants(rowID);
         }
