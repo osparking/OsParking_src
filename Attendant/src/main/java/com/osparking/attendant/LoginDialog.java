@@ -88,7 +88,7 @@ public class LoginDialog extends javax.swing.JDialog {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         userIDText.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        userIDText.setText("admin");
+        userIDText.setText("guest9");
         userIDText.setPreferredSize(new java.awt.Dimension(80, 30));
 
         ID_Label.setFont(new java.awt.Font(font_Type, font_Style, font_Size));

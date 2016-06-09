@@ -92,12 +92,14 @@ import static com.osparking.global.names.JDBCMySQL.getHashedPW;
 import com.osparking.global.names.JTextFieldLimit;
 import com.osparking.global.names.OSP_enums.OpLogLevel;
 import com.osparking.global.names.ParentGUI;
+import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.JComponent;
+import javax.swing.JViewport;
 import javax.swing.KeyStroke;
 import javax.swing.table.DefaultTableModel;
 
@@ -133,7 +135,12 @@ public class AttListForm extends javax.swing.JFrame {
             initComponents();
             setIconImages(OSPiconList);
             
-            userPWLabel.setText(loginID + " " + MY_PW_LABEL.getContent());
+            // Make last 8 digits of the user ID visible on the user password label.
+            String id = loginID;
+            if (loginID.length() > 8) {
+                id = ".." + loginID.substring(loginID.length() - 8);
+            }
+            userPWLabel.setText(id + " " + MY_PW_LABEL.getContent());
             
             this.loginID = loginID;
             this.loginPW = loginPW;
@@ -144,8 +151,25 @@ public class AttListForm extends javax.swing.JFrame {
             userIDText.setDocument(new JTextFieldLimit(20));
 
             RefreshTableContents();
-            // usersTable.changeSelection(selectedRowIndex, 0, false, false);
-            ShowAttendantDetail(selectedRowIndex); 
+            selectedRowIndex = searchRow(loginID);
+            ShowAttendantDetail(selectedRowIndex);
+            
+            SwingUtilities.invokeLater(new Runnable()  
+            {  
+                public void run()  
+                {  
+                    {  
+            //            if (rowInVisible(usersTable, selectedRowIndex)) {
+                        if (rowInVisible(usersTable, selectedRowIndex)) {
+                            usersTable.changeSelection(selectedRowIndex, 0, false, false); 
+                        } else {
+                            usersTable.setRowSelectionInterval(selectedRowIndex, selectedRowIndex);
+                        }
+                    }  
+                }  
+            });             
+            
+            usersTable.requestFocus();            
 
             usersTable.getRowSorter().addRowSorterListener(new RowSorterListener() {
                 @Override  
@@ -850,7 +874,7 @@ public class AttListForm extends javax.swing.JFrame {
         currentPWD_Panel.add(filler64);
 
         userPWLabel.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        userPWLabel.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        userPWLabel.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
         userPWLabel.setText(MY_PW_LABEL.getContent());
         userPWLabel.setMaximumSize(new java.awt.Dimension(130, 21));
         userPWLabel.setMinimumSize(new java.awt.Dimension(130, 21));
@@ -1180,8 +1204,7 @@ public class AttListForm extends javax.swing.JFrame {
                     multiFuncButton.setMnemonic('s');
                     setModificationState(true); // change to modification mode
                     createButton.setEnabled(false);
-                    deleteButton.setEnabled(false);  
-
+                    changeDeletableProperty(false);
                     break;
                     // </editor-fold>                
                 case UpdateMode:
@@ -1221,6 +1244,7 @@ public class AttListForm extends javax.swing.JFrame {
                     if (allFieldsAreGood(errorMsg)) {
                         String newUserID = userIDText.getText().trim();
                         int result = saveCreatedRecord();
+                        
                         String dialogText = "";
                         
                         if (result == 1) {
@@ -1419,7 +1443,7 @@ public class AttListForm extends javax.swing.JFrame {
                 multiFuncButton.setText(MODIFY_BTN.getContent());
                 multiFuncButton.setMnemonic('m');
                 createButton.setEnabled(true);
-                deleteButton.setEnabled(true);
+                changeDeletableProperty(true);
             }
             usersTableMouseClicked(null);
         } catch (Exception ex) {
@@ -1771,8 +1795,6 @@ public class AttListForm extends javax.swing.JFrame {
             multiFuncButton.setMnemonic('s');
             changeButtonEnabled(false);
             multiFuncButton.setEnabled(true);
-            deleteButton.setEnabled(false);
-            
             // </editor-fold>    
 
             // <editor-fold defaultstate="collapsed" desc="-- Change labels of password fields">
@@ -1781,7 +1803,6 @@ public class AttListForm extends javax.swing.JFrame {
             changePWLabel.setEnabled(false);
             newPW1Label.setText(NEW_PW_LABLE.getContent());
             newPW2Label.setText(REPEAT_PW_LABEL.getContent());
-            userPWLabel.setText(MY_PW_LABEL.getContent());
             // </editor-fold>   
         } catch (Exception ex) {
             logParkingException(Level.SEVERE, ex, "(User Action: Clicked Create New User Button)");         
@@ -1811,10 +1832,11 @@ public class AttListForm extends javax.swing.JFrame {
             usersTable.getRowSorter().setSortKeys(sortKeys);  
             if(usersTable.getRowCount()==0){
                 multiFuncButton.setEnabled(false);
-                deleteButton.setEnabled(false);
+                changeDeletableProperty(false);
+                
             }else{
                 multiFuncButton.setEnabled(true);
-                deleteButton.setEnabled(true);
+                changeDeletableProperty(true);
             }
         } catch (Exception ex) {
             logParkingException(Level.SEVERE, ex, 
@@ -2227,7 +2249,6 @@ public class AttListForm extends javax.swing.JFrame {
         changePWLabel.setEnabled(true);
         newPW1Label.setText(NEW_PW_LABLE.getContent());
         newPW2Label.setText(REPEAT_PW_LABEL.getContent());
-        userPWLabel.setText(MY_PW_LABEL.getContent());
         // </editor-fold> 
         
         // <editor-fold defaultstate="collapsed" desc="-- Enable two buttons back again">        
@@ -2271,8 +2292,6 @@ public class AttListForm extends javax.swing.JFrame {
         userIDText.setEditable(false);       
         checkIDButton.setEnabled(false); 
         // </editor-fold>   
-
-//        legendLLabel.setText(CREATE_COND.getContent());       
     }
 
     private boolean dataExistsInDB(String sql, String dataEntered) {
@@ -2329,7 +2348,6 @@ public class AttListForm extends javax.swing.JFrame {
         if (!(Character.isLetter(lastCh)) && !(Character.isDigit(lastCh))) 
         {
             tempStr.append(ID_END_CHAR_CHECK_DIALOG.getContent() + System.lineSeparator());
-//                    ((String[])Globals.DialogMSGList.get(ID_END_CHAR_CHECK_DIALOG.getContent()
         }
         if (tempStr.length() >= 1) {
             tempStr.deleteCharAt(idLen - 1); // remove last newline character
@@ -2382,6 +2400,13 @@ public class AttListForm extends javax.swing.JFrame {
         }
     }
 
+    /**
+     * Find if a given user exists on the user table.
+     * @param userID the ID of the given user
+     * @return the index of row for the user on within the user table if found, if
+     *      not found -1 is returned.
+     * 
+     */
     private int searchRow(String userID) {
         for(int row = 0; row < usersTable.getRowCount(); row++) { 
             String next = (String)usersTable.getValueAt(row, 0);  
@@ -2557,6 +2582,42 @@ public class AttListForm extends javax.swing.JFrame {
                 break;
             default:
                 break;
+        }
+    }
+
+    private boolean rowInVisible2(JTable table, int rowIndex) 
+    { 
+        if (!(table.getParent() instanceof JViewport)) { 
+           return false; 
+        } 
+
+        JViewport viewport = (JViewport)table.getParent(); 
+        // This rectangle is relative to the table where the 
+        // northwest corner of cell (0,0) is always (0,0) 
+
+        Rectangle rect = table.getCellRect(rowIndex, 1, true); 
+
+        // The location of the viewport relative to the table     
+        Point pt = viewport.getViewPosition(); 
+        // Translate the cell location so that it is relative 
+        // to the view, assuming the northwest corner of the 
+        // view is (0,0) 
+        rect.setLocation(rect.x-pt.x, rect.y-pt.y);
+//        rect.setLeft(0);
+//        rect.setWidth(1);
+        // Check if view completely contains the row
+        return new Rectangle(viewport.getExtentSize()).contains(rect); 
+    }     
+
+    private boolean rowInVisible(JTable usersTable, int i) {
+        Rectangle vr = usersTable.getVisibleRect ();
+        int first = usersTable.rowAtPoint(vr.getLocation());
+        vr.translate(0, vr.height);
+        int visibleRows = usersTable.rowAtPoint(vr.getLocation()) - first;
+        if (i < visibleRows) {
+            return false;
+        } else {
+            return true;
         }
     }
 
