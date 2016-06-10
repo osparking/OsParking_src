@@ -1165,7 +1165,8 @@ public class AttListForm extends javax.swing.JFrame {
             // When a table is sorted on some key, a row of the table can have two index values.
             // They are one for the display ordering and the other is  for the location in the model.
             // So, in the source code, these two index values need to be translated back and forth.
-            if (formMode != FormMode.UpdateMode) {
+//            if (formMode != FormMode.UpdateMode) {
+            if (formMode == FormMode.NormalMode) {
                 java.awt.EventQueue.invokeLater(new Runnable() {
                     public void run() {
                         selectedRowIndex = usersTable.getSelectedRow();
@@ -1683,7 +1684,6 @@ public class AttListForm extends javax.swing.JFrame {
         // Prepare to accept property values for a new user to be created.
         try {
             setFormMode(FormMode.CreateMode);
-            usersTable.setEnabled(false);
             ID_usable = false;
             // <editor-fold defaultstate="collapsed" desc="-- Enable data input fields">
             userIDText.setEnabled(true);
@@ -1716,7 +1716,6 @@ public class AttListForm extends javax.swing.JFrame {
             createButton.setEnabled(false);
             multiFuncButton.setText(SAVE_BTN.getContent());
             multiFuncButton.setMnemonic('s');
-            changeButtonEnabled(false);
             multiFuncButton.setEnabled(true);
             // </editor-fold>    
 
@@ -2180,7 +2179,6 @@ public class AttListForm extends javax.swing.JFrame {
         // <editor-fold defaultstate="collapsed" desc="-- Enable two buttons back again">        
         createButton.setEnabled(true);
         multiFuncButton.setText(MODIFY_BTN.getContent());
-        changeButtonEnabled(true);
         multiFuncButton.setMnemonic('m');
         // </editor-fold>   
         
@@ -2206,7 +2204,6 @@ public class AttListForm extends javax.swing.JFrame {
             // </editor-fold>   
         }
         
-        usersTable.setEnabled(true);
         setFormMode(FormMode.NormalMode);
         if(selectedRowIndex < 0)
             selectedRowIndex = 0;
@@ -2406,7 +2403,6 @@ public class AttListForm extends javax.swing.JFrame {
         boolean isAdminRerocd = (loginID.equals("admin"));
         boolean notOwnRecord = !(loginID.equals(userIDText.getText()));
         
-//        legendLLabel.setText(DATA_COND.getContent());
         if (!isAdminRerocd && notOwnRecord) {
             // No user can change self 'admin' property
             // No user with admin right can change admin property of user 'admin'
@@ -2427,7 +2423,6 @@ public class AttListForm extends javax.swing.JFrame {
         if(isAdminRerocd && notOwnRecord)
             managerAuthCheckBox.setEnabled(flag);
         changeBoxEditability(flag);
-        changeButtonEnabled(!flag);        
     }
 
     private void changeBoxEditability(boolean bln) {
@@ -2440,7 +2435,8 @@ public class AttListForm extends javax.swing.JFrame {
         userPassword.setEditable(bln);
     }
 
-    private void changeButtonEnabled(boolean flag) {
+    private void setSearchEnabled(boolean flag) {
+        usersTable.setEnabled(flag);
         cancelButton.setEnabled(!flag);
         searchText.setEnabled(flag);
         searchCriteriaComboBox. setEnabled(flag);
@@ -2484,7 +2480,7 @@ public class AttListForm extends javax.swing.JFrame {
                 legendLLabel.setText(CREATE_COND.getContent());
                 userPassword.setEnabled(true);
                 userPassword.setEditable(true);
-                usersTable.setEnabled(false);
+                setSearchEnabled(false);
                 break;
             case NormalMode:
                 legendLLabel.setText(DATA_COND.getContent());
@@ -2495,13 +2491,13 @@ public class AttListForm extends javax.swing.JFrame {
                     userPassword.setEnabled(false);
                     userPassword.setEditable(false);
                 }
-                usersTable.setEnabled(true);
+                setSearchEnabled(true);
                 break;
             case UpdateMode:
                 legendLLabel.setText(MODIFY_COND.getContent());
                 userPassword.setEnabled(true);
                 userPassword.setEditable(true);
-                usersTable.setEnabled(false);
+                setSearchEnabled(false);
                 break;
             default:
                 break;
