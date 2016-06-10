@@ -65,6 +65,7 @@ import static com.osparking.global.names.ControlEnums.DialogTitleTypes.CREATTION
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.DELETE_DIALOGTITLE;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.DELETE_FAIL_DAILOGTITLE;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.DELETE_RESULT_DIALOGTITLE;
+import static com.osparking.global.names.ControlEnums.DialogTitleTypes.USER_FIELD_CHECK_RESULT;
 import static com.osparking.global.names.ControlEnums.LabelContent.*;
 import static com.osparking.global.names.ControlEnums.TableTypes.CELL_PHONE_HEADER;
 import static com.osparking.global.names.ControlEnums.TableTypes.EMAIL_HEADER;
@@ -1279,14 +1280,16 @@ public class AttListForm extends javax.swing.JFrame {
                                     break;
                             }                            
                             
-                            JOptionPane.showMessageDialog(this, 
+                            showMessageDialog(this, 
                                     dialogText,
                                     CREATION_RESULT_DIALOGTITLE.getContent(),
                                     JOptionPane.PLAIN_MESSAGE);            
                         }
                     } else {
                         if (errorMsg[0].length() > 0) {
-                            showMessageDialog(null, errorMsg[0]);
+                            showMessageDialog(this, errorMsg[0], 
+                                    USER_FIELD_CHECK_RESULT.getContent(),
+                                    JOptionPane.WARNING_MESSAGE);
                         }
                     }   
                     break;

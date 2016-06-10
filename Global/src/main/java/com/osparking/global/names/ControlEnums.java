@@ -648,6 +648,7 @@ public class ControlEnums {
         ERROR_DIALOGTITLE("오류", "Error"),
         WORK_MODE_DIALOGTITLE("작업 모드 환기", "Current Work Mode"),
         CREATION_RESULT_DIALOGTITLE("생성 결과", "Creation Result"),
+        USER_FIELD_CHECK_RESULT("항목 검사 결과", "Field Check Result"),
         CREATTION_FAIL_DIALOGTITLE("생성 실패", "Creation Error" ),               
         DELETE_ALL_DAILOGTITLE("전체 삭제 확인", "All Record Deletion Confirmation"),
         DELETE_ALL_RESULT_DIALOGTITLE("전체 삭제 결과", "All Record Deletion Result"),
