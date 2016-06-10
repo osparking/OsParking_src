@@ -1205,7 +1205,7 @@ public class AttListForm extends javax.swing.JFrame {
                     multiFuncButton.setMnemonic('s');
                     setModificationState(true); // change to modification mode
                     createButton.setEnabled(false);
-                    changeDeletableProperty(false);
+                    deleteButton.setEnabled(false);
                     break;
                     // </editor-fold>                
                 case UpdateMode:
@@ -1445,7 +1445,7 @@ public class AttListForm extends javax.swing.JFrame {
                 multiFuncButton.setText(MODIFY_BTN.getContent());
                 multiFuncButton.setMnemonic('m');
                 createButton.setEnabled(true);
-                changeDeletableProperty(true);
+                deleteButton.setEnabled(true);
             }
             usersTableMouseClicked(null);
         } catch (Exception ex) {
@@ -1755,11 +1755,11 @@ public class AttListForm extends javax.swing.JFrame {
             usersTable.getRowSorter().setSortKeys(sortKeys);  
             if(usersTable.getRowCount()==0){
                 multiFuncButton.setEnabled(false);
-                changeDeletableProperty(false);
+                deleteButton.setEnabled(false);
                 
             }else{
                 multiFuncButton.setEnabled(true);
-                changeDeletableProperty(true);
+                deleteButton.setEnabled(true);
             }
         } catch (Exception ex) {
             logParkingException(Level.SEVERE, ex, 
@@ -2142,8 +2142,8 @@ public class AttListForm extends javax.swing.JFrame {
     
     private void ChangeFieldPropForAttendants(String rowID) {
         managerAuthCheckBox.setEnabled(false);
-        createButton.setEnabled(false);            
-        changeDeletableProperty(false);
+        createButton.setEnabled(false);       
+        deleteButton.setEnabled(false);
         if (loginID.equals(rowID)) { 
             // user manages self information
             changeEnabledProperty(true);
@@ -2431,12 +2431,6 @@ public class AttListForm extends javax.swing.JFrame {
         new1Password.setEditable(bln);
         new2Password.setEditable(bln);
         userPassword.setEditable(bln);
-    }
-
-    private void changeDeletableProperty(boolean b) {
-        deleteButton.setEnabled(b);                  
-        userPassword.setEnabled(b);
-        userPassword.setEditable(b);
     }
 
     private void changeButtonEnabled(boolean flag) {
@@ -2838,7 +2832,7 @@ public class AttListForm extends javax.swing.JFrame {
         if (isManager) {            
             createButton.setEnabled(true);            
             if (rowID.equals("admin")) {
-                changeDeletableProperty(false);
+                deleteButton.setEnabled(false);
                 if (loginID.equals("admin")) {
                     // admin manages self information
                     changeEnabledProperty(true);
@@ -2854,17 +2848,17 @@ public class AttListForm extends javax.swing.JFrame {
             } else if (rowID.equals(loginID)){
                 // administrator's self information management
                 // can't delete his/her own record
-                changeDeletableProperty(false);
+                deleteButton.setEnabled(false);
                 changeEnabledProperty(true);
                 multiFuncButton.setEnabled(true);         
             } else if (!rowManager || loginID.equals("admin")){
-                changeDeletableProperty(true);
+                deleteButton.setEnabled(true);
                 changeEnabledProperty(true);
                 multiFuncButton.setEnabled(true);         
             } else {
                 // non-admin attendant's information management by administrator
                 // : update and deletion are possible
-                changeDeletableProperty(false);
+                deleteButton.setEnabled(false);
                 changeEnabledProperty(false);
                 multiFuncButton.setEnabled(false);         
             }            
