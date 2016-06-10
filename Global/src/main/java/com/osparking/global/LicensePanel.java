@@ -1,5 +1,5 @@
 /* 
- * Copyright (C) 2015 Open Source Parking Inc.(www.osparking.com)
+ * Copyright (C) 2015, 2016  Open Source Parking, Inc.(www.osparking.com)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -99,7 +99,7 @@ public class LicensePanel extends javax.swing.JPanel {
         jTextArea1.setColumns(20);
         jTextArea1.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         jTextArea1.setRows(5);
-        jTextArea1.setText("Copyright (C) 2015 Open Source Parking Inc.\n\nThis program is free software; you can redistribute it and/or modify it \nunder the terms of the GNU General Public License as published by the \nFree Software Foundation; either version 3 of the License, or \n(at your option) any later version.\n\nThis program is distributed in the hope that it will be useful, but WITHOUT \nANY WARRANTY; without even the implied warranty of MERCHANTABILITY \nor FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public \nLicense for more details.\n\nYou should have received a copy of the GNU General Public License along \nwith this program; if not, see <http://www.gnu.org/licenses>.");
+        jTextArea1.setText("Copyright (C) 2015, 2016  Open Source Parking, Inc.\n\nThis program is free software; you can redistribute it and/or modify it \nunder the terms of the GNU General Public License as published by the \nFree Software Foundation; either version 3 of the License, or \n(at your option) any later version.\n\nThis program is distributed in the hope that it will be useful, but WITHOUT \nANY WARRANTY; without even the implied warranty of MERCHANTABILITY \nor FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public \nLicense for more details.\n\nYou should have received a copy of the GNU General Public License along \nwith this program; if not, see <http://www.gnu.org/licenses>.");
         jScrollPane1.setViewportView(jTextArea1);
 
         jPanel1.add(jScrollPane1, java.awt.BorderLayout.CENTER);

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Open Source Parking Inc.
+ * Copyright (C) 2015, 2016  Open Source Parking, Inc.(www.osparking.com)
  *
  * This program inStream free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by

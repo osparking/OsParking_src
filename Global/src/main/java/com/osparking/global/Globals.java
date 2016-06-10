@@ -1,5 +1,5 @@
 /* 
- * Copyright (C) 2015 Open Source Parking Inc.(www.osparking.com)
+ * Copyright (C) 2015, 2016  Open Source Parking, Inc.(www.osparking.com)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -363,7 +363,7 @@ public class Globals {
         String message = 
                 name + "," + System.lineSeparator() +
 
-                "Copyright (C) 2015 Open Source Parking Inc." + System.lineSeparator() +
+                "Copyright (C) 2015, 2016  Open Source Parking, Inc." + System.lineSeparator() +
                 "This program comes with ABSOLUTELY NO WARRANTY;" + System.lineSeparator() +
                 "for details click [About] button which is at the " + location + " corner." 
                 + System.lineSeparator() +
@@ -376,7 +376,7 @@ public class Globals {
     public static void shortLicenseDialog(JFrame parentForm) {
         String message = 
                 "OsParking, a parking lot management program," + System.lineSeparator() +
-                "Copyright (C) 2015 Open Source Parking Inc." + System.lineSeparator() +
+                "Copyright (C) 2015, 2016  Open Source Parking, Inc." + System.lineSeparator() +
                 "This program comes with ABSOLUTELY NO WARRANTY;" + System.lineSeparator() +
                 "for details use top menu [System] > [About] command." + System.lineSeparator() +
                 "This is free software, and you are welcome to redistribute it" + System.lineSeparator() +
