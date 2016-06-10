@@ -16,6 +16,7 @@
  */
 package com.osparking.attendant;
 
+import static com.osparking.global.CommonData.metaKeyLabel;
 import static com.osparking.global.DataSheet.saveODSfile;
 import java.awt.Point;
 import java.awt.event.KeyEvent;
@@ -33,7 +34,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.commons.validator.routines.EmailValidator;
 import javax.swing.JDialog;
-import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import static javax.swing.JOptionPane.INFORMATION_MESSAGE;
@@ -52,7 +52,6 @@ import static javax.swing.JOptionPane.showMessageDialog;
 import static com.osparking.global.names.DB_Access.*;
 import com.osparking.global.Globals;
 import com.osparking.global.names.ControlEnums.ATTLIST_ComboBoxTypes;
-import static com.osparking.global.names.ControlEnums.ButtonContent.CHECK_BTN;
 import static com.osparking.global.names.ControlEnums.ButtonTypes.*;
 import static com.osparking.global.names.ControlEnums.DialogMSGTypes.*;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.ATT_EMAIL_DUP_DIALOGTITLE;
@@ -66,7 +65,6 @@ import static com.osparking.global.names.ControlEnums.DialogTitleTypes.CREATTION
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.DELETE_DIALOGTITLE;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.DELETE_FAIL_DAILOGTITLE;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.DELETE_RESULT_DIALOGTITLE;
-import static com.osparking.global.names.ControlEnums.DialogTitleTypes.WARING_DIALOGTITLE;
 import static com.osparking.global.names.ControlEnums.LabelContent.*;
 import static com.osparking.global.names.ControlEnums.TableTypes.CELL_PHONE_HEADER;
 import static com.osparking.global.names.ControlEnums.TableTypes.EMAIL_HEADER;
@@ -91,17 +89,17 @@ import static com.osparking.global.names.JDBCMySQL.getHashedPW;
 import com.osparking.global.names.JTextFieldLimit;
 import com.osparking.global.names.OSP_enums.OpLogLevel;
 import com.osparking.global.names.ParentGUI;
+import java.awt.Dimension;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
+import javax.swing.Box;
 import javax.swing.JComponent;
 import javax.swing.KeyStroke;
 import javax.swing.table.DefaultTableModel;
-import org.jopendocument.dom.OOUtils;
-import org.jopendocument.dom.spreadsheet.SpreadSheet;
 
 /**
  *
@@ -217,7 +215,12 @@ public class AttListForm extends javax.swing.JFrame {
     
     private void initComponentsUser()
     {
-        userID2Label.setText(USER_ID_LABEL.getContent() + loginID);
+        String idStr = USER_ID_LABEL.getContent() + loginID;
+        JLabel tempLabel = new JLabel(idStr);
+        tempLabel.setFont(topUserIdLabel.getFont());
+        Dimension dim = tempLabel.getPreferredSize();
+        topUserIdLabel.setPreferredSize(new Dimension(dim.width + 16, dim.height));
+        topUserIdLabel.setText(idStr);
         adminAuth2CheckBox.setSelected(isManager);
         saveFileChooser.setDialogType(javax.swing.JFileChooser.SAVE_DIALOG);
         isIDreqLabel.setText("\u25CF");
@@ -240,18 +243,17 @@ public class AttListForm extends javax.swing.JFrame {
 
         saveFileChooser = new javax.swing.JFileChooser();
         requiredNotice = new javax.swing.JLabel();
+        filler20 = new javax.swing.Box.Filler(new java.awt.Dimension(40, 0), new java.awt.Dimension(40, 0), new java.awt.Dimension(40, 32767));
         wholePanel = new javax.swing.JPanel();
         topPanel = new javax.swing.JPanel();
         filler23 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 10), new java.awt.Dimension(0, 10), new java.awt.Dimension(32767, 10));
         topInPanel = new javax.swing.JPanel();
-        filler27 = new javax.swing.Box.Filler(new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 32767));
-        seeLicenseButton = new javax.swing.JButton();
-        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
-        filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
+        filler_w205 = new javax.swing.Box.Filler(new java.awt.Dimension(187, 0), new java.awt.Dimension(205, 0), new java.awt.Dimension(2000, 0));
+        filler21 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
         adminAuth2CheckBox = new javax.swing.JCheckBox();
-        filler4 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 32767));
-        userID2Label = new javax.swing.JLabel();
-        filler46 = new javax.swing.Box.Filler(new java.awt.Dimension(60, 0), new java.awt.Dimension(60, 0), new java.awt.Dimension(60, 32767));
+        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(5, 0), new java.awt.Dimension(5, 0), new java.awt.Dimension(5, 32767));
+        topUserIdLabel = new javax.swing.JLabel();
+        filler46 = new javax.swing.Box.Filler(new java.awt.Dimension(40, 0), new java.awt.Dimension(40, 0), new java.awt.Dimension(60, 32767));
         westPanel = new javax.swing.JPanel();
         filler5 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 40), new java.awt.Dimension(0, 40), new java.awt.Dimension(32767, 40));
         RequiredPanel1 = new javax.swing.JPanel();
@@ -269,7 +271,7 @@ public class AttListForm extends javax.swing.JFrame {
         filler43 = new javax.swing.Box.Filler(new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 32767));
         userIDText = new javax.swing.JTextField();
         filler33 = new javax.swing.Box.Filler(new java.awt.Dimension(20, 15), new java.awt.Dimension(40, 30), new java.awt.Dimension(40, 32767));
-        filler6 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 10), new java.awt.Dimension(0, 10), new java.awt.Dimension(32767, 10));
+        filler6 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 5), new java.awt.Dimension(0, 5), new java.awt.Dimension(32767, 10));
         idCheckPanel = new javax.swing.JPanel();
         filler28 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
         checkIDButton = new javax.swing.JButton();
@@ -314,7 +316,7 @@ public class AttListForm extends javax.swing.JFrame {
         filler67 = new javax.swing.Box.Filler(new java.awt.Dimension(55, 0), new java.awt.Dimension(55, 0), new java.awt.Dimension(55, 32767));
         emailAddrText = new javax.swing.JTextField();
         filler66 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 15), new java.awt.Dimension(10, 30), new java.awt.Dimension(40, 32767));
-        filler13 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 10), new java.awt.Dimension(0, 10), new java.awt.Dimension(32767, 10));
+        filler13 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 5), new java.awt.Dimension(0, 5), new java.awt.Dimension(32767, 10));
         emailCheckPanel = new javax.swing.JPanel();
         filler29 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
         checkEmailButton = new javax.swing.JButton();
@@ -374,7 +376,6 @@ public class AttListForm extends javax.swing.JFrame {
         southPanel = new javax.swing.JPanel();
         spacePanel1 = new javax.swing.JPanel();
         btnPanel = new javax.swing.JPanel();
-        filler70 = new javax.swing.Box.Filler(new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 32767));
         createButton = new javax.swing.JButton();
         filler71 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 10), new java.awt.Dimension(10, 10), new java.awt.Dimension(10, 32767));
         deleteButton = new javax.swing.JButton();
@@ -389,10 +390,10 @@ public class AttListForm extends javax.swing.JFrame {
         filler76 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 10), new java.awt.Dimension(10, 10), new java.awt.Dimension(10, 32767));
         searchButton = new javax.swing.JButton();
         filler81 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 10), new java.awt.Dimension(10, 10), new java.awt.Dimension(10, 32767));
-        saveTextFileButton = new javax.swing.JButton();
+        saveOdsButton = new javax.swing.JButton();
         filler82 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 10), new java.awt.Dimension(10, 10), new java.awt.Dimension(10, 32767));
         closeFormButton = new javax.swing.JButton();
-        filler83 = new javax.swing.Box.Filler(new java.awt.Dimension(20, 0), new java.awt.Dimension(40, 0), new java.awt.Dimension(20, 32767));
+        filler83 = new javax.swing.Box.Filler(new java.awt.Dimension(20, 0), new java.awt.Dimension(40, 0), new java.awt.Dimension(40, 32767));
         spacePanel2 = new javax.swing.JPanel();
 
         saveFileChooser.setDialogType(javax.swing.JFileChooser.SAVE_DIALOG);
@@ -418,6 +419,8 @@ public class AttListForm extends javax.swing.JFrame {
                 formWindowClosing(evt);
             }
         });
+        getContentPane().setLayout(new javax.swing.BoxLayout(getContentPane(), javax.swing.BoxLayout.LINE_AXIS));
+        getContentPane().add(filler20);
 
         wholePanel.setMinimumSize(new java.awt.Dimension(400, 400));
         wholePanel.setPreferredSize(new java.awt.Dimension(400, 400));
@@ -426,21 +429,11 @@ public class AttListForm extends javax.swing.JFrame {
         topPanel.setLayout(new javax.swing.BoxLayout(topPanel, javax.swing.BoxLayout.PAGE_AXIS));
         topPanel.add(filler23);
 
+        topInPanel.setMinimumSize(new java.awt.Dimension(267, 26));
+        topInPanel.setPreferredSize(new java.awt.Dimension(267, 26));
         topInPanel.setLayout(new javax.swing.BoxLayout(topInPanel, javax.swing.BoxLayout.LINE_AXIS));
-        topInPanel.add(filler27);
-
-        seeLicenseButton.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        seeLicenseButton.setText("About");
-        seeLicenseButton.setFocusable(false);
-        seeLicenseButton.setRequestFocusEnabled(false);
-        seeLicenseButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                seeLicenseButtonActionPerformed(evt);
-            }
-        });
-        topInPanel.add(seeLicenseButton);
-        topInPanel.add(filler1);
-        topInPanel.add(filler2);
+        topInPanel.add(filler_w205);
+        topInPanel.add(filler21);
 
         adminAuth2CheckBox.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         adminAuth2CheckBox.setText(MANAGER_HEADER.getContent());
@@ -448,13 +441,18 @@ public class AttListForm extends javax.swing.JFrame {
         adminAuth2CheckBox.setEnabled(false);
         adminAuth2CheckBox.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         adminAuth2CheckBox.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
+        topInPanel.add(metaKeyLabel);
+        topInPanel.add(Box.createHorizontalGlue());
         topInPanel.add(adminAuth2CheckBox);
-        topInPanel.add(filler4);
+        topInPanel.add(filler1);
 
-        userID2Label.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        userID2Label.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        userID2Label.setText(LOGIN_ID_LABEL.getContent() + ": " +loginID);
-        topInPanel.add(userID2Label);
+        topUserIdLabel.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        topUserIdLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        topUserIdLabel.setText(LOGIN_ID_LABEL.getContent() + ": " +loginID);
+        topUserIdLabel.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        topUserIdLabel.setMaximumSize(new java.awt.Dimension(200, 26));
+        topUserIdLabel.setPreferredSize(new java.awt.Dimension(99, 26));
+        topInPanel.add(topUserIdLabel);
         topInPanel.add(filler46);
 
         topPanel.add(topInPanel);
@@ -539,18 +537,19 @@ public class AttListForm extends javax.swing.JFrame {
         westPanel.add(loginPanel);
         westPanel.add(filler6);
 
-        idCheckPanel.setMaximumSize(new java.awt.Dimension(32877, 28));
+        idCheckPanel.setMaximumSize(new java.awt.Dimension(32877, 30));
         idCheckPanel.setMinimumSize(new java.awt.Dimension(300, 26));
-        idCheckPanel.setPreferredSize(new java.awt.Dimension(300, 26));
+        idCheckPanel.setPreferredSize(new java.awt.Dimension(300, 30));
         idCheckPanel.setLayout(new javax.swing.BoxLayout(idCheckPanel, javax.swing.BoxLayout.LINE_AXIS));
         idCheckPanel.add(filler28);
 
         checkIDButton.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        checkIDButton.setText(CHECK_BTN.getContent());
+        checkIDButton.setMnemonic('K');
+        checkIDButton.setText(ID_CHECK_BTN.getContent());
         checkIDButton.setEnabled(false);
-        checkIDButton.setMaximumSize(new java.awt.Dimension(90, 23));
+        checkIDButton.setMaximumSize(new java.awt.Dimension(110, 35));
         checkIDButton.setMinimumSize(new java.awt.Dimension(90, 23));
-        checkIDButton.setPreferredSize(new java.awt.Dimension(90, 23));
+        checkIDButton.setPreferredSize(new java.awt.Dimension(110, 30));
         checkIDButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 checkIDButtonActionPerformed(evt);
@@ -730,18 +729,20 @@ public class AttListForm extends javax.swing.JFrame {
         westPanel.add(emailPanel);
         westPanel.add(filler13);
 
-        emailCheckPanel.setMaximumSize(new java.awt.Dimension(32877, 28));
+        emailCheckPanel.setMaximumSize(new java.awt.Dimension(32877, 30));
         emailCheckPanel.setMinimumSize(new java.awt.Dimension(300, 26));
-        emailCheckPanel.setPreferredSize(new java.awt.Dimension(300, 26));
+        emailCheckPanel.setPreferredSize(new java.awt.Dimension(300, 30));
         emailCheckPanel.setLayout(new javax.swing.BoxLayout(emailCheckPanel, javax.swing.BoxLayout.LINE_AXIS));
         emailCheckPanel.add(filler29);
 
         checkEmailButton.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        checkEmailButton.setText(CHECK_BTN.getContent());
+        checkEmailButton.setMnemonic('L');
+        checkEmailButton.setText(EMAIL_CHECK_BTN.getContent());
+        checkEmailButton.setToolTipText("");
         checkEmailButton.setEnabled(false);
-        checkEmailButton.setMaximumSize(new java.awt.Dimension(90, 23));
+        checkEmailButton.setMaximumSize(new java.awt.Dimension(110, 35));
         checkEmailButton.setMinimumSize(new java.awt.Dimension(90, 23));
-        checkEmailButton.setPreferredSize(new java.awt.Dimension(90, 23));
+        checkEmailButton.setPreferredSize(new java.awt.Dimension(110, 30));
         checkEmailButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 checkEmailButtonActionPerformed(evt);
@@ -932,7 +933,7 @@ public class AttListForm extends javax.swing.JFrame {
         centerPanel.setPreferredSize(new java.awt.Dimension(600, 474));
         centerPanel.setLayout(new java.awt.BorderLayout());
 
-        jLabel11.setFont(new java.awt.Font(font_Type, font_Style, 16));
+        jLabel11.setFont(new java.awt.Font(font_Type, font_Style, head_font_Size));
         jLabel11.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel11.setText(ATTLIST_FRAME_TITLE.getContent());
         centerPanel.add(jLabel11, java.awt.BorderLayout.PAGE_START);
@@ -1007,7 +1008,6 @@ public class AttListForm extends javax.swing.JFrame {
         btnPanel.setMaximumSize(new java.awt.Dimension(33747, 40));
         btnPanel.setMinimumSize(new java.awt.Dimension(950, 40));
         btnPanel.setLayout(new javax.swing.BoxLayout(btnPanel, javax.swing.BoxLayout.LINE_AXIS));
-        btnPanel.add(filler70);
 
         createButton.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         createButton.setMnemonic('r');
@@ -1043,7 +1043,7 @@ public class AttListForm extends javax.swing.JFrame {
         multiFuncButton.setMnemonic('m');
         multiFuncButton.setText(MODIFY_BTN.getContent());
         multiFuncButton.setEnabled(false);
-        multiFuncButton.setMaximumSize(new java.awt.Dimension(80, 60));
+        multiFuncButton.setMaximumSize(new java.awt.Dimension(100, 60));
         multiFuncButton.setMinimumSize(new java.awt.Dimension(80, 60));
         multiFuncButton.setPreferredSize(new java.awt.Dimension(90, 40));
         multiFuncButton.addActionListener(new java.awt.event.ActionListener() {
@@ -1104,21 +1104,21 @@ public class AttListForm extends javax.swing.JFrame {
         btnPanel.add(searchButton);
         btnPanel.add(filler81);
 
-        saveTextFileButton.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        saveTextFileButton.setMnemonic('A');
-        saveTextFileButton.setText(SAVE_ODS_BTN.getContent());
-        saveTextFileButton.setToolTipText(SAVE_AS_TOOLTIP.getContent());
-        saveTextFileButton.setAutoscrolls(true);
-        saveTextFileButton.setMargin(new java.awt.Insets(0, 0, 0, 0));
-        saveTextFileButton.setMaximumSize(new java.awt.Dimension(80, 40));
-        saveTextFileButton.setMinimumSize(new java.awt.Dimension(80, 40));
-        saveTextFileButton.setPreferredSize(new java.awt.Dimension(100, 40));
-        saveTextFileButton.addActionListener(new java.awt.event.ActionListener() {
+        saveOdsButton.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        saveOdsButton.setMnemonic('A');
+        saveOdsButton.setText(SAVE_ODS_BTN.getContent());
+        saveOdsButton.setToolTipText(SAVE_AS_TOOLTIP.getContent());
+        saveOdsButton.setAutoscrolls(true);
+        saveOdsButton.setMargin(new java.awt.Insets(0, 0, 0, 0));
+        saveOdsButton.setMaximumSize(new java.awt.Dimension(140, 60));
+        saveOdsButton.setMinimumSize(new java.awt.Dimension(100, 40));
+        saveOdsButton.setPreferredSize(new java.awt.Dimension(110, 40));
+        saveOdsButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                saveTextFileButtonActionPerformed(evt);
+                saveOdsButtonActionPerformed(evt);
             }
         });
-        btnPanel.add(saveTextFileButton);
+        btnPanel.add(saveOdsButton);
         btnPanel.add(filler82);
 
         closeFormButton.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
@@ -1152,7 +1152,7 @@ public class AttListForm extends javax.swing.JFrame {
 
         wholePanel.add(southPanel, java.awt.BorderLayout.SOUTH);
 
-        getContentPane().add(wholePanel, java.awt.BorderLayout.CENTER);
+        getContentPane().add(wholePanel);
 
         setSize(new java.awt.Dimension(1054, 696));
         setLocationRelativeTo(null);
@@ -1464,9 +1464,9 @@ public class AttListForm extends javax.swing.JFrame {
         }        
     }    
     
-    private void saveTextFileButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveTextFileButtonActionPerformed
+    private void saveOdsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveOdsButtonActionPerformed
         saveODSfile(this, usersTable, saveFileChooser, USER_SAVE_ODS_FAIL_DIALOG.getContent());
-    }//GEN-LAST:event_saveTextFileButtonActionPerformed
+    }//GEN-LAST:event_saveOdsButtonActionPerformed
 
     private void deleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteButtonActionPerformed
         try {
@@ -1763,10 +1763,6 @@ public class AttListForm extends javax.swing.JFrame {
                     "(User action: user list search)");         
         }
     }//GEN-LAST:event_searchButtonActionPerformed
-
-    private void seeLicenseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_seeLicenseButtonActionPerformed
-        showLicensePanel(this, "License Notice on User(=Attendant) Project");
-    }//GEN-LAST:event_seeLicenseButtonActionPerformed
 
     private void PWHelpButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PWHelpButtonActionPerformed
         pwValidator = new PasswordValidator();
@@ -2445,7 +2441,7 @@ public class AttListForm extends javax.swing.JFrame {
         searchText.setEnabled(flag);
         searchCriteriaComboBox. setEnabled(flag);
         searchButton.setEnabled(flag);
-        saveTextFileButton. setEnabled(flag);
+        saveOdsButton. setEnabled(flag);
         closeFormButton.setEnabled(flag); 
     }
 
@@ -2585,10 +2581,10 @@ public class AttListForm extends javax.swing.JFrame {
     private javax.swing.Box.Filler filler17;
     private javax.swing.Box.Filler filler18;
     private javax.swing.Box.Filler filler19;
-    private javax.swing.Box.Filler filler2;
+    private javax.swing.Box.Filler filler20;
+    private javax.swing.Box.Filler filler21;
     private javax.swing.Box.Filler filler22;
     private javax.swing.Box.Filler filler23;
-    private javax.swing.Box.Filler filler27;
     private javax.swing.Box.Filler filler28;
     private javax.swing.Box.Filler filler29;
     private javax.swing.Box.Filler filler3;
@@ -2602,7 +2598,6 @@ public class AttListForm extends javax.swing.JFrame {
     private javax.swing.Box.Filler filler37;
     private javax.swing.Box.Filler filler38;
     private javax.swing.Box.Filler filler39;
-    private javax.swing.Box.Filler filler4;
     private javax.swing.Box.Filler filler40;
     private javax.swing.Box.Filler filler41;
     private javax.swing.Box.Filler filler42;
@@ -2636,7 +2631,6 @@ public class AttListForm extends javax.swing.JFrame {
     private javax.swing.Box.Filler filler68;
     private javax.swing.Box.Filler filler69;
     private javax.swing.Box.Filler filler7;
-    private javax.swing.Box.Filler filler70;
     private javax.swing.Box.Filler filler71;
     private javax.swing.Box.Filler filler72;
     private javax.swing.Box.Filler filler73;
@@ -2652,6 +2646,7 @@ public class AttListForm extends javax.swing.JFrame {
     private javax.swing.Box.Filler filler84;
     private javax.swing.Box.Filler filler85;
     private javax.swing.Box.Filler filler9;
+    private javax.swing.Box.Filler filler_w205;
     private javax.swing.JPanel idCheckPanel;
     private javax.swing.JLabel isIDreqLabel;
     private javax.swing.JLabel jLabel1;
@@ -2679,17 +2674,16 @@ public class AttListForm extends javax.swing.JFrame {
     private javax.swing.JPanel repeatPWD_Panel;
     private javax.swing.JLabel requiredNotice;
     private javax.swing.JFileChooser saveFileChooser;
-    private javax.swing.JButton saveTextFileButton;
+    private javax.swing.JButton saveOdsButton;
     private javax.swing.JButton searchButton;
     private javax.swing.JComboBox searchCriteriaComboBox;
     private javax.swing.JTextField searchText;
-    private javax.swing.JButton seeLicenseButton;
     private javax.swing.JPanel southPanel;
     private javax.swing.JPanel spacePanel1;
     private javax.swing.JPanel spacePanel2;
     private javax.swing.JPanel topInPanel;
     private javax.swing.JPanel topPanel;
-    private javax.swing.JLabel userID2Label;
+    private javax.swing.JLabel topUserIdLabel;
     private javax.swing.JLabel userIDLabel;
     private javax.swing.JTextField userIDText;
     private javax.swing.JTextField userNameText;
@@ -2948,7 +2942,7 @@ public class AttListForm extends javax.swing.JFrame {
                                 public void windowOpened( WindowEvent e ){
                                     attendantsForm.searchText.requestFocus();
                                 }
-                            }); 
+                            });
                             attendantsForm.isStandalone = true;
                             attendantsForm.setVisible(true); 
                         }

@@ -348,7 +348,7 @@
             <Property name="requestFocusEnabled" type="boolean" value="false"/>
           </Properties>
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_LayoutCodePost" type="java.lang.String" value="visibleMenuBar.add(Box.createHorizontalGlue());&#xa;metaKeyLabel.setFont(new java.awt.Font(font_Type, font_Style, font_Size));&#xa;metaKeyLabel.setForeground(new Color(0xff, 0x85, 0x33));&#xa;visibleMenuBar.add(metaKeyLabel);&#xa;visibleMenuBar.add(Box.createHorizontalGlue());"/>
+            <AuxValue name="JavaCodeGenerator_LayoutCodePost" type="java.lang.String" value="visibleMenuBar.add(Box.createHorizontalGlue());&#xa;visibleMenuBar.add(metaKeyLabel);&#xa;visibleMenuBar.add(Box.createHorizontalGlue());"/>
           </AuxValues>
           <SubComponents>
             <MenuItem class="javax.swing.JMenuItem" name="LoginUser">

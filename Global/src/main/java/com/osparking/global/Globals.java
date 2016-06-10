@@ -362,7 +362,6 @@ public class Globals {
         
         String message = 
                 name + "," + System.lineSeparator() +
-
                 "Copyright (C) 2015, 2016  Open Source Parking, Inc." + System.lineSeparator() +
                 "This program comes with ABSOLUTELY NO WARRANTY;" + System.lineSeparator() +
                 "for details click [About] button which is at the " + location + " corner." 
@@ -497,6 +496,7 @@ public class Globals {
 
     public static String font_Type = "SansSerif";
     public static int font_Size = 14;
+    public static int head_font_Size = 16;
     public static int font_Style = BOLD;        
         
     /**

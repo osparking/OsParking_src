@@ -191,7 +191,8 @@ public class ControlEnums {
         CANCEL_BTN("취소(C)", "Cancel"),
         SEARCH_BTN("검색(S)", "Search"),
         SAVE_AS_BTN("파일저장(A)", "Save As"),
-        CHECK_BTN("중복검색", "Check"),
+        ID_CHECK_BTN("<HTML>중복검사(<U>K</U>)</HTML>", "<HTML>Check(<U>K</U>)</HTML>"),
+        EMAIL_CHECK_BTN("<HTML>중복검사(<U>L</U>)</HTML>", "<HTML>Check(<U>L</U>)</HTML>"),
         CLEAR_BTN("초기화(L)", "Clear"),
         DELETE_ALL_BTN("전체삭제(E)", "Delete All"),
         READ_ODS_BTN("<HTML>ods읽기(<U>O</U>)</HTML>", "<HTML>Read  <U>O</U>ds</HTML>"),
@@ -226,21 +227,6 @@ public class ControlEnums {
         public String getContent() {
                 return contents[language.ordinal()];
         }        
-    }
-    
-    public enum ButtonContent {  
-        CHECK_BTN("중복검색", "Check");
-        
-        ButtonContent(String korean, String english) {
-            contents[KOREAN.ordinal()] = korean;
-            contents[ENGLISH.ordinal()] = english;
-        }
-        
-        private String[] contents = new String[Languages.values().length];
-        
-        public String getContent() {
-                return contents[language.ordinal()];
-        }
     }
     
     public enum MsgContent {  

@@ -20,6 +20,7 @@ import com.osparking.attendant.AttListForm;
 import com.osparking.attendant.LoginDialog;
 import com.osparking.attendant.LoginEventListener;
 import com.osparking.attendant.LoginWindowEvent;
+import static com.osparking.global.CommonData.metaKeyLabel;
 import com.osparking.global.Globals;
 import static com.osparking.global.Globals.*;
 import com.osparking.global.names.CarAdmission;
@@ -1494,8 +1495,6 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
         LogInOutMenu.add(LogoutUser);
 
         visibleMenuBar.add(Box.createHorizontalGlue());
-        metaKeyLabel.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        metaKeyLabel.setForeground(new Color(0xff, 0x85, 0x33));
         visibleMenuBar.add(metaKeyLabel);
         visibleMenuBar.add(Box.createHorizontalGlue());
 
@@ -2209,7 +2208,7 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
     private javax.swing.JMenuBar visibleMenuBar;
     // End of variables declaration//GEN-END:variables
     // </editor-fold>
-    JLabel metaKeyLabel = new JLabel(META_KEY_LABEL.getContent()); 
+    
     JLabel managerLabel = new JLabel(MANAGER_MANU.getContent()); 
     JLabel ID_Label = new JLabel(ID_LABEL_STR.getContent()); 
     
