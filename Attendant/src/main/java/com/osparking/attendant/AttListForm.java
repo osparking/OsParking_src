@@ -1747,8 +1747,15 @@ public class AttListForm extends javax.swing.JFrame {
                 searchCondition = " where name like '" + "%" + searchText.getText() + "%';";
             }
             List sortKeys = usersTable.getRowSorter().getSortKeys();                
-            RefreshTableContents(); 
-            usersTable.changeSelection(selectedRowIndex, 0, false, false);
+            
+            if (RefreshTableContents() == 0) {
+                // Show popup dialog telling no user found.
+                JOptionPane.showConfirmDialog(this, NO_USER_DIALOG.getContent(),
+                        SEARCH_RESULT_TITLE.getContent(),
+                        JOptionPane.PLAIN_MESSAGE, INFORMATION_MESSAGE);                
+            } else {
+                usersTable.changeSelection(0, 0, false, false);
+            }
             usersTable.requestFocus();
             ShowAttendantDetail(selectedRowIndex);
             
@@ -2696,7 +2703,7 @@ public class AttListForm extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
     // </editor-fold>
     
-    private void RefreshTableContents() {
+    private int RefreshTableContents() {
         DefaultTableModel model =  (DefaultTableModel) usersTable.getModel();
         Connection conn = null;
         PreparedStatement pstmt = null;
@@ -2740,6 +2747,7 @@ public class AttListForm extends javax.swing.JFrame {
             logParkingException(Level.SEVERE, ex, "(refresh user list displaying table)");
         } finally {
             closeDBstuff(conn, pstmt, rs, "(refresh user list displaying table)");
+            return model.getRowCount();
         }
     }
 

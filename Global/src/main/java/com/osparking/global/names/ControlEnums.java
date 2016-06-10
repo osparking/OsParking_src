@@ -44,6 +44,7 @@ public class ControlEnums {
         DRIVER_LIST_FRAME_TITLE("운전자 목록", "Driver List"),
         CAR_ARRIVALS_FRAME_TITLE("도착 목록", "Arrival Records"),
         SEARCH_CRITERIA_PANEL_TITLE("검색 기준", "Search Criteria"),
+        SEARCH_RESULT_TITLE("검색 결과", "Search Result"),
         ARRIVAL_PROPERTIES_PANEL_TITLE("도착 속성", "Arrival Properties"),
         ARRIVAL_TIME_PANEL_TITLE("도착 기간", "Arrival Time"),
         VEHICLE_ARIIVAL_DETAILS_PANEL_TITLE("도착차량 상세정보", "Vehicle Arrival Details"),
@@ -347,6 +348,7 @@ public class ControlEnums {
         ATT_NAME_CHECK_DIALOG("  - 관리원 이름 두 글자 이상", "  - Name should be longer than 1 character"),
         ATT_CELL_CHECK_DIALOG("  - 휴대폰 번호 입력 오류", "  - Wrong cell phone number"),
         PHONE_CHECK_DIALOG("  - 전화 번호 입력 오류", "  - Phone number error"),
+        NO_USER_DIALOG("사용자 검색 건수: 0", "No user found"),
         CELL_PHONE_CHECK_DIALOG(
                 "  - 전화번호 나 휴대폰 중 하나 입력", "  - Either phone, cell-phone or both is needed"),
         PASSWORD_CHECK_DIALOG(
