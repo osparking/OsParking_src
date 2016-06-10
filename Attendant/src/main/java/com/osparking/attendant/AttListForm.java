@@ -2477,6 +2477,7 @@ public class AttListForm extends javax.swing.JFrame {
                 legendLLabel.setText(CREATE_COND.getContent());
                 userPassword.setEnabled(true);
                 userPassword.setEditable(true);
+                usersTable.setEnabled(false);
                 break;
             case NormalMode:
                 legendLLabel.setText(DATA_COND.getContent());
@@ -2487,11 +2488,13 @@ public class AttListForm extends javax.swing.JFrame {
                     userPassword.setEnabled(false);
                     userPassword.setEditable(false);
                 }
+                usersTable.setEnabled(true);
                 break;
             case UpdateMode:
                 legendLLabel.setText(MODIFY_COND.getContent());
                 userPassword.setEnabled(true);
                 userPassword.setEditable(true);
+                usersTable.setEnabled(false);
                 break;
             default:
                 break;
