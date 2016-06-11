@@ -19,6 +19,7 @@ package com.osparking.attendant;
 import static com.osparking.global.CommonData.buttonHeightNorm;
 import static com.osparking.global.CommonData.buttonWidthNorm;
 import static com.osparking.global.CommonData.metaKeyLabel;
+import static com.osparking.global.CommonData.pointColor;
 import static com.osparking.global.DataSheet.saveODSfile;
 import java.awt.Point;
 import java.awt.event.KeyEvent;
@@ -68,6 +69,9 @@ import static com.osparking.global.names.ControlEnums.DialogTitleTypes.DELETE_DI
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.DELETE_FAIL_DAILOGTITLE;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.DELETE_RESULT_DIALOGTITLE;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.USER_FIELD_CHECK_RESULT;
+import static com.osparking.global.names.ControlEnums.FormModeString.CREATE;
+import static com.osparking.global.names.ControlEnums.FormModeString.MODIFY;
+import static com.osparking.global.names.ControlEnums.FormModeString.SEARCH;
 import static com.osparking.global.names.ControlEnums.LabelContent.*;
 import static com.osparking.global.names.ControlEnums.TableTypes.CELL_PHONE_HEADER;
 import static com.osparking.global.names.ControlEnums.TableTypes.EMAIL_HEADER;
@@ -79,6 +83,8 @@ import static com.osparking.global.names.ControlEnums.TableTypes.USER_ID_HEADER;
 import static com.osparking.global.names.ControlEnums.TitleTypes.*;
 import static com.osparking.global.names.ControlEnums.ToolTipContent.CELL_INPUT_TOOLTIP;
 import static com.osparking.global.names.ControlEnums.ToolTipContent.CELL_PHONE_TOOLTIP;
+import static com.osparking.global.names.ControlEnums.ToolTipContent.CHK_DUP_ID_TIP;
+import static com.osparking.global.names.ControlEnums.ToolTipContent.CHK_E_MAIL_TIP;
 import static com.osparking.global.names.ControlEnums.ToolTipContent.ID_INPUT_TOOLTIP;
 import static com.osparking.global.names.ControlEnums.ToolTipContent.NAME_INPUT_TOOLTIP;
 import static com.osparking.global.names.ControlEnums.ToolTipContent.PHONE_INPUT_TOOLTIP;
@@ -258,7 +264,10 @@ public class AttListForm extends javax.swing.JFrame {
         topUserIdLabel = new javax.swing.JLabel();
         filler46 = new javax.swing.Box.Filler(new java.awt.Dimension(40, 0), new java.awt.Dimension(40, 0), new java.awt.Dimension(60, 32767));
         westPanel = new javax.swing.JPanel();
-        filler5 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 40), new java.awt.Dimension(0, 40), new java.awt.Dimension(32767, 40));
+        modePanel = new javax.swing.JPanel();
+        jLabel2 = new javax.swing.JLabel();
+        modeString = new javax.swing.JLabel();
+        jSeparator1 = new javax.swing.JSeparator();
         RequiredPanel1 = new javax.swing.JPanel();
         filler30 = new javax.swing.Box.Filler(new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 32767));
         legendLLabel = new javax.swing.JLabel();
@@ -343,7 +352,6 @@ public class AttListForm extends javax.swing.JFrame {
         filler77 = new javax.swing.Box.Filler(new java.awt.Dimension(20, 0), new java.awt.Dimension(10, 10), new java.awt.Dimension(20, 32767));
         filler16 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 10), new java.awt.Dimension(0, 10), new java.awt.Dimension(32767, 10));
         repeatPWD_Panel = new javax.swing.JPanel();
-        filler58 = new javax.swing.Box.Filler(new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 32767));
         newPW2Label = new javax.swing.JLabel();
         filler59 = new javax.swing.Box.Filler(new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 32767));
         newPW2ReqLabel = new javax.swing.JLabel();
@@ -466,7 +474,46 @@ public class AttListForm extends javax.swing.JFrame {
         westPanel.setMinimumSize(new java.awt.Dimension(400, 355));
         westPanel.setPreferredSize(new java.awt.Dimension(400, 537));
         westPanel.setLayout(new javax.swing.BoxLayout(westPanel, javax.swing.BoxLayout.PAGE_AXIS));
-        westPanel.add(filler5);
+
+        modePanel.setMaximumSize(new java.awt.Dimension(32767, 28));
+        modePanel.setMinimumSize(new java.awt.Dimension(300, 26));
+        modePanel.setPreferredSize(new java.awt.Dimension(300, 26));
+
+        jLabel2.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jLabel2.setText(MODE_LABEL.getContent());
+        jLabel2.setMaximumSize(new java.awt.Dimension(200, 28));
+        jLabel2.setMinimumSize(new java.awt.Dimension(50, 26));
+        jLabel2.setPreferredSize(new java.awt.Dimension(80, 26));
+
+        modeString.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        modeString.setForeground(pointColor);
+        modeString.setText(SEARCH.getContent());
+        modeString.setMaximumSize(new java.awt.Dimension(200, 28));
+        modeString.setMinimumSize(new java.awt.Dimension(34, 26));
+        modeString.setPreferredSize(new java.awt.Dimension(80, 26));
+
+        javax.swing.GroupLayout modePanelLayout = new javax.swing.GroupLayout(modePanel);
+        modePanel.setLayout(modePanelLayout);
+        modePanelLayout.setHorizontalGroup(
+            modePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(modePanelLayout.createSequentialGroup()
+                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(5, 5, 5)
+                .addComponent(modeString, javax.swing.GroupLayout.PREFERRED_SIZE, 198, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+        modePanelLayout.setVerticalGroup(
+            modePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, modePanelLayout.createSequentialGroup()
+                .addGap(0, 0, 0)
+                .addGroup(modePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(modeString, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
+        );
+
+        westPanel.add(modePanel);
+        westPanel.add(jSeparator1);
 
         RequiredPanel1.setMaximumSize(new java.awt.Dimension(32877, 28));
         RequiredPanel1.setMinimumSize(new java.awt.Dimension(300, 26));
@@ -549,6 +596,7 @@ public class AttListForm extends javax.swing.JFrame {
         checkIDButton.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         checkIDButton.setMnemonic('K');
         checkIDButton.setText(ID_CHECK_BTN.getContent());
+        checkIDButton.setToolTipText(CHK_DUP_ID_TIP.getContent());
         checkIDButton.setEnabled(false);
         checkIDButton.setMaximumSize(new java.awt.Dimension(110, 35));
         checkIDButton.setMinimumSize(new java.awt.Dimension(90, 23));
@@ -741,7 +789,7 @@ public class AttListForm extends javax.swing.JFrame {
         checkEmailButton.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         checkEmailButton.setMnemonic('L');
         checkEmailButton.setText(EMAIL_CHECK_BTN.getContent());
-        checkEmailButton.setToolTipText("");
+        checkEmailButton.setToolTipText(CHK_E_MAIL_TIP.getContent());
         checkEmailButton.setEnabled(false);
         checkEmailButton.setMaximumSize(new java.awt.Dimension(110, 35));
         checkEmailButton.setMinimumSize(new java.awt.Dimension(90, 23));
@@ -841,14 +889,13 @@ public class AttListForm extends javax.swing.JFrame {
         repeatPWD_Panel.setMinimumSize(new java.awt.Dimension(300, 26));
         repeatPWD_Panel.setPreferredSize(new java.awt.Dimension(300, 26));
         repeatPWD_Panel.setLayout(new javax.swing.BoxLayout(repeatPWD_Panel, javax.swing.BoxLayout.LINE_AXIS));
-        repeatPWD_Panel.add(filler58);
 
         newPW2Label.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         newPW2Label.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         newPW2Label.setText(REPEAT_PW_LABEL.getContent());
-        newPW2Label.setMaximumSize(new java.awt.Dimension(130, 21));
+        newPW2Label.setMaximumSize(new java.awt.Dimension(150, 21));
         newPW2Label.setMinimumSize(new java.awt.Dimension(130, 21));
-        newPW2Label.setPreferredSize(new java.awt.Dimension(130, 21));
+        newPW2Label.setPreferredSize(new java.awt.Dimension(150, 21));
         repeatPWD_Panel.add(newPW2Label);
         repeatPWD_Panel.add(filler59);
 
@@ -1167,7 +1214,6 @@ public class AttListForm extends javax.swing.JFrame {
             // When a table is sorted on some key, a row of the table can have two index values.
             // They are one for the display ordering and the other is  for the location in the model.
             // So, in the source code, these two index values need to be translated back and forth.
-//            if (formMode != FormMode.UpdateMode) {
             if (formMode == FormMode.NormalMode) {
                 java.awt.EventQueue.invokeLater(new Runnable() {
                     public void run() {
@@ -2479,12 +2525,14 @@ public class AttListForm extends javax.swing.JFrame {
         this.formMode = formMode;
         switch (formMode) {
             case CreateMode:
+                modeString.setText(CREATE.getContent());
                 legendLLabel.setText(CREATE_COND.getContent());
                 userPassword.setEnabled(true);
                 userPassword.setEditable(true);
                 setSearchEnabled(false);
                 break;
             case NormalMode:
+                modeString.setText(SEARCH.getContent());
                 legendLLabel.setText(DATA_COND.getContent());
                 if (isDeletableByMe(userIDText.getText())) {
                     userPassword.setEnabled(true);
@@ -2496,6 +2544,7 @@ public class AttListForm extends javax.swing.JFrame {
                 setSearchEnabled(true);
                 break;
             case UpdateMode:
+                modeString.setText(MODIFY.getContent());
                 legendLLabel.setText(MODIFY_COND.getContent());
                 userPassword.setEnabled(true);
                 userPassword.setEditable(true);
@@ -2613,7 +2662,6 @@ public class AttListForm extends javax.swing.JFrame {
     private javax.swing.Box.Filler filler47;
     private javax.swing.Box.Filler filler48;
     private javax.swing.Box.Filler filler49;
-    private javax.swing.Box.Filler filler5;
     private javax.swing.Box.Filler filler50;
     private javax.swing.Box.Filler filler51;
     private javax.swing.Box.Filler filler52;
@@ -2622,7 +2670,6 @@ public class AttListForm extends javax.swing.JFrame {
     private javax.swing.Box.Filler filler55;
     private javax.swing.Box.Filler filler56;
     private javax.swing.Box.Filler filler57;
-    private javax.swing.Box.Filler filler58;
     private javax.swing.Box.Filler filler59;
     private javax.swing.Box.Filler filler6;
     private javax.swing.Box.Filler filler60;
@@ -2656,13 +2703,17 @@ public class AttListForm extends javax.swing.JFrame {
     private javax.swing.JLabel isIDreqLabel;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JSeparator jSeparator1;
     private javax.swing.JLabel legendLLabel;
     private javax.swing.JPanel loginPanel;
     private javax.swing.JCheckBox managerAuthCheckBox;
+    private javax.swing.JPanel modePanel;
+    private javax.swing.JLabel modeString;
     private javax.swing.JButton multiFuncButton;
     private javax.swing.JLabel nameLabel;
     private javax.swing.JPanel namePanel;

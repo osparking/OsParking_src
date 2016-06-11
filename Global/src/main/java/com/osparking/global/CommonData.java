@@ -37,4 +37,5 @@ public class CommonData {
         metaKeyLabel.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         metaKeyLabel.setForeground(new Color(0xff, 0x85, 0x33));
     }
+    public static final Color pointColor = new java.awt.Color(255, 51, 51);
 }

@@ -78,6 +78,7 @@ public class ControlEnums {
     public enum LabelContent {
         LOGIN_ID_LABEL("아이디", "Login ID"), 
         PW_LABEL("비밀번호",  "Password"), 
+        MODE_LABEL("작업 상태 :", "Operation Mode :"), 
         MODIFY_COND("\u203B 정보 수정 조건", "\u203B Legend"), 
         CREATE_COND("\u203B 정보 생성 조건", "\u203B Legend"), 
         DATA_COND("\u203B 필수 선택 구분", "\u203B Legend"), 
@@ -90,7 +91,7 @@ public class ControlEnums {
         EMAIL_LABEL("이메일",  "E-Mail"),
         CHANGE_PW_LABEL("비밀번호 변경",  "Change Password"),
         NEW_PW_LABLE("새 비밀번호",  "New Password"),
-        REPEAT_PW_LABEL("비밀번호 확인",  "Repeat Password"),
+        REPEAT_PW_LABEL("새 비밀번호 반복",  "Repeat Password"),
         MY_PW_LABEL("비밀번호",  "Password"),
         CREATION_LABEL("자료 생성일",  "Creation Date"),
         AFFILIATION_LIST_LABEL("상위 소속 목록",  "Higher Affiliations"),
@@ -229,7 +230,22 @@ public class ControlEnums {
                 return contents[language.ordinal()];
         }        
     }
-    
+
+    public enum FormModeString {  
+        SEARCH("검색 ", "Searching"),
+        MODIFY("수정", "Modifying"),
+        CREATE("생성", "Creating");
+        
+        FormModeString(String korean, String english) {
+            contents[KOREAN.ordinal()] = korean;
+            contents[ENGLISH.ordinal()] = english;
+        }
+        private String[] contents = new String[Languages.values().length];
+        public String getContent() {
+                return contents[language.ordinal()];
+        }
+    }
+        
     public enum MsgContent {  
         RECENT_WORD("최근 ", "Recent "),
         LOG_IN("로그인", "Logged In"),
@@ -256,6 +272,8 @@ public class ControlEnums {
         LOGIN_BTN_TOOLTIP("관리자 로그인", "Click to Login"),
         CLOSE_BTN_TOOLTIP("현재 창을 닫기", "Close Window"),
         SAVE_AS_TOOLTIP("파일로 저장", "Save as file"),
+        CHK_DUP_ID_TIP("이미 등록된 ID 인지 검사", "Check if ID is occupied"),
+        CHK_E_MAIL_TIP("주소 형식 및 기 등록 여부 검사", "Check syntax and if already registered"),        
         ID_INPUT_TOOLTIP("영문숫자 최대 20자!", "Up to 20 alphanumeric characters"),
         NAME_INPUT_TOOLTIP("두 자 이상 입력하세요", "Please enter at least two characters"),
         PW_INPUT_TOOTLTIP("현 사용자 비번 입력!", "Current User Password!"),
