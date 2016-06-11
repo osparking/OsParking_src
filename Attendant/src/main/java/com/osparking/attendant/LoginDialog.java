@@ -17,6 +17,10 @@
  */
 package com.osparking.attendant;
 
+import static com.osparking.global.CommonData.buttonHeightNorm;
+import static com.osparking.global.CommonData.buttonWidthNorm;
+import static com.osparking.global.CommonData.buttonWidthWide;
+import static com.osparking.global.CommonData.metaKeyLabel;
 import com.osparking.global.Globals;
 import static com.osparking.global.Globals.OSPiconList;
 import static com.osparking.global.Globals.checkOptions;
@@ -36,12 +40,14 @@ import static com.osparking.global.names.ControlEnums.LabelContent.PW_LABEL;
 import static com.osparking.global.names.ControlEnums.TitleTypes.LOGIN_DIALOG_TITLE;
 import static com.osparking.global.names.DB_Access.readSettings;
 import com.osparking.global.names.JDBCMySQL;
+import java.awt.Dimension;
 import java.awt.event.KeyEvent;
 import static java.awt.event.KeyEvent.VK_ENTER;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.logging.Level;
+import javax.swing.Box;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import static javax.swing.JOptionPane.showMessageDialog;
@@ -84,8 +90,10 @@ public class LoginDialog extends javax.swing.JDialog {
         loginButton = new javax.swing.JButton();
         closeButton = new javax.swing.JButton();
         password = new javax.swing.JPasswordField();
+        topPanel = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setResizable(false);
 
         userIDText.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         userIDText.setText("admin");
@@ -107,7 +115,9 @@ public class LoginDialog extends javax.swing.JDialog {
         loginButton.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         loginButton.setMnemonic('L');
         loginButton.setText(LOGIN_BTN.getContent());
-        loginButton.setPreferredSize(new java.awt.Dimension(100, 35));
+        loginButton.setMaximumSize(new Dimension(buttonWidthWide, buttonHeightNorm));
+        loginButton.setMinimumSize(new Dimension(buttonWidthWide, buttonHeightNorm));
+        loginButton.setPreferredSize(new Dimension(buttonWidthWide, buttonHeightNorm));
         loginButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 loginButtonActionPerformed(evt);
@@ -122,7 +132,9 @@ public class LoginDialog extends javax.swing.JDialog {
         closeButton.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         closeButton.setMnemonic('C');
         closeButton.setText(CLOSE_BTN.getContent());
-        closeButton.setPreferredSize(new java.awt.Dimension(100, 35));
+        closeButton.setMaximumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
+        closeButton.setMinimumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
+        closeButton.setPreferredSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
         closeButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 closeButtonActionPerformed(evt);
@@ -143,11 +155,16 @@ public class LoginDialog extends javax.swing.JDialog {
             }
         });
 
+        topPanel.add(Box.createHorizontalGlue());
+        topPanel.add(metaKeyLabel);
+        topPanel.add(Box.createHorizontalGlue());
+        topPanel.setPreferredSize(new java.awt.Dimension(346, 28));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 346, Short.MAX_VALUE)
+            .addComponent(topPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
                     .addGap(0, 0, Short.MAX_VALUE)
@@ -171,10 +188,13 @@ public class LoginDialog extends javax.swing.JDialog {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 190, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(topPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(183, Short.MAX_VALUE))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
-                    .addGap(0, 0, Short.MAX_VALUE)
+                    .addGap(0, 57, Short.MAX_VALUE)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addComponent(ID_Label, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(userIDText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -186,7 +206,7 @@ public class LoginDialog extends javax.swing.JDialog {
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addComponent(loginButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(closeButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGap(0, 0, Short.MAX_VALUE)))
+                    .addGap(0, 58, Short.MAX_VALUE)))
         );
 
         pack();
@@ -358,6 +378,7 @@ public class LoginDialog extends javax.swing.JDialog {
     private javax.swing.JButton closeButton;
     private javax.swing.JButton loginButton;
     private javax.swing.JPasswordField password;
+    private javax.swing.JPanel topPanel;
     private javax.swing.JTextField userIDText;
     // End of variables declaration//GEN-END:variables
 

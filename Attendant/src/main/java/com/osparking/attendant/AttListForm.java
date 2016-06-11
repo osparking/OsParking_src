@@ -1,4 +1,4 @@
-/* 
+/* 畇
  * Copyright (C) 2015, 2016  Open Source Parking, Inc.(www.osparking.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -16,6 +16,8 @@
  */
 package com.osparking.attendant;
 
+import static com.osparking.global.CommonData.buttonHeightNorm;
+import static com.osparking.global.CommonData.buttonWidthNorm;
 import static com.osparking.global.CommonData.metaKeyLabel;
 import static com.osparking.global.DataSheet.saveODSfile;
 import java.awt.Point;
@@ -1014,9 +1016,9 @@ public class AttListForm extends javax.swing.JFrame {
         createButton.setMnemonic('r');
         createButton.setText(CREATE_BTN.getContent());
         createButton.setEnabled(false);
-        createButton.setMaximumSize(new java.awt.Dimension(80, 60));
-        createButton.setMinimumSize(new java.awt.Dimension(80, 40));
-        createButton.setPreferredSize(new java.awt.Dimension(90, 40));
+        createButton.setMaximumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
+        createButton.setMinimumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
+        createButton.setPreferredSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
         createButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 createButtonActionPerformed(evt);
@@ -1125,9 +1127,9 @@ public class AttListForm extends javax.swing.JFrame {
         closeFormButton.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         closeFormButton.setMnemonic('c');
         closeFormButton.setText(CLOSE_BTN.getContent());
-        closeFormButton.setMaximumSize(new java.awt.Dimension(80, 60));
-        closeFormButton.setMinimumSize(new java.awt.Dimension(80, 60));
-        closeFormButton.setPreferredSize(new java.awt.Dimension(90, 40));
+        closeFormButton.setMaximumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
+        closeFormButton.setMinimumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
+        closeFormButton.setPreferredSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
         closeFormButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 closeFormButtonActionPerformed(evt);
@@ -2931,7 +2933,6 @@ public class AttListForm extends javax.swing.JFrame {
             public void run() {
                 try {
                     storePassingDelay = true;
-                    shortLicenseDialog(null, "Attendant Program", "upper left");
                     LoginDialog loginDialog = new LoginDialog(null, true);
                     loginDialog.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
                     loginDialog.addLoginEventListener(new LoginEventListener() {

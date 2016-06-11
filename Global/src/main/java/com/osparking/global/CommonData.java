@@ -28,6 +28,10 @@ import javax.swing.JLabel;
  * @author Open Source Parking, Inc.
  */
 public class CommonData {
+    public static final int buttonWidthNorm = 90; // Normal Width
+    public static final int buttonWidthWide = 110; // Wide Width
+    public static final int buttonHeightNorm = 40;
+    public static final int buttonHeightShort = 30;
     public static JLabel metaKeyLabel = new JLabel(META_KEY_LABEL.getContent());  
     static {
         metaKeyLabel.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
