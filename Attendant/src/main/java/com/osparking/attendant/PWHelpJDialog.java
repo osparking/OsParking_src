@@ -16,6 +16,15 @@
  */
 package com.osparking.attendant;
 
+import static com.osparking.global.CommonData.buttonHeightNorm;
+import static com.osparking.global.CommonData.buttonWidthNorm;
+import static com.osparking.global.CommonData.buttonWidthWide;
+import static com.osparking.global.Globals.font_Size;
+import static com.osparking.global.Globals.font_Style;
+import static com.osparking.global.Globals.font_Type;
+import static com.osparking.global.names.ControlEnums.ButtonTypes.CLOSE_BTN;
+import static com.osparking.global.names.ControlEnums.DialogMSGTypes.HOWTO_CLOSE_WINDOW_DIALOG;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import javax.swing.AbstractAction;
@@ -80,6 +89,7 @@ public class PWHelpJDialog extends javax.swing.JDialog {
         jScrollPane1 = new javax.swing.JScrollPane();
         HelpTextArea = new javax.swing.JTextArea();
         HelpTitleLabel = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
 
         setResizable(false);
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -88,7 +98,13 @@ public class PWHelpJDialog extends javax.swing.JDialog {
             }
         });
 
-        okButton.setText("OK");
+        okButton.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        okButton.setMnemonic('C');
+        okButton.setText(CLOSE_BTN.getContent());
+        okButton.setMargin(new java.awt.Insets(0, 0, 0, 0));
+        okButton.setMaximumSize(new Dimension(buttonWidthWide, buttonHeightNorm));
+        okButton.setMinimumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
+        okButton.setPreferredSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
         okButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 okButtonActionPerformed(evt);
@@ -105,6 +121,9 @@ public class PWHelpJDialog extends javax.swing.JDialog {
         HelpTitleLabel.setText("<Helo Dialog Title>");
         HelpTitleLabel.setToolTipText("");
 
+        jLabel1.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        jLabel1.setText(HOWTO_CLOSE_WINDOW_DIALOG.getContent());
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -113,8 +132,11 @@ public class PWHelpJDialog extends javax.swing.JDialog {
             .addGroup(layout.createSequentialGroup()
                 .addGap(25, 25, 25)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(okButton, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 297, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 297, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(okButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(23, 23, 23))
         );
         layout.setVerticalGroup(
@@ -122,10 +144,12 @@ public class PWHelpJDialog extends javax.swing.JDialog {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addComponent(HelpTitleLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 203, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 214, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(okButton)
-                .addContainerGap(23, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(okButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel1))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         getRootPane().setDefaultButton(okButton);
@@ -153,6 +177,7 @@ public class PWHelpJDialog extends javax.swing.JDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextArea HelpTextArea;
     private javax.swing.JLabel HelpTitleLabel;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JButton okButton;
     // End of variables declaration//GEN-END:variables

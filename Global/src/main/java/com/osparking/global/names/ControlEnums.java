@@ -144,6 +144,7 @@ public class ControlEnums {
         STATISTICS_SIZE_LABEL("통계 모집단 크기",  "Statistics Population Size"),
         RECORD_PASSING_LABEL("통과 시간 기록",  "Record Passing Delay"),
         PASSWORD_LEVEL_LABEL("비밀번호 난이도",  "Password Complexity Level"),
+        HOWTO_CHANGE_PW_STRENGTH("비밀번호 난이도 설정",  "Setting Password Complexity Level"),
         LOGGING_LEVEL_LABEL("일반연산 로깅 레벨",  "General Operation Logging Level"),
         LANGUAGE_LABEL("표시 언어",  "Language Chooser"),
         MAX_LINE_LABEL("메인 상황게시 최대 행수",  "Recent Event Line Max"),
@@ -361,6 +362,7 @@ public class ControlEnums {
     }
 
     public enum DialogMSGTypes {
+        HOWTO_CLOSE_WINDOW_DIALOG ("(창단기: 엔터키)", "(To close window: Enter Key)."),
         ID_CHECK_DIALOG ("아이디 중복검사가 필요합니다.", "Need to check if 'id' is usable(unoccupied)."),
         EMAIL_CHECK_DIALOG("이메일 중복검사가 필요합니다.", "Need to check if 'E-Mail' is usable(unoccupied)."),
         ATT_NAME_CHECK_DIALOG("  - 관리원 이름 두 글자 이상", "  - Name should be longer than 1 character"),
@@ -578,8 +580,6 @@ public class ControlEnums {
                 + "  - includes more than one number key(0-9)\n"
                 + "  - includes at least one special character shown below"
                 ),
-        
-//        SAME_DATA_INPUT_DIALOG("'에 같은 값이 존재합니다.", "Same data exists in '"),
         
         BUILDING_IN_DIALOG("건물 번호", "Building number"),
         ROOM_IN_DIALOG("호실 번호", "Room number"),

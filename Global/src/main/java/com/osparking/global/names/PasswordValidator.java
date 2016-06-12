@@ -16,12 +16,14 @@
  */
 package com.osparking.global.names;
 
-import static com.osparking.global.Globals.language;
 import static com.osparking.global.names.ControlEnums.DialogMSGTypes.PW_COMPLEX_DIALOG;
 import static com.osparking.global.names.ControlEnums.DialogMSGTypes.PW_FOURDIGIT_DIALOG;
 import static com.osparking.global.names.ControlEnums.DialogMSGTypes.PW_SIXDIGIT_DIALOG;
+import static com.osparking.global.names.ControlEnums.LabelContent.HOWTO_CHANGE_PW_STRENGTH;
+import static com.osparking.global.names.ControlEnums.LabelContent.PASSWORD_LEVEL_LABEL;
+import static com.osparking.global.names.ControlEnums.MenuITemTypes.SETTING_MENU_ITEM;
+import static com.osparking.global.names.ControlEnums.MenuITemTypes.SYSTEM_MENU;
 import static com.osparking.global.names.ControlEnums.ToolTipContent.*;
-import static com.osparking.global.names.DB_Access.parkingLotLocale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import static com.osparking.global.names.DB_Access.pwStrengthLevel;
@@ -92,16 +94,6 @@ public class PasswordValidator {
     private String getTextFor(ControlEnums.DialogMSGTypes msgType){
         StringBuilder sBuilder = new StringBuilder();
         
-        switch (parkingLotLocale.getLanguage()) {
-            case "ko":
-                sBuilder.append("* 다음 조건을 만족하는 비밀번호를 입력하세요.\n");
-                sBuilder.append("\n");
-                break;
-            default :
-                sBuilder.append("* Enter password satisfying below conditions:\n");
-                sBuilder.append("\n");
-                break;
-        }
         switch (msgType) {
             case PW_FOURDIGIT_DIALOG:
                 sBuilder.append(PW_FOURDIGIT_DIALOG.getContent());
@@ -124,6 +116,13 @@ public class PasswordValidator {
         default:
             break;
         }
+        
+        sBuilder.append("\n" + HOWTO_CHANGE_PW_STRENGTH.getContent());
+        sBuilder.append("\n" + 
+                SYSTEM_MENU.getContent() + " > " +
+                SETTING_MENU_ITEM.getContent() + " > " +
+                PASSWORD_LEVEL_LABEL.getContent() );
+
         return sBuilder.toString();
     }
 }
