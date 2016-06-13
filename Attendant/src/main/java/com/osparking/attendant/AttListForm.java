@@ -2215,20 +2215,20 @@ public class AttListForm extends javax.swing.JFrame {
 //        userPassword.setEnabled(b);
     }
     
-    private void ChangeFieldPropForAttendants(String rowID) {
-        managerAuthCheckBox.setEnabled(false);
-        createButton.setEnabled(false);       
-        deleteButton.setEnabled(false);
-        if (loginID.equals(rowID)) { 
-            // user manages self information
-            changeEnabledProperty(true);
-            multiFuncButton.setEnabled(true);  
-        } else {
-            // a user can't manage other user's information
-            changeEnabledProperty(false);
-            multiFuncButton.setEnabled(false);              
-        }
-    }
+//    private void ChangeFieldPropForAttendants(String rowID) {
+//        managerAuthCheckBox.setEnabled(false);
+//        createButton.setEnabled(false);       
+//        deleteButton.setEnabled(false);
+//        if (loginID.equals(rowID)) { 
+//            // user manages self information
+//            changeEnabledProperty(true);
+//            multiFuncButton.setEnabled(true);  
+//        } else {
+//            // a user can't manage other user's information
+//            changeEnabledProperty(false);
+//            multiFuncButton.setEnabled(false);              
+//        }
+//    }
 
     /**
      * Get out of attendant creation mode.
@@ -2943,9 +2943,53 @@ public class AttListForm extends javax.swing.JFrame {
                 multiFuncButton.setEnabled(false);         
             }            
         } else {
-            ChangeFieldPropForAttendants(rowID);
+//            ChangeFieldPropForAttendants(rowID);
+            managerAuthCheckBox.setEnabled(false);
+            createButton.setEnabled(false);       
+            deleteButton.setEnabled(false);
+            if (loginID.equals(rowID)) { 
+                // user manages self information
+                changeEnabledProperty(true);
+                multiFuncButton.setEnabled(true);  
+            } else {
+                // a user can't manage other user's information
+                changeEnabledProperty(false);
+                multiFuncButton.setEnabled(false);              
+            }
         }
     }
+    
+    private void changeFieldAndButtonProperties2(String rowID, boolean rowManager) {
+        if (loginID == null) {
+            return;
+        }
+        if (rowID.equals(loginID)) { // Self row is selected
+            deleteButton.setEnabled(false);
+            changeEnabledProperty(true);
+            multiFuncButton.setEnabled(true);              
+        } else if (loginID.equals("admin") || // non-admin is handled row by admin
+                isManager && !rowManager) // non-manager is handled row by manager
+        { 
+            deleteButton.setEnabled(true);
+            changeEnabledProperty(true);
+            multiFuncButton.setEnabled(true);                
+        } else {
+            deleteButton.setEnabled(false);
+            changeEnabledProperty(false);
+            multiFuncButton.setEnabled(false);                  
+        }
+            
+        // Attendant is created by who?
+        if (isManager) {
+            createButton.setEnabled(true);   
+            if (loginID.equals("admin")) {
+                managerAuthCheckBox.setEnabled(false);
+            }
+        } else {
+            createButton.setEnabled(false);       
+        }
+    }
+    
 
     private void SetTableColumnWidth() {
         usersTable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
