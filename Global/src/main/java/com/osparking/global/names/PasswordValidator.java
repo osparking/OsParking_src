@@ -28,6 +28,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import static com.osparking.global.names.DB_Access.pwStrengthLevel;
 import com.osparking.global.names.OSP_enums.PWStrengthLevel;
+import org.jsoup.Jsoup;
 
 public class PasswordValidator {
 
@@ -116,12 +117,6 @@ public class PasswordValidator {
         default:
             break;
         }
-        
-        sBuilder.append("\n" + HOWTO_CHANGE_PW_STRENGTH.getContent());
-        sBuilder.append("\n" + 
-                SYSTEM_MENU.getContent() + " > " +
-                SETTING_MENU_ITEM.getContent() + " > " +
-                PASSWORD_LEVEL_LABEL.getContent() );
 
         return sBuilder.toString();
     }

@@ -16,6 +16,7 @@
  */
 package com.osparking.attendant;
 
+import com.osparking.global.CommonData;
 import static com.osparking.global.CommonData.buttonHeightNorm;
 import static com.osparking.global.CommonData.buttonWidthNorm;
 import static com.osparking.global.CommonData.metaKeyLabel;
@@ -74,6 +75,7 @@ import static com.osparking.global.names.ControlEnums.FormModeString.MODIFY;
 import static com.osparking.global.names.ControlEnums.FormModeString.SEARCH;
 import static com.osparking.global.names.ControlEnums.LabelContent.*;
 import static com.osparking.global.names.ControlEnums.TableTypes.CELL_PHONE_HEADER;
+import static com.osparking.global.names.ControlEnums.TableTypes.CREATED_HEADER;
 import static com.osparking.global.names.ControlEnums.TableTypes.EMAIL_HEADER;
 import static com.osparking.global.names.ControlEnums.TableTypes.MANAGER_HEADER;
 import static com.osparking.global.names.ControlEnums.TableTypes.MODIFIED_HEADER;
@@ -103,6 +105,8 @@ import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.Box;
@@ -174,9 +178,7 @@ public class AttListForm extends javax.swing.JFrame {
                     }  
                 }  
             });             
-            
             usersTable.requestFocus();            
-
             usersTable.getRowSorter().addRowSorterListener(new RowSorterListener() {
                 @Override  
                 public void sorterChanged (final RowSorterEvent e) {  
@@ -186,11 +188,11 @@ public class AttListForm extends javax.swing.JFrame {
                         {  
                             if (e.getType () == RowSorterEvent.Type.SORTED)  
                             {  
-                                if (usersTable.getSelectedRow () != -1) {  
+                                if (usersTable.getSelectedRow () != -1) {
                                     usersTable.scrollRectToVisible 
                                         (usersTable.getCellRect 
                                             (usersTable.getSelectedRow(), 0, false));
-                                }  
+                                }
                             }  
                         }  
                     }); 
@@ -262,7 +264,6 @@ public class AttListForm extends javax.swing.JFrame {
         adminAuth2CheckBox = new javax.swing.JCheckBox();
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(5, 0), new java.awt.Dimension(5, 0), new java.awt.Dimension(5, 32767));
         topUserIdLabel = new javax.swing.JLabel();
-        filler46 = new javax.swing.Box.Filler(new java.awt.Dimension(40, 0), new java.awt.Dimension(40, 0), new java.awt.Dimension(60, 32767));
         westPanel = new javax.swing.JPanel();
         modePanel = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
@@ -383,7 +384,6 @@ public class AttListForm extends javax.swing.JFrame {
                 return false;   //Disallow the editing of any cell
             }
         };
-        filler3 = new javax.swing.Box.Filler(new java.awt.Dimension(40, 0), new java.awt.Dimension(40, 0), new java.awt.Dimension(40, 32767));
         southPanel = new javax.swing.JPanel();
         spacePanel1 = new javax.swing.JPanel();
         btnPanel = new javax.swing.JPanel();
@@ -394,18 +394,19 @@ public class AttListForm extends javax.swing.JFrame {
         multiFuncButton = new javax.swing.JButton();
         filler73 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 10), new java.awt.Dimension(10, 10), new java.awt.Dimension(10, 32767));
         cancelButton = new javax.swing.JButton();
-        filler22 = new javax.swing.Box.Filler(new java.awt.Dimension(90, 0), new java.awt.Dimension(90, 0), new java.awt.Dimension(32767, 32767));
+        filler22 = new javax.swing.Box.Filler(new java.awt.Dimension(15, 0), new java.awt.Dimension(90, 0), new java.awt.Dimension(32767, 32767));
+        searchPanel = new javax.swing.JPanel();
         searchCriteriaComboBox = new javax.swing.JComboBox();
-        filler85 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 10), new java.awt.Dimension(10, 10), new java.awt.Dimension(10, 32767));
+        filler85 = new javax.swing.Box.Filler(new java.awt.Dimension(5, 10), new java.awt.Dimension(5, 10), new java.awt.Dimension(5, 32767));
         searchText = new javax.swing.JTextField();
-        filler76 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 10), new java.awt.Dimension(10, 10), new java.awt.Dimension(10, 32767));
+        filler76 = new javax.swing.Box.Filler(new java.awt.Dimension(5, 10), new java.awt.Dimension(5, 10), new java.awt.Dimension(5, 32767));
         searchButton = new javax.swing.JButton();
         filler81 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 10), new java.awt.Dimension(10, 10), new java.awt.Dimension(10, 32767));
         saveOdsButton = new javax.swing.JButton();
         filler82 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 10), new java.awt.Dimension(10, 10), new java.awt.Dimension(10, 32767));
         closeFormButton = new javax.swing.JButton();
-        filler83 = new javax.swing.Box.Filler(new java.awt.Dimension(20, 0), new java.awt.Dimension(40, 0), new java.awt.Dimension(40, 32767));
         spacePanel2 = new javax.swing.JPanel();
+        filler3 = new javax.swing.Box.Filler(new java.awt.Dimension(40, 0), new java.awt.Dimension(40, 0), new java.awt.Dimension(40, 32767));
 
         saveFileChooser.setDialogType(javax.swing.JFileChooser.SAVE_DIALOG);
         saveFileChooser.setApproveButtonText(SAVE_BTN.getContent());
@@ -424,7 +425,8 @@ public class AttListForm extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle(ATTLIST_FRAME_TITLE.getContent()
         );
-        setMinimumSize(new java.awt.Dimension(1100, 710));
+        setMinimumSize(new java.awt.Dimension(1027, 665));
+        setPreferredSize(new java.awt.Dimension(1027, 665));
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 formWindowClosing(evt);
@@ -464,7 +466,6 @@ public class AttListForm extends javax.swing.JFrame {
         topUserIdLabel.setMaximumSize(new java.awt.Dimension(200, 26));
         topUserIdLabel.setPreferredSize(new java.awt.Dimension(99, 26));
         topInPanel.add(topUserIdLabel);
-        topInPanel.add(filler46);
 
         topPanel.add(topInPanel);
 
@@ -988,18 +989,18 @@ public class AttListForm extends javax.swing.JFrame {
         jLabel11.setText(ATTLIST_FRAME_TITLE.getContent());
         centerPanel.add(jLabel11, java.awt.BorderLayout.PAGE_START);
 
-        jScrollPane1.setMinimumSize(new java.awt.Dimension(600, 474));
+        jScrollPane1.setMinimumSize(new java.awt.Dimension(603, 474));
         jScrollPane1.setName(""); // NOI18N
-        jScrollPane1.setPreferredSize(new java.awt.Dimension(600, 474));
+        jScrollPane1.setPreferredSize(new java.awt.Dimension(603, 474));
 
         usersTable.setAutoCreateRowSorter(true);
         usersTable.setFont(new java.awt.Font(font_Type, 0, font_Size));
         usersTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
             },
             new String[]{
                 USER_ID_HEADER.getContent(),
@@ -1008,9 +1009,12 @@ public class AttListForm extends javax.swing.JFrame {
                 CELL_PHONE_HEADER.getContent(),
                 PHONE_HEADER.getContent(),
                 EMAIL_HEADER.getContent(),
+                CREATED_HEADER.getContent(),
                 MODIFIED_HEADER.getContent()
             }
         ));
+        TableColumnModel utcm = usersTable.getColumnModel();
+        utcm.removeColumn(utcm.getColumn(6));
         usersTable.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_ALL_COLUMNS);
         usersTable.setFillsViewportHeight(true);
         usersTable.setFocusCycleRoot(true);
@@ -1036,17 +1040,18 @@ public class AttListForm extends javax.swing.JFrame {
         centerPanel.add(jScrollPane1, java.awt.BorderLayout.CENTER);
 
         wholePanel.add(centerPanel, java.awt.BorderLayout.CENTER);
-        wholePanel.add(filler3, java.awt.BorderLayout.LINE_END);
 
-        southPanel.setMinimumSize(new java.awt.Dimension(920, 40));
-        southPanel.setPreferredSize(new java.awt.Dimension(761, 80));
+        southPanel.setMinimumSize(new java.awt.Dimension(980, 88));
+        southPanel.setPreferredSize(new java.awt.Dimension(980, 93));
         southPanel.setLayout(new javax.swing.BoxLayout(southPanel, javax.swing.BoxLayout.PAGE_AXIS));
+
+        spacePanel1.setPreferredSize(new java.awt.Dimension(980, 24));
 
         javax.swing.GroupLayout spacePanel1Layout = new javax.swing.GroupLayout(spacePanel1);
         spacePanel1.setLayout(spacePanel1Layout);
         spacePanel1Layout.setHorizontalGroup(
             spacePanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGap(0, 947, Short.MAX_VALUE)
         );
         spacePanel1Layout.setVerticalGroup(
             spacePanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1056,13 +1061,15 @@ public class AttListForm extends javax.swing.JFrame {
         southPanel.add(spacePanel1);
 
         btnPanel.setMaximumSize(new java.awt.Dimension(33747, 40));
-        btnPanel.setMinimumSize(new java.awt.Dimension(950, 40));
+        btnPanel.setMinimumSize(new java.awt.Dimension(980, 40));
+        btnPanel.setPreferredSize(new java.awt.Dimension(980, 45));
         btnPanel.setLayout(new javax.swing.BoxLayout(btnPanel, javax.swing.BoxLayout.LINE_AXIS));
 
         createButton.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         createButton.setMnemonic('r');
         createButton.setText(CREATE_BTN.getContent());
         createButton.setEnabled(false);
+        createButton.setMargin(new java.awt.Insets(0, 0, 0, 0));
         createButton.setMaximumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
         createButton.setMinimumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
         createButton.setPreferredSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
@@ -1078,9 +1085,10 @@ public class AttListForm extends javax.swing.JFrame {
         deleteButton.setMnemonic('d');
         deleteButton.setText(DELETE_BTN.getContent());
         deleteButton.setEnabled(false);
-        deleteButton.setMaximumSize(new java.awt.Dimension(80, 60));
-        deleteButton.setMinimumSize(new java.awt.Dimension(80, 60));
-        deleteButton.setPreferredSize(new java.awt.Dimension(90, 40));
+        deleteButton.setMargin(new java.awt.Insets(0, 0, 0, 0));
+        deleteButton.setMaximumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
+        deleteButton.setMinimumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
+        deleteButton.setPreferredSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
         deleteButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 deleteButtonActionPerformed(evt);
@@ -1093,9 +1101,10 @@ public class AttListForm extends javax.swing.JFrame {
         multiFuncButton.setMnemonic('m');
         multiFuncButton.setText(MODIFY_BTN.getContent());
         multiFuncButton.setEnabled(false);
-        multiFuncButton.setMaximumSize(new java.awt.Dimension(100, 60));
-        multiFuncButton.setMinimumSize(new java.awt.Dimension(80, 60));
-        multiFuncButton.setPreferredSize(new java.awt.Dimension(90, 40));
+        multiFuncButton.setMargin(new java.awt.Insets(0, 0, 0, 0));
+        multiFuncButton.setMaximumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
+        multiFuncButton.setMinimumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
+        multiFuncButton.setPreferredSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
         multiFuncButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 multiFuncButtonActionPerformed(evt);
@@ -1108,9 +1117,10 @@ public class AttListForm extends javax.swing.JFrame {
         cancelButton.setMnemonic('c');
         cancelButton.setText(CANCEL_BTN.getContent());
         cancelButton.setEnabled(false);
-        cancelButton.setMaximumSize(new java.awt.Dimension(80, 60));
-        cancelButton.setMinimumSize(new java.awt.Dimension(80, 60));
-        cancelButton.setPreferredSize(new java.awt.Dimension(90, 40));
+        cancelButton.setMargin(new java.awt.Insets(0, 0, 0, 0));
+        cancelButton.setMaximumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
+        cancelButton.setMinimumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
+        cancelButton.setPreferredSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
         cancelButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cancelButtonActionPerformed(evt);
@@ -1118,6 +1128,11 @@ public class AttListForm extends javax.swing.JFrame {
         });
         btnPanel.add(cancelButton);
         btnPanel.add(filler22);
+
+        searchPanel.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        searchPanel.setMinimumSize(new java.awt.Dimension(315, 40));
+        searchPanel.setPreferredSize(new java.awt.Dimension(311, 45));
+        searchPanel.setLayout(new javax.swing.BoxLayout(searchPanel, javax.swing.BoxLayout.LINE_AXIS));
 
         searchCriteriaComboBox.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         searchCriteriaComboBox.setModel(new javax.swing.DefaultComboBoxModel(
@@ -1129,29 +1144,32 @@ public class AttListForm extends javax.swing.JFrame {
         searchCriteriaComboBox.setMaximumSize(new java.awt.Dimension(100, 30));
         searchCriteriaComboBox.setMinimumSize(new java.awt.Dimension(100, 30));
         searchCriteriaComboBox.setPreferredSize(new java.awt.Dimension(100, 30));
-        btnPanel.add(searchCriteriaComboBox);
-        btnPanel.add(filler85);
+        searchPanel.add(searchCriteriaComboBox);
+        searchPanel.add(filler85);
 
         searchText.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         searchText.setToolTipText(SEARCH_INPUT_TOOLTIP.getContent());
         searchText.setMaximumSize(new java.awt.Dimension(200, 30));
         searchText.setMinimumSize(new java.awt.Dimension(80, 30));
         searchText.setPreferredSize(new java.awt.Dimension(120, 30));
-        btnPanel.add(searchText);
-        btnPanel.add(filler76);
+        searchPanel.add(searchText);
+        searchPanel.add(filler76);
 
         searchButton.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         searchButton.setMnemonic('S');
         searchButton.setText(SEARCH_BTN.getContent());
-        searchButton.setMaximumSize(new java.awt.Dimension(80, 60));
-        searchButton.setMinimumSize(new java.awt.Dimension(80, 60));
-        searchButton.setPreferredSize(new java.awt.Dimension(90, 40));
+        searchButton.setMargin(new java.awt.Insets(0, 0, 0, 0));
+        searchButton.setMaximumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
+        searchButton.setMinimumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
+        searchButton.setPreferredSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
         searchButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 searchButtonActionPerformed(evt);
             }
         });
-        btnPanel.add(searchButton);
+        searchPanel.add(searchButton);
+
+        btnPanel.add(searchPanel);
         btnPanel.add(filler81);
 
         saveOdsButton.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
@@ -1160,9 +1178,9 @@ public class AttListForm extends javax.swing.JFrame {
         saveOdsButton.setToolTipText(SAVE_AS_TOOLTIP.getContent());
         saveOdsButton.setAutoscrolls(true);
         saveOdsButton.setMargin(new java.awt.Insets(0, 0, 0, 0));
-        saveOdsButton.setMaximumSize(new java.awt.Dimension(140, 60));
-        saveOdsButton.setMinimumSize(new java.awt.Dimension(100, 40));
-        saveOdsButton.setPreferredSize(new java.awt.Dimension(110, 40));
+        saveOdsButton.setMaximumSize(new Dimension(CommonData.buttonWidthWide, buttonHeightNorm));
+        saveOdsButton.setMinimumSize(new Dimension(CommonData.buttonWidthWide, buttonHeightNorm));
+        saveOdsButton.setPreferredSize(new Dimension(CommonData.buttonWidthWide, buttonHeightNorm));
         saveOdsButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 saveOdsButtonActionPerformed(evt);
@@ -1174,6 +1192,7 @@ public class AttListForm extends javax.swing.JFrame {
         closeFormButton.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         closeFormButton.setMnemonic('c');
         closeFormButton.setText(CLOSE_BTN.getContent());
+        closeFormButton.setMargin(new java.awt.Insets(0, 0, 0, 0));
         closeFormButton.setMaximumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
         closeFormButton.setMinimumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
         closeFormButton.setPreferredSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
@@ -1183,19 +1202,20 @@ public class AttListForm extends javax.swing.JFrame {
             }
         });
         btnPanel.add(closeFormButton);
-        btnPanel.add(filler83);
 
         southPanel.add(btnPanel);
+
+        spacePanel2.setPreferredSize(new java.awt.Dimension(980, 24));
 
         javax.swing.GroupLayout spacePanel2Layout = new javax.swing.GroupLayout(spacePanel2);
         spacePanel2.setLayout(spacePanel2Layout);
         spacePanel2Layout.setHorizontalGroup(
             spacePanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGap(0, 947, Short.MAX_VALUE)
         );
         spacePanel2Layout.setVerticalGroup(
             spacePanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGap(0, 24, Short.MAX_VALUE)
         );
 
         southPanel.add(spacePanel2);
@@ -1203,8 +1223,9 @@ public class AttListForm extends javax.swing.JFrame {
         wholePanel.add(southPanel, java.awt.BorderLayout.SOUTH);
 
         getContentPane().add(wholePanel);
+        getContentPane().add(filler3);
 
-        setSize(new java.awt.Dimension(1054, 696));
+        setSize(new java.awt.Dimension(1035, 692));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
@@ -1475,7 +1496,8 @@ public class AttListForm extends javax.swing.JFrame {
         } else {
             if (wrongFields.toString().length() == 0)
                 userPassword.requestFocus();                    
-            wrongFields.append(ADMIN_PW_CHECK_DIALOG.getContent() + System.lineSeparator());
+            wrongFields.append(loginID + ADMIN_PW_CHECK_DIALOG.getContent() 
+                    + System.lineSeparator());
             result = false;
         }        
         errorMsg[0] = wrongFields.toString();
@@ -1758,6 +1780,8 @@ public class AttListForm extends javax.swing.JFrame {
             new2Password.setEnabled(true);
             // </editor-fold>     
 
+            // Set currend date to creation date text box
+            creationDateText.setText(new SimpleDateFormat("YYYY-MM-dd").format(new Date()));
             changeBoxEditability(true);
 
             // <editor-fold defaultstate="collapsed" desc="-- Change visibility lower buttons">
@@ -1824,15 +1848,12 @@ public class AttListForm extends javax.swing.JFrame {
     private void PWHelpButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PWHelpButtonActionPerformed
         pwValidator = new PasswordValidator();
         String helpText = pwValidator.getWrongPWFormatMsg(pwStrengthLevel);
-
         JDialog helpDialog = new PWHelpJDialog(this, false, 
                 ATT_HELP_DIALOGTITLE.getContent(), helpText);
-        Point buttonPoint = new Point();
-        PWHelpButton.getLocation(buttonPoint);
-
-        Point framePoint = new Point();
-        this.getLocation(framePoint);
-        Point topLeft = new Point(framePoint.x + buttonPoint.x + 60, framePoint.y + buttonPoint.y - 60);
+        int helpHt = helpDialog.getPreferredSize().height / 2;
+        Point buttonLoc = getLocationOnCurrentScreen(PWHelpButton);
+        Point topLeft = new Point(buttonLoc.x + 30, buttonLoc.y - helpHt);
+        
         helpDialog.setLocation(topLeft);
         helpDialog.setVisible(true);
     }//GEN-LAST:event_PWHelpButtonActionPerformed
@@ -2658,7 +2679,6 @@ public class AttListForm extends javax.swing.JFrame {
     private javax.swing.Box.Filler filler43;
     private javax.swing.Box.Filler filler44;
     private javax.swing.Box.Filler filler45;
-    private javax.swing.Box.Filler filler46;
     private javax.swing.Box.Filler filler47;
     private javax.swing.Box.Filler filler48;
     private javax.swing.Box.Filler filler49;
@@ -2694,7 +2714,6 @@ public class AttListForm extends javax.swing.JFrame {
     private javax.swing.Box.Filler filler80;
     private javax.swing.Box.Filler filler81;
     private javax.swing.Box.Filler filler82;
-    private javax.swing.Box.Filler filler83;
     private javax.swing.Box.Filler filler84;
     private javax.swing.Box.Filler filler85;
     private javax.swing.Box.Filler filler9;
@@ -2733,6 +2752,7 @@ public class AttListForm extends javax.swing.JFrame {
     private javax.swing.JButton saveOdsButton;
     private javax.swing.JButton searchButton;
     private javax.swing.JComboBox searchCriteriaComboBox;
+    private javax.swing.JPanel searchPanel;
     private javax.swing.JTextField searchText;
     private javax.swing.JPanel southPanel;
     private javax.swing.JPanel spacePanel1;
@@ -2763,7 +2783,7 @@ public class AttListForm extends javax.swing.JFrame {
         sb.append("if(isManager, 'Y', 'N') as 'Manager', ");
         sb.append("cellphone as 'Cell', phone as 'Phone', email as 'E-mail', ");
         sb.append("date_format(creationTime, '%Y-%m-%d') as 'Created', ");
-        sb.append("date_format(lastModiTime, '%Y-%m-%d %H:%i') as 'Modified' ");
+        sb.append("date_format(lastModiTime, '%Y-%m-%d') as 'Modified' ");
         sb.append("from users_osp");
         sb.append(searchCondition);
         try {

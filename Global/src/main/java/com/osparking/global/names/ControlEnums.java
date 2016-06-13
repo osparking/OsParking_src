@@ -144,7 +144,8 @@ public class ControlEnums {
         STATISTICS_SIZE_LABEL("통계 모집단 크기",  "Statistics Population Size"),
         RECORD_PASSING_LABEL("통과 시간 기록",  "Record Passing Delay"),
         PASSWORD_LEVEL_LABEL("비밀번호 난이도",  "Password Complexity Level"),
-        HOWTO_CHANGE_PW_STRENGTH("비밀번호 난이도 설정",  "Setting Password Complexity Level"),
+        HOWTO_CHANGE_PW_STRENGTH("\u203B 비밀번호 난이도 설정 단계:",
+                "\u203B Setting Password Complexity Level:"),
         LOGGING_LEVEL_LABEL("일반연산 로깅 레벨",  "General Operation Logging Level"),
         LANGUAGE_LABEL("표시 언어",  "Language Chooser"),
         MAX_LINE_LABEL("메인 상황게시 최대 행수",  "Recent Event Line Max"),
@@ -326,6 +327,7 @@ public class ControlEnums {
         CELL_PHONE_HEADER("휴대전화", "Cell Phone"),
         PHONE_HEADER("유선전화", "Phone"),
         EMAIL_HEADER("이메일", "E-mail"),
+        CREATED_HEADER("생성날짜", "Created"),
         MODIFIED_HEADER("수정날짜", "Modified"),
         ORDER_HEADER("순번", "Order"),
         HIGHER_HEADER("상위 소속", "Higher Affiliation"),
@@ -372,9 +374,9 @@ public class ControlEnums {
         CELL_PHONE_CHECK_DIALOG(
                 "  - 전화번호 나 휴대폰 중 하나 입력", "  - Either phone, cell-phone or both is needed"),
         PASSWORD_CHECK_DIALOG(
-                "  - 비밀번호 형식이 요구사항과 맞지 않음.", "  - Password doesn't meet syntax requirements"),
+                "  - 비밀번호 형식이 요구조건에 부합하지 않음.", "  - Password doesn't meet syntax requirements"),
         REPEAT_PW_CHECK_ERROR("  - 새 비밀번호 반복입력 불일치", "  - New passwords don't match"),
-        ADMIN_PW_CHECK_DIALOG("  - 관리원 비밀번호 오류", "  - Your Password is Wrong!"),
+        ADMIN_PW_CHECK_DIALOG(" 비밀번호 틀림!", "'s Password is Wrong!"),
         DELETE_FAIL_DAILOG("비밀번호가 올바르지 않습니다.", "Password is wrong!"),
         ID_LENGTH_CHECK_DIALOG("아이디는 두 자 이상이어야 합니다.", "ID should consists of at least 2 characters."),
         ID_FIRST_CHAR_CHECK_DIALOG(
