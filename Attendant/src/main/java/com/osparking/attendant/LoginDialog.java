@@ -96,8 +96,13 @@ public class LoginDialog extends javax.swing.JDialog {
         setResizable(false);
 
         userIDText.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        userIDText.setText("clerk");
+        userIDText.setText("guest");
         userIDText.setPreferredSize(new java.awt.Dimension(80, 30));
+        userIDText.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                userIDTextActionPerformed(evt);
+            }
+        });
 
         ID_Label.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         ID_Label.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
@@ -309,6 +314,10 @@ public class LoginDialog extends javax.swing.JDialog {
             handleLoginAttempt();
         }
     }//GEN-LAST:event_passwordKeyPressed
+
+    private void userIDTextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_userIDTextActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_userIDTextActionPerformed
 
     /**
      * @param args the command line arguments

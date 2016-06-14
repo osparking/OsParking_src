@@ -209,7 +209,7 @@ public class AttListForm extends javax.swing.JFrame {
             public void windowOpened( WindowEvent e ){
                 searchText.requestFocus();
             }
-        });           
+        });
         attachEnterHandler(searchText);
         adminAuth2CheckBox.setSelected(isManager);
     }
@@ -294,7 +294,7 @@ public class AttListForm extends javax.swing.JFrame {
         filler32 = new javax.swing.Box.Filler(new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 32767));
         adminAuthLabel = new javax.swing.JLabel();
         filler37 = new javax.swing.Box.Filler(new java.awt.Dimension(50, 0), new java.awt.Dimension(50, 0), new java.awt.Dimension(60, 32767));
-        managerAuthCheckBox = new javax.swing.JCheckBox();
+        managerCheckBox = new javax.swing.JCheckBox();
         filler9 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 10), new java.awt.Dimension(0, 10), new java.awt.Dimension(32767, 10));
         namePanel = new javax.swing.JPanel();
         filler35 = new javax.swing.Box.Filler(new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 32767));
@@ -426,7 +426,6 @@ public class AttListForm extends javax.swing.JFrame {
         setTitle(ATTLIST_FRAME_TITLE.getContent()
         );
         setMinimumSize(new java.awt.Dimension(1027, 665));
-        setPreferredSize(new java.awt.Dimension(1027, 665));
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 formWindowClosing(evt);
@@ -629,10 +628,10 @@ public class AttListForm extends javax.swing.JFrame {
         adminPanel.add(adminAuthLabel);
         adminPanel.add(filler37);
 
-        managerAuthCheckBox.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        managerAuthCheckBox.setEnabled(false);
-        managerAuthCheckBox.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
-        adminPanel.add(managerAuthCheckBox);
+        managerCheckBox.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        managerCheckBox.setEnabled(false);
+        managerCheckBox.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
+        adminPanel.add(managerCheckBox);
 
         westPanel.add(adminPanel);
         westPanel.add(filler9);
@@ -1269,7 +1268,7 @@ public class AttListForm extends javax.swing.JFrame {
         try {
             switch (formMode) {
                 case NormalMode:
-                    // <editor-fold defaultstate="collapsed" desc="-- Prepare to change user information">
+                    // <editor-fold defaultstate="collapsed" desc="-- Prepare to update user information">
                     setFormMode(FormMode.UpdateMode);
                     multiFuncButton.setText(SAVE_BTN.getContent());
                     multiFuncButton.setMnemonic('s');
@@ -1400,7 +1399,7 @@ public class AttListForm extends javax.swing.JFrame {
             } else {
                 updateAttendant.setString(pIndex++, email);
             }
-            if (managerAuthCheckBox.isSelected()) {
+            if (managerCheckBox.isSelected()) {
                 updateAttendant.setInt(pIndex++, 1);
             } else {
                 updateAttendant.setInt(pIndex++, 0);
@@ -1746,7 +1745,8 @@ public class AttListForm extends javax.swing.JFrame {
                 case KeyEvent.VK_PAGE_UP: key = "Next Page Arrow"; break;
                 case KeyEvent.VK_PAGE_DOWN: key = "Prev Page Arrow"; break;
             }
-            logParkingException(Level.SEVERE, ex, "(User Action: " + key + " key entered while surfing user list)");
+            logParkingException(Level.SEVERE, ex, 
+                    "(User Action: " + key + " key entered while surfing user list)");
         }
     }//GEN-LAST:event_usersTableKeyPressed
 
@@ -1763,8 +1763,8 @@ public class AttListForm extends javax.swing.JFrame {
 
             checkIDButton.setEnabled(true);
             if (loginID.equals("admin"))
-                managerAuthCheckBox.setEnabled(true);        
-            managerAuthCheckBox.setSelected(false);
+                managerCheckBox.setEnabled(true);        
+            managerCheckBox.setSelected(false);
 
             changeEnabledProperty(true);
             userNameText.setText("");
@@ -1786,6 +1786,7 @@ public class AttListForm extends javax.swing.JFrame {
 
             // <editor-fold defaultstate="collapsed" desc="-- Change visibility lower buttons">
             createButton.setEnabled(false);
+            deleteButton.setEnabled(false);
             multiFuncButton.setText(SAVE_BTN.getContent());
             multiFuncButton.setMnemonic('s');
             multiFuncButton.setEnabled(true);
@@ -2043,7 +2044,6 @@ public class AttListForm extends javax.swing.JFrame {
                     }                    
                     
                     JOptionPane.showConfirmDialog(this, dialogMessage,
-//                            getTextFor(ID_CHECK_GOOD_DIALOG, userIDText.getText().trim()),
                             ATT_ID_DUP_CHCEK_DIALOGTITLE.getContent(), 
                              JOptionPane.PLAIN_MESSAGE, INFORMATION_MESSAGE);
                 } else {
@@ -2212,24 +2212,8 @@ public class AttListForm extends javax.swing.JFrame {
         cellPhoneText.setEnabled(b);
         phoneText.setEnabled(b);
         emailAddrText.setEnabled(b);
-//        userPassword.setEnabled(b);
     }
     
-//    private void ChangeFieldPropForAttendants(String rowID) {
-//        managerAuthCheckBox.setEnabled(false);
-//        createButton.setEnabled(false);       
-//        deleteButton.setEnabled(false);
-//        if (loginID.equals(rowID)) { 
-//            // user manages self information
-//            changeEnabledProperty(true);
-//            multiFuncButton.setEnabled(true);  
-//        } else {
-//            // a user can't manage other user's information
-//            changeEnabledProperty(false);
-//            multiFuncButton.setEnabled(false);              
-//        }
-//    }
-
     /**
      * Get out of attendant creation mode.
      * @param created tells whether a new attendant is created or not.
@@ -2279,7 +2263,7 @@ public class AttListForm extends javax.swing.JFrame {
         ShowAttendantDetail(usersTable.convertRowIndexToModel(selectedRowIndex));     
         
         // <editor-fold defaultstate="collapsed" desc="-- Disable login ID related controls in search mode">            
-        managerAuthCheckBox.setEnabled(false);        
+        managerCheckBox.setEnabled(false);        
         userIDText.setEnabled(false); 
         userIDText.setEditable(false);       
         checkIDButton.setEnabled(false); 
@@ -2368,7 +2352,7 @@ public class AttListForm extends javax.swing.JFrame {
             } else {
                 createAttendant.setString(pIndex++, email);
             }
-            if (managerAuthCheckBox.isSelected()) {
+            if (managerCheckBox.isSelected()) {
                 createAttendant.setInt(pIndex++, 1);
             } else {
                 createAttendant.setInt(pIndex++, 0);
@@ -2476,9 +2460,9 @@ public class AttListForm extends javax.swing.JFrame {
             // No user can change self 'admin' property
             // No user with admin right can change admin property of user 'admin'
             if (loginID.equals("admin")) {
-                managerAuthCheckBox.setEnabled(flag);
+                managerCheckBox.setEnabled(flag);
                 if (flag) {
-                    managerAuthCheckBox.requestFocusInWindow();
+                    managerCheckBox.requestFocusInWindow();
                 }
             }
         } else {
@@ -2490,7 +2474,7 @@ public class AttListForm extends javax.swing.JFrame {
         }
         changePWCheckBox.setEnabled(flag);
         if(isAdminRerocd && notOwnRecord)
-            managerAuthCheckBox.setEnabled(flag);
+            managerCheckBox.setEnabled(flag);
         changeBoxEditability(flag);
     }
 
@@ -2524,7 +2508,7 @@ public class AttListForm extends javax.swing.JFrame {
 
         sBuild.append("User Info Modification Summany=>" + System.lineSeparator());
         sBuild.append("\tModified User ID: " + userIDText.getText());
-        sBuild.append(",\tIs Admin: " + (managerAuthCheckBox.isSelected() ? "Yes" : "No"));
+        sBuild.append(",\tIs Admin: " + (managerCheckBox.isSelected() ? "Yes" : "No"));
         sBuild.append(System.lineSeparator());
         
         sBuild.append("\tName: " + userNameText.getText().trim());
@@ -2548,33 +2532,29 @@ public class AttListForm extends javax.swing.JFrame {
             case CreateMode:
                 modeString.setText(CREATE.getContent());
                 legendLLabel.setText(CREATE_COND.getContent());
-                userPassword.setEnabled(true);
-                userPassword.setEditable(true);
+                enableUserPassword(true);
                 setSearchEnabled(false);
                 break;
             case NormalMode:
                 modeString.setText(SEARCH.getContent());
                 legendLLabel.setText(DATA_COND.getContent());
                 if (isDeletableByMe(userIDText.getText())) {
-                    userPassword.setEnabled(true);
-                    userPassword.setEditable(true);
+                    enableUserPassword(true);
                 } else {
-                    userPassword.setEnabled(false);
-                    userPassword.setEditable(false);
+                    enableUserPassword(false);
                 }
                 setSearchEnabled(true);
                 break;
             case UpdateMode:
                 modeString.setText(MODIFY.getContent());
                 legendLLabel.setText(MODIFY_COND.getContent());
-                userPassword.setEnabled(true);
-                userPassword.setEditable(true);
+                enableUserPassword(true);
                 setSearchEnabled(false);
                 break;
             default:
                 break;
         }
-    } 
+    }
 
     private boolean rowInVisible(JTable usersTable, int i) {
         Rectangle vr = usersTable.getVisibleRect ();
@@ -2586,6 +2566,11 @@ public class AttListForm extends javax.swing.JFrame {
         } else {
             return true;
         }
+    }
+
+    private void enableUserPassword(boolean flag) {
+        userPassword.setEnabled(flag);
+        userPassword.setEditable(flag);    
     }
 
     class TextFileOnly extends javax.swing.filechooser.FileFilter {
@@ -2730,7 +2715,7 @@ public class AttListForm extends javax.swing.JFrame {
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JLabel legendLLabel;
     private javax.swing.JPanel loginPanel;
-    private javax.swing.JCheckBox managerAuthCheckBox;
+    private javax.swing.JCheckBox managerCheckBox;
     private javax.swing.JPanel modePanel;
     private javax.swing.JLabel modeString;
     private javax.swing.JButton multiFuncButton;
@@ -2835,7 +2820,7 @@ public class AttListForm extends javax.swing.JFrame {
             boolean isManager = (attModel.getValueAt(clickedRow, 2).toString().equals("Y") ? true : false);
         
             userIDText.setText(tableRowID);
-            changeFieldAndButtonProperties(tableRowID, isManager);
+            changeFieldButtonUsability(tableRowID, isManager);
         
             field = attModel.getValueAt(clickedRow, 5);
             if (field == null) {
@@ -2853,7 +2838,7 @@ public class AttListForm extends javax.swing.JFrame {
         }
         userNameText.setText(attModel.getValueAt(clickedRow, 1).toString());
         String adminAuthority = attModel.getValueAt(clickedRow, 2).toString();
-        managerAuthCheckBox.setSelected(adminAuthority.equals("Y"));
+        managerCheckBox.setSelected(adminAuthority.equals("Y"));
         
         // <editor-fold defaultstate="collapsed" desc="-- 2 Display or copy phone number">            
         field = attModel.getValueAt(clickedRow, 3);
@@ -2904,77 +2889,27 @@ public class AttListForm extends javax.swing.JFrame {
             }
         }
     }    
-    
-    private void changeFieldAndButtonProperties(String rowID, boolean rowManager) {
+ 
+    private void changeFieldButtonUsability(String rowID, boolean rowForManager) {
         if (loginID == null) {
             return;
         }
-        if (isManager) {            
-            createButton.setEnabled(true);            
-            if (rowID.equals("admin")) {
-                deleteButton.setEnabled(false);
-                if (loginID.equals("admin")) {
-                    // admin manages self information
-                    changeEnabledProperty(true);
-                    multiFuncButton.setEnabled(true);  
-                    //CurrentPassword.setEnabled(false);
-                } else {
-                    // non-admin administrator attendant manages admin's information
-                    // (cf. average attendant can be an administrator but not an 'admin'.
-                    // 'admin' is a special ID which is unique in the OsParking system.
-                    changeEnabledProperty(false);
-                    multiFuncButton.setEnabled(false);            
-                }
-            } else if (rowID.equals(loginID)){
-                // administrator's self information management
-                // can't delete his/her own record
-                deleteButton.setEnabled(false);
-                changeEnabledProperty(true);
-                multiFuncButton.setEnabled(true);         
-            } else if (!rowManager || loginID.equals("admin")){
-                deleteButton.setEnabled(true);
-                changeEnabledProperty(true);
-                multiFuncButton.setEnabled(true);         
-            } else {
-                // non-admin attendant's information management by administrator
-                // : update and deletion are possible
-                deleteButton.setEnabled(false);
-                changeEnabledProperty(false);
-                multiFuncButton.setEnabled(false);         
-            }            
-        } else {
-//            ChangeFieldPropForAttendants(rowID);
-            managerAuthCheckBox.setEnabled(false);
-            createButton.setEnabled(false);       
+        if (rowID.equals(loginID)) { 
+            // Login user self information is under consideration.
             deleteButton.setEnabled(false);
-            if (loginID.equals(rowID)) { 
-                // user manages self information
-                changeEnabledProperty(true);
-                multiFuncButton.setEnabled(true);  
-            } else {
-                // a user can't manage other user's information
-                changeEnabledProperty(false);
-                multiFuncButton.setEnabled(false);              
-            }
-        }
-    }
-    
-    private void changeFieldAndButtonProperties2(String rowID, boolean rowManager) {
-        if (loginID == null) {
-            return;
-        }
-        if (rowID.equals(loginID)) { // Self row is selected
-            deleteButton.setEnabled(false);
+            enableUserPassword(false);
             changeEnabledProperty(true);
             multiFuncButton.setEnabled(true);              
         } else if (loginID.equals("admin") || // non-admin is handled row by admin
-                isManager && !rowManager) // non-manager is handled row by manager
+                isManager && !rowForManager) // non-manager is handled row by manager
         { 
             deleteButton.setEnabled(true);
+            enableUserPassword(true);
             changeEnabledProperty(true);
             multiFuncButton.setEnabled(true);                
         } else {
             deleteButton.setEnabled(false);
+            enableUserPassword(false);
             changeEnabledProperty(false);
             multiFuncButton.setEnabled(false);                  
         }
@@ -2982,11 +2917,9 @@ public class AttListForm extends javax.swing.JFrame {
         // Attendant is created by who?
         if (isManager) {
             createButton.setEnabled(true);   
-            if (loginID.equals("admin")) {
-                managerAuthCheckBox.setEnabled(false);
-            }
         } else {
             createButton.setEnabled(false);       
+            managerCheckBox.setEnabled(false);
         }
     }
     
