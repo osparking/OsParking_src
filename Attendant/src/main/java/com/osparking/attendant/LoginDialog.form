@@ -202,10 +202,10 @@
         </Property>
       </Properties>
       <AuxValues>
-        <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="topPanel.add(Box.createHorizontalGlue());&#xa;topPanel.add(metaKeyLabel);&#xa;topPanel.add(Box.createHorizontalGlue());"/>
+        <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="metaKeyLeftFiller = new javax.swing.Box.Filler(new java.awt.Dimension(40, 0), new java.awt.Dimension(40, 0), new java.awt.Dimension(40, 32767));&#xa;topPanel.add(metaKeyLeftFiller);&#xa;topPanel.add(metaKeyLabel);&#xa;//topPanel.add(Box.createHorizontalGlue());"/>
       </AuxValues>
 
-      <Layout class="org.netbeans.modules.form.compat2.layouts.DesignFlowLayout"/>
+      <Layout class="org.netbeans.modules.form.compat2.layouts.DesignBoxLayout"/>
     </Container>
   </SubComponents>
 </Form>

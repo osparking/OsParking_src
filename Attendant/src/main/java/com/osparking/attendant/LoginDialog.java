@@ -160,10 +160,12 @@ public class LoginDialog extends javax.swing.JDialog {
             }
         });
 
-        topPanel.add(Box.createHorizontalGlue());
+        metaKeyLeftFiller = new javax.swing.Box.Filler(new java.awt.Dimension(40, 0), new java.awt.Dimension(40, 0), new java.awt.Dimension(40, 32767));
+        topPanel.add(metaKeyLeftFiller);
         topPanel.add(metaKeyLabel);
-        topPanel.add(Box.createHorizontalGlue());
+        //topPanel.add(Box.createHorizontalGlue());
         topPanel.setPreferredSize(new java.awt.Dimension(346, 28));
+        topPanel.setLayout(new javax.swing.BoxLayout(topPanel, javax.swing.BoxLayout.LINE_AXIS));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -391,6 +393,8 @@ public class LoginDialog extends javax.swing.JDialog {
     private javax.swing.JTextField userIDText;
     // End of variables declaration//GEN-END:variables
 
+    private javax.swing.Box.Filler metaKeyLeftFiller;
+    
     private void fireLoginEvent(LoginWindowEvent loginEvent) {
         Object[] listeners = loginListeners.getListenerList();
         for (int i = 0; i < listeners.length; i = i+2) {

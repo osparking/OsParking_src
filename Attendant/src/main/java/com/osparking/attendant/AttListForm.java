@@ -24,11 +24,7 @@ import static com.osparking.global.CommonData.pointColor;
 import static com.osparking.global.DataSheet.saveODSfile;
 import java.awt.Point;
 import java.awt.event.KeyEvent;
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -62,7 +58,6 @@ import static com.osparking.global.names.ControlEnums.DialogTitleTypes.ATT_EMAIL
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.ATT_EMAIL_SYNTAX_CHECK_DIALOG;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.ATT_HELP_DIALOGTITLE;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.ATT_ID_DUP_CHCEK_DIALOGTITLE;
-import static com.osparking.global.names.ControlEnums.DialogTitleTypes.ATT_SFAVE_AS_SUCCESS_DIALOGTITLE;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.ATT_USER_UPDATE_DIALOGTITLE;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.CREATION_RESULT_DIALOGTITLE;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.CREATTION_FAIL_DIALOGTITLE;
@@ -262,8 +257,6 @@ public class AttListForm extends javax.swing.JFrame {
         topPanel = new javax.swing.JPanel();
         filler23 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 10), new java.awt.Dimension(0, 10), new java.awt.Dimension(32767, 10));
         topInPanel = new javax.swing.JPanel();
-        filler_w205 = new javax.swing.Box.Filler(new java.awt.Dimension(187, 0), new java.awt.Dimension(205, 0), new java.awt.Dimension(2000, 0));
-        filler21 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
         adminAuth2CheckBox = new javax.swing.JCheckBox();
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(5, 0), new java.awt.Dimension(5, 0), new java.awt.Dimension(5, 32767));
         topUserIdLabel = new javax.swing.JLabel();
@@ -445,8 +438,6 @@ public class AttListForm extends javax.swing.JFrame {
         topInPanel.setMinimumSize(new java.awt.Dimension(267, 26));
         topInPanel.setPreferredSize(new java.awt.Dimension(267, 26));
         topInPanel.setLayout(new javax.swing.BoxLayout(topInPanel, javax.swing.BoxLayout.LINE_AXIS));
-        topInPanel.add(filler_w205);
-        topInPanel.add(filler21);
 
         adminAuth2CheckBox.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         adminAuth2CheckBox.setText(MANAGER_HEADER.getContent());
@@ -456,6 +447,11 @@ public class AttListForm extends javax.swing.JFrame {
         adminAuth2CheckBox.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
         topInPanel.add(metaKeyLabel);
         topInPanel.add(Box.createHorizontalGlue());
+        adminAuth2CheckBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                adminAuth2CheckBoxActionPerformed(evt);
+            }
+        });
         topInPanel.add(adminAuth2CheckBox);
         topInPanel.add(filler1);
 
@@ -1054,7 +1050,7 @@ public class AttListForm extends javax.swing.JFrame {
         usersTable.setMinimumSize(new java.awt.Dimension(600, 474));
         usersTable.setName(""); // NOI18N
         usersTable.setNextFocusableComponent(userNameText);
-        usersTable.setPreferredSize(new java.awt.Dimension(600, 5000));
+        usersTable.setPreferredSize(new java.awt.Dimension(600, 1200));
         usersTable.setRowHeight(22);
         usersTable.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -2190,6 +2186,10 @@ public class AttListForm extends javax.swing.JFrame {
                 phoneText.getText().trim().equals(phoneOrig));            
     }//GEN-LAST:event_phoneTextKeyReleased
 
+    private void adminAuth2CheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_adminAuth2CheckBoxActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_adminAuth2CheckBoxActionPerformed
+
     private void clearPasswordFields() {
         userPassword.setText("");
         new1Password.setText("");
@@ -2679,7 +2679,6 @@ public class AttListForm extends javax.swing.JFrame {
     private javax.swing.Box.Filler filler18;
     private javax.swing.Box.Filler filler19;
     private javax.swing.Box.Filler filler20;
-    private javax.swing.Box.Filler filler21;
     private javax.swing.Box.Filler filler22;
     private javax.swing.Box.Filler filler23;
     private javax.swing.Box.Filler filler28;
@@ -2736,7 +2735,6 @@ public class AttListForm extends javax.swing.JFrame {
     private javax.swing.Box.Filler filler82;
     private javax.swing.Box.Filler filler84;
     private javax.swing.Box.Filler filler9;
-    private javax.swing.Box.Filler filler_w205;
     private javax.swing.JPanel idCheckPanel;
     private javax.swing.JLabel isIDreqLabel;
     private javax.swing.JLabel jLabel1;
