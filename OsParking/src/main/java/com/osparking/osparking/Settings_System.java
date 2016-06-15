@@ -3556,29 +3556,6 @@ public class Settings_System extends javax.swing.JFrame {
         }    
     }
 
-    private void reflectE_BoardTypeChange(int gateNo) {
-        JComboBox typeCBox = (JComboBox)componentMap.get("E_Board" + gateNo + "_TypeCBox");
-        
-        if (typeCBox.getSelectedIndex() == E_BoardType.Simulator.ordinal()) { 
-            EBoardSettingsButton.setText("Simulator");
-            changeCycleCBoxEnabled(true);
-        } else if (typeCBox.getSelectedIndex() == E_BoardType.LEDnotice.ordinal()) {
-            EBoardSettingsButton.setText("LEDnotice");
-            changeCycleCBoxEnabled(false);
-        }
-        
-        if (typeCBox.getSelectedIndex() == deviceType[E_Board.ordinal()][gateNo]) {
-            changeEnabled_of_SaveCancelButtons(false);
-        } else {
-            changeEnabled_of_SaveCancelButtons(true);
-        }        
-    }
-
-    private void changeCycleCBoxEnabled(boolean b) {
-        BlinkingComboBox.setEnabled(b);
-        FlowingComboBox.setEnabled(b);
-    }
-
     private void changeSaveEnabledForDeviceType(DeviceType currDevType, int gateNo) {
         JComboBox cBox = (JComboBox)componentMap.get("" + currDevType + gateNo + "_TypeCBox");
         

@@ -100,6 +100,7 @@ import static com.osparking.global.names.JDBCMySQL.getHashedPW;
 import com.osparking.global.names.JTextFieldLimit;
 import com.osparking.global.names.OSP_enums.OpLogLevel;
 import com.osparking.global.names.ParentGUI;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
@@ -107,6 +108,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashSet;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.Box;
@@ -135,6 +137,7 @@ public class AttListForm extends javax.swing.JFrame {
     private PasswordValidator pwValidator; 
     ParentGUI mainGUI;
     boolean isStandalone = false;
+    private HashSet<Component> changedControls = new HashSet<Component>();    
     
     /**
      * Creates new form AttListForm
@@ -397,9 +400,7 @@ public class AttListForm extends javax.swing.JFrame {
         filler22 = new javax.swing.Box.Filler(new java.awt.Dimension(15, 0), new java.awt.Dimension(90, 0), new java.awt.Dimension(32767, 32767));
         searchPanel = new javax.swing.JPanel();
         searchCriteriaComboBox = new javax.swing.JComboBox();
-        filler85 = new javax.swing.Box.Filler(new java.awt.Dimension(5, 10), new java.awt.Dimension(5, 10), new java.awt.Dimension(5, 32767));
         searchText = new javax.swing.JTextField();
-        filler76 = new javax.swing.Box.Filler(new java.awt.Dimension(5, 10), new java.awt.Dimension(5, 10), new java.awt.Dimension(5, 32767));
         searchButton = new javax.swing.JButton();
         filler81 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 10), new java.awt.Dimension(10, 10), new java.awt.Dimension(10, 32767));
         saveOdsButton = new javax.swing.JButton();
@@ -578,11 +579,6 @@ public class AttListForm extends javax.swing.JFrame {
         userIDText.setMaximumSize(new java.awt.Dimension(32767, 30));
         userIDText.setMinimumSize(new java.awt.Dimension(80, 26));
         userIDText.setPreferredSize(new java.awt.Dimension(80, 26));
-        userIDText.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                userIDTextActionPerformed(evt);
-            }
-        });
         userIDText.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 newIDtyped(evt);
@@ -638,6 +634,11 @@ public class AttListForm extends javax.swing.JFrame {
         managerCheckBox.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         managerCheckBox.setEnabled(false);
         managerCheckBox.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
+        managerCheckBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                managerCheckBoxActionPerformed(evt);
+            }
+        });
         adminPanel.add(managerCheckBox);
 
         westPanel.add(adminPanel);
@@ -674,15 +675,20 @@ public class AttListForm extends javax.swing.JFrame {
         userNameText.setMinimumSize(new java.awt.Dimension(80, 30));
         userNameText.setName(""); // NOI18N
         userNameText.setPreferredSize(new java.awt.Dimension(80, 30));
+        userNameText.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                userNameTextKeyReleased(evt);
+            }
+        });
         namePanel.add(userNameText);
         namePanel.add(filler38);
 
         westPanel.add(namePanel);
         westPanel.add(filler10);
 
-        cellPhonePanel.setMaximumSize(new java.awt.Dimension(32877, 28));
+        cellPhonePanel.setMaximumSize(new java.awt.Dimension(32877, 30));
         cellPhonePanel.setMinimumSize(new java.awt.Dimension(300, 26));
-        cellPhonePanel.setPreferredSize(new java.awt.Dimension(300, 26));
+        cellPhonePanel.setPreferredSize(new java.awt.Dimension(300, 30));
         cellPhonePanel.setLayout(new javax.swing.BoxLayout(cellPhonePanel, javax.swing.BoxLayout.LINE_AXIS));
         cellPhonePanel.add(filler36);
 
@@ -710,17 +716,22 @@ public class AttListForm extends javax.swing.JFrame {
         cellPhoneText.setToolTipText(CELL_INPUT_TOOLTIP.getContent());
         cellPhoneText.setEnabled(false);
         cellPhoneText.setMaximumSize(new java.awt.Dimension(32767, 30));
-        cellPhoneText.setMinimumSize(new java.awt.Dimension(80, 21));
-        cellPhoneText.setPreferredSize(new java.awt.Dimension(80, 21));
+        cellPhoneText.setMinimumSize(new java.awt.Dimension(80, 30));
+        cellPhoneText.setPreferredSize(new java.awt.Dimension(80, 30));
+        cellPhoneText.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                cellPhoneTextKeyReleased(evt);
+            }
+        });
         cellPhonePanel.add(cellPhoneText);
         cellPhonePanel.add(filler49);
 
         westPanel.add(cellPhonePanel);
         westPanel.add(filler11);
 
-        phonePanel.setMaximumSize(new java.awt.Dimension(32877, 28));
-        phonePanel.setMinimumSize(new java.awt.Dimension(300, 26));
-        phonePanel.setPreferredSize(new java.awt.Dimension(300, 26));
+        phonePanel.setMaximumSize(new java.awt.Dimension(32877, 30));
+        phonePanel.setMinimumSize(new java.awt.Dimension(300, 30));
+        phonePanel.setPreferredSize(new java.awt.Dimension(300, 30));
         phonePanel.setLayout(new javax.swing.BoxLayout(phonePanel, javax.swing.BoxLayout.LINE_AXIS));
         phonePanel.add(filler39);
 
@@ -748,11 +759,11 @@ public class AttListForm extends javax.swing.JFrame {
         phoneText.setToolTipText(PHONE_INPUT_TOOLTIP.getContent());
         phoneText.setEnabled(false);
         phoneText.setMaximumSize(new java.awt.Dimension(32767, 30));
-        phoneText.setMinimumSize(new java.awt.Dimension(6, 21));
-        phoneText.setPreferredSize(new java.awt.Dimension(80, 21));
-        phoneText.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                phoneTextActionPerformed(evt);
+        phoneText.setMinimumSize(new java.awt.Dimension(80, 30));
+        phoneText.setPreferredSize(new java.awt.Dimension(80, 30));
+        phoneText.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                phoneTextKeyReleased(evt);
             }
         });
         phonePanel.add(phoneText);
@@ -789,6 +800,9 @@ public class AttListForm extends javax.swing.JFrame {
             }
         });
         emailAddrText.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                emailAddrTextKeyReleased(evt);
+            }
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 EmailTypedHandler(evt);
             }
@@ -1146,26 +1160,30 @@ public class AttListForm extends javax.swing.JFrame {
         btnPanel.add(cancelButton);
         btnPanel.add(filler22);
 
-        searchPanel.setBackground(new java.awt.Color(250, 250, 250));
+        searchPanel.setBackground(new java.awt.Color(191, 191, 191));
         searchPanel.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        searchPanel.setMaximumSize(new java.awt.Dimension(300, 2147483647));
         searchPanel.setMinimumSize(new java.awt.Dimension(270, 56));
         searchPanel.setPreferredSize(new java.awt.Dimension(270, 56));
-        java.awt.FlowLayout flowLayout1 = new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 0, 0);
-        flowLayout1.setAlignOnBaseline(true);
-        searchPanel.setLayout(flowLayout1);
+        searchPanel.setLayout(new javax.swing.BoxLayout(searchPanel, javax.swing.BoxLayout.LINE_AXIS));
 
         searchCriteriaComboBox.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        ((JLabel)searchCriteriaComboBox.getRenderer()).setHorizontalAlignment(JLabel.RIGHT);
         searchCriteriaComboBox.setModel(new javax.swing.DefaultComboBoxModel(
             new String[]{
                 NAME_LABEL.getContent(),
                 LOGIN_ID_LABEL.getContent()
             }
         ));
-        searchCriteriaComboBox.setMaximumSize(new java.awt.Dimension(100, 30));
-        searchCriteriaComboBox.setMinimumSize(new java.awt.Dimension(70, 30));
-        searchCriteriaComboBox.setPreferredSize(new java.awt.Dimension(70, 30));
+        searchCriteriaComboBox.setMaximumSize(new java.awt.Dimension(80, 30));
+        searchCriteriaComboBox.setMinimumSize(new java.awt.Dimension(80, 30));
+        searchCriteriaComboBox.setPreferredSize(new java.awt.Dimension(80, 30));
+        searchCriteriaComboBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                searchCriteriaComboBoxActionPerformed(evt);
+            }
+        });
         searchPanel.add(searchCriteriaComboBox);
-        searchPanel.add(filler85);
 
         searchText.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         searchText.setToolTipText(SEARCH_INPUT_TOOLTIP.getContent());
@@ -1173,7 +1191,6 @@ public class AttListForm extends javax.swing.JFrame {
         searchText.setMinimumSize(new java.awt.Dimension(80, 30));
         searchText.setPreferredSize(new java.awt.Dimension(80, 30));
         searchPanel.add(searchText);
-        searchPanel.add(filler76);
 
         searchButton.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         searchButton.setMnemonic('S');
@@ -1292,6 +1309,7 @@ public class AttListForm extends javax.swing.JFrame {
                     // <editor-fold defaultstate="collapsed" desc="-- Prepare to update user information">
                     setFormMode(FormMode.UpdateMode);
                     multiFuncButton.setText(SAVE_BTN.getContent());
+                    multiFuncButton.setEnabled(false);
                     multiFuncButton.setMnemonic('s');
                     setModificationState(true); // change to modification mode
                     createButton.setEnabled(false);
@@ -1881,6 +1899,7 @@ public class AttListForm extends javax.swing.JFrame {
     }//GEN-LAST:event_PWHelpButtonActionPerformed
 
     private void changePWCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_changePWCheckBoxActionPerformed
+        changeSaveButtonEnabled(changePWCheckBox, !changePWCheckBox.isSelected());
         ChangeNewPasswordEnabled(changePWCheckBox.isSelected());
     }//GEN-LAST:event_changePWCheckBoxActionPerformed
 
@@ -2102,123 +2121,74 @@ public class AttListForm extends javax.swing.JFrame {
         disposeAndOptionalExit();        
     }//GEN-LAST:event_formWindowClosing
 
-    private void userIDTextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_userIDTextActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_userIDTextActionPerformed
-
-    private void phoneTextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_phoneTextActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_phoneTextActionPerformed
-
     private void emailAddrTextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_emailAddrTextActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_emailAddrTextActionPerformed
 
-    private void CreateAttendantListTextFile(String filename) {
-        //FileWriter writer = null;
-        BufferedWriter bw = null;
-        StringBuilder sb  = new StringBuilder();
+    private void searchCriteriaComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchCriteriaComboBoxActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_searchCriteriaComboBoxActionPerformed
 
-        try {
-            //writer = new FileWriter(filename);
-            bw = new BufferedWriter(new OutputStreamWriter(
-                    new FileOutputStream(filename), "utf-8"));
-            
-            // Write table heading
-            int rowFrame;
-            int colCount = usersTable.getModel().getColumnCount();
-            writeColumnHeadings(bw, colCount);
-            
-            for (rowFrame = 0; rowFrame < usersTable.getModel().getRowCount(); rowFrame++)
-            {
-                // Get the number of row shown at this row frame.
-                int row = usersTable.convertRowIndexToModel(rowFrame);
-                
-                // Read the table row by row
-                for (int colFrame = 0; colFrame < colCount; colFrame++)
-                {
-                    // Read the line element by element 
-                    // Get the column index shown at this table frame column
-                    int col = usersTable.convertColumnIndexToModel(colFrame);
-                    Object itemObj = usersTable.getModel().getValueAt(row, col);
-                    if (itemObj == null) {
-                        // for an empty(null) element, write a blank string as a place holder.
-                        bw.write("");
-                    } else {
-                        bw.write(itemObj.toString());
-                    }
-                    if (colFrame < colCount -1) {
-                        // Use tab as the element separator within a line
-                        bw.write("\t");
-                    }
-                }
-                // Add CRLF at the end of each line and make it readable from notepad
-                bw.write(System.getProperty("line.separator"));
-            }
-            // Show the result in a ack popup box
-            StringBuilder dialogBuilder = new StringBuilder();
-            
-            int lastSlash = filename.lastIndexOf((int)'\\');
-            switch (language) {
-                case KOREAN:
-                    dialogBuilder.append("생성 완료!\n  -파일이름: ");
-                    dialogBuilder.append(filename.substring(lastSlash + 1));
-                    dialogBuilder.append(" (총 ");
-                    dialogBuilder.append(rowFrame);
-                    dialogBuilder.append("행)");
-                    dialogBuilder.append("\n  -파일위치: ");
-                    dialogBuilder.append(filename.substring(0, lastSlash + 1));
-                    break;
-                    
-                case ENGLISH:
-                    dialogBuilder.append("File Created!" + System.lineSeparator() + "  - File name: ");
-                    dialogBuilder.append(filename.substring(lastSlash + 1));
-                    dialogBuilder.append(" (total ");
-                    dialogBuilder.append(rowFrame);
-                    dialogBuilder.append("lines)");
-                    dialogBuilder.append(System.lineSeparator() + "  - File Location: ");
-                    dialogBuilder.append(filename.substring(0, lastSlash + 1));
-                    break;
-                    
-                default:
-                    break;
-            }            
-            
-            JOptionPane.showMessageDialog(this, dialogBuilder.toString(),
-                    ATT_SFAVE_AS_SUCCESS_DIALOGTITLE.getContent(), 
-                    JOptionPane.PLAIN_MESSAGE);            
-        } catch (Exception ex) {
-        } finally {
-            try {
-                if (bw != null) {
-                    bw.close();
-                }
-            } catch (IOException ex) {
-                logParkingException(Level.SEVERE, ex, "(finally-filename: " + filename + ")");
-            }
+    private void managerCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_managerCheckBoxActionPerformed
+        TableModel attModel = usersTable.getModel();
+        String adminAuthority = attModel.getValueAt(selectedRowIndex, 2).toString();
+        boolean isManOri = adminAuthority.equals("Y");
+        
+        if (managerCheckBox.isSelected() && isManOri || 
+                !managerCheckBox.isSelected() && !isManOri) 
+        {
+            changeSaveButtonEnabled(managerCheckBox, true);
+        } else 
+            if (managerCheckBox.isSelected() && !isManOri || 
+                    !managerCheckBox.isSelected() && isManOri) 
+        {
+            changeSaveButtonEnabled(managerCheckBox, false);
         }
-    }
+    }//GEN-LAST:event_managerCheckBoxActionPerformed
 
-    private void writeColumnHeadings(BufferedWriter bw, int colCount) {
-        String colHeading = null;
-        try {
-            for (int colFrame=0; colFrame < colCount; colFrame++)
-            {
-                int col = usersTable.convertColumnIndexToModel(colFrame);            
-                colHeading = usersTable.getModel().getColumnName(col);
-                bw.write(colHeading);
-                if (col < colCount -1)
-                {
-                    // except the last element of each row, write a 'tab' seperator
-                    bw.write("\t");
-                }
-            }
-            bw.write(System.getProperty("line.separator"));
-        } catch (IOException ex) {
-            logParkingException(Level.SEVERE, ex, "(colHeading: " + colHeading + ")");
+    private void userNameTextKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_userNameTextKeyReleased
+        Object cellObj = usersTable.getModel().getValueAt(selectedRowIndex, 1);
+        String usernameOrig = "";
+        if (cellObj != null) {
+            usernameOrig = cellObj.toString();
         }
-    }
+        
+        changeSaveButtonEnabled(userNameText, 
+                userNameText.getText().trim().equals(usernameOrig));
+    }//GEN-LAST:event_userNameTextKeyReleased
 
+    private void cellPhoneTextKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cellPhoneTextKeyReleased
+        Object cellObj = usersTable.getModel().getValueAt(selectedRowIndex, 3);
+        String cellOrig = "";
+        if (cellObj != null) {
+            cellOrig = cellObj.toString();
+        }
+
+        changeSaveButtonEnabled(cellPhoneText, 
+                cellPhoneText.getText().trim().equals(cellOrig));        
+    }//GEN-LAST:event_cellPhoneTextKeyReleased
+
+    private void emailAddrTextKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_emailAddrTextKeyReleased
+        Object cellObj = usersTable.getModel().getValueAt(selectedRowIndex, 5);
+        String emailOrig = "";
+        if (cellObj != null) {
+            emailOrig = cellObj.toString();
+        }
+        
+        changeSaveButtonEnabled(emailAddrText, 
+                emailAddrText.getText().trim().equals(emailOrig));            
+    }//GEN-LAST:event_emailAddrTextKeyReleased
+
+    private void phoneTextKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_phoneTextKeyReleased
+        Object cellObj = usersTable.getModel().getValueAt(selectedRowIndex, 4);
+        String phoneOrig = "";
+        if (cellObj != null) {
+            phoneOrig = cellObj.toString();
+        }        
+          
+        changeSaveButtonEnabled(phoneText, 
+                phoneText.getText().trim().equals(phoneOrig));            
+    }//GEN-LAST:event_phoneTextKeyReleased
 
     private void clearPasswordFields() {
         userPassword.setText("");
@@ -2442,6 +2412,22 @@ public class AttListForm extends javax.swing.JFrame {
         }  
         return -1;
     }
+    
+    private void changeSaveButtonEnabled(final Component compo, final boolean isSame) 
+    {
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                if (isSame) {
+                    // remove from changedControls set
+                    changedControls.remove(compo);
+                } else {
+                    // add to the changedControls set
+                    changedControls.add(compo);
+                }
+                multiFuncButton.setEnabled(changedControls.size() > 0);
+            }
+        });
+    }    
 
     private void doAfterUpdateOperations(int result) {
         if (result == 1) {
@@ -2468,8 +2454,11 @@ public class AttListForm extends javax.swing.JFrame {
             }
             
             JOptionPane.showMessageDialog(this, dialogMessage,
-                    ATT_USER_UPDATE_DIALOGTITLE.getContent(), 
-                    JOptionPane.PLAIN_MESSAGE);  
+                    ATT_USER_UPDATE_DIALOGTITLE.getContent(),
+                    JOptionPane.PLAIN_MESSAGE);
+            changedControls.clear();
+            multiFuncButton.setEnabled(false);
+                    
             clearPasswordFields();
         } else {
             String dialogMessage = "";
@@ -2540,7 +2529,7 @@ public class AttListForm extends javax.swing.JFrame {
         usersTable.setEnabled(flag);
         cancelButton.setEnabled(!flag);
         searchText.setEnabled(flag);
-        searchCriteriaComboBox. setEnabled(flag);
+        searchCriteriaComboBox.setEnabled(flag);
         searchButton.setEnabled(flag);
         saveOdsButton. setEnabled(flag);
         closeFormButton.setEnabled(flag); 
@@ -2740,14 +2729,12 @@ public class AttListForm extends javax.swing.JFrame {
     private javax.swing.Box.Filler filler73;
     private javax.swing.Box.Filler filler74;
     private javax.swing.Box.Filler filler75;
-    private javax.swing.Box.Filler filler76;
     private javax.swing.Box.Filler filler77;
     private javax.swing.Box.Filler filler8;
     private javax.swing.Box.Filler filler80;
     private javax.swing.Box.Filler filler81;
     private javax.swing.Box.Filler filler82;
     private javax.swing.Box.Filler filler84;
-    private javax.swing.Box.Filler filler85;
     private javax.swing.Box.Filler filler9;
     private javax.swing.Box.Filler filler_w205;
     private javax.swing.JPanel idCheckPanel;
@@ -2855,6 +2842,7 @@ public class AttListForm extends javax.swing.JFrame {
 
     private void ShowAttendantDetail(int clickedRow) {
         TableModel attModel = usersTable.getModel();
+
         if ( attModel.getRowCount() == 0)
         {
             return;
