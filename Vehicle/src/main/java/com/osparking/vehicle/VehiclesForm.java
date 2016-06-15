@@ -205,76 +205,76 @@ public class VehiclesForm extends javax.swing.JFrame {
         filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 32767));
         rowNumTextField = new javax.swing.JTextField();
         filler39 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(30, 0), new java.awt.Dimension(10, 32767));
-        filler3 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 10), new java.awt.Dimension(0, 10), new java.awt.Dimension(32767, 10));
+        filler3 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 8), new java.awt.Dimension(0, 8), new java.awt.Dimension(32767, 10));
         jPanel11 = new javax.swing.JPanel();
         filler37 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(30, 0), new java.awt.Dimension(10, 32767));
         jLabel3 = new javax.swing.JLabel();
         filler15 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 32767));
         carTagTextField = new javax.swing.JTextField();
         filler36 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(30, 0), new java.awt.Dimension(10, 32767));
-        filler4 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 10), new java.awt.Dimension(0, 10), new java.awt.Dimension(32767, 10));
+        filler4 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 8), new java.awt.Dimension(0, 8), new java.awt.Dimension(32767, 10));
         jPanel12 = new javax.swing.JPanel();
         filler40 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(30, 0), new java.awt.Dimension(10, 32767));
         selectDriverButton = new javax.swing.JButton();
         filler16 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 32767));
         driverTextField = new javax.swing.JTextField();
         filler35 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(30, 0), new java.awt.Dimension(10, 32767));
-        filler5 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 10), new java.awt.Dimension(0, 10), new java.awt.Dimension(32767, 10));
+        filler5 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 8), new java.awt.Dimension(0, 8), new java.awt.Dimension(32767, 10));
         jPanel23 = new javax.swing.JPanel();
         filler41 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(30, 0), new java.awt.Dimension(10, 32767));
         jLabel5 = new javax.swing.JLabel();
         filler17 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 32767));
         cellTextField = new javax.swing.JTextField();
         filler34 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(30, 0), new java.awt.Dimension(10, 32767));
-        filler6 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 10), new java.awt.Dimension(0, 10), new java.awt.Dimension(32767, 10));
+        filler6 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 8), new java.awt.Dimension(0, 8), new java.awt.Dimension(32767, 10));
         jPanel24 = new javax.swing.JPanel();
         filler42 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(30, 0), new java.awt.Dimension(10, 32767));
         jLabel6 = new javax.swing.JLabel();
         filler18 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 32767));
         phoneTextField = new javax.swing.JTextField();
         filler33 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(30, 0), new java.awt.Dimension(10, 32767));
-        filler8 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 10), new java.awt.Dimension(0, 10), new java.awt.Dimension(32767, 10));
+        filler8 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 8), new java.awt.Dimension(0, 8), new java.awt.Dimension(32767, 10));
         jPanel30 = new javax.swing.JPanel();
         filler43 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(30, 0), new java.awt.Dimension(10, 32767));
         jLabel10 = new javax.swing.JLabel();
         filler19 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 32767));
         lastModiTextField = new javax.swing.JTextField();
         filler32 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(30, 0), new java.awt.Dimension(10, 32767));
-        filler9 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 10), new java.awt.Dimension(0, 10), new java.awt.Dimension(32767, 10));
+        filler9 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 8), new java.awt.Dimension(0, 8), new java.awt.Dimension(32767, 10));
         jPanel25 = new javax.swing.JPanel();
         filler44 = new javax.swing.Box.Filler(new java.awt.Dimension(30, 0), new java.awt.Dimension(30, 0), new java.awt.Dimension(30, 32767));
         jLabel7 = new javax.swing.JLabel();
         filler20 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 32767));
         notiCheckBox = new javax.swing.JCheckBox();
-        filler7 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 10), new java.awt.Dimension(0, 10), new java.awt.Dimension(32767, 10));
+        filler7 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 8), new java.awt.Dimension(0, 8), new java.awt.Dimension(32767, 10));
         jPanel26 = new javax.swing.JPanel();
         filler45 = new javax.swing.Box.Filler(new java.awt.Dimension(30, 0), new java.awt.Dimension(30, 0), new java.awt.Dimension(30, 32767));
         jLabel8 = new javax.swing.JLabel();
         filler21 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 32767));
         wholeCheckBox = new javax.swing.JCheckBox();
         filler30 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(30, 0), new java.awt.Dimension(10, 32767));
-        filler10 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 10), new java.awt.Dimension(0, 10), new java.awt.Dimension(32767, 10));
+        filler10 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 8), new java.awt.Dimension(0, 8), new java.awt.Dimension(32767, 10));
         jPanel27 = new javax.swing.JPanel();
         filler46 = new javax.swing.Box.Filler(new java.awt.Dimension(30, 0), new java.awt.Dimension(30, 0), new java.awt.Dimension(30, 32767));
         jLabel13 = new javax.swing.JLabel();
         filler22 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 32767));
         permitCheckBox = new javax.swing.JCheckBox();
         filler29 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(30, 0), new java.awt.Dimension(10, 32767));
-        filler11 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 10), new java.awt.Dimension(0, 10), new java.awt.Dimension(32767, 10));
+        filler11 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 8), new java.awt.Dimension(0, 8), new java.awt.Dimension(32767, 10));
         jPanel28 = new javax.swing.JPanel();
         filler47 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(30, 0), new java.awt.Dimension(10, 32767));
         jLabel14 = new javax.swing.JLabel();
         filler23 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 32767));
         reasonTextField = new javax.swing.JTextField();
         filler28 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(30, 0), new java.awt.Dimension(10, 32767));
-        filler12 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 10), new java.awt.Dimension(0, 10), new java.awt.Dimension(32767, 10));
+        filler12 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 8), new java.awt.Dimension(0, 8), new java.awt.Dimension(32767, 10));
         jPanel29 = new javax.swing.JPanel();
         filler48 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(30, 0), new java.awt.Dimension(10, 32767));
         jLabel15 = new javax.swing.JLabel();
         filler24 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 32767));
         otherInfoTextField = new javax.swing.JTextField();
         filler26 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(30, 0), new java.awt.Dimension(10, 32767));
-        filler13 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 10), new java.awt.Dimension(0, 10), new java.awt.Dimension(32767, 10));
+        filler13 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 8), new java.awt.Dimension(0, 8), new java.awt.Dimension(32767, 10));
         jPanel31 = new javax.swing.JPanel();
         filler49 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(30, 0), new java.awt.Dimension(10, 32767));
         jLabel9 = new javax.swing.JLabel();
@@ -335,16 +335,16 @@ public class VehiclesForm extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle(VEHICLESFORM_FRAME_TITLE.getContent());
-        setMinimumSize(new java.awt.Dimension(1350, 750));
-        setPreferredSize(new java.awt.Dimension(1250, 750));
+        setMinimumSize(new java.awt.Dimension(1350, 770));
+        setPreferredSize(new java.awt.Dimension(1250, 770));
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 formWindowClosing(evt);
             }
         });
 
-        wholePanel.setMinimumSize(new java.awt.Dimension(1190, 1100));
-        wholePanel.setPreferredSize(new java.awt.Dimension(1190, 1100));
+        wholePanel.setMinimumSize(new java.awt.Dimension(1190, 770));
+        wholePanel.setPreferredSize(new java.awt.Dimension(1190, 770));
         wholePanel.setLayout(new java.awt.BorderLayout());
 
         topPanel.setLayout(new javax.swing.BoxLayout(topPanel, javax.swing.BoxLayout.PAGE_AXIS));
@@ -397,7 +397,8 @@ public class VehiclesForm extends javax.swing.JFrame {
         wholePanel.add(topPanel, java.awt.BorderLayout.NORTH);
 
         leftPanel.setMaximumSize(new java.awt.Dimension(393204, 32767));
-        leftPanel.setPreferredSize(new java.awt.Dimension(320, 362));
+        leftPanel.setMinimumSize(new java.awt.Dimension(161, 680));
+        leftPanel.setPreferredSize(new java.awt.Dimension(320, 680));
         leftPanel.setLayout(new javax.swing.BoxLayout(leftPanel, javax.swing.BoxLayout.PAGE_AXIS));
         leftPanel.add(filler14);
 
@@ -709,10 +710,12 @@ public class VehiclesForm extends javax.swing.JFrame {
         wholePanel.add(leftPanel, java.awt.BorderLayout.WEST);
         wholePanel.add(filler54, java.awt.BorderLayout.PAGE_END);
 
-        centerPanel.setPreferredSize(new java.awt.Dimension(850, 480));
-        centerPanel.setLayout(new javax.swing.BoxLayout(centerPanel, javax.swing.BoxLayout.PAGE_AXIS));
+        centerPanel.setMinimumSize(new java.awt.Dimension(850, 670));
+        centerPanel.setPreferredSize(new java.awt.Dimension(850, 670));
+        centerPanel.setLayout(new javax.swing.BoxLayout(centerPanel, javax.swing.BoxLayout.Y_AXIS));
 
         centerFirstPanel.setMaximumSize(new java.awt.Dimension(2147483647, 90));
+        centerFirstPanel.setMinimumSize(new java.awt.Dimension(850, 80));
         centerFirstPanel.setPreferredSize(new java.awt.Dimension(850, 80));
         centerFirstPanel.setLayout(new javax.swing.BoxLayout(centerFirstPanel, javax.swing.BoxLayout.PAGE_AXIS));
 
@@ -859,8 +862,8 @@ public class VehiclesForm extends javax.swing.JFrame {
 
         centerPanel.add(centerFirstPanel);
 
-        jScrollPane1.setMinimumSize(new java.awt.Dimension(0, 370));
-        jScrollPane1.setPreferredSize(new java.awt.Dimension(452, 410));
+        jScrollPane1.setMinimumSize(new java.awt.Dimension(0, 550));
+        jScrollPane1.setPreferredSize(new java.awt.Dimension(452, 550));
 
         vehiclesTable.setAutoCreateRowSorter(true);
         DefaultTableModel tableModel = new DefaultTableModel(
@@ -909,7 +912,8 @@ public class VehiclesForm extends javax.swing.JFrame {
         vehiclesTable.setModel(tableModel);
         //hideSomeColumns();
         fineTuneColumnWidth();
-        vehiclesTable.setMinimumSize(new java.awt.Dimension(600, 400));
+        vehiclesTable.setMinimumSize(new java.awt.Dimension(600, 550));
+        vehiclesTable.setPreferredSize(new java.awt.Dimension(0, 550));
         jScrollPane1.setViewportView(vehiclesTable);
 
         centerPanel.add(jScrollPane1);

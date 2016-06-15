@@ -16,13 +16,9 @@
  */
 package com.osparking.global.names;
 
-//import static com.osparking.global.Globals.language;
-
 import static com.osparking.global.Globals.language;
 import static com.osparking.global.names.ControlEnums.Languages.ENGLISH;
 import static com.osparking.global.names.ControlEnums.Languages.KOREAN;
-
-//import static com.osparking.global.names.ControlEnums.Languages.*;
 
 /**
  *
@@ -380,10 +376,11 @@ public class ControlEnums {
         DELETE_FAIL_DAILOG("비밀번호가 올바르지 않습니다.", "Password is wrong!"),
         ID_LENGTH_CHECK_DIALOG("아이디는 두 자 이상이어야 합니다.", "ID should consists of at least 2 characters."),
         ID_FIRST_CHAR_CHECK_DIALOG(
-                "첫 글자가 영문자가 아닙니다", "nested character isn't an alpha-numeric, space, or dot(.)" ), 
+                "- 첫 글자가 영문자가 아닙니다!", "- First character isn't an English alphabet!" ), 
         ID_CHAR_CHECK_DIALOG(
-                "내포된 글자가 영숫자, 공백 혹은 점(.)이 아닙니다", "first character is not an alphabet" ),
-        ID_END_CHAR_CHECK_DIALOG("끝 글자가 영숫자가 아닙니다", "last character isn't an alpha-numeric" ),
+                "- 아이디에 내포 가능한 문자: " + System.lineSeparator() + "   영숫자, 공백 혹은 점(.)",
+                "- Characters allowed inside ID string: " + System.lineSeparator() + "   Alphanumeric, blank, period(.)" ),
+        ID_END_CHAR_CHECK_DIALOG("- 끝 글자가 영숫자가 아닙니다!", "Last character isn't an alpha-numeric!" ),
         AFFILIATION_DELETE_ALL_DAILOG(
                 "모든 상위 및 하위 소속들을 삭제합니까?", "Want to delete all of higher and lower affiliations?"),
         AFFILIATION_DELETE_ALL_RESULT_DAILOG(
@@ -652,7 +649,7 @@ public class ControlEnums {
         ATT_SAVE_AS_FAIL_DIALOGTITLE("파일명 변경 필요성 알림", "Choose Different File Name"), 
         ATT_EMAIL_DUP_DIALOGTITLE("이메일 중복 검사 결과", "Duplicate Check Result"), 
         ATT_EMAIL_SYNTAX_CHECK_DIALOG("이메일 주소 검사 결과", "Syntax Check Result"),            
-        ATT_ID_DUP_CHCEK_DIALOGTITLE("아이디 중복검사 결과", "ID Check Result"),               
+        ATT_ID_DUP_CHCEK_DIALOGTITLE("아이디 검사 결과", "ID Check Result"),
         ATT_USER_UPDATE_DIALOGTITLE("관리원 정보 수정 결과", "User Info Change Result"),       
         ATT_SFAVE_AS_SUCCESS_DIALOGTITLE("텍스트(.txt) 파일 생성", "Text File(*.txt) Creation"), 
         ATT_HELP_DIALOGTITLE("비밀번호 요구조건", "Password Requirements"),

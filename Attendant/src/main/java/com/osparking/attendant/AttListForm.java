@@ -1,4 +1,4 @@
-/* 畇
+/* 
  * Copyright (C) 2015, 2016  Open Source Parking, Inc.(www.osparking.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -275,7 +275,7 @@ public class AttListForm extends javax.swing.JFrame {
         filler42 = new javax.swing.Box.Filler(new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 32767));
         jLabel1 = new javax.swing.JLabel();
         filler41 = new javax.swing.Box.Filler(new java.awt.Dimension(40, 40), new java.awt.Dimension(40, 40), new java.awt.Dimension(40, 32767));
-        filler7 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 10), new java.awt.Dimension(0, 10), new java.awt.Dimension(32767, 10));
+        jSeparator2 = new javax.swing.JSeparator();
         loginPanel = new javax.swing.JPanel();
         filler31 = new javax.swing.Box.Filler(new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 32767));
         userIDLabel = new javax.swing.JLabel();
@@ -328,7 +328,7 @@ public class AttListForm extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         filler67 = new javax.swing.Box.Filler(new java.awt.Dimension(55, 0), new java.awt.Dimension(55, 0), new java.awt.Dimension(55, 32767));
         emailAddrText = new javax.swing.JTextField();
-        filler66 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 15), new java.awt.Dimension(10, 30), new java.awt.Dimension(40, 32767));
+        filler66 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 30), new java.awt.Dimension(10, 30), new java.awt.Dimension(40, 32767));
         filler13 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 5), new java.awt.Dimension(0, 5), new java.awt.Dimension(32767, 10));
         emailCheckPanel = new javax.swing.JPanel();
         filler29 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
@@ -425,7 +425,7 @@ public class AttListForm extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle(ATTLIST_FRAME_TITLE.getContent()
         );
-        setMinimumSize(new java.awt.Dimension(1027, 665));
+        setMinimumSize(new java.awt.Dimension(1027, 680));
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 formWindowClosing(evt);
@@ -434,8 +434,8 @@ public class AttListForm extends javax.swing.JFrame {
         getContentPane().setLayout(new javax.swing.BoxLayout(getContentPane(), javax.swing.BoxLayout.LINE_AXIS));
         getContentPane().add(filler20);
 
-        wholePanel.setMinimumSize(new java.awt.Dimension(400, 400));
-        wholePanel.setPreferredSize(new java.awt.Dimension(400, 400));
+        wholePanel.setMinimumSize(new java.awt.Dimension(400, 670));
+        wholePanel.setPreferredSize(new java.awt.Dimension(400, 670));
         wholePanel.setLayout(new java.awt.BorderLayout());
 
         topPanel.setLayout(new javax.swing.BoxLayout(topPanel, javax.swing.BoxLayout.PAGE_AXIS));
@@ -471,8 +471,8 @@ public class AttListForm extends javax.swing.JFrame {
         wholePanel.add(topPanel, java.awt.BorderLayout.NORTH);
 
         westPanel.setMaximumSize(new java.awt.Dimension(2147483647, 2147483647));
-        westPanel.setMinimumSize(new java.awt.Dimension(400, 355));
-        westPanel.setPreferredSize(new java.awt.Dimension(400, 537));
+        westPanel.setMinimumSize(new java.awt.Dimension(400, 540));
+        westPanel.setPreferredSize(new java.awt.Dimension(400, 540));
         westPanel.setLayout(new javax.swing.BoxLayout(westPanel, javax.swing.BoxLayout.PAGE_AXIS));
 
         modePanel.setMaximumSize(new java.awt.Dimension(32767, 28));
@@ -513,6 +513,8 @@ public class AttListForm extends javax.swing.JFrame {
         );
 
         westPanel.add(modePanel);
+
+        jSeparator1.setPreferredSize(new java.awt.Dimension(0, 0));
         westPanel.add(jSeparator1);
 
         RequiredPanel1.setMaximumSize(new java.awt.Dimension(32877, 28));
@@ -541,7 +543,7 @@ public class AttListForm extends javax.swing.JFrame {
         RequiredPanel1.add(filler41);
 
         westPanel.add(RequiredPanel1);
-        westPanel.add(filler7);
+        westPanel.add(jSeparator2);
 
         loginPanel.setMaximumSize(new java.awt.Dimension(32877, 30));
         loginPanel.setMinimumSize(new java.awt.Dimension(300, 26));
@@ -576,6 +578,11 @@ public class AttListForm extends javax.swing.JFrame {
         userIDText.setMaximumSize(new java.awt.Dimension(32767, 30));
         userIDText.setMinimumSize(new java.awt.Dimension(80, 26));
         userIDText.setPreferredSize(new java.awt.Dimension(80, 26));
+        userIDText.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                userIDTextActionPerformed(evt);
+            }
+        });
         userIDText.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 newIDtyped(evt);
@@ -664,9 +671,9 @@ public class AttListForm extends javax.swing.JFrame {
         userNameText.setToolTipText(NAME_INPUT_TOOLTIP.getContent());
         userNameText.setEnabled(false);
         userNameText.setMaximumSize(new java.awt.Dimension(32767, 30));
-        userNameText.setMinimumSize(new java.awt.Dimension(80, 26));
+        userNameText.setMinimumSize(new java.awt.Dimension(80, 30));
         userNameText.setName(""); // NOI18N
-        userNameText.setPreferredSize(new java.awt.Dimension(80, 26));
+        userNameText.setPreferredSize(new java.awt.Dimension(80, 30));
         namePanel.add(userNameText);
         namePanel.add(filler38);
 
@@ -741,6 +748,13 @@ public class AttListForm extends javax.swing.JFrame {
         phoneText.setToolTipText(PHONE_INPUT_TOOLTIP.getContent());
         phoneText.setEnabled(false);
         phoneText.setMaximumSize(new java.awt.Dimension(32767, 30));
+        phoneText.setMinimumSize(new java.awt.Dimension(6, 21));
+        phoneText.setPreferredSize(new java.awt.Dimension(80, 21));
+        phoneText.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                phoneTextActionPerformed(evt);
+            }
+        });
         phonePanel.add(phoneText);
         phonePanel.add(filler61);
 
@@ -748,7 +762,7 @@ public class AttListForm extends javax.swing.JFrame {
         westPanel.add(filler12);
 
         emailPanel.setMaximumSize(new java.awt.Dimension(32877, 30));
-        emailPanel.setMinimumSize(new java.awt.Dimension(300, 26));
+        emailPanel.setMinimumSize(new java.awt.Dimension(300, 28));
         emailPanel.setPreferredSize(new java.awt.Dimension(300, 30));
         emailPanel.setLayout(new javax.swing.BoxLayout(emailPanel, javax.swing.BoxLayout.LINE_AXIS));
         emailPanel.add(filler51);
@@ -757,7 +771,7 @@ public class AttListForm extends javax.swing.JFrame {
         jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel4.setText(EMAIL_LABEL.getContent());
         jLabel4.setMaximumSize(new java.awt.Dimension(130, 30));
-        jLabel4.setMinimumSize(new java.awt.Dimension(130, 21));
+        jLabel4.setMinimumSize(new java.awt.Dimension(130, 30));
         jLabel4.setPreferredSize(new java.awt.Dimension(130, 30));
         jLabel4.setRequestFocusEnabled(false);
         emailPanel.add(jLabel4);
@@ -767,8 +781,13 @@ public class AttListForm extends javax.swing.JFrame {
         emailAddrText.setHorizontalAlignment(javax.swing.JTextField.LEFT);
         emailAddrText.setEnabled(false);
         emailAddrText.setMaximumSize(new java.awt.Dimension(32767, 30));
-        emailAddrText.setMinimumSize(new java.awt.Dimension(80, 26));
-        emailAddrText.setPreferredSize(new java.awt.Dimension(80, 28));
+        emailAddrText.setMinimumSize(new java.awt.Dimension(80, 30));
+        emailAddrText.setPreferredSize(new java.awt.Dimension(120, 30));
+        emailAddrText.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                emailAddrTextActionPerformed(evt);
+            }
+        });
         emailAddrText.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 EmailTypedHandler(evt);
@@ -979,8 +998,8 @@ public class AttListForm extends javax.swing.JFrame {
 
         wholePanel.add(westPanel, java.awt.BorderLayout.WEST);
 
-        centerPanel.setMinimumSize(new java.awt.Dimension(600, 474));
-        centerPanel.setPreferredSize(new java.awt.Dimension(600, 474));
+        centerPanel.setMinimumSize(new java.awt.Dimension(600, 540));
+        centerPanel.setPreferredSize(new java.awt.Dimension(600, 540));
         centerPanel.setLayout(new java.awt.BorderLayout());
 
         jLabel11.setFont(new java.awt.Font(font_Type, font_Style, head_font_Size));
@@ -1017,7 +1036,6 @@ public class AttListForm extends javax.swing.JFrame {
         usersTable.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_ALL_COLUMNS);
         usersTable.setFillsViewportHeight(true);
         usersTable.setFocusCycleRoot(true);
-        usersTable.setFocusTraversalPolicy(null);
         usersTable.setMaximumSize(new java.awt.Dimension(32767, 32767));
         usersTable.setMinimumSize(new java.awt.Dimension(600, 474));
         usersTable.setName(""); // NOI18N
@@ -1050,11 +1068,11 @@ public class AttListForm extends javax.swing.JFrame {
         spacePanel1.setLayout(spacePanel1Layout);
         spacePanel1Layout.setHorizontalGroup(
             spacePanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 947, Short.MAX_VALUE)
+            .addGap(0, 934, Short.MAX_VALUE)
         );
         spacePanel1Layout.setVerticalGroup(
             spacePanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGap(0, 24, Short.MAX_VALUE)
         );
 
         southPanel.add(spacePanel1);
@@ -1128,10 +1146,13 @@ public class AttListForm extends javax.swing.JFrame {
         btnPanel.add(cancelButton);
         btnPanel.add(filler22);
 
-        searchPanel.setBorder(javax.swing.BorderFactory.createEtchedBorder());
-        searchPanel.setMinimumSize(new java.awt.Dimension(315, 40));
-        searchPanel.setPreferredSize(new java.awt.Dimension(311, 45));
-        searchPanel.setLayout(new javax.swing.BoxLayout(searchPanel, javax.swing.BoxLayout.LINE_AXIS));
+        searchPanel.setBackground(new java.awt.Color(250, 250, 250));
+        searchPanel.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        searchPanel.setMinimumSize(new java.awt.Dimension(270, 56));
+        searchPanel.setPreferredSize(new java.awt.Dimension(270, 56));
+        java.awt.FlowLayout flowLayout1 = new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 0, 0);
+        flowLayout1.setAlignOnBaseline(true);
+        searchPanel.setLayout(flowLayout1);
 
         searchCriteriaComboBox.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         searchCriteriaComboBox.setModel(new javax.swing.DefaultComboBoxModel(
@@ -1141,16 +1162,16 @@ public class AttListForm extends javax.swing.JFrame {
             }
         ));
         searchCriteriaComboBox.setMaximumSize(new java.awt.Dimension(100, 30));
-        searchCriteriaComboBox.setMinimumSize(new java.awt.Dimension(100, 30));
-        searchCriteriaComboBox.setPreferredSize(new java.awt.Dimension(100, 30));
+        searchCriteriaComboBox.setMinimumSize(new java.awt.Dimension(70, 30));
+        searchCriteriaComboBox.setPreferredSize(new java.awt.Dimension(70, 30));
         searchPanel.add(searchCriteriaComboBox);
         searchPanel.add(filler85);
 
         searchText.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         searchText.setToolTipText(SEARCH_INPUT_TOOLTIP.getContent());
-        searchText.setMaximumSize(new java.awt.Dimension(200, 30));
+        searchText.setMaximumSize(new java.awt.Dimension(120, 30));
         searchText.setMinimumSize(new java.awt.Dimension(80, 30));
-        searchText.setPreferredSize(new java.awt.Dimension(120, 30));
+        searchText.setPreferredSize(new java.awt.Dimension(80, 30));
         searchPanel.add(searchText);
         searchPanel.add(filler76);
 
@@ -1210,7 +1231,7 @@ public class AttListForm extends javax.swing.JFrame {
         spacePanel2.setLayout(spacePanel2Layout);
         spacePanel2Layout.setHorizontalGroup(
             spacePanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 947, Short.MAX_VALUE)
+            .addGap(0, 934, Short.MAX_VALUE)
         );
         spacePanel2Layout.setVerticalGroup(
             spacePanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1224,7 +1245,7 @@ public class AttListForm extends javax.swing.JFrame {
         getContentPane().add(wholePanel);
         getContentPane().add(filler3);
 
-        setSize(new java.awt.Dimension(1035, 692));
+        setSize(new java.awt.Dimension(1030, 716));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
@@ -2051,6 +2072,7 @@ public class AttListForm extends javax.swing.JFrame {
                             checkResult,
                             ATT_ID_DUP_CHCEK_DIALOGTITLE.getContent(), 
                             JOptionPane.PLAIN_MESSAGE, WARNING_MESSAGE);
+                    userIDText.requestFocus();
                 }
             }
         } catch (Exception ex) {
@@ -2079,6 +2101,18 @@ public class AttListForm extends javax.swing.JFrame {
             mainGUI.clearAttendantManageForm();
         disposeAndOptionalExit();        
     }//GEN-LAST:event_formWindowClosing
+
+    private void userIDTextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_userIDTextActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_userIDTextActionPerformed
+
+    private void phoneTextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_phoneTextActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_phoneTextActionPerformed
+
+    private void emailAddrTextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_emailAddrTextActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_emailAddrTextActionPerformed
 
     private void CreateAttendantListTextFile(String filename) {
         //FileWriter writer = null;
@@ -2299,6 +2333,16 @@ public class AttListForm extends javax.swing.JFrame {
         return result;
     } 
 
+    private boolean isEnglish(char firstCh) 
+    {
+        if (Character.isLowerCase(firstCh) ||  Character.isUpperCase(firstCh)) 
+        {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    
     private String IDSyntaxCheckResult(String idEntered) {
         // ID syntax requirement:
         // Allowed characters: alphabet, number digit(0-9), nested space or dot(.)
@@ -2308,26 +2352,30 @@ public class AttListForm extends javax.swing.JFrame {
         StringBuilder tempStr = new StringBuilder();
         int idLen = idEntered.length();
         
-        if (!(Character.isLetter(idEntered.charAt(0)))) {
-            tempStr.append(ID_FIRST_CHAR_CHECK_DIALOG.getContent() + System.lineSeparator());
-        } 
-        for (int i = 0; i < idLen - 1; i++) {
-            char ch = idEntered.charAt(i);
+        if (! isEnglish(idEntered.charAt(0))) {
+            tempStr.append(ID_FIRST_CHAR_CHECK_DIALOG.getContent());
+        }
+        
+        char ch;
+        for (int i = 1; i < idLen - 1; i++) {
+            ch = idEntered.charAt(i);
             
-            if (!(Character.isLetter(ch)) && !(Character.isDigit(ch)) && ch != ' ' && ch != '.')
+            if (! isEnglish(ch) && !(Character.isDigit(ch)) && ch != ' ' && ch != '.')
             {
-                tempStr.append(ID_CHAR_CHECK_DIALOG.getContent()  + System.lineSeparator());
+                if (tempStr.length() > 0)
+                    tempStr.append(System.lineSeparator());                
+                tempStr.append(ID_CHAR_CHECK_DIALOG.getContent());
             }
         }
-        char lastCh = idEntered.charAt(idLen - 1);
+        ch = idEntered.charAt(idLen - 1);
         
-        if (!(Character.isLetter(lastCh)) && !(Character.isDigit(lastCh))) 
+        if (!(isEnglish(ch)) && !(Character.isDigit(ch))) 
         {
-            tempStr.append(ID_END_CHAR_CHECK_DIALOG.getContent() + System.lineSeparator());
+            if (tempStr.length() > 0)
+                tempStr.append(System.lineSeparator());            
+            tempStr.append(ID_END_CHAR_CHECK_DIALOG.getContent());
         }
-        if (tempStr.length() >= 1) {
-            tempStr.deleteCharAt(idLen - 1); // remove last newline character
-        }
+
         return tempStr.toString();
     }
 
@@ -2687,7 +2735,6 @@ public class AttListForm extends javax.swing.JFrame {
     private javax.swing.Box.Filler filler67;
     private javax.swing.Box.Filler filler68;
     private javax.swing.Box.Filler filler69;
-    private javax.swing.Box.Filler filler7;
     private javax.swing.Box.Filler filler71;
     private javax.swing.Box.Filler filler72;
     private javax.swing.Box.Filler filler73;
@@ -2713,6 +2760,7 @@ public class AttListForm extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JSeparator jSeparator2;
     private javax.swing.JLabel legendLLabel;
     private javax.swing.JPanel loginPanel;
     private javax.swing.JCheckBox managerCheckBox;
