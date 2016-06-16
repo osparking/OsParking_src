@@ -33,9 +33,10 @@ public class CommonData {
     public static final int buttonHeightNorm = 40;
     public static final int buttonHeightShort = 30;
     public static JLabel metaKeyLabel = new JLabel(META_KEY_LABEL.getContent());  
+    public static final Color tipColor = new java.awt.Color(0xff, 0x85, 0x33);
     static {
         metaKeyLabel.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        metaKeyLabel.setForeground(new Color(0xff, 0x85, 0x33));
+        metaKeyLabel.setForeground(tipColor);
     }
     public static final Color pointColor = new java.awt.Color(255, 51, 51);
 }

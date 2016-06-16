@@ -267,6 +267,8 @@ public class ControlEnums {
     }
     
     public enum ToolTipContent {
+        CTRL_F_TOOLTIP("(Ctrl+F)", "(Ctrl+F)"),
+        SEARCH_TOOLTIP("포커스 이동: Control+F", "To focus Click Ctrl+F"),
         LOGIN_BTN_TOOLTIP("관리자 로그인", "Click to Login"),
         CLOSE_BTN_TOOLTIP("현재 창을 닫기", "Close Window"),
         SAVE_AS_TOOLTIP("파일로 저장", "Save as file"),

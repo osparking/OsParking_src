@@ -2215,7 +2215,7 @@ public class Settings_System extends javax.swing.JFrame {
         Point buttonPoint = new Point();
         PWHelpButton.getLocation(buttonPoint);
 
-        Point framePoint = new Point(); 
+        Point framePoint = new Point();
         this.getLocation(framePoint);
         Point topLeft = new Point(framePoint.x + buttonPoint.x + 60, framePoint.y + buttonPoint.y - 60);
         helpDialog.setLocation(topLeft);

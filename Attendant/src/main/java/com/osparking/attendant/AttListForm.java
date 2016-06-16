@@ -21,6 +21,7 @@ import static com.osparking.global.CommonData.buttonHeightNorm;
 import static com.osparking.global.CommonData.buttonWidthNorm;
 import static com.osparking.global.CommonData.metaKeyLabel;
 import static com.osparking.global.CommonData.pointColor;
+import static com.osparking.global.CommonData.tipColor;
 import static com.osparking.global.DataSheet.saveODSfile;
 import java.awt.Point;
 import java.awt.event.KeyEvent;
@@ -83,19 +84,21 @@ import static com.osparking.global.names.ControlEnums.ToolTipContent.CELL_INPUT_
 import static com.osparking.global.names.ControlEnums.ToolTipContent.CELL_PHONE_TOOLTIP;
 import static com.osparking.global.names.ControlEnums.ToolTipContent.CHK_DUP_ID_TIP;
 import static com.osparking.global.names.ControlEnums.ToolTipContent.CHK_E_MAIL_TIP;
+import static com.osparking.global.names.ControlEnums.ToolTipContent.CTRL_F_TOOLTIP;
 import static com.osparking.global.names.ControlEnums.ToolTipContent.ID_INPUT_TOOLTIP;
 import static com.osparking.global.names.ControlEnums.ToolTipContent.NAME_INPUT_TOOLTIP;
 import static com.osparking.global.names.ControlEnums.ToolTipContent.PHONE_INPUT_TOOLTIP;
 import static com.osparking.global.names.ControlEnums.ToolTipContent.PW_INPUT_TOOTLTIP;
 import static com.osparking.global.names.ControlEnums.ToolTipContent.REPEAT_PW_INPUT_TOOLTIP;
 import static com.osparking.global.names.ControlEnums.ToolTipContent.SAVE_AS_TOOLTIP;
-import static com.osparking.global.names.ControlEnums.ToolTipContent.SEARCH_INPUT_TOOLTIP;
+import static com.osparking.global.names.ControlEnums.ToolTipContent.SEARCH_TOOLTIP;
 import com.osparking.global.names.DB_Access;
 import com.osparking.global.names.JDBCMySQL;
 import static com.osparking.global.names.JDBCMySQL.getHashedPW;
 import com.osparking.global.names.JTextFieldLimit;
 import com.osparking.global.names.OSP_enums.OpLogLevel;
 import com.osparking.global.names.ParentGUI;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Rectangle;
@@ -110,6 +113,8 @@ import javax.swing.Action;
 import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JComponent;
+import javax.swing.JRootPane;
+import javax.swing.JTextField;
 import javax.swing.KeyStroke;
 import javax.swing.table.DefaultTableModel;
 
@@ -212,6 +217,11 @@ public class AttListForm extends javax.swing.JFrame {
         });
         attachEnterHandler(searchText);
         adminAuth2CheckBox.setSelected(isManager);
+        
+        KeyStroke controlF = KeyStroke.getKeyStroke("control F");
+        JRootPane rootPane = getRootPane();
+        rootPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(controlF, "myAction");
+        rootPane.getActionMap().put("myAction", new Ctrl_F_Action(searchText));                
     }
     
     private void attachEnterHandler(JComponent compo) {
@@ -1249,10 +1259,19 @@ public class AttListForm extends javax.swing.JFrame {
         searchPanel.add(searchCriteriaComboBox);
 
         searchText.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        searchText.setToolTipText(SEARCH_INPUT_TOOLTIP.getContent());
+        searchText.setText(CTRL_F_TOOLTIP.getContent());
+        searchText.setToolTipText(SEARCH_TOOLTIP.getContent());
         searchText.setMaximumSize(new java.awt.Dimension(120, 30));
         searchText.setMinimumSize(new java.awt.Dimension(80, 30));
         searchText.setPreferredSize(new java.awt.Dimension(80, 30));
+        searchText.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                searchTextFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                searchTextFocusLost(evt);
+            }
+        });
         searchPanel.add(searchText);
 
         searchButton.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
@@ -1851,28 +1870,36 @@ public class AttListForm extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_usersTableKeyPressed
 
+    /**
+     * Remove the content of detailed information fields of attendant.
+     * @param enableThis flag to set enabled data member of controls.
+     */
+    private void clearAttendantDetails(boolean enableThis) {
+        userIDText.setEnabled(enableThis);
+        userIDText.setText("");
+        checkIDButton.setEnabled(enableThis);
+        managerCheckBox.setSelected(false);
+        changeEnabledProperty(enableThis);
+        userNameText.setText("");
+        cellPhoneText.setText("");
+        phoneText.setText("");
+        emailAddrText.setText("");   
+        creationDateText.setText("");
+    }
+    
     private void createButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createButtonActionPerformed
         // Prepare to accept property values for a new user to be created.
         try {
             setFormMode(FormMode.CreateMode);
             ID_usable = false;
             // <editor-fold defaultstate="collapsed" desc="-- Enable data input fields">
-            userIDText.setEnabled(true);
-            userIDText.setText("");
+            clearAttendantDetails(true);
             userIDText.setEditable(true);
             userIDText.requestFocusInWindow();
 
-            checkIDButton.setEnabled(true);
             if (loginID.equals("admin")) {
                 managerCBoxEnabled(true);
             }
-            managerCheckBox.setSelected(false);
-
-            changeEnabledProperty(true);
-            userNameText.setText("");
-            cellPhoneText.setText("");
-            phoneText.setText("");
-            emailAddrText.setText("");
             // </editor-fold>     
 
             // <editor-fold defaultstate="collapsed" desc="-- Enable password fields">           
@@ -1923,12 +1950,14 @@ public class AttListForm extends javax.swing.JFrame {
             List sortKeys = usersTable.getRowSorter().getSortKeys();                
             
             if (RefreshTableContents() == 0) {
+                clearAttendantDetails(false);
                 // Show popup dialog telling no user found.
                 JOptionPane.showConfirmDialog(this, NO_USER_DIALOG.getContent(),
                         SEARCH_RESULT_TITLE.getContent(),
                         JOptionPane.PLAIN_MESSAGE, INFORMATION_MESSAGE);                
             } else {
                 usersTable.changeSelection(0, 0, false, false);
+                ShowAttendantDetail(selectedRowIndex);
             }
             usersTable.requestFocus();
             ShowAttendantDetail(selectedRowIndex);
@@ -2256,6 +2285,22 @@ public class AttListForm extends javax.swing.JFrame {
         displayHelpDialog(managerHelpButton, RIGHTS_DIALOGTITLE.getContent(),
               USER_RIGHTS_DESCRIPTION.getContent(), false);
     }//GEN-LAST:event_managerHelpButtonActionPerformed
+
+    private void searchTextFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_searchTextFocusGained
+        System.out.println("Gained Current: " + searchText.getText());
+        if (searchText.getText().equals(CTRL_F_TOOLTIP.getContent())) {
+            searchText.setText("");
+            searchText.setForeground(new Color(0, 0, 0));
+        }
+    }//GEN-LAST:event_searchTextFocusGained
+
+    private void searchTextFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_searchTextFocusLost
+        System.out.println("Lost Current: " + searchText.getText());
+        if (searchText.getText().length() == 0) {
+            searchText.setText(CTRL_F_TOOLTIP.getContent());
+            searchText.setForeground(tipColor);
+        }        
+    }//GEN-LAST:event_searchTextFocusLost
 
     private void clearPasswordFields() {
         userPassword.setText("");
@@ -2695,6 +2740,19 @@ public class AttListForm extends javax.swing.JFrame {
         managerHelpButton.setEnabled(flag);    
     }
 
+    private static class Ctrl_F_Action extends AbstractAction {
+        JTextField searchText; 
+        public Ctrl_F_Action(JTextField searchText) {
+            this.searchText = searchText;
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            searchText.requestFocus();
+            System.out.println("Ctrl + F pressed");
+        }
+    }
+
     class TextFileOnly extends javax.swing.filechooser.FileFilter {
         @Override
         public boolean accept(File file) {
@@ -2938,6 +2996,7 @@ public class AttListForm extends javax.swing.JFrame {
 
         if ( attModel.getRowCount() == 0)
         {
+            // Clear attendant detail panel as no one is selected currently.
             return;
         }
 

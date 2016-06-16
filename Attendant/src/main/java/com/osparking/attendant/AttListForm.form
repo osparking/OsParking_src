@@ -2629,8 +2629,11 @@
                         <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                           <Connection code="new java.awt.Font(font_Type, font_Style, font_Size)" type="code"/>
                         </Property>
+                        <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                          <Connection code="CTRL_F_TOOLTIP.getContent()" type="code"/>
+                        </Property>
                         <Property name="toolTipText" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                          <Connection code="SEARCH_INPUT_TOOLTIP.getContent()" type="code"/>
+                          <Connection code="SEARCH_TOOLTIP.getContent()" type="code"/>
                         </Property>
                         <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                           <Dimension value="[120, 30]"/>
@@ -2642,6 +2645,10 @@
                           <Dimension value="[80, 30]"/>
                         </Property>
                       </Properties>
+                      <Events>
+                        <EventHandler event="focusGained" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="searchTextFocusGained"/>
+                        <EventHandler event="focusLost" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="searchTextFocusLost"/>
+                      </Events>
                     </Component>
                     <Component class="javax.swing.JButton" name="searchButton">
                       <Properties>
