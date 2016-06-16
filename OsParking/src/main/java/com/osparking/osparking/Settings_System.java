@@ -2166,7 +2166,7 @@ public class Settings_System extends javax.swing.JFrame {
         String helpText = "Date Input Panel GUI language selection .";
 
         JDialog helpDialog = new PWHelpJDialog(this, false,
-            "Language Usage", helpText);
+            "Language Usage", helpText, false);
         locateAndShowHelpDialog(this, helpDialog, LoggingLevelHelpButton);
     }//GEN-LAST:event_LanguageSelectionlHelpButtonActionPerformed
 
@@ -2202,7 +2202,7 @@ public class Settings_System extends javax.swing.JFrame {
         }
 
         JDialog helpDialog = new PWHelpJDialog(this, false,
-            "What is being LOGGED?", helpText);
+            "What is being LOGGED?", helpText, false);
         locateAndShowHelpDialog(this, helpDialog, LoggingLevelHelpButton);
     }//GEN-LAST:event_LoggingLevelHelpButtonActionPerformed
 
@@ -2211,7 +2211,7 @@ public class Settings_System extends javax.swing.JFrame {
         short pwPowerLevel = (short)PWStrengthChoiceComboBox.getSelectedIndex();
         String helpText = pwValidator.getWrongPWFormatMsg(pwPowerLevel);
 
-        JDialog helpDialog = new PWHelpJDialog(this, false, "Password Requirements", helpText);
+        JDialog helpDialog = new PWHelpJDialog(this, false, "Password Requirements", helpText, true);
         Point buttonPoint = new Point();
         PWHelpButton.getLocation(buttonPoint);
 

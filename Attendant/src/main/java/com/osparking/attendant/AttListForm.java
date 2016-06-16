@@ -64,6 +64,7 @@ import static com.osparking.global.names.ControlEnums.DialogTitleTypes.CREATTION
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.DELETE_DIALOGTITLE;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.DELETE_FAIL_DAILOGTITLE;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.DELETE_RESULT_DIALOGTITLE;
+import static com.osparking.global.names.ControlEnums.DialogTitleTypes.RIGHTS_DIALOGTITLE;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.USER_FIELD_CHECK_RESULT;
 import static com.osparking.global.names.ControlEnums.FormModeString.CREATE;
 import static com.osparking.global.names.ControlEnums.FormModeString.MODIFY;
@@ -107,6 +108,7 @@ import java.util.HashSet;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.Box;
+import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.KeyStroke;
 import javax.swing.table.DefaultTableModel;
@@ -129,7 +131,7 @@ public class AttListForm extends javax.swing.JFrame {
     String searchCondition = "";
     private static Logger logException = null;
     private static Logger logOperation = null;
-    private PasswordValidator pwValidator; 
+    private static PasswordValidator pwValidator = new PasswordValidator(); 
     ParentGUI mainGUI;
     boolean isStandalone = false;
     private HashSet<Component> changedControls = new HashSet<Component>();    
@@ -289,8 +291,10 @@ public class AttListForm extends javax.swing.JFrame {
         adminPanel = new javax.swing.JPanel();
         filler32 = new javax.swing.Box.Filler(new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 32767));
         adminAuthLabel = new javax.swing.JLabel();
-        filler37 = new javax.swing.Box.Filler(new java.awt.Dimension(50, 0), new java.awt.Dimension(50, 0), new java.awt.Dimension(60, 32767));
+        filler37 = new javax.swing.Box.Filler(new java.awt.Dimension(55, 0), new java.awt.Dimension(55, 0), new java.awt.Dimension(55, 32767));
         managerCheckBox = new javax.swing.JCheckBox();
+        filler85 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 32767));
+        managerHelpButton = new javax.swing.JButton();
         filler9 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 10), new java.awt.Dimension(0, 10), new java.awt.Dimension(32767, 10));
         namePanel = new javax.swing.JPanel();
         filler35 = new javax.swing.Box.Filler(new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 32767));
@@ -344,7 +348,7 @@ public class AttListForm extends javax.swing.JFrame {
         newPW1ReqLabel = new javax.swing.JLabel();
         filler75 = new javax.swing.Box.Filler(new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 32767));
         new1Password = new javax.swing.JPasswordField();
-        filler84 = new javax.swing.Box.Filler(new java.awt.Dimension(20, 0), new java.awt.Dimension(10, 10), new java.awt.Dimension(20, 32767));
+        filler84 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 32767));
         PWHelpButton = new javax.swing.JButton();
         filler77 = new javax.swing.Box.Filler(new java.awt.Dimension(20, 0), new java.awt.Dimension(10, 10), new java.awt.Dimension(20, 32767));
         filler16 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 10), new java.awt.Dimension(0, 10), new java.awt.Dimension(32767, 10));
@@ -373,7 +377,10 @@ public class AttListForm extends javax.swing.JFrame {
         filler50 = new javax.swing.Box.Filler(new java.awt.Dimension(20, 15), new java.awt.Dimension(40, 30), new java.awt.Dimension(40, 32767));
         filler18 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 32767));
         centerPanel = new javax.swing.JPanel();
+        listTopPanel = new javax.swing.JPanel();
         jLabel11 = new javax.swing.JLabel();
+        countLabel = new javax.swing.JLabel();
+        countValue = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         usersTable = new javax.swing.JTable(){
             public boolean isCellEditable(int rowIndex, int colIndex) {
@@ -636,6 +643,24 @@ public class AttListForm extends javax.swing.JFrame {
             }
         });
         adminPanel.add(managerCheckBox);
+        adminPanel.add(filler85);
+
+        managerHelpButton.setBackground(new java.awt.Color(153, 255, 153));
+        managerHelpButton.setFont(new java.awt.Font("Dotum", 1, 14)); // NOI18N
+        managerHelpButton.setIcon(getQuest20_Icon());
+        managerHelpButton.setEnabled(false);
+        managerHelpButton.setMargin(new java.awt.Insets(2, 4, 2, 4));
+        managerHelpButton.setMaximumSize(new java.awt.Dimension(20, 20));
+        managerHelpButton.setMinimumSize(new java.awt.Dimension(20, 20));
+        managerHelpButton.setOpaque(false);
+        managerHelpButton.setPreferredSize(new java.awt.Dimension(20, 20));
+        managerHelpButton.setRequestFocusEnabled(false);
+        managerHelpButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                managerHelpButtonActionPerformed(evt);
+            }
+        });
+        adminPanel.add(managerHelpButton);
 
         westPanel.add(adminPanel);
         westPanel.add(filler9);
@@ -1010,12 +1035,54 @@ public class AttListForm extends javax.swing.JFrame {
 
         centerPanel.setMinimumSize(new java.awt.Dimension(600, 540));
         centerPanel.setPreferredSize(new java.awt.Dimension(600, 540));
-        centerPanel.setLayout(new java.awt.BorderLayout());
+        centerPanel.setLayout(new javax.swing.BoxLayout(centerPanel, javax.swing.BoxLayout.Y_AXIS));
+
+        listTopPanel.setMaximumSize(new java.awt.Dimension(32767, 30));
+        listTopPanel.setPreferredSize(new java.awt.Dimension(76, 30));
 
         jLabel11.setFont(new java.awt.Font(font_Type, font_Style, head_font_Size));
         jLabel11.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel11.setText(ATTLIST_FRAME_TITLE.getContent());
-        centerPanel.add(jLabel11, java.awt.BorderLayout.PAGE_START);
+
+        countLabel.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        countLabel.setText(COUNT_LABEL.getContent());
+
+        countValue.setForeground(pointColor);
+        countValue.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        countValue.setText("0");
+
+        javax.swing.GroupLayout listTopPanelLayout = new javax.swing.GroupLayout(listTopPanel);
+        listTopPanel.setLayout(listTopPanelLayout);
+        listTopPanelLayout.setHorizontalGroup(
+            listTopPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(listTopPanelLayout.createSequentialGroup()
+                .addGap(1, 1, 1)
+                .addComponent(countLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(countValue, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(428, Short.MAX_VALUE))
+            .addGroup(listTopPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(listTopPanelLayout.createSequentialGroup()
+                    .addGap(0, 0, Short.MAX_VALUE)
+                    .addComponent(jLabel11)
+                    .addGap(0, 0, Short.MAX_VALUE)))
+        );
+        listTopPanelLayout.setVerticalGroup(
+            listTopPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(listTopPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(listTopPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(countLabel)
+                    .addComponent(countValue))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(listTopPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(listTopPanelLayout.createSequentialGroup()
+                    .addGap(0, 0, Short.MAX_VALUE)
+                    .addComponent(jLabel11)
+                    .addGap(0, 0, Short.MAX_VALUE)))
+        );
+
+        centerPanel.add(listTopPanel);
 
         jScrollPane1.setMinimumSize(new java.awt.Dimension(603, 474));
         jScrollPane1.setName(""); // NOI18N
@@ -1047,10 +1114,10 @@ public class AttListForm extends javax.swing.JFrame {
         usersTable.setFillsViewportHeight(true);
         usersTable.setFocusCycleRoot(true);
         usersTable.setMaximumSize(new java.awt.Dimension(32767, 32767));
-        usersTable.setMinimumSize(new java.awt.Dimension(600, 474));
+        usersTable.setMinimumSize(new java.awt.Dimension(600, 0));
         usersTable.setName(""); // NOI18N
         usersTable.setNextFocusableComponent(userNameText);
-        usersTable.setPreferredSize(new java.awt.Dimension(600, 1200));
+        usersTable.setPreferredSize(new java.awt.Dimension(600, 0));
         usersTable.setRowHeight(22);
         usersTable.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -1064,7 +1131,7 @@ public class AttListForm extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(usersTable);
 
-        centerPanel.add(jScrollPane1, java.awt.BorderLayout.CENTER);
+        centerPanel.add(jScrollPane1);
 
         wholePanel.add(centerPanel, java.awt.BorderLayout.CENTER);
 
@@ -1501,7 +1568,6 @@ public class AttListForm extends javax.swing.JFrame {
         // when password is to be updated
         // supply new password and identical confirmation of it
         if (changePWCheckBox.isSelected()) {
-            pwValidator = new PasswordValidator();
             if (pwValidator.isInValidForm(new String(new1Password.getPassword()))) {
                 String pass1 = new String(new1Password.getPassword());
                 String pass2 = new String(new2Password.getPassword());
@@ -1797,8 +1863,9 @@ public class AttListForm extends javax.swing.JFrame {
             userIDText.requestFocusInWindow();
 
             checkIDButton.setEnabled(true);
-            if (loginID.equals("admin"))
-                managerCheckBox.setEnabled(true);        
+            if (loginID.equals("admin")) {
+                managerCBoxEnabled(true);
+            }
             managerCheckBox.setSelected(false);
 
             changeEnabledProperty(true);
@@ -1880,18 +1947,13 @@ public class AttListForm extends javax.swing.JFrame {
                     "(User action: user list search)");         
         }
     }//GEN-LAST:event_searchButtonActionPerformed
-
+// RIGHTS_DIALOGTITLE
+    // helpText PWHelpButton
+    
+    
     private void PWHelpButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PWHelpButtonActionPerformed
-        pwValidator = new PasswordValidator();
-        String helpText = pwValidator.getWrongPWFormatMsg(pwStrengthLevel);
-        JDialog helpDialog = new PWHelpJDialog(this, false, 
-                ATT_HELP_DIALOGTITLE.getContent(), helpText);
-        int helpHt = helpDialog.getPreferredSize().height / 2;
-        Point buttonLoc = getLocationOnCurrentScreen(PWHelpButton);
-        Point topLeft = new Point(buttonLoc.x + 30, buttonLoc.y - helpHt);
-        
-        helpDialog.setLocation(topLeft);
-        helpDialog.setVisible(true);
+        displayHelpDialog(PWHelpButton, ATT_HELP_DIALOGTITLE.getContent(),
+                pwValidator.getWrongPWFormatMsg(pwStrengthLevel), true);
     }//GEN-LAST:event_PWHelpButtonActionPerformed
 
     private void changePWCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_changePWCheckBoxActionPerformed
@@ -2190,6 +2252,11 @@ public class AttListForm extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_adminAuth2CheckBoxActionPerformed
 
+    private void managerHelpButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_managerHelpButtonActionPerformed
+        displayHelpDialog(managerHelpButton, RIGHTS_DIALOGTITLE.getContent(),
+              USER_RIGHTS_DESCRIPTION.getContent(), false);
+    }//GEN-LAST:event_managerHelpButtonActionPerformed
+
     private void clearPasswordFields() {
         userPassword.setText("");
         new1Password.setText("");
@@ -2267,7 +2334,8 @@ public class AttListForm extends javax.swing.JFrame {
         ShowAttendantDetail(usersTable.convertRowIndexToModel(selectedRowIndex));     
         
         // <editor-fold defaultstate="collapsed" desc="-- Disable login ID related controls in search mode">            
-        managerCheckBox.setEnabled(false);        
+//        managerCheckBox.setEnabled(false); 
+        managerCBoxEnabled(false);
         userIDText.setEnabled(false); 
         userIDText.setEditable(false);       
         checkIDButton.setEnabled(false); 
@@ -2497,7 +2565,8 @@ public class AttListForm extends javax.swing.JFrame {
             // No user can change self 'admin' property
             // No user with admin right can change admin property of user 'admin'
             if (loginID.equals("admin")) {
-                managerCheckBox.setEnabled(flag);
+//                managerCheckBox.setEnabled(flag);
+                managerCBoxEnabled(flag);
                 if (flag) {
                     managerCheckBox.requestFocusInWindow();
                 }
@@ -2511,7 +2580,8 @@ public class AttListForm extends javax.swing.JFrame {
         }
         changePWCheckBox.setEnabled(flag);
         if(isAdminRerocd && notOwnRecord)
-            managerCheckBox.setEnabled(flag);
+//            managerCheckBox.setEnabled(flag);
+            managerCBoxEnabled(flag);
         changeBoxEditability(flag);
     }
 
@@ -2536,7 +2606,6 @@ public class AttListForm extends javax.swing.JFrame {
     }
 
     private String showPasswordRequirement() {
-        pwValidator = new PasswordValidator();
         return pwValidator.getPasswordTooltip();
     }
 
@@ -2610,6 +2679,22 @@ public class AttListForm extends javax.swing.JFrame {
         userPassword.setEditable(flag);    
     }
 
+    private void displayHelpDialog(JButton PWHelpButton, String title, String helpText,
+            boolean isPassword) {
+        JDialog helpDialog = new PWHelpJDialog(this, false, title, helpText, isPassword);
+        int helpHt = helpDialog.getPreferredSize().height / 2;
+        Point buttonLoc = getLocationOnCurrentScreen(PWHelpButton);
+        Point topLeft = new Point(buttonLoc.x + 30, buttonLoc.y - helpHt);
+        
+        helpDialog.setLocation(topLeft);
+        helpDialog.setVisible(true);        
+    }
+
+    private void managerCBoxEnabled(boolean flag) {
+        managerCheckBox.setEnabled(flag);
+        managerHelpButton.setEnabled(flag);    
+    }
+
     class TextFileOnly extends javax.swing.filechooser.FileFilter {
         @Override
         public boolean accept(File file) {
@@ -2658,6 +2743,8 @@ public class AttListForm extends javax.swing.JFrame {
     private javax.swing.JButton checkEmailButton;
     private javax.swing.JButton checkIDButton;
     private javax.swing.JButton closeFormButton;
+    private javax.swing.JLabel countLabel;
+    private javax.swing.JLabel countValue;
     private javax.swing.JButton createButton;
     private javax.swing.JLabel createDate;
     private javax.swing.JTextField creationDateText;
@@ -2734,6 +2821,7 @@ public class AttListForm extends javax.swing.JFrame {
     private javax.swing.Box.Filler filler81;
     private javax.swing.Box.Filler filler82;
     private javax.swing.Box.Filler filler84;
+    private javax.swing.Box.Filler filler85;
     private javax.swing.Box.Filler filler9;
     private javax.swing.JPanel idCheckPanel;
     private javax.swing.JLabel isIDreqLabel;
@@ -2747,8 +2835,10 @@ public class AttListForm extends javax.swing.JFrame {
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JLabel legendLLabel;
+    private javax.swing.JPanel listTopPanel;
     private javax.swing.JPanel loginPanel;
     private javax.swing.JCheckBox managerCheckBox;
+    private javax.swing.JButton managerHelpButton;
     private javax.swing.JPanel modePanel;
     private javax.swing.JLabel modeString;
     private javax.swing.JButton multiFuncButton;
@@ -2834,6 +2924,11 @@ public class AttListForm extends javax.swing.JFrame {
             logParkingException(Level.SEVERE, ex, "(refresh user list displaying table)");
         } finally {
             closeDBstuff(conn, pstmt, rs, "(refresh user list displaying table)");
+            Dimension tableDim = new Dimension(usersTable.getSize().width, 
+                    usersTable.getRowHeight() * (usersTable.getRowCount() + 1)); 
+            usersTable.setSize(tableDim);
+            usersTable.setPreferredSize(tableDim);
+            countValue.setText(String.valueOf(usersTable.getRowCount()));
             return model.getRowCount();
         }
     }
@@ -2953,7 +3048,8 @@ public class AttListForm extends javax.swing.JFrame {
             createButton.setEnabled(true);   
         } else {
             createButton.setEnabled(false);       
-            managerCheckBox.setEnabled(false);
+//            managerCheckBox.setEnabled(false);
+            managerCBoxEnabled(false);
         }
     }
     

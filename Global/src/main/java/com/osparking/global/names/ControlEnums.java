@@ -110,7 +110,7 @@ public class ControlEnums {
         REASON_LABEL ("불허사유",  "Reason"),
         OTHER_INFO_LABEL  ("기타정보",  "Other Info'"),
         REGI_DATE_LABEL ("최초등록",  "Regi' Date"),
-        COUNT_LABEL ("차량 대수",  "Vehicle Count"),
+        COUNT_LABEL ("자료 수 :",  "Count : "),
         REQUIRED3_LABEL ("*: 필수 항목",  "*: required field"),
         GATE_NAME_LABEL ("입구 이름",  "Gate Name"),
         ATTENDANT_LABEL ("관리원",  "Attendant"),
@@ -453,6 +453,16 @@ public class ControlEnums {
                             + System.getProperty("line.separator") 
                             + "driver creation is automatically cancelled."),
         
+        USER_RIGHTS_DESCRIPTION("1. 관리자(ID: admin) : 상위" + System.getProperty("line.separator") +
+                "    - 매니저 및 일반에 대한 모든 권한" + System.getProperty("line.separator") +
+                "      (모든 권한: 삽입, 삭제, 갱신)" + System.getProperty("line.separator") +
+                System.getProperty("line.separator") +
+                "2. 매니저(첵크된 계정) : 중위" + System.getProperty("line.separator") +
+                "    - 일반에 대한 모든 권한" +System.getProperty("line.separator") +
+                "      (일반에 매니저 권한 부여 불가)" +System.getProperty("line.separator") +
+                System.getProperty("line.separator") +
+                "3. 일반 : 하위" +System.getProperty("line.separator") +
+                "    - 자기 계정에 대한 갱신 권한",""),
         DRIVER_CLOSE_FORM_DIALOG(
                 "생성/수정 중인정보를 포기하시겟습니까?", "Want to desert car information being created/modified?"),
         
@@ -653,6 +663,7 @@ public class ControlEnums {
         ATT_USER_UPDATE_DIALOGTITLE("관리원 정보 수정 결과", "User Info Change Result"),       
         ATT_SFAVE_AS_SUCCESS_DIALOGTITLE("텍스트(.txt) 파일 생성", "Text File(*.txt) Creation"), 
         ATT_HELP_DIALOGTITLE("비밀번호 요구조건", "Password Requirements"),
+        RIGHTS_DIALOGTITLE("사용자 권한 3 단계", "User 3 level rights"),
         CONFIRM_LOGOUT("로그아웃 확인", "Confirm Logout"),                
         READ_ODS_DIALOGTITLE("차트 분석 결과", "Sheet Analysis Result"),                
         READ_ODS_FAIL_DIALOGTITLE("차트 형식 오류", "Sheet Cell Data Format Error"),       
