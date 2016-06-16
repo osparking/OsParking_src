@@ -73,6 +73,7 @@ public class ControlEnums {
     
     public enum LabelContent {
         LOGIN_ID_LABEL("아이디", "Login ID"), 
+        ID_LABEL("아이디 : ", "User ID : "), 
         PW_LABEL("비밀번호",  "Password"), 
         MODE_LABEL("작업 상태 :", "Operation Mode :"), 
         MODIFY_COND("\u203B 정보 수정 조건", "\u203B Legend"), 
@@ -383,6 +384,7 @@ public class ControlEnums {
                 "- 아이디에 내포 가능한 문자: " + System.lineSeparator() + "   영숫자, 공백 혹은 점(.)",
                 "- Characters allowed inside ID string: " + System.lineSeparator() + "   Alphanumeric, blank, period(.)" ),
         ID_END_CHAR_CHECK_DIALOG("- 끝 글자가 영숫자가 아닙니다!", "Last character isn't an alpha-numeric!" ),
+        ATT_DELETE_DIALOG("아래 계정을 삭제합니까?", "Want to delete below user?" ),
         AFFILIATION_DELETE_ALL_DAILOG(
                 "모든 상위 및 하위 소속들을 삭제합니까?", "Want to delete all of higher and lower affiliations?"),
         AFFILIATION_DELETE_ALL_RESULT_DAILOG(

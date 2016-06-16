@@ -1411,7 +1411,7 @@ public class AttListForm extends javax.swing.JFrame {
                         usersTableMouseClicked(null);
                     } else {
                         if (errorMsg[0].length() > 0) {
-                            showMessageDialog(null, errorMsg[0]);
+                            showMessageDialog(this, errorMsg[0]);
                         }
                     }
                     break;
@@ -1669,20 +1669,10 @@ public class AttListForm extends javax.swing.JFrame {
             String dialogText = "";
             if (loginPW.equals(pwHashed) ) {
                 // Get a confirmation from the user for the deletion.
-                switch (language) {
-                    case KOREAN:
-                        dialogText = "아래 계정을 삭제합니까?" + System.lineSeparator()  
-                                + "계정 ID: " + userIDText.getText();
-                        break;
-                    case ENGLISH:
-                        dialogText = "Do you want to delete this user?" + System.lineSeparator() 
-                                + "User ID: " + userIDText.getText();
-                        break;
-                    default:
-                        break;
-                }                
+                dialogText = ATT_DELETE_DIALOG.getContent() + System.lineSeparator()  
+                        + ID_LABEL.getContent() + userIDText.getText();
                 
-                int result = JOptionPane.showConfirmDialog(null, dialogText, 
+                int result = JOptionPane.showConfirmDialog(this, dialogText, 
                         DELETE_DIALOGTITLE.getContent(), 
                         JOptionPane.YES_NO_OPTION);
                 if (result == JOptionPane.YES_OPTION) {            
@@ -1692,10 +1682,11 @@ public class AttListForm extends javax.swing.JFrame {
                     userPassword.setText("");
                 }
             } else {
-                showMessageDialog(null, 
+                showMessageDialog(this, 
                         DELETE_FAIL_DAILOG.getContent() + System.lineSeparator(),
                         DELETE_FAIL_DAILOGTITLE.getContent(), 
                         JOptionPane.INFORMATION_MESSAGE);             
+                userPassword.requestFocus();
             }
 
             //throw new Exception("dummy");
@@ -2287,7 +2278,6 @@ public class AttListForm extends javax.swing.JFrame {
     }//GEN-LAST:event_managerHelpButtonActionPerformed
 
     private void searchTextFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_searchTextFocusGained
-        System.out.println("Gained Current: " + searchText.getText());
         if (searchText.getText().equals(CTRL_F_TOOLTIP.getContent())) {
             searchText.setText("");
             searchText.setForeground(new Color(0, 0, 0));
@@ -2295,7 +2285,6 @@ public class AttListForm extends javax.swing.JFrame {
     }//GEN-LAST:event_searchTextFocusGained
 
     private void searchTextFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_searchTextFocusLost
-        System.out.println("Lost Current: " + searchText.getText());
         if (searchText.getText().length() == 0) {
             searchText.setText(CTRL_F_TOOLTIP.getContent());
             searchText.setForeground(tipColor);
@@ -2749,7 +2738,6 @@ public class AttListForm extends javax.swing.JFrame {
         @Override
         public void actionPerformed(ActionEvent e) {
             searchText.requestFocus();
-            System.out.println("Ctrl + F pressed");
         }
     }
 

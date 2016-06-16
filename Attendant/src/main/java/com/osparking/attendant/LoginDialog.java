@@ -98,9 +98,9 @@ public class LoginDialog extends javax.swing.JDialog {
         userIDText.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         userIDText.setText("admin");
         userIDText.setPreferredSize(new java.awt.Dimension(80, 30));
-        userIDText.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                userIDTextActionPerformed(evt);
+        userIDText.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                userIDTextFocusGained(evt);
             }
         });
 
@@ -233,11 +233,11 @@ public class LoginDialog extends javax.swing.JDialog {
         // Check if both user ID and password were entered.
         if (getUserIDText().getText().trim().length() == 0)            
         {
-            showMessageDialog(null, INPUT_ID_DIALOG.getContent());
+            showMessageDialog(this, INPUT_ID_DIALOG.getContent());
             return;
         } else if (getPassword().getPassword().length== 0) 
         {
-            showMessageDialog(null, INPUT_PW_DIALOG.getContent());
+            showMessageDialog(this, INPUT_PW_DIALOG.getContent());
             return;            
         }        
         //</editor-fold>
@@ -248,7 +248,7 @@ public class LoginDialog extends javax.swing.JDialog {
             System.out.println("Login Success");
             disposeAndOptionalExit();
         } else {
-            showMessageDialog(null, LOGIN_WRONG_DIALOG.getContent(),
+            showMessageDialog(this, LOGIN_WRONG_DIALOG.getContent(),
                     ERROR_DIALOGTITLE.getContent(), 
                     JOptionPane.ERROR_MESSAGE);
         }
@@ -317,9 +317,11 @@ public class LoginDialog extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_passwordKeyPressed
 
-    private void userIDTextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_userIDTextActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_userIDTextActionPerformed
+    private void userIDTextFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_userIDTextFocusGained
+        if (userIDText.getText().length() > 0) {
+            userIDText.selectAll();
+        }
+    }//GEN-LAST:event_userIDTextFocusGained
 
     /**
      * @param args the command line arguments
