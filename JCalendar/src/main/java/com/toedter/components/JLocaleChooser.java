@@ -50,12 +50,13 @@ Example: by OsParking on 2016. 6. 17.
 public class JLocaleChooser extends JComboBox implements ItemListener {
 	private static final long serialVersionUID = 8152430789764877431L;
 	protected JComponent component;
+        static Locale defaultLocale = new Locale("en", "US");        
 
 	/**
 	 * Default JLocaleChooser constructor.
 	 */
-	public JLocaleChooser() {
-	    this(null);
+	public JLocaleChooser(Locale defaultLocale) {
+            this(null, defaultLocale);
 	}
 
     /**
@@ -70,14 +71,14 @@ public class JLocaleChooser extends JComboBox implements ItemListener {
 	/**
 	 * Default JLocaleChooser constructor.
 	 */
-	public JLocaleChooser(JComponent component) {
+	public JLocaleChooser(JComponent component, Locale currLocale) {
 		super();
 		this.component = component;
 		addItemListener(this);
                 
                 Locale locale1 = new Locale( // Added by OsParking on 2016. 6. 17.
-                        parkingLotLocale.getLanguage(), 
-                        parkingLotLocale.getCountry(), "WIN");
+                        currLocale.getLanguage(), 
+                        currLocale.getCountry(), "WIN");
                 Locale.setDefault(locale1); // upto here OsParking on 2016. 6. 17.
                 
 		locales = Calendar.getAvailableLocales();
@@ -156,7 +157,7 @@ public class JLocaleChooser extends JComboBox implements ItemListener {
 	 */
 	static public void main(String[] s) {
 		JFrame frame = new JFrame("LocaleChooser");
-		frame.getContentPane().add(new JLocaleChooser());
+		frame.getContentPane().add(new JLocaleChooser(parkingLotLocale));
 		frame.pack();
 		frame.setVisible(true);
 	}

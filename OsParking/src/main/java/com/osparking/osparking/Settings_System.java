@@ -187,7 +187,7 @@ public class Settings_System extends javax.swing.JFrame {
         jLabel14 = new javax.swing.JLabel();
         TextFieldPicWidth = new javax.swing.JTextField();
         TextFieldPicHeight = new javax.swing.JTextField();
-        DateChooserLangCBox = new com.toedter.components.JLocaleChooser();
+        DateChooserLangCBox = new com.toedter.components.JLocaleChooser(parkingLotLocale);
         LanguageSelectionlHelpButton = new javax.swing.JButton();
         jLabel42 = new javax.swing.JLabel();
         lotNameTextField = new javax.swing.JTextField();
