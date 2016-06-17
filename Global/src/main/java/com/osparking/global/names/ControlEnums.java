@@ -72,7 +72,7 @@ public class ControlEnums {
     }
     
     public enum LabelContent {
-        LOGIN_ID_LABEL("아이디", "Login ID"), 
+        LOGIN_ID_LABEL("아이디", "User ID"), 
         ID_LABEL("아이디 : ", "User ID : "), 
         PW_LABEL("비밀번호",  "Password"), 
         MODE_LABEL("작업 상태 :", "Operation Mode :"), 
@@ -459,14 +459,28 @@ public class ControlEnums {
         
         USER_RIGHTS_DESCRIPTION("1. 관리자(ID: admin) : 상위" + System.getProperty("line.separator") +
                 "    - 매니저 및 일반에 대한 모든 권한" + System.getProperty("line.separator") +
-                "      (모든 권한: 삽입, 삭제, 갱신)" + System.getProperty("line.separator") +
+                "      (모든 권한: 삽입, 갱신, 삭제)" + System.getProperty("line.separator") +
                 System.getProperty("line.separator") +
                 "2. 매니저(첵크된 계정) : 중위" + System.getProperty("line.separator") +
-                "    - 일반에 대한 모든 권한" +System.getProperty("line.separator") +
-                "      (일반에 매니저 권한 부여 불가)" +System.getProperty("line.separator") +
+                "    - 일반에 대한 모든 권한" + System.getProperty("line.separator") +
+                "      (일반에 매니저 권한 부여 불가)" + System.getProperty("line.separator") +
                 System.getProperty("line.separator") +
                 "3. 일반 : 하위" +System.getProperty("line.separator") +
-                "    - 자기 계정에 대한 갱신 권한",""),
+                "    - 자기 계정에 대한 갱신 권한" +
+                "* 누구도 자기의 매니저 속성 변경 불가" +System.getProperty("line.separator") +
+                "* 누구도 자기의 계정 삭제 불가" +System.getProperty("line.separator")
+                ,
+                "1. admin(: user ID) : high level" + System.getProperty("line.separator") +
+                "    - All rights for the managers and the ordinaries" + System.getProperty("line.separator") +
+                "      (rights: insert, update, delete)" + System.getProperty("line.separator") +
+                "2. Managers : middle level" + System.getProperty("line.separator") +
+                "    - All the rights for the ordinaries " + System.getProperty("line.separator") +
+                "      (manager check box disabled)" + System.getProperty("line.separator") +
+                "3. Ordinaries : low level" + System.getProperty("line.separator") +
+                "    - Update own account information" + System.getProperty("line.separator") +
+                "* No one can change own manager check box" + System.getProperty("line.separator") +
+                "* No one can delete own account" + System.getProperty("line.separator")
+        ),
         DRIVER_CLOSE_FORM_DIALOG(
                 "생성/수정 중인정보를 포기하시겟습니까?", "Want to desert car information being created/modified?"),
         

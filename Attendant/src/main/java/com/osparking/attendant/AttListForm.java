@@ -281,8 +281,7 @@ public class AttListForm extends javax.swing.JFrame {
         filler30 = new javax.swing.Box.Filler(new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 32767));
         legendLLabel = new javax.swing.JLabel();
         filler42 = new javax.swing.Box.Filler(new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 32767));
-        jLabel1 = new javax.swing.JLabel();
-        filler41 = new javax.swing.Box.Filler(new java.awt.Dimension(40, 40), new java.awt.Dimension(40, 40), new java.awt.Dimension(40, 32767));
+        legendString = new javax.swing.JLabel();
         jSeparator2 = new javax.swing.JSeparator();
         loginPanel = new javax.swing.JPanel();
         filler31 = new javax.swing.Box.Filler(new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 32767));
@@ -371,7 +370,6 @@ public class AttListForm extends javax.swing.JFrame {
         filler57 = new javax.swing.Box.Filler(new java.awt.Dimension(20, 15), new java.awt.Dimension(40, 30), new java.awt.Dimension(40, 32767));
         filler17 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 10), new java.awt.Dimension(0, 10), new java.awt.Dimension(32767, 10));
         currentPWD_Panel = new javax.swing.JPanel();
-        filler64 = new javax.swing.Box.Filler(new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 32767));
         userPWLabel = new javax.swing.JLabel();
         filler54 = new javax.swing.Box.Filler(new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 32767));
         userPWReqLabel = new javax.swing.JLabel();
@@ -380,7 +378,6 @@ public class AttListForm extends javax.swing.JFrame {
         filler56 = new javax.swing.Box.Filler(new java.awt.Dimension(20, 0), new java.awt.Dimension(40, 40), new java.awt.Dimension(40, 32767));
         filler19 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 10), new java.awt.Dimension(0, 10), new java.awt.Dimension(32767, 10));
         datePanel = new javax.swing.JPanel();
-        filler65 = new javax.swing.Box.Filler(new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 32767));
         createDate = new javax.swing.JLabel();
         filler68 = new javax.swing.Box.Filler(new java.awt.Dimension(55, 0), new java.awt.Dimension(55, 0), new java.awt.Dimension(55, 32767));
         creationDateText = new javax.swing.JTextField();
@@ -548,13 +545,12 @@ public class AttListForm extends javax.swing.JFrame {
         RequiredPanel1.add(legendLLabel);
         RequiredPanel1.add(filler42);
 
-        jLabel1.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        jLabel1.setText("\u25CF " + REQUIRED1_LABEL.getContent() + ",  \uu25B2 " + REQUIRED2_LABEL.getContent());
-        jLabel1.setMaximumSize(new java.awt.Dimension(1100, 30));
-        jLabel1.setMinimumSize(new java.awt.Dimension(110, 21));
-        jLabel1.setPreferredSize(new java.awt.Dimension(80, 21));
-        RequiredPanel1.add(jLabel1);
-        RequiredPanel1.add(filler41);
+        legendString.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        legendString.setText("\u25CF " + REQUIRED1_LABEL.getContent() + ",  \uu25B2 " + REQUIRED2_LABEL.getContent());
+        legendString.setMaximumSize(new java.awt.Dimension(1100, 30));
+        legendString.setMinimumSize(new java.awt.Dimension(155, 21));
+        legendString.setPreferredSize(new java.awt.Dimension(155, 21));
+        RequiredPanel1.add(legendString);
 
         westPanel.add(RequiredPanel1);
         westPanel.add(jSeparator2);
@@ -985,14 +981,13 @@ public class AttListForm extends javax.swing.JFrame {
         currentPWD_Panel.setMinimumSize(new java.awt.Dimension(300, 26));
         currentPWD_Panel.setPreferredSize(new java.awt.Dimension(300, 26));
         currentPWD_Panel.setLayout(new javax.swing.BoxLayout(currentPWD_Panel, javax.swing.BoxLayout.LINE_AXIS));
-        currentPWD_Panel.add(filler64);
 
         userPWLabel.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         userPWLabel.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
         userPWLabel.setText(MY_PW_LABEL.getContent());
-        userPWLabel.setMaximumSize(new java.awt.Dimension(130, 21));
-        userPWLabel.setMinimumSize(new java.awt.Dimension(130, 21));
-        userPWLabel.setPreferredSize(new java.awt.Dimension(130, 21));
+        userPWLabel.setMaximumSize(new java.awt.Dimension(150, 21));
+        userPWLabel.setMinimumSize(new java.awt.Dimension(150, 21));
+        userPWLabel.setPreferredSize(new java.awt.Dimension(150, 21));
         currentPWD_Panel.add(userPWLabel);
         currentPWD_Panel.add(filler54);
 
@@ -1020,14 +1015,13 @@ public class AttListForm extends javax.swing.JFrame {
         datePanel.setMinimumSize(new java.awt.Dimension(300, 26));
         datePanel.setPreferredSize(new java.awt.Dimension(300, 26));
         datePanel.setLayout(new javax.swing.BoxLayout(datePanel, javax.swing.BoxLayout.LINE_AXIS));
-        datePanel.add(filler65);
 
         createDate.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         createDate.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         createDate.setText(CREATION_LABEL.getContent());
-        createDate.setMaximumSize(new java.awt.Dimension(130, 21));
-        createDate.setMinimumSize(new java.awt.Dimension(130, 21));
-        createDate.setPreferredSize(new java.awt.Dimension(130, 21));
+        createDate.setMaximumSize(new java.awt.Dimension(150, 21));
+        createDate.setMinimumSize(new java.awt.Dimension(150, 21));
+        createDate.setPreferredSize(new java.awt.Dimension(150, 21));
         datePanel.add(createDate);
         datePanel.add(filler68);
 
@@ -1248,9 +1242,9 @@ public class AttListForm extends javax.swing.JFrame {
                 LOGIN_ID_LABEL.getContent()
             }
         ));
-        searchCriteriaComboBox.setMaximumSize(new java.awt.Dimension(80, 30));
-        searchCriteriaComboBox.setMinimumSize(new java.awt.Dimension(80, 30));
-        searchCriteriaComboBox.setPreferredSize(new java.awt.Dimension(80, 30));
+        searchCriteriaComboBox.setMaximumSize(new java.awt.Dimension(90, 30));
+        searchCriteriaComboBox.setMinimumSize(new java.awt.Dimension(90, 30));
+        searchCriteriaComboBox.setPreferredSize(new java.awt.Dimension(90, 30));
         searchCriteriaComboBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 searchCriteriaComboBoxActionPerformed(evt);
@@ -1787,12 +1781,12 @@ public class AttListForm extends javax.swing.JFrame {
                 
                 switch (language) {
                     case KOREAN:
-                        dialogMessage = "사용자(아이디: " + userIDText.getText() + ") 기록이" + 
+                        dialogMessage = "사용자(아이디: " + deleteID + ") 기록이" + 
                                 System.lineSeparator() + "성공적으로 삭제되었습니다.";
                         break;
                         
                     case ENGLISH:
-                        dialogMessage = "User(ID: " + userIDText.getText() + ") record" + 
+                        dialogMessage = "User(ID: " + deleteID + ") record" + 
                                 System.lineSeparator() + "deleted successfully.";
                         break;
                         
@@ -2828,7 +2822,6 @@ public class AttListForm extends javax.swing.JFrame {
     private javax.swing.Box.Filler filler38;
     private javax.swing.Box.Filler filler39;
     private javax.swing.Box.Filler filler40;
-    private javax.swing.Box.Filler filler41;
     private javax.swing.Box.Filler filler42;
     private javax.swing.Box.Filler filler43;
     private javax.swing.Box.Filler filler44;
@@ -2850,8 +2843,6 @@ public class AttListForm extends javax.swing.JFrame {
     private javax.swing.Box.Filler filler61;
     private javax.swing.Box.Filler filler62;
     private javax.swing.Box.Filler filler63;
-    private javax.swing.Box.Filler filler64;
-    private javax.swing.Box.Filler filler65;
     private javax.swing.Box.Filler filler66;
     private javax.swing.Box.Filler filler67;
     private javax.swing.Box.Filler filler68;
@@ -2871,7 +2862,6 @@ public class AttListForm extends javax.swing.JFrame {
     private javax.swing.Box.Filler filler9;
     private javax.swing.JPanel idCheckPanel;
     private javax.swing.JLabel isIDreqLabel;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel4;
@@ -2881,6 +2871,7 @@ public class AttListForm extends javax.swing.JFrame {
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JLabel legendLLabel;
+    private javax.swing.JLabel legendString;
     private javax.swing.JPanel listTopPanel;
     private javax.swing.JPanel loginPanel;
     private javax.swing.JCheckBox managerCheckBox;

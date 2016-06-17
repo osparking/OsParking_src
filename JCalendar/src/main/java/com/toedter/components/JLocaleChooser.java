@@ -21,14 +21,24 @@
 
 package com.toedter.components;
 
+import static com.osparking.global.names.DB_Access.parkingLotLocale;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Locale;
 
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
+
+/*
+The part changed by OsParking(www.osparking.com) is commented by OsParking in line.
+Example: by OsParking on 2016. 6. 17.
+*/
 
 /**
  * JLocaleChooser is a bean for choosing locales.
@@ -64,13 +74,21 @@ public class JLocaleChooser extends JComboBox implements ItemListener {
 		super();
 		this.component = component;
 		addItemListener(this);
+                
+                Locale locale1 = new Locale( // Added by OsParking on 2016. 6. 17.
+                        parkingLotLocale.getLanguage(), 
+                        parkingLotLocale.getCountry(), "WIN");
+                Locale.setDefault(locale1); // upto here OsParking on 2016. 6. 17.
+                
 		locales = Calendar.getAvailableLocales();
+                
+                sortAlphaOrder(locales); // This line added by OsParking on 2016. 6. 17.
 		localeCount = locales.length;
 
 		for (int i = 0; i < localeCount; i++) {
-			if (locales[i].getCountry().length() > 0) {
-				addItem(locales[i].getDisplayName());
-			}
+                    if (locales[i].getCountry().length() > 0) {
+                            addItem(locales[i].getDisplayName());
+                    }
 		}
 
 		setLocale(Locale.getDefault());
@@ -146,5 +164,24 @@ public class JLocaleChooser extends JComboBox implements ItemListener {
 	private Locale[] locales;
 	private Locale locale;
 	private int localeCount;
+
+    /**
+     * Sort locales on its display name for user friendliness.
+     * 
+     * This module is added by OsParking on 2016. 6. 17.
+     * @param locales array of locales that are not sorted by the display name.
+     */
+    private void sortAlphaOrder(Locale[] locales) {
+        // first convert array to list
+        List<Locale> caList = Arrays.asList(locales);
+        Collections.sort(caList, new Comparator<Locale>() {
+            @Override
+            public int compare(Locale o1, Locale o2) {
+                return o1.getDisplayName().compareTo(o2.getDisplayName());
+            }
+        });
+        
+        caList.toArray(locales);
+    }
 }
 

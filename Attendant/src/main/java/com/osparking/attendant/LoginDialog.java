@@ -96,7 +96,7 @@ public class LoginDialog extends javax.swing.JDialog {
         setResizable(false);
 
         userIDText.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        userIDText.setText("admin");
+        userIDText.setText("manager001");
         userIDText.setPreferredSize(new java.awt.Dimension(80, 30));
         userIDText.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {

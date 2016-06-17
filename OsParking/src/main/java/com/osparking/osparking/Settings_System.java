@@ -96,6 +96,7 @@ import static com.osparking.global.names.DB_Access.connectionType;
 import static com.osparking.global.names.DB_Access.deviceComID;
 import static com.osparking.global.names.DB_Access.devicePort;
 import static com.osparking.global.names.DB_Access.deviceType;
+import static com.osparking.global.names.DB_Access.parkingLotLocale;
 import static com.osparking.global.names.DB_Access.parkingLotName;
 import com.osparking.global.names.OSP_enums.CameraType;
 import com.osparking.global.names.OSP_enums.ConnectionType;
@@ -3116,9 +3117,7 @@ public class Settings_System extends javax.swing.JFrame {
         RecordPassingDelayCBox.setSelected(storePassingDelay);
         PWStrengthChoiceComboBox.setSelectedIndex(pwStrengthLevel);
         OptnLoggingLevelComboBox.setSelectedIndex(opLoggingIndex);
-        if (localeIndex - 2 >=0 )
-            DateChooserLangCBox.setSelectedIndex(localeIndex - 2);
-        DateChooserLangCBox.setSelectedIndex(localeIndex);
+        DateChooserLangCBox.setSelectedItem(parkingLotLocale.getDisplayName());
         
         StatPopSizeTextField.setText(Integer.toString(statCount));
         MessageMaxLineComboBox.setSelectedItem(String.valueOf(maxMessageLines));
