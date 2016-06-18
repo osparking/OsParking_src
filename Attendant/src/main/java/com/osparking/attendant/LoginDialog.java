@@ -409,6 +409,12 @@ public class LoginDialog extends javax.swing.JDialog {
         }
     }
 
+    /**
+     * Check if the user 'admin' is already inserted on the parking lot
+     * database as it is supposed to be.
+     * 
+     * Otherwise, an error dialog appears and error message is added to the log.
+     */
     private void checkAdminExistance() {
         String sql = "Select count(*) as dataCount From users_osp Where id = ?";
         if (!dataExistsInDB(sql, "admin")) {

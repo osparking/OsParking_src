@@ -1770,16 +1770,20 @@ public class AttListForm extends javax.swing.JFrame {
             int result = updateStmt.executeUpdate();
             if (result == 1) {
                 List sortKeys = usersTable.getRowSorter().getSortKeys();                
-                RefreshTableContents(); 
-                usersTable.getRowSorter().setSortKeys(sortKeys);
-                if (selectedRowIndex == usersTable.getRowCount()) {
-                    selectedRowIndex--;
-                }
-                usersTable.changeSelection(selectedRowIndex, 0, false, false); 
-                usersTable.requestFocus();
                 
-                int realRow = usersTable.convertRowIndexToModel(selectedRowIndex);
-                ShowAttendantDetail(realRow);  
+                if (RefreshTableContents() == 0) {
+                    clearDetailOnEmptyListing();
+                } else {
+                    usersTable.getRowSorter().setSortKeys(sortKeys);
+                    if (selectedRowIndex == usersTable.getRowCount()) {
+                        selectedRowIndex--;
+                    }
+                    usersTable.changeSelection(selectedRowIndex, 0, false, false); 
+                    usersTable.requestFocus();
+                
+                    int realRow = usersTable.convertRowIndexToModel(selectedRowIndex);
+                    ShowAttendantDetail(realRow);
+                }
                 logParkingOperation(OpLogLevel.SettingsChange, 
                         ("* User deleted (ID:" + deleteID + ")"));
                 
@@ -1941,9 +1945,11 @@ public class AttListForm extends javax.swing.JFrame {
             List sortKeys = usersTable.getRowSorter().getSortKeys();                
             
             if (RefreshTableContents() == 0) {
-                clearAttendantDetails(false);
-                // Show popup dialog telling no user found.
-                JOptionPane.showConfirmDialog(this, NO_USER_DIALOG.getContent(),
+                clearDetailOnEmptyListing();
+                
+                // Inform user that no user found.
+                JOptionPane.showConfirmDialog(this, 
+                        NO_USER_DIALOG.getContent(),
                         SEARCH_RESULT_TITLE.getContent(),
                         JOptionPane.PLAIN_MESSAGE, INFORMATION_MESSAGE);                
             } else {
@@ -1965,9 +1971,6 @@ public class AttListForm extends javax.swing.JFrame {
                     "(User action: user list search)");         
         }
     }//GEN-LAST:event_searchButtonActionPerformed
-// RIGHTS_DIALOGTITLE
-    // helpText PWHelpButton
-    
     
     private void PWHelpButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PWHelpButtonActionPerformed
         displayHelpDialog(PWHelpButton, ATT_HELP_DIALOGTITLE.getContent(),
@@ -2353,6 +2356,7 @@ public class AttListForm extends javax.swing.JFrame {
             List sortKeys = usersTable.getRowSorter().getSortKeys();            
             RefreshTableContents(); 
             usersTable.getRowSorter().setSortKeys(sortKeys);
+            
             String newUserID = userIDText.getText().trim();
             selectedRowIndex = searchRow(newUserID);
             usersTable.changeSelection(selectedRowIndex, 0, false, false); 
@@ -2566,7 +2570,15 @@ public class AttListForm extends javax.swing.JFrame {
             multiFuncButton.setEnabled(false);
                     
             clearPasswordFields();
+            
+            selectedRowIndex = searchRow(userIDText.getText());
+            usersTable.changeSelection(selectedRowIndex, 0, false, false); 
+            usersTable.requestFocus();
+
+            ShowAttendantDetail(selectedRowIndex);   
+        
         } else {
+            //<editor-fold desc="-- Handle the case of update failure">
             String dialogMessage = "";
             
             switch (language) {
@@ -2587,12 +2599,8 @@ public class AttListForm extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, dialogMessage,
                     ATT_USER_UPDATE_DIALOGTITLE.getContent(), 
                     JOptionPane.PLAIN_MESSAGE);            
+            //</editor-fold>
         }
-        selectedRowIndex = searchRow(userIDText.getText());
-        usersTable.changeSelection(selectedRowIndex, 0, false, false); 
-        usersTable.requestFocus();
-        
-        ShowAttendantDetail(selectedRowIndex);
     }
 
     private void setModificationState(boolean flag) {
@@ -2731,6 +2739,19 @@ public class AttListForm extends javax.swing.JFrame {
     private void managerCBoxEnabled(boolean flag) {
         managerCheckBox.setEnabled(flag);
         managerHelpButton.setEnabled(flag);    
+    }
+
+    private void disableModifiability() {
+        deleteButton.setEnabled(false);
+        enableUserPassword(false);
+        changeEnabledProperty(false);
+        multiFuncButton.setEnabled(false);     
+    }
+
+    private void clearDetailOnEmptyListing() {
+        selectedRowIndex = -1;
+        clearAttendantDetails(false);
+        disableModifiability();    
     }
 
     private static class Ctrl_F_Action extends AbstractAction {
@@ -2927,6 +2948,11 @@ public class AttListForm extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
     // </editor-fold>
     
+    /**
+     * Update attendant listing table by accessing database table.
+     * It also 
+     * @return 
+     */
     private int RefreshTableContents() {
         DefaultTableModel model =  (DefaultTableModel) usersTable.getModel();
         Connection conn = null;
@@ -2945,14 +2971,6 @@ public class AttListForm extends javax.swing.JFrame {
             conn = JDBCMySQL.getConnection();
             pstmt = conn.prepareStatement(sb.toString());
             rs = pstmt.executeQuery();
-	    /*
-            usersTable.setModel(DbUtils.resultSetToTableModel(rs));
-            int dimX = usersTable.getPreferredSize().width;
-            int rowHeight = usersTable.getRowHeight();
-            usersTable.setPreferredSize(new Dimension(dimX, 
-                    rowHeight * usersTable.getRowCount()));
-            SetTableColumnWidth();
-	    */
 
             model.setRowCount(0);
             while(rs.next()){
@@ -2976,6 +2994,7 @@ public class AttListForm extends javax.swing.JFrame {
             usersTable.setSize(tableDim);
             usersTable.setPreferredSize(tableDim);
             countValue.setText(String.valueOf(usersTable.getRowCount()));
+            
             return model.getRowCount();
         }
     }
@@ -3085,10 +3104,7 @@ public class AttListForm extends javax.swing.JFrame {
             changeEnabledProperty(true);
             multiFuncButton.setEnabled(true);                
         } else {
-            deleteButton.setEnabled(false);
-            enableUserPassword(false);
-            changeEnabledProperty(false);
-            multiFuncButton.setEnabled(false);                  
+            disableModifiability();
         }
             
         // Attendant is created by who?
