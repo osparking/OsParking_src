@@ -50,11 +50,11 @@
             <version>1.0</version>
             <type>jar</type>
         </dependency>
-        <dependency>
+<!--        <dependency>
             <groupId>unknown.binary</groupId>
             <artifactId>AbsoluteLayout</artifactId>
             <version>SNAPSHOT</version>
-        </dependency>
+        </dependency>-->
     </dependencies>       
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

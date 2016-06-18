@@ -1431,7 +1431,13 @@ public class AttListForm extends javax.swing.JFrame {
                         int result = saveCreatedRecord();
                         String dialogText = "";
                         
-                        if (result == 1) {
+                        if (result == 1) { // 1 record inserted == insertion success.
+                            if (searchCondition.length() > 0) {
+                                /**
+                                 * List newly created user on the list in any case.
+                                 */
+                                searchCondition += " or id like '%" + newUserID + "%'";
+                            }
                             revokeCreationMode(true);
                             switch (language) {
                                 case KOREAN:
@@ -1928,9 +1934,9 @@ public class AttListForm extends javax.swing.JFrame {
     private void searchButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchButtonActionPerformed
         try {
             if (searchCriteriaComboBox.getSelectedIndex() == ATTLIST_ComboBoxTypes.ID.ordinal()) {
-                searchCondition = " where id like '" + "%" + searchText.getText() + "%';";
+                searchCondition = " where id like '%" + searchText.getText() + "%'";
             } else {
-                searchCondition = " where name like '" + "%" + searchText.getText() + "%';";
+                searchCondition = " where name like '%" + searchText.getText() + "%'";
             }
             List sortKeys = usersTable.getRowSorter().getSortKeys();                
             
@@ -2346,7 +2352,7 @@ public class AttListForm extends javax.swing.JFrame {
 
         if (created) {
             // <editor-fold defaultstate="collapsed" desc="-- Refresh user list while maintaining sort order">            
-            List sortKeys = usersTable.getRowSorter().getSortKeys();
+            List sortKeys = usersTable.getRowSorter().getSortKeys();            
             RefreshTableContents(); 
             usersTable.getRowSorter().setSortKeys(sortKeys);
             String newUserID = userIDText.getText().trim();
@@ -2445,6 +2451,12 @@ public class AttListForm extends javax.swing.JFrame {
         return tempStr.toString();
     }
 
+    /**
+     * Insert new user information in the database.
+     * 
+     * @return number of record created (=1) in case of success, 
+     * otherwise -1 (in case of failure)
+     */
     private int saveCreatedRecord() {
         Connection conn = null;        
         PreparedStatement createAttendant = null;
