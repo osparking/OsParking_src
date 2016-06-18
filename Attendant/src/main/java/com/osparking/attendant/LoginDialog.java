@@ -17,6 +17,7 @@
  */
 package com.osparking.attendant;
 
+import static com.osparking.attendant.AttListForm.dataExistsInDB;
 import static com.osparking.global.CommonData.buttonHeightNorm;
 import static com.osparking.global.CommonData.buttonWidthNorm;
 import static com.osparking.global.CommonData.buttonWidthWide;
@@ -35,8 +36,10 @@ import static com.osparking.global.names.ControlEnums.DialogMSGTypes.INPUT_ID_DI
 import static com.osparking.global.names.ControlEnums.DialogMSGTypes.INPUT_PW_DIALOG;
 import static com.osparking.global.names.ControlEnums.DialogMSGTypes.LOGIN_WRONG_DIALOG;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.ERROR_DIALOGTITLE;
+import static com.osparking.global.names.ControlEnums.DialogTitleTypes.WARING_DIALOGTITLE;
 import static com.osparking.global.names.ControlEnums.LabelContent.LOGIN_ID_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.PW_LABEL;
+import static com.osparking.global.names.ControlEnums.MsgContent.MISSING_ADMIN;
 import static com.osparking.global.names.ControlEnums.TitleTypes.LOGIN_DIALOG_TITLE;
 import static com.osparking.global.names.DB_Access.readSettings;
 import com.osparking.global.names.JDBCMySQL;
@@ -47,7 +50,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.logging.Level;
-import javax.swing.Box;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import static javax.swing.JOptionPane.showMessageDialog;
@@ -69,6 +71,7 @@ public class LoginDialog extends javax.swing.JDialog {
         setTitle(LOGIN_DIALOG_TITLE.getContent());
         initComponents();
         setIconImages(OSPiconList); 
+        checkAdminExistance();
     }
 
     public void addLoginEventListener(LoginEventListener listener) {
@@ -96,7 +99,7 @@ public class LoginDialog extends javax.swing.JDialog {
         setResizable(false);
 
         userIDText.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        userIDText.setText("manager001");
+        userIDText.setText("admin");
         userIDText.setPreferredSize(new java.awt.Dimension(80, 30));
         userIDText.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
@@ -403,6 +406,17 @@ public class LoginDialog extends javax.swing.JDialog {
             if (listeners[i] == LoginEventListener.class) {
                 ((LoginEventListener) listeners[i+1]).loginEventOccurred(loginEvent);
             }
-        }        
+        }
+    }
+
+    private void checkAdminExistance() {
+        String sql = "Select count(*) as dataCount From users_osp Where id = ?";
+        if (!dataExistsInDB(sql, "admin")) {
+            String errorMsg = MISSING_ADMIN.getContent();
+            logParkingException(Level.SEVERE, null, errorMsg);
+            JOptionPane.showMessageDialog(this, errorMsg,
+                    WARING_DIALOGTITLE.getContent(),
+                    JOptionPane.ERROR_MESSAGE);
+        }
     }
 }

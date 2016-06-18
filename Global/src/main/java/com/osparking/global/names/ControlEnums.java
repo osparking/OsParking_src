@@ -246,12 +246,14 @@ public class ControlEnums {
     }
         
     public enum MsgContent {  
-        RECENT_WORD("최근 ", "Recent "),
-        LOG_IN("로그인", "Logged In"),
-        LOG_OUT("로그아웃", "Logged Out"),
         ASK_LOGOUT(", 로그아웃 원하십니까?", ", do you want to log out?"),
         AVERAGE_WORDS(" 대 평균 통과시간: ", " car passing delay average: "),
+        LOG_IN("로그인", "Logged In"),
+        LOG_OUT("로그아웃", "Logged Out"),
         FILE_PATH("파일경로: ", "File path: "),
+        MISSING_ADMIN("admin 아이디가 ParkingLot DB에 없음!!", 
+                "admin is not in the ParkingLot DB"),
+        RECENT_WORD("최근 ", "Recent "),
         SYSTEM_START("오즈파킹 가동 시작", "OsParking started"),
         SYSTEM_STOP("오즈파킹 가동 중지", "OsParking started");
         

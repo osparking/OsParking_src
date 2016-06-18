@@ -1956,7 +1956,6 @@ public class AttListForm extends javax.swing.JFrame {
             if(usersTable.getRowCount()==0){
                 multiFuncButton.setEnabled(false);
                 deleteButton.setEnabled(false);
-                
             }else{
                 multiFuncButton.setEnabled(true);
                 deleteButton.setEnabled(true);
@@ -2375,7 +2374,7 @@ public class AttListForm extends javax.swing.JFrame {
         // </editor-fold>   
     }
 
-    private boolean dataExistsInDB(String sql, String dataEntered) {
+    public static boolean dataExistsInDB(String sql, String dataEntered) {
         boolean result = false;
         Connection conn = null;
         PreparedStatement pstmt = null;    
