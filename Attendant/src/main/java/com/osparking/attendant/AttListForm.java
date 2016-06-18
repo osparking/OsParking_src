@@ -1947,12 +1947,11 @@ public class AttListForm extends javax.swing.JFrame {
                         SEARCH_RESULT_TITLE.getContent(),
                         JOptionPane.PLAIN_MESSAGE, INFORMATION_MESSAGE);                
             } else {
-                usersTable.changeSelection(0, 0, false, false);
+                selectedRowIndex = 0;
+                usersTable.changeSelection(selectedRowIndex, 0, false, false);
                 ShowAttendantDetail(selectedRowIndex);
             }
             usersTable.requestFocus();
-            ShowAttendantDetail(selectedRowIndex);
-            
             usersTable.getRowSorter().setSortKeys(sortKeys);  
             if(usersTable.getRowCount()==0){
                 multiFuncButton.setEnabled(false);
