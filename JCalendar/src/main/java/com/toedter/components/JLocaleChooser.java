@@ -50,13 +50,22 @@ Example: by OsParking on 2016. 6. 17.
 public class JLocaleChooser extends JComboBox implements ItemListener {
 	private static final long serialVersionUID = 8152430789764877431L;
 	protected JComponent component;
-        static Locale defaultLocale = new Locale("en", "US");        
+        static Locale defaultLocale = new Locale("en", "US"); // OsParking on 2016. 6. 18.
 
 	/**
 	 * Default JLocaleChooser constructor.
 	 */
-	public JLocaleChooser(Locale defaultLocale) {
+	public JLocaleChooser() {
             this(null, defaultLocale);
+	}
+	
+        /**
+         * Constructor that accepts locale to use in displaying locale list.
+         * Added by OsParking on 2016. 6. 18.
+         * @param locale locale to use in showing locale list.
+         */
+        public JLocaleChooser(Locale locale) {
+            this(null, locale);
 	}
 
     /**

@@ -3118,6 +3118,7 @@ public class Settings_System extends javax.swing.JFrame {
         PWStrengthChoiceComboBox.setSelectedIndex(pwStrengthLevel);
         OptnLoggingLevelComboBox.setSelectedIndex(opLoggingIndex);
         DateChooserLangCBox.setSelectedItem(parkingLotLocale.getDisplayName());
+        localeIndex = (short) DateChooserLangCBox.getSelectedIndex();
         
         StatPopSizeTextField.setText(Integer.toString(statCount));
         MessageMaxLineComboBox.setSelectedItem(String.valueOf(maxMessageLines));
