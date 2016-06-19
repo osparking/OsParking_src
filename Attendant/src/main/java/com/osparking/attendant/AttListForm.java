@@ -24,7 +24,6 @@ import static com.osparking.global.CommonData.pointColor;
 import static com.osparking.global.CommonData.tipColor;
 import static com.osparking.global.DataSheet.saveODSfile;
 import java.awt.Point;
-import java.awt.event.KeyEvent;
 import java.io.File;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -116,6 +115,9 @@ import javax.swing.JComponent;
 import javax.swing.JRootPane;
 import javax.swing.JTextField;
 import javax.swing.KeyStroke;
+import javax.swing.ListSelectionModel;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -125,7 +127,6 @@ import javax.swing.table.DefaultTableModel;
 //test git song
 public class AttListForm extends javax.swing.JFrame {
     private FormMode formMode = FormMode.NormalMode;
-    int selectedRowIndex = 0;  
     String loginID = null;
     String loginPW = null;
     boolean isManager = false;
@@ -140,6 +141,10 @@ public class AttListForm extends javax.swing.JFrame {
     ParentGUI mainGUI;
     boolean isStandalone = false;
     private HashSet<Component> changedControls = new HashSet<Component>();    
+    /**
+     * Tells if attendant search key hint string("Ctrl+F") is shown.
+     */
+    private boolean hintShown = true;
     
     /**
      * Creates new form AttListForm
@@ -163,26 +168,22 @@ public class AttListForm extends javax.swing.JFrame {
             this.isManager = isManager;
             initComponentsUser();
             
-            // limit maximun allowed length of user ID
+            // limit maximun allowed length of user IDa
             userIDText.setDocument(new JTextFieldLimit(20));
 
-            RefreshTableContents();
-            selectedRowIndex = searchRow(loginID);
-            ShowAttendantDetail(selectedRowIndex);
+            ListSelectionModel model = usersTable.getSelectionModel();
+            model.addListSelectionListener(new AttendantRowSelectionListener());
             
-            SwingUtilities.invokeLater(new Runnable()  
-            {  
-                public void run()  
-                {  
-                    {  
-                        if (rowInVisible(usersTable, selectedRowIndex)) {
-                            usersTable.changeSelection(selectedRowIndex, 0, false, false); 
-                        } else {
-                            usersTable.setRowSelectionInterval(selectedRowIndex, selectedRowIndex);
-                        }
-                    }  
-                }  
-            });             
+            RefreshTableContents();
+            int selectIndex = searchRow(loginID);
+
+            if (rowHidden(usersTable, selectIndex)) {
+                usersTable.changeSelection(selectIndex, 0, false, false); 
+            } else {
+                usersTable.setRowSelectionInterval(selectIndex, selectIndex);
+            }            
+          
+            
             usersTable.requestFocus();            
             usersTable.getRowSorter().addRowSorterListener(new RowSorterListener() {
                 @Override  
@@ -461,11 +462,6 @@ public class AttListForm extends javax.swing.JFrame {
         adminAuth2CheckBox.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
         topInPanel.add(metaKeyLabel);
         topInPanel.add(Box.createHorizontalGlue());
-        adminAuth2CheckBox.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                adminAuth2CheckBoxActionPerformed(evt);
-            }
-        });
         topInPanel.add(adminAuth2CheckBox);
         topInPanel.add(filler1);
 
@@ -821,11 +817,6 @@ public class AttListForm extends javax.swing.JFrame {
         emailAddrText.setMaximumSize(new java.awt.Dimension(32767, 30));
         emailAddrText.setMinimumSize(new java.awt.Dimension(80, 30));
         emailAddrText.setPreferredSize(new java.awt.Dimension(120, 30));
-        emailAddrText.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                emailAddrTextActionPerformed(evt);
-            }
-        });
         emailAddrText.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 emailAddrTextKeyReleased(evt);
@@ -1123,16 +1114,6 @@ public class AttListForm extends javax.swing.JFrame {
         usersTable.setNextFocusableComponent(userNameText);
         usersTable.setPreferredSize(new java.awt.Dimension(600, 0));
         usersTable.setRowHeight(22);
-        usersTable.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                usersTableMouseClicked(evt);
-            }
-        });
-        usersTable.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                usersTableKeyPressed(evt);
-            }
-        });
         jScrollPane1.setViewportView(usersTable);
 
         centerPanel.add(jScrollPane1);
@@ -1245,11 +1226,6 @@ public class AttListForm extends javax.swing.JFrame {
         searchCriteriaComboBox.setMaximumSize(new java.awt.Dimension(90, 30));
         searchCriteriaComboBox.setMinimumSize(new java.awt.Dimension(90, 30));
         searchCriteriaComboBox.setPreferredSize(new java.awt.Dimension(90, 30));
-        searchCriteriaComboBox.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                searchCriteriaComboBoxActionPerformed(evt);
-            }
-        });
         searchPanel.add(searchCriteriaComboBox);
 
         searchText.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
@@ -1342,28 +1318,6 @@ public class AttListForm extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void usersTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_usersTableMouseClicked
-
-        try {
-            // When a table is sorted on some key, a row of the table can have two index values.
-            // They are one for the display ordering and the other is  for the location in the model.
-            // So, in the source code, these two index values need to be translated back and forth.
-            if (formMode == FormMode.NormalMode) {
-                java.awt.EventQueue.invokeLater(new Runnable() {
-                    public void run() {
-                        selectedRowIndex = usersTable.getSelectedRow();
-                        if (selectedRowIndex != -1) {
-                            ShowAttendantDetail(usersTable.convertRowIndexToModel(selectedRowIndex));
-                        }
-                    }
-                });
-            }
-        } catch (Exception ex) {
-            logParkingException(Level.SEVERE, ex, 
-                    "(User action: user list table mouse click, index: " + selectedRowIndex + ")");
-        }
-    }//GEN-LAST:event_usersTableMouseClicked
-
     private void ChangeNewPasswordEnabled(boolean flag)
     {
         new1Password.setEnabled(flag);
@@ -1402,7 +1356,6 @@ public class AttListForm extends javax.swing.JFrame {
                         setModificationState(false);
                         int result = saveUpdatedRecord();
                         doAfterUpdateOperations(result);
-                        usersTableMouseClicked(null);
                     } else {
                         if (errorMsg[0].length() > 0) {
                             showMessageDialog(this, errorMsg[0]);
@@ -1637,7 +1590,6 @@ public class AttListForm extends javax.swing.JFrame {
                 createButton.setEnabled(true);
                 deleteButton.setEnabled(true);
             }
-            usersTableMouseClicked(null);
         } catch (Exception ex) {
             String mode = (formMode == FormMode.CreateMode ? "Create" : "Modify");
             logParkingException(Level.SEVERE, ex, "(User action: user cancelled mode " + mode);
@@ -1771,18 +1723,17 @@ public class AttListForm extends javax.swing.JFrame {
             if (result == 1) {
                 List sortKeys = usersTable.getRowSorter().getSortKeys();                
                 
+                int selectIndex = usersTable.getSelectedRow();
                 if (RefreshTableContents() == 0) {
-                    clearDetailOnEmptyListing();
+                    clearDetailsForEmptyList();
                 } else {
                     usersTable.getRowSorter().setSortKeys(sortKeys);
-                    if (selectedRowIndex == usersTable.getRowCount()) {
-                        selectedRowIndex--;
+                    if (selectIndex == usersTable.getRowCount()) {
+                        selectIndex--;
                     }
-                    usersTable.changeSelection(selectedRowIndex, 0, false, false); 
+                    selectIndex = usersTable.convertRowIndexToModel(selectIndex);
+                    usersTable.changeSelection(selectIndex, 0, false, false); 
                     usersTable.requestFocus();
-                
-                    int realRow = usersTable.convertRowIndexToModel(selectedRowIndex);
-                    ShowAttendantDetail(realRow);
                 }
                 logParkingOperation(OpLogLevel.SettingsChange, 
                         ("* User deleted (ID:" + deleteID + ")"));
@@ -1836,45 +1787,16 @@ public class AttListForm extends javax.swing.JFrame {
         }     
     }//GEN-LAST:event_deleteButtonActionPerformed
 
-    private void usersTableKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_usersTableKeyPressed
-        
-        int keyCode = evt.getKeyCode();
-        try {
-            if (keyCode == KeyEvent.VK_ENTER || 
-                    keyCode == KeyEvent.VK_UP || keyCode == KeyEvent.VK_DOWN ||
-                    keyCode == KeyEvent.VK_PAGE_UP || keyCode == KeyEvent.VK_PAGE_DOWN)
-            {
-                java.awt.EventQueue.invokeLater(new Runnable() {
-                    public void run() {
-                        int selRow = usersTable.getSelectedRow();
-                        int realRow = usersTable.convertRowIndexToModel(selRow);
-                        ShowAttendantDetail(realRow);               
-                    }
-                }); 
-            }
-        } catch (Exception ex) {
-            String key = null;
-            switch (keyCode) {
-                case KeyEvent.VK_UP: key = "Up Arrow"; break;
-                case KeyEvent.VK_DOWN: key = "Down Arrow"; break;
-                case KeyEvent.VK_PAGE_UP: key = "Next Page Arrow"; break;
-                case KeyEvent.VK_PAGE_DOWN: key = "Prev Page Arrow"; break;
-            }
-            logParkingException(Level.SEVERE, ex, 
-                    "(User Action: " + key + " key entered while surfing user list)");
-        }
-    }//GEN-LAST:event_usersTableKeyPressed
-
     /**
      * Remove the content of detailed information fields of attendant.
      * @param enableThis flag to set enabled data member of controls.
      */
-    private void clearAttendantDetails(boolean enableThis) {
+    private void clearAttendantDetail(boolean enableThis) {
         userIDText.setEnabled(enableThis);
         userIDText.setText("");
         checkIDButton.setEnabled(enableThis);
         managerCheckBox.setSelected(false);
-        changeEnabledProperty(enableThis);
+        changeTextFieldEnabled(enableThis);
         userNameText.setText("");
         cellPhoneText.setText("");
         phoneText.setText("");
@@ -1888,7 +1810,7 @@ public class AttListForm extends javax.swing.JFrame {
             setFormMode(FormMode.CreateMode);
             ID_usable = false;
             // <editor-fold defaultstate="collapsed" desc="-- Enable data input fields">
-            clearAttendantDetails(true);
+            clearAttendantDetail(true);
             userIDText.setEditable(true);
             userIDText.requestFocusInWindow();
 
@@ -1937,15 +1859,20 @@ public class AttListForm extends javax.swing.JFrame {
     
     private void searchButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchButtonActionPerformed
         try {
-            if (searchCriteriaComboBox.getSelectedIndex() == ATTLIST_ComboBoxTypes.ID.ordinal()) {
-                searchCondition = " where id like '%" + searchText.getText() + "%'";
+            String searchStr = searchText.getText().trim();
+            if (hintShown) {
+                searchCondition = "";
             } else {
-                searchCondition = " where name like '%" + searchText.getText() + "%'";
+                if (searchCriteriaComboBox.getSelectedIndex() == ATTLIST_ComboBoxTypes.ID.ordinal()) {
+                    searchCondition = " where id like '%" + searchStr + "%'";
+                } else {
+                    searchCondition = " where name like '%" + searchStr + "%'";
+                }
             }
             List sortKeys = usersTable.getRowSorter().getSortKeys();                
             
             if (RefreshTableContents() == 0) {
-                clearDetailOnEmptyListing();
+                clearDetailsForEmptyList();
                 
                 // Inform user that no user found.
                 JOptionPane.showConfirmDialog(this, 
@@ -1953,9 +1880,7 @@ public class AttListForm extends javax.swing.JFrame {
                         SEARCH_RESULT_TITLE.getContent(),
                         JOptionPane.PLAIN_MESSAGE, INFORMATION_MESSAGE);                
             } else {
-                selectedRowIndex = 0;
-                usersTable.changeSelection(selectedRowIndex, 0, false, false);
-                ShowAttendantDetail(selectedRowIndex);
+                usersTable.changeSelection(0, 0, false, false);
             }
             usersTable.requestFocus();
             usersTable.getRowSorter().setSortKeys(sortKeys);  
@@ -2200,33 +2125,25 @@ public class AttListForm extends javax.swing.JFrame {
         disposeAndOptionalExit();        
     }//GEN-LAST:event_formWindowClosing
 
-    private void emailAddrTextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_emailAddrTextActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_emailAddrTextActionPerformed
-
-    private void searchCriteriaComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchCriteriaComboBoxActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_searchCriteriaComboBoxActionPerformed
-
     private void managerCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_managerCheckBoxActionPerformed
         TableModel attModel = usersTable.getModel();
-        String adminAuthority = attModel.getValueAt(selectedRowIndex, 2).toString();
-        boolean isManOri = adminAuthority.equals("Y");
+        String adminAuthority = attModel.getValueAt(usersTable.getSelectedRow(), 2).toString();
+        boolean wasManager = adminAuthority.equals("Y");
         
-        if (managerCheckBox.isSelected() && isManOri || 
-                !managerCheckBox.isSelected() && !isManOri) 
+        if (managerCheckBox.isSelected() && wasManager || 
+                !managerCheckBox.isSelected() && !wasManager) 
         {
             changeSaveButtonEnabled(managerCheckBox, true);
         } else 
-            if (managerCheckBox.isSelected() && !isManOri || 
-                    !managerCheckBox.isSelected() && isManOri) 
+            if (managerCheckBox.isSelected() && !wasManager || 
+                    !managerCheckBox.isSelected() && wasManager) 
         {
             changeSaveButtonEnabled(managerCheckBox, false);
         }
     }//GEN-LAST:event_managerCheckBoxActionPerformed
 
     private void userNameTextKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_userNameTextKeyReleased
-        Object cellObj = usersTable.getModel().getValueAt(selectedRowIndex, 1);
+        Object cellObj = usersTable.getModel().getValueAt(usersTable.getSelectedRow(), 1);
         String usernameOrig = "";
         if (cellObj != null) {
             usernameOrig = cellObj.toString();
@@ -2237,7 +2154,7 @@ public class AttListForm extends javax.swing.JFrame {
     }//GEN-LAST:event_userNameTextKeyReleased
 
     private void cellPhoneTextKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cellPhoneTextKeyReleased
-        Object cellObj = usersTable.getModel().getValueAt(selectedRowIndex, 3);
+        Object cellObj = usersTable.getModel().getValueAt(usersTable.getSelectedRow(), 3);
         String cellOrig = "";
         if (cellObj != null) {
             cellOrig = cellObj.toString();
@@ -2248,7 +2165,7 @@ public class AttListForm extends javax.swing.JFrame {
     }//GEN-LAST:event_cellPhoneTextKeyReleased
 
     private void emailAddrTextKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_emailAddrTextKeyReleased
-        Object cellObj = usersTable.getModel().getValueAt(selectedRowIndex, 5);
+        Object cellObj = usersTable.getModel().getValueAt(usersTable.getSelectedRow(), 5);
         String emailOrig = "";
         if (cellObj != null) {
             emailOrig = cellObj.toString();
@@ -2259,7 +2176,7 @@ public class AttListForm extends javax.swing.JFrame {
     }//GEN-LAST:event_emailAddrTextKeyReleased
 
     private void phoneTextKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_phoneTextKeyReleased
-        Object cellObj = usersTable.getModel().getValueAt(selectedRowIndex, 4);
+        Object cellObj = usersTable.getModel().getValueAt(usersTable.getSelectedRow(), 4);
         String phoneOrig = "";
         if (cellObj != null) {
             phoneOrig = cellObj.toString();
@@ -2269,10 +2186,6 @@ public class AttListForm extends javax.swing.JFrame {
                 phoneText.getText().trim().equals(phoneOrig));            
     }//GEN-LAST:event_phoneTextKeyReleased
 
-    private void adminAuth2CheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_adminAuth2CheckBoxActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_adminAuth2CheckBoxActionPerformed
-
     private void managerHelpButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_managerHelpButtonActionPerformed
         displayHelpDialog(managerHelpButton, RIGHTS_DIALOGTITLE.getContent(),
               USER_RIGHTS_DESCRIPTION.getContent(), false);
@@ -2281,13 +2194,15 @@ public class AttListForm extends javax.swing.JFrame {
     private void searchTextFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_searchTextFocusGained
         if (searchText.getText().equals(CTRL_F_TOOLTIP.getContent())) {
             searchText.setText("");
+            hintShown = false;            
             searchText.setForeground(new Color(0, 0, 0));
         }
     }//GEN-LAST:event_searchTextFocusGained
 
     private void searchTextFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_searchTextFocusLost
-        if (searchText.getText().length() == 0) {
+        if (searchText.getText().trim().length() == 0) {
             searchText.setText(CTRL_F_TOOLTIP.getContent());
+            hintShown = true;
             searchText.setForeground(tipColor);
         }        
     }//GEN-LAST:event_searchTextFocusLost
@@ -2313,7 +2228,7 @@ public class AttListForm extends javax.swing.JFrame {
         return numCount;
     }
 
-    private void changeEnabledProperty(boolean b) {
+    private void changeTextFieldEnabled(boolean b) {
         userNameText.setEnabled(b);
         cellPhoneText.setEnabled(b);
         phoneText.setEnabled(b);
@@ -2342,7 +2257,7 @@ public class AttListForm extends javax.swing.JFrame {
         // </editor-fold>   
         
         changeBoxEditability(false);
-        clearPasswordFields();        
+        clearPasswordFields();       
 
         // <editor-fold defaultstate="collapsed" desc="-- Disable password related controls in search mode">        
         changePWCheckBox.setSelected(false);
@@ -2358,16 +2273,15 @@ public class AttListForm extends javax.swing.JFrame {
             usersTable.getRowSorter().setSortKeys(sortKeys);
             
             String newUserID = userIDText.getText().trim();
-            selectedRowIndex = searchRow(newUserID);
-            usersTable.changeSelection(selectedRowIndex, 0, false, false); 
+            int selectIndex = searchRow(newUserID);
+            if(selectIndex < 0)
+                selectIndex = 0;
+            usersTable.changeSelection(selectIndex, 0, false, false); 
             usersTable.requestFocus();
             // </editor-fold>   
         }
         
         setFormMode(FormMode.NormalMode);
-        if(selectedRowIndex < 0)
-            selectedRowIndex = 0;
-        ShowAttendantDetail(usersTable.convertRowIndexToModel(selectedRowIndex));     
         
         // <editor-fold defaultstate="collapsed" desc="-- Disable login ID related controls in search mode">            
 //        managerCheckBox.setEnabled(false); 
@@ -2544,7 +2458,9 @@ public class AttListForm extends javax.swing.JFrame {
             List sortKeys = usersTable.getRowSorter().getSortKeys();
             RefreshTableContents(); 
             usersTable.getRowSorter().setSortKeys(sortKeys);    
-            logParkingOperation(OpLogLevel.SettingsChange, getModifiedUserInfo());       
+            int selectIndex = searchRow(userIDText.getText());
+            usersTable.changeSelection(selectIndex, 0, false, false); 
+            usersTable.requestFocus();
             
             String dialogMessage = "";
             
@@ -2562,21 +2478,14 @@ public class AttListForm extends javax.swing.JFrame {
                 default:
                     break;
             }
-            
             JOptionPane.showMessageDialog(this, dialogMessage,
                     ATT_USER_UPDATE_DIALOGTITLE.getContent(),
                     JOptionPane.PLAIN_MESSAGE);
-            changedControls.clear();
-            multiFuncButton.setEnabled(false);
-                    
-            clearPasswordFields();
             
-            selectedRowIndex = searchRow(userIDText.getText());
-            usersTable.changeSelection(selectedRowIndex, 0, false, false); 
-            usersTable.requestFocus();
-
-            ShowAttendantDetail(selectedRowIndex);   
-        
+            clearPasswordFields();
+            multiFuncButton.setEnabled(false);
+            changedControls.clear();
+            logParkingOperation(OpLogLevel.SettingsChange, getModifiedUserInfo());       
         } else {
             //<editor-fold desc="-- Handle the case of update failure">
             String dialogMessage = "";
@@ -2611,7 +2520,6 @@ public class AttListForm extends javax.swing.JFrame {
             // No user can change self 'admin' property
             // No user with admin right can change admin property of user 'admin'
             if (loginID.equals("admin")) {
-//                managerCheckBox.setEnabled(flag);
                 managerCBoxEnabled(flag);
                 if (flag) {
                     managerCheckBox.requestFocusInWindow();
@@ -2626,7 +2534,6 @@ public class AttListForm extends javax.swing.JFrame {
         }
         changePWCheckBox.setEnabled(flag);
         if(isAdminRerocd && notOwnRecord)
-//            managerCheckBox.setEnabled(flag);
             managerCBoxEnabled(flag);
         changeBoxEditability(flag);
     }
@@ -2684,23 +2591,23 @@ public class AttListForm extends javax.swing.JFrame {
             case CreateMode:
                 modeString.setText(CREATE.getContent());
                 legendLLabel.setText(CREATE_COND.getContent());
-                enableUserPassword(true);
+                changeUserPasswordEnabled(true);
                 setSearchEnabled(false);
                 break;
             case NormalMode:
                 modeString.setText(SEARCH.getContent());
                 legendLLabel.setText(DATA_COND.getContent());
                 if (isDeletableByMe(userIDText.getText())) {
-                    enableUserPassword(true);
+                    changeUserPasswordEnabled(true);
                 } else {
-                    enableUserPassword(false);
+                    changeUserPasswordEnabled(false);
                 }
                 setSearchEnabled(true);
                 break;
             case UpdateMode:
                 modeString.setText(MODIFY.getContent());
                 legendLLabel.setText(MODIFY_COND.getContent());
-                enableUserPassword(true);
+                changeUserPasswordEnabled(true);
                 setSearchEnabled(false);
                 break;
             default:
@@ -2708,7 +2615,7 @@ public class AttListForm extends javax.swing.JFrame {
         }
     }
 
-    private boolean rowInVisible(JTable usersTable, int i) {
+    private boolean rowHidden(JTable usersTable, int i) {
         Rectangle vr = usersTable.getVisibleRect ();
         int first = usersTable.rowAtPoint(vr.getLocation());
         vr.translate(0, vr.height);
@@ -2720,7 +2627,7 @@ public class AttListForm extends javax.swing.JFrame {
         }
     }
 
-    private void enableUserPassword(boolean flag) {
+    private void changeUserPasswordEnabled(boolean flag) {
         userPassword.setEnabled(flag);
         userPassword.setEditable(flag);    
     }
@@ -2742,15 +2649,14 @@ public class AttListForm extends javax.swing.JFrame {
     }
 
     private void disableModifiability() {
+        changeTextFieldEnabled(false);
+        changeUserPasswordEnabled(false);
         deleteButton.setEnabled(false);
-        enableUserPassword(false);
-        changeEnabledProperty(false);
         multiFuncButton.setEnabled(false);     
     }
 
-    private void clearDetailOnEmptyListing() {
-        selectedRowIndex = -1;
-        clearAttendantDetails(false);
+    private void clearDetailsForEmptyList() {
+        clearAttendantDetail(false);
         disableModifiability();    
     }
 
@@ -2763,6 +2669,22 @@ public class AttListForm extends javax.swing.JFrame {
         @Override
         public void actionPerformed(ActionEvent e) {
             searchText.requestFocus();
+        }
+    }
+
+    static int count = 0;
+    private class AttendantRowSelectionListener implements ListSelectionListener {
+        public AttendantRowSelectionListener() {
+        }
+        @Override
+        public void valueChanged(ListSelectionEvent e) {
+            /* Create and display the form */
+            if (e.getValueIsAdjusting()) {
+                return;
+            } else {
+                int index = usersTable.getSelectedRow();
+                showAttendantDetail(index);
+            }
         }
     }
 
@@ -2999,7 +2921,7 @@ public class AttListForm extends javax.swing.JFrame {
         }
     }
 
-    private void ShowAttendantDetail(int clickedRow) {
+    private void showAttendantDetail(int clickedRow) {
         TableModel attModel = usersTable.getModel();
 
         if ( attModel.getRowCount() == 0)
@@ -3093,15 +3015,15 @@ public class AttListForm extends javax.swing.JFrame {
         if (rowID.equals(loginID)) { 
             // Login user self information is under consideration.
             deleteButton.setEnabled(false);
-            enableUserPassword(false);
-            changeEnabledProperty(true);
+            changeUserPasswordEnabled(false);
+            changeTextFieldEnabled(true);
             multiFuncButton.setEnabled(true);              
         } else if (loginID.equals("admin") || // non-admin is handled row by admin
                 isManager && !rowForManager) // non-manager is handled row by manager
         { 
             deleteButton.setEnabled(true);
-            enableUserPassword(true);
-            changeEnabledProperty(true);
+            changeUserPasswordEnabled(true);
+            changeTextFieldEnabled(true);
             multiFuncButton.setEnabled(true);                
         } else {
             disableModifiability();
