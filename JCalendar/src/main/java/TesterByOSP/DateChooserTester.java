@@ -17,8 +17,6 @@
  */
 package TesterByOSP;
 
-import static com.osparking.global.Globals.OSPiconList;
-
 /**
  *
  * @author Open Source Parking Inc.
@@ -30,8 +28,6 @@ public class DateChooserTester extends javax.swing.JFrame {
      */
     public DateChooserTester() {
         initComponents();
-        
-        setIconImages(OSPiconList);        
         TEstDateChooser.setLocale(TestLocaleChooser.getLocale());
     }
 
