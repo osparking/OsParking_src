@@ -80,17 +80,6 @@
 
           <Layout class="org.netbeans.modules.form.compat2.layouts.DesignBoxLayout"/>
           <SubComponents>
-            <Component class="javax.swing.JButton" name="seeLicenseButton">
-              <Properties>
-                <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                  <Connection code="new java.awt.Font(font_Type, font_Style, font_Size)" type="code"/>
-                </Property>
-                <Property name="text" type="java.lang.String" value="About"/>
-              </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="seeLicenseButtonActionPerformed"/>
-              </Events>
-            </Component>
             <Component class="javax.swing.Box$Filler" name="filler11">
               <Properties>
                 <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
@@ -108,7 +97,7 @@
                 </Property>
                 <Property name="mnemonic" type="int" value="99"/>
                 <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                  <Connection code="((String[])Globals.ButtonLabels.get(CLOSE_BTN.ordinal()))[ourLang]" type="code"/>
+                  <Connection code="CLOSE_BTN.getContent()" type="code"/>
                 </Property>
                 <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                   <Dimension value="[90, 40]"/>
@@ -185,10 +174,10 @@
                     <Component class="javax.swing.JLabel" name="jLabel1">
                       <Properties>
                         <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                          <Connection code="new java.awt.Font(font_Type, font_Style, font_Size)" type="code"/>
+                          <Connection code="new java.awt.Font(font_Type, font_Style, head_font_Size)" type="code"/>
                         </Property>
                         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                          <Connection code="((String[])Globals.LabelsText.get(AFFILIATION_LIST_LABEL.ordinal()))[ourLang]" type="code"/>
+                          <Connection code="AFFILIATION_LIST_LABEL.getContent()" type="code"/>
                         </Property>
                       </Properties>
                       <AccessibilityProperties>
@@ -219,7 +208,7 @@
                               <Connection code="new java.awt.Font(font_Type, font_Style, font_Size)" type="code"/>
                             </Property>
                             <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                              <Connection code="new javax.swing.table.DefaultTableModel(&#xa;    new Object [][] {&#xa;        {1, &quot;Janitor&apos;s Office&quot;, 2},&#xa;        {2, &quot;Engineering Bldg&quot;, 1}&#xa;    },&#xa;    new String[]{&#xa;        ((String[])Globals.TableHeaderList.get(ORDER_HEADER.ordinal()))[ourLang],&#xa;        ((String[])Globals.TableHeaderList.get(HIGHER_HEADER.ordinal()))[ourLang],&#xa;        &quot;L1_NO&quot;&#xa;    }&#xa;)&#xa;{&#xa;    public boolean isCellEditable(int row, int column)&#xa;    {&#xa;        if (column == 0)&#xa;        return false;&#xa;        else&#xa;        return true;&#xa;    }&#xa;    @Override&#xa;    public Class&lt;?&gt; getColumnClass(int columnIndex) {&#xa;        if (columnIndex == 0)&#xa;        return Integer.class;&#xa;        else&#xa;        return String.class;&#xa;    }&#xa;}&#xa;&#xa;" type="code"/>
+                              <Connection code="new javax.swing.table.DefaultTableModel(&#xa;    new Object [][] {&#xa;        {1, &quot;Janitor&apos;s Office&quot;, 2},&#xa;        {2, &quot;Engineering Bldg&quot;, 1}&#xa;    },&#xa;    new String[]{&#xa;        ORDER_HEADER.getContent(),&#xa;        HIGHER_HEADER.getContent(),&#xa;        &quot;L1_NO&quot;&#xa;    }&#xa;)&#xa;{&#xa;    public boolean isCellEditable(int row, int column)&#xa;    {&#xa;        if (column == 0)&#xa;        return false;&#xa;        else&#xa;        return true;&#xa;    }&#xa;    @Override&#xa;    public Class&lt;?&gt; getColumnClass(int columnIndex) {&#xa;        if (columnIndex == 0)&#xa;        return Integer.class;&#xa;        else&#xa;        return String.class;&#xa;    }&#xa;}&#xa;&#xa;" type="code"/>
                             </Property>
                             <Property name="doubleBuffered" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                               <Connection code="true" type="code"/>
@@ -257,7 +246,7 @@
                               <Connection code="new java.awt.Font(font_Type, font_Style, font_Size)" type="code"/>
                             </Property>
                             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                              <Connection code="((String[])Globals.ButtonLabels.get(CREATE_NO_SHORT_BTN.ordinal()))[ourLang]" type="code"/>
+                              <Connection code="CREATE_NO_SHORT_BTN.getContent()" type="code"/>
                             </Property>
                             <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                               <Dimension value="[90, 40]"/>
@@ -279,7 +268,7 @@
                               <Connection code="new java.awt.Font(font_Type, font_Style, font_Size)" type="code"/>
                             </Property>
                             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                              <Connection code="((String[])Globals.ButtonLabels.get(MODIFY_NO_SHORT_BTN.ordinal()))[ourLang]" type="code"/>
+                              <Connection code="MODIFY_NO_SHORT_BTN.getContent()" type="code"/>
                             </Property>
                             <Property name="enabled" type="boolean" value="false"/>
                             <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
@@ -302,7 +291,7 @@
                               <Connection code="new java.awt.Font(font_Type, font_Style, font_Size)" type="code"/>
                             </Property>
                             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                              <Connection code="((String[])Globals.ButtonLabels.get(DELETE_NO_SHORT_BTN.ordinal()))[ourLang]" type="code"/>
+                              <Connection code="DELETE_NO_SHORT_BTN.getContent()" type="code"/>
                             </Property>
                             <Property name="enabled" type="boolean" value="false"/>
                             <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
@@ -362,7 +351,7 @@
                           <Connection code="new java.awt.Font(font_Type, font_Style, font_Size)" type="code"/>
                         </Property>
                         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                          <Connection code="((String[])Globals.LabelsText.get(LOWER_LIST_LABEL.ordinal()))[ourLang]" type="code"/>
+                          <Connection code="LOWER_LIST_LABEL.getContent()" type="code"/>
                         </Property>
                       </Properties>
                       <Constraints>
@@ -390,7 +379,7 @@
                               <Connection code="new java.awt.Font(font_Type, font_Style, font_Size)" type="code"/>
                             </Property>
                             <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                              <Connection code="new javax.swing.table.DefaultTableModel(&#xa;    new Object [][] {&#xa;        {1, &quot;Group 1&quot;, 3},&#xa;        {2, &quot;Group 2&quot;, 4}&#xa;    },&#xa;    new String [] {&#xa;        ((String[])Globals.TableHeaderList.get(ORDER_HEADER.ordinal()))[ourLang],&#xa;        ((String[])Globals.TableHeaderList.get(LOWER_HEADER.ordinal()))[ourLang],&#xa;        &quot;PARTY_NO&quot;&#xa;    }&#xa;)&#xa;{&#xa;    public boolean isCellEditable(int row, int column)&#xa;    {&#xa;        if (column == 0)&#xa;        return false;&#xa;        else&#xa;        return true;&#xa;    }&#xa;    @Override&#xa;    public Class&lt;?&gt; getColumnClass(int columnIndex) {&#xa;        if (columnIndex == 0)&#xa;        return Integer.class;&#xa;        else&#xa;        return String.class;&#xa;    }&#xa;}&#xa;" type="code"/>
+                              <Connection code="new javax.swing.table.DefaultTableModel(&#xa;    new Object [][] {&#xa;        {1, &quot;Group 1&quot;, 3},&#xa;        {2, &quot;Group 2&quot;, 4}&#xa;    },&#xa;    new String [] {&#xa;        ORDER_HEADER.getContent(),&#xa;        LOWER_HEADER.getContent(),&#xa;        &quot;PARTY_NO&quot;&#xa;    }&#xa;)&#xa;{&#xa;    public boolean isCellEditable(int row, int column)&#xa;    {&#xa;        if (column == 0)&#xa;        return false;&#xa;        else&#xa;        return true;&#xa;    }&#xa;    @Override&#xa;    public Class&lt;?&gt; getColumnClass(int columnIndex) {&#xa;        if (columnIndex == 0)&#xa;        return Integer.class;&#xa;        else&#xa;        return String.class;&#xa;    }&#xa;}&#xa;" type="code"/>
                             </Property>
                             <Property name="doubleBuffered" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                               <Connection code="true" type="code"/>
@@ -423,7 +412,7 @@
                               <Connection code="new java.awt.Font(font_Type, font_Style, font_Size)" type="code"/>
                             </Property>
                             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                              <Connection code="((String[])Globals.ButtonLabels.get(CREATE_NO_SHORT_BTN.ordinal()))[ourLang]" type="code"/>
+                              <Connection code="CREATE_NO_SHORT_BTN.getContent()" type="code"/>
                             </Property>
                             <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                               <Dimension value="[90, 40]"/>
@@ -446,7 +435,7 @@
                               <Connection code="new java.awt.Font(font_Type, font_Style, font_Size)" type="code"/>
                             </Property>
                             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                              <Connection code="((String[])Globals.ButtonLabels.get(MODIFY_NO_SHORT_BTN.ordinal()))[ourLang]" type="code"/>
+                              <Connection code="MODIFY_NO_SHORT_BTN.getContent()" type="code"/>
                             </Property>
                             <Property name="enabled" type="boolean" value="false"/>
                             <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
@@ -470,7 +459,7 @@
                               <Connection code="new java.awt.Font(font_Type, font_Style, font_Size)" type="code"/>
                             </Property>
                             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                              <Connection code="((String[])Globals.ButtonLabels.get(DELETE_NO_SHORT_BTN.ordinal()))[ourLang]" type="code"/>
+                              <Connection code="DELETE_NO_SHORT_BTN.getContent()" type="code"/>
                             </Property>
                             <Property name="enabled" type="boolean" value="false"/>
                             <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
@@ -531,7 +520,7 @@
                           <Connection code="new java.awt.Font(font_Type, font_Style, font_Size)" type="code"/>
                         </Property>
                         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                          <Connection code="((String[])Globals.ButtonLabels.get(DELETE_ALL_BTN.ordinal()))[ourLang]" type="code"/>
+                          <Connection code="DELETE_ALL_BTN.getContent()" type="code"/>
                         </Property>
                         <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                           <Dimension value="[90, 40]"/>
@@ -550,7 +539,7 @@
                           <Connection code="new java.awt.Font(font_Type, font_Style, font_Size)" type="code"/>
                         </Property>
                         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                          <Connection code="((String[])Globals.ButtonLabels.get(READ_ODS_BTN.ordinal()))[ourLang]" type="code"/>
+                          <Connection code="READ_ODS_BTN.getContent()" type="code"/>
                         </Property>
                         <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                           <Dimension value="[90, 40]"/>
@@ -652,10 +641,10 @@
                     <Component class="javax.swing.JLabel" name="jLabel4">
                       <Properties>
                         <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                          <Connection code="new java.awt.Font(font_Type, font_Style, font_Size)" type="code"/>
+                          <Connection code="new java.awt.Font(font_Type, font_Style, head_font_Size)" type="code"/>
                         </Property>
                         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                          <Connection code="((String[])Globals.LabelsText.get(BUILDING_LIST_LABEL.ordinal()))[ourLang]" type="code"/>
+                          <Connection code="BUILDING_LIST_LABEL.getContent()" type="code"/>
                         </Property>
                       </Properties>
                       <Constraints>
@@ -683,7 +672,7 @@
                               <Connection code="new java.awt.Font(font_Type, font_Style, font_Size)" type="code"/>
                             </Property>
                             <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                              <Connection code="new javax.swing.table.DefaultTableModel(&#xa;    new Object [][] { {1, 101, 5}, {2, 102, 6} },&#xa;    new String [] {&#xa;        ((String[])Globals.TableHeaderList.get(ORDER_HEADER.ordinal()))[ourLang],&#xa;        ((String[])Globals.TableHeaderList.get(BUILDING_HEADER.ordinal()))[ourLang],&#xa;        &quot;SEQ_NO&quot;})&#xa;{&#xa;    public boolean isCellEditable(int row, int column)&#xa;    {&#xa;        if (column == 0)&#xa;        return false;&#xa;        else&#xa;        return true;&#xa;    }&#xa;    @Override&#xa;    public Class&lt;?&gt; getColumnClass(int columnIndex) {&#xa;        return Integer.class;&#xa;    }&#xa;}&#xa;" type="code"/>
+                              <Connection code="new javax.swing.table.DefaultTableModel(&#xa;    new Object [][] { {1, 101, 5}, {2, 102, 6} },&#xa;    new String [] {&#xa;        ORDER_HEADER.getContent(),&#xa;        BUILDING_HEADER.getContent(),&#xa;        &quot;SEQ_NO&quot;})&#xa;{&#xa;    public boolean isCellEditable(int row, int column)&#xa;    {&#xa;        if (column == 0)&#xa;        return false;&#xa;        else&#xa;        return true;&#xa;    }&#xa;    @Override&#xa;    public Class&lt;?&gt; getColumnClass(int columnIndex) {&#xa;        return Integer.class;&#xa;    }&#xa;}&#xa;" type="code"/>
                             </Property>
                             <Property name="doubleBuffered" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                               <Connection code="true" type="code"/>
@@ -722,7 +711,7 @@
                               <Connection code="new java.awt.Font(font_Type, font_Style, font_Size)" type="code"/>
                             </Property>
                             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                              <Connection code="((String[])Globals.ButtonLabels.get(CREATE_NO_SHORT_BTN.ordinal()))[ourLang]" type="code"/>
+                              <Connection code="CREATE_NO_SHORT_BTN.getContent()" type="code"/>
                             </Property>
                             <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                               <Dimension value="[90, 40]"/>
@@ -744,7 +733,7 @@
                               <Connection code="new java.awt.Font(font_Type, font_Style, font_Size)" type="code"/>
                             </Property>
                             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                              <Connection code="((String[])Globals.ButtonLabels.get(MODIFY_NO_SHORT_BTN.ordinal()))[ourLang]" type="code"/>
+                              <Connection code="MODIFY_NO_SHORT_BTN.getContent()" type="code"/>
                             </Property>
                             <Property name="enabled" type="boolean" value="false"/>
                             <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
@@ -767,7 +756,7 @@
                               <Connection code="new java.awt.Font(font_Type, font_Style, font_Size)" type="code"/>
                             </Property>
                             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                              <Connection code="((String[])Globals.ButtonLabels.get(DELETE_NO_SHORT_BTN.ordinal()))[ourLang]" type="code"/>
+                              <Connection code="DELETE_NO_SHORT_BTN.getContent()" type="code"/>
                             </Property>
                             <Property name="enabled" type="boolean" value="false"/>
                             <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
@@ -827,7 +816,7 @@
                           <Connection code="new java.awt.Font(font_Type, font_Style, font_Size)" type="code"/>
                         </Property>
                         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                          <Connection code="((String[])Globals.LabelsText.get(ROOM_LIST_LABEL.ordinal()))[ourLang]" type="code"/>
+                          <Connection code="ROOM_LIST_LABEL.getContent()" type="code"/>
                         </Property>
                       </Properties>
                       <Constraints>
@@ -855,7 +844,7 @@
                               <Connection code="new java.awt.Font(font_Type, font_Style, font_Size)" type="code"/>
                             </Property>
                             <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                              <Connection code="new javax.swing.table.DefaultTableModel(&#xa;    new Object [][] {{1, 803, 1}, {2, 805, 2}},&#xa;    new String [] {&#xa;        ((String[])Globals.TableHeaderList.get(ORDER_HEADER.ordinal()))[ourLang],&#xa;        ((String[])Globals.TableHeaderList.get(ROOM_HEADER.ordinal()))[ourLang], &#xa;        &quot;SEQ_NO&quot;})&#xa;{&#xa;    public boolean isCellEditable(int row, int column)&#xa;    {&#xa;        if (column == 0)&#xa;        return false;&#xa;        else&#xa;        return true;&#xa;    }&#xa;    @Override&#xa;    public Class&lt;?&gt; getColumnClass(int columnIndex) {&#xa;        return Integer.class;&#xa;    }&#xa;}&#xa;" type="code"/>
+                              <Connection code="new javax.swing.table.DefaultTableModel(&#xa;    new Object [][] {{1, 803, 1}, {2, 805, 2}},&#xa;    new String [] {&#xa;        ORDER_HEADER.getContent(),&#xa;        ROOM_HEADER.getContent(),&#xa;        &quot;SEQ_NO&quot;})&#xa;{&#xa;    public boolean isCellEditable(int row, int column)&#xa;    {&#xa;        if (column == 0)&#xa;        return false;&#xa;        else&#xa;        return true;&#xa;    }&#xa;    @Override&#xa;    public Class&lt;?&gt; getColumnClass(int columnIndex) {&#xa;        return Integer.class;&#xa;    }&#xa;}&#xa;" type="code"/>
                             </Property>
                             <Property name="doubleBuffered" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                               <Connection code="true" type="code"/>
@@ -893,7 +882,7 @@
                               <Connection code="new java.awt.Font(font_Type, font_Style, font_Size)" type="code"/>
                             </Property>
                             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                              <Connection code="((String[])Globals.ButtonLabels.get(CREATE_NO_SHORT_BTN.ordinal()))[ourLang]" type="code"/>
+                              <Connection code="CREATE_NO_SHORT_BTN.getContent()" type="code"/>
                             </Property>
                             <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                               <Dimension value="[90, 40]"/>
@@ -915,7 +904,7 @@
                               <Connection code="new java.awt.Font(font_Type, font_Style, font_Size)" type="code"/>
                             </Property>
                             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                              <Connection code="((String[])Globals.ButtonLabels.get(MODIFY_NO_SHORT_BTN.ordinal()))[ourLang]" type="code"/>
+                              <Connection code="MODIFY_NO_SHORT_BTN.getContent()" type="code"/>
                             </Property>
                             <Property name="enabled" type="boolean" value="false"/>
                             <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
@@ -938,7 +927,7 @@
                               <Connection code="new java.awt.Font(font_Type, font_Style, font_Size)" type="code"/>
                             </Property>
                             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                              <Connection code="((String[])Globals.ButtonLabels.get(DELETE_NO_SHORT_BTN.ordinal()))[ourLang]" type="code"/>
+                              <Connection code="DELETE_NO_SHORT_BTN.getContent()" type="code"/>
                             </Property>
                             <Property name="enabled" type="boolean" value="false"/>
                             <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
@@ -998,7 +987,7 @@
                           <Connection code="new java.awt.Font(font_Type, font_Style, font_Size)" type="code"/>
                         </Property>
                         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                          <Connection code="((String[])Globals.ButtonLabels.get(DELETE_ALL_BTN.ordinal()))[ourLang]" type="code"/>
+                          <Connection code="DELETE_ALL_BTN.getContent()" type="code"/>
                         </Property>
                         <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                           <Dimension value="[90, 40]"/>
@@ -1017,7 +1006,7 @@
                           <Connection code="new java.awt.Font(font_Type, font_Style, font_Size)" type="code"/>
                         </Property>
                         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                          <Connection code="((String[])Globals.ButtonLabels.get(READ_ODS_BTN.ordinal()))[ourLang]" type="code"/>
+                          <Connection code="READ_ODS_BTN.getContent()" type="code"/>
                         </Property>
                         <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                           <Dimension value="[90, 40]"/>

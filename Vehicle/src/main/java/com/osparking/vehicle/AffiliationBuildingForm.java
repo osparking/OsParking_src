@@ -27,6 +27,7 @@ import static com.osparking.global.Globals.closeDBstuff;
 import static com.osparking.global.Globals.emptyLastRowPossible;
 import static com.osparking.global.Globals.getQuest20_Icon;
 import static com.osparking.global.Globals.getTopLeftPointToPutThisFrameAtScreenCenter;
+import static com.osparking.global.Globals.head_font_Size;
 import static com.osparking.global.Globals.highlightTableRow;
 import static com.osparking.global.Globals.initializeLoggers;
 import static com.osparking.global.Globals.insertNewBuilding;
@@ -147,7 +148,6 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
         wholePanel = new javax.swing.JPanel();
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(30, 0), new java.awt.Dimension(30, 0), new java.awt.Dimension(30, 32767));
         topPanel = new javax.swing.JPanel();
-        seeLicenseButton = new javax.swing.JButton();
         filler11 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
         closeFormButton = new javax.swing.JButton();
         centerPanel = new javax.swing.JPanel();
@@ -214,15 +214,6 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
         wholePanel.add(filler1, java.awt.BorderLayout.WEST);
 
         topPanel.setLayout(new javax.swing.BoxLayout(topPanel, javax.swing.BoxLayout.LINE_AXIS));
-
-        seeLicenseButton.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        seeLicenseButton.setText("About");
-        seeLicenseButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                seeLicenseButtonActionPerformed(evt);
-            }
-        });
-        topPanel.add(seeLicenseButton);
         topPanel.add(filler11);
 
         closeFormButton.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
@@ -252,7 +243,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
         jPanel1.setPreferredSize(new java.awt.Dimension(588, 168));
         jPanel1.setLayout(new java.awt.BorderLayout());
 
-        jLabel1.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        jLabel1.setFont(new java.awt.Font(font_Type, font_Style, head_font_Size));
         jLabel1.setText(AFFILIATION_LIST_LABEL.getContent());
         jPanel1.add(jLabel1, java.awt.BorderLayout.PAGE_START);
         jLabel1.getAccessibleContext().setAccessibleName("");
@@ -505,7 +496,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     jPanel4.setPreferredSize(new java.awt.Dimension(588, 168));
     jPanel4.setLayout(new java.awt.BorderLayout());
 
-    jLabel4.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+    jLabel4.setFont(new java.awt.Font(font_Type, font_Style, head_font_Size));
     jLabel4.setText(BUILDING_LIST_LABEL.getContent());
     jPanel4.add(jLabel4, java.awt.BorderLayout.NORTH);
 
@@ -1813,10 +1804,6 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
         helpDialog.setVisible(true);
     }//GEN-LAST:event_ODSBuildPWHelpActionPerformed
 
-    private void seeLicenseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_seeLicenseButtonActionPerformed
-        showLicensePanel(this, "License Notice on Vehicle Manager");
-    }//GEN-LAST:event_seeLicenseButtonActionPerformed
-
     private void closeFormButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_closeFormButtonActionPerformed
         // TODO add your handling code here:
         dispose();
@@ -2082,7 +2069,6 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     private javax.swing.JFileChooser odsFileChooser;
     private javax.swing.JButton readSheet_Affiliation;
     private javax.swing.JButton readSheet_Button;
-    private javax.swing.JButton seeLicenseButton;
     private javax.swing.JPanel topPanel;
     private javax.swing.JPanel wholePanel;
     // End of variables declaration//GEN-END:variables
