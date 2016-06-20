@@ -349,7 +349,7 @@ public class Settings_System extends javax.swing.JFrame {
         wholePanel.setLayout(new javax.swing.BoxLayout(wholePanel, javax.swing.BoxLayout.PAGE_AXIS));
 
         parkinglotOptionPanel.setMinimumSize(new java.awt.Dimension(690, 300));
-        parkinglotOptionPanel.setPreferredSize(new java.awt.Dimension(0, 300));
+        parkinglotOptionPanel.setPreferredSize(new java.awt.Dimension(0, 330));
         parkinglotOptionPanel.setLayout(new java.awt.GridBagLayout());
 
         PWStrengthChoiceComboBox.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
@@ -703,6 +703,9 @@ public class Settings_System extends javax.swing.JFrame {
         jLabel42.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         jLabel42.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel42.setText(LOT_NAME_LABEL.getContent());
+        jLabel42.setMaximumSize(new java.awt.Dimension(76, 27));
+        jLabel42.setMinimumSize(new java.awt.Dimension(76, 27));
+        jLabel42.setPreferredSize(new java.awt.Dimension(76, 27));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -712,9 +715,9 @@ public class Settings_System extends javax.swing.JFrame {
 
         lotNameTextField.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         lotNameTextField.setToolTipText("");
-        lotNameTextField.setMinimumSize(new java.awt.Dimension(250, 27));
+        lotNameTextField.setMinimumSize(new java.awt.Dimension(250, 25));
         lotNameTextField.setName("lotNameTextField"); // NOI18N
-        lotNameTextField.setPreferredSize(new java.awt.Dimension(250, 27));
+        lotNameTextField.setPreferredSize(new java.awt.Dimension(250, 30));
         lotNameTextField.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 lotNameTextFieldKeyReleased(evt);
@@ -725,7 +728,7 @@ public class Settings_System extends javax.swing.JFrame {
         gridBagConstraints.gridy = 1;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 5, 10);
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 0, 10);
         parkinglotOptionPanel.add(lotNameTextField, gridBagConstraints);
 
         StatPopSizeTextField.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
@@ -747,12 +750,15 @@ public class Settings_System extends javax.swing.JFrame {
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 5, 10);
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 0, 10);
         parkinglotOptionPanel.add(StatPopSizeTextField, gridBagConstraints);
 
         jLabel4.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel4.setText(STATISTICS_SIZE_LABEL.getContent());
+        jLabel4.setMaximumSize(new java.awt.Dimension(176, 27));
+        jLabel4.setMinimumSize(new java.awt.Dimension(76, 27));
+        jLabel4.setPreferredSize(new java.awt.Dimension(110, 27));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
