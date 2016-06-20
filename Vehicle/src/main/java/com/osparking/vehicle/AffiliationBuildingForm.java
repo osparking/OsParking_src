@@ -165,21 +165,22 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
         insertL1_Button = new javax.swing.JButton();
         modifyL1_Button = new javax.swing.JButton();
         deleteL1_Button = new javax.swing.JButton();
-        filler8 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 10), new java.awt.Dimension(0, 10), new java.awt.Dimension(32767, 10));
-        jPanel2 = new javax.swing.JPanel();
+        h10_8 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 10), new java.awt.Dimension(0, 10), new java.awt.Dimension(32767, 10));
+        botLeft = new javax.swing.JPanel();
         affiBotTitle = new javax.swing.JLabel();
-        jScrollPane2 = new javax.swing.JScrollPane();
+        scrollBotLeft = new javax.swing.JScrollPane();
         L2_Affiliation = new javax.swing.JTable();
-        jPanel10 = new javax.swing.JPanel();
+        affiliBotRight = new javax.swing.JPanel();
         affiL2_Control = new javax.swing.JRadioButton();
         insertL2_Button = new javax.swing.JButton();
         modifyL2_Button = new javax.swing.JButton();
         deleteL2_Button = new javax.swing.JButton();
-        filler7 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 10), new java.awt.Dimension(0, 10), new java.awt.Dimension(32767, 10));
+        h10_7 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 10), new java.awt.Dimension(0, 10), new java.awt.Dimension(32767, 10));
         jPanel3 = new javax.swing.JPanel();
         deleteAll_Affiliation = new javax.swing.JButton();
         readSheet_Affiliation = new javax.swing.JButton();
         ODSAffiliHelp = new javax.swing.JButton();
+        filler4 = new javax.swing.Box.Filler(new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 32767));
         buildingPanel = new javax.swing.JPanel();
         topRight = new javax.swing.JPanel();
         bldgTopTitle = new javax.swing.JLabel();
@@ -190,7 +191,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
         insertBuilding_Button = new javax.swing.JButton();
         modifyBuilding_Button = new javax.swing.JButton();
         deleteBuilding_Button = new javax.swing.JButton();
-        filler9 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 10), new java.awt.Dimension(0, 10), new java.awt.Dimension(32767, 10));
+        h10_9 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 10), new java.awt.Dimension(0, 10), new java.awt.Dimension(32767, 10));
         jPanel5 = new javax.swing.JPanel();
         UnitLabel = new javax.swing.JLabel();
         jScrollPane4 = new javax.swing.JScrollPane();
@@ -200,25 +201,27 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
         insertUnit_Button = new javax.swing.JButton();
         modifyUnit_Button = new javax.swing.JButton();
         deleteUnit_Button = new javax.swing.JButton();
-        filler10 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 10), new java.awt.Dimension(0, 10), new java.awt.Dimension(32767, 10));
+        h10_10 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 10), new java.awt.Dimension(0, 10), new java.awt.Dimension(32767, 10));
         jPanel6 = new javax.swing.JPanel();
         deleteAll_Button = new javax.swing.JButton();
         readSheet_Button = new javax.swing.JButton();
         ODSBuildPWHelp = new javax.swing.JButton();
         filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(40, 0), new java.awt.Dimension(40, 0), new java.awt.Dimension(30, 32767));
-        jPanel1 = new javax.swing.JPanel();
         bottomPanel = new javax.swing.JPanel();
-        filler4 = new javax.swing.Box.Filler(new java.awt.Dimension(40, 20), new java.awt.Dimension(40, 20), new java.awt.Dimension(40, 20));
-        filler3 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 40), new java.awt.Dimension(0, 40), new java.awt.Dimension(32767, 20));
+        h20_5 = new javax.swing.Box.Filler(new java.awt.Dimension(40, 20), new java.awt.Dimension(40, 20), new java.awt.Dimension(40, 20));
+        closePanel = new javax.swing.JPanel();
+        jPanel2 = new javax.swing.JPanel();
         closeFormButton = new javax.swing.JButton();
-        filler5 = new javax.swing.Box.Filler(new java.awt.Dimension(40, 40), new java.awt.Dimension(40, 40), new java.awt.Dimension(40, 40));
+        filler3 = new javax.swing.Box.Filler(new Dimension(40, buttonHeightNorm), new Dimension(40, buttonHeightNorm), new Dimension(40, buttonHeightNorm));
+        jPanel1 = new javax.swing.JPanel();
 
         odsFileChooser.setFileFilter(new OdsFileOnly());
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle(AFFILI_BUILD_FRAME_TITLE.getContent());
         setBackground(PopUpBackground);
-        setMinimumSize(new java.awt.Dimension(740, 550));
+        setMinimumSize(new java.awt.Dimension(740, 600));
+        setPreferredSize(new java.awt.Dimension(740, 600));
 
         wholePanel.setLayout(new java.awt.BorderLayout());
 
@@ -229,30 +232,32 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
 
         wholePanel.add(topPanel, java.awt.BorderLayout.NORTH);
 
+        BigMidPanel.setMinimumSize(new java.awt.Dimension(380, 320));
         BigMidPanel.setLayout(new javax.swing.BoxLayout(BigMidPanel, javax.swing.BoxLayout.X_AXIS));
         BigMidPanel.add(filler1);
 
+        centerPanel.setMinimumSize(new java.awt.Dimension(300, 320));
         centerPanel.setPreferredSize(new java.awt.Dimension(500, 489));
         centerPanel.setLayout(new javax.swing.BoxLayout(centerPanel, javax.swing.BoxLayout.X_AXIS));
 
         affiliationPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        affiliationPanel.setMinimumSize(new java.awt.Dimension(300, 255));
+        affiliationPanel.setMinimumSize(new java.awt.Dimension(300, 320));
         affiliationPanel.setPreferredSize(new java.awt.Dimension(300, 489));
         affiliationPanel.setLayout(new javax.swing.BoxLayout(affiliationPanel, javax.swing.BoxLayout.Y_AXIS));
 
-        topLeft.setMinimumSize(new java.awt.Dimension(83, 85));
+        topLeft.setMinimumSize(new java.awt.Dimension(83, 160));
         topLeft.setPreferredSize(new java.awt.Dimension(588, 168));
         topLeft.setLayout(new java.awt.BorderLayout());
 
         affiTopTitle.setFont(new java.awt.Font(font_Type, font_Style, head_font_Size));
         affiTopTitle.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         affiTopTitle.setText(AFFILIATION_LIST_LABEL.getContent());
-        topLeft.add(affiTopTitle, java.awt.BorderLayout.PAGE_START);
+        topLeft.add(affiTopTitle, java.awt.BorderLayout.NORTH);
         affiTopTitle.getAccessibleContext().setAccessibleName("");
 
-        scrollTopLeft.setMaximumSize(new java.awt.Dimension(25000, 30000));
-        scrollTopLeft.setMinimumSize(new java.awt.Dimension(24, 120));
-        scrollTopLeft.setPreferredSize(new java.awt.Dimension(200, 120));
+        scrollTopLeft.setMaximumSize(new java.awt.Dimension(32767, 300));
+        scrollTopLeft.setMinimumSize(new java.awt.Dimension(24, 140));
+        scrollTopLeft.setPreferredSize(new java.awt.Dimension(200, 140));
 
         L1_Affiliation.setAutoCreateRowSorter(true);
         L1_Affiliation.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
@@ -373,22 +378,23 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     affiliTopRight.add(deleteL1_Button, gridBagConstraints);
 
     topLeft.add(affiliTopRight, java.awt.BorderLayout.EAST);
+    topLeft.add(h10_8, java.awt.BorderLayout.SOUTH);
+    h10_8.getAccessibleContext().setAccessibleName("");
 
     affiliationPanel.add(topLeft);
-    affiliationPanel.add(filler8);
 
-    jPanel2.setMinimumSize(new java.awt.Dimension(83, 85));
-    jPanel2.setPreferredSize(new java.awt.Dimension(588, 168));
-    jPanel2.setLayout(new java.awt.BorderLayout());
+    botLeft.setMinimumSize(new java.awt.Dimension(83, 160));
+    botLeft.setPreferredSize(new java.awt.Dimension(588, 168));
+    botLeft.setLayout(new java.awt.BorderLayout());
 
     affiBotTitle.setFont(new java.awt.Font(font_Type, font_Style, head_font_Size));
     affiBotTitle.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
     affiBotTitle.setText(LOWER_LIST_LABEL.getContent());
-    jPanel2.add(affiBotTitle, java.awt.BorderLayout.NORTH);
+    botLeft.add(affiBotTitle, java.awt.BorderLayout.NORTH);
 
-    jScrollPane2.setMaximumSize(new java.awt.Dimension(32767, 300));
-    jScrollPane2.setMinimumSize(new java.awt.Dimension(24, 120));
-    jScrollPane2.setPreferredSize(new java.awt.Dimension(200, 120));
+    scrollBotLeft.setMaximumSize(new java.awt.Dimension(32767, 300));
+    scrollBotLeft.setMinimumSize(new java.awt.Dimension(24, 140));
+    scrollBotLeft.setPreferredSize(new java.awt.Dimension(200, 140));
 
     L2_Affiliation.setAutoCreateRowSorter(true);
     L2_Affiliation.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
@@ -434,11 +440,13 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
             L2_AffiliationKeyReleased(evt);
         }
     });
-    jScrollPane2.setViewportView(L2_Affiliation);
+    scrollBotLeft.setViewportView(L2_Affiliation);
 
-    jPanel2.add(jScrollPane2, java.awt.BorderLayout.CENTER);
+    botLeft.add(scrollBotLeft, java.awt.BorderLayout.CENTER);
 
-    jPanel10.setLayout(new java.awt.GridBagLayout());
+    affiliBotRight.setMinimumSize(new Dimension(buttonWidthNorm, L2_Affiliation.getSize().height));
+    affiliBotRight.setPreferredSize(new Dimension(buttonWidthNorm, L2_Affiliation.getSize().height));
+    affiliBotRight.setLayout(new java.awt.GridBagLayout());
 
     fourPanels.add(affiL2_Control);
     affiL2_Control.addItemListener(new java.awt.event.ItemListener() {
@@ -446,7 +454,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
             affiL2_ControlItemStateChanged(evt);
         }
     });
-    jPanel10.add(affiL2_Control, new java.awt.GridBagConstraints());
+    affiliBotRight.add(affiL2_Control, new java.awt.GridBagConstraints());
 
     insertL2_Button.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
     insertL2_Button.setMnemonic('R');
@@ -464,7 +472,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 0;
     gridBagConstraints.gridy = 1;
-    jPanel10.add(insertL2_Button, gridBagConstraints);
+    affiliBotRight.add(insertL2_Button, gridBagConstraints);
 
     modifyL2_Button.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
     modifyL2_Button.setMnemonic('M');
@@ -482,7 +490,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 0;
     gridBagConstraints.gridy = 2;
-    jPanel10.add(modifyL2_Button, gridBagConstraints);
+    affiliBotRight.add(modifyL2_Button, gridBagConstraints);
 
     deleteL2_Button.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
     deleteL2_Button.setMnemonic('D');
@@ -500,12 +508,12 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 0;
     gridBagConstraints.gridy = 3;
-    jPanel10.add(deleteL2_Button, gridBagConstraints);
+    affiliBotRight.add(deleteL2_Button, gridBagConstraints);
 
-    jPanel2.add(jPanel10, java.awt.BorderLayout.EAST);
-    jPanel2.add(filler7, java.awt.BorderLayout.PAGE_END);
+    botLeft.add(affiliBotRight, java.awt.BorderLayout.EAST);
+    botLeft.add(h10_7, java.awt.BorderLayout.PAGE_END);
 
-    affiliationPanel.add(jPanel2);
+    affiliationPanel.add(botLeft);
 
     jPanel3.setMinimumSize(new java.awt.Dimension(212, 33));
     jPanel3.setPreferredSize(new java.awt.Dimension(588, 50));
@@ -552,6 +560,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     affiliationPanel.add(jPanel3);
 
     centerPanel.add(affiliationPanel);
+    centerPanel.add(filler4);
 
     buildingPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
     buildingPanel.setMinimumSize(new java.awt.Dimension(0, 223));
@@ -682,7 +691,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     bldgTopRight.add(deleteBuilding_Button, gridBagConstraints);
 
     topRight.add(bldgTopRight, java.awt.BorderLayout.EAST);
-    topRight.add(filler9, java.awt.BorderLayout.PAGE_END);
+    topRight.add(h10_9, java.awt.BorderLayout.PAGE_END);
 
     buildingPanel.add(topRight);
 
@@ -788,6 +797,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     deleteUnit_Button.setMnemonic('D');
     deleteUnit_Button.setText(DELETE_BTN.getContent());
     deleteUnit_Button.setEnabled(false);
+    deleteUnit_Button.setMargin(new java.awt.Insets(2, 4, 2, 4));
     deleteUnit_Button.setMaximumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
     deleteUnit_Button.setMinimumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
     deleteUnit_Button.setPreferredSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
@@ -802,7 +812,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     jPanel12.add(deleteUnit_Button, gridBagConstraints);
 
     jPanel5.add(jPanel12, java.awt.BorderLayout.EAST);
-    jPanel5.add(filler10, java.awt.BorderLayout.PAGE_END);
+    jPanel5.add(h10_10, java.awt.BorderLayout.PAGE_END);
 
     buildingPanel.add(jPanel5);
 
@@ -857,13 +867,28 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
 
     wholePanel.add(BigMidPanel, java.awt.BorderLayout.CENTER);
 
-    jPanel1.setLayout(new java.awt.BorderLayout());
-
     bottomPanel.setMinimumSize(new java.awt.Dimension(200, 60));
-    bottomPanel.setPreferredSize(new java.awt.Dimension(200, 60));
-    bottomPanel.setLayout(new javax.swing.BoxLayout(bottomPanel, javax.swing.BoxLayout.X_AXIS));
-    bottomPanel.add(filler4);
-    bottomPanel.add(filler3);
+    bottomPanel.setPreferredSize(new java.awt.Dimension(200, 100));
+    bottomPanel.setLayout(new java.awt.BorderLayout());
+    bottomPanel.add(h20_5, java.awt.BorderLayout.NORTH);
+
+    closePanel.setMaximumSize(new Dimension(4000, buttonHeightNorm));
+    closePanel.setMinimumSize(new Dimension(150, buttonHeightNorm));
+    closePanel.setPreferredSize(new Dimension(40, buttonHeightNorm + 4));
+    closePanel.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT, 0, 5));
+
+    javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+    jPanel2.setLayout(jPanel2Layout);
+    jPanel2Layout.setHorizontalGroup(
+        jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addGap(0, 0, Short.MAX_VALUE)
+    );
+    jPanel2Layout.setVerticalGroup(
+        jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addGap(0, 0, Short.MAX_VALUE)
+    );
+
+    closePanel.add(jPanel2);
 
     closeFormButton.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
     closeFormButton.setMnemonic('c');
@@ -876,12 +901,16 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
             closeFormButtonActionPerformed(evt);
         }
     });
-    bottomPanel.add(closeFormButton);
-    bottomPanel.add(filler5);
+    closePanel.add(closeFormButton);
+    closePanel.add(filler3);
 
-    jPanel1.add(bottomPanel, java.awt.BorderLayout.NORTH);
+    bottomPanel.add(closePanel, java.awt.BorderLayout.CENTER);
 
-    wholePanel.add(jPanel1, java.awt.BorderLayout.PAGE_END);
+    jPanel1.setMinimumSize(new java.awt.Dimension(10, 36));
+    jPanel1.setPreferredSize(new java.awt.Dimension(100, 36));
+    bottomPanel.add(jPanel1, java.awt.BorderLayout.PAGE_END);
+
+    wholePanel.add(bottomPanel, java.awt.BorderLayout.SOUTH);
 
     getContentPane().add(wholePanel, java.awt.BorderLayout.CENTER);
 
@@ -2261,15 +2290,18 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     private javax.swing.JRadioButton affiL1_Control;
     private javax.swing.JRadioButton affiL2_Control;
     private javax.swing.JLabel affiTopTitle;
+    private javax.swing.JPanel affiliBotRight;
     private javax.swing.JPanel affiliTopRight;
     private javax.swing.JPanel affiliationPanel;
     private javax.swing.JPanel bldgTopRight;
     private javax.swing.JLabel bldgTopTitle;
+    private javax.swing.JPanel botLeft;
     private javax.swing.JPanel bottomPanel;
     private javax.swing.JRadioButton buildingControl;
     private javax.swing.JPanel buildingPanel;
     private javax.swing.JPanel centerPanel;
     private javax.swing.JButton closeFormButton;
+    private javax.swing.JPanel closePanel;
     private javax.swing.JButton deleteAll_Affiliation;
     private javax.swing.JButton deleteAll_Button;
     private javax.swing.JButton deleteBuilding_Button;
@@ -2277,28 +2309,26 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     private javax.swing.JButton deleteL2_Button;
     private javax.swing.JButton deleteUnit_Button;
     private javax.swing.Box.Filler filler1;
-    private javax.swing.Box.Filler filler10;
     private javax.swing.Box.Filler filler11;
     private javax.swing.Box.Filler filler2;
     private javax.swing.Box.Filler filler3;
     private javax.swing.Box.Filler filler4;
-    private javax.swing.Box.Filler filler5;
-    private javax.swing.Box.Filler filler7;
-    private javax.swing.Box.Filler filler8;
-    private javax.swing.Box.Filler filler9;
     private javax.swing.ButtonGroup fourPanels;
+    private javax.swing.Box.Filler h10_10;
+    private javax.swing.Box.Filler h10_7;
+    private javax.swing.Box.Filler h10_8;
+    private javax.swing.Box.Filler h10_9;
+    private javax.swing.Box.Filler h20_5;
     private javax.swing.JButton insertBuilding_Button;
     private javax.swing.JButton insertL1_Button;
     private javax.swing.JButton insertL2_Button;
     private javax.swing.JButton insertUnit_Button;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel10;
     private javax.swing.JPanel jPanel12;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
-    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JButton modifyBuilding_Button;
     private javax.swing.JButton modifyL1_Button;
@@ -2307,6 +2337,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     private javax.swing.JFileChooser odsFileChooser;
     private javax.swing.JButton readSheet_Affiliation;
     private javax.swing.JButton readSheet_Button;
+    private javax.swing.JScrollPane scrollBotLeft;
     private javax.swing.JScrollPane scrollTopLeft;
     private javax.swing.JScrollPane scrollTopRight;
     private javax.swing.JPanel topLeft;
