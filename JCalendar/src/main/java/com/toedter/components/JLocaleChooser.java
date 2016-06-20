@@ -21,7 +21,6 @@
 
 package com.toedter.components;
 
-import static com.osparking.global.names.DB_Access.parkingLotLocale;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.Arrays;
@@ -50,7 +49,8 @@ Example: by OsParking on 2016. 6. 17.
 public class JLocaleChooser extends JComboBox implements ItemListener {
 	private static final long serialVersionUID = 8152430789764877431L;
 	protected JComponent component;
-        static Locale defaultLocale = new Locale("en", "US"); // OsParking on 2016. 6. 18.
+//        static Locale defaultLocale = new Locale("en", "US"); // OsParking on 2016. 6. 18.
+        static Locale defaultLocale = new Locale("ko", "KR"); // OsParking on 2016. 6. 18.
 
 	/**
 	 * Default JLocaleChooser constructor.
@@ -166,7 +166,7 @@ public class JLocaleChooser extends JComboBox implements ItemListener {
 	 */
 	static public void main(String[] s) {
 		JFrame frame = new JFrame("LocaleChooser");
-		frame.getContentPane().add(new JLocaleChooser(parkingLotLocale));
+		frame.getContentPane().add(new JLocaleChooser(defaultLocale));
 		frame.pack();
 		frame.setVisible(true);
 	}

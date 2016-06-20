@@ -1,0 +1,19 @@
+#
+### Java ###
+*.class
+#
+# Package Files # -- patterns w/o slash applies everywhere in this directory and below.
+*.jar
+*.war
+*.ear
+*.log
+*.swp
+#
+# Mobile Tools for Java (J2ME)
+.mtj.tmp/
+#
+# specific file everywhere
+#
+**/nbactions.xml
+
+/target
