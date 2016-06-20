@@ -400,9 +400,9 @@ public class AttListForm extends javax.swing.JFrame {
         btnPanel = new javax.swing.JPanel();
         createButton = new javax.swing.JButton();
         filler71 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 10), new java.awt.Dimension(10, 10), new java.awt.Dimension(10, 32767));
-        deleteButton = new javax.swing.JButton();
-        filler72 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 10), new java.awt.Dimension(10, 10), new java.awt.Dimension(10, 32767));
         multiFuncButton = new javax.swing.JButton();
+        filler72 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 10), new java.awt.Dimension(10, 10), new java.awt.Dimension(10, 32767));
+        deleteButton = new javax.swing.JButton();
         filler73 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 10), new java.awt.Dimension(10, 10), new java.awt.Dimension(10, 32767));
         cancelButton = new javax.swing.JButton();
         filler22 = new javax.swing.Box.Filler(new java.awt.Dimension(15, 0), new java.awt.Dimension(90, 0), new java.awt.Dimension(32767, 32767));
@@ -1160,22 +1160,6 @@ public class AttListForm extends javax.swing.JFrame {
         btnPanel.add(createButton);
         btnPanel.add(filler71);
 
-        deleteButton.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        deleteButton.setMnemonic('d');
-        deleteButton.setText(DELETE_BTN.getContent());
-        deleteButton.setEnabled(false);
-        deleteButton.setMargin(new java.awt.Insets(0, 0, 0, 0));
-        deleteButton.setMaximumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
-        deleteButton.setMinimumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
-        deleteButton.setPreferredSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
-        deleteButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                deleteButtonActionPerformed(evt);
-            }
-        });
-        btnPanel.add(deleteButton);
-        btnPanel.add(filler72);
-
         multiFuncButton.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         multiFuncButton.setMnemonic('m');
         multiFuncButton.setText(MODIFY_BTN.getContent());
@@ -1190,6 +1174,22 @@ public class AttListForm extends javax.swing.JFrame {
             }
         });
         btnPanel.add(multiFuncButton);
+        btnPanel.add(filler72);
+
+        deleteButton.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        deleteButton.setMnemonic('d');
+        deleteButton.setText(DELETE_BTN.getContent());
+        deleteButton.setEnabled(false);
+        deleteButton.setMargin(new java.awt.Insets(0, 0, 0, 0));
+        deleteButton.setMaximumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
+        deleteButton.setMinimumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
+        deleteButton.setPreferredSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
+        deleteButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deleteButtonActionPerformed(evt);
+            }
+        });
+        btnPanel.add(deleteButton);
         btnPanel.add(filler73);
 
         cancelButton.setFont(new java.awt.Font(font_Type, font_Style, font_Size));

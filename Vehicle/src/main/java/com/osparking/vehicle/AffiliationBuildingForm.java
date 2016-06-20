@@ -17,6 +17,8 @@
 package com.osparking.vehicle;
 
 import static com.mysql.jdbc.MysqlErrorNumbers.ER_DUP_ENTRY;
+import static com.osparking.global.CommonData.buttonHeightNorm;
+import static com.osparking.global.CommonData.buttonWidthNorm;
 import static com.osparking.global.Globals.PopUpBackground;
 import static com.osparking.global.Globals.font_Size;
 import static com.osparking.global.Globals.font_Style;
@@ -38,8 +40,6 @@ import static com.osparking.global.Globals.language;
 import static com.osparking.global.Globals.logParkingException;
 import static com.osparking.global.Globals.rejectEmptyInput;
 import static com.osparking.global.Globals.removeEmptyRow;
-import static com.osparking.global.Globals.shortLicenseDialog;
-import static com.osparking.global.Globals.showLicensePanel;
 import static com.osparking.global.names.ControlEnums.ButtonTypes.*;
 import static com.osparking.global.names.ControlEnums.DialogMSGTypes.AFFILIATION_DELETE_ALL_DAILOG;
 import static com.osparking.global.names.ControlEnums.DialogMSGTypes.AFFILIATION_DELETE_ALL_RESULT_DAILOG;
@@ -78,6 +78,7 @@ import com.osparking.global.names.OdsFileOnly;
 import com.osparking.global.names.WrappedInt;
 import com.osparking.vehicle.driver.ODSReader;
 import static com.osparking.vehicle.driver.ODSReader.getWrongCellPointString;
+import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.MouseAdapter;
@@ -299,10 +300,11 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     jPanel7.setLayout(new javax.swing.BoxLayout(jPanel7, javax.swing.BoxLayout.Y_AXIS));
 
     insertL1_Button.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-    insertL1_Button.setText(CREATE_NO_SHORT_BTN.getContent());
-    insertL1_Button.setMaximumSize(new java.awt.Dimension(90, 40));
-    insertL1_Button.setMinimumSize(new java.awt.Dimension(90, 40));
-    insertL1_Button.setPreferredSize(new java.awt.Dimension(90, 40));
+    insertL1_Button.setMnemonic('R');
+    insertL1_Button.setText(CREATE_BTN.getContent());
+    insertL1_Button.setMaximumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
+    insertL1_Button.setMinimumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
+    insertL1_Button.setPreferredSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
     insertL1_Button.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent evt) {
             insertL1_ButtonActionPerformed(evt);
@@ -311,11 +313,11 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     jPanel7.add(insertL1_Button);
 
     modifyL1_Button.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-    modifyL1_Button.setText(MODIFY_NO_SHORT_BTN.getContent());
+    modifyL1_Button.setText(MODIFY_BTN.getContent());
     modifyL1_Button.setEnabled(false);
-    modifyL1_Button.setMaximumSize(new java.awt.Dimension(90, 40));
-    modifyL1_Button.setMinimumSize(new java.awt.Dimension(90, 40));
-    modifyL1_Button.setPreferredSize(new java.awt.Dimension(90, 40));
+    modifyL1_Button.setMaximumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
+    modifyL1_Button.setMinimumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
+    modifyL1_Button.setPreferredSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
     modifyL1_Button.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent evt) {
             modifyL1_ButtonActionPerformed(evt);
@@ -324,11 +326,11 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     jPanel7.add(modifyL1_Button);
 
     deleteL1_Button.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-    deleteL1_Button.setText(DELETE_NO_SHORT_BTN.getContent());
+    deleteL1_Button.setText(DELETE_BTN.getContent());
     deleteL1_Button.setEnabled(false);
-    deleteL1_Button.setMaximumSize(new java.awt.Dimension(90, 40));
-    deleteL1_Button.setMinimumSize(new java.awt.Dimension(90, 40));
-    deleteL1_Button.setPreferredSize(new java.awt.Dimension(90, 40));
+    deleteL1_Button.setMaximumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
+    deleteL1_Button.setMinimumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
+    deleteL1_Button.setPreferredSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
     deleteL1_Button.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent evt) {
             deleteL1_ButtonActionPerformed(evt);
@@ -398,11 +400,12 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     jPanel10.setLayout(new javax.swing.BoxLayout(jPanel10, javax.swing.BoxLayout.Y_AXIS));
 
     insertL2_Button.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-    insertL2_Button.setText(CREATE_NO_SHORT_BTN.getContent());
-    insertL2_Button.setMaximumSize(new java.awt.Dimension(90, 40));
-    insertL2_Button.setMinimumSize(new java.awt.Dimension(90, 40));
+    insertL2_Button.setMnemonic('R');
+    insertL2_Button.setText(CREATE_BTN.getContent());
+    insertL2_Button.setMaximumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
+    insertL2_Button.setMinimumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
     insertL2_Button.setName(""); // NOI18N
-    insertL2_Button.setPreferredSize(new java.awt.Dimension(90, 40));
+    insertL2_Button.setPreferredSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
     insertL2_Button.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent evt) {
             insertL2_ButtonActionPerformed(evt);
@@ -411,12 +414,12 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     jPanel10.add(insertL2_Button);
 
     modifyL2_Button.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-    modifyL2_Button.setText(MODIFY_NO_SHORT_BTN.getContent());
+    modifyL2_Button.setText(MODIFY_BTN.getContent());
     modifyL2_Button.setEnabled(false);
-    modifyL2_Button.setMaximumSize(new java.awt.Dimension(90, 40));
-    modifyL2_Button.setMinimumSize(new java.awt.Dimension(90, 40));
+    modifyL2_Button.setMaximumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
+    modifyL2_Button.setMinimumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
     modifyL2_Button.setName(""); // NOI18N
-    modifyL2_Button.setPreferredSize(new java.awt.Dimension(90, 40));
+    modifyL2_Button.setPreferredSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
     modifyL2_Button.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent evt) {
             modifyL2_ButtonActionPerformed(evt);
@@ -425,12 +428,12 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     jPanel10.add(modifyL2_Button);
 
     deleteL2_Button.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-    deleteL2_Button.setText(DELETE_NO_SHORT_BTN.getContent());
+    deleteL2_Button.setText(DELETE_BTN.getContent());
     deleteL2_Button.setEnabled(false);
-    deleteL2_Button.setMaximumSize(new java.awt.Dimension(90, 40));
-    deleteL2_Button.setMinimumSize(new java.awt.Dimension(90, 40));
+    deleteL2_Button.setMaximumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
+    deleteL2_Button.setMinimumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
     deleteL2_Button.setName(""); // NOI18N
-    deleteL2_Button.setPreferredSize(new java.awt.Dimension(90, 40));
+    deleteL2_Button.setPreferredSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
     deleteL2_Button.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent evt) {
             deleteL2_ButtonActionPerformed(evt);
@@ -543,10 +546,11 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     jPanel11.setLayout(new javax.swing.BoxLayout(jPanel11, javax.swing.BoxLayout.Y_AXIS));
 
     insertBuilding_Button.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-    insertBuilding_Button.setText(CREATE_NO_SHORT_BTN.getContent());
-    insertBuilding_Button.setMaximumSize(new java.awt.Dimension(90, 40));
-    insertBuilding_Button.setMinimumSize(new java.awt.Dimension(90, 40));
-    insertBuilding_Button.setPreferredSize(new java.awt.Dimension(90, 40));
+    insertBuilding_Button.setMnemonic('R');
+    insertBuilding_Button.setText(CREATE_BTN.getContent());
+    insertBuilding_Button.setMaximumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
+    insertBuilding_Button.setMinimumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
+    insertBuilding_Button.setPreferredSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
     insertBuilding_Button.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent evt) {
             insertBuilding_ButtonActionPerformed(evt);
@@ -555,11 +559,11 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     jPanel11.add(insertBuilding_Button);
 
     modifyBuilding_Button.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-    modifyBuilding_Button.setText(MODIFY_NO_SHORT_BTN.getContent());
+    modifyBuilding_Button.setText(MODIFY_BTN.getContent());
     modifyBuilding_Button.setEnabled(false);
-    modifyBuilding_Button.setMaximumSize(new java.awt.Dimension(90, 40));
-    modifyBuilding_Button.setMinimumSize(new java.awt.Dimension(90, 40));
-    modifyBuilding_Button.setPreferredSize(new java.awt.Dimension(90, 40));
+    modifyBuilding_Button.setMaximumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
+    modifyBuilding_Button.setMinimumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
+    modifyBuilding_Button.setPreferredSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
     modifyBuilding_Button.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent evt) {
             modifyBuilding_ButtonActionPerformed(evt);
@@ -568,11 +572,11 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     jPanel11.add(modifyBuilding_Button);
 
     deleteBuilding_Button.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-    deleteBuilding_Button.setText(DELETE_NO_SHORT_BTN.getContent());
+    deleteBuilding_Button.setText(DELETE_BTN.getContent());
     deleteBuilding_Button.setEnabled(false);
-    deleteBuilding_Button.setMaximumSize(new java.awt.Dimension(90, 40));
-    deleteBuilding_Button.setMinimumSize(new java.awt.Dimension(90, 40));
-    deleteBuilding_Button.setPreferredSize(new java.awt.Dimension(90, 40));
+    deleteBuilding_Button.setMaximumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
+    deleteBuilding_Button.setMinimumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
+    deleteBuilding_Button.setPreferredSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
     deleteBuilding_Button.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent evt) {
             deleteBuilding_ButtonActionPerformed(evt);
@@ -635,10 +639,11 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     jPanel12.setLayout(new javax.swing.BoxLayout(jPanel12, javax.swing.BoxLayout.Y_AXIS));
 
     insertUnit_Button.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-    insertUnit_Button.setText(CREATE_NO_SHORT_BTN.getContent());
-    insertUnit_Button.setMaximumSize(new java.awt.Dimension(90, 40));
-    insertUnit_Button.setMinimumSize(new java.awt.Dimension(90, 40));
-    insertUnit_Button.setPreferredSize(new java.awt.Dimension(90, 40));
+    insertUnit_Button.setMnemonic('R');
+    insertUnit_Button.setText(CREATE_BTN.getContent());
+    insertUnit_Button.setMaximumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
+    insertUnit_Button.setMinimumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
+    insertUnit_Button.setPreferredSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
     insertUnit_Button.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent evt) {
             insertUnit_ButtonActionPerformed(evt);
@@ -647,11 +652,11 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     jPanel12.add(insertUnit_Button);
 
     modifyUnit_Button.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-    modifyUnit_Button.setText(MODIFY_NO_SHORT_BTN.getContent());
+    modifyUnit_Button.setText(MODIFY_BTN.getContent());
     modifyUnit_Button.setEnabled(false);
-    modifyUnit_Button.setMaximumSize(new java.awt.Dimension(90, 40));
-    modifyUnit_Button.setMinimumSize(new java.awt.Dimension(90, 40));
-    modifyUnit_Button.setPreferredSize(new java.awt.Dimension(90, 40));
+    modifyUnit_Button.setMaximumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
+    modifyUnit_Button.setMinimumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
+    modifyUnit_Button.setPreferredSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
     modifyUnit_Button.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent evt) {
             modifyUnit_ButtonActionPerformed(evt);
@@ -660,11 +665,11 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     jPanel12.add(modifyUnit_Button);
 
     deleteUnit_Button.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-    deleteUnit_Button.setText(DELETE_NO_SHORT_BTN.getContent());
+    deleteUnit_Button.setText(DELETE_BTN.getContent());
     deleteUnit_Button.setEnabled(false);
-    deleteUnit_Button.setMaximumSize(new java.awt.Dimension(90, 40));
-    deleteUnit_Button.setMinimumSize(new java.awt.Dimension(90, 40));
-    deleteUnit_Button.setPreferredSize(new java.awt.Dimension(90, 40));
+    deleteUnit_Button.setMaximumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
+    deleteUnit_Button.setMinimumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
+    deleteUnit_Button.setPreferredSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
     deleteUnit_Button.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent evt) {
             deleteUnit_ButtonActionPerformed(evt);
@@ -2653,7 +2658,6 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
                 runForm.setVisible(true);
                 runForm.setDefaultCloseOperation(
                         javax.swing.WindowConstants.EXIT_ON_CLOSE);
-                shortLicenseDialog(runForm, "Attendant Program", "upper left");
             }
         });
     }
