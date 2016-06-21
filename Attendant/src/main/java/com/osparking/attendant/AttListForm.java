@@ -66,6 +66,10 @@ import static com.osparking.global.names.ControlEnums.DialogTitleTypes.DELETE_FA
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.DELETE_RESULT_DIALOGTITLE;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.RIGHTS_DIALOGTITLE;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.USER_FIELD_CHECK_RESULT;
+import com.osparking.global.names.ControlEnums.FormMode;
+import static com.osparking.global.names.ControlEnums.FormMode.CreateMode;
+import static com.osparking.global.names.ControlEnums.FormMode.NormalMode;
+import static com.osparking.global.names.ControlEnums.FormMode.UpdateMode;
 import static com.osparking.global.names.ControlEnums.FormModeString.CREATE;
 import static com.osparking.global.names.ControlEnums.FormModeString.MODIFY;
 import static com.osparking.global.names.ControlEnums.FormModeString.SEARCH;
@@ -3126,8 +3130,3 @@ public class AttListForm extends javax.swing.JFrame {
     }
 }
 
-enum FormMode {
-    NormalMode,
-    CreateMode,
-    UpdateMode
-}

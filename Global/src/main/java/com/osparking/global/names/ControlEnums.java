@@ -97,7 +97,10 @@ public class ControlEnums {
         ROOM_LIST_LABEL("호실 목록",  "Rooms of Building"), 
         HELP_AFFIL_LABEL("소속 명칭 ods 파일 형식",  "Affiliation name list ods file content"), 
         HELP_BUILDING_LABEL("건물 호실 ods 파일 형식", "Building room number list ods file content"), 
-        FORM_MODE_LABEL("작업모드 : ",  "Form Mode :"), 
+        AFFILI_MODE_STRING("소속, 부서", "Affiliations"), 
+        BUILDING_MODE_STRING("건물, 호실", "Building, Units"), 
+        FORM_MODE_LABEL("작업 모드 : ",  "Form Mode :"), 
+        WORK_PANEL_LABEL("작업 대상 : ",  "Work Panel :"), 
         SEARCH_MODE_LABEL("차량 검색",  "Searching"), 
         CREATE_MODE_LABEL("차량 등록",  "Car Creation"), 
         MODIFY_MODE_LABEL("차량 변경",  "Modification"), 
@@ -189,10 +192,6 @@ public class ControlEnums {
         CREATE_BTN("생성(R)", "Create"),
         DELETE_BTN("삭제(D)", "Delete"),
         MODIFY_BTN("수정(M)", "Modify"),
-//        CREATE_NO_SHORT_BTN("생성", "Create"),
-//        DELETE_NO_SHORT_BTN("삭제", "Delete"),
-//        MODIFY_NO_SHORT_BTN("수정", "Modify"),
-        
         CANCEL_BTN("취소(C)", "Cancel"),
         SEARCH_BTN("검색(S)", "Search"),
         SAVE_AS_BTN("파일저장(A)", "Save As"),
@@ -272,6 +271,7 @@ public class ControlEnums {
     
     public enum ToolTipContent {
         CTRL_F_TOOLTIP("(Ctrl+F)", "(Ctrl+F)"),
+        INSERT_TOOLTIP("(입력 후 엔터 키)", "(Type and Enter)"),
         SEARCH_TOOLTIP("포커스 이동: Control+F", "To focus Click Ctrl+F"),
         LOGIN_BTN_TOOLTIP("관리자 로그인", "Click to Login"),
         CLOSE_BTN_TOOLTIP("현재 창을 닫기", "Close Window"),
@@ -886,4 +886,10 @@ public class ControlEnums {
     public enum MessageTypes{
         LOGIN_MSG, LOGOUT_MSG, PASSING_DELAY_MSG, 
     }
+    
+    public enum FormMode {
+        NormalMode,
+        CreateMode,
+        UpdateMode
+    }    
 }

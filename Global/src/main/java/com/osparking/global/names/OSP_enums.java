@@ -251,12 +251,6 @@ public class OSP_enums {
         EBDsettingsChange // log system settings change plus E-board settings change
     }    
     
-    public enum FormMode {
-        MODIFICATION,
-        CREATION,
-        SEARCHING
-    }      
-    
     public enum DeviceType {
         Camera ("카메라",  "Camera"),
         E_Board ("전광판",  "E-Board"),

@@ -51,6 +51,7 @@ import static com.osparking.global.names.ControlEnums.ButtonTypes.*;
 import static com.osparking.global.names.ControlEnums.ComboBoxItemTypes.*;
 import static com.osparking.global.names.ControlEnums.DialogMSGTypes.*;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.*;
+import com.osparking.global.names.ControlEnums.FormMode;
 import static com.osparking.global.names.ControlEnums.LabelContent.CAR_TAG_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.CELL_PHONE_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.COUNT_LABEL;
@@ -85,9 +86,7 @@ import static com.osparking.global.names.ControlEnums.ToolTipContent.OTHER_TOOLT
 import static com.osparking.global.names.JDBCMySQL.getConnection;
 import com.osparking.global.names.JTextFieldLimit;
 import com.osparking.global.names.OSP_enums;
-import com.osparking.global.names.OSP_enums.FormMode;
 import com.osparking.global.names.OSP_enums.VehicleCol;
-import com.osparking.global.names.OdsFileOnly;
 import com.osparking.global.names.PComboBox;
 import com.osparking.global.names.WrappedInt;
 import com.osparking.vehicle.driver.ODSReader;
@@ -98,7 +97,6 @@ import java.util.ArrayList;
 import java.util.logging.Logger;
 import static javax.swing.JOptionPane.WARNING_MESSAGE;
 import javax.swing.JTable;
-import org.jopendocument.dom.OOUtils;
 import org.jopendocument.dom.spreadsheet.Sheet;
 import org.jopendocument.dom.spreadsheet.SpreadSheet;
 /**
@@ -126,7 +124,7 @@ public class VehiclesForm extends javax.swing.JFrame {
         attachEnterHandler(searchBldgCBox);
         attachEnterHandler(searchETC);
         
-        setFormMode(FormMode.SEARCHING);
+        setFormMode(FormMode.NormalMode);
         loadSearchBox();
         attachEventListenerToVehicleTable();
         loadVehicleTable(0, "");
@@ -149,7 +147,7 @@ public class VehiclesForm extends javax.swing.JFrame {
 
     private void openDriverSelectionForm(VehiclesForm mySelf) {
         int seqNo = 0; 
-        if (formMode == formMode.MODIFICATION)
+        if (formMode == formMode.UpdateMode)
             seqNo = Integer.parseInt((String)vehiclesTable.getModel().getValueAt(
                     vehiclesTable.getSelectedRow(), VehicleCol.SeqNo.getNumVal()));
         new DriverSelection(mySelf, seqNo).setVisible(true);
@@ -1021,16 +1019,16 @@ public class VehiclesForm extends javax.swing.JFrame {
 
     private void insertSave_ButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_insertSave_ButtonActionPerformed
         
-        if (getFormMode() == FormMode.SEARCHING) {
+        if (getFormMode() == FormMode.NormalMode) {
             //<editor-fold defaultstate="collapsed" desc="--change to insertion mode ">
-            setFormMode(FormMode.CREATION);
+            setFormMode(FormMode.CreateMode);
             // clear vehicle detail text fields on the left side panel
             clearVehicleDetail();
 
             // move focus to the car tag number input field
             carTagTextField.requestFocus();
             //</editor-fold>
-        } else if (getFormMode() == FormMode.CREATION) {
+        } else if (getFormMode() == FormMode.CreateMode) {
             //<editor-fold defaultstate="collapsed" desc="--check and save vehicle info' ">
             // check if all the required fields are supplied
             if (carTagTextField.getText().trim().length() == 0) {
@@ -1052,7 +1050,7 @@ public class VehiclesForm extends javax.swing.JFrame {
                 
                 result = insertNewVehicle(plateNo, vehicleContents);
                 if (result == 1) {
-                    setFormMode(FormMode.SEARCHING);
+                    setFormMode(FormMode.NormalMode);
                     loadVehicleTable(-1, plateNo.toString()); 
                 } else {
                     JOptionPane.showConfirmDialog(null, VEHICLE_CREATION_FAIL_DIALOG.getContent(),
@@ -1066,7 +1064,7 @@ public class VehiclesForm extends javax.swing.JFrame {
     }//GEN-LAST:event_insertSave_ButtonActionPerformed
 
     private void driverTextFieldMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_driverTextFieldMouseClicked
-        if (evt.isConsumed() || formMode == FormMode.SEARCHING)
+        if (evt.isConsumed() || formMode == FormMode.NormalMode)
             return;
         else
             evt.consume();
@@ -1080,22 +1078,22 @@ public class VehiclesForm extends javax.swing.JFrame {
      * @param evt 
      */
     private void modiSave_ButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modiSave_ButtonActionPerformed
-        if (getFormMode() == FormMode.SEARCHING) {
+        if (getFormMode() == FormMode.NormalMode) {
             //<editor-fold defaultstate="collapsed" desc="--change to insertion mode ">
-            setFormMode(FormMode.MODIFICATION);
+            setFormMode(FormMode.UpdateMode);
             
             // move focus to the car tag number input field
             highlightTableRow(vehiclesTable, vehiclesTable.getSelectedRow());
             selectDriverButton.requestFocus();
             //</editor-fold>
-        } else if (getFormMode() == FormMode.MODIFICATION) {
+        } else if (getFormMode() == FormMode.UpdateMode) {
             //<editor-fold defaultstate="collapsed" desc="--check and save updated vehicle">
             // save updated vehicle information
             StringBuffer vehicleModification = new StringBuffer();
             
             if (saveUpdatedVehicle(vehicleModification) == 1)
             {
-                setFormMode(FormMode.SEARCHING);
+                setFormMode(FormMode.NormalMode);
                 loadVehicleTable(-1, carTagTextField.getText()); 
                 logParkingOperation(OSP_enums.OpLogLevel.SettingsChange, vehicleModification.toString());
             } else {
@@ -1111,7 +1109,7 @@ public class VehiclesForm extends javax.swing.JFrame {
         // depending on the mode of the form, it performs one of the following functions
         // 1. cancel current insertion,  2.  cancel current update
         // 3. delete current row(vehicle)
-        if (formMode == FormMode.CREATION) {
+        if (formMode == FormMode.CreateMode) {
             //<editor-fold defaultstate="collapsed" desc="--handle cancelling insertion">
             int response = JOptionPane.showConfirmDialog(null, VEHICLE_CREATE_CANCEL_DIALOG.getContent(),
 //                                ((String[])Globals.DialogMSGList.get(VEHICLE_CREATE_CANCEL_DIALOG.ordinal()))[ourLang], 
@@ -1120,7 +1118,7 @@ public class VehiclesForm extends javax.swing.JFrame {
         
             if (response == JOptionPane.YES_OPTION) 
             {
-                setFormMode(FormMode.SEARCHING);
+                setFormMode(FormMode.NormalMode);
                 insertSave_Button.setText(CREATE_BTN.getContent());
                 int selRow = vehiclesTable.getSelectedRow();
                 if (selRow >= 0)
@@ -1130,7 +1128,7 @@ public class VehiclesForm extends javax.swing.JFrame {
             } 
             //</editor-fold>
             
-        } else if (formMode == FormMode.MODIFICATION) {
+        } else if (formMode == FormMode.UpdateMode) {
             //<editor-fold defaultstate="collapsed" desc="--handle cancelling update">
             int response = JOptionPane.showConfirmDialog(null, VEHICLE_MODIFY_CANCEL_DAILOG.getContent(),
                                 WARING_DIALOGTITLE.getContent(), 
@@ -1138,7 +1136,7 @@ public class VehiclesForm extends javax.swing.JFrame {
         
             if (response == JOptionPane.YES_OPTION) 
             {
-                setFormMode(FormMode.SEARCHING);
+                setFormMode(FormMode.NormalMode);
                 modiSave_Button.setText(MODIFY_BTN.getContent());
                 int selRow = vehiclesTable.getSelectedRow();
                 if (selRow >= 0)
@@ -1149,7 +1147,7 @@ public class VehiclesForm extends javax.swing.JFrame {
             } 
             //</editor-fold>
         }
-        else if (formMode == FormMode.SEARCHING) {
+        else if (formMode == FormMode.NormalMode) {
             int selRow = vehiclesTable.getSelectedRow();
             highlightTableRow(vehiclesTable, selRow);
             // stop processing if no row selected currently
@@ -1162,7 +1160,7 @@ public class VehiclesForm extends javax.swing.JFrame {
     }//GEN-LAST:event_deleteCancel_ButtonActionPerformed
 
     private void selectDriverButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectDriverButtonActionPerformed
-        if (formMode == FormMode.SEARCHING)
+        if (formMode == FormMode.NormalMode)
             return;
         openDriverSelectionForm(this);
     }//GEN-LAST:event_selectDriverButtonActionPerformed
@@ -1700,7 +1698,7 @@ public class VehiclesForm extends javax.swing.JFrame {
                     @Override
                     public void run() {
                         if (vehiclesTable.getSelectedRow() >= 0) {
-                            if (getFormMode() == FormMode.SEARCHING) {
+                            if (getFormMode() == FormMode.NormalMode) {
                                 showVehicleDetail(vehiclesTable.convertRowIndexToModel(
                                         vehiclesTable.getSelectedRow()));  
                             } else {
@@ -1709,13 +1707,13 @@ public class VehiclesForm extends javax.swing.JFrame {
                                 switch (language) {
                                     case KOREAN:
                                         dialogMessage = "차량정보 " 
-                                                + (formMode == FormMode.CREATION ? "생성" : "변경") 
+                                                + (formMode == FormMode.CreateMode ? "생성" : "변경") 
                                                 + " 중입니다";
                                         break;
                                         
                                     case ENGLISH:
                                         dialogMessage = "Car information is being" 
-                                                + (formMode == FormMode.CREATION ? "created." : "modified.");
+                                                + (formMode == FormMode.CreateMode ? "created." : "modified.");
                                         break;
                                         
                                     default:
@@ -1750,7 +1748,7 @@ public class VehiclesForm extends javax.swing.JFrame {
             
         // switch label for the users, change button label/functionality
         switch (aFormMode) {
-            case CREATION:
+            case CreateMode:
                 searchButton.setEnabled(false);
                 clearButton.setEnabled(false);
                 closeFormButton.setEnabled(false);
@@ -1773,7 +1771,7 @@ public class VehiclesForm extends javax.swing.JFrame {
                 searchBldgCBox.setEnabled(false);
                 searchETC.setEnabled(false);
                 break;
-            case MODIFICATION:
+            case UpdateMode:
                 searchButton.setEnabled(false);
                 clearButton.setEnabled(false);
                 closeFormButton.setEnabled(false);
@@ -1796,7 +1794,7 @@ public class VehiclesForm extends javax.swing.JFrame {
                 searchBldgCBox.setEnabled(false);
                 searchETC.setEnabled(false);
                 break;
-            case SEARCHING:
+            case NormalMode:
                 searchButton.setEnabled(true);
                 searchButton.setMnemonic('s');
                 closeFormButton.setEnabled(true);
@@ -1837,7 +1835,7 @@ public class VehiclesForm extends javax.swing.JFrame {
         // As car tag number is the primary key of the vehicle table
         // it shouldn't be modified. It needs to be editable for insertion though.
         // and be put back to non-editable after the new vehicle inserted.
-        if (getFormMode() != FormMode.MODIFICATION)
+        if (getFormMode() != FormMode.UpdateMode)
             carTagTextField.setEditable(b);
         notiCheckBox.setEnabled(b);
         wholeCheckBox.setEnabled(b);
@@ -1851,9 +1849,9 @@ public class VehiclesForm extends javax.swing.JFrame {
         deleteAllVehicles.setEnabled(!b);
         readSheet_Button.setEnabled(!b);
         
-        if (getFormMode() == FormMode.CREATION)
+        if (getFormMode() == FormMode.CreateMode)
             modiSave_Button.setEnabled(false);
-        else if (getFormMode() == FormMode.MODIFICATION)
+        else if (getFormMode() == FormMode.UpdateMode)
             insertSave_Button.setEnabled(false);
         else {
             modiSave_Button.setEnabled(true);
@@ -1907,7 +1905,7 @@ public class VehiclesForm extends javax.swing.JFrame {
     }
 
     private void closeFrameGracefully() {
-        if (formMode == FormMode.SEARCHING) {
+        if (formMode == FormMode.NormalMode) {
             dispose();
         } else {
             
@@ -1915,13 +1913,13 @@ public class VehiclesForm extends javax.swing.JFrame {
             
             switch (language) {
                 case KOREAN:
-                    dialogMessage = (formMode == FormMode.CREATION ? "생성" : "변경")
+                    dialogMessage = (formMode == FormMode.CreateMode ? "생성" : "변경")
                             + " 중인 차량정보를 포기하겠습니까?";
                     break;
                     
                 case ENGLISH:
                     dialogMessage = "Do you want to give up " +
-                                (formMode == FormMode.CREATION ? "registering " : "modifying ")
+                                (formMode == FormMode.CreateMode ? "registering " : "modifying ")
                                         + "a car?";
                     break;
                     

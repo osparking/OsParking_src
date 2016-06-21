@@ -17,9 +17,11 @@
 package com.osparking.vehicle;
 
 import static com.mysql.jdbc.MysqlErrorNumbers.ER_DUP_ENTRY;
+import com.osparking.global.CommonData;
 import static com.osparking.global.CommonData.buttonHeightNorm;
 import static com.osparking.global.CommonData.buttonWidthNorm;
 import static com.osparking.global.CommonData.buttonWidthWide;
+import static com.osparking.global.CommonData.pointColor;
 import static com.osparking.global.Globals.PopUpBackground;
 import static com.osparking.global.Globals.font_Size;
 import static com.osparking.global.Globals.font_Style;
@@ -61,22 +63,33 @@ import static com.osparking.global.names.ControlEnums.DialogTitleTypes.READ_ODS_
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.READ_ODS_FAIL_DIALOGTITLE;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.REJECT_USER_DIALOGTITLE;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.UNIT_MODIFY_DIALOGTITLE;
+import com.osparking.global.names.ControlEnums.FormMode;
+import static com.osparking.global.names.ControlEnums.FormModeString.CREATE;
+import static com.osparking.global.names.ControlEnums.FormModeString.MODIFY;
+import static com.osparking.global.names.ControlEnums.FormModeString.SEARCH;
 import static com.osparking.global.names.ControlEnums.LabelContent.AFFILIATION_LIST_LABEL;
+import static com.osparking.global.names.ControlEnums.LabelContent.AFFILI_MODE_STRING;
 import static com.osparking.global.names.ControlEnums.LabelContent.BUILDING_LIST_LABEL;
+import static com.osparking.global.names.ControlEnums.LabelContent.BUILDING_MODE_STRING;
 import static com.osparking.global.names.ControlEnums.LabelContent.HELP_AFFIL_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.HELP_BUILDING_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.LOWER_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.LOWER_LIST_LABEL;
+import static com.osparking.global.names.ControlEnums.LabelContent.MODE_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.ROOM_LIST_LABEL;
+import static com.osparking.global.names.ControlEnums.LabelContent.WORK_PANEL_LABEL;
 import static com.osparking.global.names.ControlEnums.TableTypes.*;
 import static com.osparking.global.names.ControlEnums.TitleTypes.AFFILI_BUILD_FRAME_TITLE;
+import static com.osparking.global.names.ControlEnums.ToolTipContent.INSERT_TOOLTIP;
 import static com.osparking.global.names.DB_Access.parkingLotLocale;
 import static com.osparking.global.names.DB_Access.readSettings;
 import static com.osparking.global.names.JDBCMySQL.getConnection;
-import com.osparking.global.names.OSP_enums.FormMode;
 import com.osparking.global.names.OSP_enums.ODS_TYPE;
+import static com.osparking.global.names.OSP_enums.ODS_TYPE.AFFILIATION;
+import static com.osparking.global.names.OSP_enums.ODS_TYPE.BUILDING;
 import com.osparking.global.names.OdsFileOnly;
 import com.osparking.global.names.WrappedInt;
+import static com.osparking.vehicle.TableType.L1_TABLE;
 import com.osparking.vehicle.driver.ODSReader;
 import static com.osparking.vehicle.driver.ODSReader.getWrongCellPointString;
 import java.awt.Dimension;
@@ -101,6 +114,7 @@ import javax.swing.JOptionPane;
 import static javax.swing.JOptionPane.INFORMATION_MESSAGE;
 import static javax.swing.JOptionPane.WARNING_MESSAGE;
 import static javax.swing.JOptionPane.showMessageDialog;
+import javax.swing.JRadioButton;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
@@ -119,7 +133,7 @@ import org.jopendocument.dom.spreadsheet.SpreadSheet;
  * @author Open Source Parking Inc.
  */
 public class AffiliationBuildingForm extends javax.swing.JFrame {
-    FormMode formMode = FormMode.SEARCHING;
+    private FormMode formMode = FormMode.NormalMode;
     /**
      * Creates new form BuildingManageFrame
      */
@@ -151,7 +165,10 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
         fourPanels = new javax.swing.ButtonGroup();
         wholePanel = new javax.swing.JPanel();
         topPanel = new javax.swing.JPanel();
-        filler11 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
+        workPanel = new javax.swing.JLabel();
+        workPanelName = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        modeString = new javax.swing.JLabel();
         BigMidPanel = new javax.swing.JPanel();
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(40, 0), new java.awt.Dimension(40, 0), new java.awt.Dimension(30, 32767));
         centerPanel = new javax.swing.JPanel();
@@ -159,7 +176,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
         topLeft = new javax.swing.JPanel();
         affiTopTitle = new javax.swing.JLabel();
         scrollTopLeft = new javax.swing.JScrollPane();
-        L1_Affiliation = new javax.swing.JTable();
+        L1_Affiliation = new RXTable();
         affiliTopRight = new javax.swing.JPanel();
         affiL1_Control = new javax.swing.JRadioButton();
         insertL1_Button = new javax.swing.JButton();
@@ -176,12 +193,11 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
         insertL2_Button = new javax.swing.JButton();
         modifyL2_Button = new javax.swing.JButton();
         deleteL2_Button = new javax.swing.JButton();
+        cancelL2_Button = new javax.swing.JButton();
         h10_pan_2 = new javax.swing.JPanel();
-        allLeftPanel = new javax.swing.JPanel();
-        deleteAll_Affiliation = new javax.swing.JButton();
-        readSheet_Affiliation = new javax.swing.JButton();
-        ODSAffiliHelp = new javax.swing.JButton();
-        filler4 = new javax.swing.Box.Filler(new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 32767));
+        filler4 = new javax.swing.Box.Filler(new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 0), new java.awt.Dimension(40, 32767));
+        jSeparator1 = new javax.swing.JSeparator();
+        filler5 = new javax.swing.Box.Filler(new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 0), new java.awt.Dimension(40, 32767));
         buildingPanel = new javax.swing.JPanel();
         topRight = new javax.swing.JPanel();
         bldgTopTitle = new javax.swing.JLabel();
@@ -192,6 +208,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
         insertBuilding_Button = new javax.swing.JButton();
         modifyBuilding_Button = new javax.swing.JButton();
         deleteBuilding_Button = new javax.swing.JButton();
+        cancelBuilding_Button = new javax.swing.JButton();
         h10_pan_3 = new javax.swing.JPanel();
         jPanel5 = new javax.swing.JPanel();
         UnitLabel = new javax.swing.JLabel();
@@ -202,34 +219,58 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
         insertUnit_Button = new javax.swing.JButton();
         modifyUnit_Button = new javax.swing.JButton();
         deleteUnit_Button = new javax.swing.JButton();
+        cancelUnit_Button = new javax.swing.JButton();
         h10_pan_4 = new javax.swing.JPanel();
-        allRightPanel = new javax.swing.JPanel();
-        deleteAll_Button = new javax.swing.JButton();
-        readSheet_Button = new javax.swing.JButton();
-        ODSBuildPWHelp = new javax.swing.JButton();
         filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(40, 0), new java.awt.Dimension(40, 0), new java.awt.Dimension(30, 32767));
         bottomPanel = new javax.swing.JPanel();
         h20_5 = new javax.swing.Box.Filler(new java.awt.Dimension(40, 20), new java.awt.Dimension(40, 20), new java.awt.Dimension(40, 20));
         closePanel = new javax.swing.JPanel();
-        jPanel2 = new javax.swing.JPanel();
+        deleteAll_Affiliation = new javax.swing.JButton();
+        readODSpan = new javax.swing.JPanel();
+        readSheet = new javax.swing.JButton();
+        ODSAffiliHelp = new javax.swing.JButton();
+        saveSheet = new javax.swing.JButton();
         closeFormButton = new javax.swing.JButton();
-        filler3 = new javax.swing.Box.Filler(new Dimension(40, buttonHeightNorm), new Dimension(40, buttonHeightNorm), new Dimension(40, buttonHeightNorm));
-        jPanel1 = new javax.swing.JPanel();
+        bottomGap = new javax.swing.JPanel();
 
         odsFileChooser.setFileFilter(new OdsFileOnly());
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle(AFFILI_BUILD_FRAME_TITLE.getContent());
         setBackground(PopUpBackground);
-        setMinimumSize(new java.awt.Dimension(740, 600));
-        setPreferredSize(new java.awt.Dimension(740, 600));
+        setMinimumSize(new java.awt.Dimension(740, 645));
+        setPreferredSize(new java.awt.Dimension(740, 645));
 
         wholePanel.setLayout(new java.awt.BorderLayout());
 
-        topPanel.setMinimumSize(new java.awt.Dimension(0, 40));
-        topPanel.setPreferredSize(new java.awt.Dimension(0, 40));
-        topPanel.setLayout(new javax.swing.BoxLayout(topPanel, javax.swing.BoxLayout.LINE_AXIS));
-        topPanel.add(filler11);
+        topPanel.setMinimumSize(new java.awt.Dimension(0, 54));
+        topPanel.setPreferredSize(new java.awt.Dimension(0, 54));
+        topPanel.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 5, 20));
+
+        workPanel.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        workPanel.setText(WORK_PANEL_LABEL.getContent());
+        topPanel.add(workPanel);
+
+        workPanelName.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        workPanelName.setForeground(pointColor);
+        workPanelName.setText("소속, 부서");
+        topPanel.add(workPanelName);
+
+        jLabel2.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jLabel2.setText(MODE_LABEL.getContent());
+        jLabel2.setMaximumSize(new java.awt.Dimension(200, 28));
+        jLabel2.setMinimumSize(new java.awt.Dimension(50, 26));
+        jLabel2.setPreferredSize(new java.awt.Dimension(80, 26));
+        topPanel.add(jLabel2);
+
+        modeString.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        modeString.setForeground(CommonData.tipColor);
+        modeString.setText(SEARCH.getContent());
+        modeString.setMaximumSize(new java.awt.Dimension(200, 28));
+        modeString.setMinimumSize(new java.awt.Dimension(34, 26));
+        modeString.setPreferredSize(new java.awt.Dimension(80, 26));
+        topPanel.add(modeString);
 
         wholePanel.add(topPanel, java.awt.BorderLayout.NORTH);
 
@@ -241,7 +282,6 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
         centerPanel.setPreferredSize(new java.awt.Dimension(500, 489));
         centerPanel.setLayout(new javax.swing.BoxLayout(centerPanel, javax.swing.BoxLayout.X_AXIS));
 
-        affiliationPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         affiliationPanel.setMinimumSize(new java.awt.Dimension(300, 320));
         affiliationPanel.setPreferredSize(new java.awt.Dimension(300, 489));
         affiliationPanel.setLayout(new javax.swing.BoxLayout(affiliationPanel, javax.swing.BoxLayout.Y_AXIS));
@@ -260,6 +300,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
         scrollTopLeft.setMinimumSize(new java.awt.Dimension(24, 140));
         scrollTopLeft.setPreferredSize(new java.awt.Dimension(200, 140));
 
+        ((RXTable)L1_Affiliation).setSelectAllForEdit(true);
         L1_Affiliation.setAutoCreateRowSorter(true);
         L1_Affiliation.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         L1_Affiliation.setModel(new javax.swing.table.DefaultTableModel(
@@ -379,8 +420,8 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     affiliTopRight.add(deleteL1_Button, gridBagConstraints);
 
     cancelL1_Button.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-    cancelL1_Button.setMnemonic('D');
-    cancelL1_Button.setText(DELETE_BTN.getContent());
+    cancelL1_Button.setMnemonic('C');
+    cancelL1_Button.setText(CANCEL_BTN.getContent());
     cancelL1_Button.setEnabled(false);
     cancelL1_Button.setMaximumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
     cancelL1_Button.setMinimumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
@@ -404,7 +445,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     h10_pan_1.setLayout(h10_pan_1Layout);
     h10_pan_1Layout.setHorizontalGroup(
         h10_pan_1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-        .addGap(0, 315, Short.MAX_VALUE)
+        .addGap(0, 317, Short.MAX_VALUE)
     );
     h10_pan_1Layout.setVerticalGroup(
         h10_pan_1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -542,6 +583,24 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     gridBagConstraints.gridy = 3;
     affiliBotRight.add(deleteL2_Button, gridBagConstraints);
 
+    cancelL2_Button.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+    cancelL2_Button.setMnemonic('C');
+    cancelL2_Button.setText(CANCEL_BTN.getContent());
+    cancelL2_Button.setEnabled(false);
+    cancelL2_Button.setMaximumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
+    cancelL2_Button.setMinimumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
+    cancelL2_Button.setPreferredSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
+    cancelL2_Button.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            cancelL2_ButtonActionPerformed(evt);
+        }
+    });
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 0;
+    gridBagConstraints.gridy = 4;
+    gridBagConstraints.anchor = java.awt.GridBagConstraints.PAGE_START;
+    affiliBotRight.add(cancelL2_Button, gridBagConstraints);
+
     botLeft.add(affiliBotRight, java.awt.BorderLayout.EAST);
 
     h10_pan_2.setMinimumSize(new java.awt.Dimension(0, 10));
@@ -551,7 +610,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     h10_pan_2.setLayout(h10_pan_2Layout);
     h10_pan_2Layout.setHorizontalGroup(
         h10_pan_2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-        .addGap(0, 315, Short.MAX_VALUE)
+        .addGap(0, 317, Short.MAX_VALUE)
     );
     h10_pan_2Layout.setVerticalGroup(
         h10_pan_2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -562,54 +621,14 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
 
     affiliationPanel.add(botLeft);
 
-    allLeftPanel.setMinimumSize(new java.awt.Dimension(212, 33));
-    allLeftPanel.setPreferredSize(new java.awt.Dimension(588, 50));
-
-    deleteAll_Affiliation.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-    deleteAll_Affiliation.setText(DELETE_ALL_BTN.getContent());
-    deleteAll_Affiliation.setMaximumSize(new Dimension(buttonWidthWide, buttonHeightNorm));
-    deleteAll_Affiliation.setMinimumSize(new Dimension(buttonWidthWide, buttonHeightNorm));
-    deleteAll_Affiliation.setPreferredSize(new Dimension(buttonWidthWide, buttonHeightNorm));
-    deleteAll_Affiliation.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent evt) {
-            deleteAll_AffiliationActionPerformed(evt);
-        }
-    });
-    allLeftPanel.add(deleteAll_Affiliation);
-
-    readSheet_Affiliation.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-    readSheet_Affiliation.setText(READ_ODS_BTN.getContent());
-    readSheet_Affiliation.setMaximumSize(new Dimension(buttonWidthWide, buttonHeightNorm));
-    readSheet_Affiliation.setMinimumSize(new Dimension(buttonWidthWide, buttonHeightNorm));
-    readSheet_Affiliation.setPreferredSize(new Dimension(buttonWidthWide, buttonHeightNorm));
-    readSheet_Affiliation.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent evt) {
-            readSheet_AffiliationActionPerformed(evt);
-        }
-    });
-    allLeftPanel.add(readSheet_Affiliation);
-
-    ODSAffiliHelp.setBackground(new java.awt.Color(153, 255, 153));
-    ODSAffiliHelp.setFont(new java.awt.Font("Dotum", 1, 14)); // NOI18N
-    ODSAffiliHelp.setIcon(getQuest20_Icon());
-    ODSAffiliHelp.setAlignmentY(0.0F);
-    ODSAffiliHelp.setMargin(new java.awt.Insets(2, 4, 2, 4));
-    ODSAffiliHelp.setMinimumSize(new java.awt.Dimension(20, 20));
-    ODSAffiliHelp.setOpaque(false);
-    ODSAffiliHelp.setPreferredSize(new java.awt.Dimension(25, 25));
-    ODSAffiliHelp.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent evt) {
-            ODSAffiliHelpActionPerformed(evt);
-        }
-    });
-    allLeftPanel.add(ODSAffiliHelp);
-
-    affiliationPanel.add(allLeftPanel);
-
     centerPanel.add(affiliationPanel);
     centerPanel.add(filler4);
 
-    buildingPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+    jSeparator1.setOrientation(javax.swing.SwingConstants.VERTICAL);
+    jSeparator1.setOpaque(true);
+    centerPanel.add(jSeparator1);
+    centerPanel.add(filler5);
+
     buildingPanel.setMinimumSize(new java.awt.Dimension(0, 223));
     buildingPanel.setPreferredSize(new java.awt.Dimension(200, 489));
     buildingPanel.setLayout(new javax.swing.BoxLayout(buildingPanel, javax.swing.BoxLayout.Y_AXIS));
@@ -737,6 +756,24 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     gridBagConstraints.anchor = java.awt.GridBagConstraints.PAGE_START;
     bldgTopRight.add(deleteBuilding_Button, gridBagConstraints);
 
+    cancelBuilding_Button.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+    cancelBuilding_Button.setMnemonic('C');
+    cancelBuilding_Button.setText(CANCEL_BTN.getContent());
+    cancelBuilding_Button.setEnabled(false);
+    cancelBuilding_Button.setMaximumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
+    cancelBuilding_Button.setMinimumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
+    cancelBuilding_Button.setPreferredSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
+    cancelBuilding_Button.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            cancelBuilding_ButtonActionPerformed(evt);
+        }
+    });
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 0;
+    gridBagConstraints.gridy = 4;
+    gridBagConstraints.anchor = java.awt.GridBagConstraints.PAGE_START;
+    bldgTopRight.add(cancelBuilding_Button, gridBagConstraints);
+
     topRight.add(bldgTopRight, java.awt.BorderLayout.EAST);
 
     h10_pan_3.setPreferredSize(new java.awt.Dimension(0, 10));
@@ -745,7 +782,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     h10_pan_3.setLayout(h10_pan_3Layout);
     h10_pan_3Layout.setHorizontalGroup(
         h10_pan_3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-        .addGap(0, 215, Short.MAX_VALUE)
+        .addGap(0, 217, Short.MAX_VALUE)
     );
     h10_pan_3Layout.setVerticalGroup(
         h10_pan_3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -873,6 +910,24 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     gridBagConstraints.gridy = 3;
     jPanel12.add(deleteUnit_Button, gridBagConstraints);
 
+    cancelUnit_Button.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+    cancelUnit_Button.setMnemonic('C');
+    cancelUnit_Button.setText(CANCEL_BTN.getContent());
+    cancelUnit_Button.setEnabled(false);
+    cancelUnit_Button.setMaximumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
+    cancelUnit_Button.setMinimumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
+    cancelUnit_Button.setPreferredSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
+    cancelUnit_Button.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            cancelUnit_ButtonActionPerformed(evt);
+        }
+    });
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 0;
+    gridBagConstraints.gridy = 4;
+    gridBagConstraints.anchor = java.awt.GridBagConstraints.PAGE_START;
+    jPanel12.add(cancelUnit_Button, gridBagConstraints);
+
     jPanel5.add(jPanel12, java.awt.BorderLayout.EAST);
 
     h10_pan_4.setPreferredSize(new java.awt.Dimension(0, 10));
@@ -881,7 +936,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     h10_pan_4.setLayout(h10_pan_4Layout);
     h10_pan_4Layout.setHorizontalGroup(
         h10_pan_4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-        .addGap(0, 215, Short.MAX_VALUE)
+        .addGap(0, 217, Short.MAX_VALUE)
     );
     h10_pan_4Layout.setVerticalGroup(
         h10_pan_4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -891,50 +946,6 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     jPanel5.add(h10_pan_4, java.awt.BorderLayout.SOUTH);
 
     buildingPanel.add(jPanel5);
-
-    allRightPanel.setMinimumSize(new java.awt.Dimension(212, 33));
-    allRightPanel.setPreferredSize(new java.awt.Dimension(400, 50));
-
-    deleteAll_Button.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-    deleteAll_Button.setText(DELETE_ALL_BTN.getContent());
-    deleteAll_Button.setMaximumSize(new Dimension(buttonWidthWide, buttonHeightNorm));
-    deleteAll_Button.setMinimumSize(new Dimension(buttonWidthWide, buttonHeightNorm));
-    deleteAll_Button.setPreferredSize(new Dimension(buttonWidthWide, buttonHeightNorm));
-    deleteAll_Button.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent evt) {
-            deleteAll_ButtonActionPerformed(evt);
-        }
-    });
-    allRightPanel.add(deleteAll_Button);
-
-    readSheet_Button.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-    readSheet_Button.setText(READ_ODS_BTN.getContent());
-    readSheet_Button.setMaximumSize(new Dimension(buttonWidthWide, buttonHeightNorm));
-    readSheet_Button.setMinimumSize(new Dimension(buttonWidthWide, buttonHeightNorm));
-    readSheet_Button.setPreferredSize(new Dimension(buttonWidthWide, buttonHeightNorm));
-    readSheet_Button.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent evt) {
-            readSheet_ButtonActionPerformed(evt);
-        }
-    });
-    allRightPanel.add(readSheet_Button);
-
-    ODSBuildPWHelp.setBackground(new java.awt.Color(153, 255, 153));
-    ODSBuildPWHelp.setFont(new java.awt.Font("Dotum", 1, 14)); // NOI18N
-    ODSBuildPWHelp.setIcon(getQuest20_Icon());
-    ODSBuildPWHelp.setAlignmentY(0.0F);
-    ODSBuildPWHelp.setMargin(new java.awt.Insets(2, 4, 2, 4));
-    ODSBuildPWHelp.setMinimumSize(new java.awt.Dimension(20, 20));
-    ODSBuildPWHelp.setOpaque(false);
-    ODSBuildPWHelp.setPreferredSize(new java.awt.Dimension(25, 25));
-    ODSBuildPWHelp.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent evt) {
-            ODSBuildPWHelpActionPerformed(evt);
-        }
-    });
-    allRightPanel.add(ODSBuildPWHelp);
-
-    buildingPanel.add(allRightPanel);
 
     centerPanel.add(buildingPanel);
 
@@ -951,20 +962,75 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     closePanel.setMaximumSize(new Dimension(4000, buttonHeightNorm));
     closePanel.setMinimumSize(new Dimension(150, buttonHeightNorm));
     closePanel.setPreferredSize(new Dimension(40, buttonHeightNorm + 4));
-    closePanel.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT, 0, 5));
 
-    javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-    jPanel2.setLayout(jPanel2Layout);
-    jPanel2Layout.setHorizontalGroup(
-        jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-        .addGap(0, 0, Short.MAX_VALUE)
+    deleteAll_Affiliation.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+    deleteAll_Affiliation.setText(DELETE_ALL_BTN.getContent());
+    deleteAll_Affiliation.setMaximumSize(new Dimension(buttonWidthWide, buttonHeightNorm));
+    deleteAll_Affiliation.setMinimumSize(new Dimension(buttonWidthWide, buttonHeightNorm));
+    deleteAll_Affiliation.setPreferredSize(new Dimension(buttonWidthWide, buttonHeightNorm));
+    deleteAll_Affiliation.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            deleteAll_AffiliationActionPerformed(evt);
+        }
+    });
+
+    readODSpan.setMinimumSize(new java.awt.Dimension(130, 40));
+    readODSpan.setPreferredSize(new java.awt.Dimension(140, 40));
+
+    readSheet.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+    readSheet.setText(READ_ODS_BTN.getContent());
+    readSheet.setMaximumSize(new Dimension(buttonWidthWide, buttonHeightNorm));
+    readSheet.setMinimumSize(new Dimension(buttonWidthWide, buttonHeightNorm));
+    readSheet.setPreferredSize(new Dimension(buttonWidthWide, buttonHeightNorm));
+    readSheet.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            readSheetActionPerformed(evt);
+        }
+    });
+
+    ODSAffiliHelp.setBackground(new java.awt.Color(153, 255, 153));
+    ODSAffiliHelp.setFont(new java.awt.Font("Dotum", 1, 14)); // NOI18N
+    ODSAffiliHelp.setIcon(getQuest20_Icon());
+    ODSAffiliHelp.setAlignmentY(0.0F);
+    ODSAffiliHelp.setMargin(new java.awt.Insets(2, 4, 2, 4));
+    ODSAffiliHelp.setMinimumSize(new java.awt.Dimension(20, 20));
+    ODSAffiliHelp.setOpaque(false);
+    ODSAffiliHelp.setPreferredSize(new java.awt.Dimension(25, 25));
+    ODSAffiliHelp.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            ODSAffiliHelpActionPerformed(evt);
+        }
+    });
+
+    javax.swing.GroupLayout readODSpanLayout = new javax.swing.GroupLayout(readODSpan);
+    readODSpan.setLayout(readODSpanLayout);
+    readODSpanLayout.setHorizontalGroup(
+        readODSpanLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addGroup(readODSpanLayout.createSequentialGroup()
+            .addGap(2, 2, 2)
+            .addComponent(readSheet, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGap(0, 0, 0)
+            .addComponent(ODSAffiliHelp, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
     );
-    jPanel2Layout.setVerticalGroup(
-        jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-        .addGap(0, 0, Short.MAX_VALUE)
+    readODSpanLayout.setVerticalGroup(
+        readODSpanLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addComponent(readSheet, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, readODSpanLayout.createSequentialGroup()
+            .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(ODSAffiliHelp, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
     );
 
-    closePanel.add(jPanel2);
+    saveSheet.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+    saveSheet.setText(SAVE_ODS_BTN.getContent());
+    saveSheet.setMaximumSize(new Dimension(buttonWidthWide, buttonHeightNorm));
+    saveSheet.setMinimumSize(new Dimension(buttonWidthWide, buttonHeightNorm));
+    saveSheet.setPreferredSize(new Dimension(buttonWidthWide, buttonHeightNorm));
+    saveSheet.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            saveSheetActionPerformed(evt);
+        }
+    });
 
     closeFormButton.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
     closeFormButton.setMnemonic('c');
@@ -977,14 +1043,38 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
             closeFormButtonActionPerformed(evt);
         }
     });
-    closePanel.add(closeFormButton);
-    closePanel.add(filler3);
+
+    javax.swing.GroupLayout closePanelLayout = new javax.swing.GroupLayout(closePanel);
+    closePanel.setLayout(closePanelLayout);
+    closePanelLayout.setHorizontalGroup(
+        closePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addGroup(closePanelLayout.createSequentialGroup()
+            .addGap(40, 40, 40)
+            .addComponent(deleteAll_Affiliation, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGap(10, 10, 10)
+            .addComponent(readODSpan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGap(10, 10, 10)
+            .addComponent(saveSheet, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 84, Short.MAX_VALUE)
+            .addComponent(closeFormButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGap(40, 40, 40))
+    );
+    closePanelLayout.setVerticalGroup(
+        closePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addGroup(closePanelLayout.createSequentialGroup()
+            .addGroup(closePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addComponent(readODSpan, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 44, Short.MAX_VALUE)
+                .addComponent(deleteAll_Affiliation, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(saveSheet, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(closeFormButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGap(0, 0, 0))
+    );
 
     bottomPanel.add(closePanel, java.awt.BorderLayout.CENTER);
 
-    jPanel1.setMinimumSize(new java.awt.Dimension(10, 36));
-    jPanel1.setPreferredSize(new java.awt.Dimension(100, 36));
-    bottomPanel.add(jPanel1, java.awt.BorderLayout.PAGE_END);
+    bottomGap.setMinimumSize(new java.awt.Dimension(10, 36));
+    bottomGap.setPreferredSize(new java.awt.Dimension(100, 36));
+    bottomPanel.add(bottomGap, java.awt.BorderLayout.SOUTH);
 
     wholePanel.add(bottomPanel, java.awt.BorderLayout.SOUTH);
 
@@ -993,6 +1083,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     pack();
     }// </editor-fold>//GEN-END:initComponents
     
+    static int count = 0;
     private void addAffiliationSelectionListener() {
         ListSelectionModel cellSelectionModel = L1_Affiliation.getSelectionModel();
         cellSelectionModel.addListSelectionListener (new ListSelectionListener ()
@@ -1000,7 +1091,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
             public void valueChanged(ListSelectionEvent  e) {
                 if (!e.getValueIsAdjusting())
                 {
-                    System.out.println("valueChanged");
+                    System.out.println("valueChanged : " + (++count));
                     int index1 = followAndGetTrueIndex(L1_Affiliation);
                      
                     if (index1 >= 0) 
@@ -1102,6 +1193,10 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
             {
                 removeEmptyRow(insertL1_Button, L1_Affiliation);                    
             } 
+            cancelL1_Button.setEnabled(false);
+            setFormMode(FormMode.NormalMode);
+            changeControlEnabledForTable(L1_TABLE);
+            
             // </editor-fold>
         }
         else 
@@ -1230,7 +1325,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     }//GEN-LAST:event_deleteL1_ButtonActionPerformed
 
     private void insertL1_ButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_insertL1_ButtonActionPerformed
-        prepareRecordInsertion(L1_Affiliation, insertL1_Button);
+        prepareRecordInsertion(L1_Affiliation, insertL1_Button, cancelL1_Button);
     }//GEN-LAST:event_insertL1_ButtonActionPerformed
 
     private void L2_AffiliationKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_L2_AffiliationKeyReleased
@@ -1321,7 +1416,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     }//GEN-LAST:event_L2_AffiliationKeyReleased
 
     private void insertL2_ButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_insertL2_ButtonActionPerformed
-        prepareRecordInsertion(L2_Affiliation, insertL2_Button);      
+        prepareRecordInsertion(L2_Affiliation, insertL2_Button, cancelL2_Button);      
     }//GEN-LAST:event_insertL2_ButtonActionPerformed
 
     private void deleteL2_ButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteL2_ButtonActionPerformed
@@ -1484,7 +1579,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     }//GEN-LAST:event_BuildingTableKeyReleased
 
     private void insertUnit_ButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_insertUnit_ButtonActionPerformed
-        prepareRecordInsertion(UnitTable, insertUnit_Button);
+        prepareRecordInsertion(UnitTable, insertUnit_Button, cancelUnit_Button);
     }//GEN-LAST:event_insertUnit_ButtonActionPerformed
     
     private void UnitTableKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_UnitTableKeyReleased
@@ -1575,7 +1670,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     }//GEN-LAST:event_UnitTableKeyReleased
 
     private void insertBuilding_ButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_insertBuilding_ButtonActionPerformed
-        prepareRecordInsertion(BuildingTable, insertBuilding_Button);
+        prepareRecordInsertion(BuildingTable, insertBuilding_Button, cancelBuilding_Button);
     }//GEN-LAST:event_insertBuilding_ButtonActionPerformed
 
     private void deleteBuilding_ButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteBuilding_ButtonActionPerformed
@@ -1821,38 +1916,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_UnitTableFocusLost
 
-    private void deleteAll_ButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteAll_ButtonActionPerformed
-        int result = JOptionPane.showConfirmDialog(this, BUILDING_DELETE_ALL_DAILOG.getContent(), 
-                DELETE_ALL_RESULT_DIALOGTITLE.getContent(), 
-                JOptionPane.YES_NO_OPTION); 
-        
-        if (result == JOptionPane.YES_OPTION) {
-            Connection conn = null;
-            PreparedStatement createBuilding = null;
-            String excepMsg = "(Deletion of whole building";
-            result = 0;
-
-            try {
-                String sql = "Delete From BUILDING_TABLE";
-                conn = getConnection();
-                createBuilding = conn.prepareStatement(sql);
-                result = createBuilding.executeUpdate();
-            } catch (SQLException ex) {
-                logParkingException(Level.SEVERE, ex, excepMsg);
-            } finally {
-                closeDBstuff(conn, createBuilding, null, excepMsg);
-            }
-            
-            if (result >= 1) {
-                loadBuilding(0, 0); 
-                JOptionPane.showConfirmDialog(this, BUILDING_DELETE_ALL_RESULT_DAILOG.getContent(),
-                        DELETE_RESULT_DIALOGTITLE.getContent(),
-                       JOptionPane.PLAIN_MESSAGE, INFORMATION_MESSAGE);
-            }
-        }
-    }//GEN-LAST:event_deleteAll_ButtonActionPerformed
-
-    private void readSheet_ButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_readSheet_ButtonActionPerformed
+    private void saveSheetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveSheetActionPerformed
         try {
             int returnVal = odsFileChooser.showOpenDialog(this);
             if (returnVal == JFileChooser.APPROVE_OPTION) {                
@@ -1934,43 +1998,77 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
         } catch (Exception ex) {
             logParkingException(Level.SEVERE, ex, "(User action: read user list ods file sheet)");
         }            
-    }//GEN-LAST:event_readSheet_ButtonActionPerformed
+    }//GEN-LAST:event_saveSheetActionPerformed
 
     private void deleteAll_AffiliationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteAll_AffiliationActionPerformed
-        // TODO add your handling code here:
-        
-        int result = JOptionPane.showConfirmDialog(this, AFFILIATION_DELETE_ALL_DAILOG.getContent(),
-                DELETE_ALL_DAILOGTITLE.getContent(), 
-                JOptionPane.YES_NO_OPTION); 
-        
-        if (result == JOptionPane.YES_OPTION) {
-            Connection conn = null;
-            PreparedStatement deleteAffiliation = null;
-            String excepMsg = "(All Affiliation Deletion)";
-            
-            result = 0;
-            try {
-                String sql = "Delete From L1_Affiliation";
-                
-                conn = getConnection();
-                deleteAffiliation = conn.prepareStatement(sql);
-                result = deleteAffiliation.executeUpdate();
-            } catch (SQLException ex) {
-                logParkingException(Level.SEVERE, ex, excepMsg);
-            } finally {
-                closeDBstuff(conn, deleteAffiliation, null, excepMsg);
-            }    
-            
-            if (result >= 1) {
-                loadL1_Affiliation(0, "");
-                JOptionPane.showConfirmDialog(this, AFFILIATION_DELETE_ALL_RESULT_DAILOG.getContent(),
-                        DELETE_ALL_RESULT_DIALOGTITLE.getContent(), 
-                        JOptionPane.PLAIN_MESSAGE, INFORMATION_MESSAGE);
-            }  
+
+        if (chosenPanelFor() == AFFILIATION) {
+            int result = JOptionPane.showConfirmDialog(this, AFFILIATION_DELETE_ALL_DAILOG.getContent(),
+                    DELETE_ALL_DAILOGTITLE.getContent(), 
+                    JOptionPane.YES_NO_OPTION); 
+
+            if (result == JOptionPane.YES_OPTION) {
+                //<editor-fold desc="-- Delete every affiliation information">
+                Connection conn = null;
+                PreparedStatement deleteAffiliation = null;
+                String excepMsg = "(All Affiliation Deletion)";
+
+                result = 0;
+                try {
+                    String sql = "Delete From L1_Affiliation";
+
+                    conn = getConnection();
+                    deleteAffiliation = conn.prepareStatement(sql);
+                    result = deleteAffiliation.executeUpdate();
+                } catch (SQLException ex) {
+                    logParkingException(Level.SEVERE, ex, excepMsg);
+                } finally {
+                    closeDBstuff(conn, deleteAffiliation, null, excepMsg);
+                }    
+
+                if (result >= 1) {
+                    loadL1_Affiliation(0, "");
+                    JOptionPane.showConfirmDialog(this, AFFILIATION_DELETE_ALL_RESULT_DAILOG.getContent(),
+                            DELETE_ALL_RESULT_DIALOGTITLE.getContent(), 
+                            JOptionPane.PLAIN_MESSAGE, INFORMATION_MESSAGE);
+                }  
+                //</editor-fold>
+            }
+        } else {
+            int result = JOptionPane.showConfirmDialog(this, BUILDING_DELETE_ALL_DAILOG.getContent(), 
+                    DELETE_ALL_RESULT_DIALOGTITLE.getContent(), 
+                    JOptionPane.YES_NO_OPTION); 
+
+            if (result == JOptionPane.YES_OPTION) {
+                //<editor-fold desc="-- Delete every affiliation information">
+                Connection conn = null;
+                PreparedStatement createBuilding = null;
+                String excepMsg = "(Deletion of whole building";
+                result = 0;
+
+                try {
+                    String sql = "Delete From BUILDING_TABLE";
+                    conn = getConnection();
+                    createBuilding = conn.prepareStatement(sql);
+                    result = createBuilding.executeUpdate();
+                } catch (SQLException ex) {
+                    logParkingException(Level.SEVERE, ex, excepMsg);
+                } finally {
+                    closeDBstuff(conn, createBuilding, null, excepMsg);
+                }
+
+                if (result >= 1) {
+                    loadBuilding(0, 0); 
+                    JOptionPane.showConfirmDialog(this, BUILDING_DELETE_ALL_RESULT_DAILOG.getContent(),
+                            DELETE_RESULT_DIALOGTITLE.getContent(),
+                           JOptionPane.PLAIN_MESSAGE, INFORMATION_MESSAGE);
+                }
+                //</editor-fold>
+            }            
         }
     }//GEN-LAST:event_deleteAll_AffiliationActionPerformed
 
-    private void readSheet_AffiliationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_readSheet_AffiliationActionPerformed
+    private void readSheetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_readSheetActionPerformed
         try {
             int returnVal = odsFileChooser.showOpenDialog(this);
             if (returnVal == JFileChooser.APPROVE_OPTION) {                
@@ -2029,33 +2127,32 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
         } catch (Exception ex) {
             logParkingException(Level.SEVERE, ex, "(User Action: upload affiliation data from an ods sheet)");             
         }           
-    }//GEN-LAST:event_readSheet_AffiliationActionPerformed
+    }//GEN-LAST:event_readSheetActionPerformed
 
     private void ODSAffiliHelpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ODSAffiliHelpActionPerformed
 
-        JDialog helpDialog = new ODS_HelpJDialog(this, false, 
-                HELP_AFFIL_LABEL.getContent(),
-                ODS_TYPE.AFFILIATION);
-        Point buttonPoint = new Point();
-        ODSAffiliHelp.getLocation(buttonPoint);
-        Point framePoint = new Point();
-        this.getLocation(framePoint);
-        helpDialog.setLocation(framePoint.x + buttonPoint.x + 50, framePoint.y + 30);
-        helpDialog.setVisible(true);
+        if (chosenPanelFor() == AFFILIATION) {
+            JDialog helpDialog = new ODS_HelpJDialog(this, false, 
+                    HELP_AFFIL_LABEL.getContent(),
+                    ODS_TYPE.AFFILIATION);
+            Point buttonPoint = new Point();
+            ODSAffiliHelp.getLocation(buttonPoint);
+            Point framePoint = new Point();
+            this.getLocation(framePoint);
+            helpDialog.setLocation(framePoint.x + buttonPoint.x + 50, framePoint.y + 30);
+            helpDialog.setVisible(true);
+        } else {
+            JDialog helpDialog = new ODS_HelpJDialog(this, false, 
+                    HELP_BUILDING_LABEL.getContent(),
+                    ODS_TYPE.BUILDING);
+            Point buttonPoint = new Point();
+            ODSAffiliHelp.getLocation(buttonPoint);
+            Point framePoint = new Point();
+            this.getLocation(framePoint);
+            helpDialog.setLocation(framePoint.x - 130, framePoint.y + 30);                
+            helpDialog.setVisible(true);    
+        }
     }//GEN-LAST:event_ODSAffiliHelpActionPerformed
-
-    private void ODSBuildPWHelpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ODSBuildPWHelpActionPerformed
-
-        JDialog helpDialog = new ODS_HelpJDialog(this, false, 
-                HELP_BUILDING_LABEL.getContent(),
-                ODS_TYPE.BUILDING);
-        Point buttonPoint = new Point();
-        ODSBuildPWHelp.getLocation(buttonPoint);
-        Point framePoint = new Point();
-        this.getLocation(framePoint);
-        helpDialog.setLocation(framePoint.x - 130, framePoint.y + 30);                
-        helpDialog.setVisible(true);
-    }//GEN-LAST:event_ODSBuildPWHelpActionPerformed
 
     private void closeFormButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_closeFormButtonActionPerformed
         // TODO add your handling code here:
@@ -2063,24 +2160,49 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     }//GEN-LAST:event_closeFormButtonActionPerformed
 
     private void affiL1_ControlItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_affiL1_ControlItemStateChanged
-        
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                int index1 = followAndGetTrueIndex(L1_Affiliation);                 
-                if (index1 >= 0)
-                {
-                    Object L1_no = L1_Affiliation.getModel().getValueAt(index1, 2);
-                    
-                    boolean enable = L1_no != null && affiL1_Control.isSelected();
-                    insertL1_Button.setEnabled(enable);
-                    modifyL1_Button.setEnabled(enable);
-                    deleteL1_Button.setEnabled(enable);
-                    L1_Affiliation.setEnabled(enable);
-                }
+                changeControlEnabledForTable(L1_TABLE);
             }
         });          
     }//GEN-LAST:event_affiL1_ControlItemStateChanged
 
+    private void changeItemsEnabled(JTable table, boolean selected,
+            JButton insertButton, JButton modifyButton, JButton deleteButton) {
+        int index1 = followAndGetTrueIndex(table);                 
+        if (index1 >= 0)
+        {
+            Object L1_no = table.getModel().getValueAt(index1, 2);
+            boolean enable = L1_no != null && selected;
+
+            modifyButton.setEnabled(enable);
+            deleteButton.setEnabled(enable);
+        }
+
+        insertButton.setEnabled(selected);
+        table.setEnabled(selected);
+        if (selected) {
+            changeWorkPanelLabel();
+        }          
+    }
+    
+    private void changeControlEnabledForTable(TableType table) {
+        switch (table) {
+            case L1_TABLE: 
+                changeItemsEnabled(L1_Affiliation, affiL1_Control.isSelected(),
+                        insertL1_Button, modifyL1_Button, deleteL1_Button);
+                break;
+        }
+    }
+    
+    private void changeWorkPanelLabel() {
+        if (chosenPanelFor() == AFFILIATION) {
+            workPanelName.setText(AFFILI_MODE_STRING.getContent());
+        } else {
+            workPanelName.setText(BUILDING_MODE_STRING.getContent());
+        }
+    }
+    
     private void buildingControlItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_buildingControlItemStateChanged
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
@@ -2094,6 +2216,9 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
                     deleteBuilding_Button.setEnabled(enable);
                     BuildingTable.setEnabled(enable);
                 }
+                if (buildingControl.isSelected()) {
+                    changeWorkPanelLabel();
+                }                
             }
         });        
     }//GEN-LAST:event_buildingControlItemStateChanged
@@ -2124,7 +2249,10 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
                 modifyL2_Button.setEnabled(enable);
                 deleteL2_Button.setEnabled(enable);
                 L2_Affiliation.setEnabled(enable);                    
-//                L2_Affiliation
+
+                if (affiL2_Control.isSelected()) {
+                    changeWorkPanelLabel();
+                }                
             }
         });          
         
@@ -2145,14 +2273,40 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
                 insertUnit_Button.setEnabled(enable);
                 modifyUnit_Button.setEnabled(enable);
                 deleteUnit_Button.setEnabled(enable);
-                UnitTable.setEnabled(enable);                    
+                UnitTable.setEnabled(enable);
+                
+                if (unitControl.isSelected()) {
+                    changeWorkPanelLabel();
+                }                
             }
         });           
     }//GEN-LAST:event_unitControlItemStateChanged
 
     private void cancelL1_ButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelL1_ButtonActionPerformed
-        // TODO add your handling code here:
+        // Remove current L1 new row content.
+        ((DefaultTableModel)L1_Affiliation.getModel()).
+                removeRow(L1_Affiliation.getRowCount() - 1);
+        
+        // Return to read mode as if [Enter] key pressed.
+        if (L1_Affiliation.getRowCount() > 0) {
+            L1_Affiliation.setRowSelectionInterval(0, 0);
+        }
+        insertL1_Button.setEnabled(true);
+        cancelL1_Button.setEnabled(false);
+        setFormMode(FormMode.NormalMode);
     }//GEN-LAST:event_cancelL1_ButtonActionPerformed
+
+    private void cancelL2_ButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelL2_ButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cancelL2_ButtonActionPerformed
+
+    private void cancelBuilding_ButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelBuilding_ButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cancelBuilding_ButtonActionPerformed
+
+    private void cancelUnit_ButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelUnit_ButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cancelUnit_ButtonActionPerformed
 
     private void adjustTables() {
         adjustAffiliationTable(L1_Affiliation);
@@ -2363,7 +2517,6 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     private javax.swing.JTable L1_Affiliation;
     private javax.swing.JTable L2_Affiliation;
     private javax.swing.JButton ODSAffiliHelp;
-    private javax.swing.JButton ODSBuildPWHelp;
     private javax.swing.JLabel UnitLabel;
     private javax.swing.JTable UnitTable;
     private javax.swing.JLabel affiBotTitle;
@@ -2373,29 +2526,29 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     private javax.swing.JPanel affiliBotRight;
     private javax.swing.JPanel affiliTopRight;
     private javax.swing.JPanel affiliationPanel;
-    private javax.swing.JPanel allLeftPanel;
-    private javax.swing.JPanel allRightPanel;
     private javax.swing.JPanel bldgTopRight;
     private javax.swing.JLabel bldgTopTitle;
     private javax.swing.JPanel botLeft;
+    private javax.swing.JPanel bottomGap;
     private javax.swing.JPanel bottomPanel;
     private javax.swing.JRadioButton buildingControl;
     private javax.swing.JPanel buildingPanel;
+    private javax.swing.JButton cancelBuilding_Button;
     private javax.swing.JButton cancelL1_Button;
+    private javax.swing.JButton cancelL2_Button;
+    private javax.swing.JButton cancelUnit_Button;
     private javax.swing.JPanel centerPanel;
     private javax.swing.JButton closeFormButton;
     private javax.swing.JPanel closePanel;
     private javax.swing.JButton deleteAll_Affiliation;
-    private javax.swing.JButton deleteAll_Button;
     private javax.swing.JButton deleteBuilding_Button;
     private javax.swing.JButton deleteL1_Button;
     private javax.swing.JButton deleteL2_Button;
     private javax.swing.JButton deleteUnit_Button;
     private javax.swing.Box.Filler filler1;
-    private javax.swing.Box.Filler filler11;
     private javax.swing.Box.Filler filler2;
-    private javax.swing.Box.Filler filler3;
     private javax.swing.Box.Filler filler4;
+    private javax.swing.Box.Filler filler5;
     private javax.swing.ButtonGroup fourPanels;
     private javax.swing.JPanel h10_pan_1;
     private javax.swing.JPanel h10_pan_2;
@@ -2406,18 +2559,20 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     private javax.swing.JButton insertL1_Button;
     private javax.swing.JButton insertL2_Button;
     private javax.swing.JButton insertUnit_Button;
-    private javax.swing.JPanel jPanel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel12;
-    private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JLabel modeString;
     private javax.swing.JButton modifyBuilding_Button;
     private javax.swing.JButton modifyL1_Button;
     private javax.swing.JButton modifyL2_Button;
     private javax.swing.JButton modifyUnit_Button;
     private javax.swing.JFileChooser odsFileChooser;
-    private javax.swing.JButton readSheet_Affiliation;
-    private javax.swing.JButton readSheet_Button;
+    private javax.swing.JPanel readODSpan;
+    private javax.swing.JButton readSheet;
+    private javax.swing.JButton saveSheet;
     private javax.swing.JScrollPane scrollBotLeft;
     private javax.swing.JScrollPane scrollTopLeft;
     private javax.swing.JScrollPane scrollTopRight;
@@ -2426,6 +2581,8 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     private javax.swing.JPanel topRight;
     private javax.swing.JRadioButton unitControl;
     private javax.swing.JPanel wholePanel;
+    private javax.swing.JLabel workPanel;
+    private javax.swing.JLabel workPanelName;
     // End of variables declaration//GEN-END:variables
     
     /**
@@ -2896,13 +3053,15 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
             
             switch (language) {
                 case KOREAN:
-                    dialog = "다음 상위 소속 이름을 변경합니까?" + System.getProperty("line.separator") 
+                    dialog = "다음 상위 소속 이름을 변경합니까?" 
+                            + System.getProperty("line.separator") 
                             + " - 상위 소속: " + prevL1Name 
                             + " (관련 하위 소속: " + getL2RecordCount(L1_no) + " 개)"; 
                     break;
                     
                 case ENGLISH:
-                    dialog =  "Want to change the following higher affil'?" + System.getProperty("line.separator") 
+                    dialog =  "Want to change the following higher affil'?"
+                            + System.getProperty("line.separator") 
                             + " - Higher Affiliation: " + prevL1Name 
                             + " (number of lower affiliations: " + getL2RecordCount(L1_no) + ")";
                     break;
@@ -2921,7 +3080,9 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
         }
     }
 
-    private void prepareRecordInsertion(JTable listTable, JButton insertButton) {    
+    private void prepareRecordInsertion(JTable listTable, JButton insertButton,
+            JButton cancelButton) 
+    {    
         
         DefaultTableModel model = (DefaultTableModel)listTable.getModel();
         model.setRowCount(listTable.getRowCount() + 1);
@@ -2932,13 +3093,19 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
             rowIndex = 0;
         }
         listTable.setRowSelectionInterval(rowIndex, rowIndex);
+        
+        ((DefaultTableModel)listTable.getModel()).
+                setValueAt(INSERT_TOOLTIP.getContent(), rowIndex, 1);
+
         if (listTable.editCellAt(rowIndex, 1))
         {
             listTable.getEditorComponent().requestFocus();
             listTable.scrollRectToVisible(
                     new Rectangle(listTable.getCellRect(rowIndex, 0, true)));
         }
-        insertButton.setEnabled(false);      
+        insertButton.setEnabled(false);
+        cancelButton.setEnabled(true);
+        setFormMode(FormMode.CreateMode);
     }
 
     private void rejectUserInput(JTable thisTable, int rowIndex, String groupName) {
@@ -3013,4 +3180,73 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
             }
         });
     }
+
+    private ODS_TYPE chosenPanelFor() {
+        if (affiL1_Control.isSelected() || affiL2_Control.isSelected()) {
+            return AFFILIATION;
+        } else {
+            return BUILDING;
+        }
+    }
+
+    private void changeRadioButtonsEnabled(boolean b) {
+        affiL1_Control.setEnabled(b);
+        affiL2_Control.setEnabled(b);
+        buildingControl.setEnabled(b);
+        unitControl.setEnabled(b);
+    }
+
+    private void changeBottomButtonsEnbled(boolean b) {
+        deleteAll_Affiliation.setEnabled(b);
+        readSheet.setEnabled(b);
+        saveSheet.setEnabled(b);
+        closeFormButton.setEnabled(b);
+    }
+
+    /**
+     * @return the formMode
+     */
+    public FormMode getFormMode() {
+        return formMode;
+    }
+
+    /**
+     * @param formMode the formMode to set
+     */
+    public void setFormMode(FormMode formMode) {
+        this.formMode = formMode;
+        
+        switch (formMode) {
+            case CreateMode:
+                modeString.setText(CREATE.getContent());
+                changeRadioButtonsEnabled(false);
+                changeBottomButtonsEnbled(false);                
+                break;
+            case NormalMode:
+                modeString.setText(SEARCH.getContent());
+//                if (isDeletableByMe(userIDText.getText())) {
+//                    changeUserPasswordEnabled(true);
+//                } else {
+//                    changeUserPasswordEnabled(false);
+//                }
+//                setSearchEnabled(true);
+                changeRadioButtonsEnabled(true);
+                changeBottomButtonsEnbled(true);
+                break;
+            case UpdateMode:
+                modeString.setText(MODIFY.getContent());
+//                changeUserPasswordEnabled(true);
+//                setSearchEnabled(false);
+                break;
+            default:
+                break;
+        }        
+    }
+}
+
+enum TableType {
+    L1_TABLE,
+    L2_TABLE,
+    Building,
+    UnitTab,
 }
