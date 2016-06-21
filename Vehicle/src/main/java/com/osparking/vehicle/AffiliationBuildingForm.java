@@ -165,10 +165,14 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
         fourPanels = new javax.swing.ButtonGroup();
         wholePanel = new javax.swing.JPanel();
         topPanel = new javax.swing.JPanel();
+        jPanel1 = new javax.swing.JPanel();
         workPanel = new javax.swing.JLabel();
         workPanelName = new javax.swing.JLabel();
+        filler3 = new javax.swing.Box.Filler(new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 32767));
         jLabel2 = new javax.swing.JLabel();
         modeString = new javax.swing.JLabel();
+        jPanel2 = new javax.swing.JPanel();
+        jSeparator2 = new javax.swing.JSeparator();
         BigMidPanel = new javax.swing.JPanel();
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(40, 0), new java.awt.Dimension(40, 0), new java.awt.Dimension(30, 32767));
         centerPanel = new javax.swing.JPanel();
@@ -245,32 +249,67 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
 
         topPanel.setMinimumSize(new java.awt.Dimension(0, 54));
         topPanel.setPreferredSize(new java.awt.Dimension(0, 54));
-        topPanel.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 5, 20));
+        topPanel.setLayout(new java.awt.BorderLayout());
+
+        jPanel1.setMinimumSize(new java.awt.Dimension(100, 40));
+        jPanel1.setPreferredSize(new java.awt.Dimension(100, 40));
 
         workPanel.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        workPanel.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         workPanel.setText(WORK_PANEL_LABEL.getContent());
-        topPanel.add(workPanel);
+        workPanel.setMaximumSize(new java.awt.Dimension(140, 28));
+        workPanel.setMinimumSize(new java.awt.Dimension(50, 26));
+        workPanel.setPreferredSize(new java.awt.Dimension(90, 26));
+        jPanel1.add(workPanel);
 
         workPanelName.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         workPanelName.setForeground(pointColor);
         workPanelName.setText("소속, 부서");
-        topPanel.add(workPanelName);
+        workPanelName.setHorizontalTextPosition(javax.swing.SwingConstants.LEADING);
+        workPanelName.setMaximumSize(new java.awt.Dimension(200, 28));
+        workPanelName.setMinimumSize(new java.awt.Dimension(51, 26));
+        workPanelName.setPreferredSize(new java.awt.Dimension(80, 26));
+        jPanel1.add(workPanelName);
+        jPanel1.add(filler3);
 
         jLabel2.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel2.setText(MODE_LABEL.getContent());
-        jLabel2.setMaximumSize(new java.awt.Dimension(200, 28));
+        jLabel2.setMaximumSize(new java.awt.Dimension(120, 28));
         jLabel2.setMinimumSize(new java.awt.Dimension(50, 26));
         jLabel2.setPreferredSize(new java.awt.Dimension(80, 26));
-        topPanel.add(jLabel2);
+        jPanel1.add(jLabel2);
 
         modeString.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         modeString.setForeground(CommonData.tipColor);
         modeString.setText(SEARCH.getContent());
-        modeString.setMaximumSize(new java.awt.Dimension(200, 28));
+        modeString.setMaximumSize(new java.awt.Dimension(120, 28));
         modeString.setMinimumSize(new java.awt.Dimension(34, 26));
         modeString.setPreferredSize(new java.awt.Dimension(80, 26));
-        topPanel.add(modeString);
+        jPanel1.add(modeString);
+
+        topPanel.add(jPanel1, java.awt.BorderLayout.CENTER);
+
+        jPanel2.setMinimumSize(new java.awt.Dimension(0, 14));
+        jPanel2.setPreferredSize(new java.awt.Dimension(0, 14));
+
+        jSeparator2.setOpaque(true);
+        jSeparator2.setPreferredSize(new java.awt.Dimension(200, 0));
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jSeparator2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 657, Short.MAX_VALUE)
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addComponent(jSeparator2, javax.swing.GroupLayout.DEFAULT_SIZE, 3, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+
+        topPanel.add(jPanel2, java.awt.BorderLayout.SOUTH);
 
         wholePanel.add(topPanel, java.awt.BorderLayout.NORTH);
 
@@ -1089,33 +1128,37 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
         cellSelectionModel.addListSelectionListener (new ListSelectionListener ()
         {
             public void valueChanged(ListSelectionEvent  e) {
-                if (!e.getValueIsAdjusting())
-                {
-                    System.out.println("valueChanged : " + (++count));
-                    int index1 = followAndGetTrueIndex(L1_Affiliation);
-                     
-                    if (index1 >= 0) 
-                    {
-                        Object L1_no = L1_Affiliation.getModel().getValueAt(index1, 2);
-                        modifyL1_Button.setEnabled(L1_no == null ? false : true);
-                        deleteL1_Button.setEnabled(L1_no == null ? false : true);
-                        loadL2_Affiliation(L1_no, 0, "");
-                    }
-                    else
-                    {
-                        loadL2_Affiliation(null, 0, "");
-                    }
+                java.awt.EventQueue.invokeLater(new Runnable() {
+                    public void run() {
+                        if (!e.getValueIsAdjusting())
+                        {
+                            System.out.println("valueChanged : " + (++count));
+                            int index1 = followAndGetTrueIndex(L1_Affiliation);
 
-                    // clear L2List selection
-                    L2_Affiliation.removeEditor();
-                    L2_Affiliation.getSelectionModel().clearSelection();  
-                    
-                    // Delete an empty row if existed
-                    if (emptyLastRowPossible(insertL1_Button, L1_Affiliation))
-                    {
-                        removeEmptyRow(insertL1_Button, L1_Affiliation);                    
+                            if (index1 >= 0) 
+                            {
+                                Object L1_no = L1_Affiliation.getModel().getValueAt(index1, 2);
+                                modifyL1_Button.setEnabled(L1_no == null ? false : true);
+                                deleteL1_Button.setEnabled(L1_no == null ? false : true);
+                                loadL2_Affiliation(L1_no, 0, "");
+                            }
+                            else
+                            {
+                                loadL2_Affiliation(null, 0, "");
+                            }
+
+                            // clear L2List selection
+                            L2_Affiliation.removeEditor();
+                            L2_Affiliation.getSelectionModel().clearSelection();  
+
+                            // Delete an empty row if existed
+                            if (emptyLastRowPossible(insertL1_Button, L1_Affiliation))
+                            {
+                                removeEmptyRow(insertL1_Button, L1_Affiliation);                    
+                            }
+                        }
                     }
-                }
+                });                 
             }
         }); 
         
@@ -1196,7 +1239,6 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
             cancelL1_Button.setEnabled(false);
             setFormMode(FormMode.NormalMode);
             changeControlEnabledForTable(L1_TABLE);
-            
             // </editor-fold>
         }
         else 
@@ -1238,6 +1280,9 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
                     loadL1_Affiliation(-1, L1Name); // Refresh higher affiliation list
                 } 
             } 
+            cancelL1_Button.setEnabled(false);
+            setFormMode(FormMode.NormalMode);
+            changeControlEnabledForTable(L1_TABLE);            
             //</editor-fold>                             
         }
     }//GEN-LAST:event_L1_AffiliationKeyReleased
@@ -2484,6 +2529,10 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
                          rs.getInt("recNo"),  rs.getString("PARTY_NAME"), rs.getInt("L2_NO")
                     });
                 }
+                if (model.getRowCount() == 0) {
+                    model.addRow(new Object[] {"", "(none)", ""
+                    });
+                }
                 //</editor-fold>
             } catch (SQLException ex) {
                 logParkingException(Level.SEVERE, ex, excepMsg);
@@ -2547,6 +2596,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     private javax.swing.JButton deleteUnit_Button;
     private javax.swing.Box.Filler filler1;
     private javax.swing.Box.Filler filler2;
+    private javax.swing.Box.Filler filler3;
     private javax.swing.Box.Filler filler4;
     private javax.swing.Box.Filler filler5;
     private javax.swing.ButtonGroup fourPanels;
@@ -2560,10 +2610,13 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     private javax.swing.JButton insertL2_Button;
     private javax.swing.JButton insertUnit_Button;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel12;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JSeparator jSeparator2;
     private javax.swing.JLabel modeString;
     private javax.swing.JButton modifyBuilding_Button;
     private javax.swing.JButton modifyL1_Button;
@@ -3060,7 +3113,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
                     break;
                     
                 case ENGLISH:
-                    dialog =  "Want to change the following higher affil'?"
+                    dialog =  "Want to change the following higher affiliation?"
                             + System.getProperty("line.separator") 
                             + " - Higher Affiliation: " + prevL1Name 
                             + " (number of lower affiliations: " + getL2RecordCount(L1_no) + ")";
@@ -3076,6 +3129,8 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
 
             if (result == JOptionPane.NO_OPTION) { 
                 L1_Affiliation.getCellEditor().stopCellEditing();
+            } else {
+                setFormMode(FormMode.UpdateMode);
             }
         }
     }
@@ -3224,19 +3279,13 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
                 break;
             case NormalMode:
                 modeString.setText(SEARCH.getContent());
-//                if (isDeletableByMe(userIDText.getText())) {
-//                    changeUserPasswordEnabled(true);
-//                } else {
-//                    changeUserPasswordEnabled(false);
-//                }
-//                setSearchEnabled(true);
                 changeRadioButtonsEnabled(true);
                 changeBottomButtonsEnbled(true);
                 break;
             case UpdateMode:
                 modeString.setText(MODIFY.getContent());
-//                changeUserPasswordEnabled(true);
-//                setSearchEnabled(false);
+                changeRadioButtonsEnabled(false);
+                changeBottomButtonsEnbled(false);                   
                 break;
             default:
                 break;
