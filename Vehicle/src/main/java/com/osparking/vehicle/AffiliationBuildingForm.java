@@ -78,6 +78,12 @@ import static com.osparking.global.names.ControlEnums.LabelContent.LOWER_LIST_LA
 import static com.osparking.global.names.ControlEnums.LabelContent.MODE_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.ROOM_LIST_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.WORK_PANEL_LABEL;
+import static com.osparking.global.names.ControlEnums.MsgContent.AFFILI_DIAG_L1;
+import static com.osparking.global.names.ControlEnums.MsgContent.AFFILI_DIAG_L2;
+import static com.osparking.global.names.ControlEnums.MsgContent.AFFILI_DIAG_L3;
+import static com.osparking.global.names.ControlEnums.MsgContent.BLDG_DIAG_L1;
+import static com.osparking.global.names.ControlEnums.MsgContent.BLDG_DIAG_L2;
+import static com.osparking.global.names.ControlEnums.MsgContent.BLDG_DIAG_L3;
 import static com.osparking.global.names.ControlEnums.TableTypes.*;
 import static com.osparking.global.names.ControlEnums.TitleTypes.AFFILI_BUILD_FRAME_TITLE;
 import static com.osparking.global.names.ControlEnums.ToolTipContent.INSERT_TOOLTIP;
@@ -89,7 +95,10 @@ import static com.osparking.global.names.OSP_enums.ODS_TYPE.AFFILIATION;
 import static com.osparking.global.names.OSP_enums.ODS_TYPE.BUILDING;
 import com.osparking.global.names.OdsFileOnly;
 import com.osparking.global.names.WrappedInt;
+import static com.osparking.vehicle.TableType.Building;
 import static com.osparking.vehicle.TableType.L1_TABLE;
+import static com.osparking.vehicle.TableType.L2_TABLE;
+import static com.osparking.vehicle.TableType.UnitTab;
 import com.osparking.vehicle.driver.ODSReader;
 import static com.osparking.vehicle.driver.ODSReader.getWrongCellPointString;
 import java.awt.Dimension;
@@ -114,7 +123,6 @@ import javax.swing.JOptionPane;
 import static javax.swing.JOptionPane.INFORMATION_MESSAGE;
 import static javax.swing.JOptionPane.WARNING_MESSAGE;
 import static javax.swing.JOptionPane.showMessageDialog;
-import javax.swing.JRadioButton;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
@@ -206,7 +214,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
         topRight = new javax.swing.JPanel();
         bldgTopTitle = new javax.swing.JLabel();
         scrollTopRight = new javax.swing.JScrollPane();
-        BuildingTable = new javax.swing.JTable();
+        BuildingTable = new RXTable();
         bldgTopRight = new javax.swing.JPanel();
         buildingControl = new javax.swing.JRadioButton();
         insertBuilding_Button = new javax.swing.JButton();
@@ -685,6 +693,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     scrollTopRight.setMinimumSize(new java.awt.Dimension(100, 120));
     scrollTopRight.setPreferredSize(new java.awt.Dimension(100, 120));
 
+    ((RXTable)BuildingTable).setSelectAllForEdit(true);
     BuildingTable.setAutoCreateRowSorter(true);
     BuildingTable.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
     BuildingTable.setModel(new javax.swing.table.DefaultTableModel(
@@ -709,8 +718,6 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     );
     BuildingTable.setDoubleBuffered(true);
     BuildingTable.setEnabled(false);
-    BuildingTable.setMinimumSize(new java.awt.Dimension(100, 120));
-    BuildingTable.setPreferredSize(new java.awt.Dimension(100, 120));
     BuildingTable.setRowHeight(22);
     L1_Affiliation.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     BuildingTable.addFocusListener(new java.awt.event.FocusAdapter() {
@@ -1208,7 +1215,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
         // Conditions to make this a new higher affiliation: Cond 1 and cond 2
         if (model.getValueAt(rowIndex, 0) == null) // Cond 1. Row number field is null
         { 
-            // <editor-fold defaultstate="collapsed" desc="-- Create a Higher Affiliation">                  
+            // <editor-fold defaultstate="collapsed" desc="-- Create a high affiliation">                  
             if (L1Name == null 
                     || L1Name.isEmpty()
                     || L1Name.equals(INSERT_TOOLTIP.getContent())) 
@@ -1219,6 +1226,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
                 // Cond 2. Name field has string of meaningful affiliation name
                 // <editor-fold defaultstate="collapsed" desc="-- Insert New Higher name and Refresh the List">               
                 int result = 0;
+                
                 try {
                     result = insertNewLevel1Affiliation(L1Name);
                 } catch (SQLException ex) {
@@ -1234,9 +1242,6 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
                 {
                     loadL1_Affiliation(-1, L1Name); // Refresh the list
                 }
-                cancelL1_Button.setEnabled(false);
-                setFormMode(FormMode.NormalMode);
-                changeControlEnabledForTable(L1_TABLE);
                 // </editor-fold>
             }
             //</editor-fold>
@@ -1275,16 +1280,15 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
                     closeDBstuff(conn, modifyAffiliation, null, excepMsg);
                 }    
                 //</editor-fold>   
-                if (result == 1)
-                {
+                if (result == 1) {
                     loadL1_Affiliation(-1, L1Name); // Refresh higher affiliation list
                 } 
             } 
-            cancelL1_Button.setEnabled(false);
-            setFormMode(FormMode.NormalMode);
-            changeControlEnabledForTable(L1_TABLE);            
             //</editor-fold>                             
         }
+        cancelL1_Button.setEnabled(false);
+        setFormMode(FormMode.NormalMode);
+        changeControlEnabledForTable(L1_TABLE);            
     }//GEN-LAST:event_L1_AffiliationKeyReleased
 
     private void deleteL1_ButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteL1_ButtonActionPerformed
@@ -1370,7 +1374,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     }//GEN-LAST:event_deleteL1_ButtonActionPerformed
 
     private void insertL1_ButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_insertL1_ButtonActionPerformed
-        prepareRecordInsertion(L1_Affiliation, insertL1_Button, cancelL1_Button);
+        prepareRecordInsertion(L1_Affiliation, cancelL1_Button);
     }//GEN-LAST:event_insertL1_ButtonActionPerformed
 
     private void L2_AffiliationKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_L2_AffiliationKeyReleased
@@ -1419,6 +1423,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
         }
         else // handle the case of modification
         {
+            //<editor-fold desc="-- Handle building no update">
             if (L2Name.trim().isEmpty()) {
                 rejectEmptyInput(L2_Affiliation, rowIndex, "Can't save empty string as a name");
             } else {
@@ -1456,12 +1461,13 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
                 {
                     loadL2_Affiliation(L1_no, -1, L2Name); // Refresh lower affiliation list
                 }
-            }            
+            }
+            //</editor-fold>
         }
     }//GEN-LAST:event_L2_AffiliationKeyReleased
 
     private void insertL2_ButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_insertL2_ButtonActionPerformed
-        prepareRecordInsertion(L2_Affiliation, insertL2_Button, cancelL2_Button);      
+        prepareRecordInsertion(L2_Affiliation, cancelL2_Button);      
     }//GEN-LAST:event_insertL2_ButtonActionPerformed
 
     private void deleteL2_ButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteL2_ButtonActionPerformed
@@ -1541,18 +1547,24 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     private void BuildingTableKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_BuildingTableKeyReleased
         int rowIndex = BuildingTable.convertRowIndexToModel(BuildingTable.getSelectedRow());
         TableModel model = BuildingTable.getModel();
-        Object bldgNoObj = model.getValueAt(rowIndex, 1);
+        String bnoStr = ((String)model.getValueAt(rowIndex, 1)).trim();
         
-        // Check if it were a new building number being created
-        // - Cond 1: current building number is null, Cond 2: Building Number is not null
-        if (model.getValueAt(rowIndex, 0) == null) {
-            // <editor-fold defaultstate="collapsed" desc="-- Create a new building number">            
-            if (bldgNoObj != null) 
+        // Conditions to make this a new building number: Cond 1 and cond 2        
+        if (model.getValueAt(rowIndex, 0) == null) // Cond 1. Row number field is null
+        { 
+            // <editor-fold defaultstate="collapsed" desc="-- Create a building">            
+            if (bnoStr == null 
+                    || bnoStr.isEmpty()
+                    || bnoStr.equals(INSERT_TOOLTIP.getContent()))             
             {
-                int result = 0;
-                int bldgNo = (Integer)bldgNoObj; 
-
+                abortCreation(L1_TABLE);
+                return;
+            } else {
+                // Cond 2: Building Number has a good decimal number string
                 // <editor-fold defaultstate="collapsed" desc="-- Actual creation of a new building(number)">            
+                int result = 0;
+                int bldgNo = Integer.parseInt(bnoStr);
+
                 try {
                     result = insertNewBuilding(bldgNo);
                 } catch (SQLException ex) {
@@ -1560,46 +1572,40 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
                     {
                         rejectUserInput(BuildingTable, rowIndex, BUILDING_IN_DIALOG.getContent());
                     }
-                    else
-                    {
-                        logParkingException(Level.SEVERE, ex, "(inserted building: " + bldgNo + ")");
+                    else {
+                        logParkingException(Level.SEVERE, ex, 
+                                "(inserted building: " + bldgNo + ")");
                     }
-                }                    
-                //</editor-fold>            
-                
+                }
                 if (result == 1)
                 {
                     loadBuilding(-1, bldgNo); // Refresh building number list
-                    insertBuilding_Button.setEnabled(true);
-                }
+                }             
+                //</editor-fold>            
             }   
-            else
-            {
-                removeEmptyRow(insertBuilding_Button, BuildingTable);                
-            }
             //</editor-fold>            
         }
         else // Handle building number update case
         {
             // <editor-fold defaultstate="collapsed" desc="-- Handle building number update">                          
-            if (bldgNoObj == null) {
+            if (bnoStr.isEmpty()) {
                 rejectEmptyInput(BuildingTable, rowIndex, "Can't use empty string as a building number"); 
-            }
-            else {
+            } else {
                 Object bldgSeqNo = model.getValueAt(rowIndex, 2);
+                
+                int result = 0;
                 
                 // <editor-fold defaultstate="collapsed" desc="-- Actual building number update">
                 Connection conn = null;
                 PreparedStatement modifyBuilding = null;
                 String excepMsg = "(Original building no: " + prevBldgNo + ")";
 
-                int result = 0;
                 try {
                     String sql = "Update building_table Set BLDG_NO = ? Where SEQ_NO = ?";
 
                     conn = getConnection();
                     modifyBuilding = conn.prepareStatement(sql);
-                    modifyBuilding.setInt(1, (Integer)bldgNoObj); 
+                    modifyBuilding.setInt(1, Integer.parseInt(bnoStr)); 
                     modifyBuilding.setInt(2, (Integer)bldgSeqNo);
 
                     result = modifyBuilding.executeUpdate();
@@ -1614,17 +1620,19 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
                     closeDBstuff(conn, modifyBuilding, null, excepMsg);
                 }    
                 //</editor-fold>            
-                
                 if (result == 1) {
-                    loadBuilding(-1, (Integer)bldgNoObj); // Refresh building number list after a number update
+                    loadBuilding(-1, Integer.parseInt(bnoStr)); // Refresh building number list after update
                 } 
             }
             //</editor-fold>            
         }
+        cancelBuilding_Button.setEnabled(false);
+        setFormMode(FormMode.NormalMode);
+        changeControlEnabledForTable(Building);           
     }//GEN-LAST:event_BuildingTableKeyReleased
 
     private void insertUnit_ButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_insertUnit_ButtonActionPerformed
-        prepareRecordInsertion(UnitTable, insertUnit_Button, cancelUnit_Button);
+        prepareRecordInsertion(UnitTable, cancelUnit_Button);
     }//GEN-LAST:event_insertUnit_ButtonActionPerformed
     
     private void UnitTableKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_UnitTableKeyReleased
@@ -1715,7 +1723,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     }//GEN-LAST:event_UnitTableKeyReleased
 
     private void insertBuilding_ButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_insertBuilding_ButtonActionPerformed
-        prepareRecordInsertion(BuildingTable, insertBuilding_Button, cancelBuilding_Button);
+        prepareRecordInsertion(BuildingTable, cancelBuilding_Button);
     }//GEN-LAST:event_insertBuilding_ButtonActionPerformed
 
     private void deleteBuilding_ButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteBuilding_ButtonActionPerformed
@@ -1735,11 +1743,11 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
         switch (parkingLotLocale.getLanguage()) {
                 case "ko":
                     dialog = "다음 건물 및 그의 호실들을 삭제합니까?" + System.getProperty("line.separator") 
-                    + "건물번호: " + bldg_no + " (소속 호실: " + count + " 개)";
+                    + "건물번호 : " + bldg_no + " (소속 호실 : " + count + " 개)";
                     break;
                 default:
                     dialog = "Want to delete the following building and its rooms?" + System.getProperty("line.separator") 
-                    + "Building No.: " + bldg_no + " (Number of Rooms: " + count + ")";
+                    + "Building No.: " + bldg_no + " (Number of Rooms : " + count + ")";
                     break;
             }        
         
@@ -1914,18 +1922,20 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
 
     private void modifyBuilding_ButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modifyBuilding_ButtonActionPerformed
         // Get confirmation from the user on a building number update.
-        int bIndex = BuildingTable.getSelectedRow();
-        
-        if (BuildingTable.editCellAt(bIndex, 1))
-        {
-            BuildingTable.getEditorComponent().requestFocus();        
-            processBuildingChangeTrial(bIndex);
-        }
+//        int bIndex = BuildingTable.getSelectedRow();
+//        
+//        if (BuildingTable.editCellAt(bIndex, 1))
+//        {
+//            BuildingTable.getEditorComponent().requestFocus();        
+//            processBuildingChangeTrial(bIndex);
+//        }
+        prepareRecordModification(BuildingTable, Building, modifyBuilding_Button, 
+                cancelBuilding_Button);
     }//GEN-LAST:event_modifyBuilding_ButtonActionPerformed
 
     private void modifyL1_ButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modifyL1_ButtonActionPerformed
         // Get confirmation from the user on a 1st level affiliation update.
-        prepareRecordModification(L1_Affiliation);
+        prepareRecordModification(L1_Affiliation, L1_TABLE, modifyL1_Button, cancelL1_Button);
     }//GEN-LAST:event_modifyL1_ButtonActionPerformed
 
     private void L1_AffiliationFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_L1_AffiliationFocusLost
@@ -2230,6 +2240,20 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
                 changeItemsEnabled(L1_Affiliation, affiL1_Control.isSelected(),
                         insertL1_Button, modifyL1_Button, deleteL1_Button);
                 break;
+            case L2_TABLE: 
+                changeItemsEnabled(L2_Affiliation, affiL2_Control.isSelected(),
+                        insertL2_Button, modifyL2_Button, deleteL2_Button);
+                break;
+            case Building: 
+                changeItemsEnabled(BuildingTable, buildingControl.isSelected(),
+                        insertBuilding_Button, modifyBuilding_Button, deleteBuilding_Button);
+                break;
+            case UnitTab: 
+                changeItemsEnabled(UnitTable, unitControl.isSelected(),
+                        insertUnit_Button, modifyUnit_Button, deleteUnit_Button);
+                break;
+            default:
+                break;
         }
     }
     
@@ -2285,19 +2309,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     private void buildingControlStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_buildingControlStateChanged
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                int bIndex = followAndGetTrueIndex(BuildingTable);                 
-                if (bIndex >= 0)
-                {
-                    Object bldg_seq_no = BuildingTable.getModel().getValueAt(bIndex, 2);
-                    boolean enable = bldg_seq_no != null && buildingControl.isSelected();
-                    insertBuilding_Button.setEnabled(enable);
-                    modifyBuilding_Button.setEnabled(enable);
-                    deleteBuilding_Button.setEnabled(enable);
-                    BuildingTable.setEnabled(enable);
-                }
-                if (buildingControl.isSelected()) {
-                    changeWorkPanelLabel();
-                }                
+                changeControlEnabledForTable(Building);                
             }
         });   
     }//GEN-LAST:event_buildingControlStateChanged
@@ -2305,22 +2317,28 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     private void affiL2_ControlStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_affiL2_ControlStateChanged
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                int index2 = followAndGetTrueIndex(L2_Affiliation);                 
-                if (index2 < 0) {
-                    index2 = 0;
-                    L2_Affiliation.setRowSelectionInterval(index2, index2);
-                }
-                Object L2_no = L2_Affiliation.getModel().getValueAt(index2, 2);
-
-                boolean enable = L2_no != null && affiL2_Control.isSelected();
-                insertL2_Button.setEnabled(enable);
-                modifyL2_Button.setEnabled(enable);
-                deleteL2_Button.setEnabled(enable);
-                L2_Affiliation.setEnabled(enable);                    
-
-                if (affiL2_Control.isSelected()) {
-                    changeWorkPanelLabel();
-                }                
+                changeControlEnabledForTable(L2_TABLE);
+                
+//                int index2 = followAndGetTrueIndex(L2_Affiliation);                 
+//                if (index2 < 0 && L2_Affiliation.getRowCount() > 0) {
+//                    index2 = 0;
+//                    L2_Affiliation.setRowSelectionInterval(index2, index2);
+//                }
+//                Object L2_no = null;
+//                
+//                if (index2 >= 0) {
+//                    L2_no = L2_Affiliation.getModel().getValueAt(index2, 2);
+//                }
+//
+//                boolean enable = L2_no != null && affiL2_Control.isSelected();
+//                insertL2_Button.setEnabled(enable);
+//                modifyL2_Button.setEnabled(enable);
+//                deleteL2_Button.setEnabled(enable);
+//                L2_Affiliation.setEnabled(enable);                    
+//
+//                if (affiL2_Control.isSelected()) {
+//                    changeWorkPanelLabel();
+//                }                
             }
         }); 
     }//GEN-LAST:event_affiL2_ControlStateChanged
@@ -2328,22 +2346,28 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     private void unitControlStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_unitControlStateChanged
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                int unitRow = followAndGetTrueIndex(UnitTable);                 
-                if (unitRow < 0) {
-                    unitRow = 0;
-                    UnitTable.setRowSelectionInterval(unitRow, unitRow);
-                }
-                Object unitNo = UnitTable.getModel().getValueAt(unitRow, 2);
-
-                boolean enable = unitNo != null && unitControl.isSelected();
-                insertUnit_Button.setEnabled(enable);
-                modifyUnit_Button.setEnabled(enable);
-                deleteUnit_Button.setEnabled(enable);
-                UnitTable.setEnabled(enable);
+                changeControlEnabledForTable(UnitTab);                
                 
-                if (unitControl.isSelected()) {
-                    changeWorkPanelLabel();
-                }                
+//                int select_idx = followAndGetTrueIndex(UnitTable);                 
+//                if (select_idx < 0 && UnitTable.getRowCount() > 0) {
+//                    select_idx = 0;
+//                    UnitTable.setRowSelectionInterval(select_idx, select_idx);
+//                }
+//                Object unitNo = null;
+//                
+//                if (select_idx >= 0) {
+//                    unitNo = UnitTable.getModel().getValueAt(select_idx, 2);
+//                }
+//
+//                boolean enable = unitNo != null && unitControl.isSelected();
+//                insertUnit_Button.setEnabled(enable);
+//                modifyUnit_Button.setEnabled(enable);
+//                deleteUnit_Button.setEnabled(enable);
+//                UnitTable.setEnabled(enable);
+//                
+//                if (unitControl.isSelected()) {
+//                    changeWorkPanelLabel();
+//                }                
             }
         }); 
     }//GEN-LAST:event_unitControlStateChanged
@@ -2913,9 +2937,11 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
                 }
                 else
                 {
-                    int row = table.rowAtPoint(p);
+//                    int row = table.rowAtPoint(p);
                     if (me.getClickCount() == 2) {
-                        processBuildingChangeTrial(row);
+//                        processBuildingChangeTrial(row);
+                        prepareRecordModification(BuildingTable, Building, 
+                                modifyBuilding_Button, cancelBuilding_Button);                        
                     }
                 }
             }
@@ -3051,44 +3077,6 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
         }
     }
 
-    private void processBuildingChangeTrial(int rowIndex) {
-        int model_index = BuildingTable.convertRowIndexToModel(rowIndex);  
-        TableModel modelB = BuildingTable.getModel();
-        
-        prevBldgNo = modelB.getValueAt(model_index, 1);    
-        if (modelB.getValueAt(model_index, 0) != null) 
-        {
-            int bldg_seq_no = (Integer)modelB.getValueAt(model_index, 2);
-            
-            String dialog = "";
-            
-            switch (language) {
-                case KOREAN:
-                    dialog = "다음 건물의 번호를 변경합니까?" + System.getProperty("line.separator") 
-                            + " - 건물번호: " + prevBldgNo 
-                            + " (관련 호실: " + getUnitCount(bldg_seq_no) + " 개)";
-                    break;
-                    
-                case ENGLISH:
-                    dialog =  "Want to change the following building number?" + System.getProperty("line.separator") 
-                            + " - Building no.: " + prevBldgNo 
-                            + " (number of rooms: " + getUnitCount(bldg_seq_no) + ")";
-                    break;
-                    
-                default:
-                    break;
-            }            
-            
-            int result = JOptionPane.showConfirmDialog(this, dialog,
-                    BUILDING_MODIFY_DIALOGTITLE.getContent(),
-                    JOptionPane.YES_NO_OPTION); 
-
-            if (result == JOptionPane.NO_OPTION) { 
-                BuildingTable.getCellEditor().stopCellEditing();
-            }
-        }    
-    }
-
     private void processL1NameChangeTrial(int rowIndex) {
         int model_index = L1_Affiliation.convertRowIndexToModel(rowIndex);
         TableModel model1 = L1_Affiliation.getModel();
@@ -3134,8 +3122,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
         }
     }
 
-    private void prepareRecordInsertion(JTable listTable, JButton insertButton,
-            JButton cancelButton) 
+    private void prepareRecordInsertion(JTable listTable, JButton cancelButton) 
     {    
         DefaultTableModel model = (DefaultTableModel)listTable.getModel();
         model.setRowCount(listTable.getRowCount() + 1);
@@ -3156,9 +3143,8 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
             listTable.scrollRectToVisible(
                     new Rectangle(listTable.getCellRect(rowIndex, 0, true)));
         }
-        insertButton.setEnabled(false);
-        cancelButton.setEnabled(true);
         setFormMode(FormMode.CreateMode);
+        cancelButton.setEnabled(true);
     }
 
     private void rejectUserInput(JTable thisTable, int rowIndex, String groupName) {
@@ -3290,7 +3276,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     private void abortCreation(TableType tableType) {
         switch (tableType) {
             case L1_TABLE: 
-                removeAndReturn(L1_Affiliation, insertL1_Button, cancelL1_Button);
+                removeAndReturn(L1_Affiliation, cancelL1_Button);
                 break;
                 
             default:
@@ -3298,8 +3284,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
         }  
     }
 
-    private void removeAndReturn(JTable table, 
-            JButton insertButton, JButton cancelButton) 
+    private void removeAndReturn(JTable table, JButton cancelButton) 
     {
         ((DefaultTableModel)table.getModel()).setRowCount(table.getRowCount() - 1);
         
@@ -3311,14 +3296,80 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
         cancelButton.setEnabled(false);
     }
 
-    private void prepareRecordModification(JTable table) {
+    private void prepareRecordModification(JTable table, TableType tableType,
+            JButton modifyButton, JButton cancelButton) 
+    {
         int rowIndex = table.getSelectedRow();
         
         if (table.editCellAt(rowIndex, 1))
         {
             table.getEditorComponent().requestFocus();        
-            processL1NameChangeTrial(rowIndex);
-        }    
+            
+            int model_index = table.convertRowIndexToModel(rowIndex);
+            TableModel model = table.getModel();
+
+            //<editor-fold desc="-- Save previous record field value">
+            switch(tableType) {
+                case L1_TABLE:
+                    prevL1Name = model.getValueAt(model_index, 1);
+                    break;
+//                case L2_TABLE:
+//                    prevL2Name = model.getValueAt(model_index, 1);
+//                    break;
+                case Building:
+                    prevBldgNo = model.getValueAt(model_index, 1);
+                    break;
+//                case UnitTab:
+//                    prevUnitNo = model.getValueAt(model_index, 1);
+//                    break;
+                default:
+                    break;
+            }
+            //</editor-fold>
+            
+            if (model.getValueAt(model_index, 0) != null)
+            {
+                String dialog = "";
+
+                //<editor-fold desc="-- Make confirm message.">
+                switch (tableType) {
+                    case L1_TABLE:
+                        int L1_no = (int)model.getValueAt(model_index, 2);
+                        
+                        dialog = AFFILI_DIAG_L1.getContent() + System.getProperty("line.separator") 
+                                + AFFILI_DIAG_L2.getContent() + prevL1Name + System.getProperty("line.separator") 
+                                + AFFILI_DIAG_L3.getContent() + getL2RecordCount(L1_no); 
+                        break;
+
+                    case Building:
+                        dialog = BLDG_DIAG_L1.getContent() + System.getProperty("line.separator") 
+                                + BLDG_DIAG_L2.getContent() + prevBldgNo + " " 
+                                + BLDG_DIAG_L3.getContent() + count + ")";
+                        break;
+
+                    default:
+                        break;
+                }
+                //</editor-fold>
+
+                String dialogTitle = null;
+                if (tableType == Building) {
+                    dialogTitle = BUILDING_MODIFY_DIALOGTITLE.getContent();
+                } else {
+                    dialogTitle = AFFILIATION_MODIFY_DIALOGTITLE.getContent();
+                }
+                int result = JOptionPane.showConfirmDialog(this, dialog,
+                        dialogTitle, JOptionPane.YES_NO_OPTION); 
+
+                if (result == JOptionPane.NO_OPTION) { 
+                    table.getCellEditor().stopCellEditing();
+                } else {
+                    setFormMode(FormMode.UpdateMode);
+                    modifyButton.setEnabled(false);
+                    cancelButton.setEnabled(true);
+                }
+            }
+        }
     }
 }
 

@@ -246,6 +246,17 @@ public class ControlEnums {
     }
         
     public enum MsgContent {  
+        AFFILI_DIAG_L1("다음 상위 소속 명칭을 변경합니까?", 
+                "Want to change the following higher affiliation?"),
+        AFFILI_DIAG_L2(" - 상위 소속 : ", 
+                " - Higher Affiliation : "),
+        AFFILI_DIAG_L3(" - 하위 부서 수 : ", 
+                " - Number of lower affiliations : "),
+        BLDG_DIAG_L1("다음 건물 번호를 변경합니까?", 
+                "Want to change below building number?"),
+        BLDG_DIAG_L2("건물번호 : ", "Building No.: "),
+        BLDG_DIAG_L3("(소속 호실 수: ", "(Number of rooms : "),
+        
         ASK_LOGOUT(", 로그아웃 원하십니까?", ", do you want to log out?"),
         AVERAGE_WORDS(" 대 평균 통과시간: ", " car passing delay average: "),
         LOG_IN("로그인", "Logged In"),
@@ -689,7 +700,7 @@ public class ControlEnums {
         READ_ODS_DIALOGTITLE("차트 분석 결과", "Sheet Analysis Result"),                
         READ_ODS_FAIL_DIALOGTITLE("차트 형식 오류", "Sheet Cell Data Format Error"),       
         AFFILIATION_MODIFY_DIALOGTITLE("상위 소속 변경", "Higher Affiliation Change"),  
-        BUILDING_MODIFY_DIALOGTITLE("건물 번호 변경 확인", "Building No. Change Confirm'"),
+        BUILDING_MODIFY_DIALOGTITLE("건물 변경 확인", "Building Change Confirm'"),
         LOWER_MODIFY_DIALOGTITLE("소속 명칭 변경", "Change Low Affil' Confirm'"),
         UNIT_MODIFY_DIALOGTITLE("호실 변경", "Room Number Change Confirm'"),
         REJECT_USER_DIALOGTITLE("중복 값 입력 오류", "Duplicate Data Error'"),

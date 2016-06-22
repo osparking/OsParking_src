@@ -922,12 +922,6 @@
                                   <Connection code="true" type="code"/>
                                 </Property>
                                 <Property name="enabled" type="boolean" value="false"/>
-                                <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                                  <Dimension value="[100, 120]"/>
-                                </Property>
-                                <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                                  <Dimension value="[100, 120]"/>
-                                </Property>
                                 <Property name="rowHeight" type="int" value="22"/>
                               </Properties>
                               <Events>
@@ -935,7 +929,9 @@
                                 <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="BuildingTableKeyReleased"/>
                               </Events>
                               <AuxValues>
+                                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new RXTable()"/>
                                 <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="L1_Affiliation.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);"/>
+                                <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="((RXTable)BuildingTable).setSelectAllForEdit(true);"/>
                               </AuxValues>
                             </Component>
                           </SubComponents>
