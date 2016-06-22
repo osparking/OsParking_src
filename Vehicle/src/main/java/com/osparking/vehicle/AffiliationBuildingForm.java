@@ -76,6 +76,7 @@ import static com.osparking.global.names.ControlEnums.LabelContent.HELP_BUILDING
 import static com.osparking.global.names.ControlEnums.LabelContent.LOWER_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.LOWER_LIST_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.MODE_LABEL;
+import static com.osparking.global.names.ControlEnums.LabelContent.NONE_EXIST;
 import static com.osparking.global.names.ControlEnums.LabelContent.ROOM_LIST_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.WORK_PANEL_LABEL;
 import static com.osparking.global.names.ControlEnums.MsgContent.AFFILI_DIAG_L1;
@@ -154,9 +155,9 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
         setIconImages(OSPiconList);
         this.setLocationRelativeTo(null);
         this.getContentPane().setBackground(PopUpBackground);       
-        adjustTables();
         loadL1_Affiliation(0, "");
         loadBuilding(0, 0);
+        adjustTables();
     }
 
     /**
@@ -335,7 +336,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
 
         topLeft.setMinimumSize(new java.awt.Dimension(83, 160));
         topLeft.setPreferredSize(new java.awt.Dimension(588, 168));
-        topLeft.setLayout(new java.awt.BorderLayout());
+        topLeft.setLayout(new java.awt.BorderLayout(10, 0));
 
         affiTopTitle.setFont(new java.awt.Font(font_Type, font_Style, head_font_Size));
         affiTopTitle.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -505,7 +506,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
 
     botLeft.setMinimumSize(new java.awt.Dimension(83, 160));
     botLeft.setPreferredSize(new java.awt.Dimension(588, 168));
-    botLeft.setLayout(new java.awt.BorderLayout());
+    botLeft.setLayout(new java.awt.BorderLayout(10, 0));
 
     affiBotTitle.setFont(new java.awt.Font(font_Type, font_Style, head_font_Size));
     affiBotTitle.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -682,7 +683,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
 
     topRight.setMinimumSize(new java.awt.Dimension(83, 85));
     topRight.setPreferredSize(new java.awt.Dimension(400, 168));
-    topRight.setLayout(new java.awt.BorderLayout());
+    topRight.setLayout(new java.awt.BorderLayout(10, 0));
 
     bldgTopTitle.setFont(new java.awt.Font(font_Type, font_Style, head_font_Size));
     bldgTopTitle.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -726,8 +727,14 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
         }
     });
     BuildingTable.addKeyListener(new java.awt.event.KeyAdapter() {
+        public void keyPressed(java.awt.event.KeyEvent evt) {
+            BuildingTableKeyPressed(evt);
+        }
         public void keyReleased(java.awt.event.KeyEvent evt) {
             BuildingTableKeyReleased(evt);
+        }
+        public void keyTyped(java.awt.event.KeyEvent evt) {
+            BuildingTableKeyTyped(evt);
         }
     });
     scrollTopRight.setViewportView(BuildingTable);
@@ -841,7 +848,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
 
     jPanel5.setMinimumSize(new java.awt.Dimension(83, 85));
     jPanel5.setPreferredSize(new java.awt.Dimension(400, 168));
-    jPanel5.setLayout(new java.awt.BorderLayout());
+    jPanel5.setLayout(new java.awt.BorderLayout(10, 0));
 
     UnitLabel.setFont(new java.awt.Font(font_Type, font_Style, head_font_Size));
     UnitLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -1547,23 +1554,23 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     private void BuildingTableKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_BuildingTableKeyReleased
         int rowIndex = BuildingTable.convertRowIndexToModel(BuildingTable.getSelectedRow());
         TableModel model = BuildingTable.getModel();
-        String bnoStr = ((String)model.getValueAt(rowIndex, 1)).trim();
+        Integer bldgNo = (Integer)model.getValueAt(rowIndex, 1);
         
         // Conditions to make this a new building number: Cond 1 and cond 2        
         if (model.getValueAt(rowIndex, 0) == null) // Cond 1. Row number field is null
         { 
             // <editor-fold defaultstate="collapsed" desc="-- Create a building">            
-            if (bnoStr == null 
-                    || bnoStr.isEmpty()
-                    || bnoStr.equals(INSERT_TOOLTIP.getContent()))             
+            if (bldgNo == null)
+//            if (bldgNo == null 
+//                    || bldgNo.isEmpty()
+//                    || bldgNo.equals(INSERT_TOOLTIP.getContent()))             
             {
-                abortCreation(L1_TABLE);
+                abortCreation(Building);
                 return;
             } else {
                 // Cond 2: Building Number has a good decimal number string
                 // <editor-fold defaultstate="collapsed" desc="-- Actual creation of a new building(number)">            
                 int result = 0;
-                int bldgNo = Integer.parseInt(bnoStr);
 
                 try {
                     result = insertNewBuilding(bldgNo);
@@ -1588,7 +1595,8 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
         else // Handle building number update case
         {
             // <editor-fold defaultstate="collapsed" desc="-- Handle building number update">                          
-            if (bnoStr.isEmpty()) {
+//            if (bldgNo.isEmpty()) {
+            if (bldgNo == null) {
                 rejectEmptyInput(BuildingTable, rowIndex, "Can't use empty string as a building number"); 
             } else {
                 Object bldgSeqNo = model.getValueAt(rowIndex, 2);
@@ -1605,7 +1613,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
 
                     conn = getConnection();
                     modifyBuilding = conn.prepareStatement(sql);
-                    modifyBuilding.setInt(1, Integer.parseInt(bnoStr)); 
+                    modifyBuilding.setInt(1, bldgNo); 
                     modifyBuilding.setInt(2, (Integer)bldgSeqNo);
 
                     result = modifyBuilding.executeUpdate();
@@ -1621,7 +1629,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
                 }    
                 //</editor-fold>            
                 if (result == 1) {
-                    loadBuilding(-1, Integer.parseInt(bnoStr)); // Refresh building number list after update
+                    loadBuilding(-1, bldgNo); // Refresh building number list after update
                 } 
             }
             //</editor-fold>            
@@ -2287,15 +2295,36 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     }//GEN-LAST:event_cancelL1_ButtonActionPerformed
 
     private void cancelL2_ButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelL2_ButtonActionPerformed
-        // TODO add your handling code here:
+        // Remove current L2 new row content.
+        if (formMode == FormMode.CreateMode) {
+            abortCreation(L2_TABLE);
+        } else if (formMode == FormMode.UpdateMode) {
+            L2_Affiliation.getCellEditor().stopCellEditing();
+            setFormMode(FormMode.NormalMode);  
+            cancelL2_Button.setEnabled(false);
+        }
     }//GEN-LAST:event_cancelL2_ButtonActionPerformed
 
     private void cancelBuilding_ButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelBuilding_ButtonActionPerformed
-        // TODO add your handling code here:
+        // Remove current L1 new row content.
+        if (formMode == FormMode.CreateMode) {
+            abortCreation(Building);
+        } else if (formMode == FormMode.UpdateMode) {
+            BuildingTable.getCellEditor().stopCellEditing();
+            setFormMode(FormMode.NormalMode);  
+            cancelBuilding_Button.setEnabled(false);
+        }
     }//GEN-LAST:event_cancelBuilding_ButtonActionPerformed
 
     private void cancelUnit_ButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelUnit_ButtonActionPerformed
-        // TODO add your handling code here:
+        // Remove current L1 new row content.
+        if (formMode == FormMode.CreateMode) {
+            abortCreation(UnitTab);
+        } else if (formMode == FormMode.UpdateMode) {
+            UnitTable.getCellEditor().stopCellEditing();
+            setFormMode(FormMode.NormalMode);  
+            cancelUnit_Button.setEnabled(false);
+        }
     }//GEN-LAST:event_cancelUnit_ButtonActionPerformed
 
     private void affiL1_ControlStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_affiL1_ControlStateChanged
@@ -2371,6 +2400,16 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
             }
         }); 
     }//GEN-LAST:event_unitControlStateChanged
+
+    private void BuildingTableKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_BuildingTableKeyTyped
+        System.out.println("Typed: '" + evt.getKeyChar() + "'");
+        // TODO add your handling code here:
+    }//GEN-LAST:event_BuildingTableKeyTyped
+
+    private void BuildingTableKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_BuildingTableKeyPressed
+        System.out.println("Pressed: '" + evt.getKeyChar() + "'");
+        // TODO add your handling code here:
+    }//GEN-LAST:event_BuildingTableKeyPressed
 
     private void adjustTables() {
         adjustAffiliationTable(L1_Affiliation);
@@ -2549,7 +2588,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
                     });
                 }
                 if (model.getRowCount() == 0) {
-                    model.addRow(new Object[] {"", "(none)", ""
+                    model.addRow(new Object[] {"", NONE_EXIST.getContent(), ""
                     });
                 }
                 //</editor-fold>
@@ -2786,6 +2825,10 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
                     model.addRow(new Object[] 
                         {rs.getInt("recNo"),  rs.getInt("UNIT_NO"), rs.getInt("SEQ_NO")});
                 }
+                if (model.getRowCount() == 0) {
+                    model.addRow(new Object[] {"", NONE_EXIST.getContent(), ""
+                    });
+                }               
                 //</editor-fold>
             } catch (SQLException ex) {
                 logParkingException(Level.SEVERE, ex, excepMsg);
@@ -3278,7 +3321,15 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
             case L1_TABLE: 
                 removeAndReturn(L1_Affiliation, cancelL1_Button);
                 break;
-                
+            case L2_TABLE: 
+                removeAndReturn(L2_Affiliation, cancelL2_Button);
+                break;
+            case Building: 
+                removeAndReturn(BuildingTable, cancelBuilding_Button);
+                break;
+            case UnitTab: 
+                removeAndReturn(UnitTable, cancelUnit_Button);
+                break;
             default:
                 break;
         }  

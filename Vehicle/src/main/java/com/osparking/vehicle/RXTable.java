@@ -30,6 +30,8 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
 import javax.swing.*;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.*;
 import javax.swing.text.*;
 
@@ -41,7 +43,7 @@ import javax.swing.text.*;
  *
  * 2) reorderColumns - static convenience method for reodering table columns
  */
-public class RXTable extends JTable
+public class RXTable extends JTable //implements TableModelListener
 {
 	private boolean isSelectAllForMouseEvent = false;
 	private boolean isSelectAllForActionEvent = false;
@@ -58,6 +60,7 @@ public class RXTable extends JTable
     public RXTable()
     {
         this(null, null, null);
+        getModel().addTableModelListener(this);        
     }
 
     /**
@@ -291,4 +294,19 @@ public class RXTable extends JTable
 			catch(IllegalArgumentException e) {}
 		}
 	}
+
+//    public void tableChanged(TableModelEvent e) {
+//        int row = e.getFirstRow();
+//        int column = e.getColumn();
+//        TableModel model = (TableModel)e.getSource();
+//        
+//        if (row == -1 || column == -1) {
+//            return;
+//        } else {
+//            String columnName = model.getColumnName(column);
+//            Object data = model.getValueAt(row, column);
+//            
+//            System.out.println("Typed: " + data.toString());
+//        }
+//    }
 }  // End of Class RXTable

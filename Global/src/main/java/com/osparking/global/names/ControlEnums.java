@@ -83,6 +83,7 @@ public class ControlEnums {
         REQUIRED2_LABEL(": 최소 1 개", ": 1 or more"),
         USER_ID_LABEL("사용자 ID: ", "My ID: "),
         NAME_LABEL("이름",  "Name"),
+        NONE_EXIST("(없음)", "(none)"),
         CELL_PHONE_LABEL("휴대전화", "Cell Phone"),
         PHONE_LABEL("유선전화",  "Phone"),
         EMAIL_LABEL("이메일",  "E-Mail"),
