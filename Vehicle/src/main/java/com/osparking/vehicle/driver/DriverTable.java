@@ -38,13 +38,13 @@ import static com.osparking.global.Globals.emptyLastRowPossible;
 import static com.osparking.global.Globals.language;
 import static com.osparking.global.Globals.removeEmptyRow;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.MODIFY_DAILOGTITLE;
+import com.osparking.global.names.ControlEnums.FormMode;
 import com.osparking.global.names.InnoComboBoxItem;
 import com.osparking.global.names.OSP_enums.DriverCol;
 import static com.osparking.global.names.OSP_enums.DriverCol.AffiliationL1;
 import static com.osparking.global.names.OSP_enums.DriverCol.AffiliationL2;
 import static com.osparking.global.names.OSP_enums.DriverCol.BuildingNo;
 import static com.osparking.global.names.OSP_enums.DriverCol.UnitNo;
-import com.osparking.global.names.OSP_enums.FormMode;
 import com.osparking.global.names.PComboBox;
 import java.awt.AWTKeyStroke;
 import java.awt.event.KeyEvent;
@@ -73,8 +73,8 @@ public class DriverTable extends JTable {
     }   
     
     public boolean isCellEditable(int row, int column) {
-        if ((parent.getFormMode() == FormMode.CREATION ||
-                parent.getFormMode() == FormMode.MODIFICATION)
+        if ((parent.getFormMode() == FormMode.CreateMode ||
+                parent.getFormMode() == FormMode.UpdateMode)
                 && column != DriverCol.RowNo.getNumVal()) 
         {
             return true;
@@ -148,9 +148,9 @@ public class DriverTable extends JTable {
         
         // if new driver is being created and the cell is outside the new driver, then quit
         int tabSize = driverTable.getRowCount();
-        if (parent.getFormMode() == FormMode.MODIFICATION && row != modifyingRowM 
+        if (parent.getFormMode() == FormMode.UpdateMode && row != modifyingRowM 
                 ||
-                parent.getFormMode() == FormMode.CREATION && row != tabSize -1)
+                parent.getFormMode() == FormMode.CreateMode && row != tabSize -1)
         {
             return null;
         }
@@ -288,7 +288,7 @@ public class DriverTable extends JTable {
                             removeEmptyRow(parent.createDriver_Button, driverTable);
                         }                        
 
-                        if (parent.getFormMode() != FormMode.MODIFICATION) {
+                        if (parent.getFormMode() != FormMode.UpdateMode) {
                             Point cBoxLoc = ((PComboBox)me.getSource()).getLocation();
                             int rowV = driverTable.rowAtPoint(cBoxLoc);                                    
                             int colV = driverTable.columnAtPoint(cBoxLoc);
@@ -304,19 +304,19 @@ public class DriverTable extends JTable {
         
     public static void finalizeDataEntry(ManageDrivers parent){
         System.out.println("finalizeDataEntry called");
-        if (parent.getFormMode() == FormMode.CREATION) {
+        if (parent.getFormMode() == FormMode.CreateMode) {
             if (driverTable.getCellEditor() != null) {
                 driverTable.getCellEditor().stopCellEditing(); // store user input
                 parent.finalizeDriverCreation();
             }
-            parent.setFormMode(FormMode.SEARCHING);
-        } else if (parent.getFormMode() == FormMode.MODIFICATION) {
+            parent.setFormMode(FormMode.NormalMode);
+        } else if (parent.getFormMode() == FormMode.UpdateMode) {
             if (driverTable.getCellEditor() != null) {
                 driverTable.getCellEditor().stopCellEditing(); // store user input
                 int rowV = driverTable.getSelectedRow();
                 parent.finalizeDriverUpdate(rowV);
             }
-            parent.setFormMode(FormMode.SEARCHING);
+            parent.setFormMode(FormMode.NormalMode);
         }        
     }
 }

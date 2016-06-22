@@ -120,6 +120,7 @@ import java.util.logging.Logger;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import static javax.swing.JOptionPane.INFORMATION_MESSAGE;
 import static javax.swing.JOptionPane.WARNING_MESSAGE;
@@ -130,6 +131,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
@@ -717,6 +719,8 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
         }
     }
     );
+    ((DefaultTableCellRenderer)BuildingTable.getTableHeader().getDefaultRenderer())
+    .setHorizontalAlignment(JLabel.CENTER);
     BuildingTable.setDoubleBuffered(true);
     BuildingTable.setEnabled(false);
     BuildingTable.setRowHeight(22);
@@ -881,6 +885,8 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
         }
     }
     );
+    ((DefaultTableCellRenderer)UnitTable.getTableHeader().getDefaultRenderer())
+    .setHorizontalAlignment(JLabel.CENTER);
     UnitTable.setDoubleBuffered(true);
     UnitTable.setEnabled(false);
     UnitTable.setRowHeight(22);

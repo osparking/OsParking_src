@@ -17,7 +17,6 @@
 package com.osparking.vehicle.driver;
 
 import static com.mysql.jdbc.MysqlErrorNumbers.ER_DUP_ENTRY;
-import com.osparking.global.Globals;
 import static com.osparking.vehicle.driver.DriverTable.modifyingRowM;
 import static com.osparking.vehicle.driver.ODSReader.getWrongCellPointString;
 import java.awt.Dimension;
@@ -83,6 +82,7 @@ import static com.osparking.global.names.ControlEnums.ButtonTypes.*;
 import static com.osparking.global.names.ControlEnums.ComboBoxItemTypes.*;
 import static com.osparking.global.names.ControlEnums.DialogMSGTypes.*;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.*;
+import com.osparking.global.names.ControlEnums.FormMode;
 import static com.osparking.global.names.ControlEnums.LabelContent.CREATE_MODE_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.MODIFY_MODE_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.SEARCH_MODE_LABEL;
@@ -100,7 +100,6 @@ import static com.osparking.global.names.OSP_enums.DriverCol.CellPhone;
 import static com.osparking.global.names.OSP_enums.DriverCol.DriverName;
 import static com.osparking.global.names.OSP_enums.DriverCol.LandLine;
 import static com.osparking.global.names.OSP_enums.DriverCol.UnitNo;
-import com.osparking.global.names.OSP_enums.FormMode;
 import com.osparking.global.names.PComboBox;
 import com.osparking.global.names.WrappedInt;
 import org.jopendocument.dom.spreadsheet.Sheet;
@@ -113,7 +112,7 @@ import org.jopendocument.dom.spreadsheet.SpreadSheet;
  */
 public class ManageDrivers extends javax.swing.JFrame {
     
-    private FormMode formMode = FormMode.SEARCHING; 
+    private FormMode formMode = FormMode.NormalMode; 
     private DriverSelection driverSelectionForm = null; 
 
     /**
@@ -180,7 +179,7 @@ public class ManageDrivers extends javax.swing.JFrame {
      */
     public void setFormMode(FormMode newMode) {
         switch (newMode) {
-            case CREATION:
+            case CreateMode:
                 closeFormButton.setEnabled(false);
                 
                 searchButton.setEnabled(false);
@@ -201,7 +200,7 @@ public class ManageDrivers extends javax.swing.JFrame {
                 formModeLabel.setText(CREATE_MODE_LABEL.getContent());
                 break;
                 
-            case MODIFICATION:
+            case UpdateMode:
                 closeFormButton.setEnabled(false);
                 
                 searchButton.setEnabled(false);
@@ -222,7 +221,7 @@ public class ManageDrivers extends javax.swing.JFrame {
                 formModeLabel.setText(MODIFY_MODE_LABEL.getContent());
                 break;
                 
-            case SEARCHING:
+            case NormalMode:
                 closeFormButton.setEnabled(true);
                 
                 searchButton.setEnabled(true);
@@ -272,7 +271,7 @@ public class ManageDrivers extends javax.swing.JFrame {
                     return;
                 
 //                System.out.println(++changeCount + ". manage drivers form : value changed");
-                if (selectionListenerDisabled || getFormMode() == FormMode.SEARCHING) 
+                if (selectionListenerDisabled || getFormMode() == FormMode.NormalMode) 
                 {
                     if (driverTable.getSelectedRowCount() > 0) {
                         modifyDriver_Button.setEnabled(true);
@@ -282,7 +281,7 @@ public class ManageDrivers extends javax.swing.JFrame {
                     return;
                 }
                 
-                if (getFormMode() == FormMode.CREATION) {
+                if (getFormMode() == FormMode.CreateMode) {
                     if (driverTable.getSelectedRow() < driverTable.getRowCount() - 1) 
                         processSaveAction();
                 }
@@ -376,7 +375,7 @@ public class ManageDrivers extends javax.swing.JFrame {
                         DriverCol.CellPhone.getNumVal());
                 String cell = String.valueOf(driverTable.getValueAt(rowIndex, colM)).toLowerCase();                    
 
-                setFormMode(FormMode.SEARCHING);
+                setFormMode(FormMode.NormalMode);
                 loadDriverData(UNKNOWN, driverName, cell); // insert > refresh list
                 
                 StringBuffer driverProperties = new StringBuffer();
@@ -864,7 +863,7 @@ public class ManageDrivers extends javax.swing.JFrame {
     private void createDriver_ButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createDriver_ButtonActionPerformed
         int rowV = driverTable.getSelectedRow();
         
-        if (getFormMode() == FormMode.CREATION) {
+        if (getFormMode() == FormMode.CreateMode) {
             processSaveAction();
         } else {
             //<editor-fold desc="-- Process driver creation request">            
@@ -887,7 +886,7 @@ public class ManageDrivers extends javax.swing.JFrame {
                 rowIndex = 0;
             }
 
-            setFormMode(FormMode.CREATION);
+            setFormMode(FormMode.CreateMode);
 
             highlightTableRow(driverTable, rowIndex);
             if (driverTable.editCellAt(rowIndex, 1))
@@ -962,7 +961,7 @@ public class ManageDrivers extends javax.swing.JFrame {
             return;
         }
 
-        if (getFormMode() == FormMode.MODIFICATION) {
+        if (getFormMode() == FormMode.UpdateMode) {
             //<editor-fold desc="-- Process modification save request">
             if (driverTable.getCellEditor() != null) {
                 driverTable.getCellEditor().stopCellEditing(); // store user input
@@ -1000,7 +999,7 @@ public class ManageDrivers extends javax.swing.JFrame {
             rowM = driverTable.convertRowIndexToModel(rowV);
         int colV = driverTable.getSelectedColumn();        
 
-        if (getFormMode() == FormMode.CREATION) {
+        if (getFormMode() == FormMode.CreateMode) {
             //<editor-fold desc="-- Handle driver creation cancellation request">
             Object[] options = new Object[2];
             
@@ -1028,7 +1027,7 @@ public class ManageDrivers extends javax.swing.JFrame {
         
             if (response == JOptionPane.YES_OPTION) {
                 // Confirmed cancel request
-                setFormMode(FormMode.SEARCHING);
+                setFormMode(FormMode.NormalMode);
                 
                 // remove last row which was prepared for the new driver information
                 ((DefaultTableModel)driverTable.getModel()).setRowCount(driverTable.getRowCount() - 1);     
@@ -1044,7 +1043,7 @@ public class ManageDrivers extends javax.swing.JFrame {
                 startEditingCell(rowM, colV);
             }         
             //</editor-fold>
-        } else if (getFormMode() == FormMode.MODIFICATION) {
+        } else if (getFormMode() == FormMode.UpdateMode) {
             //<editor-fold desc="-- Process modification cancel request">
             
             int response = JOptionPane.showOptionDialog(this, DRIVER_MODIFY_CANCEL_DAILOG.getContent(),
@@ -1056,7 +1055,7 @@ public class ManageDrivers extends javax.swing.JFrame {
                 startEditingCell(rowV, colV);
             } else {
                 driverTable.getCellEditor().cancelCellEditing();
-                setFormMode(FormMode.SEARCHING);
+                setFormMode(FormMode.NormalMode);
                 loadDriverData(rowM, "", "");
                 driverTable.requestFocusInWindow();
             } 
@@ -1179,7 +1178,7 @@ public class ManageDrivers extends javax.swing.JFrame {
     }//GEN-LAST:event_deleteDriver_ButtonActionPerformed
 
     private void driversTableKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_driversTableKeyReleased
-        if (getFormMode() == FormMode.SEARCHING 
+        if (getFormMode() == FormMode.NormalMode 
                 || evt.getKeyCode() == VK_SHIFT ) {
             return; // in view mode, don't need to save update or insertion.
         } else { 
@@ -1199,7 +1198,7 @@ public class ManageDrivers extends javax.swing.JFrame {
 
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {  
-                if (getFormMode() == FormMode.CREATION ) {
+                if (getFormMode() == FormMode.CreateMode ) {
                     finalizeDriverCreation();
                     
                 } else {
@@ -1219,7 +1218,7 @@ public class ManageDrivers extends javax.swing.JFrame {
             col = 2;
         }
 
-        if (getFormMode() == FormMode.MODIFICATION) {
+        if (getFormMode() == FormMode.UpdateMode) {
             if (modifyingRowM == row) {
                 if (driverTable.getValueAt(row, col).toString() != null) {
                     if (driverTable.editCellAt(row, col)) {
@@ -1228,7 +1227,7 @@ public class ManageDrivers extends javax.swing.JFrame {
                 }
             }
         } else {
-            if (getFormMode() == FormMode.CREATION) {
+            if (getFormMode() == FormMode.CreateMode) {
                 if (driverTable.getModel().getValueAt(row, 0) == null) {
                     if (driverTable.editCellAt(row, col))
                     {
@@ -1596,7 +1595,7 @@ public class ManageDrivers extends javax.swing.JFrame {
             
         int numRows = model.getRowCount();
         if (numRows > 0) {  
-            setFormMode(FormMode.SEARCHING);
+            setFormMode(FormMode.NormalMode);
             deleteAllDrivers.setEnabled(true);
             // <editor-fold defaultstate="collapsed" desc="-- Highlight a selected driver">                          
             if (driverName.length() > 0) {
@@ -1611,7 +1610,7 @@ public class ManageDrivers extends javax.swing.JFrame {
                 highlightTableRow(driverTable, viewIndex);
             //</editor-fold>
         } else {
-            setFormMode(FormMode.SEARCHING);
+            setFormMode(FormMode.NormalMode);
         }
         createDriver_Button.setEnabled(true);
     }
@@ -1692,7 +1691,7 @@ public class ManageDrivers extends javax.swing.JFrame {
                             removeEmptyRow(createDriver_Button, driverTable);
                         }                        
                         
-                        if (getFormMode() != FormMode.MODIFICATION) {
+                        if (getFormMode() != FormMode.UpdateMode) {
                             int rowV = table.rowAtPoint(p);
                             int colV = table.columnAtPoint(p);
                             ((DriverTable)driverTable).userWantsToUpdateRow(rowV, colV);
@@ -1709,7 +1708,7 @@ public class ManageDrivers extends javax.swing.JFrame {
     }
     
     void setUpdateMode (boolean toModify) {
-        setFormMode(toModify ? FormMode.MODIFICATION : FormMode.SEARCHING);
+        setFormMode(toModify ? FormMode.UpdateMode : FormMode.NormalMode);
         if (toModify) {
             modifyDriver_Button.setText(SAVE_BTN.getContent());
             deleteDriver_Button.setText(CANCEL_BTN.getContent());
@@ -2044,7 +2043,7 @@ public class ManageDrivers extends javax.swing.JFrame {
                 StringBuffer driverProperties = new StringBuffer();
                 if (saveModifiedDriverInfo(driverProperties) == 1) {
                     // if insertion was successful, then redisplay the list
-                    setFormMode(FormMode.SEARCHING);
+                    setFormMode(FormMode.NormalMode);
 
                     int rowM = driverTable.convertRowIndexToModel(nextRowV);
                     col1 = driverTable.convertColumnIndexToModel(
@@ -2066,7 +2065,7 @@ public class ManageDrivers extends javax.swing.JFrame {
                 }
             } else {
                 // load original data back again 
-                setFormMode(FormMode.SEARCHING);
+                setFormMode(FormMode.NormalMode);
                 loadDriverData(UNKNOWN, name, cell);
             }
             driverTable.requestFocusInWindow();
@@ -2109,7 +2108,7 @@ public class ManageDrivers extends javax.swing.JFrame {
         if (name == null || name.trim().length() == 0)
         {
             // without driver name, system just discard such insertion request with a warning
-            setFormMode(FormMode.SEARCHING);
+            setFormMode(FormMode.NormalMode);
             removeRealEmptyRow();
         } 
         // 2. driver cell phone isn't provided
@@ -2133,7 +2132,7 @@ public class ManageDrivers extends javax.swing.JFrame {
                 }                  
 
             } else {
-                setFormMode(FormMode.SEARCHING);
+                setFormMode(FormMode.NormalMode);
                 ((DefaultTableModel)driverTable.getModel())
                         .setRowCount(driverTable.getRowCount() - 1);             
             }            
@@ -2505,7 +2504,7 @@ public class ManageDrivers extends javax.swing.JFrame {
     }
 
     private void closeFrameGracefully() {
-        if (formMode == FormMode.SEARCHING) {
+        if (formMode == FormMode.NormalMode) {
             dispose();
         } else {
             int response = JOptionPane.showConfirmDialog(null, DRIVER_CLOSE_FORM_DIALOG.getContent(),
