@@ -127,6 +127,7 @@ public class Globals {
     public static int GATE_BAR_HEIGHT = 370;    
     public static int E_BOARD_WIDTH = 321;
     public static int E_BOARD_HEIGHT = 300;
+    public static int BLDG_TAB_WIDTH = 250;
 
     public static DefaultListModel<?>[] admissionListModel = new DefaultListModel<?> [5];
 

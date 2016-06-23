@@ -278,8 +278,8 @@
                     <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                       <Dimension value="[300, 320]"/>
                     </Property>
-                    <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                      <Dimension value="[300, 489]"/>
+                    <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                      <Connection code="new Dimension(BLDG_TAB_WIDTH+50, 500)" type="code"/>
                     </Property>
                   </Properties>
 
@@ -391,7 +391,6 @@
                                 <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
                                   <ComponentRef name="fourPanels"/>
                                 </Property>
-                                <Property name="selected" type="boolean" value="true"/>
                                 <Property name="horizontalAlignment" type="int" value="0"/>
                               </Properties>
                               <Events>
@@ -535,7 +534,7 @@
                           <Layout>
                             <DimensionLayout dim="0">
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <EmptySpace min="0" pref="317" max="32767" attributes="0"/>
+                                  <EmptySpace min="0" pref="267" max="32767" attributes="0"/>
                               </Group>
                             </DimensionLayout>
                             <DimensionLayout dim="1">
@@ -796,7 +795,7 @@
                           <Layout>
                             <DimensionLayout dim="0">
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <EmptySpace min="0" pref="317" max="32767" attributes="0"/>
+                                  <EmptySpace min="0" pref="267" max="32767" attributes="0"/>
                               </Group>
                             </DimensionLayout>
                             <DimensionLayout dim="1">
@@ -853,8 +852,8 @@
                     <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                       <Dimension value="[0, 223]"/>
                     </Property>
-                    <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                      <Dimension value="[200, 489]"/>
+                    <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                      <Connection code="new Dimension(BLDG_TAB_WIDTH, 500)" type="code"/>
                     </Property>
                   </Properties>
 
@@ -921,7 +920,7 @@
                                 <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                                   <Connection code="new java.awt.Font(font_Type, font_Style, font_Size)" type="code"/>
                                 </Property>
-                                <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor" postCode="((DefaultTableCellRenderer)BuildingTable.getTableHeader().getDefaultRenderer())&#xa;            .setHorizontalAlignment(JLabel.CENTER);">
+                                <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor" postCode="((DefaultTableCellRenderer)BuildingTable.getTableHeader().getDefaultRenderer())&#xa;            .setHorizontalAlignment(JLabel.CENTER);&#xa;BuildingTable.getColumnModel().getColumn(1).setCellRenderer(bnoCellRenderer);">
                                   <Connection code="new javax.swing.table.DefaultTableModel(&#xa;    new Object [][] { {1, 101, 5}, {2, 102, 6} },&#xa;    new String [] {&#xa;        ORDER_HEADER.getContent(),&#xa;        BUILDING_HEADER.getContent(),&#xa;        &quot;SEQ_NO&quot;})&#xa;{&#xa;    public boolean isCellEditable(int row, int column)&#xa;    {&#xa;        if (column == 0)&#xa;        return false;&#xa;        else&#xa;        return true;&#xa;    }&#xa;    @Override&#xa;    public Class&lt;?&gt; getColumnClass(int columnIndex) {&#xa;        return Integer.class;&#xa;    }&#xa;}&#xa;" type="code"/>
                                 </Property>
                                 <Property name="doubleBuffered" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
@@ -1109,7 +1108,7 @@
                           <Layout>
                             <DimensionLayout dim="0">
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <EmptySpace min="0" pref="217" max="32767" attributes="0"/>
+                                  <EmptySpace min="0" pref="267" max="32767" attributes="0"/>
                               </Group>
                             </DimensionLayout>
                             <DimensionLayout dim="1">
@@ -1180,7 +1179,7 @@
                                 <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                                   <Connection code="new java.awt.Font(font_Type, font_Style, font_Size)" type="code"/>
                                 </Property>
-                                <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor" postCode="((DefaultTableCellRenderer)UnitTable.getTableHeader().getDefaultRenderer())&#xa;            .setHorizontalAlignment(JLabel.CENTER);">
+                                <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor" postCode="((DefaultTableCellRenderer)UnitTable.getTableHeader().getDefaultRenderer())&#xa;            .setHorizontalAlignment(JLabel.CENTER);&#xa;UnitTable.getColumnModel().getColumn(1).setCellRenderer(bnoCellRenderer);">
                                   <Connection code="new javax.swing.table.DefaultTableModel(&#xa;    new Object [][] {{1, 803, 1}, {2, 805, 2}},&#xa;    new String [] {&#xa;        ORDER_HEADER.getContent(),&#xa;        ROOM_HEADER.getContent(),&#xa;        &quot;SEQ_NO&quot;})&#xa;{&#xa;    public boolean isCellEditable(int row, int column)&#xa;    {&#xa;        if (column == 0)&#xa;        return false;&#xa;        else&#xa;        return true;&#xa;    }&#xa;    @Override&#xa;    public Class&lt;?&gt; getColumnClass(int columnIndex) {&#xa;        return Integer.class;&#xa;    }&#xa;}&#xa;" type="code"/>
                                 </Property>
                                 <Property name="doubleBuffered" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
@@ -1367,7 +1366,7 @@
                           <Layout>
                             <DimensionLayout dim="0">
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <EmptySpace min="0" pref="217" max="32767" attributes="0"/>
+                                  <EmptySpace min="0" pref="267" max="32767" attributes="0"/>
                               </Group>
                             </DimensionLayout>
                             <DimensionLayout dim="1">

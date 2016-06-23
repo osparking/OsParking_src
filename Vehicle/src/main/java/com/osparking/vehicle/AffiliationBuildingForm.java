@@ -22,6 +22,7 @@ import static com.osparking.global.CommonData.buttonHeightNorm;
 import static com.osparking.global.CommonData.buttonWidthNorm;
 import static com.osparking.global.CommonData.buttonWidthWide;
 import static com.osparking.global.CommonData.pointColor;
+import static com.osparking.global.Globals.BLDG_TAB_WIDTH;
 import static com.osparking.global.Globals.PopUpBackground;
 import static com.osparking.global.Globals.font_Size;
 import static com.osparking.global.Globals.font_Style;
@@ -102,6 +103,7 @@ import static com.osparking.vehicle.TableType.L2_TABLE;
 import static com.osparking.vehicle.TableType.UnitTab;
 import com.osparking.vehicle.driver.ODSReader;
 import static com.osparking.vehicle.driver.ODSReader.getWrongCellPointString;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Rectangle;
@@ -117,6 +119,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
@@ -127,17 +130,20 @@ import static javax.swing.JOptionPane.WARNING_MESSAGE;
 import static javax.swing.JOptionPane.showMessageDialog;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
+import javax.swing.border.Border;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
 import org.jopendocument.dom.spreadsheet.Sheet;
 import org.jopendocument.dom.spreadsheet.SpreadSheet;
+import static org.jsoup.helper.StringUtil.padding;
 
 /**
  *
@@ -150,16 +156,17 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
      */
     public AffiliationBuildingForm() {
         initComponents();
-
+        affiL1_Control.setSelected(true);
+        
         /**
          * Set icon for the simulated camera program
          */
         setIconImages(OSPiconList);
         this.setLocationRelativeTo(null);
         this.getContentPane().setBackground(PopUpBackground);       
+        adjustTables();
         loadL1_Affiliation(0, "");
         loadBuilding(0, 0);
-        adjustTables();
     }
 
     /**
@@ -333,7 +340,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
         centerPanel.setLayout(new javax.swing.BoxLayout(centerPanel, javax.swing.BoxLayout.X_AXIS));
 
         affiliationPanel.setMinimumSize(new java.awt.Dimension(300, 320));
-        affiliationPanel.setPreferredSize(new java.awt.Dimension(300, 489));
+        affiliationPanel.setPreferredSize(new Dimension(BLDG_TAB_WIDTH+50, 500));
         affiliationPanel.setLayout(new javax.swing.BoxLayout(affiliationPanel, javax.swing.BoxLayout.Y_AXIS));
 
         topLeft.setMinimumSize(new java.awt.Dimension(83, 160));
@@ -404,7 +411,6 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     affiliTopRight.setLayout(new java.awt.GridBagLayout());
 
     fourPanels.add(affiL1_Control);
-    affiL1_Control.setSelected(true);
     affiL1_Control.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
     affiL1_Control.addChangeListener(new javax.swing.event.ChangeListener() {
         public void stateChanged(javax.swing.event.ChangeEvent evt) {
@@ -495,7 +501,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     h10_pan_1.setLayout(h10_pan_1Layout);
     h10_pan_1Layout.setHorizontalGroup(
         h10_pan_1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-        .addGap(0, 317, Short.MAX_VALUE)
+        .addGap(0, 267, Short.MAX_VALUE)
     );
     h10_pan_1Layout.setVerticalGroup(
         h10_pan_1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -660,7 +666,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     h10_pan_2.setLayout(h10_pan_2Layout);
     h10_pan_2Layout.setHorizontalGroup(
         h10_pan_2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-        .addGap(0, 317, Short.MAX_VALUE)
+        .addGap(0, 267, Short.MAX_VALUE)
     );
     h10_pan_2Layout.setVerticalGroup(
         h10_pan_2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -680,7 +686,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     centerPanel.add(filler5);
 
     buildingPanel.setMinimumSize(new java.awt.Dimension(0, 223));
-    buildingPanel.setPreferredSize(new java.awt.Dimension(200, 489));
+    buildingPanel.setPreferredSize(new Dimension(BLDG_TAB_WIDTH, 500));
     buildingPanel.setLayout(new javax.swing.BoxLayout(buildingPanel, javax.swing.BoxLayout.Y_AXIS));
 
     topRight.setMinimumSize(new java.awt.Dimension(83, 85));
@@ -721,6 +727,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     );
     ((DefaultTableCellRenderer)BuildingTable.getTableHeader().getDefaultRenderer())
     .setHorizontalAlignment(JLabel.CENTER);
+    BuildingTable.getColumnModel().getColumn(1).setCellRenderer(bnoCellRenderer);
     BuildingTable.setDoubleBuffered(true);
     BuildingTable.setEnabled(false);
     BuildingTable.setRowHeight(22);
@@ -839,7 +846,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     h10_pan_3.setLayout(h10_pan_3Layout);
     h10_pan_3Layout.setHorizontalGroup(
         h10_pan_3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-        .addGap(0, 217, Short.MAX_VALUE)
+        .addGap(0, 267, Short.MAX_VALUE)
     );
     h10_pan_3Layout.setVerticalGroup(
         h10_pan_3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -887,6 +894,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     );
     ((DefaultTableCellRenderer)UnitTable.getTableHeader().getDefaultRenderer())
     .setHorizontalAlignment(JLabel.CENTER);
+    UnitTable.getColumnModel().getColumn(1).setCellRenderer(bnoCellRenderer);
     UnitTable.setDoubleBuffered(true);
     UnitTable.setEnabled(false);
     UnitTable.setRowHeight(22);
@@ -995,7 +1003,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     h10_pan_4.setLayout(h10_pan_4Layout);
     h10_pan_4Layout.setHorizontalGroup(
         h10_pan_4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-        .addGap(0, 217, Short.MAX_VALUE)
+        .addGap(0, 267, Short.MAX_VALUE)
     );
     h10_pan_4Layout.setVerticalGroup(
         h10_pan_4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1936,13 +1944,6 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
 
     private void modifyBuilding_ButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modifyBuilding_ButtonActionPerformed
         // Get confirmation from the user on a building number update.
-//        int bIndex = BuildingTable.getSelectedRow();
-//        
-//        if (BuildingTable.editCellAt(bIndex, 1))
-//        {
-//            BuildingTable.getEditorComponent().requestFocus();        
-//            processBuildingChangeTrial(bIndex);
-//        }
         prepareRecordModification(BuildingTable, Building, modifyBuilding_Button, 
                 cancelBuilding_Button);
     }//GEN-LAST:event_modifyBuilding_ButtonActionPerformed
@@ -2496,8 +2497,8 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
                 viewIndexToHighlight--;
             }
             highlightTableRow(L1_Affiliation, viewIndexToHighlight);
-            modifyL1_Button.setEnabled(true);                
-            deleteL1_Button.setEnabled(true);                
+//            modifyL1_Button.setEnabled(true);                
+//            deleteL1_Button.setEnabled(true);                
         }
         else
         {
@@ -3428,6 +3429,21 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
             }
         }
     }
+
+    DefaultTableCellRenderer bnoCellRenderer = new DefaultTableCellRenderer() {
+        Border padding = BorderFactory.createEmptyBorder(0, 15, 0, 15);
+
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value, 
+                boolean isSelected, boolean hasFocus, int row, int column) 
+        {
+            super.getTableCellRendererComponent(table, value, isSelected, hasFocus,
+                    row, column);
+            setBorder(BorderFactory.createCompoundBorder(getBorder(), padding));
+            setHorizontalAlignment(JLabel.RIGHT);
+            return this;            
+        }
+    };
 }
 
 enum TableType {
