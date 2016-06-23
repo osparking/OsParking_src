@@ -253,10 +253,20 @@ public class ControlEnums {
                 " - Higher Affiliation : "),
         AFFILI_DIAG_L3(" - 하위 부서 수 : ", 
                 " - Number of lower affiliations : "),
+        AFFILI_DEL_L1("다음 소속 및 그 하위 소속을 삭제합니까?", 
+                "Want to delete below higher and lower affiliations?"),
         BLDG_DIAG_L1("다음 건물 번호를 변경합니까?", 
                 "Want to change below building number?"),
         BLDG_DIAG_L2("건물번호 : ", "Building No.: "),
         BLDG_DIAG_L3("(소속 호실 수: ", "(Number of rooms : "),
+        
+        BLDG_DELETE_L1("다음 건물 및 소속 호실들을 삭제합니까?", 
+                "Want to delete below building and its rooms?"),
+        BLDG_DELETE_L2("건물번호 : ", "Building No.: "),
+        BLDG_DELETE_L3(" (소속 호실 수: ", " (Number of Rooms : "),
+        
+        AFFILI_DEL_RESULT("소속 삭제 성공!", "Successful affiliation deletion!"),
+        BLDG_DEL_RESULT("건물 삭제 성공!", "Successful building deletion!"),
         
         ASK_LOGOUT(", 로그아웃 원하십니까?", ", do you want to log out?"),
         AVERAGE_WORDS(" 대 평균 통과시간: ", " car passing delay average: "),

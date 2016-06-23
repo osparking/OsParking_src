@@ -80,9 +80,15 @@ import static com.osparking.global.names.ControlEnums.LabelContent.MODE_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.NONE_EXIST;
 import static com.osparking.global.names.ControlEnums.LabelContent.ROOM_LIST_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.WORK_PANEL_LABEL;
+import static com.osparking.global.names.ControlEnums.MsgContent.AFFILI_DEL_L1;
+import static com.osparking.global.names.ControlEnums.MsgContent.AFFILI_DEL_RESULT;
 import static com.osparking.global.names.ControlEnums.MsgContent.AFFILI_DIAG_L1;
 import static com.osparking.global.names.ControlEnums.MsgContent.AFFILI_DIAG_L2;
 import static com.osparking.global.names.ControlEnums.MsgContent.AFFILI_DIAG_L3;
+import static com.osparking.global.names.ControlEnums.MsgContent.BLDG_DELETE_L1;
+import static com.osparking.global.names.ControlEnums.MsgContent.BLDG_DELETE_L2;
+import static com.osparking.global.names.ControlEnums.MsgContent.BLDG_DELETE_L3;
+import static com.osparking.global.names.ControlEnums.MsgContent.BLDG_DEL_RESULT;
 import static com.osparking.global.names.ControlEnums.MsgContent.BLDG_DIAG_L1;
 import static com.osparking.global.names.ControlEnums.MsgContent.BLDG_DIAG_L2;
 import static com.osparking.global.names.ControlEnums.MsgContent.BLDG_DIAG_L3;
@@ -1230,7 +1236,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
             return -1;
         else
             return theTable.convertRowIndexToModel(theTable.getSelectedRow());                
-    }    
+    }
     
     private void L1_AffiliationKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_L1_AffiliationKeyReleased
         int rowIndex = L1_Affiliation.convertRowIndexToModel (L1_Affiliation.getSelectedRow());
@@ -1316,6 +1322,29 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
         changeControlEnabledForTable(L1_TABLE);            
     }//GEN-LAST:event_L1_AffiliationKeyReleased
 
+    // Delete currently selected table row
+    private int deleteHigherRow(String excepMsg, String sql, int bldg_seq_no) 
+    {
+        //<editor-fold desc="-- Actual deletion of a building number">
+        Connection conn = null;
+        PreparedStatement createBuilding = null;
+        int result = 0;
+        
+        try {
+            conn = getConnection();
+            createBuilding = conn.prepareStatement(sql);
+            createBuilding.setInt(1, bldg_seq_no);
+
+            result = createBuilding.executeUpdate();
+        } catch (SQLException ex) {
+            logParkingException(Level.SEVERE, ex, excepMsg);
+        } finally {
+            closeDBstuff(conn, createBuilding, null, excepMsg);
+            return result;
+        }    
+        //</editor-fold>        
+    }
+    
     private void deleteL1_ButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteL1_ButtonActionPerformed
         // Delete currently selected higher affiliation
         int viewIndex = L1_Affiliation.getSelectedRow();
@@ -1328,24 +1357,9 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
         int L1_no = (int)L1_Affiliation.getModel().getValueAt(modal_Index, 2);
         int count = getL2RecordCount(L1_no);
         
-        String dialogMessage = "";
-        
-        switch (language) {
-            case KOREAN:
-                dialogMessage = "다음 소속 및 그 하위 소속을 삭제합니까?" + System.getProperty("line.separator") 
-                + "소속명: '" + affiliation + "' (하위소속: " + count + " 건)";
-                break;
-                
-            case ENGLISH:
-                dialogMessage = "Want to delete the following affiliation and its lower affiliations?" 
-                + System.getProperty("line.separator") 
-                + " - Affiliation name: '" + affiliation 
-                + "' (lower affiliations count: " + count + ")";
-                break;
-                
-            default:
-                break;
-        }
+        String dialogMessage = AFFILI_DEL_L1.getContent() + System.getProperty("line.separator") 
+                + AFFILI_DIAG_L2.getContent() + affiliation + System.getProperty("line.separator") 
+                + AFFILI_DIAG_L3.getContent() + count;
             
         int result = JOptionPane.showConfirmDialog(this, dialogMessage,
                 DELETE_DIALOGTITLE.getContent(),
@@ -1353,46 +1367,21 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
         
         if (result == JOptionPane.YES_OPTION) {
             //<editor-fold desc="delete upper level affliation (unit name)">
-            Connection conn = null;
-            PreparedStatement createBuilding = null;
             String excepMsg = "(In deletion of: " + affiliation + ")";
+            String sql = "Delete From L1_Affiliation Where L1_no = ?";
+            
+            result = deleteHigherRow(excepMsg, sql, L1_no);
 
-            result = -1;
-            try {
-                conn = getConnection();
-                createBuilding = conn.prepareStatement("Delete From L1_Affiliation Where L1_no = ?");
-                createBuilding.setInt(1, L1_no);
+            if (result == 1) {
+                loadL1_Affiliation(viewIndex, ""); // Deliver the index of deleted row
 
-                result = createBuilding.executeUpdate();
-            } catch (SQLException ex) {
-                logParkingException(Level.SEVERE, ex, excepMsg);
-            } finally {
-                closeDBstuff(conn, createBuilding, null, excepMsg);
+                dialogMessage = AFFILI_DEL_RESULT.getContent() +
+                        System.getProperty("line.separator") + 
+                        AFFILI_DIAG_L2.getContent() + affiliation;
 
-                if (result == 1) {
-                    loadL1_Affiliation(viewIndex, ""); // Deliver the index of deleted row
-                    
-                    dialogMessage = "";
-                    
-                    switch (language) {
-                        case KOREAN:
-                            dialogMessage = "소속 '" + affiliation + 
-                                "'이 성공적으로 삭제되었습니다";
-                            break;
-                            
-                        case ENGLISH:
-                            dialogMessage = "Affiliation '" + affiliation + 
-                                "' has been successfully deleted";
-                            break;
-                            
-                        default:
-                            break;
-                    }                    
-                    
-                    JOptionPane.showConfirmDialog(this, dialogMessage,
-                            DELETE_RESULT_DIALOGTITLE.getContent(),
-                            JOptionPane.PLAIN_MESSAGE, INFORMATION_MESSAGE);
-                }
+                JOptionPane.showConfirmDialog(this, dialogMessage,
+                        DELETE_RESULT_DIALOGTITLE.getContent(),
+                        JOptionPane.PLAIN_MESSAGE, INFORMATION_MESSAGE);
             }
             //</editor-fold>
         }
@@ -1575,16 +1564,14 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     private void BuildingTableKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_BuildingTableKeyReleased
         int rowIndex = BuildingTable.convertRowIndexToModel(BuildingTable.getSelectedRow());
         TableModel model = BuildingTable.getModel();
-        Integer bldgNo = (Integer)model.getValueAt(rowIndex, 1);
+        Integer bldgNo = (Integer)(model.getValueAt(rowIndex, 1));
+        int bno = bldgNo;
         
         // Conditions to make this a new building number: Cond 1 and cond 2        
         if (model.getValueAt(rowIndex, 0) == null) // Cond 1. Row number field is null
         { 
             // <editor-fold defaultstate="collapsed" desc="-- Create a building">            
             if (bldgNo == null)
-//            if (bldgNo == null 
-//                    || bldgNo.isEmpty()
-//                    || bldgNo.equals(INSERT_TOOLTIP.getContent()))             
             {
                 abortCreation(Building);
                 return;
@@ -1613,45 +1600,23 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
             }   
             //</editor-fold>            
         }
-        else // Handle building number update case
-        {
+        else {
             // <editor-fold defaultstate="collapsed" desc="-- Handle building number update">                          
-//            if (bldgNo.isEmpty()) {
             if (bldgNo == null) {
                 rejectEmptyInput(BuildingTable, rowIndex, "Can't use empty string as a building number"); 
             } else {
-                Object bldgSeqNo = model.getValueAt(rowIndex, 2);
-                
-                int result = 0;
-                
                 // <editor-fold defaultstate="collapsed" desc="-- Actual building number update">
-                Connection conn = null;
-                PreparedStatement modifyBuilding = null;
+                String sql = "Update building_table Set BLDG_NO = ? Where SEQ_NO = ?";
+                int seqNo = (Integer)(model.getValueAt(rowIndex, 2));
                 String excepMsg = "(Original building no: " + prevBldgNo + ")";
-
-                try {
-                    String sql = "Update building_table Set BLDG_NO = ? Where SEQ_NO = ?";
-
-                    conn = getConnection();
-                    modifyBuilding = conn.prepareStatement(sql);
-                    modifyBuilding.setInt(1, bldgNo); 
-                    modifyBuilding.setInt(2, (Integer)bldgSeqNo);
-
-                    result = modifyBuilding.executeUpdate();
-                } catch (SQLException ex) {
-                    if (ex.getErrorCode() == ER_DUP_ENTRY) {
-                        rejectUserInput(BuildingTable, rowIndex, BUILDING_IN_DIALOG.getContent());
-                    }
-                    else {
-                        logParkingException(Level.SEVERE, ex, excepMsg);
-                    }
-                } finally {
-                    closeDBstuff(conn, modifyBuilding, null, excepMsg);
-                }    
-                //</editor-fold>            
+                int result = 0;
+                result = updateBuildingUnit(rowIndex, bno, seqNo,
+                        sql, excepMsg, BuildingTable, BUILDING_IN_DIALOG.getContent());
+                
                 if (result == 1) {
                     loadBuilding(-1, bldgNo); // Refresh building number list after update
                 } 
+                //</editor-fold>            
             }
             //</editor-fold>            
         }
@@ -1670,83 +1635,81 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
         int bldgNo = (Integer)bModel.getValueAt(bIndex, 1);
         Object bldgSeqNoObj = bModel.getValueAt(bIndex, 2);
                 
-        int uIndex = UnitTable.convertRowIndexToModel (UnitTable.getSelectedRow());
-        TableModel uModel = UnitTable.getModel();
-        Object unitNoObj = uModel.getValueAt(uIndex, 1);
+        int rowIndex = UnitTable.convertRowIndexToModel (UnitTable.getSelectedRow());
+        TableModel model = UnitTable.getModel();
+        Object unitNoObj = model.getValueAt(rowIndex, 1);
         
         // Conditions to make this a new room number: Cond 1 and cond 2
-        if (uModel.getValueAt(uIndex, 0) == null) // Cond 1. Row number field is null
+        if (model.getValueAt(rowIndex, 0) == null) // Cond 1. Row number field is null
         {
             // <editor-fold defaultstate="collapsed" desc="-- Create a new Room number"> 
-            if (unitNoObj != null) // Cond 2. Number field has some string
+            if (unitNoObj == null) // Cond 2. Number field has some string
             {
+                abortCreation(UnitTab);
+                return;
+            } else {
+                // Cond 2: Unit Number has a good decimal number string
+                // <editor-fold defaultstate="collapsed" desc="-- Actual creation of a new room number"> 
                 int unit_no = (Integer)unitNoObj; 
                 int result = 0;
-
-                // <editor-fold defaultstate="collapsed" desc="-- Actual creation of a new room number"> 
+                
                 try {
                     result = insertNewBuildingUnit(unit_no, (Integer)bldgSeqNoObj);
                 } catch (SQLException ex) {
                     if (ex.getErrorCode() == ER_DUP_ENTRY)
                     {
-                        rejectUserInput(UnitTable, uIndex, ROOM_IN_DIALOG.getContent());
+                        rejectUserInput(UnitTable, rowIndex, ROOM_IN_DIALOG.getContent());
                     }
                     else
                     {
                         logParkingException(Level.SEVERE, ex, "(inserted UNIT: " + unit_no + ")");
                     }
                 }
-                //</editor-fold>                
-
                 if (result == 1)
                 {
                     loadUnitNumberTable(bldgNo, (Integer)bldgSeqNoObj, -1, unit_no); // Refresh the list
-//                    insertUnit_Button.setEnabled(true);
                 }
-            }
-            else
-            {
-                removeEmptyRow(insertUnit_Button, UnitTable);                
+                //</editor-fold>                
             }
             //</editor-fold>
         } 
         else 
         {
             if (unitNoObj == null) {
-                rejectEmptyInput(UnitTable, uIndex, "Can't use empty string as a room unit number"); 
+                rejectEmptyInput(UnitTable, rowIndex, "Can't use empty string as a room unit number"); 
             } else {
                 // <editor-fold defaultstate="collapsed" desc="-- Actual room number update">
                 int unit_no = (Integer)unitNoObj; 
                 
                 Connection conn = null;
-                PreparedStatement updateUnit = null;
+                PreparedStatement updateStmt = null;
+                String sql = "Update BUILDING_UNIT Set UNIT_NO = ? Where SEQ_NO = ?";
+                int unitSeqNo = (Integer)model.getValueAt(rowIndex, 2);
                 String excepMsg = "(Oiriginal UNIT No: " + prevUnitNo + ")";
-
                 int result = 0;
+                
                 try {
-                    String sql = "Update BUILDING_UNIT Set UNIT_NO = ? Where SEQ_NO = ?";
                     conn = getConnection();
-                    updateUnit = conn.prepareStatement(sql);
-                    updateUnit.setInt(1, unit_no);
-                    updateUnit.setInt(2, (Integer)uModel.getValueAt(uIndex, 2));
-
-                    result = updateUnit.executeUpdate();
+                    updateStmt = conn.prepareStatement(sql);
+                    updateStmt.setInt(1, unit_no);
+                    updateStmt.setInt(2, unitSeqNo);
+                    result = updateStmt.executeUpdate();
                 } catch (SQLException ex) {
                     if (ex.getErrorCode() == ER_DUP_ENTRY) {
-                        rejectUserInput(UnitTable, uIndex, ROOM_IN_DIALOG.getContent());
+                        rejectUserInput(UnitTable, rowIndex, ROOM_IN_DIALOG.getContent());
                     }
                     else {
                         logParkingException(Level.SEVERE, ex, excepMsg);
                     }
                 } finally {
-                    closeDBstuff(conn, updateUnit, null, excepMsg);
+                    closeDBstuff(conn, updateStmt, null, excepMsg);
                 }                  
-                //</editor-fold>
                 
                 if (result == 1) {
                     // Refresh room number list table after a room number update
                     loadUnitNumberTable((Integer)bldgNo, bModel.getValueAt(bIndex, 2), -1, unit_no); 
                 } 
+                //</editor-fold>
             }
         }
     }//GEN-LAST:event_UnitTableKeyReleased
@@ -1757,75 +1720,39 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
 
     private void deleteBuilding_ButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteBuilding_ButtonActionPerformed
         // Delete currently selected building row
+
         int viewIndex = BuildingTable.getSelectedRow();
         if (viewIndex == -1)
         {
             return;
-        }
-        int modal_Index = BuildingTable.convertRowIndexToModel(viewIndex);        
-        int bldg_no = (Integer)BuildingTable.getModel().getValueAt(modal_Index, 1);
-        int bldg_seq_no = (Integer)BuildingTable.getModel().getValueAt(modal_Index, 2);        
-        int count = getUnitCount(bldg_seq_no);
-        
-        String dialog = "";
-        
-        switch (parkingLotLocale.getLanguage()) {
-                case "ko":
-                    dialog = "다음 건물 및 그의 호실들을 삭제합니까?" + System.getProperty("line.separator") 
-                    + "건물번호 : " + bldg_no + " (소속 호실 : " + count + " 개)";
-                    break;
-                default:
-                    dialog = "Want to delete the following building and its rooms?" + System.getProperty("line.separator") 
-                    + "Building No.: " + bldg_no + " (Number of Rooms : " + count + ")";
-                    break;
-            }        
-        
-        int result = JOptionPane.showConfirmDialog(this, dialog,
-                DELETE_DIALOGTITLE.getContent(),
-                JOptionPane.YES_NO_OPTION); 
-        
-        if (result == JOptionPane.YES_OPTION) {
-            //<editor-fold desc="actual delete of a building(its number)">
-            Connection conn = null;
-            PreparedStatement createBuilding = null;
-            String excepMsg = "(Deletion Belong No: " + bldg_no + ")";
+        } else {
+            int modal_Index = BuildingTable.convertRowIndexToModel(viewIndex);        
+            int bldg_no = (Integer)BuildingTable.getModel().getValueAt(modal_Index, 1);
+            int bldg_seq_no = (Integer)BuildingTable.getModel().getValueAt(modal_Index, 2);        
+            int count = getUnitCount(bldg_seq_no);
 
-            result = 0;
-            try {
-                String sql = "Delete From BUILDING_TABLE Where SEQ_NO = ?";
-
-                conn = getConnection();
-                createBuilding = conn.prepareStatement(sql);
-                createBuilding.setInt(1, bldg_seq_no);
-
-                result = createBuilding.executeUpdate();
-            } catch (SQLException ex) {
-                logParkingException(Level.SEVERE, ex, excepMsg);
-            } finally {
-                closeDBstuff(conn, createBuilding, null, excepMsg);
-            }    
-            //</editor-fold>
+            String message = BLDG_DELETE_L1.getContent() + System.getProperty("line.separator") 
+                    + BLDG_DELETE_L2.getContent() + bldg_no + BLDG_DELETE_L3.getContent() 
+                    + count + ")";
             
+            int result = JOptionPane.showConfirmDialog(this, message,
+                    DELETE_DIALOGTITLE.getContent(),
+                    JOptionPane.YES_NO_OPTION); 
+        
+            if (result == JOptionPane.YES_OPTION) {
+                String excepMsg = "(while deleting building No: " + bldg_no + ")";            
+                String sql = "Delete From BUILDING_TABLE Where SEQ_NO = ?";                
+
+                result = deleteHigherRow(excepMsg, sql, bldg_seq_no);
+            }
+
             if (result == 1) {
                 loadBuilding(viewIndex, 0); // Deliver the index of deleted row
-                
-                switch (language) {
-                    case KOREAN:
-                        dialog = "다음 건물 이 성공적으로 삭제되었습니다" 
+                message = BLDG_DEL_RESULT.getContent()
                         +  System.getProperty("line.separator") 
-                        + "건물 번호: " + bldg_no;
-                        break;
-                        
-                    case ENGLISH:
-                        dialog = "Building No. " + bldg_no + 
-                            " has been successfully deleted";
-                        break;
-                        
-                    default:
-                        break;
-                }
-                
-                JOptionPane.showConfirmDialog(this, dialog,
+                        + BLDG_DIAG_L2.getContent() + bldg_no;
+
+                JOptionPane.showConfirmDialog(this, message,
                             DELETE_RESULT_DIALOGTITLE.getContent(),
                             JOptionPane.PLAIN_MESSAGE, INFORMATION_MESSAGE);                
             }
@@ -2234,8 +2161,10 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     private boolean firstRowIsDummy(JTable table) {
 	if (table.getRowCount() == 1) {
             Object lineNo = table.getModel().getValueAt(0, 0); // Line number column value
-            if (((String)lineNo).length() == 0) {
-                return true;
+            if (lineNo.getClass() == String.class) {
+                if (((String)lineNo).length() == 0) {
+                    return true;
+                }
             }
         }
         return false;
@@ -2284,9 +2213,6 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
                         insertL2_Button, modifyL2_Button, deleteL2_Button);
                 if (!affiL2_Control.isSelected()) {
                     addDummyFirstRow((DefaultTableModel)L2_Affiliation.getModel());
-//                    int count = ((DefaultTableModel)L2_Affiliation.getModel()).getRowCount();
-//                    System.out.println("Count: " + count);
-//                    System.out.println("Count: " + L2_Affiliation.getRowCount());
                 }
                 break;
             case Building: 
@@ -3442,6 +3368,32 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
             model.addRow(new Object[] {"", NONE_EXIST.getContent(), ""
             });
         }
+    }
+
+    private int updateBuildingUnit(int row, int data, int seqNo,
+            String sql, String excepMsg, JTable BuildingTable, String content) 
+    {
+        Connection conn = null;
+        PreparedStatement updateStmt = null;
+        int result = 0;
+        
+        try {
+            conn = getConnection();
+            updateStmt = conn.prepareStatement(sql);
+            updateStmt.setInt(1, data); 
+            updateStmt.setInt(2, seqNo);
+            result = updateStmt.executeUpdate();
+        } catch (SQLException ex) {
+            if (ex.getErrorCode() == ER_DUP_ENTRY) {
+                rejectUserInput(BuildingTable, row, content);
+            }
+            else {
+                logParkingException(Level.SEVERE, ex, excepMsg);
+            }
+        } finally {
+            closeDBstuff(conn, updateStmt, null, excepMsg);
+            return result;
+        }    
     }
 }
 
