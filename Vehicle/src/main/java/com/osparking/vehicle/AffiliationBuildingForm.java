@@ -137,13 +137,11 @@ import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
 import org.jopendocument.dom.spreadsheet.Sheet;
 import org.jopendocument.dom.spreadsheet.SpreadSheet;
-import static org.jsoup.helper.StringUtil.padding;
 
 /**
  *
@@ -209,7 +207,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
         botLeft = new javax.swing.JPanel();
         affiBotTitle = new javax.swing.JLabel();
         scrollBotLeft = new javax.swing.JScrollPane();
-        L2_Affiliation = new javax.swing.JTable();
+        L2_Affiliation = new RXTable();
         affiliBotRight = new javax.swing.JPanel();
         affiL2_Control = new javax.swing.JRadioButton();
         insertL2_Button = new javax.swing.JButton();
@@ -235,7 +233,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
         jPanel5 = new javax.swing.JPanel();
         UnitLabel = new javax.swing.JLabel();
         jScrollPane4 = new javax.swing.JScrollPane();
-        UnitTable = new javax.swing.JTable();
+        UnitTable = new RXTable();
         jPanel12 = new javax.swing.JPanel();
         unitControl = new javax.swing.JRadioButton();
         insertUnit_Button = new javax.swing.JButton();
@@ -412,9 +410,9 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
 
     fourPanels.add(affiL1_Control);
     affiL1_Control.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-    affiL1_Control.addChangeListener(new javax.swing.event.ChangeListener() {
-        public void stateChanged(javax.swing.event.ChangeEvent evt) {
-            affiL1_ControlStateChanged(evt);
+    affiL1_Control.addItemListener(new java.awt.event.ItemListener() {
+        public void itemStateChanged(java.awt.event.ItemEvent evt) {
+            affiL1_ControlItemStateChanged(evt);
         }
     });
     gridBagConstraints = new java.awt.GridBagConstraints();
@@ -525,6 +523,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     scrollBotLeft.setMinimumSize(new java.awt.Dimension(24, 140));
     scrollBotLeft.setPreferredSize(new java.awt.Dimension(200, 140));
 
+    ((RXTable)L2_Affiliation).setSelectAllForEdit(true);
     L2_Affiliation.setAutoCreateRowSorter(true);
     L2_Affiliation.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
     L2_Affiliation.setModel(new javax.swing.table.DefaultTableModel(
@@ -578,9 +577,9 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     affiliBotRight.setLayout(new java.awt.GridBagLayout());
 
     fourPanels.add(affiL2_Control);
-    affiL2_Control.addChangeListener(new javax.swing.event.ChangeListener() {
-        public void stateChanged(javax.swing.event.ChangeEvent evt) {
-            affiL2_ControlStateChanged(evt);
+    affiL2_Control.addItemListener(new java.awt.event.ItemListener() {
+        public void itemStateChanged(java.awt.event.ItemEvent evt) {
+            affiL2_ControlItemStateChanged(evt);
         }
     });
     affiliBotRight.add(affiL2_Control, new java.awt.GridBagConstraints());
@@ -757,9 +756,9 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     bldgTopRight.setLayout(new java.awt.GridBagLayout());
 
     fourPanels.add(buildingControl);
-    buildingControl.addChangeListener(new javax.swing.event.ChangeListener() {
-        public void stateChanged(javax.swing.event.ChangeEvent evt) {
-            buildingControlStateChanged(evt);
+    buildingControl.addItemListener(new java.awt.event.ItemListener() {
+        public void itemStateChanged(java.awt.event.ItemEvent evt) {
+            buildingControlItemStateChanged(evt);
         }
     });
     gridBagConstraints = new java.awt.GridBagConstraints();
@@ -870,6 +869,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     jScrollPane4.setMinimumSize(new java.awt.Dimension(24, 120));
     jScrollPane4.setPreferredSize(new java.awt.Dimension(454, 120));
 
+    ((RXTable)UnitTable).setSelectAllForEdit(true);
     UnitTable.setAutoCreateRowSorter(true);
     UnitTable.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
     UnitTable.setModel(new javax.swing.table.DefaultTableModel(
@@ -918,9 +918,9 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     jPanel12.setLayout(new java.awt.GridBagLayout());
 
     fourPanels.add(unitControl);
-    unitControl.addChangeListener(new javax.swing.event.ChangeListener() {
-        public void stateChanged(javax.swing.event.ChangeEvent evt) {
-            unitControlStateChanged(evt);
+    unitControl.addItemListener(new java.awt.event.ItemListener() {
+        public void itemStateChanged(java.awt.event.ItemEvent evt) {
+            unitControlItemStateChanged(evt);
         }
     });
     jPanel12.add(unitControl, new java.awt.GridBagConstraints());
@@ -1194,27 +1194,31 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
         cellSelectionModel.addListSelectionListener (new ListSelectionListener ()
         {
             public void valueChanged(ListSelectionEvent  e) {
-                if (!e.getValueIsAdjusting())
-                {
-                    int index2 = followAndGetTrueIndex(L2_Affiliation);
-                    if (index2 >= 0)
-                    {
-                        Object L2_no = L2_Affiliation.getModel().getValueAt(index2, 2);
-                        deleteL2_Button.setEnabled(L2_no == null ? false : true);               
-                        modifyL2_Button.setEnabled(L2_no == null ? false : true);    
+                java.awt.EventQueue.invokeLater(new Runnable() {
+                    public void run() {
+                        if (!e.getValueIsAdjusting())
+                        {
+                            int index2 = followAndGetTrueIndex(L2_Affiliation);
+                            if (index2 >= 0)
+                            {
+                                Object L2_no = L2_Affiliation.getModel().getValueAt(index2, 2);
+                                deleteL2_Button.setEnabled(L2_no == null ? false : true);               
+                                modifyL2_Button.setEnabled(L2_no == null ? false : true);    
+                            }
+                            else
+                            {
+                                deleteL2_Button.setEnabled(false);     
+                                modifyL2_Button.setEnabled(false);     
+                            }
+
+                            // Delete an empty row if existed
+                            if (emptyLastRowPossible(insertL2_Button, L2_Affiliation))
+                            {
+                                removeEmptyRow(insertL2_Button, L2_Affiliation);
+                            }
+                        }
                     }
-                    else
-                    {
-                        deleteL2_Button.setEnabled(false);     
-                        modifyL2_Button.setEnabled(false);     
-                    }
-                    
-                    // Delete an empty row if existed
-                    if (emptyLastRowPossible(insertL2_Button, L2_Affiliation))
-                    {
-                        removeEmptyRow(insertL2_Button, L2_Affiliation);
-                    }
-                }
+                });
             }
         });
     }
@@ -1395,28 +1399,33 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     }//GEN-LAST:event_deleteL1_ButtonActionPerformed
 
     private void insertL1_ButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_insertL1_ButtonActionPerformed
-        prepareRecordInsertion(L1_Affiliation, cancelL1_Button);
+        prepareRecordInsertion(L1_Affiliation, insertL1_Button, cancelL1_Button);
     }//GEN-LAST:event_insertL1_ButtonActionPerformed
 
     private void L2_AffiliationKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_L2_AffiliationKeyReleased
         int rowIndex = L2_Affiliation.convertRowIndexToModel (L2_Affiliation.getSelectedRow());
         TableModel model = L2_Affiliation.getModel();        
-        final String L2Name = (String)model.getValueAt(rowIndex, 1);
+        final String L2Name = ((String)model.getValueAt(rowIndex, 1)).trim();
         
         // Conditions to make this a new lower affiliation: Cond 1 and cond 2
         if (model.getValueAt(rowIndex, 0) == null) // Cond 1. Row number field is null
         {
-            // <editor-fold defaultstate="collapsed" desc="-- Create a Lower Affiliation">   
-            if (L2Name != null && !L2Name.trim().isEmpty()) // Cond 2. Name field has some string
+            // <editor-fold defaultstate="collapsed" desc="-- Create a low affiliation">   
+            if (L2Name == null 
+                    || L2Name.isEmpty()
+                    || L2Name.equals(INSERT_TOOLTIP.getContent())) 
             {
-                String name2 = L2Name.trim();
-                int L1_index = L1_Affiliation.convertRowIndexToModel(L1_Affiliation.getSelectedRow());                
-                Object L1_No = L1_Affiliation.getModel().getValueAt(L1_index, 2);
+                abortCreation(L2_TABLE);
+                return;                
+            } else {
+                // Cond 2. Name field has string of meaningful low affiliation name
+                int index = L1_Affiliation.convertRowIndexToModel(L1_Affiliation.getSelectedRow());                
+                Object parentKey = L1_Affiliation.getModel().getValueAt(index, 2);
 
                 int result = 0;
                 // <editor-fold defaultstate="collapsed" desc="-- Insert New Lower name and Refresh the List"> 
                 try {
-                    result = insertNewLevel2Affiliation((Integer)L1_No, name2);
+                    result = insertNewLevel2Affiliation((Integer)parentKey, L2Name);
                 } catch (SQLException ex) {
                     if (ex.getErrorCode() == ER_DUP_ENTRY)
                     {
@@ -1425,26 +1434,21 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
                     else
                     {
                         logParkingException(Level.SEVERE, ex, 
-                                "(insertion tried L2 name: " + name2 + ")");
+                                "(insertion tried L2 name: " + L2Name + ")");
                     }
                 }                  
                        
                 if (result == 1)
                 {
-                    loadL2_Affiliation(L1_No, -1, name2); // Refresh the list
-                    insertL2_Button.setEnabled(true);
+                    loadL2_Affiliation(parentKey, -1, L2Name); // Refresh the list
                 }
                 //</editor-fold>
             }
-            else
-            {
-                removeEmptyRow(insertL2_Button, L2_Affiliation);    
-            }
             //</editor-fold>            
         }
-        else // handle the case of modification
+        else 
         {
-            //<editor-fold desc="-- Handle building no update">
+            //<editor-fold desc="-- Handle building number update">
             if (L2Name.trim().isEmpty()) {
                 rejectEmptyInput(L2_Affiliation, rowIndex, "Can't save empty string as a name");
             } else {
@@ -1485,10 +1489,13 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
             }
             //</editor-fold>
         }
+        cancelL2_Button.setEnabled(false);
+        setFormMode(FormMode.NormalMode);
+        changeControlEnabledForTable(L2_TABLE);            
     }//GEN-LAST:event_L2_AffiliationKeyReleased
 
     private void insertL2_ButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_insertL2_ButtonActionPerformed
-        prepareRecordInsertion(L2_Affiliation, cancelL2_Button);      
+        prepareRecordInsertion(L2_Affiliation, insertL2_Button, cancelL2_Button);      
     }//GEN-LAST:event_insertL2_ButtonActionPerformed
 
     private void deleteL2_ButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteL2_ButtonActionPerformed
@@ -1654,7 +1661,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     }//GEN-LAST:event_BuildingTableKeyReleased
 
     private void insertUnit_ButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_insertUnit_ButtonActionPerformed
-        prepareRecordInsertion(UnitTable, cancelUnit_Button);
+        prepareRecordInsertion(UnitTable, insertUnit_Button, cancelUnit_Button);
     }//GEN-LAST:event_insertUnit_ButtonActionPerformed
     
     private void UnitTableKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_UnitTableKeyReleased
@@ -1745,7 +1752,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     }//GEN-LAST:event_UnitTableKeyReleased
 
     private void insertBuilding_ButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_insertBuilding_ButtonActionPerformed
-        prepareRecordInsertion(BuildingTable, cancelBuilding_Button);
+        prepareRecordInsertion(BuildingTable, insertBuilding_Button, cancelBuilding_Button);
     }//GEN-LAST:event_insertBuilding_ButtonActionPerformed
 
     private void deleteBuilding_ButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteBuilding_ButtonActionPerformed
@@ -2224,12 +2231,33 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
         dispose();
     }//GEN-LAST:event_closeFormButtonActionPerformed
 
+    private boolean firstRowIsDummy(JTable table) {
+	if (table.getRowCount() == 1) {
+            Object lineNo = table.getModel().getValueAt(0, 0); // Line number column value
+            if (((String)lineNo).length() == 0) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
     private void changeItemsEnabled(JTable table, boolean selected,
-            JButton insertButton, JButton modifyButton, JButton deleteButton) {
-        int index1 = followAndGetTrueIndex(table);                 
-        if (index1 >= 0)
+            JButton insertButton, JButton modifyButton, JButton deleteButton)
+    {
+        if (firstRowIsDummy(table)) {
+            ((DefaultTableModel)table.getModel()).setRowCount(0);
+        }
+        
+        int idx = followAndGetTrueIndex(table);    
+        
+        if (idx == -1 && table.getRowCount() > 0) {
+            idx = 0;
+            table.setRowSelectionInterval(idx, idx);
+        }
+        
+        if (idx >= 0)
         {
-            Object L1_no = table.getModel().getValueAt(index1, 2);
+            Object L1_no = table.getModel().getValueAt(idx, 2);
             boolean enable = L1_no != null 
                     && selected 
                     && formMode == FormMode.NormalMode;
@@ -2237,15 +2265,11 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
             modifyButton.setEnabled(enable);
             deleteButton.setEnabled(enable);
         }
-
-        if (formMode == FormMode.NormalMode) {
-            insertButton.setEnabled(selected);
-        } else {
-            insertButton.setEnabled(false);
-        }
+        
+        insertButton.setEnabled(formMode == FormMode.NormalMode && selected);
         table.setEnabled(selected);
         if (selected) {
-            changeWorkPanelLabel();
+            changeWorkModeLabel();
         }          
     }
     
@@ -2258,6 +2282,12 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
             case L2_TABLE: 
                 changeItemsEnabled(L2_Affiliation, affiL2_Control.isSelected(),
                         insertL2_Button, modifyL2_Button, deleteL2_Button);
+                if (!affiL2_Control.isSelected()) {
+                    addDummyFirstRow((DefaultTableModel)L2_Affiliation.getModel());
+//                    int count = ((DefaultTableModel)L2_Affiliation.getModel()).getRowCount();
+//                    System.out.println("Count: " + count);
+//                    System.out.println("Count: " + L2_Affiliation.getRowCount());
+                }
                 break;
             case Building: 
                 changeItemsEnabled(BuildingTable, buildingControl.isSelected(),
@@ -2266,13 +2296,16 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
             case UnitTab: 
                 changeItemsEnabled(UnitTable, unitControl.isSelected(),
                         insertUnit_Button, modifyUnit_Button, deleteUnit_Button);
+                if (!unitControl.isSelected()) {
+                    addDummyFirstRow((DefaultTableModel)UnitTable.getModel());
+                }                
                 break;
             default:
                 break;
         }
     }
     
-    private void changeWorkPanelLabel() {
+    private void changeWorkModeLabel() {
         if (chosenPanelFor() == AFFILIATION) {
             workPanelName.setText(AFFILI_MODE_STRING.getContent());
         } else {
@@ -2334,80 +2367,6 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_cancelUnit_ButtonActionPerformed
 
-    private void affiL1_ControlStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_affiL1_ControlStateChanged
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                changeControlEnabledForTable(L1_TABLE);
-            }
-        });    
-    }//GEN-LAST:event_affiL1_ControlStateChanged
-
-    private void buildingControlStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_buildingControlStateChanged
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                changeControlEnabledForTable(Building);                
-            }
-        });   
-    }//GEN-LAST:event_buildingControlStateChanged
-
-    private void affiL2_ControlStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_affiL2_ControlStateChanged
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                changeControlEnabledForTable(L2_TABLE);
-                
-//                int index2 = followAndGetTrueIndex(L2_Affiliation);                 
-//                if (index2 < 0 && L2_Affiliation.getRowCount() > 0) {
-//                    index2 = 0;
-//                    L2_Affiliation.setRowSelectionInterval(index2, index2);
-//                }
-//                Object L2_no = null;
-//                
-//                if (index2 >= 0) {
-//                    L2_no = L2_Affiliation.getModel().getValueAt(index2, 2);
-//                }
-//
-//                boolean enable = L2_no != null && affiL2_Control.isSelected();
-//                insertL2_Button.setEnabled(enable);
-//                modifyL2_Button.setEnabled(enable);
-//                deleteL2_Button.setEnabled(enable);
-//                L2_Affiliation.setEnabled(enable);                    
-//
-//                if (affiL2_Control.isSelected()) {
-//                    changeWorkPanelLabel();
-//                }                
-            }
-        }); 
-    }//GEN-LAST:event_affiL2_ControlStateChanged
-
-    private void unitControlStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_unitControlStateChanged
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                changeControlEnabledForTable(UnitTab);                
-                
-//                int select_idx = followAndGetTrueIndex(UnitTable);                 
-//                if (select_idx < 0 && UnitTable.getRowCount() > 0) {
-//                    select_idx = 0;
-//                    UnitTable.setRowSelectionInterval(select_idx, select_idx);
-//                }
-//                Object unitNo = null;
-//                
-//                if (select_idx >= 0) {
-//                    unitNo = UnitTable.getModel().getValueAt(select_idx, 2);
-//                }
-//
-//                boolean enable = unitNo != null && unitControl.isSelected();
-//                insertUnit_Button.setEnabled(enable);
-//                modifyUnit_Button.setEnabled(enable);
-//                deleteUnit_Button.setEnabled(enable);
-//                UnitTable.setEnabled(enable);
-//                
-//                if (unitControl.isSelected()) {
-//                    changeWorkPanelLabel();
-//                }                
-            }
-        }); 
-    }//GEN-LAST:event_unitControlStateChanged
-
     private void BuildingTableKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_BuildingTableKeyTyped
         System.out.println("Typed: '" + evt.getKeyChar() + "'");
         // TODO add your handling code here:
@@ -2417,6 +2376,38 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
         System.out.println("Pressed: '" + evt.getKeyChar() + "'");
         // TODO add your handling code here:
     }//GEN-LAST:event_BuildingTableKeyPressed
+
+    private void affiL2_ControlItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_affiL2_ControlItemStateChanged
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                changeControlEnabledForTable(L2_TABLE);
+            }
+        }); 
+    }//GEN-LAST:event_affiL2_ControlItemStateChanged
+
+    private void affiL1_ControlItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_affiL1_ControlItemStateChanged
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                changeControlEnabledForTable(L1_TABLE);
+            }
+        });
+    }//GEN-LAST:event_affiL1_ControlItemStateChanged
+
+    private void unitControlItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_unitControlItemStateChanged
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                changeControlEnabledForTable(UnitTab);                             
+            }
+        }); 
+    }//GEN-LAST:event_unitControlItemStateChanged
+
+    private void buildingControlItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_buildingControlItemStateChanged
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                changeControlEnabledForTable(Building);                
+            }
+        });  
+    }//GEN-LAST:event_buildingControlItemStateChanged
 
     private void adjustTables() {
         adjustAffiliationTable(L1_Affiliation);
@@ -2594,10 +2585,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
                          rs.getInt("recNo"),  rs.getString("PARTY_NAME"), rs.getInt("L2_NO")
                     });
                 }
-                if (model.getRowCount() == 0) {
-                    model.addRow(new Object[] {"", NONE_EXIST.getContent(), ""
-                    });
-                }
+                addDummyFirstRow(model);
                 //</editor-fold>
             } catch (SQLException ex) {
                 logParkingException(Level.SEVERE, ex, excepMsg);
@@ -2832,10 +2820,11 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
                     model.addRow(new Object[] 
                         {rs.getInt("recNo"),  rs.getInt("UNIT_NO"), rs.getInt("SEQ_NO")});
                 }
-                if (model.getRowCount() == 0) {
-                    model.addRow(new Object[] {"", NONE_EXIST.getContent(), ""
-                    });
-                }               
+                addDummyFirstRow(model);
+//                if (model.getRowCount() == 0) {
+//                    model.addRow(new Object[] {"", NONE_EXIST.getContent(), ""
+//                    });
+//                }               
                 //</editor-fold>
             } catch (SQLException ex) {
                 logParkingException(Level.SEVERE, ex, excepMsg);
@@ -3172,7 +3161,8 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
         }
     }
 
-    private void prepareRecordInsertion(JTable listTable, JButton cancelButton) 
+    private void prepareRecordInsertion(JTable listTable, 
+            JButton insertButton, JButton cancelButton) 
     {    
         DefaultTableModel model = (DefaultTableModel)listTable.getModel();
         model.setRowCount(listTable.getRowCount() + 1);
@@ -3194,6 +3184,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
                     new Rectangle(listTable.getCellRect(rowIndex, 0, true)));
         }
         setFormMode(FormMode.CreateMode);
+        insertButton.setEnabled(false);
         cancelButton.setEnabled(true);
     }
 
@@ -3329,7 +3320,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
                 removeAndReturn(L1_Affiliation, cancelL1_Button);
                 break;
             case L2_TABLE: 
-                removeAndReturn(L2_Affiliation, cancelL2_Button);
+                removeAndReturn(L2_Affiliation, cancelL2_Button);                
                 break;
             case Building: 
                 removeAndReturn(BuildingTable, cancelBuilding_Button);
@@ -3340,6 +3331,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
             default:
                 break;
         }  
+        changeControlEnabledForTable(tableType);
     }
 
     private void removeAndReturn(JTable table, JButton cancelButton) 
@@ -3444,6 +3436,13 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
             return this;            
         }
     };
+
+    private void addDummyFirstRow(DefaultTableModel model) {
+        if (model.getRowCount() == 0) {
+            model.addRow(new Object[] {"", NONE_EXIST.getContent(), ""
+            });
+        }
+    }
 }
 
 enum TableType {
