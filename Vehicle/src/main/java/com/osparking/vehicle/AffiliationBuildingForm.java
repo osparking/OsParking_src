@@ -22,6 +22,7 @@ import static com.osparking.global.CommonData.buttonHeightNorm;
 import static com.osparking.global.CommonData.buttonWidthNorm;
 import static com.osparking.global.CommonData.buttonWidthWide;
 import static com.osparking.global.CommonData.pointColor;
+import static com.osparking.global.CommonData.tipColorTrans;
 import static com.osparking.global.Globals.BLDG_TAB_WIDTH;
 import static com.osparking.global.Globals.PopUpBackground;
 import static com.osparking.global.Globals.font_Size;
@@ -135,8 +136,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.InputMismatchException;
-import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.BorderFactory;
@@ -213,6 +212,9 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
         jSeparator2 = new javax.swing.JSeparator();
         BigMidPanel = new javax.swing.JPanel();
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(40, 0), new java.awt.Dimension(40, 0), new java.awt.Dimension(30, 32767));
+        centerHelpPanel = new javax.swing.JPanel();
+        helpPanel = new javax.swing.JPanel();
+        csHelpLabel = new javax.swing.JLabel();
         centerPanel = new javax.swing.JPanel();
         affiliationPanel = new javax.swing.JPanel();
         topLeft = new javax.swing.JPanel();
@@ -284,8 +286,8 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle(AFFILI_BUILD_FRAME_TITLE.getContent());
         setBackground(PopUpBackground);
-        setMinimumSize(new java.awt.Dimension(740, 645));
-        setPreferredSize(new java.awt.Dimension(740, 645));
+        setMinimumSize(new java.awt.Dimension(740, 675));
+        setPreferredSize(new java.awt.Dimension(740, 675));
 
         wholePanel.setLayout(new java.awt.BorderLayout());
 
@@ -359,15 +361,46 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
         BigMidPanel.setLayout(new javax.swing.BoxLayout(BigMidPanel, javax.swing.BoxLayout.X_AXIS));
         BigMidPanel.add(filler1);
 
-        centerPanel.setMinimumSize(new java.awt.Dimension(300, 320));
-        centerPanel.setPreferredSize(new java.awt.Dimension(500, 489));
+        centerHelpPanel.setPreferredSize(new java.awt.Dimension(0, 0));
+        centerHelpPanel.setLayout(new java.awt.BorderLayout());
+
+        helpPanel.setMaximumSize(new java.awt.Dimension(32767, 30));
+        helpPanel.setMinimumSize(new java.awt.Dimension(0, 26));
+        helpPanel.setPreferredSize(new java.awt.Dimension(300, 30));
+
+        csHelpLabel.setBackground(java.awt.SystemColor.activeCaptionBorder);
+        csHelpLabel.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        csHelpLabel.setForeground(tipColorTrans);
+        csHelpLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        csHelpLabel.setText("자료 입력 후 탭 혹은 엔터 키로 저장/적용할 것!");
+        csHelpLabel.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        csHelpLabel.setMaximumSize(new java.awt.Dimension(230, 30));
+        csHelpLabel.setPreferredSize(new java.awt.Dimension(230, 28));
+        csHelpLabel.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
+
+        javax.swing.GroupLayout helpPanelLayout = new javax.swing.GroupLayout(helpPanel);
+        helpPanel.setLayout(helpPanelLayout);
+        helpPanelLayout.setHorizontalGroup(
+            helpPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(csHelpLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
+        );
+        helpPanelLayout.setVerticalGroup(
+            helpPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(helpPanelLayout.createSequentialGroup()
+                .addComponent(csHelpLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 19, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+
+        centerHelpPanel.add(helpPanel, java.awt.BorderLayout.NORTH);
+
+        centerPanel.setMinimumSize(new java.awt.Dimension(0, 0));
+        centerPanel.setPreferredSize(new java.awt.Dimension(0, 0));
         centerPanel.setLayout(new javax.swing.BoxLayout(centerPanel, javax.swing.BoxLayout.X_AXIS));
 
         affiliationPanel.setMinimumSize(new java.awt.Dimension(300, 320));
         affiliationPanel.setPreferredSize(new Dimension(BLDG_TAB_WIDTH+50, 500));
         affiliationPanel.setLayout(new javax.swing.BoxLayout(affiliationPanel, javax.swing.BoxLayout.Y_AXIS));
 
-        topLeft.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
         topLeft.setMinimumSize(new java.awt.Dimension(83, 160));
         topLeft.setPreferredSize(new java.awt.Dimension(588, 168));
         topLeft.setLayout(new java.awt.BorderLayout(10, 0));
@@ -435,7 +468,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     affiliTopRight.setPreferredSize(new Dimension(buttonWidthNorm, L1_Affiliation.getSize().height));
     affiliTopRight.setLayout(new java.awt.GridBagLayout());
 
-    radioPanel1.setBackground(new java.awt.Color(222, 218, 210));
+    radioPanel1.setBackground(new java.awt.Color(255, 204, 255));
     radioPanel1.setMaximumSize(new Dimension(buttonWidthNorm - 10, buttonHeightNorm - 10));
     radioPanel1.setMinimumSize(new Dimension(buttonWidthNorm - 10, buttonHeightNorm - 10));
     radioPanel1.setPreferredSize(new Dimension(buttonWidthNorm - 10, buttonHeightNorm - 10));
@@ -559,7 +592,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     h10_pan_1.setLayout(h10_pan_1Layout);
     h10_pan_1Layout.setHorizontalGroup(
         h10_pan_1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-        .addGap(0, 122, Short.MAX_VALUE)
+        .addGap(0, 128, Short.MAX_VALUE)
     );
     h10_pan_1Layout.setVerticalGroup(
         h10_pan_1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -636,7 +669,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     affiliBotRight.setPreferredSize(new Dimension(buttonWidthNorm, L2_Affiliation.getSize().height));
     affiliBotRight.setLayout(new java.awt.GridBagLayout());
 
-    radioPanel2.setBackground(new java.awt.Color(222, 218, 210));
+    radioPanel2.setBackground(new java.awt.Color(255, 204, 255));
     radioPanel2.setMaximumSize(new Dimension(buttonWidthNorm - 10, buttonHeightNorm - 10));
     radioPanel2.setMinimumSize(new Dimension(buttonWidthNorm - 10, buttonHeightNorm - 10));
     radioPanel2.setPreferredSize(new Dimension(buttonWidthNorm - 10, buttonHeightNorm - 10));
@@ -850,7 +883,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     bldgTopRight.setPreferredSize(new Dimension(buttonWidthNorm, BuildingTable.getSize().height));
     bldgTopRight.setLayout(new java.awt.GridBagLayout());
 
-    radioPanel3.setBackground(new java.awt.Color(222, 218, 210));
+    radioPanel3.setBackground(new java.awt.Color(255, 204, 255));
     radioPanel3.setMaximumSize(new Dimension(buttonWidthNorm - 10, buttonHeightNorm - 10));
     radioPanel3.setMinimumSize(new Dimension(buttonWidthNorm - 10, buttonHeightNorm - 10));
     radioPanel3.setPreferredSize(new Dimension(buttonWidthNorm - 10, buttonHeightNorm - 10));
@@ -1045,7 +1078,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     jPanel12.setPreferredSize(new Dimension(buttonWidthNorm, UnitTable.getSize().height));
     jPanel12.setLayout(new java.awt.GridBagLayout());
 
-    radioPanel4.setBackground(new java.awt.Color(222, 218, 210));
+    radioPanel4.setBackground(new java.awt.Color(255, 204, 255));
     radioPanel4.setMaximumSize(new Dimension(buttonWidthNorm - 10, buttonHeightNorm - 10));
     radioPanel4.setMinimumSize(new Dimension(buttonWidthNorm - 10, buttonHeightNorm - 10));
     radioPanel4.setPreferredSize(new Dimension(buttonWidthNorm - 10, buttonHeightNorm - 10));
@@ -1179,7 +1212,9 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
 
     centerPanel.add(buildingPanel);
 
-    BigMidPanel.add(centerPanel);
+    centerHelpPanel.add(centerPanel, java.awt.BorderLayout.CENTER);
+
+    BigMidPanel.add(centerHelpPanel);
     BigMidPanel.add(filler2);
 
     wholePanel.add(BigMidPanel, java.awt.BorderLayout.CENTER);
@@ -2783,9 +2818,11 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     private javax.swing.JButton cancelL1_Button;
     private javax.swing.JButton cancelL2_Button;
     private javax.swing.JButton cancelUnit_Button;
+    private javax.swing.JPanel centerHelpPanel;
     private javax.swing.JPanel centerPanel;
     private javax.swing.JButton closeFormButton;
     private javax.swing.JPanel closePanel;
+    private javax.swing.JLabel csHelpLabel;
     private javax.swing.JButton deleteAll_Affiliation;
     private javax.swing.JButton deleteBuilding_Button;
     private javax.swing.JButton deleteL1_Button;
@@ -2802,6 +2839,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     private javax.swing.JPanel h10_pan_3;
     private javax.swing.JPanel h10_pan_4;
     private javax.swing.Box.Filler h20_5;
+    private javax.swing.JPanel helpPanel;
     private javax.swing.JButton insertBuilding_Button;
     private javax.swing.JButton insertL1_Button;
     private javax.swing.JButton insertL2_Button;
@@ -3256,6 +3294,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
                     new Rectangle(listTable.getCellRect(rowIndex, 0, true)));
         }
         setFormMode(FormMode.CreateMode);
+        csHelpLabel.setForeground(CommonData.tipColor);
         insertButton.setEnabled(false);
         cancelButton.setEnabled(true);
     }
