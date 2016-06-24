@@ -36,8 +36,8 @@ import static com.osparking.global.Globals.getTopLeftPointToPutThisFrameAtScreen
 import static com.osparking.global.Globals.head_font_Size;
 import static com.osparking.global.Globals.highlightTableRow;
 import static com.osparking.global.Globals.initializeLoggers;
-import static com.osparking.global.Globals.insertNewBuilding;
-import static com.osparking.global.Globals.insertNewBuildingUnit;
+import static com.osparking.global.Globals.insertBuilding;
+import static com.osparking.global.Globals.insertBuildingUnit;
 import static com.osparking.global.Globals.insertNewLevel1Affiliation;
 import static com.osparking.global.Globals.insertNewLevel2Affiliation;
 import static com.osparking.global.Globals.language;
@@ -59,6 +59,7 @@ import static com.osparking.global.names.ControlEnums.DialogTitleTypes.DELETE_AL
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.DELETE_ALL_RESULT_DIALOGTITLE;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.DELETE_DIALOGTITLE;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.DELETE_RESULT_DIALOGTITLE;
+import static com.osparking.global.names.ControlEnums.DialogTitleTypes.ERROR_DIALOGTITLE;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.LOWER_MODIFY_DIALOGTITLE;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.READ_ODS_DIALOGTITLE;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.READ_ODS_FAIL_DIALOGTITLE;
@@ -69,9 +70,7 @@ import static com.osparking.global.names.ControlEnums.FormModeString.CREATE;
 import static com.osparking.global.names.ControlEnums.FormModeString.MODIFY;
 import static com.osparking.global.names.ControlEnums.FormModeString.SEARCH;
 import static com.osparking.global.names.ControlEnums.LabelContent.AFFILIATION_LIST_LABEL;
-import static com.osparking.global.names.ControlEnums.LabelContent.AFFILI_MODE_STRING;
 import static com.osparking.global.names.ControlEnums.LabelContent.BUILDING_LIST_LABEL;
-import static com.osparking.global.names.ControlEnums.LabelContent.BUILDING_MODE_STRING;
 import static com.osparking.global.names.ControlEnums.LabelContent.HELP_AFFIL_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.HELP_BUILDING_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.LOWER_LABEL;
@@ -80,35 +79,48 @@ import static com.osparking.global.names.ControlEnums.LabelContent.MODE_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.NONE_EXIST;
 import static com.osparking.global.names.ControlEnums.LabelContent.ROOM_LIST_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.WORK_PANEL_LABEL;
+import static com.osparking.global.names.ControlEnums.MsgContent.AFFILI2_DIAG_L1;
+import static com.osparking.global.names.ControlEnums.MsgContent.AFFILI2_DIAG_L2;
+import static com.osparking.global.names.ControlEnums.MsgContent.AFFILI2_DIAG_L3;
 import static com.osparking.global.names.ControlEnums.MsgContent.AFFILI_DEL_L1;
 import static com.osparking.global.names.ControlEnums.MsgContent.AFFILI_DEL_RESULT;
 import static com.osparking.global.names.ControlEnums.MsgContent.AFFILI_DIAG_L1;
 import static com.osparking.global.names.ControlEnums.MsgContent.AFFILI_DIAG_L2;
 import static com.osparking.global.names.ControlEnums.MsgContent.AFFILI_DIAG_L3;
 import static com.osparking.global.names.ControlEnums.MsgContent.BLDG_DELETE_L1;
-import static com.osparking.global.names.ControlEnums.MsgContent.BLDG_DELETE_L2;
 import static com.osparking.global.names.ControlEnums.MsgContent.BLDG_DELETE_L3;
 import static com.osparking.global.names.ControlEnums.MsgContent.BLDG_DEL_RESULT;
 import static com.osparking.global.names.ControlEnums.MsgContent.BLDG_DIAG_L1;
 import static com.osparking.global.names.ControlEnums.MsgContent.BLDG_DIAG_L2;
 import static com.osparking.global.names.ControlEnums.MsgContent.BLDG_DIAG_L3;
-import static com.osparking.global.names.ControlEnums.TableTypes.*;
+import static com.osparking.global.names.ControlEnums.MsgContent.UNIT_DIAG_L1;
+import static com.osparking.global.names.ControlEnums.MsgContent.UNIT_DIAG_L2;
+import static com.osparking.global.names.ControlEnums.MsgContent.UNIT_DIAG_L3;
+import com.osparking.global.names.ControlEnums.TableType;
+import static com.osparking.global.names.ControlEnums.TableType.Building;
+import static com.osparking.global.names.ControlEnums.TableType.L1_TABLE;
+import static com.osparking.global.names.ControlEnums.TableType.L2_TABLE;
+import static com.osparking.global.names.ControlEnums.TableType.UnitTab;
+import static com.osparking.global.names.ControlEnums.TableTypes.BUILDING_HEADER;
+import static com.osparking.global.names.ControlEnums.TableTypes.HIGHER_HEADER;
+import static com.osparking.global.names.ControlEnums.TableTypes.LOWER_HEADER;
+import static com.osparking.global.names.ControlEnums.TableTypes.ORDER_HEADER;
+import static com.osparking.global.names.ControlEnums.TableTypes.ROOM_HEADER;
 import static com.osparking.global.names.ControlEnums.TitleTypes.AFFILI_BUILD_FRAME_TITLE;
 import static com.osparking.global.names.ControlEnums.ToolTipContent.INSERT_TOOLTIP;
+import static com.osparking.global.names.ControlEnums.ToolTipContent.NUMBER_FORMAT_ERROR_MSG;
 import static com.osparking.global.names.DB_Access.parkingLotLocale;
 import static com.osparking.global.names.DB_Access.readSettings;
 import static com.osparking.global.names.JDBCMySQL.getConnection;
 import com.osparking.global.names.OSP_enums.ODS_TYPE;
 import static com.osparking.global.names.OSP_enums.ODS_TYPE.AFFILIATION;
 import static com.osparking.global.names.OSP_enums.ODS_TYPE.BUILDING;
+//import static com.osparking.global.names.OSP_enums.VehicleCol.Building;
 import com.osparking.global.names.OdsFileOnly;
 import com.osparking.global.names.WrappedInt;
-import static com.osparking.vehicle.TableType.Building;
-import static com.osparking.vehicle.TableType.L1_TABLE;
-import static com.osparking.vehicle.TableType.L2_TABLE;
-import static com.osparking.vehicle.TableType.UnitTab;
 import com.osparking.vehicle.driver.ODSReader;
 import static com.osparking.vehicle.driver.ODSReader.getWrongCellPointString;
+import static java.awt.Color.black;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Point;
@@ -123,6 +135,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.InputMismatchException;
+import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.BorderFactory;
@@ -136,7 +150,9 @@ import static javax.swing.JOptionPane.WARNING_MESSAGE;
 import static javax.swing.JOptionPane.showMessageDialog;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
+import javax.swing.border.BevelBorder;
 import javax.swing.border.Border;
+import javax.swing.border.SoftBevelBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.event.TableModelEvent;
@@ -202,8 +218,9 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
         topLeft = new javax.swing.JPanel();
         affiTopTitle = new javax.swing.JLabel();
         scrollTopLeft = new javax.swing.JScrollPane();
-        L1_Affiliation = new RXTable();
+        L1_Affiliation = new RXTable(L1_TABLE);
         affiliTopRight = new javax.swing.JPanel();
+        radioPanel1 = new javax.swing.JPanel();
         affiL1_Control = new javax.swing.JRadioButton();
         insertL1_Button = new javax.swing.JButton();
         modifyL1_Button = new javax.swing.JButton();
@@ -213,8 +230,9 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
         botLeft = new javax.swing.JPanel();
         affiBotTitle = new javax.swing.JLabel();
         scrollBotLeft = new javax.swing.JScrollPane();
-        L2_Affiliation = new RXTable();
+        L2_Affiliation = new RXTable(L2_TABLE);
         affiliBotRight = new javax.swing.JPanel();
+        radioPanel2 = new javax.swing.JPanel();
         affiL2_Control = new javax.swing.JRadioButton();
         insertL2_Button = new javax.swing.JButton();
         modifyL2_Button = new javax.swing.JButton();
@@ -228,19 +246,21 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
         topRight = new javax.swing.JPanel();
         bldgTopTitle = new javax.swing.JLabel();
         scrollTopRight = new javax.swing.JScrollPane();
-        BuildingTable = new RXTable();
+        BuildingTable = new RXTable(Building);
         bldgTopRight = new javax.swing.JPanel();
+        radioPanel3 = new javax.swing.JPanel();
         buildingControl = new javax.swing.JRadioButton();
         insertBuilding_Button = new javax.swing.JButton();
         modifyBuilding_Button = new javax.swing.JButton();
         deleteBuilding_Button = new javax.swing.JButton();
         cancelBuilding_Button = new javax.swing.JButton();
         h10_pan_3 = new javax.swing.JPanel();
-        jPanel5 = new javax.swing.JPanel();
+        botRight = new javax.swing.JPanel();
         UnitLabel = new javax.swing.JLabel();
         jScrollPane4 = new javax.swing.JScrollPane();
-        UnitTable = new RXTable();
+        UnitTable = new RXTable(UnitTab);
         jPanel12 = new javax.swing.JPanel();
+        radioPanel4 = new javax.swing.JPanel();
         unitControl = new javax.swing.JRadioButton();
         insertUnit_Button = new javax.swing.JButton();
         modifyUnit_Button = new javax.swing.JButton();
@@ -322,7 +342,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jSeparator2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 657, Short.MAX_VALUE)
+            .addComponent(jSeparator2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 380, Short.MAX_VALUE)
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -347,6 +367,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
         affiliationPanel.setPreferredSize(new Dimension(BLDG_TAB_WIDTH+50, 500));
         affiliationPanel.setLayout(new javax.swing.BoxLayout(affiliationPanel, javax.swing.BoxLayout.Y_AXIS));
 
+        topLeft.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
         topLeft.setMinimumSize(new java.awt.Dimension(83, 160));
         topLeft.setPreferredSize(new java.awt.Dimension(588, 168));
         topLeft.setLayout(new java.awt.BorderLayout(10, 0));
@@ -414,6 +435,16 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     affiliTopRight.setPreferredSize(new Dimension(buttonWidthNorm, L1_Affiliation.getSize().height));
     affiliTopRight.setLayout(new java.awt.GridBagLayout());
 
+    radioPanel1.setBackground(new java.awt.Color(222, 218, 210));
+    radioPanel1.setMaximumSize(new Dimension(buttonWidthNorm - 10, buttonHeightNorm - 10));
+    radioPanel1.setMinimumSize(new Dimension(buttonWidthNorm - 10, buttonHeightNorm - 10));
+    radioPanel1.setPreferredSize(new Dimension(buttonWidthNorm - 10, buttonHeightNorm - 10));
+    radioPanel1.addMouseListener(new java.awt.event.MouseAdapter() {
+        public void mouseClicked(java.awt.event.MouseEvent evt) {
+            radioPanel1MouseClicked(evt);
+        }
+    });
+
     fourPanels.add(affiL1_Control);
     affiL1_Control.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
     affiL1_Control.addItemListener(new java.awt.event.ItemListener() {
@@ -421,9 +452,32 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
             affiL1_ControlItemStateChanged(evt);
         }
     });
+
+    javax.swing.GroupLayout radioPanel1Layout = new javax.swing.GroupLayout(radioPanel1);
+    radioPanel1.setLayout(radioPanel1Layout);
+    radioPanel1Layout.setHorizontalGroup(
+        radioPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addGap(0, 0, Short.MAX_VALUE)
+        .addGroup(radioPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(radioPanel1Layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(affiL1_Control)
+                .addGap(0, 0, Short.MAX_VALUE)))
+    );
+    radioPanel1Layout.setVerticalGroup(
+        radioPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addGap(0, 0, Short.MAX_VALUE)
+        .addGroup(radioPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(radioPanel1Layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(affiL1_Control)
+                .addGap(0, 0, Short.MAX_VALUE)))
+    );
+
     gridBagConstraints = new java.awt.GridBagConstraints();
-    gridBagConstraints.anchor = java.awt.GridBagConstraints.PAGE_START;
-    affiliTopRight.add(affiL1_Control, gridBagConstraints);
+    gridBagConstraints.gridx = 0;
+    gridBagConstraints.gridy = 0;
+    affiliTopRight.add(radioPanel1, gridBagConstraints);
 
     insertL1_Button.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
     insertL1_Button.setMnemonic('R');
@@ -505,7 +559,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     h10_pan_1.setLayout(h10_pan_1Layout);
     h10_pan_1Layout.setHorizontalGroup(
         h10_pan_1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-        .addGap(0, 267, Short.MAX_VALUE)
+        .addGap(0, 122, Short.MAX_VALUE)
     );
     h10_pan_1Layout.setVerticalGroup(
         h10_pan_1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -582,13 +636,48 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     affiliBotRight.setPreferredSize(new Dimension(buttonWidthNorm, L2_Affiliation.getSize().height));
     affiliBotRight.setLayout(new java.awt.GridBagLayout());
 
+    radioPanel2.setBackground(new java.awt.Color(222, 218, 210));
+    radioPanel2.setMaximumSize(new Dimension(buttonWidthNorm - 10, buttonHeightNorm - 10));
+    radioPanel2.setMinimumSize(new Dimension(buttonWidthNorm - 10, buttonHeightNorm - 10));
+    radioPanel2.setPreferredSize(new Dimension(buttonWidthNorm - 10, buttonHeightNorm - 10));
+    radioPanel2.addMouseListener(new java.awt.event.MouseAdapter() {
+        public void mouseClicked(java.awt.event.MouseEvent evt) {
+            radioPanel2MouseClicked(evt);
+        }
+    });
+
     fourPanels.add(affiL2_Control);
     affiL2_Control.addItemListener(new java.awt.event.ItemListener() {
         public void itemStateChanged(java.awt.event.ItemEvent evt) {
             affiL2_ControlItemStateChanged(evt);
         }
     });
-    affiliBotRight.add(affiL2_Control, new java.awt.GridBagConstraints());
+
+    javax.swing.GroupLayout radioPanel2Layout = new javax.swing.GroupLayout(radioPanel2);
+    radioPanel2.setLayout(radioPanel2Layout);
+    radioPanel2Layout.setHorizontalGroup(
+        radioPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addGap(0, 0, Short.MAX_VALUE)
+        .addGroup(radioPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(radioPanel2Layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(affiL2_Control)
+                .addGap(0, 0, Short.MAX_VALUE)))
+    );
+    radioPanel2Layout.setVerticalGroup(
+        radioPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addGap(0, 0, Short.MAX_VALUE)
+        .addGroup(radioPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(radioPanel2Layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(affiL2_Control)
+                .addGap(0, 0, Short.MAX_VALUE)))
+    );
+
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 0;
+    gridBagConstraints.gridy = 0;
+    affiliBotRight.add(radioPanel2, gridBagConstraints);
 
     insertL2_Button.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
     insertL2_Button.setMnemonic('R');
@@ -671,7 +760,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     h10_pan_2.setLayout(h10_pan_2Layout);
     h10_pan_2Layout.setHorizontalGroup(
         h10_pan_2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-        .addGap(0, 267, Short.MAX_VALUE)
+        .addGap(0, 128, Short.MAX_VALUE)
     );
     h10_pan_2Layout.setVerticalGroup(
         h10_pan_2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -761,15 +850,48 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     bldgTopRight.setPreferredSize(new Dimension(buttonWidthNorm, BuildingTable.getSize().height));
     bldgTopRight.setLayout(new java.awt.GridBagLayout());
 
+    radioPanel3.setBackground(new java.awt.Color(222, 218, 210));
+    radioPanel3.setMaximumSize(new Dimension(buttonWidthNorm - 10, buttonHeightNorm - 10));
+    radioPanel3.setMinimumSize(new Dimension(buttonWidthNorm - 10, buttonHeightNorm - 10));
+    radioPanel3.setPreferredSize(new Dimension(buttonWidthNorm - 10, buttonHeightNorm - 10));
+    radioPanel3.addMouseListener(new java.awt.event.MouseAdapter() {
+        public void mouseClicked(java.awt.event.MouseEvent evt) {
+            radioPanel3MouseClicked(evt);
+        }
+    });
+
     fourPanels.add(buildingControl);
     buildingControl.addItemListener(new java.awt.event.ItemListener() {
         public void itemStateChanged(java.awt.event.ItemEvent evt) {
             buildingControlItemStateChanged(evt);
         }
     });
+
+    javax.swing.GroupLayout radioPanel3Layout = new javax.swing.GroupLayout(radioPanel3);
+    radioPanel3.setLayout(radioPanel3Layout);
+    radioPanel3Layout.setHorizontalGroup(
+        radioPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addGap(0, 0, Short.MAX_VALUE)
+        .addGroup(radioPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(radioPanel3Layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(buildingControl)
+                .addGap(0, 0, Short.MAX_VALUE)))
+    );
+    radioPanel3Layout.setVerticalGroup(
+        radioPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addGap(0, 0, Short.MAX_VALUE)
+        .addGroup(radioPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(radioPanel3Layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(buildingControl)
+                .addGap(0, 0, Short.MAX_VALUE)))
+    );
+
     gridBagConstraints = new java.awt.GridBagConstraints();
-    gridBagConstraints.anchor = java.awt.GridBagConstraints.PAGE_START;
-    bldgTopRight.add(buildingControl, gridBagConstraints);
+    gridBagConstraints.gridx = 0;
+    gridBagConstraints.gridy = 0;
+    bldgTopRight.add(radioPanel3, gridBagConstraints);
 
     insertBuilding_Button.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
     insertBuilding_Button.setMnemonic('R');
@@ -851,7 +973,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     h10_pan_3.setLayout(h10_pan_3Layout);
     h10_pan_3Layout.setHorizontalGroup(
         h10_pan_3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-        .addGap(0, 267, Short.MAX_VALUE)
+        .addGap(0, 128, Short.MAX_VALUE)
     );
     h10_pan_3Layout.setVerticalGroup(
         h10_pan_3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -862,14 +984,14 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
 
     buildingPanel.add(topRight);
 
-    jPanel5.setMinimumSize(new java.awt.Dimension(83, 85));
-    jPanel5.setPreferredSize(new java.awt.Dimension(400, 168));
-    jPanel5.setLayout(new java.awt.BorderLayout(10, 0));
+    botRight.setMinimumSize(new java.awt.Dimension(83, 85));
+    botRight.setPreferredSize(new java.awt.Dimension(400, 168));
+    botRight.setLayout(new java.awt.BorderLayout(10, 0));
 
     UnitLabel.setFont(new java.awt.Font(font_Type, font_Style, head_font_Size));
     UnitLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
     UnitLabel.setText(ROOM_LIST_LABEL.getContent());
-    jPanel5.add(UnitLabel, java.awt.BorderLayout.NORTH);
+    botRight.add(UnitLabel, java.awt.BorderLayout.NORTH);
 
     jScrollPane4.setMaximumSize(new java.awt.Dimension(32767, 300));
     jScrollPane4.setMinimumSize(new java.awt.Dimension(24, 120));
@@ -917,11 +1039,21 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     });
     jScrollPane4.setViewportView(UnitTable);
 
-    jPanel5.add(jScrollPane4, java.awt.BorderLayout.CENTER);
+    botRight.add(jScrollPane4, java.awt.BorderLayout.CENTER);
 
     jPanel12.setMinimumSize(new Dimension(buttonWidthNorm, UnitTable.getSize().height));
     jPanel12.setPreferredSize(new Dimension(buttonWidthNorm, UnitTable.getSize().height));
     jPanel12.setLayout(new java.awt.GridBagLayout());
+
+    radioPanel4.setBackground(new java.awt.Color(222, 218, 210));
+    radioPanel4.setMaximumSize(new Dimension(buttonWidthNorm - 10, buttonHeightNorm - 10));
+    radioPanel4.setMinimumSize(new Dimension(buttonWidthNorm - 10, buttonHeightNorm - 10));
+    radioPanel4.setPreferredSize(new Dimension(buttonWidthNorm - 10, buttonHeightNorm - 10));
+    radioPanel4.addMouseListener(new java.awt.event.MouseAdapter() {
+        public void mouseClicked(java.awt.event.MouseEvent evt) {
+            radioPanel4MouseClicked(evt);
+        }
+    });
 
     fourPanels.add(unitControl);
     unitControl.addItemListener(new java.awt.event.ItemListener() {
@@ -929,7 +1061,32 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
             unitControlItemStateChanged(evt);
         }
     });
-    jPanel12.add(unitControl, new java.awt.GridBagConstraints());
+
+    javax.swing.GroupLayout radioPanel4Layout = new javax.swing.GroupLayout(radioPanel4);
+    radioPanel4.setLayout(radioPanel4Layout);
+    radioPanel4Layout.setHorizontalGroup(
+        radioPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addGap(0, 0, Short.MAX_VALUE)
+        .addGroup(radioPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(radioPanel4Layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(unitControl)
+                .addGap(0, 0, Short.MAX_VALUE)))
+    );
+    radioPanel4Layout.setVerticalGroup(
+        radioPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addGap(0, 0, Short.MAX_VALUE)
+        .addGroup(radioPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(radioPanel4Layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(unitControl)
+                .addGap(0, 0, Short.MAX_VALUE)))
+    );
+
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 0;
+    gridBagConstraints.gridy = 0;
+    jPanel12.add(radioPanel4, gridBagConstraints);
 
     insertUnit_Button.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
     insertUnit_Button.setMnemonic('R');
@@ -1001,7 +1158,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     gridBagConstraints.anchor = java.awt.GridBagConstraints.PAGE_START;
     jPanel12.add(cancelUnit_Button, gridBagConstraints);
 
-    jPanel5.add(jPanel12, java.awt.BorderLayout.EAST);
+    botRight.add(jPanel12, java.awt.BorderLayout.EAST);
 
     h10_pan_4.setPreferredSize(new java.awt.Dimension(0, 10));
 
@@ -1009,16 +1166,16 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     h10_pan_4.setLayout(h10_pan_4Layout);
     h10_pan_4Layout.setHorizontalGroup(
         h10_pan_4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-        .addGap(0, 267, Short.MAX_VALUE)
+        .addGap(0, 0, Short.MAX_VALUE)
     );
     h10_pan_4Layout.setVerticalGroup(
         h10_pan_4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-        .addGap(0, 10, Short.MAX_VALUE)
+        .addGap(0, 0, Short.MAX_VALUE)
     );
 
-    jPanel5.add(h10_pan_4, java.awt.BorderLayout.SOUTH);
+    botRight.add(h10_pan_4, java.awt.BorderLayout.SOUTH);
 
-    buildingPanel.add(jPanel5);
+    buildingPanel.add(botRight);
 
     centerPanel.add(buildingPanel);
 
@@ -1128,7 +1285,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
             .addComponent(readODSpan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addGap(10, 10, 10)
             .addComponent(saveSheet, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 84, Short.MAX_VALUE)
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(closeFormButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addGap(40, 40, 40))
     );
@@ -1156,7 +1313,6 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     pack();
     }// </editor-fold>//GEN-END:initComponents
     
-    static int count = 0;
     private void addAffiliationSelectionListener() {
         ListSelectionModel cellSelectionModel = L1_Affiliation.getSelectionModel();
         cellSelectionModel.addListSelectionListener (new ListSelectionListener ()
@@ -1166,7 +1322,6 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
                     public void run() {
                         if (!e.getValueIsAdjusting())
                         {
-                            System.out.println("valueChanged : " + (++count));
                             int index1 = followAndGetTrueIndex(L1_Affiliation);
 
                             if (index1 >= 0) 
@@ -1388,7 +1543,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     }//GEN-LAST:event_deleteL1_ButtonActionPerformed
 
     private void insertL1_ButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_insertL1_ButtonActionPerformed
-        prepareRecordInsertion(L1_Affiliation, insertL1_Button, cancelL1_Button);
+        prepareInsertion(L1_Affiliation, insertL1_Button, cancelL1_Button);
     }//GEN-LAST:event_insertL1_ButtonActionPerformed
 
     private void L2_AffiliationKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_L2_AffiliationKeyReleased
@@ -1484,7 +1639,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     }//GEN-LAST:event_L2_AffiliationKeyReleased
 
     private void insertL2_ButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_insertL2_ButtonActionPerformed
-        prepareRecordInsertion(L2_Affiliation, insertL2_Button, cancelL2_Button);      
+        prepareInsertion(L2_Affiliation, insertL2_Button, cancelL2_Button);      
     }//GEN-LAST:event_insertL2_ButtonActionPerformed
 
     private void deleteL2_ButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteL2_ButtonActionPerformed
@@ -1564,16 +1719,31 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     private void BuildingTableKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_BuildingTableKeyReleased
         int rowIndex = BuildingTable.convertRowIndexToModel(BuildingTable.getSelectedRow());
         TableModel model = BuildingTable.getModel();
-        Integer bldgNo = (Integer)(model.getValueAt(rowIndex, 1));
-        int bno = bldgNo;
+        Object inputObj = model.getValueAt(rowIndex, 1);
+        Integer bnoInteger = null;
         
+        if (inputObj.getClass() == String.class) {
+            JOptionPane.showConfirmDialog(this, 
+                    NUMBER_FORMAT_ERROR_MSG.getContent(),
+                    ERROR_DIALOGTITLE.getContent(),
+                    JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE);   
+            if (BuildingTable.editCellAt(rowIndex, 1)) {
+                BuildingTable.getEditorComponent().requestFocus();
+            }
+            return;
+        } else {
+            if (inputObj.getClass() == Integer.class) {
+                bnoInteger = (Integer)inputObj;
+            }
+        }
+                
         // Conditions to make this a new building number: Cond 1 and cond 2        
         if (model.getValueAt(rowIndex, 0) == null) // Cond 1. Row number field is null
         { 
             // <editor-fold defaultstate="collapsed" desc="-- Create a building">            
-            if (bldgNo == null)
+            if (bnoInteger == null)
             {
-                abortCreation(Building);
+                abortCreation(TableType.Building);
                 return;
             } else {
                 // Cond 2: Building Number has a good decimal number string
@@ -1581,7 +1751,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
                 int result = 0;
 
                 try {
-                    result = insertNewBuilding(bldgNo);
+                    result = insertBuilding(bnoInteger);
                 } catch (SQLException ex) {
                     if (ex.getErrorCode() == ER_DUP_ENTRY)
                     {
@@ -1589,12 +1759,12 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
                     }
                     else {
                         logParkingException(Level.SEVERE, ex, 
-                                "(inserted building: " + bldgNo + ")");
+                                "(inserted building: " + bnoInteger + ")");
                     }
                 }
                 if (result == 1)
                 {
-                    loadBuilding(-1, bldgNo); // Refresh building number list
+                    loadBuilding(-1, bnoInteger); // Refresh building number list
                 }             
                 //</editor-fold>            
             }   
@@ -1602,19 +1772,17 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
         }
         else {
             // <editor-fold defaultstate="collapsed" desc="-- Handle building number update">                          
-            if (bldgNo == null) {
+            if (bnoInteger == null) {
                 rejectEmptyInput(BuildingTable, rowIndex, "Can't use empty string as a building number"); 
             } else {
                 // <editor-fold defaultstate="collapsed" desc="-- Actual building number update">
                 String sql = "Update building_table Set BLDG_NO = ? Where SEQ_NO = ?";
                 int seqNo = (Integer)(model.getValueAt(rowIndex, 2));
                 String excepMsg = "(Original building no: " + prevBldgNo + ")";
-                int result = 0;
-                result = updateBuildingUnit(rowIndex, bno, seqNo,
-                        sql, excepMsg, BuildingTable, BUILDING_IN_DIALOG.getContent());
-                
+                int result = updateBuildingUnit(rowIndex, bnoInteger, seqNo, sql, 
+                        excepMsg, BuildingTable, BUILDING_IN_DIALOG.getContent());
                 if (result == 1) {
-                    loadBuilding(-1, bldgNo); // Refresh building number list after update
+                    loadBuilding(-1, bnoInteger); // Refresh building number list after update
                 } 
                 //</editor-fold>            
             }
@@ -1622,11 +1790,11 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
         }
         cancelBuilding_Button.setEnabled(false);
         setFormMode(FormMode.NormalMode);
-        changeControlEnabledForTable(Building);           
+        changeControlEnabledForTable(TableType.Building);           
     }//GEN-LAST:event_BuildingTableKeyReleased
 
     private void insertUnit_ButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_insertUnit_ButtonActionPerformed
-        prepareRecordInsertion(UnitTable, insertUnit_Button, cancelUnit_Button);
+        prepareInsertion(UnitTable, insertUnit_Button, cancelUnit_Button);
     }//GEN-LAST:event_insertUnit_ButtonActionPerformed
     
     private void UnitTableKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_UnitTableKeyReleased
@@ -1637,24 +1805,40 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
                 
         int rowIndex = UnitTable.convertRowIndexToModel (UnitTable.getSelectedRow());
         TableModel model = UnitTable.getModel();
-        Object unitNoObj = model.getValueAt(rowIndex, 1);
+        Object inputObj = model.getValueAt(rowIndex, 1);
+        Integer unoInteger = null;
+        
+        if (inputObj.getClass() == String.class) {
+            JOptionPane.showConfirmDialog(this, 
+                    NUMBER_FORMAT_ERROR_MSG.getContent(),
+                    ERROR_DIALOGTITLE.getContent(),
+                    JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE);   
+            if (UnitTable.editCellAt(rowIndex, 1)) {
+                UnitTable.getEditorComponent().requestFocus();
+            }
+            return;
+        } else {
+            if (inputObj.getClass() == Integer.class) {
+                unoInteger = (Integer)inputObj;
+            }
+        }        
         
         // Conditions to make this a new room number: Cond 1 and cond 2
         if (model.getValueAt(rowIndex, 0) == null) // Cond 1. Row number field is null
         {
             // <editor-fold defaultstate="collapsed" desc="-- Create a new Room number"> 
-            if (unitNoObj == null) // Cond 2. Number field has some string
+            if (unoInteger == null) // Cond 2. Number field has some string
             {
                 abortCreation(UnitTab);
                 return;
             } else {
                 // Cond 2: Unit Number has a good decimal number string
                 // <editor-fold defaultstate="collapsed" desc="-- Actual creation of a new room number"> 
-                int unit_no = (Integer)unitNoObj; 
+                int unit_no = (Integer)unoInteger; 
                 int result = 0;
                 
                 try {
-                    result = insertNewBuildingUnit(unit_no, (Integer)bldgSeqNoObj);
+                    result = insertBuildingUnit(unit_no, (Integer)bldgSeqNoObj);
                 } catch (SQLException ex) {
                     if (ex.getErrorCode() == ER_DUP_ENTRY)
                     {
@@ -1675,47 +1859,31 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
         } 
         else 
         {
-            if (unitNoObj == null) {
+            // <editor-fold defaultstate="collapsed" desc="-- Handle unit/room number update">      
+            if (unoInteger == null) {
                 rejectEmptyInput(UnitTable, rowIndex, "Can't use empty string as a room unit number"); 
             } else {
-                // <editor-fold defaultstate="collapsed" desc="-- Actual room number update">
-                int unit_no = (Integer)unitNoObj; 
-                
-                Connection conn = null;
-                PreparedStatement updateStmt = null;
+                // <editor-fold defaultstate="collapsed" desc="-- Actual room/unit number update">
                 String sql = "Update BUILDING_UNIT Set UNIT_NO = ? Where SEQ_NO = ?";
-                int unitSeqNo = (Integer)model.getValueAt(rowIndex, 2);
+                int seqNo = (Integer)model.getValueAt(rowIndex, 2);
                 String excepMsg = "(Oiriginal UNIT No: " + prevUnitNo + ")";
-                int result = 0;
-                
-                try {
-                    conn = getConnection();
-                    updateStmt = conn.prepareStatement(sql);
-                    updateStmt.setInt(1, unit_no);
-                    updateStmt.setInt(2, unitSeqNo);
-                    result = updateStmt.executeUpdate();
-                } catch (SQLException ex) {
-                    if (ex.getErrorCode() == ER_DUP_ENTRY) {
-                        rejectUserInput(UnitTable, rowIndex, ROOM_IN_DIALOG.getContent());
-                    }
-                    else {
-                        logParkingException(Level.SEVERE, ex, excepMsg);
-                    }
-                } finally {
-                    closeDBstuff(conn, updateStmt, null, excepMsg);
-                }                  
-                
+                int result = updateBuildingUnit(rowIndex, unoInteger, seqNo,
+                        sql, excepMsg, BuildingTable, BUILDING_IN_DIALOG.getContent());
                 if (result == 1) {
                     // Refresh room number list table after a room number update
-                    loadUnitNumberTable((Integer)bldgNo, bModel.getValueAt(bIndex, 2), -1, unit_no); 
+                    loadUnitNumberTable((Integer)bldgNo, bModel.getValueAt(bIndex, 2), -1, unoInteger); 
                 } 
                 //</editor-fold>
             }
+            //</editor-fold>            
         }
+        cancelUnit_Button.setEnabled(false);
+        setFormMode(FormMode.NormalMode);
+        changeControlEnabledForTable(UnitTab);              
     }//GEN-LAST:event_UnitTableKeyReleased
 
     private void insertBuilding_ButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_insertBuilding_ButtonActionPerformed
-        prepareRecordInsertion(BuildingTable, insertBuilding_Button, cancelBuilding_Button);
+        prepareInsertion(BuildingTable, insertBuilding_Button, cancelBuilding_Button);
     }//GEN-LAST:event_insertBuilding_ButtonActionPerformed
 
     private void deleteBuilding_ButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteBuilding_ButtonActionPerformed
@@ -1732,7 +1900,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
             int count = getUnitCount(bldg_seq_no);
 
             String message = BLDG_DELETE_L1.getContent() + System.getProperty("line.separator") 
-                    + BLDG_DELETE_L2.getContent() + bldg_no + BLDG_DELETE_L3.getContent() 
+                    + BLDG_DIAG_L2.getContent() + bldg_no + BLDG_DELETE_L3.getContent() 
                     + count + ")";
             
             int result = JOptionPane.showConfirmDialog(this, message,
@@ -1744,17 +1912,17 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
                 String sql = "Delete From BUILDING_TABLE Where SEQ_NO = ?";                
 
                 result = deleteHigherRow(excepMsg, sql, bldg_seq_no);
-            }
+                
+                if (result == 1) {
+                    loadBuilding(viewIndex, 0); // Deliver the index of deleted row
+                    message = BLDG_DEL_RESULT.getContent()
+                            +  System.getProperty("line.separator") 
+                            + BLDG_DIAG_L2.getContent() + bldg_no;
 
-            if (result == 1) {
-                loadBuilding(viewIndex, 0); // Deliver the index of deleted row
-                message = BLDG_DEL_RESULT.getContent()
-                        +  System.getProperty("line.separator") 
-                        + BLDG_DIAG_L2.getContent() + bldg_no;
-
-                JOptionPane.showConfirmDialog(this, message,
-                            DELETE_RESULT_DIALOGTITLE.getContent(),
-                            JOptionPane.PLAIN_MESSAGE, INFORMATION_MESSAGE);                
+                    JOptionPane.showConfirmDialog(this, message,
+                                DELETE_RESULT_DIALOGTITLE.getContent(),
+                                JOptionPane.PLAIN_MESSAGE, INFORMATION_MESSAGE);                
+                }
             }
         }
     }//GEN-LAST:event_deleteBuilding_ButtonActionPerformed
@@ -1867,24 +2035,17 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     }//GEN-LAST:event_deleteUnit_ButtonActionPerformed
     
     private void modifyUnit_ButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modifyUnit_ButtonActionPerformed
-        // Get confirmation from the user on a room number update.
-        int rowIndex = UnitTable.getSelectedRow();
-        if (UnitTable.editCellAt(rowIndex, 1))
-        {
-            UnitTable.getEditorComponent().requestFocus();        
-            processUnitNoChangeTrial(UnitTable.getSelectedRow());
-        }
+        prepareModification(UnitTable, modifyUnit_Button, cancelUnit_Button);
     }//GEN-LAST:event_modifyUnit_ButtonActionPerformed
 
     private void modifyBuilding_ButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modifyBuilding_ButtonActionPerformed
         // Get confirmation from the user on a building number update.
-        prepareRecordModification(BuildingTable, Building, modifyBuilding_Button, 
-                cancelBuilding_Button);
+        prepareModification(BuildingTable, modifyBuilding_Button, cancelBuilding_Button);
     }//GEN-LAST:event_modifyBuilding_ButtonActionPerformed
 
     private void modifyL1_ButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modifyL1_ButtonActionPerformed
         // Get confirmation from the user on a 1st level affiliation update.
-        prepareRecordModification(L1_Affiliation, L1_TABLE, modifyL1_Button, cancelL1_Button);
+        prepareModification(L1_Affiliation, modifyL1_Button, cancelL1_Button);
     }//GEN-LAST:event_modifyL1_ButtonActionPerformed
 
     private void L1_AffiliationFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_L1_AffiliationFocusLost
@@ -2161,9 +2322,14 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     private boolean firstRowIsDummy(JTable table) {
 	if (table.getRowCount() == 1) {
             Object lineNo = table.getModel().getValueAt(0, 0); // Line number column value
-            if (lineNo.getClass() == String.class) {
-                if (((String)lineNo).length() == 0) {
-                    return true;
+            
+            if (lineNo == null) {
+                return false;
+            } else {
+                if (lineNo.getClass() == String.class) {
+                    if (((String)lineNo).length() == 0) {
+                        return true;
+                    }
                 }
             }
         }
@@ -2179,9 +2345,56 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
         
         int idx = followAndGetTrueIndex(table);    
         
-        if (idx == -1 && table.getRowCount() > 0) {
-            idx = 0;
-            table.setRowSelectionInterval(idx, idx);
+        //<editor-fold desc="-- Change selected panel border">
+        if (selected) {
+            switch (((RXTable)table).getTableType()) {
+                case L1_TABLE:
+                    topLeft.setBorder(new SoftBevelBorder(BevelBorder.RAISED));
+                    affiTopTitle.setForeground(pointColor);
+                    break;
+                case L2_TABLE:
+                    botLeft.setBorder(new SoftBevelBorder(BevelBorder.RAISED));
+                    affiBotTitle.setForeground(pointColor);
+                    break;
+                case Building:
+                    topRight.setBorder(new SoftBevelBorder(BevelBorder.RAISED));
+                    bldgTopTitle.setForeground(pointColor);
+                    break;
+                case UnitTab:
+                    botRight.setBorder(new SoftBevelBorder(BevelBorder.RAISED));
+                    UnitLabel.setForeground(pointColor);
+                    break;
+                default:
+                    break;
+            }
+        } else {
+            switch (((RXTable)table).getTableType()) {
+                case L1_TABLE:
+                    topLeft.setBorder(null);
+                    affiTopTitle.setForeground(black);
+                    break;
+                case L2_TABLE:
+                    botLeft.setBorder(null);
+                    affiBotTitle.setForeground(black);
+                    break;
+                case Building:
+                    topRight.setBorder(null);
+                    bldgTopTitle.setForeground(black);
+                    break;
+                case UnitTab:
+                    botRight.setBorder(null);
+                    UnitLabel.setForeground(black);
+                    break;
+                default:
+                    break;
+            }
+        }
+        //</editor-fold>
+        if (selected) {
+            if (idx == -1 && table.getRowCount() > 0) {
+                idx = 0;
+                table.setRowSelectionInterval(idx, idx);
+            }
         }
         
         if (idx >= 0)
@@ -2198,8 +2411,8 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
         insertButton.setEnabled(formMode == FormMode.NormalMode && selected);
         table.setEnabled(selected);
         if (selected) {
-            changeWorkModeLabel();
-        }          
+            workPanelName.setText(((RXTable)table).getTableType().getContent());
+        }
     }
     
     private void changeControlEnabledForTable(TableType table) {
@@ -2231,22 +2444,8 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
         }
     }
     
-    private void changeWorkModeLabel() {
-        if (chosenPanelFor() == AFFILIATION) {
-            workPanelName.setText(AFFILI_MODE_STRING.getContent());
-        } else {
-            workPanelName.setText(BUILDING_MODE_STRING.getContent());
-        }
-    }
-    
     private void modifyL2_ButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modifyL2_ButtonActionPerformed
-        // Get confirmation from the user on a 2nd level affiliation update.
-        int rowIndex = L2_Affiliation.getSelectedRow();
-        if (L2_Affiliation.editCellAt(rowIndex, 1))
-        {
-            L2_Affiliation.getEditorComponent().requestFocus();
-            processL2NameChangeTrial(rowIndex);
-        }
+        prepareModification(L2_Affiliation, modifyL2_Button, cancelL2_Button);
     }//GEN-LAST:event_modifyL2_ButtonActionPerformed
 
     private void cancelL1_ButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelL1_ButtonActionPerformed
@@ -2255,8 +2454,9 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
             abortCreation(L1_TABLE);
         } else if (formMode == FormMode.UpdateMode) {
             L1_Affiliation.getCellEditor().stopCellEditing();
-            setFormMode(FormMode.NormalMode);  
+            setFormMode(FormMode.NormalMode);
             cancelL1_Button.setEnabled(false);
+            loadL1_Affiliation(L1_Affiliation.getSelectedRow(), "");
         }
     }//GEN-LAST:event_cancelL1_ButtonActionPerformed
 
@@ -2274,11 +2474,12 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     private void cancelBuilding_ButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelBuilding_ButtonActionPerformed
         // Remove current L1 new row content.
         if (formMode == FormMode.CreateMode) {
-            abortCreation(Building);
+            abortCreation(TableType.Building);
         } else if (formMode == FormMode.UpdateMode) {
             BuildingTable.getCellEditor().stopCellEditing();
             setFormMode(FormMode.NormalMode);  
             cancelBuilding_Button.setEnabled(false);
+            loadBuilding(BuildingTable.getSelectedRow(), 0);            
         }
     }//GEN-LAST:event_cancelBuilding_ButtonActionPerformed
 
@@ -2334,6 +2535,22 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
             }
         });  
     }//GEN-LAST:event_buildingControlItemStateChanged
+
+    private void radioPanel1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_radioPanel1MouseClicked
+        affiL1_Control.setSelected(true);
+    }//GEN-LAST:event_radioPanel1MouseClicked
+
+    private void radioPanel2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_radioPanel2MouseClicked
+        affiL2_Control.setSelected(true);
+    }//GEN-LAST:event_radioPanel2MouseClicked
+
+    private void radioPanel3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_radioPanel3MouseClicked
+        buildingControl.setSelected(true);
+    }//GEN-LAST:event_radioPanel3MouseClicked
+
+    private void radioPanel4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_radioPanel4MouseClicked
+        unitControl.setSelected(true);
+    }//GEN-LAST:event_radioPanel4MouseClicked
 
     private void adjustTables() {
         adjustAffiliationTable(L1_Affiliation);
@@ -2477,8 +2694,6 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
             }  
             affiBotTitle.setText(label);
             
-//            insertL2_Button.setEnabled(true);
-            
             Connection conn = null;
             Statement selectStmt = null;
             ResultSet rs = null;
@@ -2511,7 +2726,9 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
                          rs.getInt("recNo"),  rs.getString("PARTY_NAME"), rs.getInt("L2_NO")
                     });
                 }
-                addDummyFirstRow(model);
+                if (!affiL2_Control.isSelected()) {
+                    addDummyFirstRow(model);
+                }
                 //</editor-fold>
             } catch (SQLException ex) {
                 logParkingException(Level.SEVERE, ex, excepMsg);
@@ -2557,6 +2774,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     private javax.swing.JPanel bldgTopRight;
     private javax.swing.JLabel bldgTopTitle;
     private javax.swing.JPanel botLeft;
+    private javax.swing.JPanel botRight;
     private javax.swing.JPanel bottomGap;
     private javax.swing.JPanel bottomPanel;
     private javax.swing.JRadioButton buildingControl;
@@ -2592,7 +2810,6 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel12;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel5;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
@@ -2602,6 +2819,10 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     private javax.swing.JButton modifyL2_Button;
     private javax.swing.JButton modifyUnit_Button;
     private javax.swing.JFileChooser odsFileChooser;
+    private javax.swing.JPanel radioPanel1;
+    private javax.swing.JPanel radioPanel2;
+    private javax.swing.JPanel radioPanel3;
+    private javax.swing.JPanel radioPanel4;
     private javax.swing.JPanel readODSpan;
     private javax.swing.JButton readSheet;
     private javax.swing.JButton saveSheet;
@@ -2711,8 +2932,6 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
             
             UnitLabel.setText(label); 
             
-//            insertUnit_Button.setEnabled(true);
-            
             Connection conn = null;
             Statement selectStmt = null;
             ResultSet rs = null;
@@ -2746,11 +2965,9 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
                     model.addRow(new Object[] 
                         {rs.getInt("recNo"),  rs.getInt("UNIT_NO"), rs.getInt("SEQ_NO")});
                 }
-                addDummyFirstRow(model);
-//                if (model.getRowCount() == 0) {
-//                    model.addRow(new Object[] {"", NONE_EXIST.getContent(), ""
-//                    });
-//                }               
+                if (!unitControl.isSelected()) {
+                    addDummyFirstRow(model);
+                }
                 //</editor-fold>
             } catch (SQLException ex) {
                 logParkingException(Level.SEVERE, ex, excepMsg);
@@ -2902,10 +3119,8 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
                 }
                 else
                 {
-//                    int row = table.rowAtPoint(p);
                     if (me.getClickCount() == 2) {
-//                        processBuildingChangeTrial(row);
-                        prepareRecordModification(BuildingTable, Building, 
+                        prepareModification(BuildingTable,  
                                 modifyBuilding_Button, cancelBuilding_Button);                        
                     }
                 }
@@ -2921,9 +3136,10 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
                 }
                 else
                 {
-                    int row = table.rowAtPoint(p);
+//                    int row = table.rowAtPoint(p);
                     if (me.getClickCount() == 2) {
-                        processUnitNoChangeTrial(row);
+                        prepareModification(UnitTable,  
+                                modifyUnit_Button, cancelUnit_Button);                             
                     }
                 }                
             }
@@ -2938,9 +3154,10 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
                 }
                 else
                 {
-                    int row = table.rowAtPoint(p);
+//                    int row = table.rowAtPoint(p);
                     if (me.getClickCount() == 2) {
-                        processL1NameChangeTrial(row);
+                        prepareModification(L1_Affiliation,  
+                                modifyL1_Button, cancelL1_Button);                            
                     }
                 }                
             }
@@ -2955,9 +3172,11 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
                 }
                 else
                 {
-                    int row = table.rowAtPoint(p);
+//                    int row = table.rowAtPoint(p);
                     if (me.getClickCount() == 2) {
-                        processL2NameChangeTrial(row);
+//                        processL2NameChangeTrial(row);
+                        prepareModification(L2_Affiliation,  
+                                modifyL2_Button, cancelL2_Button);
                     }
                 }                
             }
@@ -2969,79 +3188,6 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     static Object prevL1Name = null;
     static Object prevL2Name = null;
     
-    private void processUnitNoChangeTrial(int rowIndex) {
-        int model_index = UnitTable.convertRowIndexToModel(rowIndex);        
-        Object lineNo = UnitTable.getModel().getValueAt(model_index, 0);
-        prevUnitNo = UnitTable.getModel().getValueAt(model_index, 1);    
-        if (lineNo != null) 
-        {
-            int bIndex = BuildingTable.convertRowIndexToModel(
-                    BuildingTable.getSelectedRow());
-            int bldgNo = (Integer)BuildingTable.getModel().getValueAt(bIndex, 1);
-            
-            String dialog = "";
-            switch (language) {
-                case KOREAN:
-                    dialog = "다음 건물의 호실 번호를 변경합니까?" + System.getProperty("line.separator") 
-                            + " - 건물 번호: " + bldgNo + System.getProperty("line.separator") 
-                            + " - 호실 번호: " + prevUnitNo;
-                    break;
-                    
-                case ENGLISH:
-                    dialog =  "Waht to change following room number?" + System.getProperty("line.separator") 
-                            + " - Building number: " + bldgNo + System.getProperty("line.separator") 
-                            + " - Room number: " + prevUnitNo;
-                    break;
-                    
-                default:
-                    break;
-                }            
-            
-            int result = JOptionPane.showConfirmDialog(this, dialog,
-                    UNIT_MODIFY_DIALOGTITLE.getContent(),
-                    JOptionPane.YES_NO_OPTION); 
-
-            if (result == JOptionPane.NO_OPTION) { 
-                UnitTable.getCellEditor().stopCellEditing();
-            }
-        }
-    }    
-
-    private void processL2NameChangeTrial(int rowIndex) {
-        int model_index = L2_Affiliation.convertRowIndexToModel(rowIndex);        
-        Object lineNo = L2_Affiliation.getModel().getValueAt(model_index, 0);
-        prevL2Name = L2_Affiliation.getModel().getValueAt(model_index, 1);    
-        if (lineNo != null) 
-        {
-            int index1 = L1_Affiliation.convertRowIndexToModel(
-                    L1_Affiliation.getSelectedRow());
-            String nameL1 = L1_Affiliation.getModel().getValueAt(index1, 1).toString();
-            
-            String dialog = "";
-            
-            switch (parkingLotLocale.getLanguage()) {
-                case "ko":
-                    dialog = "다음 하위 소속 이름을 변경합니까?" + System.getProperty("line.separator") 
-                            + " - 상위 소속: " + nameL1 + System.getProperty("line.separator") 
-                            + " - 하위 소속: " + prevL2Name;
-                    break;
-                default:
-                    dialog =  "Waht to change following lower affiliation?" + System.getProperty("line.separator") 
-                            + " - Higher Affiliation: " + nameL1 + System.getProperty("line.separator") 
-                            + " - Lower Affiliation: " + prevL2Name;
-                    break;
-            }            
-            
-            int result = JOptionPane.showConfirmDialog(this, dialog,
-                    LOWER_MODIFY_DIALOGTITLE.getContent(),
-                    JOptionPane.YES_NO_OPTION); 
-
-            if (result == JOptionPane.NO_OPTION) { 
-                L2_Affiliation.getCellEditor().stopCellEditing();
-            }
-        }
-    }
-
     private void processL1NameChangeTrial(int rowIndex) {
         int model_index = L1_Affiliation.convertRowIndexToModel(rowIndex);
         TableModel model1 = L1_Affiliation.getModel();
@@ -3087,7 +3233,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
         }
     }
 
-    private void prepareRecordInsertion(JTable listTable, 
+    private void prepareInsertion(JTable listTable, 
             JButton insertButton, JButton cancelButton) 
     {    
         DefaultTableModel model = (DefaultTableModel)listTable.getModel();
@@ -3194,9 +3340,13 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
 
     private void changeRadioButtonsEnabled(boolean b) {
         affiL1_Control.setEnabled(b);
+        changeControlEnabledForTable(L1_TABLE);
         affiL2_Control.setEnabled(b);
+        changeControlEnabledForTable(L2_TABLE);
         buildingControl.setEnabled(b);
+        changeControlEnabledForTable(Building);
         unitControl.setEnabled(b);
+        changeControlEnabledForTable(UnitTab);
     }
 
     private void changeBottomButtonsEnbled(boolean b) {
@@ -3272,8 +3422,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
         cancelButton.setEnabled(false);
     }
 
-    private void prepareRecordModification(JTable table, TableType tableType,
-            JButton modifyButton, JButton cancelButton) 
+    private void prepareModification(JTable table, JButton modifyButton, JButton cancelButton) 
     {
         int rowIndex = table.getSelectedRow();
         
@@ -3285,19 +3434,19 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
             TableModel model = table.getModel();
 
             //<editor-fold desc="-- Save previous record field value">
-            switch(tableType) {
+            switch(((RXTable)table).getTableType()) {
                 case L1_TABLE:
                     prevL1Name = model.getValueAt(model_index, 1);
                     break;
-//                case L2_TABLE:
-//                    prevL2Name = model.getValueAt(model_index, 1);
-//                    break;
+                case L2_TABLE:
+                    prevL2Name = model.getValueAt(model_index, 1);
+                    break;
                 case Building:
                     prevBldgNo = model.getValueAt(model_index, 1);
                     break;
-//                case UnitTab:
-//                    prevUnitNo = model.getValueAt(model_index, 1);
-//                    break;
+                case UnitTab:
+                    prevUnitNo = model.getValueAt(model_index, 1);
+                    break;
                 default:
                     break;
             }
@@ -3305,35 +3454,59 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
             
             if (model.getValueAt(model_index, 0) != null)
             {
+                String dialogTitle = null;
                 String dialog = "";
+                TableType tableType = ((RXTable)table).getTableType();
 
-                //<editor-fold desc="-- Make confirm message.">
+                //<editor-fold desc="-- Make dialog title and content">
                 switch (tableType) {
-                    case L1_TABLE:
-                        int L1_no = (int)model.getValueAt(model_index, 2);
                         
-                        dialog = AFFILI_DIAG_L1.getContent() + System.getProperty("line.separator") 
-                                + AFFILI_DIAG_L2.getContent() + prevL1Name + System.getProperty("line.separator") 
-                                + AFFILI_DIAG_L3.getContent() + getL2RecordCount(L1_no); 
+                    case UnitTab:
+                        int bIndex = BuildingTable.convertRowIndexToModel(
+                                BuildingTable.getSelectedRow());
+                        int bldgNo = (Integer)BuildingTable.getModel().getValueAt(bIndex, 1);
+                        
+                        dialogTitle = UNIT_MODIFY_DIALOGTITLE.getContent();
+                        dialog = UNIT_DIAG_L1.getContent() + System.getProperty("line.separator") 
+                                + UNIT_DIAG_L2.getContent() + prevUnitNo + System.getProperty("line.separator") 
+                                + UNIT_DIAG_L3.getContent() + bldgNo;
                         break;
-
+                        
                     case Building:
+                        int modal_Index = BuildingTable.convertRowIndexToModel(rowIndex);        
+                        int bno = (Integer)BuildingTable.getModel().getValueAt(modal_Index, 2);        
+                        int count = getUnitCount(bno);                        
+                        
+                        dialogTitle = BUILDING_MODIFY_DIALOGTITLE.getContent();
                         dialog = BLDG_DIAG_L1.getContent() + System.getProperty("line.separator") 
                                 + BLDG_DIAG_L2.getContent() + prevBldgNo + " " 
                                 + BLDG_DIAG_L3.getContent() + count + ")";
+                        break;
+                    
+                    case L2_TABLE:
+                        int indexL1 = L1_Affiliation.convertRowIndexToModel(L1_Affiliation.getSelectedRow());
+                        String nameL1 = L1_Affiliation.getModel().getValueAt(indexL1, 1).toString();
+                        
+                        dialogTitle = LOWER_MODIFY_DIALOGTITLE.getContent();
+                        dialog = AFFILI2_DIAG_L1.getContent() + System.getProperty("line.separator") 
+                                + AFFILI2_DIAG_L2.getContent() + prevL2Name + System.getProperty("line.separator") 
+                                + AFFILI2_DIAG_L3.getContent() + nameL1;
+                        break;
+
+                    case L1_TABLE:
+                        int L1_no = (int)model.getValueAt(model_index, 2);
+                        
+                        dialogTitle = AFFILIATION_MODIFY_DIALOGTITLE.getContent();
+                        dialog = AFFILI_DIAG_L1.getContent() + System.getProperty("line.separator") 
+                                + AFFILI_DIAG_L2.getContent() + prevL1Name + System.getProperty("line.separator") 
+                                + AFFILI_DIAG_L3.getContent() + getL2RecordCount(L1_no); 
                         break;
 
                     default:
                         break;
                 }
                 //</editor-fold>
-
-                String dialogTitle = null;
-                if (tableType == Building) {
-                    dialogTitle = BUILDING_MODIFY_DIALOGTITLE.getContent();
-                } else {
-                    dialogTitle = AFFILIATION_MODIFY_DIALOGTITLE.getContent();
-                }
+                
                 int result = JOptionPane.showConfirmDialog(this, dialog,
                         dialogTitle, JOptionPane.YES_NO_OPTION); 
 
@@ -3395,11 +3568,4 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
             return result;
         }    
     }
-}
-
-enum TableType {
-    L1_TABLE,
-    L2_TABLE,
-    Building,
-    UnitTab,
 }

@@ -1241,7 +1241,7 @@ public class Globals {
         return new DefaultTableModel(data, columnNames);
     }
     
-    public static int insertNewBuilding(int bldgNo) throws SQLException {
+    public static int insertBuilding(int bldgNo) throws SQLException {
         int result = 0;
         Connection conn = null;
         PreparedStatement createBuilding = null;
@@ -1306,7 +1306,7 @@ public class Globals {
         }        
     }     
     
-    public static int insertNewBuildingUnit(int unitNo, int bldgSeqNo) throws SQLException {   
+    public static int insertBuildingUnit(int unitNo, int bldgSeqNo) throws SQLException {   
         int result = 0;
         Connection conn = null; 
         PreparedStatement insertUnit = null;

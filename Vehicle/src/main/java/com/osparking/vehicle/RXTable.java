@@ -26,12 +26,11 @@
  */
 package com.osparking.vehicle;
 
+import com.osparking.global.names.ControlEnums.TableType;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
 import javax.swing.*;
-import javax.swing.event.TableModelEvent;
-import javax.swing.event.TableModelListener;
 import javax.swing.table.*;
 import javax.swing.text.*;
 
@@ -45,9 +44,10 @@ import javax.swing.text.*;
  */
 public class RXTable extends JTable //implements TableModelListener
 {
-	private boolean isSelectAllForMouseEvent = false;
-	private boolean isSelectAllForActionEvent = false;
-	private boolean isSelectAllForKeyEvent = false;
+    private boolean isSelectAllForMouseEvent = false;
+    private boolean isSelectAllForActionEvent = false;
+    private boolean isSelectAllForKeyEvent = false;
+    private TableType tableType; // added by OsParking on June 24th of 2016.
 
 //
 // Constructors
@@ -57,9 +57,10 @@ public class RXTable extends JTable //implements TableModelListener
      * data model, a default column model, and a default selection
      * model.
      */
-    public RXTable()
+    public RXTable(TableType type)
     {
         this(null, null, null);
+        tableType = type;
         getModel().addTableModelListener(this);        
     }
 
@@ -295,18 +296,18 @@ public class RXTable extends JTable //implements TableModelListener
 		}
 	}
 
-//    public void tableChanged(TableModelEvent e) {
-//        int row = e.getFirstRow();
-//        int column = e.getColumn();
-//        TableModel model = (TableModel)e.getSource();
-//        
-//        if (row == -1 || column == -1) {
-//            return;
-//        } else {
-//            String columnName = model.getColumnName(column);
-//            Object data = model.getValueAt(row, column);
-//            
-//            System.out.println("Typed: " + data.toString());
-//        }
-//    }
+    /**
+     * @return the tableType
+     */
+    public TableType getTableType() {
+        return tableType;
+    }
+
+    /**
+     * @param tableType the tableType to set
+     */
+    public void setTableType(TableType tableType) {
+        this.tableType = tableType;
+    }
+
 }  // End of Class RXTable

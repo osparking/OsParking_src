@@ -29,6 +29,23 @@ public class ControlEnums {
     public enum Languages{
         KOREAN, ENGLISH
     }
+
+    public enum TableType {  
+        L1_TABLE("상위 소속 ", "High Affili'"),
+        L2_TABLE("하위 부서", "Low Affili'"),
+        Building("건물(동)", "Building"),
+        UnitTab("방/호실", "Unit(Rm)");
+        
+        TableType(String korean, String english) {
+            contents[KOREAN.ordinal()] = korean;
+            contents[ENGLISH.ordinal()] = english;
+        }
+        private String[] contents = new String[Languages.values().length];
+        public String getContent() {
+                return contents[language.ordinal()];
+        }
+    }    
+    
     
     public enum TitleTypes {
         LOGIN_DIALOG_TITLE("오즈파킹 로그인", "OsParking Login"),
@@ -246,23 +263,30 @@ public class ControlEnums {
         }
     }
         
-    public enum MsgContent {  
+    public enum MsgContent {
         AFFILI_DIAG_L1("다음 상위 소속 명칭을 변경합니까?", 
                 "Want to change the following higher affiliation?"),
         AFFILI_DIAG_L2(" - 상위 소속 : ", 
                 " - Higher Affiliation : "),
         AFFILI_DIAG_L3(" - 하위 부서 수 : ", 
                 " - Number of lower affiliations : "),
+        AFFILI2_DIAG_L1("다음 하위 부서를 변경합니까?", 
+                "Change below lower affiliation?"),
+        AFFILI2_DIAG_L2(" - 하위 부서 : ", " - Lower affiliation : "),
+        AFFILI2_DIAG_L3(" - 소속 상위 부서 : ", " - Higher affiliation : "),
         AFFILI_DEL_L1("다음 소속 및 그 하위 소속을 삭제합니까?", 
                 "Want to delete below higher and lower affiliations?"),
-        BLDG_DIAG_L1("다음 건물 번호를 변경합니까?", 
-                "Want to change below building number?"),
-        BLDG_DIAG_L2("건물번호 : ", "Building No.: "),
+        
+        BLDG_DIAG_L1("다음 건물 번호를 변경합니까?", "Want to change below building number?"),
+        BLDG_DIAG_L2("건물 번호 : ", "Building No.: "),
         BLDG_DIAG_L3("(소속 호실 수: ", "(Number of rooms : "),
+        
+        UNIT_DIAG_L1("다음 호실 번호를 변경합니까?", "Change below room number?"),
+        UNIT_DIAG_L2(" - 호실 번호 : ", " - Room number : "),
+        UNIT_DIAG_L3(" - 소속 건물 : ", " - Of building : "),
         
         BLDG_DELETE_L1("다음 건물 및 소속 호실들을 삭제합니까?", 
                 "Want to delete below building and its rooms?"),
-        BLDG_DELETE_L2("건물번호 : ", "Building No.: "),
         BLDG_DELETE_L3(" (소속 호실 수: ", " (Number of Rooms : "),
         
         AFFILI_DEL_RESULT("소속 삭제 성공!", "Successful affiliation deletion!"),
@@ -306,6 +330,8 @@ public class ControlEnums {
         CELL_INPUT_TOOLTIP("숫자 11자리 입력하세요", "Enter the 11-digit number"),
         PHONE_INPUT_TOOLTIP("숫자 4자리 이상 입력하세요", "Please enter at least a four-digit number"),
         CELL_PHONE_TOOLTIP("전화 한대 이상 입력하세요", "Please enter at least one phone number"),
+        NUMBER_FORMAT_ERROR_MSG("번호 값이므로 숫자만 입력 가능합니다.",
+                "You many input only digits(0-9)"),
         REPEAT_PW_INPUT_TOOLTIP("한번 더 입력하세요", "Please enter it again."),
         SEARCH_INPUT_TOOLTIP("속성 값 입력", "Enter Search Key."),
         PW_FOURDIGIT_TOOLTIP("네 자리 숫자 입력 (자세한 내용: ? 클릭)", 
@@ -712,8 +738,8 @@ public class ControlEnums {
         READ_ODS_FAIL_DIALOGTITLE("차트 형식 오류", "Sheet Cell Data Format Error"),       
         AFFILIATION_MODIFY_DIALOGTITLE("상위 소속 변경", "Higher Affiliation Change"),  
         BUILDING_MODIFY_DIALOGTITLE("건물 변경 확인", "Building Change Confirm'"),
-        LOWER_MODIFY_DIALOGTITLE("소속 명칭 변경", "Change Low Affil' Confirm'"),
-        UNIT_MODIFY_DIALOGTITLE("호실 변경", "Room Number Change Confirm'"),
+        LOWER_MODIFY_DIALOGTITLE("하위 변경 확인", "Low Affili' Change"),
+        UNIT_MODIFY_DIALOGTITLE("호실 변경 확인", "Confirm Room Change"),
         REJECT_USER_DIALOGTITLE("중복 값 입력 오류", "Duplicate Data Error'"),
         VEHICLE_CHECK_DIALOGTITLE("차량 필수 자료 오류", "Required Field Missing"),
         VEHICLE_MODIFY_FAIL_DIALOGTITLE("차량 변경 실패", "Vehicle Modification Failure"),

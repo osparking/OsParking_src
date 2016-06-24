@@ -38,8 +38,8 @@ import com.osparking.global.Globals;
 import static com.osparking.global.Globals.checkOptions;
 import static com.osparking.global.Globals.closeDBstuff;
 import static com.osparking.global.Globals.initializeLoggers;
-import static com.osparking.global.Globals.insertNewBuilding;
-import static com.osparking.global.Globals.insertNewBuildingUnit;
+import static com.osparking.global.Globals.insertBuilding;
+import static com.osparking.global.Globals.insertBuildingUnit;
 import static com.osparking.global.Globals.insertNewLevel1Affiliation;
 import static com.osparking.global.Globals.insertNewLevel2Affiliation;
 import static com.osparking.global.Globals.language;
@@ -225,7 +225,7 @@ public class ODSReader {
                         else {
                             int result = 0;
                             try {
-                                result = insertNewBuilding(cellValue.getValue());
+                                result = insertBuilding(cellValue.getValue());
                             } catch (SQLException ex) {
                                 if (ex.getErrorCode() == ER_DUP_ENTRY)
                                 {
@@ -256,7 +256,7 @@ public class ODSReader {
                             int result = 0;
                             // try to insert unit number with the building sequence number
                             try {
-                                result = insertNewBuildingUnit(cellValue.getValue(), bldgSeqNo);
+                                result = insertBuildingUnit(cellValue.getValue(), bldgSeqNo);
                             } catch (SQLException ex) {
                                 if (ex.getErrorCode() != ER_DUP_ENTRY) {
                                     logParkingException(Level.SEVERE, ex, 
