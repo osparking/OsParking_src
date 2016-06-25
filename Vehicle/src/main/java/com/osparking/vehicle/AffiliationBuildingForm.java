@@ -67,11 +67,16 @@ import static com.osparking.global.names.ControlEnums.DialogTitleTypes.READ_ODS_
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.REJECT_USER_DIALOGTITLE;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.UNIT_MODIFY_DIALOGTITLE;
 import com.osparking.global.names.ControlEnums.FormMode;
+import static com.osparking.global.names.ControlEnums.FormMode.CreateMode;
+import static com.osparking.global.names.ControlEnums.FormMode.NormalMode;
+import static com.osparking.global.names.ControlEnums.FormMode.UpdateMode;
 import static com.osparking.global.names.ControlEnums.FormModeString.CREATE;
 import static com.osparking.global.names.ControlEnums.FormModeString.MODIFY;
 import static com.osparking.global.names.ControlEnums.FormModeString.SEARCH;
 import static com.osparking.global.names.ControlEnums.LabelContent.AFFILIATION_LIST_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.BUILDING_LIST_LABEL;
+import static com.osparking.global.names.ControlEnums.LabelContent.CHOOSE_PANEL_DIALOG;
+import static com.osparking.global.names.ControlEnums.LabelContent.CREATE_SAVE_HELP;
 import static com.osparking.global.names.ControlEnums.LabelContent.HELP_AFFIL_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.HELP_BUILDING_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.LOWER_LABEL;
@@ -79,6 +84,7 @@ import static com.osparking.global.names.ControlEnums.LabelContent.LOWER_LIST_LA
 import static com.osparking.global.names.ControlEnums.LabelContent.MODE_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.NONE_EXIST;
 import static com.osparking.global.names.ControlEnums.LabelContent.ROOM_LIST_LABEL;
+import static com.osparking.global.names.ControlEnums.LabelContent.UPDATE_SAVE_HELP;
 import static com.osparking.global.names.ControlEnums.LabelContent.WORK_PANEL_LABEL;
 import static com.osparking.global.names.ControlEnums.MsgContent.AFFILI2_DIAG_L1;
 import static com.osparking.global.names.ControlEnums.MsgContent.AFFILI2_DIAG_L2;
@@ -169,7 +175,7 @@ import org.jopendocument.dom.spreadsheet.SpreadSheet;
  * @author Open Source Parking Inc.
  */
 public class AffiliationBuildingForm extends javax.swing.JFrame {
-    private FormMode formMode = FormMode.NormalMode;
+    private FormMode formMode = NormalMode;
     /**
      * Creates new form BuildingManageFrame
      */
@@ -186,7 +192,8 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
         adjustTables();
         loadL1_Affiliation(0, "");
         loadBuilding(0, 0);
-    }
+        setFormMode(NormalMode);
+    }    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -368,11 +375,11 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
         helpPanel.setMinimumSize(new java.awt.Dimension(0, 26));
         helpPanel.setPreferredSize(new java.awt.Dimension(300, 30));
 
-        csHelpLabel.setBackground(java.awt.SystemColor.activeCaptionBorder);
         csHelpLabel.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         csHelpLabel.setForeground(tipColorTrans);
         csHelpLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         csHelpLabel.setText("자료 입력 후 탭 혹은 엔터 키로 저장/적용할 것!");
+        csHelpLabel.setVerticalAlignment(javax.swing.SwingConstants.TOP);
         csHelpLabel.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         csHelpLabel.setMaximumSize(new java.awt.Dimension(230, 30));
         csHelpLabel.setPreferredSize(new java.awt.Dimension(230, 28));
@@ -3412,22 +3419,31 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
             case CreateMode:
                 modeString.setText(CREATE.getContent());
                 changeRadioButtonsEnabled(false);
-                changeBottomButtonsEnbled(false);                
-                break;
+                changeBottomButtonsEnbled(false);   
+                (new LabelBlinker()).displayHelpMessage(csHelpLabel, 
+                        CREATE_SAVE_HELP.getContent(), false);                  
+                break;   
+                
             case NormalMode:
                 modeString.setText(SEARCH.getContent());
                 changeRadioButtonsEnabled(true);
                 changeBottomButtonsEnbled(true);
+                (new LabelBlinker()).displayHelpMessage(csHelpLabel, 
+                        CHOOSE_PANEL_DIALOG.getContent(), false);                
                 break;
+                
             case UpdateMode:
                 modeString.setText(MODIFY.getContent());
                 changeRadioButtonsEnabled(false);
-                changeBottomButtonsEnbled(false);                   
+                changeBottomButtonsEnbled(false);   
+                (new LabelBlinker()).displayHelpMessage(csHelpLabel, 
+                        UPDATE_SAVE_HELP.getContent(), false);                  
                 break;
+                
             default:
                 break;
-        }        
-    }
+        } 
+    }    
 
     private void abortCreation(TableType tableType) {
         switch (tableType) {

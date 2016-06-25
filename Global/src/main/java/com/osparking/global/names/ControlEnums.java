@@ -189,7 +189,13 @@ public class ControlEnums {
         SECONDS_LABEL ("초",  "seconds"),
         VEHICLES_LABEL (" 대",  " vehicles"),
         LOT_NAME_LABEL("주차장 이름",  "Parking Lot Name"),
-        LOWER_LABEL(" 부서 목록", "Lower affiliations of");
+        LOWER_LABEL(" 부서 목록", "Lower affiliations of"),
+        CHOOSE_PANEL_DIALOG("사용할 패널의 라디오 버튼을 선택하세요!",
+                "Click radio button of the panel to use!"),
+        CREATE_SAVE_HELP("자료 생성 후 [엔터] 키로 마감(=저장)할 것!",
+                "Press enter after the data creation!"),
+        UPDATE_SAVE_HELP("자료 갱신 후 [엔터] 키로 마감(=저장)할 것!",
+                "Press enter after the data modification!");
         
         LabelContent(String korean, String english) {
             contents[KOREAN.ordinal()] = korean;
