@@ -32,18 +32,14 @@ public class LabelBlinker {
     int counter = 0;
     ScheduledExecutorService service;    
     
-    public void displayHelpMessage(JLabel messageLabel, String message, boolean erase) {
+    public void displayHelpMessage(JLabel messageLabel, String message, boolean blinker) {
 
         Runnable runnable = new Runnable() {
             public void run() {
                 // task to run goes here
                 if (counter++ >= 6) {
                     service.shutdown();
-                    if (erase) {
-                        messageLabel.setText("");
-                    } else {
-                        messageLabel.setForeground(Color.gray);
-                    }
+                    messageLabel.setForeground(Color.gray);
                     counter = 0;
                 } else {
                     if (counter % 2 == 1) {
@@ -56,7 +52,10 @@ public class LabelBlinker {
         };
 
         messageLabel.setText(message);
-        service = Executors.newSingleThreadScheduledExecutor();
-        service.scheduleAtFixedRate(runnable, 0, 750, TimeUnit.MILLISECONDS);
+        messageLabel.setForeground(Color.gray);
+        if (blinker) {
+            service = Executors.newSingleThreadScheduledExecutor();
+            service.scheduleAtFixedRate(runnable, 0, 750, TimeUnit.MILLISECONDS);
+        }
     }     
 }

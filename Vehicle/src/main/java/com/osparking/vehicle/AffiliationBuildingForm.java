@@ -22,7 +22,6 @@ import static com.osparking.global.CommonData.buttonHeightNorm;
 import static com.osparking.global.CommonData.buttonWidthNorm;
 import static com.osparking.global.CommonData.buttonWidthWide;
 import static com.osparking.global.CommonData.pointColor;
-import static com.osparking.global.CommonData.tipColorTrans;
 import static com.osparking.global.Globals.BLDG_TAB_WIDTH;
 import static com.osparking.global.Globals.PopUpBackground;
 import static com.osparking.global.Globals.font_Size;
@@ -127,6 +126,7 @@ import com.osparking.global.names.OdsFileOnly;
 import com.osparking.global.names.WrappedInt;
 import com.osparking.vehicle.driver.ODSReader;
 import static com.osparking.vehicle.driver.ODSReader.getWrongCellPointString;
+import java.awt.Color;
 import static java.awt.Color.black;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -294,7 +294,6 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
         setTitle(AFFILI_BUILD_FRAME_TITLE.getContent());
         setBackground(PopUpBackground);
         setMinimumSize(new java.awt.Dimension(740, 675));
-        setPreferredSize(new java.awt.Dimension(740, 675));
 
         wholePanel.setLayout(new java.awt.BorderLayout());
 
@@ -376,7 +375,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
         helpPanel.setPreferredSize(new java.awt.Dimension(300, 30));
 
         csHelpLabel.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        csHelpLabel.setForeground(tipColorTrans);
+        csHelpLabel.setForeground(Color.gray);
         csHelpLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         csHelpLabel.setText("자료 입력 후 탭 혹은 엔터 키로 저장/적용할 것!");
         csHelpLabel.setVerticalAlignment(javax.swing.SwingConstants.TOP);
@@ -3301,7 +3300,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
                     new Rectangle(listTable.getCellRect(rowIndex, 0, true)));
         }
         setFormMode(FormMode.CreateMode);
-        csHelpLabel.setForeground(CommonData.tipColor);
+//        csHelpLabel.setForeground(CommonData.tipColor);
         insertButton.setEnabled(false);
         cancelButton.setEnabled(true);
     }
@@ -3409,6 +3408,12 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
         return formMode;
     }
 
+    /** Used to make context sensitive help message only once after
+     *  this GUI displayed.
+     */
+    boolean createBlinked = false;
+    boolean normalBlinked = false;
+    boolean updateBlinked = false;
     /**
      * @param formMode the formMode to set
      */
@@ -3421,7 +3426,8 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
                 changeRadioButtonsEnabled(false);
                 changeBottomButtonsEnbled(false);   
                 (new LabelBlinker()).displayHelpMessage(csHelpLabel, 
-                        CREATE_SAVE_HELP.getContent(), false);                  
+                        CREATE_SAVE_HELP.getContent(), !createBlinked);  
+                createBlinked = true;
                 break;   
                 
             case NormalMode:
@@ -3429,7 +3435,8 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
                 changeRadioButtonsEnabled(true);
                 changeBottomButtonsEnbled(true);
                 (new LabelBlinker()).displayHelpMessage(csHelpLabel, 
-                        CHOOSE_PANEL_DIALOG.getContent(), false);                
+                        CHOOSE_PANEL_DIALOG.getContent(), !normalBlinked); 
+                normalBlinked = true;
                 break;
                 
             case UpdateMode:
@@ -3437,7 +3444,8 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
                 changeRadioButtonsEnabled(false);
                 changeBottomButtonsEnbled(false);   
                 (new LabelBlinker()).displayHelpMessage(csHelpLabel, 
-                        UPDATE_SAVE_HELP.getContent(), false);                  
+                        UPDATE_SAVE_HELP.getContent(), !updateBlinked);                  
+                updateBlinked = true;
                 break;
                 
             default:
