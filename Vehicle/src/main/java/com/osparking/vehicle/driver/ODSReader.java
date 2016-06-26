@@ -41,7 +41,7 @@ import static com.osparking.global.Globals.initializeLoggers;
 import static com.osparking.global.Globals.insertBuilding;
 import static com.osparking.global.Globals.insertBuildingUnit;
 import static com.osparking.global.Globals.insertLevel1Affiliation;
-import static com.osparking.global.Globals.insertNewLevel2Affiliation;
+import static com.osparking.global.Globals.insertLevel2Affiliation;
 import static com.osparking.global.Globals.language;
 import static com.osparking.global.Globals.logParkingException;
 import static com.osparking.global.names.ControlEnums.DialogMSGTypes.CHECK_BUILDING_ODS_DIALOG;
@@ -613,21 +613,16 @@ public class ODSReader {
                         else {
                             int result = 0;
                             
-                            try {
-                                result = insertLevel1Affiliation(cellStr);
-                                if (result == 1) {
-                                    level1Count++;
-                                    goodLevel1 = true;
-                                } else {
-                                    level1Reject++;
-                                    goodLevel1 = true;
-                                }
-                            } catch (SQLException ex) {
+                            result = insertLevel1Affiliation(cellStr);
+                            if (result == 1) {
+                                level1Count++;
+                                goodLevel1 = true;
+                            } else if (result == 2) { // duplicate entry
                                 level1Reject++;
-                                if (ex.getErrorCode() == ER_DUP_ENTRY) {
-                                    goodLevel1 = true;
-                                }
-                            } 
+                                goodLevel1 = true;
+                            } else {
+                                level1Reject++;
+                            }
 
                             if (goodLevel1) {
                                 // considering the case of level 1 is duplicate and can't be inserted
@@ -642,7 +637,7 @@ public class ODSReader {
                             int result = 0;
                             // try to insert Level 2 name with the Level 1 number
                             try {
-                                result = insertNewLevel2Affiliation(L1_no, cellStr);
+                                result = insertLevel2Affiliation(L1_no, cellStr);
                             } catch (SQLException ex) {
                                 if (ex.getErrorCode() != ER_DUP_ENTRY) {
                                     logParkingException(Level.SEVERE, ex, 

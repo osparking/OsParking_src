@@ -39,7 +39,7 @@ import static com.osparking.global.Globals.initializeLoggers;
 import static com.osparking.global.Globals.insertBuilding;
 import static com.osparking.global.Globals.insertBuildingUnit;
 import static com.osparking.global.Globals.insertLevel1Affiliation;
-import static com.osparking.global.Globals.insertNewLevel2Affiliation;
+import static com.osparking.global.Globals.insertLevel2Affiliation;
 import static com.osparking.global.Globals.language;
 import static com.osparking.global.Globals.logParkingException;
 import static com.osparking.global.Globals.rejectEmptyInput;
@@ -50,6 +50,7 @@ import static com.osparking.global.names.ControlEnums.DialogMSGTypes.AFFILIATION
 import static com.osparking.global.names.ControlEnums.DialogMSGTypes.BUILDING_DELETE_ALL_DAILOG;
 import static com.osparking.global.names.ControlEnums.DialogMSGTypes.BUILDING_DELETE_ALL_RESULT_DAILOG;
 import static com.osparking.global.names.ControlEnums.DialogMSGTypes.BUILDING_IN_DIALOG;
+import static com.osparking.global.names.ControlEnums.DialogMSGTypes.DUPLICATE_HIGH_AFFILI;
 import static com.osparking.global.names.ControlEnums.DialogMSGTypes.LEVEL1_NAME_DIALOG;
 import static com.osparking.global.names.ControlEnums.DialogMSGTypes.LEVEL2_NAME_DIALOG;
 import static com.osparking.global.names.ControlEnums.DialogMSGTypes.ROOM_IN_DIALOG;
@@ -294,6 +295,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
         setTitle(AFFILI_BUILD_FRAME_TITLE.getContent());
         setBackground(PopUpBackground);
         setMinimumSize(new java.awt.Dimension(740, 675));
+        setPreferredSize(new java.awt.Dimension(740, 700));
 
         wholePanel.setLayout(new java.awt.BorderLayout());
 
@@ -388,7 +390,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
         helpPanel.setLayout(helpPanelLayout);
         helpPanelLayout.setHorizontalGroup(
             helpPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(csHelpLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
+            .addComponent(csHelpLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 300, Short.MAX_VALUE)
         );
         helpPanelLayout.setVerticalGroup(
             helpPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1454,23 +1456,18 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
             } else {
                 // Cond 2. Name field has string of meaningful affiliation name
                 // <editor-fold defaultstate="collapsed" desc="-- Insert New Higher name and Refresh the List">               
-                int result = 0;
+                int result = insertLevel1Affiliation(L1Name);
                 
-                try {
-                    result = insertLevel1Affiliation(L1Name);
-                    if (result == 1)
-                    {
-                        loadL1_Affiliation(-1, L1Name); // Refresh the list
-                    }
-                } catch (SQLException ex) {
-                    if (ex.getErrorCode() == ER_DUP_ENTRY) {
-                        rejectUserInput(L1_Affiliation, rowIndex, LEVEL1_NAME_DIALOG.getContent());
-                    }
-                    else {
-                        logParkingException(Level.SEVERE, ex, 
-                                "(insertion tried level1 name: " + L1Name + ")");
-                    }
-                }                           
+                if (result == 1)
+                {
+                    loadL1_Affiliation(-1, L1Name); // Refresh the list
+                } else if (result == 2) {
+                    String msg = DUPLICATE_HIGH_AFFILI.getContent() + L1Name;                   
+                    JOptionPane.showConfirmDialog(null, msg,
+                            ERROR_DIALOGTITLE.getContent(), 
+                            JOptionPane.WARNING_MESSAGE, WARNING_MESSAGE);                       
+                    abortCreation(L1_TABLE);
+                }
                 // </editor-fold>
             }
             //</editor-fold>
@@ -1612,7 +1609,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
                 int result = 0;
                 // <editor-fold defaultstate="collapsed" desc="-- Insert New Lower name and Refresh the List"> 
                 try {
-                    result = insertNewLevel2Affiliation((Integer)parentKey, L2Name);
+                    result = insertLevel2Affiliation((Integer)parentKey, L2Name);
                 } catch (SQLException ex) {
                     if (ex.getErrorCode() == ER_DUP_ENTRY)
                     {

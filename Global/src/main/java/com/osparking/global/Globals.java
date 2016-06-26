@@ -1335,7 +1335,7 @@ public class Globals {
         }
     }     
     
-    public static int insertLevel1Affiliation(String level1Name) throws SQLException {
+    public static int insertLevel1Affiliation(String level1Name) {
         int result = 0;
         Connection conn = null;
         PreparedStatement createLevel1 = null;
@@ -1348,8 +1348,9 @@ public class Globals {
             result = createLevel1.executeUpdate();
         } catch (SQLException ex) {
             if (ex.getErrorCode() == ER_DUP_ENTRY) {
+                result = 2;
                 logParkingException(Level.SEVERE, ex, level1Name + " already existing level1");
-                throw ex;
+//                throw ex;
             } else {
                 logParkingException(Level.SEVERE, ex, "(Failed insertion trial of '" + level1Name + "'");
             }
@@ -1359,7 +1360,7 @@ public class Globals {
         }
     }
     
-    public static int insertNewLevel2Affiliation(Integer L1_No, String PARTY_NAME) throws SQLException {   
+    public static int insertLevel2Affiliation(Integer L1_No, String PARTY_NAME) throws SQLException {   
         int result = 0;
         Connection conn = null;
         PreparedStatement insertL2name = null;

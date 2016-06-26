@@ -708,6 +708,8 @@ public class ControlEnums {
         SAVE_OVERWRITE_DIALOG(
                 "이 파일에 덮어 쓰겠습니까?", "Do you want to overwrite it?"),
         AUTO_LOGOUT("이 자동 로그아웃 됨!", " is forced to log out!"),
+        DUPLICATE_HIGH_AFFILI("중복되는 상위 소속 : ", "Duplicate high level affiliation : "),
+         
         OSPARKING_STOPS("오즈파킹 가동이 종료됨.", "OsParking operation finishes."),
         REBOOT_MESSAGE("입구 수 변화로 인하여," + System.getProperty("line.separator") +
                 "오즈파킹이 자동 종료됨."  + System.getProperty("line.separator") +
