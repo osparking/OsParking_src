@@ -40,7 +40,7 @@ import static com.osparking.global.Globals.closeDBstuff;
 import static com.osparking.global.Globals.initializeLoggers;
 import static com.osparking.global.Globals.insertBuilding;
 import static com.osparking.global.Globals.insertBuildingUnit;
-import static com.osparking.global.Globals.insertNewLevel1Affiliation;
+import static com.osparking.global.Globals.insertLevel1Affiliation;
 import static com.osparking.global.Globals.insertNewLevel2Affiliation;
 import static com.osparking.global.Globals.language;
 import static com.osparking.global.Globals.logParkingException;
@@ -429,6 +429,7 @@ public class ODSReader {
         int numBlankRow = 0;
         MutableCell cell = null;
         
+        sheet.setColumnCount(20);
         loops:
         for (int nRowIndex = 0; true; nRowIndex++)
         {
@@ -567,6 +568,7 @@ public class ODSReader {
                     if (nColIndex == 0) {
                         //<editor-fold defaultstate="collapsed" desc="-- Process Level 1 affiliations ">
                         if (cellStr.equals(DATA_END_MARKER)) {
+                            //<editor-fold desc="-- Process end of file marker">
                             if (parentForm != null) 
                             {
                                 parentForm.loadL1_Affiliation(0, "");
@@ -601,37 +603,31 @@ public class ODSReader {
 
                                 default:
                                     break;
-                            }                            
-                            
+                            }
                             JOptionPane.showConfirmDialog(null, sb.toString(),
-//                                    getTextFor(READ_AFFILIATION_ODS_DIALOG, sb, level1Count, level1Reject, 
-//                                            level2Count, level2Reject).toString(), 
                                      READ_ODS_DIALOGTITLE.getContent(), 
                                     JOptionPane.PLAIN_MESSAGE, INFORMATION_MESSAGE);                               
+                            //</editor-fold>
                             return;
                         }
                         else {
                             int result = 0;
+                            
                             try {
-                                result = insertNewLevel1Affiliation(cellStr);
-                            } catch (SQLException ex) {
-                                if (ex.getErrorCode() == ER_DUP_ENTRY)
-                                {
-                                    goodLevel1 = true;
-                                }
-                                else
-                                {
-                                    logParkingException(Level.SEVERE, ex, 
-                                            "(insertion tried level 1 name: " + cellStr + ")");
-                                }
-                            }  finally {
+                                result = insertLevel1Affiliation(cellStr);
                                 if (result == 1) {
                                     level1Count++;
                                     goodLevel1 = true;
                                 } else {
                                     level1Reject++;
+                                    goodLevel1 = true;
                                 }
-                            }                                  
+                            } catch (SQLException ex) {
+                                level1Reject++;
+                                if (ex.getErrorCode() == ER_DUP_ENTRY) {
+                                    goodLevel1 = true;
+                                }
+                            } 
 
                             if (goodLevel1) {
                                 // considering the case of level 1 is duplicate and can't be inserted
@@ -665,7 +661,6 @@ public class ODSReader {
                                 upperLevelMissingWarningNotGiven = false;
                                 JOptionPane.showConfirmDialog(null, 
                                         READ_FAIL_AFFILIATION_ODS_DIALOG.getContent() + cellStr,
-//                                        getTextFor(READ_FAIL_AFFILIATION_ODS_DIALOG, cellStr), 
                                         READ_ODS_FAIL_DIALOGTITLE.getContent(), 
                                         JOptionPane.PLAIN_MESSAGE, WARNING_MESSAGE); 
                             }

@@ -32,9 +32,9 @@ public class ControlEnums {
 
     public enum TableType {  
         L1_TABLE("상위 소속 ", "High Affili'"),
-        L2_TABLE("하위 부서", "Low Affili'"),
+        L2_TABLE("부서 목록", "Low Affili'"),
         Building("건물(동)", "Building"),
-        UnitTab("방/호실", "Unit(Rm)");
+        UnitTab("호실 목록", "Unit(Rm)");
         
         TableType(String korean, String english) {
             contents[KOREAN.ordinal()] = korean;
@@ -696,7 +696,7 @@ public class ControlEnums {
                         + "End Mark: a row having -1 at its first cell/column"),
         
         READ_FAIL_AFFILIATION_ODS_DIALOG(
-                "아래 하위소속이 속한 상위소속을 알수 없습니다." 
+                "아래 하위소속이 속한 상위소속을 알 수 없습니다." 
                         + System.getProperty("line.separator") 
                         + " - 하위 소속: ", 
                 "Can't tell to what higher affiliation do following lower affiliation belong" 

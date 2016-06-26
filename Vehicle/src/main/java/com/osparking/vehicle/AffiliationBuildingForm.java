@@ -38,7 +38,7 @@ import static com.osparking.global.Globals.highlightTableRow;
 import static com.osparking.global.Globals.initializeLoggers;
 import static com.osparking.global.Globals.insertBuilding;
 import static com.osparking.global.Globals.insertBuildingUnit;
-import static com.osparking.global.Globals.insertNewLevel1Affiliation;
+import static com.osparking.global.Globals.insertLevel1Affiliation;
 import static com.osparking.global.Globals.insertNewLevel2Affiliation;
 import static com.osparking.global.Globals.language;
 import static com.osparking.global.Globals.logParkingException;
@@ -1249,7 +1249,9 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     readODSpan.setPreferredSize(new java.awt.Dimension(140, 40));
 
     readSheet.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+    readSheet.setMnemonic('O');
     readSheet.setText(READ_ODS_BTN.getContent());
+    readSheet.setToolTipText("");
     readSheet.setMaximumSize(new Dimension(buttonWidthWide, buttonHeightNorm));
     readSheet.setMinimumSize(new Dimension(buttonWidthWide, buttonHeightNorm));
     readSheet.setPreferredSize(new Dimension(buttonWidthWide, buttonHeightNorm));
@@ -1455,7 +1457,11 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
                 int result = 0;
                 
                 try {
-                    result = insertNewLevel1Affiliation(L1Name);
+                    result = insertLevel1Affiliation(L1Name);
+                    if (result == 1)
+                    {
+                        loadL1_Affiliation(-1, L1Name); // Refresh the list
+                    }
                 } catch (SQLException ex) {
                     if (ex.getErrorCode() == ER_DUP_ENTRY) {
                         rejectUserInput(L1_Affiliation, rowIndex, LEVEL1_NAME_DIALOG.getContent());
@@ -1465,10 +1471,6 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
                                 "(insertion tried level1 name: " + L1Name + ")");
                     }
                 }                           
-                if (result == 1)
-                {
-                    loadL1_Affiliation(-1, L1Name); // Refresh the list
-                }
                 // </editor-fold>
             }
             //</editor-fold>
@@ -2270,64 +2272,12 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     }//GEN-LAST:event_deleteAll_AffiliationActionPerformed
 
     private void readSheetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_readSheetActionPerformed
-        try {
-            int returnVal = odsFileChooser.showOpenDialog(this);
-            if (returnVal == JFileChooser.APPROVE_OPTION) {                
-                File file = odsFileChooser.getSelectedFile();
-
-                Sheet sheet = null;
-                try {
-                    sheet = SpreadSheet.createFromFile(file).getSheet(0);
-                } catch (IOException ex) {
-                    Logger.getLogger(ODSReader.class.getName()).log(Level.SEVERE, null, ex);
-                }
-
-                if (sheet != null)
-                {
-                    ODSReader objODSReader = new ODSReader();
-
-                    WrappedInt level1_total = new WrappedInt();
-                    WrappedInt level2_total = new WrappedInt();
-
-                    if (objODSReader.checkAffiliationODS(sheet, level1_total, level2_total))
-                    {
-                        StringBuilder sb = new StringBuilder();
-                        sb.append("Below Data Recognized. Want to continue loading?");
-                        sb.append(System.getProperty("line.separator"));
-                        sb.append(" -Data: Higher Affiliation count: " + level1_total.getValue());
-                        sb.append(", Lower Affiliation count: " + level2_total.getValue());
-
-                        switch (language) {
-                            case KOREAN:
-                                sb.append("아래 자료가 식별되었습니다. 로딩을 계속합니까?");
-                                sb.append(System.getProperty("line.separator"));
-                                sb.append(" -자료: 상위소속 " + level1_total.getValue());
-                                sb.append("건, 하위소속 " + level2_total.getValue() + "건");
-                                break;
-                                
-                            case ENGLISH:
-                                sb.append("Below Data Recognized. Want to continue loading?");
-                                sb.append(System.getProperty("line.separator"));
-                                sb.append(" -Data: Higher Affiliation count: " + level1_total.getValue());
-                                sb.append(", Lower Affiliation count: " + level2_total.getValue());
-                                break;
-                                
-                            default:
-                                break;
-                        }
-                        
-                        int result = JOptionPane.showConfirmDialog(null, sb.toString(),
-                                READ_ODS_DIALOGTITLE.getContent(), 
-                                JOptionPane.YES_NO_OPTION);            
-                        if (result == JOptionPane.YES_OPTION) {                
-                            objODSReader.readAffiliationODS(sheet, this);
-                        }
-                    }                     
-                }
-            }
-        } catch (Exception ex) {
-            logParkingException(Level.SEVERE, ex, "(User Action: upload affiliation data from an ods sheet)");             
-        }           
+        if (currTable ==  L1_TABLE || currTable == L2_TABLE)
+        {
+            loadAffiliationsFromODS();
+        } else {
+            loadBuildingsFromODS();
+        }         
     }//GEN-LAST:event_readSheetActionPerformed
 
     private void ODSAffiliHelpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ODSAffiliHelpActionPerformed
@@ -2377,6 +2327,8 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
         return false;
     }
     
+    TableType currTable = null;
+    
     private void changeItemsEnabled(JTable table, boolean selected,
             JButton insertButton, JButton modifyButton, JButton deleteButton)
     {
@@ -2388,6 +2340,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
         
         //<editor-fold desc="-- Change selected panel border">
         if (selected) {
+            currTable = ((RXTable)table).getTableType();
             switch (((RXTable)table).getTableType()) {
                 case L1_TABLE:
                     topLeft.setBorder(new SoftBevelBorder(BevelBorder.RAISED));
@@ -3300,7 +3253,6 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
                     new Rectangle(listTable.getCellRect(rowIndex, 0, true)));
         }
         setFormMode(FormMode.CreateMode);
-//        csHelpLabel.setForeground(CommonData.tipColor);
         insertButton.setEnabled(false);
         cancelButton.setEnabled(true);
     }
@@ -3630,5 +3582,146 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
             closeDBstuff(conn, updateStmt, null, excepMsg);
             return result;
         }    
+    }
+
+    private void loadAffiliationsFromODS() {
+        try {
+            int returnVal = odsFileChooser.showOpenDialog(this);
+            if (returnVal == JFileChooser.APPROVE_OPTION) {                
+                File file = odsFileChooser.getSelectedFile();
+
+                Sheet sheet = null;
+                try {
+                    sheet = SpreadSheet.createFromFile(file).getSheet(0);
+                } catch (IOException ex) {
+                    Logger.getLogger(ODSReader.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
+                if (sheet != null)
+                {
+                    ODSReader objODSReader = new ODSReader();
+
+                    WrappedInt level1_total = new WrappedInt();
+                    WrappedInt level2_total = new WrappedInt();
+
+                    if (objODSReader.checkAffiliationODS(sheet, level1_total, level2_total))
+                    {
+                        StringBuilder sb = new StringBuilder();
+
+                        switch (language) {
+                            case KOREAN:
+                                sb.append("아래 자료가 식별되었습니다. 로딩을 계속합니까?");
+                                sb.append(System.getProperty("line.separator"));
+                                sb.append(" -자료: 상위소속 " + level1_total.getValue());
+                                sb.append("건, 하위소속 " + level2_total.getValue() + "건");
+                                break;
+                                
+                            case ENGLISH:
+                                sb.append("Below Data Recognized. Want to continue loading?");
+                                sb.append(System.getProperty("line.separator"));
+                                sb.append(" -Data: Higher Affiliation count: " + level1_total.getValue());
+                                sb.append(", Lower Affiliation count: " + level2_total.getValue());
+                                break;
+                                
+                            default:
+                                break;
+                        }
+                        
+                        int result = JOptionPane.showConfirmDialog(null, sb.toString(),
+                                READ_ODS_DIALOGTITLE.getContent(), 
+                                JOptionPane.YES_NO_OPTION);            
+                        if (result == JOptionPane.YES_OPTION) {                
+                            objODSReader.readAffiliationODS(sheet, this);
+                        }
+                    }                     
+                }
+            }
+        } catch (Exception ex) {
+            logParkingException(Level.SEVERE, ex, "(User Action: upload affiliation data from an ods sheet)");             
+        }               
+    }
+
+    private void loadBuildingsFromODS() {
+        try {
+            int returnVal = odsFileChooser.showOpenDialog(this);
+            if (returnVal == JFileChooser.APPROVE_OPTION) {                
+                File file = odsFileChooser.getSelectedFile();
+                ODSReader objODSReader = new ODSReader();
+
+                Sheet sheet = null;
+                try {
+                    sheet = SpreadSheet.createFromFile(file).getSheet(0);
+                } catch (IOException ex) {
+                    Logger.getLogger(ODSReader.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
+                if (sheet != null)
+                {
+                    ArrayList<Point> wrongCells = new ArrayList<Point>();
+                    WrappedInt buildingTotal = new WrappedInt();
+                    WrappedInt unitTotal = new WrappedInt();
+
+                    if (objODSReader.checkODS(sheet, wrongCells, buildingTotal, unitTotal))
+                    {
+                        StringBuilder sb = new StringBuilder();
+
+                        switch (language) {
+                            case KOREAN:
+                                sb.append("아래 자료가 식별되었습니다. 로딩을 계속합니까?");
+                                sb.append(System.getProperty("line.separator"));
+                                sb.append(" -자료: 건물 번호 " + buildingTotal.getValue());
+                                sb.append("건, 호실 번호 " + unitTotal.getValue() + "건");
+                                break;
+                                
+                            case ENGLISH:
+                                sb.append("Below Data Recognized. Want to continue loading?");
+                                sb.append(System.getProperty("line.separator"));
+                                sb.append(" - Data: Buildings count: " + buildingTotal.getValue());
+                                sb.append(", Room count: " + unitTotal.getValue());
+                                break;
+                                
+                            default:
+                                break;
+                        }
+                        
+                        int result = JOptionPane.showConfirmDialog(null, sb.toString(),
+                                READ_ODS_DIALOGTITLE.getContent(), 
+                                JOptionPane.YES_NO_OPTION);            
+                        if (result == JOptionPane.YES_OPTION) {                
+                            objODSReader.readODS(sheet, this);
+                            //loadBuilding(0, 0);
+                        }
+                    } else {
+                        // display wrong cell points if existed
+                        if (wrongCells.size() > 0) {
+                            String dialog = "";
+                            
+                            switch (language) {
+                                case KOREAN:
+                                    dialog = "다음 셀에서 숫자 이외의 자료가 탐지됨" 
+                                                + System.getProperty("line.separator") 
+                                                + getWrongCellPointString(wrongCells);
+                                    break;
+                                    
+                                case ENGLISH:
+                                    dialog = "Cells containing data other than numbers" 
+                                                + System.getProperty("line.separator") 
+                                                + getWrongCellPointString(wrongCells);
+                                    break;
+                                    
+                                default:
+                                    break;
+                            } 
+                            
+                            JOptionPane.showConfirmDialog(null, dialog,
+                                    READ_ODS_FAIL_DIALOGTITLE.getContent(), 
+                                    JOptionPane.PLAIN_MESSAGE, WARNING_MESSAGE);                      
+                        }
+                    }
+                }
+            }
+        } catch (Exception ex) {
+            logParkingException(Level.SEVERE, ex, "(User action: read user list ods file sheet)");
+        }            
     }
 }

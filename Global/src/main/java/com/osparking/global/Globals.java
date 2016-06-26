@@ -16,6 +16,7 @@
  */
 package com.osparking.global;
 
+import static com.mysql.jdbc.MysqlErrorNumbers.ER_DUP_ENTRY;
 import com.osparking.global.names.ControlEnums.Languages;
 import static com.osparking.global.names.ControlEnums.Languages.KOREAN;
 import static com.osparking.global.names.DB_Access.PIC_HEIGHT;
@@ -972,7 +973,7 @@ public class Globals {
                 message.append(ste.toString());
                 message.append(System.getProperty("line.separator"));
             }
-        }          
+        }
         
         if (progType == GENERAL_DEVICE) {
             textLogFile = associateTextFileToLogger(exceptionLog, progType);
@@ -1253,11 +1254,17 @@ public class Globals {
             createBuilding.setInt(1, bldgNo);
             result = createBuilding.executeUpdate();
         } catch (SQLException ex) {
+//            if (ex.getErrorCode() == ER_DUP_ENTRY) {
+//                logParkingException(Level.SEVERE, ex, level1Name + " already existing level1");
+//                throw ex;
+//            } else {
+//                logParkingException(Level.SEVERE, ex, "(Failed insertion trial of '" + level1Name + "'");
+//            }            
             logParkingException(Level.SEVERE, ex, "(inserted building: " + bldgNo + ")");
         } finally {
             closeDBstuff(conn, createBuilding, null, "(inserted building: " + bldgNo + ")");
+            return result;
         }
-        return result;
     }
     
     public static void closeInputStream(InputStream inStream, String statusMsg) {
@@ -1328,7 +1335,7 @@ public class Globals {
         }
     }     
     
-    public static int insertNewLevel1Affiliation(String level1Name) throws SQLException {
+    public static int insertLevel1Affiliation(String level1Name) throws SQLException {
         int result = 0;
         Connection conn = null;
         PreparedStatement createLevel1 = null;
@@ -1340,7 +1347,12 @@ public class Globals {
             createLevel1.setString(1, level1Name);
             result = createLevel1.executeUpdate();
         } catch (SQLException ex) {
-            logParkingException(Level.SEVERE, ex, "(insertion tried level1 name: " + level1Name + ")");
+            if (ex.getErrorCode() == ER_DUP_ENTRY) {
+                logParkingException(Level.SEVERE, ex, level1Name + " already existing level1");
+                throw ex;
+            } else {
+                logParkingException(Level.SEVERE, ex, "(Failed insertion trial of '" + level1Name + "'");
+            }
         } finally {
             closeDBstuff(conn, createLevel1, null, "insert " + level1Name);
             return result;
