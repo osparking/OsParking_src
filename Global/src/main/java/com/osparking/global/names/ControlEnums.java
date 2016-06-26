@@ -709,6 +709,9 @@ public class ControlEnums {
                 "이 파일에 덮어 쓰겠습니까?", "Do you want to overwrite it?"),
         AUTO_LOGOUT("이 자동 로그아웃 됨!", " is forced to log out!"),
         DUPLICATE_HIGH_AFFILI("중복되는 상위 소속 : ", "Duplicate high level affiliation : "),
+        DUPLICATE_LOW_AFFILI("중복되는 하위 소속 : ", "Duplicate low level affiliation : "),
+        DUPLICATE_BUILDING("중복되는 건물 번호 : ", "Duplicate building number : "),
+        DUPLICATE_UNIT("중복되는 호실 번호 : ", "Duplicate unit number : "),
          
         OSPARKING_STOPS("오즈파킹 가동이 종료됨.", "OsParking operation finishes."),
         REBOOT_MESSAGE("입구 수 변화로 인하여," + System.getProperty("line.separator") +

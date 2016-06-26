@@ -611,9 +611,8 @@ public class ODSReader {
                             return;
                         }
                         else {
-                            int result = 0;
+                            int result = insertLevel1Affiliation(cellStr);
                             
-                            result = insertLevel1Affiliation(cellStr);
                             if (result == 1) {
                                 level1Count++;
                                 goodLevel1 = true;
@@ -634,21 +633,14 @@ public class ODSReader {
                     } else {
                         //<editor-fold defaultstate="collapsed" desc="-- Process L2 name columns ">
                         if (goodLevel1) {
-                            int result = 0;
                             // try to insert Level 2 name with the Level 1 number
-                            try {
-                                result = insertLevel2Affiliation(L1_no, cellStr);
-                            } catch (SQLException ex) {
-                                if (ex.getErrorCode() != ER_DUP_ENTRY) {
-                                    logParkingException(Level.SEVERE, ex, 
-                                            "(insertion tried level 2: " + cellStr + ")");
-                                }
-                            }  finally {
-                                if (result == 1)
-                                    level2Count++;
-                                else
-                                    level2Reject++;
-                            }                              
+                            int result = insertLevel2Affiliation(L1_no, cellStr);
+                            
+                            if (result == 1) {
+                                level2Count++;
+                            } else {
+                                level2Reject++;
+                            }                            
                         } else {
                             level2Reject++;
                             if (upperLevelMissingWarningNotGiven)

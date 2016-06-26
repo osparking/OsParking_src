@@ -51,9 +51,10 @@ import static com.osparking.global.names.ControlEnums.DialogMSGTypes.BUILDING_DE
 import static com.osparking.global.names.ControlEnums.DialogMSGTypes.BUILDING_DELETE_ALL_RESULT_DAILOG;
 import static com.osparking.global.names.ControlEnums.DialogMSGTypes.BUILDING_IN_DIALOG;
 import static com.osparking.global.names.ControlEnums.DialogMSGTypes.DUPLICATE_HIGH_AFFILI;
+import static com.osparking.global.names.ControlEnums.DialogMSGTypes.DUPLICATE_LOW_AFFILI;
+import static com.osparking.global.names.ControlEnums.DialogMSGTypes.DUPLICATE_UNIT;
 import static com.osparking.global.names.ControlEnums.DialogMSGTypes.LEVEL1_NAME_DIALOG;
 import static com.osparking.global.names.ControlEnums.DialogMSGTypes.LEVEL2_NAME_DIALOG;
-import static com.osparking.global.names.ControlEnums.DialogMSGTypes.ROOM_IN_DIALOG;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.AFFILIATION_MODIFY_DIALOGTITLE;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.BUILDING_MODIFY_DIALOGTITLE;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.DELETE_ALL_DAILOGTITLE;
@@ -1606,26 +1607,18 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
                 int index = L1_Affiliation.convertRowIndexToModel(L1_Affiliation.getSelectedRow());                
                 Object parentKey = L1_Affiliation.getModel().getValueAt(index, 2);
 
-                int result = 0;
                 // <editor-fold defaultstate="collapsed" desc="-- Insert New Lower name and Refresh the List"> 
-                try {
-                    result = insertLevel2Affiliation((Integer)parentKey, L2Name);
-                } catch (SQLException ex) {
-                    if (ex.getErrorCode() == ER_DUP_ENTRY)
-                    {
-                        rejectUserInput(L2_Affiliation, rowIndex, LEVEL2_NAME_DIALOG.getContent());
-                    }
-                    else
-                    {
-                        logParkingException(Level.SEVERE, ex, 
-                                "(insertion tried L2 name: " + L2Name + ")");
-                    }
-                }                  
-                       
+                int result = insertLevel2Affiliation((Integer)parentKey, L2Name);
                 if (result == 1)
                 {
                     loadL2_Affiliation(parentKey, -1, L2Name); // Refresh the list
-                }
+                } else if (result == 2) {
+                    String msg = DUPLICATE_LOW_AFFILI.getContent() + L2Name;                   
+                    JOptionPane.showConfirmDialog(null, msg,
+                            ERROR_DIALOGTITLE.getContent(), 
+                            JOptionPane.WARNING_MESSAGE, WARNING_MESSAGE);                       
+                    abortCreation(L2_TABLE);
+                }                
                 //</editor-fold>
             }
             //</editor-fold>            
@@ -1805,7 +1798,13 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
                 if (result == 1)
                 {
                     loadBuilding(-1, bnoInteger); // Refresh building number list
-                }             
+                } else if (result == 2) {
+                    String msg = DUPLICATE_HIGH_AFFILI.getContent() + bnoInteger;                   
+                    JOptionPane.showConfirmDialog(null, msg,
+                            ERROR_DIALOGTITLE.getContent(), 
+                            JOptionPane.WARNING_MESSAGE, WARNING_MESSAGE);                       
+                    abortCreation(Building);
+                }
                 //</editor-fold>            
             }   
             //</editor-fold>            
@@ -1875,24 +1874,19 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
                 // Cond 2: Unit Number has a good decimal number string
                 // <editor-fold defaultstate="collapsed" desc="-- Actual creation of a new room number"> 
                 int unit_no = (Integer)unoInteger; 
-                int result = 0;
+                int result = insertBuildingUnit(unit_no, (Integer)bldgSeqNoObj);
                 
-                try {
-                    result = insertBuildingUnit(unit_no, (Integer)bldgSeqNoObj);
-                } catch (SQLException ex) {
-                    if (ex.getErrorCode() == ER_DUP_ENTRY)
-                    {
-                        rejectUserInput(UnitTable, rowIndex, ROOM_IN_DIALOG.getContent());
-                    }
-                    else
-                    {
-                        logParkingException(Level.SEVERE, ex, "(inserted UNIT: " + unit_no + ")");
-                    }
-                }
                 if (result == 1)
                 {
                     loadUnitNumberTable(bldgNo, (Integer)bldgSeqNoObj, -1, unit_no); // Refresh the list
-                }
+                } else if (result == 2) {
+                    String msg = DUPLICATE_UNIT.getContent() + unit_no;                   
+                    JOptionPane.showConfirmDialog(null, msg,
+                            ERROR_DIALOGTITLE.getContent(), 
+                            JOptionPane.WARNING_MESSAGE, WARNING_MESSAGE);                       
+                    abortCreation(UnitTab);
+                }    
+//                    rejectUserInput(UnitTable, rowIndex, ROOM_IN_DIALOG.getContent());
                 //</editor-fold>                
             }
             //</editor-fold>

@@ -1254,13 +1254,12 @@ public class Globals {
             createBuilding.setInt(1, bldgNo);
             result = createBuilding.executeUpdate();
         } catch (SQLException ex) {
-//            if (ex.getErrorCode() == ER_DUP_ENTRY) {
-//                logParkingException(Level.SEVERE, ex, level1Name + " already existing level1");
-//                throw ex;
-//            } else {
-//                logParkingException(Level.SEVERE, ex, "(Failed insertion trial of '" + level1Name + "'");
-//            }            
-            logParkingException(Level.SEVERE, ex, "(inserted building: " + bldgNo + ")");
+            if (ex.getErrorCode() == ER_DUP_ENTRY) {
+                result = 2;
+                logParkingException(Level.SEVERE, ex, bldgNo + " already existing building");
+            } else {
+                logParkingException(Level.SEVERE, ex, "(Insertion failed building : " + bldgNo);
+            }            
         } finally {
             closeDBstuff(conn, createBuilding, null, "(inserted building: " + bldgNo + ")");
             return result;
@@ -1313,7 +1312,7 @@ public class Globals {
         }        
     }     
     
-    public static int insertBuildingUnit(int unitNo, int bldgSeqNo) throws SQLException {   
+    public static int insertBuildingUnit(int unitNo, int bldgSeqNo) {   
         int result = 0;
         Connection conn = null; 
         PreparedStatement insertUnit = null;
@@ -1328,7 +1327,12 @@ public class Globals {
             result = insertUnit.executeUpdate();
             //</editor-fold>
         } catch (SQLException ex) {
-            logParkingException(Level.SEVERE, ex, "(inserted UNIT: " + unitNo + ")");
+            if (ex.getErrorCode() == ER_DUP_ENTRY) {
+                result = 2;
+                logParkingException(Level.SEVERE, ex, unitNo + " already existing unit number");
+            } else {
+                logParkingException(Level.SEVERE, ex, "(Insertion failed unit : " + unitNo);
+            }             
         } finally {
             closeDBstuff(conn, insertUnit, null, "insert unit " + unitNo);
             return result;    
@@ -1350,7 +1354,6 @@ public class Globals {
             if (ex.getErrorCode() == ER_DUP_ENTRY) {
                 result = 2;
                 logParkingException(Level.SEVERE, ex, level1Name + " already existing level1");
-//                throw ex;
             } else {
                 logParkingException(Level.SEVERE, ex, "(Failed insertion trial of '" + level1Name + "'");
             }
@@ -1360,7 +1363,7 @@ public class Globals {
         }
     }
     
-    public static int insertLevel2Affiliation(Integer L1_No, String PARTY_NAME) throws SQLException {   
+    public static int insertLevel2Affiliation(Integer L1_No, String level2Name) {   
         int result = 0;
         Connection conn = null;
         PreparedStatement insertL2name = null;
@@ -1371,14 +1374,18 @@ public class Globals {
             conn = JDBCMySQL.getConnection();
             insertL2name = conn.prepareStatement(sql);
             insertL2name.setInt(1, L1_No);
-            insertL2name.setString(2, PARTY_NAME);
-
+            insertL2name.setString(2, level2Name);
             result = insertL2name.executeUpdate();
             //</editor-fold>
         } catch (SQLException ex) {
-            logParkingException(Level.SEVERE, ex, "(insertion tried L2 name: " + PARTY_NAME + ")");
+            if (ex.getErrorCode() == ER_DUP_ENTRY) {
+                result = 2;
+                logParkingException(Level.SEVERE, ex, level2Name + " already exist as level 2");
+            } else {
+                logParkingException(Level.SEVERE, ex, "(Failed insertion trial of '" + level2Name + "'");
+            }            
         } finally {
-            closeDBstuff(conn, insertL2name, null, "insert " + L1_No + " " + PARTY_NAME);
+            closeDBstuff(conn, insertL2name, null, "insert " + L1_No + " " + level2Name);
             return result;    
         }
     }     
