@@ -182,7 +182,8 @@ public class ODSReader {
                     rowDataStarted = true;
                     if (nColIndex == 0) {
                         //<editor-fold defaultstate="collapsed" desc="-- Process building number column ">
-                        if (cellValue.getValue() == -1) {
+                        if (cellValue.getValue() == NUM_END_MARKER) {
+                            //<editor-fold desc="-- Process end of sheet marker">
                             if (parentForm != null) {
                                 parentForm.loadBuilding(0, 0);
                             }
@@ -221,30 +222,21 @@ public class ODSReader {
                             JOptionPane.showConfirmDialog(null, sb.toString(),
                                     READ_ODS_DIALOGTITLE.getContent(), 
                                     JOptionPane.PLAIN_MESSAGE, INFORMATION_MESSAGE);                               
+                            //</editor-fold>
                             return;
                         }
                         else {
-                            int result = 0;
-                            try {
-                                result = insertBuilding(cellValue.getValue());
-                            } catch (SQLException ex) {
-                                if (ex.getErrorCode() == ER_DUP_ENTRY)
-                                {
+                            int result = insertBuilding(cellValue.getValue());
+                            
+                            if (result == ER_NO) {
+                                buildingCount++;
+                                goodBuilding = true;
+                            } else {
+                                if (result == ER_DUP_ENTRY) {
                                     goodBuilding = true;
                                 }
-                                else
-                                {
-                                    logParkingException(Level.SEVERE, ex, "(inserted building: " 
-                                            + cellValue.getValue() + ")");
-                                }
-                            }  finally {
-                                if (result == 1) {
-                                    buildingCount++;
-                                    goodBuilding = true;
-                                } else {
-                                    buildingReject++;
-                                }
-                            }                                  
+                                buildingReject++;
+                            }                            
 
                             if (goodBuilding) {
                                 bldgSeqNo = getBldgSeqNo(cellValue.getValue());
@@ -329,6 +321,7 @@ public class ODSReader {
     }
     
     final String DATA_END_MARKER = "END";
+    final int NUM_END_MARKER = -1;
 
     public boolean checkAffiliationODS(Sheet sheet, WrappedInt level1_Total, WrappedInt level2_Total) {
         
@@ -607,13 +600,13 @@ public class ODSReader {
                         else {
                             int result = insertLevel1Affiliation(cellStr);
                             
-                            if (result == 1) {
+                            if (result == ER_NO) {
                                 level1Count++;
                                 goodLevel1 = true;
-                            } else if (result == 2) { // duplicate entry
-                                level1Reject++;
-                                goodLevel1 = true;
                             } else {
+                                if (result == ER_DUP_ENTRY) {
+                                    goodLevel1 = true;
+                                }
                                 level1Reject++;
                             }
 

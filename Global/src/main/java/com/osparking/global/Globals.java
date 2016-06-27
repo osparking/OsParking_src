@@ -1245,8 +1245,8 @@ public class Globals {
         return new DefaultTableModel(data, columnNames);
     }
     
-    public static int insertBuilding(int bldgNo) throws SQLException {
-        int result = 0;
+    public static int insertBuilding(int bldgNo) {
+        int result = ER_YES;
         Connection conn = null;
         PreparedStatement createBuilding = null;
 
@@ -1255,10 +1255,12 @@ public class Globals {
             String sql = "Insert Into Building_Table(BLDG_NO) Values (?)";
             createBuilding = conn.prepareStatement(sql);
             createBuilding.setInt(1, bldgNo);
-            result = createBuilding.executeUpdate();
+            if (createBuilding.executeUpdate() == 1) {
+                result = ER_NO;
+            }
         } catch (SQLException ex) {
             if (ex.getErrorCode() == ER_DUP_ENTRY) {
-                result = 2;
+                result = ER_DUP_ENTRY;
                 logParkingException(Level.SEVERE, ex, bldgNo + " already existing building");
             } else {
                 logParkingException(Level.SEVERE, ex, "(Insertion failed building : " + bldgNo);
@@ -1345,7 +1347,7 @@ public class Globals {
     }     
     
     public static int insertLevel1Affiliation(String level1Name) {
-        int result = 0;
+        int result = ER_YES;
         Connection conn = null;
         PreparedStatement createLevel1 = null;
 
@@ -1355,9 +1357,12 @@ public class Globals {
             createLevel1 = conn.prepareStatement(sql);
             createLevel1.setString(1, level1Name);
             result = createLevel1.executeUpdate();
+            if (result == 1) {
+                result = ER_NO;
+            }
         } catch (SQLException ex) {
             if (ex.getErrorCode() == ER_DUP_ENTRY) {
-                result = 2;
+                result = ER_DUP_ENTRY;
                 logParkingException(Level.SEVERE, ex, level1Name + " already existing level1");
             } else {
                 logParkingException(Level.SEVERE, ex, "(Failed insertion trial of '" + level1Name + "'");

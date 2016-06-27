@@ -1464,14 +1464,13 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
                 // <editor-fold defaultstate="collapsed" desc="-- Insert New Higher name and Refresh the List">               
                 int result = insertLevel1Affiliation(L1Name);
                 
-                if (result == 1)
-                {
+                if (result == ER_NO) {
                     loadL1_Affiliation(-1, L1Name); // Refresh the list
-                } else if (result == 2) {
-                    String msg = DUPLICATE_HIGH_AFFILI.getContent() + L1Name;                   
+                } else if (result == ER_DUP_ENTRY) {
+                    String msg = DUPLICATE_HIGH_AFFILI.getContent() + L1Name;
                     JOptionPane.showConfirmDialog(null, msg,
-                            ERROR_DIALOGTITLE.getContent(), 
-                            JOptionPane.WARNING_MESSAGE, WARNING_MESSAGE);                       
+                            ERROR_DIALOGTITLE.getContent(),
+                            JOptionPane.WARNING_MESSAGE, WARNING_MESSAGE);
                     abortCreation(L1_TABLE);
                 }
                 // </editor-fold>
@@ -1786,30 +1785,19 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
             } else {
                 // Cond 2: Building Number has a good decimal number string
                 // <editor-fold defaultstate="collapsed" desc="-- Actual creation of a new building(number)">            
-                int result = 0;
-
-                try {
-                    result = insertBuilding(bnoInteger);
-                } catch (SQLException ex) {
-                    if (ex.getErrorCode() == ER_DUP_ENTRY)
-                    {
-                        rejectUserInput(BuildingTable, rowIndex, BUILDING_IN_DIALOG.getContent());
-                    }
-                    else {
-                        logParkingException(Level.SEVERE, ex, 
-                                "(inserted building: " + bnoInteger + ")");
-                    }
-                }
-                if (result == 1)
-                {
+                int result = insertBuilding(bnoInteger);;
+                
+                if (result == ER_NO) {
                     loadBuilding(-1, bnoInteger); // Refresh building number list
-                } else if (result == 2) {
-                    String msg = DUPLICATE_HIGH_AFFILI.getContent() + bnoInteger;                   
-                    JOptionPane.showConfirmDialog(null, msg,
-                            ERROR_DIALOGTITLE.getContent(), 
-                            JOptionPane.WARNING_MESSAGE, WARNING_MESSAGE);                       
-                    abortCreation(Building);
-                }
+                } else {
+                    if (result == ER_DUP_ENTRY) {
+                        String msg = DUPLICATE_HIGH_AFFILI.getContent() + bnoInteger;                   
+                        JOptionPane.showConfirmDialog(null, msg,
+                                ERROR_DIALOGTITLE.getContent(), 
+                                JOptionPane.WARNING_MESSAGE, WARNING_MESSAGE);                       
+                        abortCreation(Building);
+                    }
+                }                  
                 //</editor-fold>            
             }   
             //</editor-fold>            
@@ -2493,6 +2481,12 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
             UnitTable.getCellEditor().stopCellEditing();
             setFormMode(FormMode.NormalMode);  
             cancelUnit_Button.setEnabled(false);
+
+            int bIndex = BuildingTable.convertRowIndexToView(BuildingTable.getSelectedRow());
+            int bldgNo = (Integer)(BuildingTable.getModel().getValueAt(bIndex, 1));    
+            int bldgSeqNo = (Integer)(BuildingTable.getModel().getValueAt(bIndex, 2));  
+                
+            loadUnitNumberTable(bldgNo, bldgSeqNo, UnitTable.getSelectedRow(), 0);
         }
     }//GEN-LAST:event_cancelUnit_ButtonActionPerformed
 
@@ -2933,7 +2927,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
                     
                 default:
                     break;
-            }            
+            }   
             
             UnitLabel.setText(label); 
             
@@ -3668,7 +3662,6 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
             int returnVal = odsFileChooser.showOpenDialog(this);
             if (returnVal == JFileChooser.APPROVE_OPTION) {                
                 File file = odsFileChooser.getSelectedFile();
-                ODSReader objODSReader = new ODSReader();
 
                 Sheet sheet = null;
                 try {
@@ -3679,6 +3672,8 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
 
                 if (sheet != null)
                 {
+                    ODSReader objODSReader = new ODSReader();
+                
                     ArrayList<Point> wrongCells = new ArrayList<Point>();
                     WrappedInt buildingTotal = new WrappedInt();
                     WrappedInt unitTotal = new WrappedInt();
