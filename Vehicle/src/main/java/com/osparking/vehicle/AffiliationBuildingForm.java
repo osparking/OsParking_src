@@ -24,6 +24,7 @@ import static com.osparking.global.CommonData.buttonHeightNorm;
 import static com.osparking.global.CommonData.buttonWidthNorm;
 import static com.osparking.global.CommonData.buttonWidthWide;
 import static com.osparking.global.CommonData.pointColor;
+import static com.osparking.global.DataSheet.saveODSfile;
 import static com.osparking.global.Globals.BLDG_TAB_WIDTH;
 import static com.osparking.global.Globals.PopUpBackground;
 import static com.osparking.global.Globals.font_Size;
@@ -60,6 +61,7 @@ import static com.osparking.global.names.ControlEnums.DialogMSGTypes.EMPTY_HIGH_
 import static com.osparking.global.names.ControlEnums.DialogMSGTypes.EMPTY_LOW_AFFILI;
 import static com.osparking.global.names.ControlEnums.DialogMSGTypes.LEVEL1_NAME_DIALOG;
 import static com.osparking.global.names.ControlEnums.DialogMSGTypes.LEVEL2_NAME_DIALOG;
+import static com.osparking.global.names.ControlEnums.DialogMSGTypes.USER_SAVE_ODS_FAIL_DIALOG;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.AFFILIATION_MODIFY_DIALOGTITLE;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.BUILDING_MODIFY_DIALOGTITLE;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.DELETE_ALL_DAILOGTITLE;
@@ -2111,87 +2113,15 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     }//GEN-LAST:event_UnitTableFocusLost
 
     private void saveSheetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveSheetActionPerformed
-        try {
-            int returnVal = odsFileChooser.showOpenDialog(this);
-            if (returnVal == JFileChooser.APPROVE_OPTION) {                
-                File file = odsFileChooser.getSelectedFile();
-                ODSReader objODSReader = new ODSReader();
-
-                Sheet sheet = null;
-                try {
-                    sheet = SpreadSheet.createFromFile(file).getSheet(0);
-                } catch (IOException ex) {
-                    Logger.getLogger(ODSReader.class.getName()).log(Level.SEVERE, null, ex);
-                }
-
-                if (sheet != null)
-                {
-                    ArrayList<Point> wrongCells = new ArrayList<Point>();
-                    WrappedInt buildingTotal = new WrappedInt();
-                    WrappedInt unitTotal = new WrappedInt();
-
-                    if (objODSReader.checkODS(sheet, wrongCells, buildingTotal, unitTotal))
-                    {
-                        StringBuilder sb = new StringBuilder();
-
-                        switch (language) {
-                            case KOREAN:
-                                sb.append("아래 자료가 식별되었습니다. 로딩을 계속합니까?");
-                                sb.append(System.getProperty("line.separator"));
-                                sb.append(" -자료: 건물 번호 " + buildingTotal.getValue());
-                                sb.append("건, 호실 번호 " + unitTotal.getValue() + "건");
-                                break;
-                                
-                            case ENGLISH:
-                                sb.append("Below Data Recognized. Want to continue loading?");
-                                sb.append(System.getProperty("line.separator"));
-                                sb.append(" - Data: Buildings count: " + buildingTotal.getValue());
-                                sb.append(", Room count: " + unitTotal.getValue());
-                                break;
-                                
-                            default:
-                                break;
-                        }
-                        
-                        int result = JOptionPane.showConfirmDialog(null, sb.toString(),
-                                READ_ODS_DIALOGTITLE.getContent(), 
-                                JOptionPane.YES_NO_OPTION);            
-                        if (result == JOptionPane.YES_OPTION) {                
-                            objODSReader.readODS(sheet, this);
-                            //loadBuilding(0, 0);
-                        }
-                    } else {
-                        // display wrong cell points if existed
-                        if (wrongCells.size() > 0) {
-                            String dialog = "";
-                            
-                            switch (language) {
-                                case KOREAN:
-                                    dialog = "다음 셀에서 숫자 이외의 자료가 탐지됨" 
-                                                + System.getProperty("line.separator") 
-                                                + getWrongCellPointString(wrongCells);
-                                    break;
-                                    
-                                case ENGLISH:
-                                    dialog = "Cells containing data other than numbers" 
-                                                + System.getProperty("line.separator") 
-                                                + getWrongCellPointString(wrongCells);
-                                    break;
-                                    
-                                default:
-                                    break;
-                            } 
-                            
-                            JOptionPane.showConfirmDialog(null, dialog,
-                                    READ_ODS_FAIL_DIALOGTITLE.getContent(), 
-                                    JOptionPane.PLAIN_MESSAGE, WARNING_MESSAGE);                      
-                        }
-                    }
-                }
-            }
-        } catch (Exception ex) {
-            logParkingException(Level.SEVERE, ex, "(User action: read user list ods file sheet)");
-        }            
+        if (affiL1_Control.isSelected()) {
+            saveODSfile(this, L1_Affiliation, odsFileChooser, USER_SAVE_ODS_FAIL_DIALOG.getContent());
+        } else if (affiL2_Control.isSelected()) {
+            saveODSfile(this, L2_Affiliation, odsFileChooser, USER_SAVE_ODS_FAIL_DIALOG.getContent());
+        } else if (buildingControl.isSelected()) {
+            saveODSfile(this, BuildingTable, odsFileChooser, USER_SAVE_ODS_FAIL_DIALOG.getContent());
+        } else if (unitControl.isSelected()) {
+            saveODSfile(this, UnitTable, odsFileChooser, USER_SAVE_ODS_FAIL_DIALOG.getContent());
+        }
     }//GEN-LAST:event_saveSheetActionPerformed
 
     private void deleteAll_AffiliationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteAll_AffiliationActionPerformed
