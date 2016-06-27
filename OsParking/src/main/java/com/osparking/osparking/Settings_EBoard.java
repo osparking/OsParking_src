@@ -25,7 +25,6 @@ import java.util.logging.Level;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 import javax.swing.event.ChangeEvent;
@@ -33,6 +32,7 @@ import javax.swing.event.ChangeListener;
 import static com.osparking.global.names.DB_Access.readEBoardSettings;
 import com.osparking.global.Globals;
 import static com.osparking.global.Globals.*;
+import com.osparking.global.names.ControlEnums.FormMode;
 import com.osparking.global.names.ConvComboBoxItem;
 import com.osparking.global.names.JDBCMySQL;
 import com.osparking.global.names.OSP_enums;
@@ -45,7 +45,6 @@ import com.osparking.global.names.OSP_enums.EBD_Fonts;
 import com.osparking.global.names.OSP_enums.EBD_Effects;
 import static com.osparking.osparking.device.EBoardManager.sendEBoardDefaultSetting;
 import static com.osparking.global.names.DB_Access.gateCount;
-import com.osparking.global.names.OSP_enums.FormMode;
 import com.osparking.global.names.OSP_enums.OpLogLevel;
 import com.osparking.global.names.IDevice;
 
@@ -58,7 +57,7 @@ public class Settings_EBoard extends javax.swing.JFrame {
     private HashMap<String,Component> componentMap = new HashMap<String,Component>();
     private EBD_DisplayUsage currentTab = DEFAULT_TOP_ROW, previousTab = DEFAULT_TOP_ROW;
     Settings_System parent = null;
-    FormMode formMode = FormMode.SEARCHING;
+    FormMode formMode = FormMode.NormalMode;
     /**
      * Creates new form TestDisplay
      */
@@ -1096,9 +1095,9 @@ public class Settings_EBoard extends javax.swing.JFrame {
     
     private void changeEnabled_of_SaveCancelButtons(boolean onOff) {
         if (onOff) {
-            formMode = FormMode.MODIFICATION;
+            formMode = FormMode.UpdateMode;
         } else {
-            formMode = FormMode.SEARCHING;
+            formMode = FormMode.NormalMode;
         }
         ((JButton) getComponentByName("btn_Save" + currentTab.ordinal())).setEnabled(onOff);
         ((JButton) getComponentByName("btn_Cancel" + currentTab.ordinal())).setEnabled(onOff);        
@@ -1894,7 +1893,7 @@ public class Settings_EBoard extends javax.swing.JFrame {
     }
 
     private void tryToCloseEBDSettingsForm() {
-        if (formMode == FormMode.MODIFICATION) {
+        if (formMode == FormMode.UpdateMode) {
             JOptionPane.showMessageDialog(this, 
                     "E-Board settings is being modified," + System.lineSeparator()
                             + "Either [Save] or [Cancel] current changes!"); 

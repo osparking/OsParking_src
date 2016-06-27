@@ -17,6 +17,8 @@
 package com.osparking.vehicle;
 
 import static com.mysql.jdbc.MysqlErrorNumbers.ER_DUP_ENTRY;
+import static com.mysql.jdbc.MysqlErrorNumbers.ER_NO;
+import static com.mysql.jdbc.MysqlErrorNumbers.ER_YES;
 import com.osparking.global.CommonData;
 import static com.osparking.global.CommonData.buttonHeightNorm;
 import static com.osparking.global.CommonData.buttonWidthNorm;
@@ -50,9 +52,12 @@ import static com.osparking.global.names.ControlEnums.DialogMSGTypes.AFFILIATION
 import static com.osparking.global.names.ControlEnums.DialogMSGTypes.BUILDING_DELETE_ALL_DAILOG;
 import static com.osparking.global.names.ControlEnums.DialogMSGTypes.BUILDING_DELETE_ALL_RESULT_DAILOG;
 import static com.osparking.global.names.ControlEnums.DialogMSGTypes.BUILDING_IN_DIALOG;
+import static com.osparking.global.names.ControlEnums.DialogMSGTypes.DUPLICATE_BUILDING;
 import static com.osparking.global.names.ControlEnums.DialogMSGTypes.DUPLICATE_HIGH_AFFILI;
 import static com.osparking.global.names.ControlEnums.DialogMSGTypes.DUPLICATE_LOW_AFFILI;
 import static com.osparking.global.names.ControlEnums.DialogMSGTypes.DUPLICATE_UNIT;
+import static com.osparking.global.names.ControlEnums.DialogMSGTypes.EMPTY_HIGH_AFFILI;
+import static com.osparking.global.names.ControlEnums.DialogMSGTypes.EMPTY_LOW_AFFILI;
 import static com.osparking.global.names.ControlEnums.DialogMSGTypes.LEVEL1_NAME_DIALOG;
 import static com.osparking.global.names.ControlEnums.DialogMSGTypes.LEVEL2_NAME_DIALOG;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.AFFILIATION_MODIFY_DIALOGTITLE;
@@ -358,7 +363,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addComponent(jSeparator2, javax.swing.GroupLayout.DEFAULT_SIZE, 3, Short.MAX_VALUE)
+                .addComponent(jSeparator2, javax.swing.GroupLayout.DEFAULT_SIZE, 4, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -391,12 +396,12 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
         helpPanel.setLayout(helpPanelLayout);
         helpPanelLayout.setHorizontalGroup(
             helpPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(csHelpLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 300, Short.MAX_VALUE)
+            .addComponent(csHelpLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
         );
         helpPanelLayout.setVerticalGroup(
             helpPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(helpPanelLayout.createSequentialGroup()
-                .addComponent(csHelpLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 19, Short.MAX_VALUE)
+                .addComponent(csHelpLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 20, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -499,7 +504,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     radioPanel1.setLayout(radioPanel1Layout);
     radioPanel1Layout.setHorizontalGroup(
         radioPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-        .addGap(0, 0, Short.MAX_VALUE)
+        .addGap(0, 10, Short.MAX_VALUE)
         .addGroup(radioPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(radioPanel1Layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
@@ -508,7 +513,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     );
     radioPanel1Layout.setVerticalGroup(
         radioPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-        .addGap(0, 0, Short.MAX_VALUE)
+        .addGap(0, 21, Short.MAX_VALUE)
         .addGroup(radioPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(radioPanel1Layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
@@ -699,7 +704,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     radioPanel2.setLayout(radioPanel2Layout);
     radioPanel2Layout.setHorizontalGroup(
         radioPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-        .addGap(0, 0, Short.MAX_VALUE)
+        .addGap(0, 10, Short.MAX_VALUE)
         .addGroup(radioPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(radioPanel2Layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
@@ -708,7 +713,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     );
     radioPanel2Layout.setVerticalGroup(
         radioPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-        .addGap(0, 0, Short.MAX_VALUE)
+        .addGap(0, 21, Short.MAX_VALUE)
         .addGroup(radioPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(radioPanel2Layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
@@ -913,7 +918,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     radioPanel3.setLayout(radioPanel3Layout);
     radioPanel3Layout.setHorizontalGroup(
         radioPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-        .addGap(0, 0, Short.MAX_VALUE)
+        .addGap(0, 10, Short.MAX_VALUE)
         .addGroup(radioPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(radioPanel3Layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
@@ -922,7 +927,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     );
     radioPanel3Layout.setVerticalGroup(
         radioPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-        .addGap(0, 0, Short.MAX_VALUE)
+        .addGap(0, 21, Short.MAX_VALUE)
         .addGroup(radioPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(radioPanel3Layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
@@ -1108,7 +1113,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     radioPanel4.setLayout(radioPanel4Layout);
     radioPanel4Layout.setHorizontalGroup(
         radioPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-        .addGap(0, 0, Short.MAX_VALUE)
+        .addGap(0, 10, Short.MAX_VALUE)
         .addGroup(radioPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(radioPanel4Layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
@@ -1117,7 +1122,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     );
     radioPanel4Layout.setVerticalGroup(
         radioPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-        .addGap(0, 0, Short.MAX_VALUE)
+        .addGap(0, 21, Short.MAX_VALUE)
         .addGroup(radioPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(radioPanel4Layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
@@ -1208,11 +1213,11 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     h10_pan_4.setLayout(h10_pan_4Layout);
     h10_pan_4Layout.setHorizontalGroup(
         h10_pan_4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-        .addGap(0, 0, Short.MAX_VALUE)
+        .addGap(0, 128, Short.MAX_VALUE)
     );
     h10_pan_4Layout.setVerticalGroup(
         h10_pan_4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-        .addGap(0, 0, Short.MAX_VALUE)
+        .addGap(0, 10, Short.MAX_VALUE)
     );
 
     botRight.add(h10_pan_4, java.awt.BorderLayout.SOUTH);
@@ -1477,13 +1482,13 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
         {
             // <editor-fold defaultstate="collapsed" desc="-- Handle higher affiliation name update">
             if (L1Name.isEmpty()) {
-                rejectEmptyInput(L1_Affiliation, rowIndex, "Can't save empty string as a name"); 
+                String msg = EMPTY_HIGH_AFFILI.getContent() + L1Name;  
+                abortModification(msg, rowIndex, L1_Affiliation);                      
+                return;                
             } else {
+                // <editor-fold defaultstate="collapsed" desc="-- Update high affiliation name">
                 Object L1No = model.getValueAt(rowIndex, 2);
-
                 int result = 0;
-                
-                // <editor-fold defaultstate="collapsed" desc="-- Actual update of a higher affiliation name">
                 Connection conn = null;
                 PreparedStatement modifyAffiliation = null;
                 String excepMsg = "(Original L1 Affili': " + prevL1Name + ")";
@@ -1498,18 +1503,17 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
                     result = modifyAffiliation.executeUpdate();
                 } catch (SQLException ex) {
                     if (ex.getErrorCode() == ER_DUP_ENTRY) {
-                        rejectUserInput(L1_Affiliation, rowIndex, LEVEL1_NAME_DIALOG.getContent());
-                    }
-                    else {
-                        logParkingException(Level.SEVERE, ex, excepMsg);
+                        String msg = DUPLICATE_HIGH_AFFILI.getContent() + L1Name;  
+                        abortModification(msg, rowIndex, L1_Affiliation);                      
+                        return;
                     }
                 } finally {
                     closeDBstuff(conn, modifyAffiliation, null, excepMsg);
                 }    
-                //</editor-fold>   
                 if (result == 1) {
                     loadL1_Affiliation(-1, L1Name); // Refresh higher affiliation list
                 } 
+                //</editor-fold>   
             } 
             //</editor-fold>                             
         }
@@ -1627,7 +1631,9 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
         {
             //<editor-fold desc="-- Handle building number update">
             if (L2Name.trim().isEmpty()) {
-                rejectEmptyInput(L2_Affiliation, rowIndex, "Can't save empty string as a name");
+                String msg = EMPTY_LOW_AFFILI.getContent();
+                abortModification(msg, rowIndex, L2_Affiliation);                      
+                return;                   
             } else {
                 int index1 = L1_Affiliation.convertRowIndexToView(
                         L1_Affiliation.getSelectedRow());
@@ -1650,10 +1656,9 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
                     result = updateL2name.executeUpdate();
                 } catch (SQLException ex) {
                     if (ex.getErrorCode() == ER_DUP_ENTRY) {
-                        rejectUserInput(L2_Affiliation, rowIndex, LEVEL2_NAME_DIALOG.getContent());
-                    }
-                    else {
-                        logParkingException(Level.SEVERE, ex, excepMsg);
+                        String msg = DUPLICATE_LOW_AFFILI.getContent() + L2Name;
+                        abortModification(msg, rowIndex, L2_Affiliation); 
+                        return;
                     }
                 } finally {
                     closeDBstuff(conn, updateL2name, null, excepMsg);
@@ -1820,9 +1825,14 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
                 String excepMsg = "(Original building no: " + prevBldgNo + ")";
                 int result = updateBuildingUnit(rowIndex, bnoInteger, seqNo, sql, 
                         excepMsg, BuildingTable, BUILDING_IN_DIALOG.getContent());
-                if (result == 1) {
+                
+                if (result == ER_NO) {
                     loadBuilding(-1, bnoInteger); // Refresh building number list after update
-                } 
+                } else if (result == ER_DUP_ENTRY) {
+                    String msg = DUPLICATE_BUILDING.getContent() + bnoInteger;                   
+                    abortModification(msg, rowIndex, BuildingTable);
+                    return;
+                }
                 //</editor-fold>            
             }
             //</editor-fold>            
@@ -1876,17 +1886,15 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
                 int unit_no = (Integer)unoInteger; 
                 int result = insertBuildingUnit(unit_no, (Integer)bldgSeqNoObj);
                 
-                if (result == 1)
-                {
+                if (result == ER_NO) {
                     loadUnitNumberTable(bldgNo, (Integer)bldgSeqNoObj, -1, unit_no); // Refresh the list
-                } else if (result == 2) {
+                } else if (result == ER_DUP_ENTRY) {
                     String msg = DUPLICATE_UNIT.getContent() + unit_no;                   
                     JOptionPane.showConfirmDialog(null, msg,
                             ERROR_DIALOGTITLE.getContent(), 
                             JOptionPane.WARNING_MESSAGE, WARNING_MESSAGE);                       
                     abortCreation(UnitTab);
                 }    
-//                    rejectUserInput(UnitTable, rowIndex, ROOM_IN_DIALOG.getContent());
                 //</editor-fold>                
             }
             //</editor-fold>
@@ -1903,10 +1911,14 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
                 String excepMsg = "(Oiriginal UNIT No: " + prevUnitNo + ")";
                 int result = updateBuildingUnit(rowIndex, unoInteger, seqNo,
                         sql, excepMsg, BuildingTable, BUILDING_IN_DIALOG.getContent());
-                if (result == 1) {
+                if (result == ER_NO) {
                     // Refresh room number list table after a room number update
                     loadUnitNumberTable((Integer)bldgNo, bModel.getValueAt(bIndex, 2), -1, unoInteger); 
-                } 
+                } else if (result == ER_DUP_ENTRY) {
+                    String msg = DUPLICATE_UNIT.getContent() + unoInteger;  
+                    abortModification(msg, rowIndex, UnitTable);
+                    return;
+                }
                 //</editor-fold>
             }
             //</editor-fold>            
@@ -2453,6 +2465,11 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
             L2_Affiliation.getCellEditor().stopCellEditing();
             setFormMode(FormMode.NormalMode);  
             cancelL2_Button.setEnabled(false);
+            
+            int index1 = followAndGetTrueIndex(L1_Affiliation);
+            Object L1_no = L1_Affiliation.getModel().getValueAt(index1, 2);
+                    
+            loadL2_Affiliation(L1_no, L2_Affiliation.getSelectedRow(), "");
         }
     }//GEN-LAST:event_cancelL2_ButtonActionPerformed
 
@@ -3549,25 +3566,39 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
         }
     }
 
-    private int updateBuildingUnit(int row, int data, int seqNo,
+    /**
+     * 
+     * @param rowIndex
+     * @param data
+     * @param seqNo
+     * @param sql
+     * @param excepMsg
+     * @param BuildingTable
+     * @param content
+     * @return 
+     */
+    private int updateBuildingUnit(int rowIndex, int data, int seqNo,
             String sql, String excepMsg, JTable BuildingTable, String content) 
     {
         Connection conn = null;
         PreparedStatement updateStmt = null;
-        int result = 0;
+        int result = ER_YES;
         
         try {
             conn = getConnection();
             updateStmt = conn.prepareStatement(sql);
             updateStmt.setInt(1, data); 
             updateStmt.setInt(2, seqNo);
-            result = updateStmt.executeUpdate();
+            if (updateStmt.executeUpdate() == 1)  {
+                result = ER_NO;
+            }
         } catch (SQLException ex) {
             if (ex.getErrorCode() == ER_DUP_ENTRY) {
-                rejectUserInput(BuildingTable, row, content);
+                result = ER_DUP_ENTRY;
+                logParkingException(Level.SEVERE, ex, data + " already existing building");
             }
             else {
-                logParkingException(Level.SEVERE, ex, excepMsg);
+                logParkingException(Level.SEVERE, ex, "(Insertion failed building : " + data);
             }
         } finally {
             closeDBstuff(conn, updateStmt, null, excepMsg);
@@ -3714,5 +3745,14 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
         } catch (Exception ex) {
             logParkingException(Level.SEVERE, ex, "(User action: read user list ods file sheet)");
         }            
+    }
+
+    private void abortModification(String msg, int row, JTable table) {
+        JOptionPane.showConfirmDialog(null, msg,
+                ERROR_DIALOGTITLE.getContent(), 
+                JOptionPane.WARNING_MESSAGE, WARNING_MESSAGE);                       
+        if (table.editCellAt(row, 1)) {
+            table.getEditorComponent().requestFocus();
+        }      
     }
 }

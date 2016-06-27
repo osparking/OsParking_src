@@ -26,6 +26,7 @@ import static com.osparking.global.Globals.font_Style;
 import static com.osparking.global.Globals.font_Type;
 import static com.osparking.global.Globals.getQuest20_Icon;
 import static com.osparking.global.Globals.initializeLoggers;
+import com.osparking.global.names.ControlEnums.FormMode;
 import static com.osparking.global.names.DB_Access.connectionType;
 import static com.osparking.global.names.DB_Access.gateCount;
 import static com.osparking.global.names.DB_Access.readSettings;
@@ -74,7 +75,7 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
     Settings_System parent = null;
     LEDnoticeManager manager;
     int gateNo;
-    OSP_enums.FormMode formMode = OSP_enums.FormMode.SEARCHING;
+    FormMode formMode = FormMode.NormalMode;
 
     private HashMap<String, Component> componentMap = new HashMap<String,Component>();
     
@@ -2966,7 +2967,7 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
     }    
 
     private void tryToCloseEBDSettingsForm() {
-        if (formMode == OSP_enums.FormMode.MODIFICATION) {
+        if (formMode == FormMode.UpdateMode) {
             JOptionPane.showMessageDialog(this, 
                     "E-Board settings is being modified," + System.lineSeparator()
                             + "Either [Save] or [Cancel] current changes!"); 

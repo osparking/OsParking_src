@@ -17,6 +17,7 @@
 package com.osparking.vehicle.driver;
 
 import static com.mysql.jdbc.MysqlErrorNumbers.ER_DUP_ENTRY;
+import static com.mysql.jdbc.MysqlErrorNumbers.ER_NO;
 import com.osparking.vehicle.AffiliationBuildingForm;
 import java.awt.Point;
 import java.io.File;
@@ -253,21 +254,14 @@ public class ODSReader {
                     } else {
                         //<editor-fold defaultstate="collapsed" desc="-- Process unit number columns ">
                         if (goodBuilding) {
-                            int result = 0;
+                            int result = insertBuildingUnit(cellValue.getValue(), bldgSeqNo);
                             // try to insert unit number with the building sequence number
-                            try {
-                                result = insertBuildingUnit(cellValue.getValue(), bldgSeqNo);
-                            } catch (SQLException ex) {
-                                if (ex.getErrorCode() != ER_DUP_ENTRY) {
-                                    logParkingException(Level.SEVERE, ex, 
-                                            "(inserted UNIT: " + cellValue.getValue() + ")");
-                                }
-                            }  finally {
-                                if (result == 1)
-                                    unitCount++;
-                                else
-                                    unitReject++;
-                            }    
+                            
+                            if (result == ER_NO) {
+                                unitCount++;
+                            } else {
+                                unitReject++;
+                            } 
                         } else {
                             unitReject++;
                             if (upperLevelMissingWarningNotGiven)

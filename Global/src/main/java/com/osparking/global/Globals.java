@@ -16,7 +16,10 @@
  */
 package com.osparking.global;
 
+import com.mysql.jdbc.MysqlErrorNumbers;
 import static com.mysql.jdbc.MysqlErrorNumbers.ER_DUP_ENTRY;
+import static com.mysql.jdbc.MysqlErrorNumbers.ER_NO;
+import static com.mysql.jdbc.MysqlErrorNumbers.ER_YES;
 import com.osparking.global.names.ControlEnums.Languages;
 import static com.osparking.global.names.ControlEnums.Languages.KOREAN;
 import static com.osparking.global.names.DB_Access.PIC_HEIGHT;
@@ -1313,7 +1316,7 @@ public class Globals {
     }     
     
     public static int insertBuildingUnit(int unitNo, int bldgSeqNo) {   
-        int result = 0;
+        int result = ER_YES;
         Connection conn = null; 
         PreparedStatement insertUnit = null;
 
@@ -1324,11 +1327,13 @@ public class Globals {
             insertUnit = conn.prepareStatement(sql);
             insertUnit.setInt(1, unitNo);
             insertUnit.setInt(2, bldgSeqNo);
-            result = insertUnit.executeUpdate();
+            if (insertUnit.executeUpdate() == 1) {
+                result = ER_NO;
+            }
             //</editor-fold>
         } catch (SQLException ex) {
             if (ex.getErrorCode() == ER_DUP_ENTRY) {
-                result = 2;
+                result = ER_DUP_ENTRY;
                 logParkingException(Level.SEVERE, ex, unitNo + " already existing unit number");
             } else {
                 logParkingException(Level.SEVERE, ex, "(Insertion failed unit : " + unitNo);
