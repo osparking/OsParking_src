@@ -165,6 +165,7 @@ public class ODS_HelpJDialog extends javax.swing.JDialog {
         jPanel3.add(filler4);
 
         closeButton.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        closeButton.setMnemonic('C');
         closeButton.setText(CLOSE_BTN.getContent());
         closeButton.setMaximumSize(new java.awt.Dimension(90, 40));
         closeButton.setMinimumSize(new java.awt.Dimension(90, 40));

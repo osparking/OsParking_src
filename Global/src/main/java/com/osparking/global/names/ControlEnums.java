@@ -830,17 +830,17 @@ public class ControlEnums {
         DELETE_LOG_MSG("삭제된 기록--폴더: ", "Deleted logs--directory: "),
         DELETE_FILE_MSG(", 파일: ", "files: "),
         
-        HELP_TA(
-                "\u278A 오픈오피스 스프레드시트(OpenOffice Calc) 를 사용하여 만들 수 있습니다"
+        HELP_TA( 
+                "\u203B 오픈오피스 스프레드시트(OpenOffice Calc) 를 사용하여 만들 수 있습니다"
                         + System.getProperty("line.separator")
-                        + "\u278B MS엑셀에서 엑셀파일을 다음 절차로 'ods' 파일로 저장할 수 있습니다"
+                        + "\u203B MS엑셀에서 엑셀파일을 다음 절차로 'ods' 파일로 저장할 수 있습니다"
                         + System.getProperty("line.separator")
                         + "     [파일] > [다른 이름으로 저장] > 파일 형식: 'OpenDocu...' 선택",
-                "\u278A Default file type of a office SW 'OpenOffice Calc'"
+                "\u203B Default file type of a office SW 'OpenOffice Calc'"
                         + System.getProperty("line.separator")
-                        + "\u278B Creatable using MS Excel, OpenOffice Calc, etc."
+                        + "\u203B Creatable using MS Excel, OpenOffice Calc, etc."
                         + System.getProperty("line.separator")
-                        + "\u278C In MS Excel, 'ods' can be created by --"
+                        + "\u203B In MS Excel, 'ods' can be created by --"
                         + System.getProperty("line.separator")
                         + "     [File] > [Save As...] > [File Type: (choose) 'OpenDocu...'");
                 

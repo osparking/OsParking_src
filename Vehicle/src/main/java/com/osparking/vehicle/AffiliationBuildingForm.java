@@ -2210,7 +2210,8 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
             ODSAffiliHelp.getLocation(buttonPoint);
             Point framePoint = new Point();
             this.getLocation(framePoint);
-            helpDialog.setLocation(framePoint.x + buttonPoint.x + 50, framePoint.y + 30);
+            int leftMargin = filler1.getSize().width + affiliationPanel.getSize().width;
+            helpDialog.setLocation(framePoint.x + leftMargin, framePoint.y + 30);
             helpDialog.setVisible(true);
         } else {
             JDialog helpDialog = new ODS_HelpJDialog(this, false, 
@@ -2220,13 +2221,15 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
             ODSAffiliHelp.getLocation(buttonPoint);
             Point framePoint = new Point();
             this.getLocation(framePoint);
-            helpDialog.setLocation(framePoint.x - 130, framePoint.y + 30);                
+            int rightWidth = getSize().width - 
+                    (helpDialog.getSize().width + filler5.getSize().width + 
+                    buildingPanel.getWidth() + filler2.getSize().width);
+            helpDialog.setLocation(framePoint.x + rightWidth, framePoint.y + 30);                
             helpDialog.setVisible(true);    
         }
     }//GEN-LAST:event_ODSAffiliHelpActionPerformed
 
     private void closeFormButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_closeFormButtonActionPerformed
-        // TODO add your handling code here:
         dispose();
     }//GEN-LAST:event_closeFormButtonActionPerformed
 
