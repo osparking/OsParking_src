@@ -185,6 +185,7 @@ public class ODS_HelpJDialog extends javax.swing.JDialog {
 
         jScrollPane1.setHorizontalScrollBar(null);
 
+        topTextArea.setEditable(false);
         topTextArea.setColumns(20);
         topTextArea.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         topTextArea.setRows(5);

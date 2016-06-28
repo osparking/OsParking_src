@@ -835,14 +835,14 @@ public class ControlEnums {
                         + System.getProperty("line.separator")
                         + "\u203B MS엑셀에서 엑셀파일을 다음 절차로 'ods' 파일로 저장할 수 있습니다"
                         + System.getProperty("line.separator")
-                        + "     [파일] > [다른 이름으로 저장] > 파일 형식: 'OpenDocu...' 선택",
+                        + "     [파일] \u21D2 [다른 이름으로 저장] \u21D2 파일 형식: 'OpenDocu...' 선택",
                 "\u203B Default file type of a office SW 'OpenOffice Calc'"
                         + System.getProperty("line.separator")
                         + "\u203B Creatable using MS Excel, OpenOffice Calc, etc."
                         + System.getProperty("line.separator")
                         + "\u203B In MS Excel, 'ods' can be created by --"
                         + System.getProperty("line.separator")
-                        + "     [File] > [Save As...] > [File Type: (choose) 'OpenDocu...'");
+                        + "     [File] \u21D2 [Save As...] \u21D2 [File Type: (choose) 'OpenDocu...'");
                 
         TextType(String korean, String english) {
             contents[KOREAN.ordinal()] = korean;
@@ -852,8 +852,8 @@ public class ControlEnums {
         private String[] contents = new String[Languages.values().length];
         
         public String getContent() {
-                return contents[language.ordinal()];
-        }                  
+            return contents[language.ordinal()];
+        }
     }
     
     public enum ComboBoxItemTypes {
