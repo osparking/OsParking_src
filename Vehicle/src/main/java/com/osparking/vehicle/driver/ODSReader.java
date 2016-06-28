@@ -434,7 +434,6 @@ public class ODSReader {
             //<editor-fold defaultstate="collapsed" desc="-- Iterate through each column">    
             for(int nColIndex = 0; true; nColIndex++)
             {
-                System.out.println("row: " + nRowIndex + ", col: " + nColIndex);
                 cell = sheet.getCellAt(nColIndex, nRowIndex);
                 Object cellObj = cell.getValue();
                 WrappedInt cellValue = new WrappedInt();                

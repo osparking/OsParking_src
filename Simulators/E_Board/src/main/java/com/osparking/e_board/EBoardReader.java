@@ -128,7 +128,6 @@ public class EBoardReader extends Thread implements DeviceReader {
                 }
                 
                 msgCode = getManagerSocket().getInputStream().read(); // waits for PULSE_PERIOD miliseconds
-//                System.out.println("3-1. message code delivered at: " + System.currentTimeMillis() % 10000);
 
                 if (msgCode == -1) {
                     disconnectSocket(null, "End of stream reached");
@@ -386,12 +385,8 @@ public class EBoardReader extends Thread implements DeviceReader {
 
     private void interruptCurrentDisplay(byte[] coreInfoBytes) {
         // Message protocol: <row:1><text:varies><type:1><color:1><font:1><pattern:1><cycle:4><delay:4>
-//<<<<<<< HEAD
         final byte rowNo = coreInfoBytes[0];
         final DisplayArea row = (rowNo == 0 ? TOP_ROW : BOTTOM_ROW);
-//=======
-//        final byte row = coreInfoBytes[0];
-//>>>>>>> osparking/master
         int index = 12; // 12 == total length of 6 fields (<type> ~ <delay>)
         
         String displayText = ":UnsupportedEncodingException: ";
@@ -429,11 +424,6 @@ public class EBoardReader extends Thread implements DeviceReader {
         
         //<editor-fold desc="-- print debug message">
         if (DEBUG) {
-//<<<<<<< HEAD
-            System.out.println("row: " + rowNo);
-//=======
-//            System.out.println("row: " + row);
-//>>>>>>> osparking/master
             System.out.println("msg : " + displayText);
             if (displayText.length() == 0)
                 System.out.println("msg length is zero : ");
@@ -449,7 +439,6 @@ public class EBoardReader extends Thread implements DeviceReader {
         
         //<editor-fold desc="-- reserve default message display event">
         if (delay == -1) {
-//<<<<<<< HEAD
             eBoardGUI.prevMsgSN[rowNo] = 0;
         } else {
             try {
@@ -458,16 +447,6 @@ public class EBoardReader extends Thread implements DeviceReader {
                             @Override
                             public void run() {
                                 eBoardGUI.changeE_BoardDisplay(row, eBoardGUI.getDefaultDisplaySettings()[rowNo]);
-//=======
-//            eBoardGUI.prevMsgSN[row] = 0;
-//        } else {
-//            try {
-//                eBoardGUI.getDisplayRestoreTimer()[row].reRunOnce(
-//                        new TimerTask() {
-//                            @Override
-//                            public void run() {
-//                                eBoardGUI.changeE_BoardDisplay(row, eBoardGUI.getDefaultDisplaySettings()[row]);
-//>>>>>>> osparking/master
                                 eBoardGUI.getCriticalInfoTextField().setText(
                                         timeFormat.format(new Date()) + "-- Vehicle left gate");
                             }
@@ -475,11 +454,7 @@ public class EBoardReader extends Thread implements DeviceReader {
                         delay
                 );
             } catch (Exception e) {
-//<<<<<<< HEAD
                 logParkingException(Level.SEVERE, e, "Return to default display for row #" + rowNo, eBoardGUI.getID());  
-//=======
-//                logParkingException(Level.SEVERE, e, "Return to default display for row #" + row, eBoardGUI.getID());  
-//>>>>>>> osparking/master
             }  
         }
         //</editor-fold>
@@ -502,7 +477,6 @@ public class EBoardReader extends Thread implements DeviceReader {
         }             
     }
 
-//    public synchronized void disconnectSocket(Exception e, String reason) {
     public void disconnectSocket(Exception e, String reason) {
         
         logParkingException(Level.INFO, e, reason, eBoardGUI.getID());
