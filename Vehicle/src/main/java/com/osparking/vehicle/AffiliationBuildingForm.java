@@ -143,6 +143,7 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.IOException;
 import java.sql.Connection;
@@ -303,7 +304,6 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
         setTitle(AFFILI_BUILD_FRAME_TITLE.getContent());
         setBackground(PopUpBackground);
         setMinimumSize(new java.awt.Dimension(740, 675));
-        setPreferredSize(new java.awt.Dimension(740, 700));
 
         wholePanel.setLayout(new java.awt.BorderLayout());
 
@@ -1073,7 +1073,6 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     .setHorizontalAlignment(JLabel.CENTER);
     UnitTable.getColumnModel().getColumn(1).setCellRenderer(bnoCellRenderer);
     UnitTable.setDoubleBuffered(true);
-    UnitTable.setEnabled(false);
     UnitTable.setRowHeight(22);
     L2_Affiliation.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     UnitTable.addFocusListener(new java.awt.event.FocusAdapter() {
@@ -2487,8 +2486,23 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
         adjustNumberTable(UnitTable);
         addBuildingAndUnitSelectionListener(); 
         
-        // Register mouse double click event to allow fast modification
-        addDoubleClickEventListener();
+        /**
+         * Make table column heading click select that table's radio button.
+         */
+        L1_Affiliation.getTableHeader().addMouseListener(new HdrMouseListener(L1_Affiliation));
+        L2_Affiliation.getTableHeader().addMouseListener(new HdrMouseListener(L2_Affiliation));
+        BuildingTable.getTableHeader().addMouseListener(new HdrMouseListener(BuildingTable));
+        UnitTable.getTableHeader().addMouseListener(new HdrMouseListener(UnitTable));
+        
+        /**
+         * Make table cell 
+         * click select that table's radio button,
+         * double click initiate cell modification.
+         */        
+        addClickEventListener(L1_Affiliation);
+        addClickEventListener(L2_Affiliation);
+        addClickEventListener(BuildingTable);
+        addClickEventListener(UnitTable);
     }
     
     private void adjustAffiliationTable(JTable AffiliationTable) {
@@ -3038,80 +3052,59 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
         column.setMaxWidth(50); //row number column is narrow    
     }
 
-    private void addDoubleClickEventListener() {
-        BuildingTable.addMouseListener(new MouseAdapter() {
+    private void addClickEventListener(JTable table) {
+        table.addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent me) {
-                JTable table =(JTable) me.getSource();
+                RXTable table =(RXTable) me.getSource();
                 Point p = me.getPoint();
                 if (table.columnAtPoint(p) == 0) {
-                    return;
-                }
-                else
-                {
+                    selectRadioButtonFor(table.getTableType());
+                } else {
+                    if (me.getClickCount() == 1) {
+                        selectRadioButtonFor(table.getTableType());
+                    } else 
                     if (me.getClickCount() == 2) {
-                        prepareModification(BuildingTable,  
-                                modifyBuilding_Button, cancelBuilding_Button);                        
+                        switch (table.getTableType()) {
+                            case L1_TABLE:
+                                prepareModification(table, modifyL1_Button, cancelL1_Button);                        
+                                break;
+                            case L2_TABLE:
+                                prepareModification(table, modifyL2_Button, cancelL2_Button);                        
+                                break;
+                            case Building:
+                                prepareModification(table, modifyBuilding_Button, cancelBuilding_Button);                        
+                                break;
+                            case UnitTab:
+                                prepareModification(table, modifyUnit_Button, cancelUnit_Button);                        
+                                break;
+                            default:
+                                break;
+                        }
                     }
                 }
             }
         });
-        
-        UnitTable.addMouseListener(new MouseAdapter() {
-            public void mousePressed(MouseEvent me) {
-                JTable table =(JTable) me.getSource();
-                Point p = me.getPoint();
-                if (table.columnAtPoint(p) == 0) {
-                    return;
-                }
-                else
-                {
-//                    int row = table.rowAtPoint(p);
-                    if (me.getClickCount() == 2) {
-                        prepareModification(UnitTable,  
-                                modifyUnit_Button, cancelUnit_Button);                             
-                    }
-                }                
-            }
-        });
-
-        L1_Affiliation.addMouseListener(new MouseAdapter() {
-            public void mousePressed(MouseEvent me) {
-                JTable table =(JTable) me.getSource();
-                Point p = me.getPoint();
-                if (table.columnAtPoint(p) == 0) {
-                    return;
-                }
-                else
-                {
-//                    int row = table.rowAtPoint(p);
-                    if (me.getClickCount() == 2) {
-                        prepareModification(L1_Affiliation,  
-                                modifyL1_Button, cancelL1_Button);                            
-                    }
-                }                
-            }
-        });        
-
-        L2_Affiliation.addMouseListener(new MouseAdapter() {
-            public void mousePressed(MouseEvent me) {
-                JTable table =(JTable) me.getSource();
-                Point p = me.getPoint();
-                if (table.columnAtPoint(p) == 0) {
-                    return;
-                }
-                else
-                {
-//                    int row = table.rowAtPoint(p);
-                    if (me.getClickCount() == 2) {
-//                        processL2NameChangeTrial(row);
-                        prepareModification(L2_Affiliation,  
-                                modifyL2_Button, cancelL2_Button);
-                    }
-                }                
-            }
-        });        
     }
 
+    private void selectRadioButtonFor(TableType tableType) {
+        switch (tableType) {
+            case L1_TABLE:
+                affiL1_Control.setSelected(true);
+                break;
+            case L2_TABLE:
+                affiL2_Control.setSelected(true);
+                break;
+            case Building:
+                buildingControl.setSelected(true);
+                break;
+            case UnitTab:
+                unitControl.setSelected(true);
+                break;
+            default:
+                break;
+        }                
+    }    
+            
     static Object prevUnitNo = null;
     static Object prevBldgNo = null;
     static Object prevL1Name = null;
@@ -3679,5 +3672,16 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
         if (table.editCellAt(row, 1)) {
             table.getEditorComponent().requestFocus();
         }      
+    }
+
+    private class HdrMouseListener extends MouseAdapter {
+        JTable table = null;
+        private HdrMouseListener(JTable table) {
+            this.table = table;
+        }
+
+        public void mouseClicked(MouseEvent evt) {
+            selectRadioButtonFor(((RXTable) table).getTableType());
+        }
     }
 }

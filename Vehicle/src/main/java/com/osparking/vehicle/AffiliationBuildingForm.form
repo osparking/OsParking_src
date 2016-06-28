@@ -1399,7 +1399,6 @@
                                     <Property name="doubleBuffered" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                                       <Connection code="true" type="code"/>
                                     </Property>
-                                    <Property name="enabled" type="boolean" value="false"/>
                                     <Property name="rowHeight" type="int" value="22"/>
                                   </Properties>
                                   <Events>
