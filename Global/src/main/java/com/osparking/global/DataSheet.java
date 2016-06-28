@@ -17,8 +17,7 @@
 package com.osparking.global;
 
 import static com.osparking.global.Globals.logParkingException;
-import static com.osparking.global.names.ControlEnums.DialogMSGTypes.VEHICLE_SAVE_ODS_FAIL_DIALOG;
-import static com.osparking.global.names.ControlEnums.DialogTitleTypes.WARING_DIALOGTITLE;
+import static com.osparking.global.names.ControlEnums.DialogTitleTypes.NOTICE_DIALOGTITLE;
 import com.osparking.global.names.OdsFileOnly;
 import java.io.File;
 import java.io.IOException;
@@ -26,6 +25,7 @@ import java.util.logging.Level;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import static javax.swing.JOptionPane.INFORMATION_MESSAGE;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
@@ -53,8 +53,7 @@ public class DataSheet {
         // Check the size of the list and if empty just return saying "noting to save"
         if (tableToSave.getModel().getRowCount() == 0) {
             JOptionPane.showMessageDialog(aFrame, emptyTableMsg,
-                    WARING_DIALOGTITLE.getContent(), 
-                    JOptionPane.YES_OPTION );
+                    NOTICE_DIALOGTITLE.getContent(), INFORMATION_MESSAGE);
             return;
         }
         saveFileChooser.setFileFilter(new OdsFileOnly());

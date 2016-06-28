@@ -190,8 +190,7 @@ public class ControlEnums {
         VEHICLES_LABEL (" 대",  " vehicles"),
         LOT_NAME_LABEL("주차장 이름",  "Parking Lot Name"),
         LOWER_LABEL(" 부서 목록", "Lower affiliations of"),
-        CHOOSE_PANEL_DIALOG("사용할 패널의 라디오 버튼을 선택하세요!",
-                "Click radio button of the panel to use!"),
+        CHOOSE_PANEL_DIALOG("사용할 패널을 선택하세요!", "Click the panel to use!"),
         CREATE_SAVE_HELP("자료 생성 후 [엔터] 키로 마감(=저장)할 것!",
                 "Press enter after the data creation!"),
         UPDATE_SAVE_HELP("자료 갱신 후 [엔터] 키로 마감(=저장)할 것!",
@@ -462,9 +461,9 @@ public class ControlEnums {
         VEHICLE_DELETE_ALL_RESULT_DAILOG(
                 "모든 차량 정보가 삭제되었습니다.", "All Vehicles are Deleted"),
         VEHICLE_SAVE_ODS_FAIL_DIALOG(
-                "등록된 차량이 없습니다.", "No vehicle to save!"),
+                "저장할 차량 목록이 없습니다.", "No vehicle list to save!"),
         USER_SAVE_ODS_FAIL_DIALOG(
-                "등록된 사용자가 없습니다.", "No user to save!"),
+                "저장할 사용자 목록이 없습니다!", "No user list to save!"),
         DRIVER_CREATRION_FAIL_DIALOG("운전자 정보 생성 실패.", "Failed to create a owner/driver record."), 
         DRIVER_DELETE_ALL_RESULT_DAILOG("모든 운전자가 삭제되었습니다.", "All drivers were deleted"),
         DRIVER_MODIFY_FAIL_DAILOG(
@@ -757,6 +756,7 @@ public class ControlEnums {
         VEHICLE_CHECK_DIALOGTITLE("차량 필수 자료 오류", "Required Field Missing"),
         VEHICLE_MODIFY_FAIL_DIALOGTITLE("차량 변경 실패", "Vehicle Modification Failure"),
         WARING_DIALOGTITLE("경고", "WARNING"),
+        NOTICE_DIALOGTITLE("알림", "Notice"),
         ERROR_DIALOGTITLE("오류", "Error"),
         WORK_MODE_DIALOGTITLE("작업 모드 환기", "Current Work Mode"),
         CREATION_RESULT_DIALOGTITLE("생성 결과", "Creation Result"),
