@@ -18,7 +18,9 @@ package com.osparking.vehicle;
 
 import com.osparking.global.CommonData;
 import static com.osparking.global.CommonData.buttonHeightNorm;
+import static com.osparking.global.CommonData.buttonHeightShort;
 import static com.osparking.global.CommonData.buttonWidthNorm;
+import static com.osparking.global.CommonData.metaKeyLabel;
 import static com.osparking.global.CommonData.pointColor;
 import static com.osparking.global.DataSheet.saveODSfile;
 import com.osparking.vehicle.driver.DriverSelection;
@@ -61,7 +63,7 @@ import static com.osparking.global.names.ControlEnums.LabelContent.CELL_PHONE_LA
 import static com.osparking.global.names.ControlEnums.LabelContent.COUNT_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.CREATE_MODE_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.EXACT_COMP_LABEL;
-import static com.osparking.global.names.ControlEnums.LabelContent.FORM_MODE_LABEL;
+import static com.osparking.global.names.ControlEnums.LabelContent.MODE_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.MODIFY_MODE_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.MODI_DATE_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.NOTIFICATION_LABEL;
@@ -73,14 +75,14 @@ import static com.osparking.global.names.ControlEnums.LabelContent.REASON_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.REGI_DATE_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.SEARCH_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.SEARCH_MODE_LABEL;
+import static com.osparking.global.names.ControlEnums.TableTypes.BUILD_ROOM_HEADER;
 import static com.osparking.global.names.ControlEnums.TitleTypes.VEHICLESFORM_FRAME_TITLE;
 import static com.osparking.global.names.ControlEnums.TableTypes.CAR_TAG_HEADER;
 import static com.osparking.global.names.ControlEnums.TableTypes.DRIVER_HEADER;
-import static com.osparking.global.names.ControlEnums.TableTypes.LOW_HIGH_HEADER;
+import static com.osparking.global.names.ControlEnums.TableTypes.HIGH_LOW_HEADER;
 import static com.osparking.global.names.ControlEnums.TableTypes.ORDER_HEADER;
 import static com.osparking.global.names.ControlEnums.TableTypes.OTHER_INFO_HEDER;
 import static com.osparking.global.names.ControlEnums.TableTypes.REASON_HEADER;
-import static com.osparking.global.names.ControlEnums.TableTypes.ROOM_BUILD_HEADER;
 import static com.osparking.global.names.ControlEnums.TextType.*;
 import static com.osparking.global.names.ControlEnums.ToolTipContent.AFFILIATION_TOOLTIP;
 import static com.osparking.global.names.ControlEnums.ToolTipContent.BUILDING_TOOLTIP;
@@ -93,6 +95,13 @@ import com.osparking.global.names.OSP_enums;
 import com.osparking.global.names.OSP_enums.VehicleCol;
 import com.osparking.global.names.PComboBox;
 import com.osparking.global.names.WrappedInt;
+import static com.osparking.vehicle.CommonData.vAffiliWidth;
+import static com.osparking.vehicle.CommonData.vBuildingWidth;
+import static com.osparking.vehicle.CommonData.vCauseWidth;
+import static com.osparking.vehicle.CommonData.vDriverNmWidth;
+import static com.osparking.vehicle.CommonData.vOtherWidth;
+import static com.osparking.vehicle.CommonData.vPlateNoWidth;
+import static com.osparking.vehicle.CommonData.vRowNoWidth;
 import com.osparking.vehicle.driver.ODSReader;
 import static com.osparking.vehicle.driver.ODSReader.getWrongCellPointString;
 import java.awt.Dimension;
@@ -100,6 +109,8 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.logging.Logger;
+import javax.swing.Box;
+import javax.swing.JLabel;
 import static javax.swing.JOptionPane.WARNING_MESSAGE;
 import javax.swing.JTable;
 import org.jopendocument.dom.spreadsheet.Sheet;
@@ -162,18 +173,25 @@ public class VehiclesForm extends javax.swing.JFrame {
         TableColumnModel tcm = vehiclesTable.getColumnModel();
        
         // Adjust column width one by one
-        SetAColumnWidth(tcm.getColumn(VehicleCol.RowNo.getNumVal()), 85, 85, 85); // 0: row number
-        SetAColumnWidth(tcm.getColumn(VehicleCol.PlateNumber.getNumVal()), 120, 120, 200); // 1: vehicle tag number
-        SetAColumnWidth(tcm.getColumn(VehicleCol.Name.getNumVal()), 95, 95, 32767); // 2: driver name
-        SetAColumnWidth(tcm.getColumn(VehicleCol.Affiliation.getNumVal()), 10, 120, 32767); // 3: affiliation level 1, 2
-        SetAColumnWidth(tcm.getColumn(VehicleCol.Building.getNumVal()), 10, 120, 200); // 4: building and unit no
-        SetAColumnWidth(tcm.getColumn(VehicleCol.OtherInfo.getNumVal()), 10, 120, 32767); // 5: etc info
+        SetAColumnWidth(tcm.getColumn(VehicleCol.RowNo.getNumVal()), 
+                vRowNoWidth, vRowNoWidth, vRowNoWidth); // 0: row number
+        SetAColumnWidth(tcm.getColumn(VehicleCol.PlateNumber.getNumVal()),
+                vPlateNoWidth, vPlateNoWidth, 32767); // 1: vehicle tag number
+        SetAColumnWidth(tcm.getColumn(VehicleCol.Name.getNumVal()), 
+                vDriverNmWidth, vDriverNmWidth, 32767); // 2: driver name
+        SetAColumnWidth(tcm.getColumn(VehicleCol.Affiliation.getNumVal()), 
+                10, vAffiliWidth, 32767); // 3: affiliation level 1, 2
+        SetAColumnWidth(tcm.getColumn(VehicleCol.Building.getNumVal()), 
+                10, vBuildingWidth, 32767); // 4: building and unit no
+        SetAColumnWidth(tcm.getColumn(VehicleCol.OtherInfo.getNumVal()), 
+                10, vOtherWidth, 32767); // 5: etc info
         SetAColumnWidth(tcm.getColumn(VehicleCol.CellPhone.getNumVal()), 0, 0, 0); // 6: cellphone
         SetAColumnWidth(tcm.getColumn(VehicleCol.Phone.getNumVal()), 0, 0, 0); // 7: LandLine
         SetAColumnWidth(tcm.getColumn(VehicleCol.Notification.getNumVal()), 0, 0, 0); // 8: NOTification
         SetAColumnWidth(tcm.getColumn(VehicleCol.Whole.getNumVal()), 0, 0, 0); // 9: extra comp`
         SetAColumnWidth(tcm.getColumn(VehicleCol.Permitted.getNumVal()), 0, 0, 0); // 10: Alloed
-        SetAColumnWidth(tcm.getColumn(VehicleCol.Causes.getNumVal()), 10, 150, 32767); // 11: reason
+        SetAColumnWidth(tcm.getColumn(VehicleCol.Causes.getNumVal()), 10, 
+                vCauseWidth, 32767); // 11: reason
         SetAColumnWidth(tcm.getColumn(VehicleCol.Creation.getNumVal()), 0, 0, 0); // 12: registered On
         SetAColumnWidth(tcm.getColumn(VehicleCol.Modification.getNumVal()), 0, 0, 0); // 13: Modify On
         SetAColumnWidth(tcm.getColumn(VehicleCol.SeqNo.getNumVal()), 0, 0, 0); // 14: drvseqNo
@@ -193,15 +211,18 @@ public class VehiclesForm extends javax.swing.JFrame {
         wholePanel = new javax.swing.JPanel();
         topPanel = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
-        filler62 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 40), new java.awt.Dimension(0, 40), new java.awt.Dimension(32767, 40));
-        jPanel3 = new javax.swing.JPanel();
+        topMarginPanel = new javax.swing.JPanel();
+        titlePanel = new javax.swing.JPanel();
+        aboutjPanel = new javax.swing.JPanel();
         seeLicenseButton = new javax.swing.JButton();
-        filler61 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
-        jPanel4 = new javax.swing.JPanel();
+        titlePanelReal = new javax.swing.JPanel();
+        formTitleLabel = new javax.swing.JLabel();
         leftPanel = new javax.swing.JPanel();
         modePanel = new javax.swing.JPanel();
+        modeStringPanel = new javax.swing.JPanel();
         jLabel12 = new javax.swing.JLabel();
         formModeLabel = new javax.swing.JLabel();
+        jSeparator1 = new javax.swing.JSeparator();
         jPanel8 = new javax.swing.JPanel();
         filler38 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(30, 0), new java.awt.Dimension(10, 32767));
         jLabel2 = new javax.swing.JLabel();
@@ -285,10 +306,6 @@ public class VehiclesForm extends javax.swing.JFrame {
         creationTextField = new javax.swing.JTextField();
         filler27 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(30, 0), new java.awt.Dimension(10, 32767));
         filler72 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 32767));
-        jPanel1 = new javax.swing.JPanel();
-        filler74 = new javax.swing.Box.Filler(new java.awt.Dimension(30, 0), new java.awt.Dimension(30, 0), new java.awt.Dimension(30, 32767));
-        filler73 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 32767));
-        filler54 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 40), new java.awt.Dimension(0, 40), new java.awt.Dimension(32767, 40));
         centerPanel = new javax.swing.JPanel();
         centerFirstPanel = new javax.swing.JPanel();
         tableTitlePanel = new javax.swing.JPanel();
@@ -296,45 +313,46 @@ public class VehiclesForm extends javax.swing.JFrame {
         countLbl = new javax.swing.JLabel();
         countValue = new javax.swing.JLabel();
         filler14 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
-        jLabel1 = new javax.swing.JLabel();
-        filler52 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
         rowCountSz = new javax.swing.JPanel();
-        searchPanel = new javax.swing.JPanel();
-        jLabel11 = new javax.swing.JLabel();
-        filler64 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(5, 0), new java.awt.Dimension(10, 32767));
-        searchCarTag = new javax.swing.JTextField();
-        filler66 = new javax.swing.Box.Filler(new java.awt.Dimension(5, 0), new java.awt.Dimension(5, 0), new java.awt.Dimension(5, 32767));
-        searchDriver = new javax.swing.JTextField();
-        filler67 = new javax.swing.Box.Filler(new java.awt.Dimension(5, 0), new java.awt.Dimension(5, 0), new java.awt.Dimension(5, 32767));
-        searchAffiliCBox = new PComboBox();
-        filler68 = new javax.swing.Box.Filler(new java.awt.Dimension(5, 0), new java.awt.Dimension(5, 0), new java.awt.Dimension(5, 32767));
-        searchBldgCBox = new PComboBox();
-        filler69 = new javax.swing.Box.Filler(new java.awt.Dimension(5, 0), new java.awt.Dimension(5, 0), new java.awt.Dimension(5, 32767));
-        searchETC = new javax.swing.JTextField();
-        filler71 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(1, 0), new java.awt.Dimension(32767, 0));
         clearButton = new javax.swing.JButton();
-        filler70 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(5, 0), new java.awt.Dimension(5, 32767));
+        filler31 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 32767));
         searchButton = new javax.swing.JButton();
+        searchPanel = new javax.swing.JPanel();
+        filler53 = new javax.swing.Box.Filler(new java.awt.Dimension(2, 0), new java.awt.Dimension(2, 0), new java.awt.Dimension(2, 32767));
+        jLabel11 = new javax.swing.JLabel();
+        filler51 = new javax.swing.Box.Filler(new java.awt.Dimension(5, 0), new java.awt.Dimension(5, 0), new java.awt.Dimension(5, 32767));
+        searchCarTag = new javax.swing.JTextField();
+        searchDriver = new javax.swing.JTextField();
+        searchAffiliCBox = new PComboBox();
+        searchBldgCBox = new PComboBox();
+        searchETC = new javax.swing.JTextField();
+        disallowReason = new javax.swing.JTextField();
+        filler50 = new javax.swing.Box.Filler(new java.awt.Dimension(3, 0), new java.awt.Dimension(3, 0), new java.awt.Dimension(3, 32767));
         jScrollPane1 = new javax.swing.JScrollPane();
         vehiclesTable = new javax.swing.JTable();
-        filler65 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 20), new java.awt.Dimension(0, 20), new java.awt.Dimension(32767, 20));
-        centerThridPanel = new javax.swing.JPanel();
-        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
-        saveSheet_Button = new javax.swing.JButton();
-        readSheet_Button = new javax.swing.JButton();
-        deleteAllVehicles = new javax.swing.JButton();
-        deleteCancel_Button = new javax.swing.JButton();
-        modiSave_Button = new javax.swing.JButton();
-        insertSave_Button = new javax.swing.JButton();
-        closeFormButton = new javax.swing.JButton();
         filler40_2 = new javax.swing.Box.Filler(new java.awt.Dimension(40, 0), new java.awt.Dimension(40, 0), new java.awt.Dimension(40, 32767));
+        allButtonsPanel = new javax.swing.JPanel();
+        filler55 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 15), new java.awt.Dimension(0, 15), new java.awt.Dimension(32767, 15));
+        centerThridPanel = new javax.swing.JPanel();
+        filler56 = new javax.swing.Box.Filler(new java.awt.Dimension(40, 0), new java.awt.Dimension(40, 0), new java.awt.Dimension(40, 32767));
+        insertSave_Button = new javax.swing.JButton();
+        modiSave_Button = new javax.swing.JButton();
+        deleteCancel_Button = new javax.swing.JButton();
+        filler52 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
+        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
+        deleteAllVehicles = new javax.swing.JButton();
+        readSheet_Button = new javax.swing.JButton();
+        saveSheet_Button = new javax.swing.JButton();
+        closeFormButton = new javax.swing.JButton();
+        filler57 = new javax.swing.Box.Filler(new java.awt.Dimension(40, 0), new java.awt.Dimension(40, 0), new java.awt.Dimension(40, 32767));
+        filler54 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 40), new java.awt.Dimension(0, 40), new java.awt.Dimension(32767, 40));
 
         saveFileChooser.setDialogType(javax.swing.JFileChooser.SAVE_DIALOG);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle(VEHICLESFORM_FRAME_TITLE.getContent());
-        setMinimumSize(new java.awt.Dimension(1350, 870));
-        setPreferredSize(new java.awt.Dimension(1250, 870));
+        setMinimumSize(new java.awt.Dimension(1350, 880));
+        setPreferredSize(new java.awt.Dimension(1250, 880));
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 formWindowClosing(evt);
@@ -346,14 +364,26 @@ public class VehiclesForm extends javax.swing.JFrame {
         wholePanel.setPreferredSize(new java.awt.Dimension(1190, 790));
         wholePanel.setLayout(new java.awt.BorderLayout());
 
-        topPanel.setLayout(new javax.swing.BoxLayout(topPanel, javax.swing.BoxLayout.PAGE_AXIS));
+        topPanel.setLayout(new javax.swing.BoxLayout(topPanel, javax.swing.BoxLayout.Y_AXIS));
 
         jPanel2.setLayout(new java.awt.BorderLayout());
-        jPanel2.add(filler62, java.awt.BorderLayout.PAGE_END);
+
+        topMarginPanel.setMaximumSize(new java.awt.Dimension(32767, 40));
+        topMarginPanel.setMinimumSize(new java.awt.Dimension(100, 40));
+        topMarginPanel.setPreferredSize(new java.awt.Dimension(1190, 40));
+        topMarginPanel.add(metaKeyLabel);
+        topMarginPanel.add(Box.createHorizontalGlue());
+        topMarginPanel.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 5, 15));
+        jPanel2.add(topMarginPanel, java.awt.BorderLayout.NORTH);
 
         topPanel.add(jPanel2);
 
-        jPanel3.setLayout(new javax.swing.BoxLayout(jPanel3, javax.swing.BoxLayout.LINE_AXIS));
+        titlePanel.setMinimumSize(new java.awt.Dimension(213, 40));
+        titlePanel.setPreferredSize(new java.awt.Dimension(849, 40));
+
+        aboutjPanel.setMaximumSize(new java.awt.Dimension(320, 40));
+        aboutjPanel.setMinimumSize(new java.awt.Dimension(320, 40));
+        aboutjPanel.setPreferredSize(new java.awt.Dimension(320, 40));
 
         seeLicenseButton.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         seeLicenseButton.setText("About");
@@ -365,56 +395,83 @@ public class VehiclesForm extends javax.swing.JFrame {
                 seeLicenseButtonActionPerformed(evt);
             }
         });
-        jPanel3.add(seeLicenseButton);
-        jPanel3.add(filler61);
 
-        topPanel.add(jPanel3);
+        javax.swing.GroupLayout aboutjPanelLayout = new javax.swing.GroupLayout(aboutjPanel);
+        aboutjPanel.setLayout(aboutjPanelLayout);
+        aboutjPanelLayout.setHorizontalGroup(
+            aboutjPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(aboutjPanelLayout.createSequentialGroup()
+                .addComponent(seeLicenseButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(253, Short.MAX_VALUE))
+        );
+        aboutjPanelLayout.setVerticalGroup(
+            aboutjPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(aboutjPanelLayout.createSequentialGroup()
+                .addGap(0, 0, 0)
+                .addComponent(seeLicenseButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(15, Short.MAX_VALUE))
+        );
 
-        jPanel4.setLayout(new java.awt.BorderLayout());
-        topPanel.add(jPanel4);
+        formTitleLabel.setFont(new java.awt.Font(font_Type, font_Style, head_font_Size));
+        formTitleLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        formTitleLabel.setText(VEHICLESFORM_FRAME_TITLE.getContent());
+        formTitleLabel.setMaximumSize(new java.awt.Dimension(300, 30));
+        formTitleLabel.setMinimumSize(new java.awt.Dimension(113, 30));
+        formTitleLabel.setPreferredSize(new java.awt.Dimension(200, 30));
+        titlePanelReal.add(formTitleLabel);
+
+        javax.swing.GroupLayout titlePanelLayout = new javax.swing.GroupLayout(titlePanel);
+        titlePanel.setLayout(titlePanelLayout);
+        titlePanelLayout.setHorizontalGroup(
+            titlePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(titlePanelLayout.createSequentialGroup()
+                .addComponent(aboutjPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, 0)
+                .addComponent(titlePanelReal, javax.swing.GroupLayout.DEFAULT_SIZE, 870, Short.MAX_VALUE))
+        );
+        titlePanelLayout.setVerticalGroup(
+            titlePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(aboutjPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(titlePanelReal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+        );
+
+        topPanel.add(titlePanel);
 
         wholePanel.add(topPanel, java.awt.BorderLayout.NORTH);
 
         leftPanel.setMaximumSize(new java.awt.Dimension(393204, 32767));
-        leftPanel.setMinimumSize(new java.awt.Dimension(161, 690));
+        leftPanel.setMinimumSize(new java.awt.Dimension(320, 690));
         leftPanel.setPreferredSize(new java.awt.Dimension(320, 690));
         leftPanel.setLayout(new javax.swing.BoxLayout(leftPanel, javax.swing.BoxLayout.PAGE_AXIS));
 
-        modePanel.setMaximumSize(new java.awt.Dimension(32767, 80));
-        modePanel.setPreferredSize(new java.awt.Dimension(100, 60));
+        modePanel.setMaximumSize(new java.awt.Dimension(32877, 80));
+        modePanel.setMinimumSize(new java.awt.Dimension(320, 54));
+        modePanel.setPreferredSize(new java.awt.Dimension(320, 60));
+        modePanel.setLayout(new javax.swing.BoxLayout(modePanel, javax.swing.BoxLayout.Y_AXIS));
+
+        modeStringPanel.setMinimumSize(new java.awt.Dimension(196, 30));
+        modeStringPanel.setPreferredSize(new java.awt.Dimension(119, 30));
+        modeStringPanel.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 0, 15));
 
         jLabel12.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        jLabel12.setText(FORM_MODE_LABEL.getContent());
+        jLabel12.setText(MODE_LABEL.getContent());
+        JLabel tempLabel2 = new JLabel(MODE_LABEL.getContent());
+        tempLabel2.setFont(jLabel12.getFont());
+        Dimension dim2 = tempLabel2.getPreferredSize();
         jLabel12.setMaximumSize(new java.awt.Dimension(95, 27));
         jLabel12.setMinimumSize(new java.awt.Dimension(95, 27));
-        jLabel12.setPreferredSize(new java.awt.Dimension(95, 27));
+        jLabel12.setPreferredSize(new Dimension(dim2.width + 1, dim2.height));
+        modeStringPanel.add(jLabel12);
 
         formModeLabel.setForeground(pointColor);
         formModeLabel.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         formModeLabel.setText(SEARCH_MODE_LABEL.getContent());
-        formModeLabel.setMaximumSize(new java.awt.Dimension(86, 27));
+        formModeLabel.setMaximumSize(new java.awt.Dimension(80, 27));
         formModeLabel.setMinimumSize(new java.awt.Dimension(86, 27));
+        modeStringPanel.add(formModeLabel);
 
-        javax.swing.GroupLayout modePanelLayout = new javax.swing.GroupLayout(modePanel);
-        modePanel.setLayout(modePanelLayout);
-        modePanelLayout.setHorizontalGroup(
-            modePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(modePanelLayout.createSequentialGroup()
-                .addGap(65, 65, 65)
-                .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(formModeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
-        );
-        modePanelLayout.setVerticalGroup(
-            modePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, modePanelLayout.createSequentialGroup()
-                .addGap(18, 18, 18)
-                .addGroup(modePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(formModeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap())
-        );
+        modePanel.add(modeStringPanel);
+        modePanel.add(jSeparator1);
 
         leftPanel.add(modePanel);
 
@@ -471,10 +528,10 @@ public class VehiclesForm extends javax.swing.JFrame {
         selectDriverButton.setEnabled(false);
         selectDriverButton.setFocusable(false);
         selectDriverButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        selectDriverButton.setMargin(new java.awt.Insets(0, 7, 0, 7));
-        selectDriverButton.setMaximumSize(new java.awt.Dimension(90, 27));
-        selectDriverButton.setMinimumSize(new java.awt.Dimension(90, 27));
-        selectDriverButton.setPreferredSize(new java.awt.Dimension(90, 27));
+        selectDriverButton.setMargin(new java.awt.Insets(0, 0, 0, 0));
+        selectDriverButton.setMaximumSize(new Dimension(buttonWidthNorm, buttonHeightShort));
+        selectDriverButton.setMinimumSize(new Dimension(buttonWidthNorm, buttonHeightShort));
+        selectDriverButton.setPreferredSize(new Dimension(buttonWidthNorm, buttonHeightShort));
         selectDriverButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 selectDriverButtonActionPerformed(evt);
@@ -703,16 +760,7 @@ public class VehiclesForm extends javax.swing.JFrame {
         leftPanel.add(jPanel31);
         leftPanel.add(filler72);
 
-        jPanel1.setMaximumSize(new java.awt.Dimension(32767, 28));
-        jPanel1.setPreferredSize(new java.awt.Dimension(166, 27));
-        jPanel1.setLayout(new javax.swing.BoxLayout(jPanel1, javax.swing.BoxLayout.LINE_AXIS));
-        jPanel1.add(filler74);
-        jPanel1.add(filler73);
-
-        leftPanel.add(jPanel1);
-
         wholePanel.add(leftPanel, java.awt.BorderLayout.WEST);
-        wholePanel.add(filler54, java.awt.BorderLayout.PAGE_END);
 
         centerPanel.setMinimumSize(new java.awt.Dimension(850, 670));
         centerPanel.setPreferredSize(new java.awt.Dimension(850, 670));
@@ -728,143 +776,49 @@ public class VehiclesForm extends javax.swing.JFrame {
         tableTitlePanel.setLayout(new javax.swing.BoxLayout(tableTitlePanel, javax.swing.BoxLayout.LINE_AXIS));
 
         rowCount.setMaximumSize(new java.awt.Dimension(200, 40));
-        rowCount.setMinimumSize(new java.awt.Dimension(10, 40));
-        rowCount.setPreferredSize(new java.awt.Dimension(150, 40));
-        rowCount.setLayout(new javax.swing.BoxLayout(rowCount, javax.swing.BoxLayout.LINE_AXIS));
+        rowCount.setMinimumSize(new java.awt.Dimension(200, 40));
+        rowCount.setPreferredSize(new java.awt.Dimension(300, 40));
 
         countLbl.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        countLbl.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        countLbl.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         countLbl.setText(COUNT_LABEL.getContent());
+        JLabel tempLabel = new JLabel(COUNT_LABEL.getContent());
+        tempLabel.setFont(countLbl.getFont());
+        Dimension dim = tempLabel.getPreferredSize();
         countLbl.setMaximumSize(new java.awt.Dimension(110, 27));
         countLbl.setMinimumSize(new java.awt.Dimension(90, 27));
-        countLbl.setPreferredSize(new java.awt.Dimension(110, 27));
-        rowCount.add(countLbl);
+        countLbl.setPreferredSize(new Dimension(dim.width + 1, dim.height));
 
         countValue.setForeground(pointColor);
         countValue.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         countValue.setText("count");
-        rowCount.add(countValue);
+
+        javax.swing.GroupLayout rowCountLayout = new javax.swing.GroupLayout(rowCount);
+        rowCount.setLayout(rowCountLayout);
+        rowCountLayout.setHorizontalGroup(
+            rowCountLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(rowCountLayout.createSequentialGroup()
+                .addComponent(countLbl, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(countValue)
+                .addContainerGap())
+        );
+        rowCountLayout.setVerticalGroup(
+            rowCountLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(rowCountLayout.createSequentialGroup()
+                .addContainerGap(25, Short.MAX_VALUE)
+                .addGroup(rowCountLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(countValue, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(countLbl, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+        );
 
         tableTitlePanel.add(rowCount);
         tableTitlePanel.add(filler14);
 
-        jLabel1.setFont(new java.awt.Font(font_Type, font_Style, head_font_Size));
-        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText(VEHICLESFORM_FRAME_TITLE.getContent());
-        jLabel1.setMaximumSize(new java.awt.Dimension(113, 30));
-        jLabel1.setMinimumSize(new java.awt.Dimension(113, 30));
-        jLabel1.setPreferredSize(new java.awt.Dimension(113, 30));
-        tableTitlePanel.add(jLabel1);
-        tableTitlePanel.add(filler52);
-
         rowCountSz.setMaximumSize(new java.awt.Dimension(200, 40));
-        rowCountSz.setMinimumSize(new java.awt.Dimension(10, 40));
-        rowCountSz.setPreferredSize(new java.awt.Dimension(150, 40));
-
-        javax.swing.GroupLayout rowCountSzLayout = new javax.swing.GroupLayout(rowCountSz);
-        rowCountSz.setLayout(rowCountSzLayout);
-        rowCountSzLayout.setHorizontalGroup(
-            rowCountSzLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 150, Short.MAX_VALUE)
-        );
-        rowCountSzLayout.setVerticalGroup(
-            rowCountSzLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 40, Short.MAX_VALUE)
-        );
-
-        tableTitlePanel.add(rowCountSz);
-
-        centerFirstPanel.add(tableTitlePanel);
-
-        searchPanel.setMaximumSize(new java.awt.Dimension(2147483647, 40));
-        searchPanel.setMinimumSize(new java.awt.Dimension(850, 40));
-        searchPanel.setPreferredSize(new java.awt.Dimension(850, 40));
-        searchPanel.setLayout(new javax.swing.BoxLayout(searchPanel, javax.swing.BoxLayout.LINE_AXIS));
-
-        jLabel11.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        jLabel11.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        jLabel11.setText(SEARCH_LABEL.getContent());
-        jLabel11.setMaximumSize(new java.awt.Dimension(80, 27));
-        jLabel11.setMinimumSize(new java.awt.Dimension(80, 27));
-        jLabel11.setPreferredSize(new java.awt.Dimension(80, 27));
-        searchPanel.add(jLabel11);
-        searchPanel.add(filler64);
-
-        searchCarTag.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        searchCarTag.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        searchCarTag.setText(CAR_TAG_TF.getContent());
-        searchCarTag.setToolTipText(CAR_TAG_INPUT_TOOLTIP.getContent());
-        searchCarTag.setMaximumSize(new java.awt.Dimension(120, 28));
-        searchCarTag.setMinimumSize(new java.awt.Dimension(120, 28));
-        searchCarTag.setPreferredSize(new java.awt.Dimension(120, 28));
-        searchCarTag.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                searchCarTagFocusLost(evt);
-            }
-        });
-        searchCarTag.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mousePressed(java.awt.event.MouseEvent evt) {
-                searchCarTagMousePressed(evt);
-            }
-        });
-        searchPanel.add(searchCarTag);
-        searchPanel.add(filler66);
-
-        searchDriver.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        searchDriver.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        searchDriver.setText(DRIVER_TF.getContent());
-        searchDriver.setToolTipText(DRIVER_INPUT_TOOLTIP.getContent());
-        searchDriver.setMaximumSize(new java.awt.Dimension(32767, 28));
-        searchDriver.setMinimumSize(new java.awt.Dimension(110, 28));
-        searchDriver.setPreferredSize(new java.awt.Dimension(110, 28));
-        searchDriver.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                searchDriverFocusLost(evt);
-            }
-        });
-        searchDriver.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mousePressed(java.awt.event.MouseEvent evt) {
-                searchDriverMousePressed(evt);
-            }
-        });
-        searchPanel.add(searchDriver);
-        searchPanel.add(filler67);
-
-        searchAffiliCBox.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        searchAffiliCBox.setToolTipText(AFFILIATION_TOOLTIP.getContent());
-        searchAffiliCBox.setMaximumSize(new java.awt.Dimension(32767, 30));
-        searchAffiliCBox.setMinimumSize(new java.awt.Dimension(125, 30));
-        searchAffiliCBox.setPreferredSize(new java.awt.Dimension(125, 30));
-        searchPanel.add(searchAffiliCBox);
-        searchPanel.add(filler68);
-
-        searchBldgCBox.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        searchBldgCBox.setToolTipText(BUILDING_TOOLTIP.getContent());
-        searchBldgCBox.setMaximumSize(new java.awt.Dimension(150, 30));
-        searchBldgCBox.setMinimumSize(new java.awt.Dimension(110, 30));
-        searchBldgCBox.setPreferredSize(new java.awt.Dimension(110, 30));
-        searchPanel.add(searchBldgCBox);
-        searchPanel.add(filler69);
-
-        searchETC.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        searchETC.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        searchETC.setText(OTHER_INFO_TF.getContent());
-        searchETC.setToolTipText(OTHER_TOOLTIP.getContent());
-        searchETC.setMaximumSize(new java.awt.Dimension(32767, 28));
-        searchETC.setMinimumSize(new java.awt.Dimension(120, 20));
-        searchETC.setPreferredSize(new java.awt.Dimension(120, 20));
-        searchETC.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                searchETCFocusLost(evt);
-            }
-        });
-        searchETC.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mousePressed(java.awt.event.MouseEvent evt) {
-                searchETCMousePressed(evt);
-            }
-        });
-        searchPanel.add(searchETC);
-        searchPanel.add(filler71);
+        rowCountSz.setMinimumSize(new java.awt.Dimension(200, 40));
+        rowCountSz.setPreferredSize(new java.awt.Dimension(300, 40));
+        rowCountSz.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT, 0, 0));
 
         clearButton.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         clearButton.setMnemonic('l');
@@ -877,8 +831,8 @@ public class VehiclesForm extends javax.swing.JFrame {
                 clearButtonActionPerformed(evt);
             }
         });
-        searchPanel.add(clearButton);
-        searchPanel.add(filler70);
+        rowCountSz.add(clearButton);
+        rowCountSz.add(filler31);
 
         searchButton.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         searchButton.setMnemonic('s');
@@ -891,7 +845,117 @@ public class VehiclesForm extends javax.swing.JFrame {
                 searchButtonActionPerformed(evt);
             }
         });
-        searchPanel.add(searchButton);
+        rowCountSz.add(searchButton);
+
+        tableTitlePanel.add(rowCountSz);
+
+        centerFirstPanel.add(tableTitlePanel);
+
+        searchPanel.setMaximumSize(new java.awt.Dimension(2147483647, 40));
+        searchPanel.setMinimumSize(new java.awt.Dimension(850, 40));
+        searchPanel.setPreferredSize(new java.awt.Dimension(850, 40));
+        searchPanel.setLayout(new javax.swing.BoxLayout(searchPanel, javax.swing.BoxLayout.LINE_AXIS));
+        searchPanel.add(filler53);
+
+        jLabel11.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        jLabel11.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel11.setText(SEARCH_LABEL.getContent());
+        jLabel11.setMaximumSize(new Dimension(vRowNoWidth, 28));
+        jLabel11.setMinimumSize(new Dimension(vRowNoWidth, 27));
+        jLabel11.setPreferredSize(new Dimension(vRowNoWidth, 28));
+        searchPanel.add(jLabel11);
+        searchPanel.add(filler51);
+
+        searchCarTag.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        searchCarTag.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        searchCarTag.setText(CAR_TAG_TF.getContent());
+        searchCarTag.setToolTipText(CAR_TAG_INPUT_TOOLTIP.getContent());
+        searchCarTag.setMaximumSize(new java.awt.Dimension(32767, 28));
+        searchCarTag.setMinimumSize(new Dimension(vPlateNoWidth - 10, 28));
+        searchCarTag.setPreferredSize(new Dimension(vPlateNoWidth - 5, 28));
+        searchCarTag.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                searchCarTagFocusLost(evt);
+            }
+        });
+        searchCarTag.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                searchCarTagMousePressed(evt);
+            }
+        });
+        searchPanel.add(searchCarTag);
+
+        searchDriver.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        searchDriver.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        searchDriver.setText(DRIVER_TF.getContent());
+        searchDriver.setToolTipText(DRIVER_INPUT_TOOLTIP.getContent());
+        searchDriver.setMaximumSize(new java.awt.Dimension(32767, 28));
+        searchDriver.setMinimumSize(new Dimension(vDriverNmWidth - 10, 28));
+        searchDriver.setPreferredSize(new Dimension(vDriverNmWidth - 5, 28));
+        searchDriver.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                searchDriverFocusLost(evt);
+            }
+        });
+        searchDriver.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                searchDriverMousePressed(evt);
+            }
+        });
+        searchPanel.add(searchDriver);
+
+        searchAffiliCBox.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        searchAffiliCBox.setToolTipText(AFFILIATION_TOOLTIP.getContent());
+        searchAffiliCBox.setMaximumSize(new java.awt.Dimension(32767, 30));
+        searchAffiliCBox.setMinimumSize(new Dimension(vAffiliWidth - 10, 30));
+        searchAffiliCBox.setPreferredSize(new Dimension(vAffiliWidth - 5, 30));
+        searchPanel.add(searchAffiliCBox);
+
+        searchBldgCBox.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        searchBldgCBox.setToolTipText(BUILDING_TOOLTIP.getContent());
+        searchBldgCBox.setMaximumSize(new java.awt.Dimension(32767, 30));
+        searchBldgCBox.setMinimumSize(new Dimension(vBuildingWidth - 10, 30));
+        searchBldgCBox.setPreferredSize(new Dimension(vBuildingWidth - 5, 30));
+        searchPanel.add(searchBldgCBox);
+
+        searchETC.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        searchETC.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        searchETC.setText(OTHER_INFO_TF.getContent());
+        searchETC.setToolTipText(OTHER_TOOLTIP.getContent());
+        searchETC.setMaximumSize(new java.awt.Dimension(32767, 28));
+        searchETC.setMinimumSize(new Dimension(vOtherWidth - 10, 28));
+        searchETC.setPreferredSize(new Dimension(vOtherWidth - 5, 28));
+        searchETC.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                searchETCFocusLost(evt);
+            }
+        });
+        searchETC.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                searchETCMousePressed(evt);
+            }
+        });
+        searchPanel.add(searchETC);
+
+        disallowReason.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        disallowReason.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        disallowReason.setText(DIS_REASON_TF.getContent());
+        disallowReason.setToolTipText(OTHER_TOOLTIP.getContent());
+        disallowReason.setMaximumSize(new java.awt.Dimension(32767, 28));
+        disallowReason.setMinimumSize(new Dimension(vCauseWidth - 10, 28));
+        disallowReason.setPreferredSize(new Dimension(vCauseWidth - 5, 28));
+        disallowReason.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                disallowReasonFocusLost(evt);
+            }
+        });
+        disallowReason.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                disallowReasonMousePressed(evt);
+            }
+        });
+        searchPanel.add(disallowReason);
+        searchPanel.add(filler50);
 
         centerFirstPanel.add(searchPanel);
 
@@ -916,8 +980,8 @@ public class VehiclesForm extends javax.swing.JFrame {
                 ORDER_HEADER.getContent(),
                 CAR_TAG_HEADER.getContent(),
                 DRIVER_HEADER.getContent(),
-                LOW_HIGH_HEADER.getContent(),
-                ROOM_BUILD_HEADER.getContent(),
+                HIGH_LOW_HEADER.getContent(),
+                BUILD_ROOM_HEADER.getContent(),
                 OTHER_INFO_HEDER.getContent(),
                 "Cell Phone", "Land Line",
                 "Notif'", "Exact", "Allowed",
@@ -952,66 +1016,34 @@ public class VehiclesForm extends javax.swing.JFrame {
         jScrollPane1.setViewportView(vehiclesTable);
 
         centerPanel.add(jScrollPane1);
-        centerPanel.add(filler65);
+
+        wholePanel.add(centerPanel, java.awt.BorderLayout.CENTER);
+
+        getContentPane().add(wholePanel, java.awt.BorderLayout.CENTER);
+        getContentPane().add(filler40_2, java.awt.BorderLayout.EAST);
+
+        allButtonsPanel.setPreferredSize(new java.awt.Dimension(1270, 95));
+        allButtonsPanel.setLayout(new javax.swing.BoxLayout(allButtonsPanel, javax.swing.BoxLayout.Y_AXIS));
+        allButtonsPanel.add(filler55);
 
         centerThridPanel.setMaximumSize(new java.awt.Dimension(33397, 40));
         centerThridPanel.setMinimumSize(new java.awt.Dimension(769, 40));
         centerThridPanel.setPreferredSize(new java.awt.Dimension(769, 40));
-        centerThridPanel.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT, 10, 0));
-        centerThridPanel.add(filler1);
+        centerThridPanel.setLayout(new javax.swing.BoxLayout(centerThridPanel, javax.swing.BoxLayout.LINE_AXIS));
+        centerThridPanel.add(filler56);
 
-        saveSheet_Button.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        saveSheet_Button.setMnemonic('a');
-        saveSheet_Button.setText(SAVE_ODS_BTN.getContent());
-        saveSheet_Button.setMaximumSize(new Dimension(CommonData.buttonWidthWide, buttonHeightNorm));
-        saveSheet_Button.setMinimumSize(new Dimension(CommonData.buttonWidthWide, buttonHeightNorm));
-        saveSheet_Button.setPreferredSize(new Dimension(CommonData.buttonWidthWide, buttonHeightNorm));
-        saveSheet_Button.addActionListener(new java.awt.event.ActionListener() {
+        insertSave_Button.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        insertSave_Button.setMnemonic('r');
+        insertSave_Button.setText(CREATE_BTN.getContent());
+        insertSave_Button.setMaximumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
+        insertSave_Button.setMinimumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
+        insertSave_Button.setPreferredSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
+        insertSave_Button.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                saveSheet_ButtonActionPerformed(evt);
+                insertSave_ButtonActionPerformed(evt);
             }
         });
-        centerThridPanel.add(saveSheet_Button);
-
-        readSheet_Button.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        readSheet_Button.setMnemonic('o');
-        readSheet_Button.setText(READ_ODS_BTN.getContent());
-        readSheet_Button.setMaximumSize(new Dimension(CommonData.buttonWidthWide, buttonHeightNorm));
-        readSheet_Button.setMinimumSize(new Dimension(CommonData.buttonWidthWide, buttonHeightNorm));
-        readSheet_Button.setPreferredSize(new Dimension(CommonData.buttonWidthWide, buttonHeightNorm));
-        readSheet_Button.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                readSheet_ButtonActionPerformed(evt);
-            }
-        });
-        centerThridPanel.add(readSheet_Button);
-
-        deleteAllVehicles.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        deleteAllVehicles.setMnemonic('e');
-        deleteAllVehicles.setText(DELETE_ALL_BTN.getContent());
-        deleteAllVehicles.setMaximumSize(new Dimension(CommonData.buttonWidthWide, buttonHeightNorm));
-        deleteAllVehicles.setMinimumSize(new Dimension(CommonData.buttonWidthWide, buttonHeightNorm));
-        deleteAllVehicles.setPreferredSize(new Dimension(CommonData.buttonWidthWide, buttonHeightNorm));
-        deleteAllVehicles.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                deleteAllVehiclesActionPerformed(evt);
-            }
-        });
-        centerThridPanel.add(deleteAllVehicles);
-
-        deleteCancel_Button.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        deleteCancel_Button.setMnemonic('d');
-        deleteCancel_Button.setText(DELETE_BTN.getContent());
-        deleteCancel_Button.setEnabled(false);
-        deleteCancel_Button.setMaximumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
-        deleteCancel_Button.setMinimumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
-        deleteCancel_Button.setPreferredSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
-        deleteCancel_Button.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                deleteCancel_ButtonActionPerformed(evt);
-            }
-        });
-        centerThridPanel.add(deleteCancel_Button);
+        centerThridPanel.add(insertSave_Button);
 
         modiSave_Button.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         modiSave_Button.setMnemonic('m');
@@ -1027,18 +1059,60 @@ public class VehiclesForm extends javax.swing.JFrame {
         });
         centerThridPanel.add(modiSave_Button);
 
-        insertSave_Button.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        insertSave_Button.setMnemonic('r');
-        insertSave_Button.setText(CREATE_BTN.getContent());
-        insertSave_Button.setMaximumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
-        insertSave_Button.setMinimumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
-        insertSave_Button.setPreferredSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
-        insertSave_Button.addActionListener(new java.awt.event.ActionListener() {
+        deleteCancel_Button.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        deleteCancel_Button.setMnemonic('d');
+        deleteCancel_Button.setText(DELETE_BTN.getContent());
+        deleteCancel_Button.setEnabled(false);
+        deleteCancel_Button.setMaximumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
+        deleteCancel_Button.setMinimumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
+        deleteCancel_Button.setPreferredSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
+        deleteCancel_Button.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                insertSave_ButtonActionPerformed(evt);
+                deleteCancel_ButtonActionPerformed(evt);
             }
         });
-        centerThridPanel.add(insertSave_Button);
+        centerThridPanel.add(deleteCancel_Button);
+        centerThridPanel.add(filler52);
+        centerThridPanel.add(filler1);
+
+        deleteAllVehicles.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        deleteAllVehicles.setMnemonic('e');
+        deleteAllVehicles.setText(DELETE_ALL_BTN.getContent());
+        deleteAllVehicles.setMaximumSize(new Dimension(CommonData.buttonWidthWide, buttonHeightNorm));
+        deleteAllVehicles.setMinimumSize(new Dimension(CommonData.buttonWidthWide, buttonHeightNorm));
+        deleteAllVehicles.setPreferredSize(new Dimension(CommonData.buttonWidthWide, buttonHeightNorm));
+        deleteAllVehicles.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deleteAllVehiclesActionPerformed(evt);
+            }
+        });
+        centerThridPanel.add(deleteAllVehicles);
+
+        readSheet_Button.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        readSheet_Button.setMnemonic('o');
+        readSheet_Button.setText(READ_ODS_BTN.getContent());
+        readSheet_Button.setMaximumSize(new Dimension(CommonData.buttonWidthWide, buttonHeightNorm));
+        readSheet_Button.setMinimumSize(new Dimension(CommonData.buttonWidthWide, buttonHeightNorm));
+        readSheet_Button.setPreferredSize(new Dimension(CommonData.buttonWidthWide, buttonHeightNorm));
+        readSheet_Button.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                readSheet_ButtonActionPerformed(evt);
+            }
+        });
+        centerThridPanel.add(readSheet_Button);
+
+        saveSheet_Button.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        saveSheet_Button.setMnemonic('a');
+        saveSheet_Button.setText(SAVE_ODS_BTN.getContent());
+        saveSheet_Button.setMaximumSize(new Dimension(CommonData.buttonWidthWide, buttonHeightNorm));
+        saveSheet_Button.setMinimumSize(new Dimension(CommonData.buttonWidthWide, buttonHeightNorm));
+        saveSheet_Button.setPreferredSize(new Dimension(CommonData.buttonWidthWide, buttonHeightNorm));
+        saveSheet_Button.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                saveSheet_ButtonActionPerformed(evt);
+            }
+        });
+        centerThridPanel.add(saveSheet_Button);
 
         closeFormButton.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         closeFormButton.setMnemonic('c');
@@ -1052,13 +1126,12 @@ public class VehiclesForm extends javax.swing.JFrame {
             }
         });
         centerThridPanel.add(closeFormButton);
+        centerThridPanel.add(filler57);
 
-        centerPanel.add(centerThridPanel);
+        allButtonsPanel.add(centerThridPanel);
+        allButtonsPanel.add(filler54);
 
-        wholePanel.add(centerPanel, java.awt.BorderLayout.CENTER);
-
-        getContentPane().add(wholePanel, java.awt.BorderLayout.CENTER);
-        getContentPane().add(filler40_2, java.awt.BorderLayout.EAST);
+        getContentPane().add(allButtonsPanel, java.awt.BorderLayout.PAGE_END);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -1378,6 +1451,14 @@ public class VehiclesForm extends javax.swing.JFrame {
         vehiclesTable.requestFocus();
     }//GEN-LAST:event_clearButtonActionPerformed
 
+    private void disallowReasonFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_disallowReasonFocusLost
+        // TODO add your handling code here:
+    }//GEN-LAST:event_disallowReasonFocusLost
+
+    private void disallowReasonMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_disallowReasonMousePressed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_disallowReasonMousePressed
+
     /**
      * @param args the command line arguments
      */
@@ -1424,6 +1505,8 @@ public class VehiclesForm extends javax.swing.JFrame {
 
     // <editor-fold defaultstate="collapsed" desc="-- automaticically defined variables">                              
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPanel aboutjPanel;
+    private javax.swing.JPanel allButtonsPanel;
     private javax.swing.JTextField carTagTextField;
     private javax.swing.JTextField cellTextField;
     private javax.swing.JPanel centerFirstPanel;
@@ -1436,6 +1519,7 @@ public class VehiclesForm extends javax.swing.JFrame {
     private javax.swing.JTextField creationTextField;
     private javax.swing.JButton deleteAllVehicles;
     private javax.swing.JButton deleteCancel_Button;
+    private javax.swing.JTextField disallowReason;
     private javax.swing.JTextField driverTextField;
     private javax.swing.Box.Filler filler1;
     private javax.swing.Box.Filler filler10;
@@ -1461,6 +1545,7 @@ public class VehiclesForm extends javax.swing.JFrame {
     private javax.swing.Box.Filler filler29;
     private javax.swing.Box.Filler filler3;
     private javax.swing.Box.Filler filler30;
+    private javax.swing.Box.Filler filler31;
     private javax.swing.Box.Filler filler32;
     private javax.swing.Box.Filler filler33;
     private javax.swing.Box.Filler filler34;
@@ -1483,28 +1568,22 @@ public class VehiclesForm extends javax.swing.JFrame {
     private javax.swing.Box.Filler filler48;
     private javax.swing.Box.Filler filler49;
     private javax.swing.Box.Filler filler5;
+    private javax.swing.Box.Filler filler50;
+    private javax.swing.Box.Filler filler51;
     private javax.swing.Box.Filler filler52;
+    private javax.swing.Box.Filler filler53;
     private javax.swing.Box.Filler filler54;
+    private javax.swing.Box.Filler filler55;
+    private javax.swing.Box.Filler filler56;
+    private javax.swing.Box.Filler filler57;
     private javax.swing.Box.Filler filler6;
-    private javax.swing.Box.Filler filler61;
-    private javax.swing.Box.Filler filler62;
-    private javax.swing.Box.Filler filler64;
-    private javax.swing.Box.Filler filler65;
-    private javax.swing.Box.Filler filler66;
-    private javax.swing.Box.Filler filler67;
-    private javax.swing.Box.Filler filler68;
-    private javax.swing.Box.Filler filler69;
     private javax.swing.Box.Filler filler7;
-    private javax.swing.Box.Filler filler70;
-    private javax.swing.Box.Filler filler71;
     private javax.swing.Box.Filler filler72;
-    private javax.swing.Box.Filler filler73;
-    private javax.swing.Box.Filler filler74;
     private javax.swing.Box.Filler filler8;
     private javax.swing.Box.Filler filler9;
     private javax.swing.JLabel formModeLabel;
+    private javax.swing.JLabel formTitleLabel;
     public javax.swing.JButton insertSave_Button;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
@@ -1518,7 +1597,6 @@ public class VehiclesForm extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
-    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel11;
     private javax.swing.JPanel jPanel12;
     private javax.swing.JPanel jPanel2;
@@ -1529,15 +1607,15 @@ public class VehiclesForm extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel27;
     private javax.swing.JPanel jPanel28;
     private javax.swing.JPanel jPanel29;
-    private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel30;
     private javax.swing.JPanel jPanel31;
-    private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel8;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JSeparator jSeparator1;
     private javax.swing.JTextField lastModiTextField;
     private javax.swing.JPanel leftPanel;
     private javax.swing.JPanel modePanel;
+    private javax.swing.JPanel modeStringPanel;
     private javax.swing.JButton modiSave_Button;
     private javax.swing.JCheckBox notiCheckBox;
     private javax.swing.JFileChooser odsFileChooser;
@@ -1561,6 +1639,9 @@ public class VehiclesForm extends javax.swing.JFrame {
     private javax.swing.JButton seeLicenseButton;
     private javax.swing.JButton selectDriverButton;
     private javax.swing.JPanel tableTitlePanel;
+    private javax.swing.JPanel titlePanel;
+    private javax.swing.JPanel titlePanelReal;
+    private javax.swing.JPanel topMarginPanel;
     private javax.swing.JPanel topPanel;
     private javax.swing.JTable vehiclesTable;
     private javax.swing.JCheckBox wholeCheckBox;
@@ -2160,7 +2241,7 @@ public class VehiclesForm extends javax.swing.JFrame {
 
         searchAffiliCBox.removeAllItems();
         searchAffiliCBox.addItem(new ConvComboBoxItem(new Integer(-1), 
-                LOWER_HIGHER_CB_ITEM.getContent()));
+                HIGHER_LOWER_CB_ITEM.getContent()));
         try {
             //<editor-fold defaultstate="collapsed" desc="-- load affiliation comboBox">                            
             conn = getConnection();
@@ -2187,7 +2268,7 @@ public class VehiclesForm extends javax.swing.JFrame {
         
         searchBldgCBox.removeAllItems();
         searchBldgCBox.addItem(new ConvComboBoxItem(new Integer(-1), 
-                ROOM_BUILDING_CB_ITEM.getContent()));
+                BUILDING_ROOM_CB_ITEM.getContent()));
         excepMsg = "(CBox Item Loading for : building-unit combined";
         try {
             //<editor-fold defaultstate="collapsed" desc="-- load affiliation comboBox">                            

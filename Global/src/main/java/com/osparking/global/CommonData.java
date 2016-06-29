@@ -31,7 +31,7 @@ public class CommonData {
     public static final int buttonWidthNorm = 90; // Normal Width
     public static final int buttonWidthWide = 110; // Wide Width
     public static final int buttonHeightNorm = 40;
-    public static final int buttonHeightShort = 30;
+    public static final int buttonHeightShort = 30; 
     public static JLabel metaKeyLabel = new JLabel(META_KEY_LABEL.getContent());  
     public static final Color tipColor = new java.awt.Color(0xff, 0x85, 0x33);
     public static final Color tipColorTrans = new java.awt.Color(0xff, 0x85, 0x33, 127);

@@ -451,6 +451,8 @@ public class AttListForm extends javax.swing.JFrame {
         wholePanel.setPreferredSize(new java.awt.Dimension(400, 670));
         wholePanel.setLayout(new java.awt.BorderLayout());
 
+        topPanel.setMinimumSize(new java.awt.Dimension(267, 40));
+        topPanel.setPreferredSize(new java.awt.Dimension(267, 40));
         topPanel.setLayout(new javax.swing.BoxLayout(topPanel, javax.swing.BoxLayout.PAGE_AXIS));
         topPanel.add(filler23);
 
@@ -525,10 +527,12 @@ public class AttListForm extends javax.swing.JFrame {
 
         westPanel.add(modePanel);
 
-        jSeparator1.setPreferredSize(new java.awt.Dimension(0, 0));
+        jSeparator1.setMaximumSize(new java.awt.Dimension(32767, 5));
+        jSeparator1.setMinimumSize(new java.awt.Dimension(0, 5));
+        jSeparator1.setPreferredSize(new java.awt.Dimension(0, 5));
         westPanel.add(jSeparator1);
 
-        RequiredPanel1.setMaximumSize(new java.awt.Dimension(32877, 28));
+        RequiredPanel1.setMaximumSize(new java.awt.Dimension(32877, 1024));
         RequiredPanel1.setMinimumSize(new java.awt.Dimension(300, 26));
         RequiredPanel1.setPreferredSize(new java.awt.Dimension(300, 26));
         RequiredPanel1.setLayout(new javax.swing.BoxLayout(RequiredPanel1, javax.swing.BoxLayout.LINE_AXIS));
@@ -553,6 +557,9 @@ public class AttListForm extends javax.swing.JFrame {
         RequiredPanel1.add(legendString);
 
         westPanel.add(RequiredPanel1);
+
+        jSeparator2.setMaximumSize(new java.awt.Dimension(32767, 2));
+        jSeparator2.setMinimumSize(new java.awt.Dimension(0, 2));
         westPanel.add(jSeparator2);
 
         loginPanel.setMaximumSize(new java.awt.Dimension(32877, 30));

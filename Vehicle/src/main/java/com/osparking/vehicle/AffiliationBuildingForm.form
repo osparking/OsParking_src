@@ -21,10 +21,10 @@
       <Connection code="PopUpBackground" type="code"/>
     </Property>
     <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-      <Dimension value="[740, 720]"/>
+      <Dimension value="[740, 730]"/>
     </Property>
     <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-      <Dimension value="[740, 720]"/>
+      <Dimension value="[740, 730]"/>
     </Property>
   </Properties>
   <SyntheticProperties>

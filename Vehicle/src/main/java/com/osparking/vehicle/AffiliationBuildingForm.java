@@ -301,8 +301,8 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle(AFFILI_BUILD_FRAME_TITLE.getContent());
         setBackground(PopUpBackground);
-        setMinimumSize(new java.awt.Dimension(740, 720));
-        setPreferredSize(new java.awt.Dimension(740, 720));
+        setMinimumSize(new java.awt.Dimension(740, 730));
+        setPreferredSize(new java.awt.Dimension(740, 730));
 
         wholePanel.setLayout(new java.awt.BorderLayout());
 
