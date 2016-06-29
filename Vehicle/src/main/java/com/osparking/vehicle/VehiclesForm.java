@@ -204,6 +204,7 @@ public class VehiclesForm extends javax.swing.JFrame {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
+        java.awt.GridBagConstraints gridBagConstraints;
 
         saveFileChooser = new javax.swing.JFileChooser();
         odsFileChooser = new javax.swing.JFileChooser();
@@ -219,93 +220,37 @@ public class VehiclesForm extends javax.swing.JFrame {
         formTitleLabel = new javax.swing.JLabel();
         leftPanel = new javax.swing.JPanel();
         modePanel = new javax.swing.JPanel();
+        jPanel3 = new javax.swing.JPanel();
         modeStringPanel = new javax.swing.JPanel();
         jLabel12 = new javax.swing.JLabel();
         formModeLabel = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
-        jPanel8 = new javax.swing.JPanel();
-        filler38 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(30, 0), new java.awt.Dimension(10, 32767));
-        jLabel2 = new javax.swing.JLabel();
-        filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 32767));
+        detailPanel = new javax.swing.JPanel();
+        rowNumLabel = new javax.swing.JLabel();
         rowNumTextField = new javax.swing.JTextField();
-        filler39 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(30, 0), new java.awt.Dimension(10, 32767));
-        filler3 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 8), new java.awt.Dimension(0, 8), new java.awt.Dimension(32767, 10));
-        jPanel11 = new javax.swing.JPanel();
-        filler37 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(30, 0), new java.awt.Dimension(10, 32767));
-        jLabel3 = new javax.swing.JLabel();
-        filler15 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 32767));
+        tarTagLabel = new javax.swing.JLabel();
         carTagTextField = new javax.swing.JTextField();
-        filler36 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(30, 0), new java.awt.Dimension(10, 32767));
-        filler4 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 8), new java.awt.Dimension(0, 8), new java.awt.Dimension(32767, 10));
-        jPanel12 = new javax.swing.JPanel();
-        filler40 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(30, 0), new java.awt.Dimension(10, 32767));
         selectDriverButton = new javax.swing.JButton();
-        filler16 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 32767));
         driverTextField = new javax.swing.JTextField();
-        filler35 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(30, 0), new java.awt.Dimension(10, 32767));
-        filler5 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 8), new java.awt.Dimension(0, 8), new java.awt.Dimension(32767, 10));
-        jPanel23 = new javax.swing.JPanel();
-        filler41 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(30, 0), new java.awt.Dimension(10, 32767));
-        jLabel5 = new javax.swing.JLabel();
-        filler17 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 32767));
+        cellTextLabel = new javax.swing.JLabel();
         cellTextField = new javax.swing.JTextField();
-        filler34 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(30, 0), new java.awt.Dimension(10, 32767));
-        filler6 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 8), new java.awt.Dimension(0, 8), new java.awt.Dimension(32767, 10));
-        jPanel24 = new javax.swing.JPanel();
-        filler42 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(30, 0), new java.awt.Dimension(10, 32767));
-        jLabel6 = new javax.swing.JLabel();
-        filler18 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 32767));
+        phoneTextLabel = new javax.swing.JLabel();
         phoneTextField = new javax.swing.JTextField();
-        filler33 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(30, 0), new java.awt.Dimension(10, 32767));
-        filler8 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 8), new java.awt.Dimension(0, 8), new java.awt.Dimension(32767, 10));
-        jPanel30 = new javax.swing.JPanel();
-        filler43 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(30, 0), new java.awt.Dimension(10, 32767));
-        jLabel10 = new javax.swing.JLabel();
-        filler19 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 32767));
+        lastModiLabel = new javax.swing.JLabel();
         lastModiTextField = new javax.swing.JTextField();
-        filler32 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(30, 0), new java.awt.Dimension(10, 32767));
-        filler9 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 8), new java.awt.Dimension(0, 8), new java.awt.Dimension(32767, 10));
-        jPanel25 = new javax.swing.JPanel();
-        filler44 = new javax.swing.Box.Filler(new java.awt.Dimension(30, 0), new java.awt.Dimension(30, 0), new java.awt.Dimension(30, 32767));
-        jLabel7 = new javax.swing.JLabel();
-        filler20 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 32767));
+        notiLabel = new javax.swing.JLabel();
         notiCheckBox = new javax.swing.JCheckBox();
-        filler7 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 8), new java.awt.Dimension(0, 8), new java.awt.Dimension(32767, 10));
-        jPanel26 = new javax.swing.JPanel();
-        filler45 = new javax.swing.Box.Filler(new java.awt.Dimension(30, 0), new java.awt.Dimension(30, 0), new java.awt.Dimension(30, 32767));
-        jLabel8 = new javax.swing.JLabel();
-        filler21 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 32767));
+        wholeLabel = new javax.swing.JLabel();
         wholeCheckBox = new javax.swing.JCheckBox();
-        filler30 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(30, 0), new java.awt.Dimension(10, 32767));
-        filler10 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 8), new java.awt.Dimension(0, 8), new java.awt.Dimension(32767, 10));
-        jPanel27 = new javax.swing.JPanel();
-        filler46 = new javax.swing.Box.Filler(new java.awt.Dimension(30, 0), new java.awt.Dimension(30, 0), new java.awt.Dimension(30, 32767));
-        jLabel13 = new javax.swing.JLabel();
-        filler22 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 32767));
+        permitLabel = new javax.swing.JLabel();
         permitCheckBox = new javax.swing.JCheckBox();
-        filler29 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(30, 0), new java.awt.Dimension(10, 32767));
-        filler11 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 8), new java.awt.Dimension(0, 8), new java.awt.Dimension(32767, 10));
-        jPanel28 = new javax.swing.JPanel();
-        filler47 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(30, 0), new java.awt.Dimension(10, 32767));
-        jLabel14 = new javax.swing.JLabel();
-        filler23 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 32767));
+        reasonLabel = new javax.swing.JLabel();
         reasonTextField = new javax.swing.JTextField();
-        filler28 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(30, 0), new java.awt.Dimension(10, 32767));
-        filler12 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 8), new java.awt.Dimension(0, 8), new java.awt.Dimension(32767, 10));
-        jPanel29 = new javax.swing.JPanel();
-        filler48 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(30, 0), new java.awt.Dimension(10, 32767));
-        jLabel15 = new javax.swing.JLabel();
-        filler24 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 32767));
+        otherLabel = new javax.swing.JLabel();
         otherInfoTextField = new javax.swing.JTextField();
-        filler26 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(30, 0), new java.awt.Dimension(10, 32767));
-        filler13 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 8), new java.awt.Dimension(0, 8), new java.awt.Dimension(32767, 10));
-        jPanel31 = new javax.swing.JPanel();
-        filler49 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(30, 0), new java.awt.Dimension(10, 32767));
-        jLabel9 = new javax.swing.JLabel();
-        filler25 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 32767));
+        creationLabel = new javax.swing.JLabel();
         creationTextField = new javax.swing.JTextField();
-        filler27 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(30, 0), new java.awt.Dimension(10, 32767));
-        filler72 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 32767));
+        leftMarginPanel = new javax.swing.JPanel();
         centerPanel = new javax.swing.JPanel();
         centerFirstPanel = new javax.swing.JPanel();
         tableTitlePanel = new javax.swing.JPanel();
@@ -330,6 +275,7 @@ public class VehiclesForm extends javax.swing.JFrame {
         filler50 = new javax.swing.Box.Filler(new java.awt.Dimension(3, 0), new java.awt.Dimension(3, 0), new java.awt.Dimension(3, 32767));
         jScrollPane1 = new javax.swing.JScrollPane();
         vehiclesTable = new javax.swing.JTable();
+        filler4 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 32767));
         filler40_2 = new javax.swing.Box.Filler(new java.awt.Dimension(40, 0), new java.awt.Dimension(40, 0), new java.awt.Dimension(40, 32767));
         allButtonsPanel = new javax.swing.JPanel();
         filler55 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 15), new java.awt.Dimension(0, 15), new java.awt.Dimension(32767, 15));
@@ -402,14 +348,14 @@ public class VehiclesForm extends javax.swing.JFrame {
             aboutjPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(aboutjPanelLayout.createSequentialGroup()
                 .addComponent(seeLicenseButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(253, Short.MAX_VALUE))
+                .addContainerGap(249, Short.MAX_VALUE))
         );
         aboutjPanelLayout.setVerticalGroup(
             aboutjPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(aboutjPanelLayout.createSequentialGroup()
                 .addGap(0, 0, 0)
                 .addComponent(seeLicenseButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(15, Short.MAX_VALUE))
+                .addContainerGap(13, Short.MAX_VALUE))
         );
 
         formTitleLabel.setFont(new java.awt.Font(font_Type, font_Style, head_font_Size));
@@ -442,12 +388,14 @@ public class VehiclesForm extends javax.swing.JFrame {
         leftPanel.setMaximumSize(new java.awt.Dimension(393204, 32767));
         leftPanel.setMinimumSize(new java.awt.Dimension(320, 690));
         leftPanel.setPreferredSize(new java.awt.Dimension(320, 690));
-        leftPanel.setLayout(new javax.swing.BoxLayout(leftPanel, javax.swing.BoxLayout.PAGE_AXIS));
+        leftPanel.setLayout(new java.awt.GridBagLayout());
 
         modePanel.setMaximumSize(new java.awt.Dimension(32877, 80));
         modePanel.setMinimumSize(new java.awt.Dimension(320, 54));
         modePanel.setPreferredSize(new java.awt.Dimension(320, 60));
-        modePanel.setLayout(new javax.swing.BoxLayout(modePanel, javax.swing.BoxLayout.Y_AXIS));
+        modePanel.setLayout(new java.awt.BorderLayout());
+
+        jPanel3.setLayout(new javax.swing.BoxLayout(jPanel3, javax.swing.BoxLayout.Y_AXIS));
 
         modeStringPanel.setMinimumSize(new java.awt.Dimension(196, 30));
         modeStringPanel.setPreferredSize(new java.awt.Dimension(119, 30));
@@ -458,6 +406,7 @@ public class VehiclesForm extends javax.swing.JFrame {
         JLabel tempLabel2 = new JLabel(MODE_LABEL.getContent());
         tempLabel2.setFont(jLabel12.getFont());
         Dimension dim2 = tempLabel2.getPreferredSize();
+        jLabel12.setVerticalAlignment(javax.swing.SwingConstants.TOP);
         jLabel12.setMaximumSize(new java.awt.Dimension(95, 27));
         jLabel12.setMinimumSize(new java.awt.Dimension(95, 27));
         jLabel12.setPreferredSize(new Dimension(dim2.width + 1, dim2.height));
@@ -466,62 +415,74 @@ public class VehiclesForm extends javax.swing.JFrame {
         formModeLabel.setForeground(pointColor);
         formModeLabel.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         formModeLabel.setText(SEARCH_MODE_LABEL.getContent());
+        formModeLabel.setVerticalAlignment(javax.swing.SwingConstants.TOP);
         formModeLabel.setMaximumSize(new java.awt.Dimension(80, 27));
         formModeLabel.setMinimumSize(new java.awt.Dimension(86, 27));
         modeStringPanel.add(formModeLabel);
 
-        modePanel.add(modeStringPanel);
-        modePanel.add(jSeparator1);
+        jPanel3.add(modeStringPanel);
+        jPanel3.add(jSeparator1);
 
-        leftPanel.add(modePanel);
+        modePanel.add(jPanel3, java.awt.BorderLayout.CENTER);
 
-        jPanel8.setMaximumSize(new java.awt.Dimension(32877, 28));
-        jPanel8.setLayout(new javax.swing.BoxLayout(jPanel8, javax.swing.BoxLayout.LINE_AXIS));
-        jPanel8.add(filler38);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
+        leftPanel.add(modePanel, gridBagConstraints);
 
-        jLabel2.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
-        jLabel2.setText(ORDER_LABEL.getContent());
-        jLabel2.setMaximumSize(new java.awt.Dimension(90, 27));
-        jLabel2.setMinimumSize(new java.awt.Dimension(90, 27));
-        jLabel2.setPreferredSize(new java.awt.Dimension(90, 27));
-        jPanel8.add(jLabel2);
-        jPanel8.add(filler2);
+        detailPanel.setMinimumSize(new java.awt.Dimension(270, 460));
+        detailPanel.setPreferredSize(new java.awt.Dimension(270, 460));
+        java.awt.GridBagLayout detailPanelLayout = new java.awt.GridBagLayout();
+        detailPanelLayout.columnWidths = new int[] {0, 10, 0};
+        detailPanelLayout.rowHeights = new int[] {0, 7, 0, 7, 0, 7, 0, 7, 0, 7, 0, 7, 0, 7, 0, 7, 0, 7, 0, 7, 0, 7, 0};
+        detailPanel.setLayout(detailPanelLayout);
+
+        rowNumLabel.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        rowNumLabel.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+        rowNumLabel.setText(ORDER_LABEL.getContent());
+        rowNumLabel.setMaximumSize(new java.awt.Dimension(90, 27));
+        rowNumLabel.setMinimumSize(new java.awt.Dimension(90, 27));
+        rowNumLabel.setPreferredSize(new java.awt.Dimension(90, 27));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        detailPanel.add(rowNumLabel, gridBagConstraints);
 
         rowNumTextField.setEditable(false);
         rowNumTextField.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         rowNumTextField.setEnabled(false);
         rowNumTextField.setFocusable(false);
-        jPanel8.add(rowNumTextField);
-        jPanel8.add(filler39);
+        rowNumTextField.setMargin(new java.awt.Insets(0, 2, 0, 2));
+        rowNumTextField.setMaximumSize(new java.awt.Dimension(120, 28));
+        rowNumTextField.setMinimumSize(new java.awt.Dimension(120, 28));
+        rowNumTextField.setPreferredSize(new java.awt.Dimension(140, 30));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 0;
+        detailPanel.add(rowNumTextField, gridBagConstraints);
 
-        leftPanel.add(jPanel8);
-        leftPanel.add(filler3);
-
-        jPanel11.setMaximumSize(new java.awt.Dimension(32877, 28));
-        jPanel11.setLayout(new javax.swing.BoxLayout(jPanel11, javax.swing.BoxLayout.LINE_AXIS));
-        jPanel11.add(filler37);
-
-        jLabel3.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
-        jLabel3.setText(CAR_TAG_LABEL.getContent());
-        jLabel3.setMaximumSize(new java.awt.Dimension(90, 27));
-        jLabel3.setMinimumSize(new java.awt.Dimension(90, 27));
-        jLabel3.setPreferredSize(new java.awt.Dimension(90, 27));
-        jPanel11.add(jLabel3);
-        jPanel11.add(filler15);
+        tarTagLabel.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        tarTagLabel.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+        tarTagLabel.setText(CAR_TAG_LABEL.getContent());
+        tarTagLabel.setMaximumSize(new java.awt.Dimension(90, 27));
+        tarTagLabel.setMinimumSize(new java.awt.Dimension(90, 27));
+        tarTagLabel.setPreferredSize(new java.awt.Dimension(90, 27));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        detailPanel.add(tarTagLabel, gridBagConstraints);
 
         carTagTextField.setEditable(false);
         carTagTextField.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        jPanel11.add(carTagTextField);
-        jPanel11.add(filler36);
-
-        leftPanel.add(jPanel11);
-        leftPanel.add(filler4);
-
-        jPanel12.setMaximumSize(new java.awt.Dimension(32877, 28));
-        jPanel12.setLayout(new javax.swing.BoxLayout(jPanel12, javax.swing.BoxLayout.LINE_AXIS));
-        jPanel12.add(filler40);
+        carTagTextField.setMargin(new java.awt.Insets(0, 2, 0, 2));
+        carTagTextField.setMaximumSize(new java.awt.Dimension(120, 28));
+        carTagTextField.setMinimumSize(new java.awt.Dimension(120, 28));
+        carTagTextField.setPreferredSize(new java.awt.Dimension(140, 30));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 2;
+        detailPanel.add(carTagTextField, gridBagConstraints);
 
         selectDriverButton.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         selectDriverButton.setText(OWNER_BTN.getContent());
@@ -542,223 +503,254 @@ public class VehiclesForm extends javax.swing.JFrame {
                 selectDriverButtonKeyReleased(evt);
             }
         });
-        jPanel12.add(selectDriverButton);
-        jPanel12.add(filler16);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 4;
+        detailPanel.add(selectDriverButton, gridBagConstraints);
 
         driverTextField.setEditable(false);
         driverTextField.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        driverTextField.setMargin(new java.awt.Insets(0, 2, 0, 2));
+        driverTextField.setMaximumSize(new java.awt.Dimension(140, 30));
+        driverTextField.setMinimumSize(new java.awt.Dimension(120, 28));
+        driverTextField.setPreferredSize(new java.awt.Dimension(140, 30));
         driverTextField.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 driverTextFieldMouseClicked(evt);
             }
         });
-        jPanel12.add(driverTextField);
-        jPanel12.add(filler35);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 4;
+        detailPanel.add(driverTextField, gridBagConstraints);
 
-        leftPanel.add(jPanel12);
-        leftPanel.add(filler5);
-
-        jPanel23.setMaximumSize(new java.awt.Dimension(32877, 28));
-        jPanel23.setLayout(new javax.swing.BoxLayout(jPanel23, javax.swing.BoxLayout.LINE_AXIS));
-        jPanel23.add(filler41);
-
-        jLabel5.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
-        jLabel5.setText(CELL_PHONE_LABEL.getContent());
-        jLabel5.setMaximumSize(new java.awt.Dimension(90, 27));
-        jLabel5.setMinimumSize(new java.awt.Dimension(90, 27));
-        jLabel5.setPreferredSize(new java.awt.Dimension(90, 27));
-        jPanel23.add(jLabel5);
-        jPanel23.add(filler17);
+        cellTextLabel.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        cellTextLabel.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+        cellTextLabel.setText(CELL_PHONE_LABEL.getContent());
+        cellTextLabel.setMaximumSize(new java.awt.Dimension(90, 27));
+        cellTextLabel.setMinimumSize(new java.awt.Dimension(90, 27));
+        cellTextLabel.setPreferredSize(new java.awt.Dimension(90, 27));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 6;
+        detailPanel.add(cellTextLabel, gridBagConstraints);
 
         cellTextField.setEditable(false);
         cellTextField.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         cellTextField.setEnabled(false);
         cellTextField.setFocusable(false);
-        jPanel23.add(cellTextField);
-        jPanel23.add(filler34);
+        cellTextField.setMargin(new java.awt.Insets(0, 2, 0, 2));
+        cellTextField.setMaximumSize(new java.awt.Dimension(120, 28));
+        cellTextField.setMinimumSize(new java.awt.Dimension(120, 28));
+        cellTextField.setPreferredSize(new java.awt.Dimension(140, 30));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 6;
+        detailPanel.add(cellTextField, gridBagConstraints);
 
-        leftPanel.add(jPanel23);
-        leftPanel.add(filler6);
-
-        jPanel24.setMaximumSize(new java.awt.Dimension(32877, 28));
-        jPanel24.setLayout(new javax.swing.BoxLayout(jPanel24, javax.swing.BoxLayout.LINE_AXIS));
-        jPanel24.add(filler42);
-
-        jLabel6.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
-        jLabel6.setText(PHONE_LABEL.getContent());
-        jLabel6.setMaximumSize(new java.awt.Dimension(90, 27));
-        jLabel6.setMinimumSize(new java.awt.Dimension(90, 27));
-        jLabel6.setPreferredSize(new java.awt.Dimension(90, 27));
-        jPanel24.add(jLabel6);
-        jPanel24.add(filler18);
+        phoneTextLabel.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        phoneTextLabel.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+        phoneTextLabel.setText(PHONE_LABEL.getContent());
+        phoneTextLabel.setMaximumSize(new java.awt.Dimension(90, 27));
+        phoneTextLabel.setMinimumSize(new java.awt.Dimension(90, 27));
+        phoneTextLabel.setPreferredSize(new java.awt.Dimension(90, 27));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 8;
+        detailPanel.add(phoneTextLabel, gridBagConstraints);
 
         phoneTextField.setEditable(false);
         phoneTextField.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         phoneTextField.setEnabled(false);
         phoneTextField.setFocusable(false);
-        jPanel24.add(phoneTextField);
-        jPanel24.add(filler33);
+        phoneTextField.setMargin(new java.awt.Insets(0, 2, 0, 2));
+        phoneTextField.setMaximumSize(new java.awt.Dimension(120, 28));
+        phoneTextField.setMinimumSize(new java.awt.Dimension(120, 28));
+        phoneTextField.setPreferredSize(new java.awt.Dimension(140, 30));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 8;
+        detailPanel.add(phoneTextField, gridBagConstraints);
 
-        leftPanel.add(jPanel24);
-        leftPanel.add(filler8);
-
-        jPanel30.setMaximumSize(new java.awt.Dimension(32877, 28));
-        jPanel30.setLayout(new javax.swing.BoxLayout(jPanel30, javax.swing.BoxLayout.LINE_AXIS));
-        jPanel30.add(filler43);
-
-        jLabel10.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        jLabel10.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
-        jLabel10.setText(MODI_DATE_LABEL.getContent());
-        jLabel10.setMaximumSize(new java.awt.Dimension(90, 27));
-        jLabel10.setMinimumSize(new java.awt.Dimension(90, 27));
-        jLabel10.setPreferredSize(new java.awt.Dimension(90, 27));
-        jPanel30.add(jLabel10);
-        jPanel30.add(filler19);
+        lastModiLabel.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        lastModiLabel.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+        lastModiLabel.setText(MODI_DATE_LABEL.getContent());
+        lastModiLabel.setMaximumSize(new java.awt.Dimension(90, 27));
+        lastModiLabel.setMinimumSize(new java.awt.Dimension(90, 27));
+        lastModiLabel.setPreferredSize(new java.awt.Dimension(90, 27));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 10;
+        detailPanel.add(lastModiLabel, gridBagConstraints);
 
         lastModiTextField.setEditable(false);
         lastModiTextField.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         lastModiTextField.setEnabled(false);
         lastModiTextField.setFocusable(false);
-        jPanel30.add(lastModiTextField);
-        jPanel30.add(filler32);
+        lastModiTextField.setMargin(new java.awt.Insets(0, 2, 0, 2));
+        lastModiTextField.setMaximumSize(new java.awt.Dimension(120, 28));
+        lastModiTextField.setMinimumSize(new java.awt.Dimension(120, 28));
+        lastModiTextField.setPreferredSize(new java.awt.Dimension(140, 30));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 10;
+        detailPanel.add(lastModiTextField, gridBagConstraints);
 
-        leftPanel.add(jPanel30);
-        leftPanel.add(filler9);
-
-        jPanel25.setMaximumSize(new java.awt.Dimension(32877, 28));
-        jPanel25.setLayout(new javax.swing.BoxLayout(jPanel25, javax.swing.BoxLayout.LINE_AXIS));
-        jPanel25.add(filler44);
-
-        jLabel7.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
-        jLabel7.setText(NOTIFICATION_LABEL.getContent());
-        jLabel7.setMaximumSize(new java.awt.Dimension(90, 27));
-        jLabel7.setMinimumSize(new java.awt.Dimension(90, 27));
-        jLabel7.setPreferredSize(new java.awt.Dimension(90, 27));
-        jPanel25.add(jLabel7);
-        jPanel25.add(filler20);
+        notiLabel.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        notiLabel.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+        notiLabel.setText(NOTIFICATION_LABEL.getContent());
+        notiLabel.setMaximumSize(new java.awt.Dimension(90, 27));
+        notiLabel.setMinimumSize(new java.awt.Dimension(90, 27));
+        notiLabel.setPreferredSize(new java.awt.Dimension(90, 27));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 12;
+        detailPanel.add(notiLabel, gridBagConstraints);
 
         notiCheckBox.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         notiCheckBox.setEnabled(false);
         notiCheckBox.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
         notiCheckBox.setMargin(new java.awt.Insets(0, 2, 0, 2));
-        jPanel25.add(notiCheckBox);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 12;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        detailPanel.add(notiCheckBox, gridBagConstraints);
 
-        leftPanel.add(jPanel25);
-        leftPanel.add(filler7);
-
-        jPanel26.setMaximumSize(new java.awt.Dimension(32877, 28));
-        jPanel26.setLayout(new javax.swing.BoxLayout(jPanel26, javax.swing.BoxLayout.LINE_AXIS));
-        jPanel26.add(filler45);
-
-        jLabel8.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        jLabel8.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
-        jLabel8.setText(EXACT_COMP_LABEL.getContent());
-        jLabel8.setMaximumSize(new java.awt.Dimension(90, 27));
-        jLabel8.setMinimumSize(new java.awt.Dimension(90, 27));
-        jLabel8.setPreferredSize(new java.awt.Dimension(90, 27));
-        jPanel26.add(jLabel8);
-        jPanel26.add(filler21);
+        wholeLabel.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        wholeLabel.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+        wholeLabel.setText(EXACT_COMP_LABEL.getContent());
+        wholeLabel.setMaximumSize(new java.awt.Dimension(90, 27));
+        wholeLabel.setMinimumSize(new java.awt.Dimension(90, 27));
+        wholeLabel.setPreferredSize(new java.awt.Dimension(90, 27));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 14;
+        detailPanel.add(wholeLabel, gridBagConstraints);
 
         wholeCheckBox.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         wholeCheckBox.setEnabled(false);
         wholeCheckBox.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
         wholeCheckBox.setMargin(new java.awt.Insets(0, 2, 0, 2));
-        jPanel26.add(wholeCheckBox);
-        jPanel26.add(filler30);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 14;
+        detailPanel.add(wholeCheckBox, gridBagConstraints);
 
-        leftPanel.add(jPanel26);
-        leftPanel.add(filler10);
-
-        jPanel27.setMaximumSize(new java.awt.Dimension(32877, 28));
-        jPanel27.setLayout(new javax.swing.BoxLayout(jPanel27, javax.swing.BoxLayout.LINE_AXIS));
-        jPanel27.add(filler46);
-
-        jLabel13.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        jLabel13.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
-        jLabel13.setText(PARK_ALLOWED_LABEL.getContent());
-        jLabel13.setMaximumSize(new java.awt.Dimension(90, 27));
-        jLabel13.setMinimumSize(new java.awt.Dimension(90, 27));
-        jLabel13.setPreferredSize(new java.awt.Dimension(90, 27));
-        jPanel27.add(jLabel13);
-        jPanel27.add(filler22);
+        permitLabel.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        permitLabel.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+        permitLabel.setText(PARK_ALLOWED_LABEL.getContent());
+        permitLabel.setMaximumSize(new java.awt.Dimension(90, 27));
+        permitLabel.setMinimumSize(new java.awt.Dimension(90, 27));
+        permitLabel.setPreferredSize(new java.awt.Dimension(90, 27));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 16;
+        detailPanel.add(permitLabel, gridBagConstraints);
 
         permitCheckBox.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         permitCheckBox.setEnabled(false);
         permitCheckBox.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
         permitCheckBox.setMargin(new java.awt.Insets(0, 2, 0, 2));
-        jPanel27.add(permitCheckBox);
-        jPanel27.add(filler29);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 16;
+        detailPanel.add(permitCheckBox, gridBagConstraints);
 
-        leftPanel.add(jPanel27);
-        leftPanel.add(filler11);
-
-        jPanel28.setMaximumSize(new java.awt.Dimension(32877, 28));
-        jPanel28.setLayout(new javax.swing.BoxLayout(jPanel28, javax.swing.BoxLayout.LINE_AXIS));
-        jPanel28.add(filler47);
-
-        jLabel14.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        jLabel14.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
-        jLabel14.setText(REASON_LABEL.getContent());
-        jLabel14.setMaximumSize(new java.awt.Dimension(90, 27));
-        jLabel14.setMinimumSize(new java.awt.Dimension(90, 27));
-        jLabel14.setPreferredSize(new java.awt.Dimension(90, 27));
-        jPanel28.add(jLabel14);
-        jPanel28.add(filler23);
+        reasonLabel.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        reasonLabel.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+        reasonLabel.setText(REASON_LABEL.getContent());
+        reasonLabel.setMaximumSize(new java.awt.Dimension(90, 27));
+        reasonLabel.setMinimumSize(new java.awt.Dimension(90, 27));
+        reasonLabel.setPreferredSize(new java.awt.Dimension(90, 27));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 18;
+        detailPanel.add(reasonLabel, gridBagConstraints);
 
         reasonTextField.setEditable(false);
         reasonTextField.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        jPanel28.add(reasonTextField);
-        jPanel28.add(filler28);
+        reasonTextField.setHorizontalAlignment(javax.swing.JTextField.LEFT);
+        reasonTextField.setMargin(new java.awt.Insets(0, 2, 0, 2));
+        reasonTextField.setMaximumSize(new java.awt.Dimension(120, 28));
+        reasonTextField.setMinimumSize(new java.awt.Dimension(120, 28));
+        reasonTextField.setPreferredSize(new java.awt.Dimension(140, 30));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 18;
+        detailPanel.add(reasonTextField, gridBagConstraints);
 
-        leftPanel.add(jPanel28);
-        leftPanel.add(filler12);
-
-        jPanel29.setMaximumSize(new java.awt.Dimension(32877, 28));
-        jPanel29.setLayout(new javax.swing.BoxLayout(jPanel29, javax.swing.BoxLayout.LINE_AXIS));
-        jPanel29.add(filler48);
-
-        jLabel15.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        jLabel15.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
-        jLabel15.setText(OTHER_INFO_LABEL.getContent());
-        jLabel15.setMaximumSize(new java.awt.Dimension(90, 27));
-        jLabel15.setMinimumSize(new java.awt.Dimension(90, 27));
-        jLabel15.setPreferredSize(new java.awt.Dimension(90, 27));
-        jPanel29.add(jLabel15);
-        jPanel29.add(filler24);
+        otherLabel.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        otherLabel.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+        otherLabel.setText(OTHER_INFO_LABEL.getContent());
+        otherLabel.setMaximumSize(new java.awt.Dimension(90, 27));
+        otherLabel.setMinimumSize(new java.awt.Dimension(90, 27));
+        otherLabel.setPreferredSize(new java.awt.Dimension(90, 27));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 20;
+        detailPanel.add(otherLabel, gridBagConstraints);
 
         otherInfoTextField.setEditable(false);
         otherInfoTextField.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        jPanel29.add(otherInfoTextField);
-        jPanel29.add(filler26);
+        otherInfoTextField.setMargin(new java.awt.Insets(0, 2, 0, 2));
+        otherInfoTextField.setMaximumSize(new java.awt.Dimension(120, 28));
+        otherInfoTextField.setMinimumSize(new java.awt.Dimension(120, 28));
+        otherInfoTextField.setPreferredSize(new java.awt.Dimension(140, 30));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 20;
+        detailPanel.add(otherInfoTextField, gridBagConstraints);
 
-        leftPanel.add(jPanel29);
-        leftPanel.add(filler13);
-
-        jPanel31.setMaximumSize(new java.awt.Dimension(32877, 28));
-        jPanel31.setLayout(new javax.swing.BoxLayout(jPanel31, javax.swing.BoxLayout.LINE_AXIS));
-        jPanel31.add(filler49);
-
-        jLabel9.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        jLabel9.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
-        jLabel9.setText(REGI_DATE_LABEL.getContent());
-        jLabel9.setMaximumSize(new java.awt.Dimension(90, 27));
-        jLabel9.setMinimumSize(new java.awt.Dimension(90, 27));
-        jLabel9.setPreferredSize(new java.awt.Dimension(90, 27));
-        jPanel31.add(jLabel9);
-        jPanel31.add(filler25);
+        creationLabel.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        creationLabel.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+        creationLabel.setText(REGI_DATE_LABEL.getContent());
+        creationLabel.setMaximumSize(new java.awt.Dimension(90, 27));
+        creationLabel.setMinimumSize(new java.awt.Dimension(90, 27));
+        creationLabel.setPreferredSize(new java.awt.Dimension(90, 27));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 22;
+        detailPanel.add(creationLabel, gridBagConstraints);
 
         creationTextField.setEditable(false);
         creationTextField.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         creationTextField.setEnabled(false);
         creationTextField.setFocusable(false);
-        jPanel31.add(creationTextField);
-        jPanel31.add(filler27);
+        creationTextField.setMargin(new java.awt.Insets(0, 2, 0, 2));
+        creationTextField.setMaximumSize(new java.awt.Dimension(120, 28));
+        creationTextField.setMinimumSize(new java.awt.Dimension(120, 28));
+        creationTextField.setPreferredSize(new java.awt.Dimension(140, 30));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 22;
+        detailPanel.add(creationTextField, gridBagConstraints);
 
-        leftPanel.add(jPanel31);
-        leftPanel.add(filler72);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHEAST;
+        leftPanel.add(detailPanel, gridBagConstraints);
+
+        leftMarginPanel.setMinimumSize(new java.awt.Dimension(30, 100));
+        leftMarginPanel.setPreferredSize(new java.awt.Dimension(30, 600));
+
+        javax.swing.GroupLayout leftMarginPanelLayout = new javax.swing.GroupLayout(leftMarginPanel);
+        leftMarginPanel.setLayout(leftMarginPanelLayout);
+        leftMarginPanelLayout.setHorizontalGroup(
+            leftMarginPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 30, Short.MAX_VALUE)
+        );
+        leftMarginPanelLayout.setVerticalGroup(
+            leftMarginPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 100, Short.MAX_VALUE)
+        );
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridheight = 2;
+        leftPanel.add(leftMarginPanel, gridBagConstraints);
 
         wholePanel.add(leftPanel, java.awt.BorderLayout.WEST);
 
@@ -1020,6 +1012,7 @@ public class VehiclesForm extends javax.swing.JFrame {
         wholePanel.add(centerPanel, java.awt.BorderLayout.CENTER);
 
         getContentPane().add(wholePanel, java.awt.BorderLayout.CENTER);
+        getContentPane().add(filler4, java.awt.BorderLayout.PAGE_START);
         getContentPane().add(filler40_2, java.awt.BorderLayout.EAST);
 
         allButtonsPanel.setPreferredSize(new java.awt.Dimension(1270, 95));
@@ -1182,14 +1175,6 @@ public class VehiclesForm extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_insertSave_ButtonActionPerformed
 
-    private void driverTextFieldMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_driverTextFieldMouseClicked
-        if (evt.isConsumed() || formMode == FormMode.NormalMode)
-            return;
-        else
-            evt.consume();
-        openDriverSelectionForm(this);
-    }//GEN-LAST:event_driverTextFieldMouseClicked
-
     /**
      * Depending on the mode of the form, it performs one of the following functions
      * 1. modify the detail info of currently selected vehicle
@@ -1277,18 +1262,6 @@ public class VehiclesForm extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_deleteCancel_ButtonActionPerformed
-
-    private void selectDriverButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectDriverButtonActionPerformed
-        if (formMode == FormMode.NormalMode)
-            return;
-        openDriverSelectionForm(this);
-    }//GEN-LAST:event_selectDriverButtonActionPerformed
-
-    private void selectDriverButtonKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_selectDriverButtonKeyReleased
-        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
-            openDriverSelectionForm(this);
-        }
-    }//GEN-LAST:event_selectDriverButtonKeyReleased
 
     private void closeFormButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_closeFormButtonActionPerformed
         closeFrameGracefully();
@@ -1459,6 +1432,26 @@ public class VehiclesForm extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_disallowReasonMousePressed
 
+    private void driverTextFieldMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_driverTextFieldMouseClicked
+        if (evt.isConsumed() || formMode == FormMode.NormalMode)
+        return;
+        else
+        evt.consume();
+        openDriverSelectionForm(this);
+    }//GEN-LAST:event_driverTextFieldMouseClicked
+
+    private void selectDriverButtonKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_selectDriverButtonKeyReleased
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            openDriverSelectionForm(this);
+        }
+    }//GEN-LAST:event_selectDriverButtonKeyReleased
+
+    private void selectDriverButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectDriverButtonActionPerformed
+        if (formMode == FormMode.NormalMode)
+        return;
+        openDriverSelectionForm(this);
+    }//GEN-LAST:event_selectDriverButtonActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -1509,6 +1502,7 @@ public class VehiclesForm extends javax.swing.JFrame {
     private javax.swing.JPanel allButtonsPanel;
     private javax.swing.JTextField carTagTextField;
     private javax.swing.JTextField cellTextField;
+    private javax.swing.JLabel cellTextLabel;
     private javax.swing.JPanel centerFirstPanel;
     private javax.swing.JPanel centerPanel;
     private javax.swing.JPanel centerThridPanel;
@@ -1516,58 +1510,19 @@ public class VehiclesForm extends javax.swing.JFrame {
     public javax.swing.JButton closeFormButton;
     private javax.swing.JLabel countLbl;
     private javax.swing.JLabel countValue;
+    private javax.swing.JLabel creationLabel;
     private javax.swing.JTextField creationTextField;
     private javax.swing.JButton deleteAllVehicles;
     private javax.swing.JButton deleteCancel_Button;
+    private javax.swing.JPanel detailPanel;
     private javax.swing.JTextField disallowReason;
     private javax.swing.JTextField driverTextField;
     private javax.swing.Box.Filler filler1;
-    private javax.swing.Box.Filler filler10;
-    private javax.swing.Box.Filler filler11;
-    private javax.swing.Box.Filler filler12;
-    private javax.swing.Box.Filler filler13;
     private javax.swing.Box.Filler filler14;
-    private javax.swing.Box.Filler filler15;
-    private javax.swing.Box.Filler filler16;
-    private javax.swing.Box.Filler filler17;
-    private javax.swing.Box.Filler filler18;
-    private javax.swing.Box.Filler filler19;
-    private javax.swing.Box.Filler filler2;
-    private javax.swing.Box.Filler filler20;
-    private javax.swing.Box.Filler filler21;
-    private javax.swing.Box.Filler filler22;
-    private javax.swing.Box.Filler filler23;
-    private javax.swing.Box.Filler filler24;
-    private javax.swing.Box.Filler filler25;
-    private javax.swing.Box.Filler filler26;
-    private javax.swing.Box.Filler filler27;
-    private javax.swing.Box.Filler filler28;
-    private javax.swing.Box.Filler filler29;
-    private javax.swing.Box.Filler filler3;
-    private javax.swing.Box.Filler filler30;
     private javax.swing.Box.Filler filler31;
-    private javax.swing.Box.Filler filler32;
-    private javax.swing.Box.Filler filler33;
-    private javax.swing.Box.Filler filler34;
-    private javax.swing.Box.Filler filler35;
-    private javax.swing.Box.Filler filler36;
-    private javax.swing.Box.Filler filler37;
-    private javax.swing.Box.Filler filler38;
-    private javax.swing.Box.Filler filler39;
     private javax.swing.Box.Filler filler4;
-    private javax.swing.Box.Filler filler40;
     private javax.swing.Box.Filler filler40_1;
     private javax.swing.Box.Filler filler40_2;
-    private javax.swing.Box.Filler filler41;
-    private javax.swing.Box.Filler filler42;
-    private javax.swing.Box.Filler filler43;
-    private javax.swing.Box.Filler filler44;
-    private javax.swing.Box.Filler filler45;
-    private javax.swing.Box.Filler filler46;
-    private javax.swing.Box.Filler filler47;
-    private javax.swing.Box.Filler filler48;
-    private javax.swing.Box.Filler filler49;
-    private javax.swing.Box.Filler filler5;
     private javax.swing.Box.Filler filler50;
     private javax.swing.Box.Filler filler51;
     private javax.swing.Box.Filler filler52;
@@ -1576,56 +1531,37 @@ public class VehiclesForm extends javax.swing.JFrame {
     private javax.swing.Box.Filler filler55;
     private javax.swing.Box.Filler filler56;
     private javax.swing.Box.Filler filler57;
-    private javax.swing.Box.Filler filler6;
-    private javax.swing.Box.Filler filler7;
-    private javax.swing.Box.Filler filler72;
-    private javax.swing.Box.Filler filler8;
-    private javax.swing.Box.Filler filler9;
     private javax.swing.JLabel formModeLabel;
     private javax.swing.JLabel formTitleLabel;
     public javax.swing.JButton insertSave_Button;
-    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
-    private javax.swing.JLabel jLabel13;
-    private javax.swing.JLabel jLabel14;
-    private javax.swing.JLabel jLabel15;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
-    private javax.swing.JPanel jPanel11;
-    private javax.swing.JPanel jPanel12;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel23;
-    private javax.swing.JPanel jPanel24;
-    private javax.swing.JPanel jPanel25;
-    private javax.swing.JPanel jPanel26;
-    private javax.swing.JPanel jPanel27;
-    private javax.swing.JPanel jPanel28;
-    private javax.swing.JPanel jPanel29;
-    private javax.swing.JPanel jPanel30;
-    private javax.swing.JPanel jPanel31;
-    private javax.swing.JPanel jPanel8;
+    private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JLabel lastModiLabel;
     private javax.swing.JTextField lastModiTextField;
+    private javax.swing.JPanel leftMarginPanel;
     private javax.swing.JPanel leftPanel;
     private javax.swing.JPanel modePanel;
     private javax.swing.JPanel modeStringPanel;
     private javax.swing.JButton modiSave_Button;
     private javax.swing.JCheckBox notiCheckBox;
+    private javax.swing.JLabel notiLabel;
     private javax.swing.JFileChooser odsFileChooser;
     private javax.swing.JTextField otherInfoTextField;
+    private javax.swing.JLabel otherLabel;
     private javax.swing.JCheckBox permitCheckBox;
+    private javax.swing.JLabel permitLabel;
     private javax.swing.JTextField phoneTextField;
+    private javax.swing.JLabel phoneTextLabel;
     private javax.swing.JButton readSheet_Button;
+    private javax.swing.JLabel reasonLabel;
     private javax.swing.JTextField reasonTextField;
     private javax.swing.JPanel rowCount;
     private javax.swing.JPanel rowCountSz;
+    private javax.swing.JLabel rowNumLabel;
     private javax.swing.JTextField rowNumTextField;
     private javax.swing.JFileChooser saveFileChooser;
     private javax.swing.JButton saveSheet_Button;
@@ -1639,12 +1575,14 @@ public class VehiclesForm extends javax.swing.JFrame {
     private javax.swing.JButton seeLicenseButton;
     private javax.swing.JButton selectDriverButton;
     private javax.swing.JPanel tableTitlePanel;
+    private javax.swing.JLabel tarTagLabel;
     private javax.swing.JPanel titlePanel;
     private javax.swing.JPanel titlePanelReal;
     private javax.swing.JPanel topMarginPanel;
     private javax.swing.JPanel topPanel;
     private javax.swing.JTable vehiclesTable;
     private javax.swing.JCheckBox wholeCheckBox;
+    private javax.swing.JLabel wholeLabel;
     private javax.swing.JPanel wholePanel;
     // End of variables declaration//GEN-END:variables
     //</editor-fold>
@@ -1733,6 +1671,11 @@ public class VehiclesForm extends javax.swing.JFrame {
             logParkingException(Level.SEVERE, ex, excepMsg);
         } finally {
             closeDBstuff(conn, selectStmt, rs, excepMsg);
+            Dimension tableDim = new Dimension(vehiclesTable.getSize().width, 
+                    vehiclesTable.getRowHeight() * (vehiclesTable.getRowCount() + 1)); 
+            vehiclesTable.setSize(tableDim);
+            vehiclesTable.setPreferredSize(tableDim);
+            countValue.setText(String.valueOf(vehiclesTable.getRowCount()));            
         }
         
         int numRows = model.getRowCount();
