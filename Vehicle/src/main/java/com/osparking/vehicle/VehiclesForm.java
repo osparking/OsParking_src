@@ -250,7 +250,8 @@ public class VehiclesForm extends javax.swing.JFrame {
         otherInfoTextField = new javax.swing.JTextField();
         creationLabel = new javax.swing.JLabel();
         creationTextField = new javax.swing.JTextField();
-        leftMarginPanel = new javax.swing.JPanel();
+        isIDreqLabel = new javax.swing.JLabel();
+        isIDreqLabel1 = new javax.swing.JLabel();
         centerPanel = new javax.swing.JPanel();
         centerFirstPanel = new javax.swing.JPanel();
         tableTitlePanel = new javax.swing.JPanel();
@@ -265,14 +266,13 @@ public class VehiclesForm extends javax.swing.JFrame {
         searchPanel = new javax.swing.JPanel();
         filler53 = new javax.swing.Box.Filler(new java.awt.Dimension(2, 0), new java.awt.Dimension(2, 0), new java.awt.Dimension(2, 32767));
         jLabel11 = new javax.swing.JLabel();
-        filler51 = new javax.swing.Box.Filler(new java.awt.Dimension(5, 0), new java.awt.Dimension(5, 0), new java.awt.Dimension(5, 32767));
         searchCarTag = new javax.swing.JTextField();
         searchDriver = new javax.swing.JTextField();
         searchAffiliCBox = new PComboBox();
         searchBldgCBox = new PComboBox();
         searchETC = new javax.swing.JTextField();
         disallowReason = new javax.swing.JTextField();
-        filler50 = new javax.swing.Box.Filler(new java.awt.Dimension(3, 0), new java.awt.Dimension(3, 0), new java.awt.Dimension(3, 32767));
+        filler50 = new javax.swing.Box.Filler(new java.awt.Dimension(3, 0), new java.awt.Dimension(15, 0), new java.awt.Dimension(3, 32767));
         jScrollPane1 = new javax.swing.JScrollPane();
         vehiclesTable = new javax.swing.JTable();
         filler4 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 32767));
@@ -297,8 +297,8 @@ public class VehiclesForm extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle(VEHICLESFORM_FRAME_TITLE.getContent());
-        setMinimumSize(new java.awt.Dimension(1350, 880));
-        setPreferredSize(new java.awt.Dimension(1250, 880));
+        setMinimumSize(new java.awt.Dimension(1027, 720));
+        setPreferredSize(new java.awt.Dimension(1027, 720));
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 formWindowClosing(evt);
@@ -386,13 +386,13 @@ public class VehiclesForm extends javax.swing.JFrame {
         wholePanel.add(topPanel, java.awt.BorderLayout.NORTH);
 
         leftPanel.setMaximumSize(new java.awt.Dimension(393204, 32767));
-        leftPanel.setMinimumSize(new java.awt.Dimension(320, 690));
-        leftPanel.setPreferredSize(new java.awt.Dimension(320, 690));
+        leftPanel.setMinimumSize(new java.awt.Dimension(300, 690));
+        leftPanel.setPreferredSize(new java.awt.Dimension(300, 690));
         leftPanel.setLayout(new java.awt.GridBagLayout());
 
         modePanel.setMaximumSize(new java.awt.Dimension(32877, 80));
-        modePanel.setMinimumSize(new java.awt.Dimension(320, 54));
-        modePanel.setPreferredSize(new java.awt.Dimension(320, 60));
+        modePanel.setMinimumSize(new java.awt.Dimension(280, 54));
+        modePanel.setPreferredSize(new java.awt.Dimension(280, 60));
         modePanel.setLayout(new java.awt.BorderLayout());
 
         jPanel3.setLayout(new javax.swing.BoxLayout(jPanel3, javax.swing.BoxLayout.Y_AXIS));
@@ -434,7 +434,7 @@ public class VehiclesForm extends javax.swing.JFrame {
         detailPanel.setMinimumSize(new java.awt.Dimension(270, 460));
         detailPanel.setPreferredSize(new java.awt.Dimension(270, 460));
         java.awt.GridBagLayout detailPanelLayout = new java.awt.GridBagLayout();
-        detailPanelLayout.columnWidths = new int[] {0, 10, 0};
+        detailPanelLayout.columnWidths = new int[] {0, 2, 0, 2, 0};
         detailPanelLayout.rowHeights = new int[] {0, 7, 0, 7, 0, 7, 0, 7, 0, 7, 0, 7, 0, 7, 0, 7, 0, 7, 0, 7, 0, 7, 0};
         detailPanel.setLayout(detailPanelLayout);
 
@@ -458,7 +458,7 @@ public class VehiclesForm extends javax.swing.JFrame {
         rowNumTextField.setMinimumSize(new java.awt.Dimension(120, 28));
         rowNumTextField.setPreferredSize(new java.awt.Dimension(140, 30));
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 0;
         detailPanel.add(rowNumTextField, gridBagConstraints);
 
@@ -480,7 +480,7 @@ public class VehiclesForm extends javax.swing.JFrame {
         carTagTextField.setMinimumSize(new java.awt.Dimension(120, 28));
         carTagTextField.setPreferredSize(new java.awt.Dimension(140, 30));
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 2;
         detailPanel.add(carTagTextField, gridBagConstraints);
 
@@ -520,7 +520,7 @@ public class VehiclesForm extends javax.swing.JFrame {
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 4;
         detailPanel.add(driverTextField, gridBagConstraints);
 
@@ -544,7 +544,7 @@ public class VehiclesForm extends javax.swing.JFrame {
         cellTextField.setMinimumSize(new java.awt.Dimension(120, 28));
         cellTextField.setPreferredSize(new java.awt.Dimension(140, 30));
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 6;
         detailPanel.add(cellTextField, gridBagConstraints);
 
@@ -568,7 +568,7 @@ public class VehiclesForm extends javax.swing.JFrame {
         phoneTextField.setMinimumSize(new java.awt.Dimension(120, 28));
         phoneTextField.setPreferredSize(new java.awt.Dimension(140, 30));
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 8;
         detailPanel.add(phoneTextField, gridBagConstraints);
 
@@ -592,7 +592,7 @@ public class VehiclesForm extends javax.swing.JFrame {
         lastModiTextField.setMinimumSize(new java.awt.Dimension(120, 28));
         lastModiTextField.setPreferredSize(new java.awt.Dimension(140, 30));
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 10;
         detailPanel.add(lastModiTextField, gridBagConstraints);
 
@@ -612,7 +612,7 @@ public class VehiclesForm extends javax.swing.JFrame {
         notiCheckBox.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
         notiCheckBox.setMargin(new java.awt.Insets(0, 2, 0, 2));
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 12;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         detailPanel.add(notiCheckBox, gridBagConstraints);
@@ -633,8 +633,9 @@ public class VehiclesForm extends javax.swing.JFrame {
         wholeCheckBox.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
         wholeCheckBox.setMargin(new java.awt.Insets(0, 2, 0, 2));
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 14;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         detailPanel.add(wholeCheckBox, gridBagConstraints);
 
         permitLabel.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
@@ -653,8 +654,9 @@ public class VehiclesForm extends javax.swing.JFrame {
         permitCheckBox.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
         permitCheckBox.setMargin(new java.awt.Insets(0, 2, 0, 2));
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 16;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         detailPanel.add(permitCheckBox, gridBagConstraints);
 
         reasonLabel.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
@@ -676,7 +678,7 @@ public class VehiclesForm extends javax.swing.JFrame {
         reasonTextField.setMinimumSize(new java.awt.Dimension(120, 28));
         reasonTextField.setPreferredSize(new java.awt.Dimension(140, 30));
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 18;
         detailPanel.add(reasonTextField, gridBagConstraints);
 
@@ -698,7 +700,7 @@ public class VehiclesForm extends javax.swing.JFrame {
         otherInfoTextField.setMinimumSize(new java.awt.Dimension(120, 28));
         otherInfoTextField.setPreferredSize(new java.awt.Dimension(140, 30));
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 20;
         detailPanel.add(otherInfoTextField, gridBagConstraints);
 
@@ -722,35 +724,40 @@ public class VehiclesForm extends javax.swing.JFrame {
         creationTextField.setMinimumSize(new java.awt.Dimension(120, 28));
         creationTextField.setPreferredSize(new java.awt.Dimension(140, 30));
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 22;
         detailPanel.add(creationTextField, gridBagConstraints);
+
+        isIDreqLabel.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        isIDreqLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        isIDreqLabel.setText("M");
+        isIDreqLabel.setToolTipText("");
+        isIDreqLabel.setMaximumSize(new java.awt.Dimension(15, 26));
+        isIDreqLabel.setMinimumSize(new java.awt.Dimension(15, 21));
+        isIDreqLabel.setPreferredSize(new java.awt.Dimension(15, 26));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 2;
+        detailPanel.add(isIDreqLabel, gridBagConstraints);
+
+        isIDreqLabel1.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        isIDreqLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        isIDreqLabel1.setText("M");
+        isIDreqLabel1.setToolTipText("");
+        isIDreqLabel1.setMaximumSize(new java.awt.Dimension(15, 26));
+        isIDreqLabel1.setMinimumSize(new java.awt.Dimension(15, 21));
+        isIDreqLabel1.setPreferredSize(new java.awt.Dimension(15, 26));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 4;
+        detailPanel.add(isIDreqLabel1, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHEAST;
         leftPanel.add(detailPanel, gridBagConstraints);
-
-        leftMarginPanel.setMinimumSize(new java.awt.Dimension(30, 100));
-        leftMarginPanel.setPreferredSize(new java.awt.Dimension(30, 600));
-
-        javax.swing.GroupLayout leftMarginPanelLayout = new javax.swing.GroupLayout(leftMarginPanel);
-        leftMarginPanel.setLayout(leftMarginPanelLayout);
-        leftMarginPanelLayout.setHorizontalGroup(
-            leftMarginPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 30, Short.MAX_VALUE)
-        );
-        leftMarginPanelLayout.setVerticalGroup(
-            leftMarginPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 100, Short.MAX_VALUE)
-        );
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridheight = 2;
-        leftPanel.add(leftMarginPanel, gridBagConstraints);
 
         wholePanel.add(leftPanel, java.awt.BorderLayout.WEST);
 
@@ -856,7 +863,6 @@ public class VehiclesForm extends javax.swing.JFrame {
         jLabel11.setMinimumSize(new Dimension(vRowNoWidth, 27));
         jLabel11.setPreferredSize(new Dimension(vRowNoWidth, 28));
         searchPanel.add(jLabel11);
-        searchPanel.add(filler51);
 
         searchCarTag.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         searchCarTag.setHorizontalAlignment(javax.swing.JTextField.CENTER);
@@ -1524,7 +1530,6 @@ public class VehiclesForm extends javax.swing.JFrame {
     private javax.swing.Box.Filler filler40_1;
     private javax.swing.Box.Filler filler40_2;
     private javax.swing.Box.Filler filler50;
-    private javax.swing.Box.Filler filler51;
     private javax.swing.Box.Filler filler52;
     private javax.swing.Box.Filler filler53;
     private javax.swing.Box.Filler filler54;
@@ -1534,6 +1539,8 @@ public class VehiclesForm extends javax.swing.JFrame {
     private javax.swing.JLabel formModeLabel;
     private javax.swing.JLabel formTitleLabel;
     public javax.swing.JButton insertSave_Button;
+    private javax.swing.JLabel isIDreqLabel;
+    private javax.swing.JLabel isIDreqLabel1;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JPanel jPanel2;
@@ -1542,7 +1549,6 @@ public class VehiclesForm extends javax.swing.JFrame {
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JLabel lastModiLabel;
     private javax.swing.JTextField lastModiTextField;
-    private javax.swing.JPanel leftMarginPanel;
     private javax.swing.JPanel leftPanel;
     private javax.swing.JPanel modePanel;
     private javax.swing.JPanel modeStringPanel;

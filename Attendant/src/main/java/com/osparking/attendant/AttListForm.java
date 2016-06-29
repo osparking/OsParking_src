@@ -438,7 +438,8 @@ public class AttListForm extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle(ATTLIST_FRAME_TITLE.getContent()
         );
-        setMinimumSize(new java.awt.Dimension(1027, 680));
+        setMinimumSize(new java.awt.Dimension(1027, 720));
+        setPreferredSize(new java.awt.Dimension(1027, 720));
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 formWindowClosing(evt);

@@ -858,10 +858,10 @@ public class ControlEnums {
     }
     
     public enum ComboBoxItemTypes {
-        LOWER_HIGHER_CB_ITEM("(하위-상위소속)", "(Lower-Higher)"),
-        HIGHER_LOWER_CB_ITEM("(상위-하위소속)", "(Higher-Lower)"),
+        LOWER_HIGHER_CB_ITEM("(하위-상위)", "(Lower-Higher)"),
+        HIGHER_LOWER_CB_ITEM("(상위-하위)", "(Higher-Lower)"),
         ROOM_BUILDING_CB_ITEM("(호수-건물)", "(Room-Bldg)"),
-        BUILDING_ROOM_CB_ITEM("(건물-호수)", "(Bldg-Room)"),
+        BUILDING_ROOM_CB_ITEM("(건물-호실)", "(Bldg-Room)"),
         HIGHER_CB_ITEM("(상위 소속)", "(Higher Group)"),
         LOWER_CB_ITEM("(하위 소속)", "(Lower Group)"),
         BUILDING_CB_ITEM("(건물 번호)", "(Building No,)"),

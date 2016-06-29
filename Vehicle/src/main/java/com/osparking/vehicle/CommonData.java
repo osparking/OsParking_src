@@ -25,11 +25,11 @@ public class CommonData {
      * Vehicle table column width weight(=ratio) constants.
      */
     public static final int vRowNoWidth = 60; // row number(sequence number)
-    public static final int vPlateNoWidth = 100; // 
-    public static final int vDriverNmWidth = 95; // 
-    public static final int vAffiliWidth = 120; // 
-    public static final int vBuildingWidth = 120; // 
-    public static final int vOtherWidth = 120; // 
-    public static final int vCauseWidth = 150; // 
+    public static final int vPlateNoWidth = 70; // 
+    public static final int vDriverNmWidth = 65; // 
+    public static final int vAffiliWidth = 100; // 
+    public static final int vBuildingWidth = 75; // 
+    public static final int vOtherWidth = 60; // 
+    public static final int vCauseWidth = 80; // 
     
 }
