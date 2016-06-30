@@ -34,7 +34,8 @@ public class ControlEnums {
         L1_TABLE("상위 소속 ", "High Affili'"),
         L2_TABLE("부서 목록", "Low Affili'"),
         Building("건물(동)", "Building"),
-        UnitTab("호실 목록", "Unit(Rm)");
+        UnitTab("호실 목록", "Unit(Rm)"),
+        Vehicles("등록 차량 목록", "Registerd Cars");
         
         TableType(String korean, String english) {
             contents[KOREAN.ordinal()] = korean;
