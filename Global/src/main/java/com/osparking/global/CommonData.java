@@ -22,6 +22,7 @@ import static com.osparking.global.Globals.font_Type;
 import static com.osparking.global.names.ControlEnums.MenuITemTypes.META_KEY_LABEL;
 import java.awt.Color;
 import javax.swing.JLabel;
+import javax.swing.table.DefaultTableCellRenderer;
 
 /**
  *
@@ -32,6 +33,8 @@ public class CommonData {
     public static final int buttonWidthWide = 110; // Wide Width
     public static final int buttonHeightNorm = 40;
     public static final int buttonHeightShort = 30; 
+    public static final int normGUIwidth = 1027; 
+    public static final int normGUIheight = 720; 
     public static JLabel metaKeyLabel = new JLabel(META_KEY_LABEL.getContent());  
     public static final Color tipColor = new java.awt.Color(0xff, 0x85, 0x33);
     public static final Color tipColorTrans = new java.awt.Color(0xff, 0x85, 0x33, 127);
@@ -40,4 +43,9 @@ public class CommonData {
         metaKeyLabel.setForeground(tipColor);
     }
     public static final Color pointColor = new java.awt.Color(255, 51, 51);
+    
+    public static final DefaultTableCellRenderer putCellCenter = new DefaultTableCellRenderer();
+    static {
+        putCellCenter.setHorizontalAlignment(JLabel.CENTER);    
+    }
 }

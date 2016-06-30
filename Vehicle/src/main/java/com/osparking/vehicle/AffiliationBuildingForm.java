@@ -23,6 +23,7 @@ import com.osparking.global.CommonData;
 import static com.osparking.global.CommonData.buttonHeightNorm;
 import static com.osparking.global.CommonData.buttonWidthNorm;
 import static com.osparking.global.CommonData.buttonWidthWide;
+import static com.osparking.global.CommonData.normGUIheight;
 import static com.osparking.global.CommonData.pointColor;
 import static com.osparking.global.DataSheet.saveODSfile;
 import static com.osparking.global.Globals.BLDG_TAB_WIDTH;
@@ -59,8 +60,6 @@ import static com.osparking.global.names.ControlEnums.DialogMSGTypes.DUPLICATE_L
 import static com.osparking.global.names.ControlEnums.DialogMSGTypes.DUPLICATE_UNIT;
 import static com.osparking.global.names.ControlEnums.DialogMSGTypes.EMPTY_HIGH_AFFILI;
 import static com.osparking.global.names.ControlEnums.DialogMSGTypes.EMPTY_LOW_AFFILI;
-import static com.osparking.global.names.ControlEnums.DialogMSGTypes.LEVEL1_NAME_DIALOG;
-import static com.osparking.global.names.ControlEnums.DialogMSGTypes.LEVEL2_NAME_DIALOG;
 import static com.osparking.global.names.ControlEnums.DialogMSGTypes.USER_SAVE_ODS_FAIL_DIALOG;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.AFFILIATION_MODIFY_DIALOGTITLE;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.BUILDING_MODIFY_DIALOGTITLE;
@@ -143,7 +142,6 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.IOException;
 import java.sql.Connection;
@@ -301,8 +299,8 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle(AFFILI_BUILD_FRAME_TITLE.getContent());
         setBackground(PopUpBackground);
-        setMinimumSize(new java.awt.Dimension(740, 730));
-        setPreferredSize(new java.awt.Dimension(740, 730));
+        setMinimumSize(new Dimension(750, normGUIheight));
+        setPreferredSize(new Dimension(750, normGUIheight));
 
         wholePanel.setLayout(new java.awt.BorderLayout());
 
