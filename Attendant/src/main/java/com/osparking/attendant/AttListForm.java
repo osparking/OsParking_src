@@ -20,7 +20,10 @@ import com.osparking.global.CommonData;
 import static com.osparking.global.CommonData.buttonHeightNorm;
 import static com.osparking.global.CommonData.buttonWidthNorm;
 import static com.osparking.global.CommonData.metaKeyLabel;
+import static com.osparking.global.CommonData.normGUIheight;
+import static com.osparking.global.CommonData.normGUIwidth;
 import static com.osparking.global.CommonData.pointColor;
+import static com.osparking.global.CommonData.putCellCenter;
 import static com.osparking.global.CommonData.tipColor;
 import static com.osparking.global.DataSheet.saveODSfile;
 import java.awt.Point;
@@ -249,11 +252,6 @@ public class AttListForm extends javax.swing.JFrame {
         topUserIdLabel.setText(idStr);
         adminAuth2CheckBox.setSelected(isManager);
         saveFileChooser.setDialogType(javax.swing.JFileChooser.SAVE_DIALOG);
-        isIDreqLabel.setText("\u25CF");
-        nameReqLabel.setText("\u25CF");
-        cellReqLabel.setText("\u25B2");
-        phoneReqLabel.setText("\u25B2");
-        userPWReqLabel.setText("\u25CF");
         SetTableColumnWidth();
         setModificationState(false);
     }
@@ -274,7 +272,6 @@ public class AttListForm extends javax.swing.JFrame {
         topPanel = new javax.swing.JPanel();
         filler23 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 10), new java.awt.Dimension(0, 10), new java.awt.Dimension(32767, 10));
         topInPanel = new javax.swing.JPanel();
-        adminAuth2CheckBox = new javax.swing.JCheckBox();
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(5, 0), new java.awt.Dimension(5, 0), new java.awt.Dimension(5, 32767));
         topUserIdLabel = new javax.swing.JLabel();
         westPanel = new javax.swing.JPanel();
@@ -393,6 +390,7 @@ public class AttListForm extends javax.swing.JFrame {
         jLabel11 = new javax.swing.JLabel();
         countLabel = new javax.swing.JLabel();
         countValue = new javax.swing.JLabel();
+        adminAuth2CheckBox = new javax.swing.JCheckBox();
         jScrollPane1 = new javax.swing.JScrollPane();
         usersTable = new javax.swing.JTable(){
             public boolean isCellEditable(int rowIndex, int colIndex) {
@@ -438,8 +436,8 @@ public class AttListForm extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle(ATTLIST_FRAME_TITLE.getContent()
         );
-        setMinimumSize(new java.awt.Dimension(1027, 720));
-        setPreferredSize(new java.awt.Dimension(1027, 720));
+        setMinimumSize(new Dimension(normGUIwidth, normGUIheight));
+        setPreferredSize(new Dimension(normGUIwidth, normGUIheight));
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 formWindowClosing(evt);
@@ -452,6 +450,8 @@ public class AttListForm extends javax.swing.JFrame {
         wholePanel.setPreferredSize(new java.awt.Dimension(400, 670));
         wholePanel.setLayout(new java.awt.BorderLayout());
 
+        topInPanel.add(metaKeyLabel);
+        topInPanel.add(Box.createHorizontalGlue());
         topPanel.setMinimumSize(new java.awt.Dimension(267, 40));
         topPanel.setPreferredSize(new java.awt.Dimension(267, 40));
         topPanel.setLayout(new javax.swing.BoxLayout(topPanel, javax.swing.BoxLayout.PAGE_AXIS));
@@ -460,16 +460,6 @@ public class AttListForm extends javax.swing.JFrame {
         topInPanel.setMinimumSize(new java.awt.Dimension(267, 26));
         topInPanel.setPreferredSize(new java.awt.Dimension(267, 26));
         topInPanel.setLayout(new javax.swing.BoxLayout(topInPanel, javax.swing.BoxLayout.LINE_AXIS));
-
-        adminAuth2CheckBox.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        adminAuth2CheckBox.setText(MANAGER_HEADER.getContent());
-        adminAuth2CheckBox.setToolTipText("");
-        adminAuth2CheckBox.setEnabled(false);
-        adminAuth2CheckBox.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        adminAuth2CheckBox.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
-        topInPanel.add(metaKeyLabel);
-        topInPanel.add(Box.createHorizontalGlue());
-        topInPanel.add(adminAuth2CheckBox);
         topInPanel.add(filler1);
 
         topUserIdLabel.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
@@ -580,7 +570,7 @@ public class AttListForm extends javax.swing.JFrame {
 
         isIDreqLabel.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         isIDreqLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        isIDreqLabel.setText("M");
+        isIDreqLabel.setText("\u25CF");
         isIDreqLabel.setToolTipText("");
         isIDreqLabel.setMaximumSize(new java.awt.Dimension(15, 26));
         isIDreqLabel.setMinimumSize(new java.awt.Dimension(15, 21));
@@ -696,7 +686,7 @@ public class AttListForm extends javax.swing.JFrame {
 
         nameReqLabel.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         nameReqLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        nameReqLabel.setText("M");
+        nameReqLabel.setText("\u25CF");
         nameReqLabel.setMaximumSize(new java.awt.Dimension(15, 26));
         nameReqLabel.setMinimumSize(new java.awt.Dimension(15, 26));
         nameReqLabel.setPreferredSize(new java.awt.Dimension(15, 26));
@@ -739,7 +729,7 @@ public class AttListForm extends javax.swing.JFrame {
 
         cellReqLabel.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         cellReqLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        cellReqLabel.setText("w");
+        cellReqLabel.setText("\u25B2");
         cellReqLabel.setToolTipText(CELL_PHONE_TOOLTIP.getContent());
         cellReqLabel.setMaximumSize(new java.awt.Dimension(15, 21));
         cellReqLabel.setMinimumSize(new java.awt.Dimension(15, 21));
@@ -782,7 +772,7 @@ public class AttListForm extends javax.swing.JFrame {
 
         phoneReqLabel.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         phoneReqLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        phoneReqLabel.setText("w");
+        phoneReqLabel.setText("\u25B2");
         phoneReqLabel.setToolTipText(CELL_PHONE_TOOLTIP.getContent());
         phoneReqLabel.setMaximumSize(new java.awt.Dimension(15, 21));
         phoneReqLabel.setMinimumSize(new java.awt.Dimension(15, 21));
@@ -996,7 +986,8 @@ public class AttListForm extends javax.swing.JFrame {
 
         userPWReqLabel.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         userPWReqLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        userPWReqLabel.setText("M");
+        userPWReqLabel.setText("\u25CF");
+        userPWReqLabel.setEnabled(false);
         userPWReqLabel.setMaximumSize(new java.awt.Dimension(15, 21));
         userPWReqLabel.setMinimumSize(new java.awt.Dimension(15, 21));
         userPWReqLabel.setPreferredSize(new java.awt.Dimension(15, 21));
@@ -1058,6 +1049,13 @@ public class AttListForm extends javax.swing.JFrame {
         countValue.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         countValue.setText("0");
 
+        adminAuth2CheckBox.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        adminAuth2CheckBox.setText(MANAGER_HEADER.getContent());
+        adminAuth2CheckBox.setToolTipText("");
+        adminAuth2CheckBox.setEnabled(false);
+        adminAuth2CheckBox.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        adminAuth2CheckBox.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
+
         javax.swing.GroupLayout listTopPanelLayout = new javax.swing.GroupLayout(listTopPanel);
         listTopPanel.setLayout(listTopPanelLayout);
         listTopPanelLayout.setHorizontalGroup(
@@ -1067,7 +1065,8 @@ public class AttListForm extends javax.swing.JFrame {
                 .addComponent(countLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(countValue, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(428, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 298, Short.MAX_VALUE)
+                .addComponent(adminAuth2CheckBox))
             .addGroup(listTopPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(listTopPanelLayout.createSequentialGroup()
                     .addGap(0, 0, Short.MAX_VALUE)
@@ -1082,6 +1081,9 @@ public class AttListForm extends javax.swing.JFrame {
                     .addComponent(countLabel)
                     .addComponent(countValue))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(listTopPanelLayout.createSequentialGroup()
+                .addComponent(adminAuth2CheckBox)
+                .addGap(0, 0, Short.MAX_VALUE))
             .addGroup(listTopPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(listTopPanelLayout.createSequentialGroup()
                     .addGap(0, 0, Short.MAX_VALUE)
@@ -1126,6 +1128,8 @@ public class AttListForm extends javax.swing.JFrame {
         usersTable.setNextFocusableComponent(userNameText);
         usersTable.setPreferredSize(new java.awt.Dimension(600, 0));
         usersTable.setRowHeight(22);
+        ((DefaultTableCellRenderer)usersTable.getTableHeader().getDefaultRenderer())
+        .setHorizontalAlignment(JLabel.CENTER);
         jScrollPane1.setViewportView(usersTable);
 
         centerPanel.add(jScrollPane1);
@@ -2562,12 +2566,13 @@ public class AttListForm extends javax.swing.JFrame {
 
     private void setSearchEnabled(boolean flag) {
         usersTable.setEnabled(flag);
-        cancelButton.setEnabled(!flag);
         searchText.setEnabled(flag);
         searchCriteriaComboBox.setEnabled(flag);
         searchButton.setEnabled(flag);
         saveOdsButton. setEnabled(flag);
         closeFormButton.setEnabled(flag); 
+
+        cancelButton.setEnabled(!flag);
     }
 
     private String showPasswordRequirement() {
@@ -2641,6 +2646,7 @@ public class AttListForm extends javax.swing.JFrame {
 
     private void changeUserPasswordEnabled(boolean flag) {
         userPassword.setEnabled(flag);
+        userPWReqLabel.setEnabled(flag);
         userPassword.setEditable(flag);    
     }
 
@@ -3054,14 +3060,11 @@ public class AttListForm extends javax.swing.JFrame {
 
     private void SetTableColumnWidth() {
         usersTable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
-        TableColumnModel tcm = usersTable.getColumnModel();
-        
-        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
-        centerRenderer.setHorizontalAlignment(JLabel.CENTER);
+        TableColumnModel tcm = usersTable.getColumnModel();        
         
         // Adjust column width one by one
         // Adjust email address column width
-        tcm.getColumn(2).setCellRenderer(centerRenderer);
+        tcm.getColumn(2).setCellRenderer(putCellCenter);
 
         SetAColumnWidth(tcm.getColumn(0), 10, 80, 500); // 0: User ID
         SetAColumnWidth(tcm.getColumn(1), 10, 80, 500); // 1: User name
@@ -3069,7 +3072,6 @@ public class AttListForm extends javax.swing.JFrame {
         SetAColumnWidth(tcm.getColumn(3), 10, 100, 32767); // 2: Cell Phone 
         SetAColumnWidth(tcm.getColumn(4), 10, 100, 32767); // 3: Phone number
         SetAColumnWidth(tcm.getColumn(5), 10, 120, 32767); // 5: E-mail address
-        //SetAColumnWidth(tcm.getColumn(7), 10, 120, 32767); // 7: Latest modification date and time
         SetAColumnWidth(tcm.getColumn(6), 10, 120, 32767); // 6: Latest modification date and time
     }
     

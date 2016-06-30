@@ -21,7 +21,10 @@ import static com.osparking.global.CommonData.buttonHeightNorm;
 import static com.osparking.global.CommonData.buttonHeightShort;
 import static com.osparking.global.CommonData.buttonWidthNorm;
 import static com.osparking.global.CommonData.metaKeyLabel;
+import static com.osparking.global.CommonData.normGUIheight;
+import static com.osparking.global.CommonData.normGUIwidth;
 import static com.osparking.global.CommonData.pointColor;
+import static com.osparking.global.CommonData.putCellCenter;
 import static com.osparking.global.DataSheet.saveODSfile;
 import com.osparking.vehicle.driver.DriverSelection;
 import java.awt.event.ActionEvent;
@@ -113,6 +116,7 @@ import javax.swing.Box;
 import javax.swing.JLabel;
 import static javax.swing.JOptionPane.WARNING_MESSAGE;
 import javax.swing.JTable;
+import javax.swing.table.DefaultTableCellRenderer;
 import org.jopendocument.dom.spreadsheet.Sheet;
 import org.jopendocument.dom.spreadsheet.SpreadSheet;
 /**
@@ -195,6 +199,9 @@ public class VehiclesForm extends javax.swing.JFrame {
         SetAColumnWidth(tcm.getColumn(VehicleCol.Creation.getNumVal()), 0, 0, 0); // 12: registered On
         SetAColumnWidth(tcm.getColumn(VehicleCol.Modification.getNumVal()), 0, 0, 0); // 13: Modify On
         SetAColumnWidth(tcm.getColumn(VehicleCol.SeqNo.getNumVal()), 0, 0, 0); // 14: drvseqNo
+        
+        tcm.getColumn(VehicleCol.Building.getNumVal()).setCellRenderer(putCellCenter);
+
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -218,6 +225,8 @@ public class VehiclesForm extends javax.swing.JFrame {
         seeLicenseButton = new javax.swing.JButton();
         titlePanelReal = new javax.swing.JPanel();
         formTitleLabel = new javax.swing.JLabel();
+        titleRight = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
+        marginBalancer01 = new javax.swing.JLabel();
         leftPanel = new javax.swing.JPanel();
         modePanel = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
@@ -283,12 +292,14 @@ public class VehiclesForm extends javax.swing.JFrame {
         filler56 = new javax.swing.Box.Filler(new java.awt.Dimension(40, 0), new java.awt.Dimension(40, 0), new java.awt.Dimension(40, 32767));
         insertSave_Button = new javax.swing.JButton();
         modiSave_Button = new javax.swing.JButton();
-        deleteCancel_Button = new javax.swing.JButton();
+        deleteButton = new javax.swing.JButton();
+        cancel_Button = new javax.swing.JButton();
         filler52 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
         deleteAllVehicles = new javax.swing.JButton();
         readSheet_Button = new javax.swing.JButton();
         saveSheet_Button = new javax.swing.JButton();
+        filler32 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 32767));
         closeFormButton = new javax.swing.JButton();
         filler57 = new javax.swing.Box.Filler(new java.awt.Dimension(40, 0), new java.awt.Dimension(40, 0), new java.awt.Dimension(40, 32767));
         filler54 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 40), new java.awt.Dimension(0, 40), new java.awt.Dimension(32767, 40));
@@ -297,8 +308,8 @@ public class VehiclesForm extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle(VEHICLESFORM_FRAME_TITLE.getContent());
-        setMinimumSize(new java.awt.Dimension(1027, 720));
-        setPreferredSize(new java.awt.Dimension(1027, 720));
+        setMinimumSize(new Dimension(normGUIwidth, normGUIheight));
+        setPreferredSize(new Dimension(normGUIwidth, normGUIheight));
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 formWindowClosing(evt);
@@ -317,8 +328,6 @@ public class VehiclesForm extends javax.swing.JFrame {
         topMarginPanel.setMaximumSize(new java.awt.Dimension(32767, 40));
         topMarginPanel.setMinimumSize(new java.awt.Dimension(100, 40));
         topMarginPanel.setPreferredSize(new java.awt.Dimension(1190, 40));
-        topMarginPanel.add(metaKeyLabel);
-        topMarginPanel.add(Box.createHorizontalGlue());
         topMarginPanel.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 5, 15));
         jPanel2.add(topMarginPanel, java.awt.BorderLayout.NORTH);
 
@@ -327,9 +336,9 @@ public class VehiclesForm extends javax.swing.JFrame {
         titlePanel.setMinimumSize(new java.awt.Dimension(213, 40));
         titlePanel.setPreferredSize(new java.awt.Dimension(849, 40));
 
-        aboutjPanel.setMaximumSize(new java.awt.Dimension(320, 40));
-        aboutjPanel.setMinimumSize(new java.awt.Dimension(320, 40));
-        aboutjPanel.setPreferredSize(new java.awt.Dimension(320, 40));
+        aboutjPanel.setMaximumSize(new java.awt.Dimension(300, 40));
+        aboutjPanel.setMinimumSize(new java.awt.Dimension(300, 40));
+        aboutjPanel.setPreferredSize(new java.awt.Dimension(300, 40));
 
         seeLicenseButton.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         seeLicenseButton.setText("About");
@@ -348,7 +357,7 @@ public class VehiclesForm extends javax.swing.JFrame {
             aboutjPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(aboutjPanelLayout.createSequentialGroup()
                 .addComponent(seeLicenseButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(249, Short.MAX_VALUE))
+                .addContainerGap(229, Short.MAX_VALUE))
         );
         aboutjPanelLayout.setVerticalGroup(
             aboutjPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -358,6 +367,10 @@ public class VehiclesForm extends javax.swing.JFrame {
                 .addContainerGap(13, Short.MAX_VALUE))
         );
 
+        titlePanelReal.add(metaKeyLabel);
+        titlePanelReal.add(Box.createHorizontalGlue());
+        titlePanelReal.setLayout(new javax.swing.BoxLayout(titlePanelReal, javax.swing.BoxLayout.X_AXIS));
+
         formTitleLabel.setFont(new java.awt.Font(font_Type, font_Style, head_font_Size));
         formTitleLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         formTitleLabel.setText(VEHICLESFORM_FRAME_TITLE.getContent());
@@ -365,6 +378,12 @@ public class VehiclesForm extends javax.swing.JFrame {
         formTitleLabel.setMinimumSize(new java.awt.Dimension(113, 30));
         formTitleLabel.setPreferredSize(new java.awt.Dimension(200, 30));
         titlePanelReal.add(formTitleLabel);
+        titlePanelReal.add(titleRight);
+
+        marginBalancer01.setMaximumSize(metaKeyLabel.getPreferredSize());
+        marginBalancer01.setMinimumSize(metaKeyLabel.getPreferredSize());
+        marginBalancer01.setPreferredSize(metaKeyLabel.getPreferredSize());
+        titlePanelReal.add(marginBalancer01);
 
         javax.swing.GroupLayout titlePanelLayout = new javax.swing.GroupLayout(titlePanel);
         titlePanel.setLayout(titlePanelLayout);
@@ -373,7 +392,7 @@ public class VehiclesForm extends javax.swing.JFrame {
             .addGroup(titlePanelLayout.createSequentialGroup()
                 .addComponent(aboutjPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0)
-                .addComponent(titlePanelReal, javax.swing.GroupLayout.DEFAULT_SIZE, 870, Short.MAX_VALUE))
+                .addComponent(titlePanelReal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         titlePanelLayout.setVerticalGroup(
             titlePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -730,7 +749,7 @@ public class VehiclesForm extends javax.swing.JFrame {
 
         isIDreqLabel.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         isIDreqLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        isIDreqLabel.setText("M");
+        isIDreqLabel.setText("\u25CF");
         isIDreqLabel.setToolTipText("");
         isIDreqLabel.setMaximumSize(new java.awt.Dimension(15, 26));
         isIDreqLabel.setMinimumSize(new java.awt.Dimension(15, 21));
@@ -742,7 +761,7 @@ public class VehiclesForm extends javax.swing.JFrame {
 
         isIDreqLabel1.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         isIDreqLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        isIDreqLabel1.setText("M");
+        isIDreqLabel1.setText("\u25CF");
         isIDreqLabel1.setToolTipText("");
         isIDreqLabel1.setMaximumSize(new java.awt.Dimension(15, 26));
         isIDreqLabel1.setMinimumSize(new java.awt.Dimension(15, 21));
@@ -1011,6 +1030,8 @@ public class VehiclesForm extends javax.swing.JFrame {
         fineTuneColumnWidth();
         vehiclesTable.setMinimumSize(new java.awt.Dimension(600, 400));
         vehiclesTable.setPreferredSize(new java.awt.Dimension(0, 400));
+        ((DefaultTableCellRenderer)vehiclesTable.getTableHeader().getDefaultRenderer())
+        .setHorizontalAlignment(JLabel.CENTER);
         jScrollPane1.setViewportView(vehiclesTable);
 
         centerPanel.add(jScrollPane1);
@@ -1058,19 +1079,33 @@ public class VehiclesForm extends javax.swing.JFrame {
         });
         centerThridPanel.add(modiSave_Button);
 
-        deleteCancel_Button.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        deleteCancel_Button.setMnemonic('d');
-        deleteCancel_Button.setText(DELETE_BTN.getContent());
-        deleteCancel_Button.setEnabled(false);
-        deleteCancel_Button.setMaximumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
-        deleteCancel_Button.setMinimumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
-        deleteCancel_Button.setPreferredSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
-        deleteCancel_Button.addActionListener(new java.awt.event.ActionListener() {
+        deleteButton.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        deleteButton.setMnemonic('d');
+        deleteButton.setText(DELETE_BTN.getContent());
+        deleteButton.setEnabled(false);
+        deleteButton.setMaximumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
+        deleteButton.setMinimumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
+        deleteButton.setPreferredSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
+        deleteButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                deleteCancel_ButtonActionPerformed(evt);
+                deleteButtonActionPerformed(evt);
             }
         });
-        centerThridPanel.add(deleteCancel_Button);
+        centerThridPanel.add(deleteButton);
+
+        cancel_Button.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        cancel_Button.setMnemonic('C');
+        cancel_Button.setText(CANCEL_BTN.getContent());
+        cancel_Button.setEnabled(false);
+        cancel_Button.setMaximumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
+        cancel_Button.setMinimumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
+        cancel_Button.setPreferredSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
+        cancel_Button.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cancel_ButtonActionPerformed(evt);
+            }
+        });
+        centerThridPanel.add(cancel_Button);
         centerThridPanel.add(filler52);
         centerThridPanel.add(filler1);
 
@@ -1112,6 +1147,7 @@ public class VehiclesForm extends javax.swing.JFrame {
             }
         });
         centerThridPanel.add(saveSheet_Button);
+        centerThridPanel.add(filler32);
 
         closeFormButton.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         closeFormButton.setMnemonic('c');
@@ -1215,49 +1251,9 @@ public class VehiclesForm extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_modiSave_ButtonActionPerformed
 
-    private void deleteCancel_ButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteCancel_ButtonActionPerformed
-        // depending on the mode of the form, it performs one of the following functions
-        // 1. cancel current insertion,  2.  cancel current update
-        // 3. delete current row(vehicle)
-        if (formMode == FormMode.CreateMode) {
-            //<editor-fold defaultstate="collapsed" desc="--handle cancelling insertion">
-            int response = JOptionPane.showConfirmDialog(null, VEHICLE_CREATE_CANCEL_DIALOG.getContent(),
-//                                ((String[])Globals.DialogMSGList.get(VEHICLE_CREATE_CANCEL_DIALOG.ordinal()))[ourLang], 
-                                WARING_DIALOGTITLE.getContent(), 
-                                JOptionPane.YES_NO_OPTION);
-        
-            if (response == JOptionPane.YES_OPTION) 
-            {
-                setFormMode(FormMode.NormalMode);
-                insertSave_Button.setText(CREATE_BTN.getContent());
-                int selRow = vehiclesTable.getSelectedRow();
-                if (selRow >= 0)
-                    showVehicleDetail(selRow);  
-                else
-                    clearVehicleDetail();
-            } 
-            //</editor-fold>
-            
-        } else if (formMode == FormMode.UpdateMode) {
-            //<editor-fold defaultstate="collapsed" desc="--handle cancelling update">
-            int response = JOptionPane.showConfirmDialog(null, VEHICLE_MODIFY_CANCEL_DAILOG.getContent(),
-                                WARING_DIALOGTITLE.getContent(), 
-                                JOptionPane.YES_NO_OPTION);
-        
-            if (response == JOptionPane.YES_OPTION) 
-            {
-                setFormMode(FormMode.NormalMode);
-                modiSave_Button.setText(MODIFY_BTN.getContent());
-                int selRow = vehiclesTable.getSelectedRow();
-                if (selRow >= 0)
-                    showVehicleDetail(selRow);  
-                else
-                    clearVehicleDetail();
-                driverObj = new DriverObj("", 0);           
-            } 
-            //</editor-fold>
-        }
-        else if (formMode == FormMode.NormalMode) {
+    private void deleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteButtonActionPerformed
+        // delete current row(vehicle)
+        if (formMode == FormMode.NormalMode) {
             int selRow = vehiclesTable.getSelectedRow();
             highlightTableRow(vehiclesTable, selRow);
             // stop processing if no row selected currently
@@ -1267,7 +1263,7 @@ public class VehiclesForm extends javax.swing.JFrame {
                 deleteVehicles();
             }
         }
-    }//GEN-LAST:event_deleteCancel_ButtonActionPerformed
+    }//GEN-LAST:event_deleteButtonActionPerformed
 
     private void closeFormButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_closeFormButtonActionPerformed
         closeFrameGracefully();
@@ -1458,6 +1454,50 @@ public class VehiclesForm extends javax.swing.JFrame {
         openDriverSelectionForm(this);
     }//GEN-LAST:event_selectDriverButtonActionPerformed
 
+    private void cancel_ButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancel_ButtonActionPerformed
+        // depending on the mode of the form, it performs one of the following functions
+        // 1. cancel current insertion,  2.  cancel current update
+        
+        if (formMode == FormMode.CreateMode) {
+            //<editor-fold defaultstate="collapsed" desc="--handle cancelling insertion">
+            int response = JOptionPane.showConfirmDialog(null, VEHICLE_CREATE_CANCEL_DIALOG.getContent(),
+//                                ((String[])Globals.DialogMSGList.get(VEHICLE_CREATE_CANCEL_DIALOG.ordinal()))[ourLang], 
+                                WARING_DIALOGTITLE.getContent(), 
+                                JOptionPane.YES_NO_OPTION);
+        
+            if (response == JOptionPane.YES_OPTION) 
+            {
+                setFormMode(FormMode.NormalMode);
+                insertSave_Button.setText(CREATE_BTN.getContent());
+                int selRow = vehiclesTable.getSelectedRow();
+                if (selRow >= 0)
+                    showVehicleDetail(selRow);  
+                else
+                    clearVehicleDetail();
+            } 
+            //</editor-fold>
+            
+        } else if (formMode == FormMode.UpdateMode) {
+            //<editor-fold defaultstate="collapsed" desc="--handle cancelling update">
+            int response = JOptionPane.showConfirmDialog(null, VEHICLE_MODIFY_CANCEL_DAILOG.getContent(),
+                                WARING_DIALOGTITLE.getContent(), 
+                                JOptionPane.YES_NO_OPTION);
+        
+            if (response == JOptionPane.YES_OPTION) 
+            {
+                setFormMode(FormMode.NormalMode);
+                modiSave_Button.setText(MODIFY_BTN.getContent());
+                int selRow = vehiclesTable.getSelectedRow();
+                if (selRow >= 0)
+                    showVehicleDetail(selRow);  
+                else
+                    clearVehicleDetail();
+                driverObj = new DriverObj("", 0);           
+            } 
+            //</editor-fold>
+        }
+    }//GEN-LAST:event_cancel_ButtonActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -1506,6 +1546,7 @@ public class VehiclesForm extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel aboutjPanel;
     private javax.swing.JPanel allButtonsPanel;
+    private javax.swing.JButton cancel_Button;
     private javax.swing.JTextField carTagTextField;
     private javax.swing.JTextField cellTextField;
     private javax.swing.JLabel cellTextLabel;
@@ -1519,13 +1560,14 @@ public class VehiclesForm extends javax.swing.JFrame {
     private javax.swing.JLabel creationLabel;
     private javax.swing.JTextField creationTextField;
     private javax.swing.JButton deleteAllVehicles;
-    private javax.swing.JButton deleteCancel_Button;
+    private javax.swing.JButton deleteButton;
     private javax.swing.JPanel detailPanel;
     private javax.swing.JTextField disallowReason;
     private javax.swing.JTextField driverTextField;
     private javax.swing.Box.Filler filler1;
     private javax.swing.Box.Filler filler14;
     private javax.swing.Box.Filler filler31;
+    private javax.swing.Box.Filler filler32;
     private javax.swing.Box.Filler filler4;
     private javax.swing.Box.Filler filler40_1;
     private javax.swing.Box.Filler filler40_2;
@@ -1550,6 +1592,7 @@ public class VehiclesForm extends javax.swing.JFrame {
     private javax.swing.JLabel lastModiLabel;
     private javax.swing.JTextField lastModiTextField;
     private javax.swing.JPanel leftPanel;
+    private javax.swing.JLabel marginBalancer01;
     private javax.swing.JPanel modePanel;
     private javax.swing.JPanel modeStringPanel;
     private javax.swing.JButton modiSave_Button;
@@ -1584,6 +1627,7 @@ public class VehiclesForm extends javax.swing.JFrame {
     private javax.swing.JLabel tarTagLabel;
     private javax.swing.JPanel titlePanel;
     private javax.swing.JPanel titlePanelReal;
+    private javax.swing.Box.Filler titleRight;
     private javax.swing.JPanel topMarginPanel;
     private javax.swing.JPanel topPanel;
     private javax.swing.JTable vehiclesTable;
@@ -1691,13 +1735,13 @@ public class VehiclesForm extends javax.swing.JFrame {
             showVehicleDetail(viewIndex);
             highlightTableRow(vehiclesTable, viewIndex); 
             vehiclesTable.requestFocus();
-            deleteCancel_Button.setEnabled(true);
+            deleteButton.setEnabled(true);
             modiSave_Button.setEnabled((true));
         } else {
             // clear left side panel vehicle details
             clearVehicleDetail();
 
-            deleteCancel_Button.setEnabled(false);    
+            deleteButton.setEnabled(false);    
             modiSave_Button.setEnabled(false);            
         }
     }
@@ -1756,7 +1800,7 @@ public class VehiclesForm extends javax.swing.JFrame {
         lastModiTextField.setText((String)
                 vModel.getValueAt(viewIndex, VehicleCol.Modification.getNumVal()));  
         
-        deleteCancel_Button.setEnabled(true);
+        deleteButton.setEnabled(true);
     }
 
     private void attachEventListenerToVehicleTable() {
@@ -1809,87 +1853,63 @@ public class VehiclesForm extends javax.swing.JFrame {
         return formMode;
     }
 
+    private void setSearchEnabled(boolean flag) {
+        vehiclesTable.setEnabled(flag);
+        searchCarTag.setEnabled(flag);
+        searchDriver.setEnabled(flag);
+        searchAffiliCBox.setEnabled(flag);
+        searchBldgCBox.setEnabled(flag);
+        searchETC.setEnabled(flag);
+        disallowReason.setEnabled(flag);
+        clearButton.setEnabled(flag);
+        searchButton.setEnabled(flag);
+
+        deleteButton.setEnabled(flag);    
+        closeFormButton.setEnabled(flag);
+        cancel_Button.setEnabled(!flag);        
+        
+        saveSheet_Button.setEnabled(flag);
+        
+    }
+
     /**
      * @param formMode the formMode to set
      */
     public void setFormMode(FormMode aFormMode) {
         
         // change mode value
+        FormMode prevMode = this.formMode;
         this.formMode = aFormMode;
             
         // switch label for the users, change button label/functionality
         switch (aFormMode) {
             case CreateMode:
-                searchButton.setEnabled(false);
-                clearButton.setEnabled(false);
-                closeFormButton.setEnabled(false);
-                
                 formModeLabel.setText(CREATE_MODE_LABEL.getContent());
+                setSearchEnabled(false);
                 insertSave_Button.setText(SAVE_BTN.getContent());
                 insertSave_Button.setMnemonic('s');
-                deleteCancel_Button.setEnabled(true);    
-                deleteCancel_Button.setText(CANCEL_BTN.getContent());
-                deleteCancel_Button.setMnemonic('c');
-                
-                saveSheet_Button.setEnabled(false);
-                vehiclesTable.setEnabled(false);
-                
                 makeVehicleInfoFieldsEditable(true);
-                
-                searchCarTag.setEnabled(false);
-                searchDriver.setEnabled(false);
-                searchAffiliCBox.setEnabled(false);
-                searchBldgCBox.setEnabled(false);
-                searchETC.setEnabled(false);
                 break;
-            case UpdateMode:
-                searchButton.setEnabled(false);
-                clearButton.setEnabled(false);
-                closeFormButton.setEnabled(false);
                 
+            case UpdateMode:
                 formModeLabel.setText(MODIFY_MODE_LABEL.getContent());
+                setSearchEnabled(false);
                 modiSave_Button.setText(SAVE_BTN.getContent());
                 modiSave_Button.setMnemonic('s');
-                deleteCancel_Button.setEnabled(true);    
-                deleteCancel_Button.setText(CANCEL_BTN.getContent());
-                deleteCancel_Button.setMnemonic('c');
-                
-                saveSheet_Button.setEnabled(false);
-                vehiclesTable.setEnabled(false);
-                
                 makeVehicleInfoFieldsEditable(true);
-                
-                searchCarTag.setEnabled(false);
-                searchDriver.setEnabled(false);
-                searchAffiliCBox.setEnabled(false);
-                searchBldgCBox.setEnabled(false);
-                searchETC.setEnabled(false);
                 break;
+                
             case NormalMode:
-                searchButton.setEnabled(true);
-                searchButton.setMnemonic('s');
-                closeFormButton.setEnabled(true);
-                closeFormButton.setMnemonic('c');
                 formModeLabel.setText(SEARCH_MODE_LABEL.getContent());
-                
-                insertSave_Button.setText(CREATE_BTN.getContent());
-                insertSave_Button.setMnemonic('r');
-                modiSave_Button.setText(MODIFY_BTN.getContent());
-                modiSave_Button.setMnemonic('m');
-                deleteCancel_Button.setText(DELETE_BTN.getContent());
-                deleteCancel_Button.setMnemonic('d');
-                clearButton.setEnabled(true);
-                
-                saveSheet_Button.setEnabled(true);
-                vehiclesTable.setEnabled(true);
-                
+                setSearchEnabled(true);
+                if (prevMode == FormMode.CreateMode) {
+                    insertSave_Button.setText(CREATE_BTN.getContent());
+                    insertSave_Button.setMnemonic('r');
+                } else if (prevMode == FormMode.UpdateMode) {
+                    modiSave_Button.setText(MODIFY_BTN.getContent());
+                    modiSave_Button.setMnemonic('m');
+                }
                 makeVehicleInfoFieldsEditable(false);
-                
-                searchCarTag.setEnabled(true);
-                searchDriver.setEnabled(true);
-                searchAffiliCBox.setEnabled(true);
-                searchBldgCBox.setEnabled(true);
-                searchETC.setEnabled(true);
                 break;
             default:
                 formModeLabel.setText("");
