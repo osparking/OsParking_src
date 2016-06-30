@@ -96,6 +96,7 @@ public class ControlEnums {
         MODIFY_COND("\u203B 정보 수정 조건", "\u203B Legend"), 
         CREATE_COND("\u203B 정보 생성 조건", "\u203B Legend"), 
         DATA_COND("\u203B 필수 선택 구분", "\u203B Legend"), 
+        DATA_REQUIRED("\u203B 자료 입력 구분", "\u203B Required Item"), 
         REQUIRED1_LABEL(": 필수", ": Required"), 
         REQUIRED2_LABEL(": 최소 1 개", ": 1 or more"),
         USER_ID_LABEL("사용자 ID: ", "My ID: "),

@@ -28,7 +28,8 @@ import javax.swing.table.DefaultTableCellRenderer;
  *
  * @author Open Source Parking, Inc.
  */
-public class CommonData {
+public class CommonData { // new Dimension(carTagWidth, 30)
+    public static final int carTagWidth = 125; // Normal Width
     public static final int buttonWidthNorm = 90; // Normal Width
     public static final int buttonWidthWide = 110; // Wide Width
     public static final int buttonHeightNorm = 40;
