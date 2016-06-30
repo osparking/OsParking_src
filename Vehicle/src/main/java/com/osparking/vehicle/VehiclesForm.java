@@ -147,6 +147,7 @@ public class VehiclesForm extends javax.swing.JFrame {
         attachEnterHandler(searchAffiliCBox);
         attachEnterHandler(searchBldgCBox);
         attachEnterHandler(searchETC);
+        attachEnterHandler(disallowReason);
         
         setFormMode(FormMode.NormalMode);
         loadSearchBox();
@@ -268,15 +269,16 @@ public class VehiclesForm extends javax.swing.JFrame {
         isIDreqLabel = new javax.swing.JLabel();
         isIDreqLabel1 = new javax.swing.JLabel();
         centerPanel = new javax.swing.JPanel();
-        titlePanel = new javax.swing.JPanel();
+        titlePanelReal = new javax.swing.JPanel();
+        formTitleLabel = new javax.swing.JLabel();
+        titleBelow = new javax.swing.JPanel();
         centerTopLeft = new javax.swing.JPanel();
+        metaKeyPanel = new javax.swing.JPanel();
+        metaLabel = new javax.swing.JLabel();
         countPanel = new javax.swing.JPanel();
         countLbl = new javax.swing.JLabel();
         countValue = new javax.swing.JLabel();
-        metaKeyPanel = new javax.swing.JPanel();
-        metaLabel = new javax.swing.JLabel();
-        titlePanelReal = new javax.swing.JPanel();
-        formTitleLabel = new javax.swing.JLabel();
+        filler5 = new javax.swing.Box.Filler(new java.awt.Dimension(1, 0), new java.awt.Dimension(1, 0), new java.awt.Dimension(1, 32767));
         centerTopRight = new javax.swing.JPanel();
         rowCountSz = new javax.swing.JPanel();
         clearButton = new javax.swing.JButton();
@@ -804,13 +806,39 @@ public class VehiclesForm extends javax.swing.JFrame {
         centerPanel.setPreferredSize(new java.awt.Dimension(850, 670));
         centerPanel.setLayout(new javax.swing.BoxLayout(centerPanel, javax.swing.BoxLayout.Y_AXIS));
 
-        titlePanel.setMaximumSize(new java.awt.Dimension(2147483647, 80));
-        titlePanel.setMinimumSize(new java.awt.Dimension(213, 80));
-        titlePanel.setPreferredSize(new java.awt.Dimension(849, 80));
-        titlePanel.setLayout(new java.awt.BorderLayout());
+        titlePanelReal.setMaximumSize(new java.awt.Dimension(32767, 30));
+        titlePanelReal.setMinimumSize(new java.awt.Dimension(113, 30));
+        titlePanelReal.setPreferredSize(new java.awt.Dimension(200, 30));
+        titlePanelReal.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 0, 0));
 
-        centerTopLeft.setMinimumSize(new java.awt.Dimension(220, 80));
-        centerTopLeft.setPreferredSize(new java.awt.Dimension(220, 80));
+        formTitleLabel.setFont(new java.awt.Font(font_Type, font_Style, head_font_Size));
+        formTitleLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        formTitleLabel.setText(VEHICLESFORM_FRAME_TITLE.getContent());
+        formTitleLabel.setMaximumSize(new java.awt.Dimension(300, 30));
+        formTitleLabel.setMinimumSize(new java.awt.Dimension(113, 30));
+        formTitleLabel.setPreferredSize(new java.awt.Dimension(200, 30));
+        titlePanelReal.add(formTitleLabel);
+
+        centerPanel.add(titlePanelReal);
+
+        titleBelow.setMaximumSize(new java.awt.Dimension(2147483647, 50));
+        titleBelow.setMinimumSize(new java.awt.Dimension(213, 50));
+        titleBelow.setPreferredSize(new java.awt.Dimension(849, 50));
+        titleBelow.setLayout(new java.awt.BorderLayout());
+
+        centerTopLeft.setMaximumSize(new java.awt.Dimension(32767, 50));
+        centerTopLeft.setMinimumSize(new java.awt.Dimension(220, 50));
+        centerTopLeft.setPreferredSize(new java.awt.Dimension(310, 50));
+        centerTopLeft.setLayout(new javax.swing.BoxLayout(centerTopLeft, javax.swing.BoxLayout.Y_AXIS));
+
+        metaKeyPanel.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 0, 0));
+
+        metaLabel.setText(MenuITemTypes.META_KEY_LABEL.getContent());
+        metaLabel.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        metaLabel.setForeground(tipColor);
+        metaKeyPanel.add(metaLabel);
+
+        centerTopLeft.add(metaKeyPanel);
 
         countLbl.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         countLbl.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -833,66 +861,32 @@ public class VehiclesForm extends javax.swing.JFrame {
             .addGroup(countPanelLayout.createSequentialGroup()
                 .addGap(0, 0, 0)
                 .addComponent(countLbl, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, 0)
+                .addGap(2, 2, 2)
+                .addComponent(filler5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(2, 2, 2)
                 .addComponent(countValue)
-                .addContainerGap(35, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         countPanelLayout.setVerticalGroup(
             countPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(countPanelLayout.createSequentialGroup()
-                .addGap(0, 0, 0)
-                .addGroup(countPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(countValue)
-                    .addComponent(countLbl, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(0, 0, 0))
+                .addGroup(countPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(countPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(countValue)
+                        .addComponent(countLbl, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(countPanelLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(filler5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
         );
 
-        metaKeyPanel.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 0, 5));
+        centerTopLeft.add(countPanel);
 
-        metaLabel.setText(MenuITemTypes.META_KEY_LABEL.getContent());
-        metaLabel.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        metaLabel.setForeground(tipColor);
-        metaKeyPanel.add(metaLabel);
+        titleBelow.add(centerTopLeft, java.awt.BorderLayout.WEST);
 
-        javax.swing.GroupLayout centerTopLeftLayout = new javax.swing.GroupLayout(centerTopLeft);
-        centerTopLeft.setLayout(centerTopLeftLayout);
-        centerTopLeftLayout.setHorizontalGroup(
-            centerTopLeftLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(centerTopLeftLayout.createSequentialGroup()
-                .addComponent(metaKeyPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 53, Short.MAX_VALUE))
-            .addGroup(centerTopLeftLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(centerTopLeftLayout.createSequentialGroup()
-                    .addComponent(countPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 58, Short.MAX_VALUE)))
-        );
-        centerTopLeftLayout.setVerticalGroup(
-            centerTopLeftLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, centerTopLeftLayout.createSequentialGroup()
-                .addContainerGap(29, Short.MAX_VALUE)
-                .addComponent(metaKeyPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(29, 29, 29))
-            .addGroup(centerTopLeftLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, centerTopLeftLayout.createSequentialGroup()
-                    .addGap(0, 62, Short.MAX_VALUE)
-                    .addComponent(countPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-        );
-
-        titlePanel.add(centerTopLeft, java.awt.BorderLayout.WEST);
-
-        titlePanelReal.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 0, 15));
-
-        formTitleLabel.setFont(new java.awt.Font(font_Type, font_Style, head_font_Size));
-        formTitleLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        formTitleLabel.setText(VEHICLESFORM_FRAME_TITLE.getContent());
-        formTitleLabel.setMaximumSize(new java.awt.Dimension(300, 30));
-        formTitleLabel.setMinimumSize(new java.awt.Dimension(113, 30));
-        formTitleLabel.setPreferredSize(new java.awt.Dimension(200, 30));
-        titlePanelReal.add(formTitleLabel);
-
-        titlePanel.add(titlePanelReal, java.awt.BorderLayout.CENTER);
-
-        centerTopRight.setMinimumSize(new java.awt.Dimension(220, 80));
+        centerTopRight.setMaximumSize(new java.awt.Dimension(32767, 50));
+        centerTopRight.setMinimumSize(new java.awt.Dimension(220, 50));
+        centerTopRight.setPreferredSize(new java.awt.Dimension(310, 50));
 
         rowCountSz.setMaximumSize(new java.awt.Dimension(200, 40));
         rowCountSz.setMinimumSize(new java.awt.Dimension(200, 40));
@@ -931,9 +925,8 @@ public class VehiclesForm extends javax.swing.JFrame {
         centerTopRightLayout.setHorizontalGroup(
             centerTopRightLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, centerTopRightLayout.createSequentialGroup()
-                .addGap(0, 0, 0)
-                .addComponent(rowCountSz, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(rowCountSz, javax.swing.GroupLayout.PREFERRED_SIZE, 310, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         centerTopRightLayout.setVerticalGroup(
             centerTopRightLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -942,9 +935,9 @@ public class VehiclesForm extends javax.swing.JFrame {
                 .addComponent(rowCountSz, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
-        titlePanel.add(centerTopRight, java.awt.BorderLayout.EAST);
+        titleBelow.add(centerTopRight, java.awt.BorderLayout.EAST);
 
-        centerPanel.add(titlePanel);
+        centerPanel.add(titleBelow);
 
         centerFirstPanel.setMaximumSize(new java.awt.Dimension(2147483647, 90));
         centerFirstPanel.setMinimumSize(new java.awt.Dimension(850, 40));
@@ -1051,11 +1044,6 @@ public class VehiclesForm extends javax.swing.JFrame {
         disallowReason.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
                 disallowReasonMousePressed(evt);
-            }
-        });
-        disallowReason.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                disallowReasonKeyReleased(evt);
             }
         });
         searchPanel.add(disallowReason);
@@ -1509,8 +1497,6 @@ public class VehiclesForm extends javax.swing.JFrame {
     }//GEN-LAST:event_seeLicenseButtonActionPerformed
 
     private void searchCarTagMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_searchCarTagMousePressed
-        boolean b1 = searchDriver.isEditable();
-        boolean b2 = searchDriver.isEnabled();
         searchCarTag.selectAll();
     }//GEN-LAST:event_searchCarTagMousePressed
 
@@ -1520,8 +1506,6 @@ public class VehiclesForm extends javax.swing.JFrame {
     }//GEN-LAST:event_searchCarTagFocusLost
 
     private void searchDriverMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_searchDriverMousePressed
-        boolean b1 = searchDriver.isEditable();
-        boolean b2 = searchDriver.isEnabled();
         searchDriver.selectAll();
     }//GEN-LAST:event_searchDriverMousePressed
 
@@ -1531,7 +1515,6 @@ public class VehiclesForm extends javax.swing.JFrame {
     }//GEN-LAST:event_searchDriverFocusLost
 
     private void searchETCMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_searchETCMousePressed
-
         searchETC.selectAll();
     }//GEN-LAST:event_searchETCMousePressed
 
@@ -1625,10 +1608,6 @@ public class VehiclesForm extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_cancel_ButtonActionPerformed
 
-    private void disallowReasonKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_disallowReasonKeyReleased
-        loadVehicleTable(0, "");
-    }//GEN-LAST:event_disallowReasonKeyReleased
-
     /**
      * @param args the command line arguments
      */
@@ -1707,6 +1686,7 @@ public class VehiclesForm extends javax.swing.JFrame {
     private javax.swing.Box.Filler filler40_1;
     private javax.swing.Box.Filler filler40_2;
     private javax.swing.Box.Filler filler42;
+    private javax.swing.Box.Filler filler5;
     private javax.swing.Box.Filler filler50;
     private javax.swing.Box.Filler filler53;
     private javax.swing.Box.Filler filler54;
@@ -1762,7 +1742,7 @@ public class VehiclesForm extends javax.swing.JFrame {
     private javax.swing.JButton seeLicenseButton;
     private javax.swing.JButton selectDriverButton;
     private javax.swing.JLabel tarTagLabel;
-    private javax.swing.JPanel titlePanel;
+    private javax.swing.JPanel titleBelow;
     private javax.swing.JPanel titlePanelReal;
     private javax.swing.JPanel topMarginPanel;
     private javax.swing.JPanel topPanel;
