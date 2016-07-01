@@ -17,6 +17,7 @@
 package com.osparking.vehicle.driver;
 
 import static com.mysql.jdbc.MysqlErrorNumbers.ER_DUP_ENTRY;
+import static com.osparking.global.CommonData.tableRowHeight;
 import static com.osparking.vehicle.driver.DriverTable.modifyingRowM;
 import static com.osparking.vehicle.driver.ODSReader.getWrongCellPointString;
 import java.awt.Dimension;
@@ -744,7 +745,7 @@ public class ManageDrivers extends javax.swing.JFrame {
             }
         ));
         driversTable.setInheritsPopupMenu(true);
-        driversTable.setRowHeight(22);
+        driversTable.setRowHeight(tableRowHeight);
         driversTable.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 driversTableFocusGained(evt);

@@ -22,11 +22,11 @@ import static com.osparking.global.CommonData.buttonHeightShort;
 import static com.osparking.global.CommonData.buttonWidthNorm;
 import static com.osparking.global.CommonData.buttonWidthWide;
 import static com.osparking.global.CommonData.carTagWidth;
-import static com.osparking.global.CommonData.metaKeyLabel;
 import static com.osparking.global.CommonData.normGUIheight;
 import static com.osparking.global.CommonData.normGUIwidth;
 import static com.osparking.global.CommonData.pointColor;
 import static com.osparking.global.CommonData.putCellCenter;
+import static com.osparking.global.CommonData.tableRowHeight;
 import static com.osparking.global.CommonData.tipColor;
 import static com.osparking.global.DataSheet.saveODSfile;
 import java.awt.Point;
@@ -120,7 +120,6 @@ import java.util.Date;
 import java.util.HashSet;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
-import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JRootPane;
@@ -1086,7 +1085,7 @@ public class AttListForm extends javax.swing.JFrame {
         usersTable.setName(""); // NOI18N
         usersTable.setNextFocusableComponent(userNameText);
         usersTable.setPreferredSize(new java.awt.Dimension(600, 0));
-        usersTable.setRowHeight(22);
+        usersTable.setRowHeight(tableRowHeight);
         ((DefaultTableCellRenderer)usersTable.getTableHeader().getDefaultRenderer())
         .setHorizontalAlignment(JLabel.CENTER);
         jScrollPane1.setViewportView(usersTable);

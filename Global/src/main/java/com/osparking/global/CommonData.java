@@ -36,6 +36,8 @@ public class CommonData { // new Dimension(carTagWidth, 30)
     public static final int buttonHeightShort = 30; 
     public static final int normGUIwidth = 1027; 
     public static final int normGUIheight = 720; 
+    public static final int tableRowHeight = 25; 
+    
     public static JLabel metaKeyLabel = new JLabel(META_KEY_LABEL.getContent());  
     public static final Color tipColor = new java.awt.Color(0xff, 0x85, 0x33);
     public static final Color tipColorTrans = new java.awt.Color(0xff, 0x85, 0x33, 127);

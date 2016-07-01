@@ -25,6 +25,7 @@ import static com.osparking.global.CommonData.normGUIheight;
 import static com.osparking.global.CommonData.normGUIwidth;
 import static com.osparking.global.CommonData.pointColor;
 import static com.osparking.global.CommonData.putCellCenter;
+import static com.osparking.global.CommonData.tableRowHeight;
 import static com.osparking.global.CommonData.tipColor;
 import static com.osparking.global.DataSheet.saveODSfile;
 import com.osparking.vehicle.driver.DriverSelection;
@@ -172,9 +173,11 @@ public class VehiclesForm extends javax.swing.JFrame {
 
     private void openDriverSelectionForm(VehiclesForm mySelf) {
         int seqNo = 0; 
-        if (formMode == formMode.UpdateMode)
+        
+        if (formMode == formMode.UpdateMode) {
             seqNo = Integer.parseInt((String)vehiclesTable.getModel().getValueAt(
                     vehiclesTable.getSelectedRow(), VehicleCol.SeqNo.getNumVal()));
+        }
         new DriverSelection(mySelf, seqNo).setVisible(true);
     }
             
@@ -1106,7 +1109,7 @@ public class VehiclesForm extends javax.swing.JFrame {
         vehiclesTable.setMinimumSize(new java.awt.Dimension(600, 400));
         ((DefaultTableCellRenderer)vehiclesTable.getTableHeader().getDefaultRenderer())
         .setHorizontalAlignment(JLabel.CENTER);
-        vehiclesTable.setRowHeight(22);
+        vehiclesTable.setRowHeight(tableRowHeight);
         jScrollPane1.setViewportView(vehiclesTable);
 
         centerPanel.add(jScrollPane1);
@@ -1560,7 +1563,7 @@ public class VehiclesForm extends javax.swing.JFrame {
 
     private void selectDriverButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectDriverButtonActionPerformed
         if (formMode == FormMode.NormalMode)
-        return;
+            return;
         openDriverSelectionForm(this);
     }//GEN-LAST:event_selectDriverButtonActionPerformed
 

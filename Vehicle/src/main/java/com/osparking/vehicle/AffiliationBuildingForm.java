@@ -25,6 +25,7 @@ import static com.osparking.global.CommonData.buttonWidthNorm;
 import static com.osparking.global.CommonData.buttonWidthWide;
 import static com.osparking.global.CommonData.normGUIheight;
 import static com.osparking.global.CommonData.pointColor;
+import static com.osparking.global.CommonData.tableRowHeight;
 import static com.osparking.global.DataSheet.saveODSfile;
 import static com.osparking.global.Globals.BLDG_TAB_WIDTH;
 import static com.osparking.global.Globals.PopUpBackground;
@@ -471,7 +472,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
 
     );
     L1_Affiliation.setDoubleBuffered(true);
-    L1_Affiliation.setRowHeight(22);
+    L1_Affiliation.setRowHeight(tableRowHeight);
     L1_Affiliation.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     L1_Affiliation.addFocusListener(new java.awt.event.FocusAdapter() {
         public void focusLost(java.awt.event.FocusEvent evt) {
@@ -668,7 +669,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     );
     L2_Affiliation.setDoubleBuffered(true);
     L2_Affiliation.setEnabled(false);
-    L2_Affiliation.setRowHeight(22);
+    L2_Affiliation.setRowHeight(tableRowHeight);
     L2_Affiliation.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     L2_Affiliation.addFocusListener(new java.awt.event.FocusAdapter() {
         public void focusLost(java.awt.event.FocusEvent evt) {
@@ -870,7 +871,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     BuildingTable.getColumnModel().getColumn(1).setCellRenderer(bnoCellRenderer);
     BuildingTable.setDoubleBuffered(true);
     BuildingTable.setEnabled(false);
-    BuildingTable.setRowHeight(22);
+    BuildingTable.setRowHeight(tableRowHeight);
     L1_Affiliation.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     BuildingTable.addFocusListener(new java.awt.event.FocusAdapter() {
         public void focusLost(java.awt.event.FocusEvent evt) {
@@ -1066,7 +1067,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     .setHorizontalAlignment(JLabel.CENTER);
     UnitTable.getColumnModel().getColumn(1).setCellRenderer(bnoCellRenderer);
     UnitTable.setDoubleBuffered(true);
-    UnitTable.setRowHeight(22);
+    UnitTable.setRowHeight(tableRowHeight);
     L2_Affiliation.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     UnitTable.addFocusListener(new java.awt.event.FocusAdapter() {
         public void focusLost(java.awt.event.FocusEvent evt) {
