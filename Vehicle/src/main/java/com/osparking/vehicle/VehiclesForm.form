@@ -536,6 +536,7 @@
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                       <Connection code="new java.awt.Font(font_Type, font_Style, font_Size)" type="code"/>
                     </Property>
+                    <Property name="mnemonic" type="int" value="68"/>
                     <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                       <Connection code="OWNER_BTN.getContent()" type="code"/>
                     </Property>

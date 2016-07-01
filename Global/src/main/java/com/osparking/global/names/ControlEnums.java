@@ -17,6 +17,7 @@
 package com.osparking.global.names;
 
 import static com.osparking.global.Globals.language;
+import static com.osparking.global.names.ControlEnums.ButtonTypes.SELECT_BTN;
 import static com.osparking.global.names.ControlEnums.Languages.ENGLISH;
 import static com.osparking.global.names.ControlEnums.Languages.KOREAN;
 
@@ -193,6 +194,8 @@ public class ControlEnums {
         LOWER_LABEL(" 부서 목록", "Lower affiliations of"),
         CHOOSE_PANEL_DIALOG("사용할 패널(제목, 목록, 분홍 버튼)을 선택하세요!", 
                 "Click the panel(title, table, pink button) to use!"),
+        SELECT_DRIVER_HELP("운전자 행 클릭 후 [" + SELECT_BTN.getContent() + "] 버튼 사용",
+                "Click a driver row, then use [" + SELECT_BTN.getContent() + "Select] button!"), 
         CREATE_SAVE_HELP("자료 생성 후 [엔터] 키로 마감(=저장)할 것!",
                 "Press enter after the data creation!"),
         UPDATE_SAVE_HELP("자료 갱신 후 [엔터] 키로 마감(=저장)할 것!",
@@ -230,9 +233,9 @@ public class ControlEnums {
         READ_ODS_NO_SHORT_BTN("시트읽기", "Read ods"),
         SAVE_NO_SHORT_BTN("저장", "Save"),
         CANCEL_NO_SHORT_BTN("취소", "Cancel"),
-        OWNER_BTN("운전자", "Owner"),
+        OWNER_BTN("운전자(D)", "Driver"),
         SELECT_BTN("선택(T)", "Select"),
-        MANAGE_BTN("운전자 목록(M)", "Manage Drivers"),
+        MANAGE_BTN("운전자 관리(M)", "Manage Drivers"),
         FIX_IT_BTN("설정(F)", "Fix It"),
         ARRIVALS_BTN("<HTML>입차기록(<U>A</U>)</HTML>", "<HTML><U>A</U>rrivals</HTML>"),
         VEHICLES_BTN("<HTML>등록차목록(<U>V</U>)</HTML>", "<HTML><U>V</U>ehicles</HTML>"),
@@ -933,7 +936,7 @@ public class ControlEnums {
         LOGIN_MENU_ITEM("로그인", "Log In"),
         LOGOUT_MENU_ITEM("로그아웃", "Log Out"),
         MANAGER_MANU("매니저 :", "Manager :"),
-        META_KEY_LABEL("메타 키: Alt", "Meta Key : Alt"),
+        META_KEY_LABEL("메타 키 : Alt", "Meta Key : Alt"),
         ID_LABEL_STR("아이디 :", "ID :"),
         ID_DEFAULT("(없음)", "(N/A)");
         

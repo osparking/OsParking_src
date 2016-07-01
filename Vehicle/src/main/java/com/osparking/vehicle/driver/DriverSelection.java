@@ -18,6 +18,7 @@ package com.osparking.vehicle.driver;
 
 import static com.osparking.global.CommonData.buttonHeightNorm;
 import static com.osparking.global.CommonData.buttonWidthNorm;
+import static com.osparking.global.CommonData.putCellCenter;
 import static com.osparking.global.CommonData.tableRowHeight;
 import static com.osparking.global.CommonData.tipColor;
 import com.osparking.vehicle.VehiclesForm;
@@ -48,17 +49,21 @@ import static com.osparking.global.Globals.initializeLoggers;
 import static com.osparking.global.Globals.logParkingException;
 import static com.osparking.global.names.ControlEnums.ButtonTypes.*;
 import static com.osparking.global.names.ControlEnums.LabelContent.SEARCH_LABEL;
+import static com.osparking.global.names.ControlEnums.LabelContent.SELECT_DRIVER_HELP;
 import static com.osparking.global.names.ControlEnums.TitleTypes.DRIVER_SELECTION_FRAME_TITLE;
 import static com.osparking.global.names.ControlEnums.TableTypes.*;
 import static com.osparking.global.names.ControlEnums.TextType.*;
 import static com.osparking.global.names.ControlEnums.ToolTipContent.CELL_PHONE_INPUT_TOOLTIP;
 import static com.osparking.global.names.ControlEnums.ToolTipContent.DRIVER_INPUT_TOOLTIP;
 import static com.osparking.global.names.JDBCMySQL.getConnection;
+import com.osparking.vehicle.LabelBlinker;
 import java.awt.Color;
 import java.awt.Dimension;
+import javax.swing.JLabel;
 import javax.swing.SwingUtilities;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.table.DefaultTableCellRenderer;
 
 /**
  *
@@ -94,8 +99,8 @@ public class DriverSelection extends javax.swing.JFrame {
         attachEnterHandler(searchCell); 
         skinnyDriverTable.getSelectionModel().addListSelectionListener(
                 new DriverSelectionListener());
-//        searchName.selectAll();
-        System.out.println("row index: " + skinnyDriverTable.getSelectedRow());
+        (new LabelBlinker()).displayHelpMessage(csHelpText, 
+                SELECT_DRIVER_HELP.getContent(), true);          
     }
     
     /**
@@ -110,15 +115,16 @@ public class DriverSelection extends javax.swing.JFrame {
         northPanel = new javax.swing.JPanel();
         westPanel = new javax.swing.JPanel();
         wholePanel = new javax.swing.JPanel();
-        jPanel2 = new javax.swing.JPanel();
+        titlePanel = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
+        csHelpPanel = new javax.swing.JPanel();
+        csHelpText = new javax.swing.JLabel();
         filler3 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 10), new java.awt.Dimension(0, 10), new java.awt.Dimension(32767, 10));
         topButtonPanel = new javax.swing.JPanel();
-        filler11 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 32767));
-        filler9 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
         fixDriverButton = new javax.swing.JButton();
         filler22 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 32767));
         searchButton = new javax.swing.JButton();
+        filler4 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 10), new java.awt.Dimension(0, 10), new java.awt.Dimension(32767, 10));
         searchPanel = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         filler6 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(5, 0), new java.awt.Dimension(10, 32767));
@@ -158,10 +164,10 @@ public class DriverSelection extends javax.swing.JFrame {
 
         wholePanel.setLayout(new javax.swing.BoxLayout(wholePanel, javax.swing.BoxLayout.Y_AXIS));
 
-        jPanel2.setMaximumSize(new java.awt.Dimension(32767, 40));
-        jPanel2.setMinimumSize(new java.awt.Dimension(120, 40));
-        jPanel2.setPreferredSize(new java.awt.Dimension(120, 40));
-        jPanel2.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 0, 0));
+        titlePanel.setMaximumSize(new java.awt.Dimension(32767, 30));
+        titlePanel.setMinimumSize(new java.awt.Dimension(120, 30));
+        titlePanel.setPreferredSize(new java.awt.Dimension(120, 30));
+        titlePanel.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 0, 0));
 
         jLabel1.setFont(new java.awt.Font(font_Type, font_Style, head_font_Size));
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -169,17 +175,39 @@ public class DriverSelection extends javax.swing.JFrame {
         jLabel1.setMaximumSize(new java.awt.Dimension(120, 28));
         jLabel1.setMinimumSize(new java.awt.Dimension(120, 28));
         jLabel1.setPreferredSize(new java.awt.Dimension(120, 28));
-        jPanel2.add(jLabel1);
+        titlePanel.add(jLabel1);
 
-        wholePanel.add(jPanel2);
+        wholePanel.add(titlePanel);
+
+        csHelpPanel.setPreferredSize(new java.awt.Dimension(100, 40));
+
+        csHelpText.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        csHelpText.setForeground(Color.gray);
+        csHelpText.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        csHelpText.setText("운전자 행 클릭 후 [선택] 버튼 사용");
+        csHelpText.setPreferredSize(new java.awt.Dimension(46, 28));
+
+        javax.swing.GroupLayout csHelpPanelLayout = new javax.swing.GroupLayout(csHelpPanel);
+        csHelpPanel.setLayout(csHelpPanelLayout);
+        csHelpPanelLayout.setHorizontalGroup(
+            csHelpPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(csHelpText, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 320, Short.MAX_VALUE)
+        );
+        csHelpPanelLayout.setVerticalGroup(
+            csHelpPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(csHelpPanelLayout.createSequentialGroup()
+                .addGap(6, 6, 6)
+                .addComponent(csHelpText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        wholePanel.add(csHelpPanel);
         wholePanel.add(filler3);
 
         topButtonPanel.setMaximumSize(new java.awt.Dimension(32767, 45));
-        topButtonPanel.setMinimumSize(new java.awt.Dimension(272, 30));
+        topButtonPanel.setMinimumSize(new java.awt.Dimension(272, 45));
         topButtonPanel.setPreferredSize(new java.awt.Dimension(242, 45));
         topButtonPanel.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT, 0, 0));
-        topButtonPanel.add(filler11);
-        topButtonPanel.add(filler9);
 
         fixDriverButton.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         fixDriverButton.setMnemonic('t');
@@ -221,6 +249,7 @@ public class DriverSelection extends javax.swing.JFrame {
         topButtonPanel.add(searchButton);
 
         wholePanel.add(topButtonPanel);
+        wholePanel.add(filler4);
 
         searchPanel.setMaximumSize(new java.awt.Dimension(2147483647, 28));
         searchPanel.setLayout(new javax.swing.BoxLayout(searchPanel, javax.swing.BoxLayout.X_AXIS));
@@ -255,6 +284,9 @@ public class DriverSelection extends javax.swing.JFrame {
             }
         });
         searchName.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                searchNameKeyReleased(evt);
+            }
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 searchNameKeyTyped(evt);
             }
@@ -316,6 +348,8 @@ public class DriverSelection extends javax.swing.JFrame {
                 }
             }
         );
+        ((DefaultTableCellRenderer)skinnyDriverTable.getTableHeader().getDefaultRenderer())
+        .setHorizontalAlignment(JLabel.CENTER);
         skinnyDriverTable.setRowHeight(tableRowHeight);
         skinnyDriverTable.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -519,6 +553,23 @@ public class DriverSelection extends javax.swing.JFrame {
     }//GEN-LAST:event_searchCellKeyTyped
 
     /**
+     * Used to detect a partial input of Korean alphabet and allow the "searchButton" enabled.
+     * Without it, Koreans might be ansious about the delay of the button becoming usable.
+     */
+    int releaseCount = 0;
+    private void searchNameKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_searchNameKeyReleased
+        if (++releaseCount >= 2) 
+        {
+            SwingUtilities.invokeLater(new Runnable() {
+                public void run() {
+                    searchButton.setEnabled(true);
+                    releaseCount = 0;
+                }
+            });        
+        }
+    }//GEN-LAST:event_searchNameKeyReleased
+
+    /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
@@ -561,20 +612,20 @@ public class DriverSelection extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel bottomButtonPanel;
     public javax.swing.JButton closeFormButton;
+    private javax.swing.JPanel csHelpPanel;
+    private javax.swing.JLabel csHelpText;
     private javax.swing.JPanel driversPanel;
     private javax.swing.JPanel eastPanel;
     private javax.swing.Box.Filler filler1;
-    private javax.swing.Box.Filler filler11;
     private javax.swing.Box.Filler filler2;
     private javax.swing.Box.Filler filler22;
     private javax.swing.Box.Filler filler3;
+    private javax.swing.Box.Filler filler4;
     private javax.swing.Box.Filler filler6;
     private javax.swing.Box.Filler filler7;
-    private javax.swing.Box.Filler filler9;
     public javax.swing.JButton fixDriverButton;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JButton manageDriversButton;
     private javax.swing.JPanel northPanel;
@@ -584,6 +635,7 @@ public class DriverSelection extends javax.swing.JFrame {
     private javax.swing.JPanel searchPanel;
     private javax.swing.JTable skinnyDriverTable;
     private javax.swing.JPanel southPanel;
+    private javax.swing.JPanel titlePanel;
     private javax.swing.JPanel topButtonPanel;
     private javax.swing.JPanel westPanel;
     private javax.swing.JPanel wholePanel;
@@ -643,12 +695,15 @@ public class DriverSelection extends javax.swing.JFrame {
         } else {
             fixDriverButton.setEnabled(false);
         }
+        searchButton.setEnabled(false);
     }
 
     private void adjustSkinnyTable() {
         // Hide drivers table sequence number which is used by only inside the code
         TableColumnModel skinnyModel = skinnyDriverTable.getColumnModel();
         
+        skinnyModel.getColumn(0).setCellRenderer(putCellCenter);
+
         // <editor-fold defaultstate="collapsezd" desc="-- Adjust Column Width ">                    
         SetAColumnWidth(skinnyModel.getColumn(0), 60, 60, 60); // 0: row number
         SetAColumnWidth(skinnyModel.getColumn(NAME), 100, 100, 100); // 1: driver name
@@ -726,12 +781,12 @@ public class DriverSelection extends javax.swing.JFrame {
     private void changeSearchButtonEnabled() {
         // prevSearchCondition
         String currSearchCondition = formSearchCondition();
-        System.out.println("curr: " + currSearchCondition + ", prev: " + prevSearchCondition);
         if (currSearchCondition.equals(prevSearchCondition)) {
             searchButton.setEnabled(false);
         } else {
             searchButton.setEnabled(true);
         }
+        releaseCount = 0;
     }
 
     private class DriverSelectionListener implements ListSelectionListener {

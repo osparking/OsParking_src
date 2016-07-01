@@ -515,6 +515,7 @@ public class VehiclesForm extends javax.swing.JFrame {
         detailPanel.add(carTagTextField, gridBagConstraints);
 
         selectDriverButton.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        selectDriverButton.setMnemonic('D');
         selectDriverButton.setText(OWNER_BTN.getContent());
         selectDriverButton.setEnabled(false);
         selectDriverButton.setFocusable(false);
