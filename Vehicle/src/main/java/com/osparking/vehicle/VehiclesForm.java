@@ -1838,7 +1838,6 @@ public class VehiclesForm extends javax.swing.JFrame {
                 }
                 //</editor-fold>
             }
-            countValue.setText(""+vehiclesTable.getRowCount()+"");
             //</editor-fold>
         } catch (SQLException ex) {
             logParkingException(Level.SEVERE, ex, excepMsg);

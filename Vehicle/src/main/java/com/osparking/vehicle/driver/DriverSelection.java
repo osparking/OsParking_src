@@ -59,6 +59,8 @@ import static com.osparking.global.names.JDBCMySQL.getConnection;
 import com.osparking.vehicle.LabelBlinker;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.im.InputContext;
+import java.util.Locale;
 import javax.swing.JLabel;
 import javax.swing.SwingUtilities;
 import javax.swing.event.ListSelectionEvent;
@@ -100,7 +102,9 @@ public class DriverSelection extends javax.swing.JFrame {
         skinnyDriverTable.getSelectionModel().addListSelectionListener(
                 new DriverSelectionListener());
         (new LabelBlinker()).displayHelpMessage(csHelpText, 
-                SELECT_DRIVER_HELP.getContent(), true);          
+                SELECT_DRIVER_HELP.getContent(), true);  
+        
+        searchName.getInputContext().selectInputMethod(Locale.KOREA);
     }
     
     /**
@@ -147,6 +151,7 @@ public class DriverSelection extends javax.swing.JFrame {
         setMaximumSize(new java.awt.Dimension(400, 535));
         setMinimumSize(new java.awt.Dimension(400, 535));
         setPreferredSize(new java.awt.Dimension(400, 535));
+        setResizable(false);
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 formWindowClosing(evt);
@@ -526,6 +531,7 @@ public class DriverSelection extends javax.swing.JFrame {
             nameHintShown = false;            
             searchName.setForeground(new Color(0, 0, 0));
         }
+        searchName.getInputContext().selectInputMethod(Locale.KOREA);        
     }//GEN-LAST:event_searchNameFocusGained
 
     private void searchCellFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_searchCellFocusGained

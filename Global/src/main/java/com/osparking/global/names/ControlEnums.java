@@ -121,9 +121,9 @@ public class ControlEnums {
         AFFILI_MODE_STRING("소속, 부서", "Affiliations"), 
         BUILDING_MODE_STRING("건물, 호실", "Building, Units"), 
         WORK_PANEL_LABEL("작업 대상 : ",  "Work Panel :"), 
-        SEARCH_MODE_LABEL("차량 검색",  "Searching"), 
-        CREATE_MODE_LABEL("차량 등록",  "Car Creation"), 
-        MODIFY_MODE_LABEL("차량 수정",  "Modification"), 
+        SEARCH_MODE_LABEL("검색",  "Searching"), 
+        CREATE_MODE_LABEL("등록",  "Car Creation"), 
+        MODIFY_MODE_LABEL("수정",  "Modification"), 
         SEARCH_LABEL("검색키",  "S'Key"), 
         ORDER_LABEL("순번",  "List#"), 
         CAR_TAG_LABEL("차량번호",  "Tag No."), 
@@ -198,6 +198,8 @@ public class ControlEnums {
                 "Click a driver row, then use [" + SELECT_BTN.getContent() + "Select] button!"), 
         CREATE_SAVE_HELP("자료 생성 후 [엔터] 키로 마감(=저장)할 것!",
                 "Press enter after the data creation!"),
+        REQUIRE_FIELD_NOTE("필수 입력 항목임!",
+                "It's a Required field!"),
         UPDATE_SAVE_HELP("자료 갱신 후 [엔터] 키로 마감(=저장)할 것!",
                 "Press enter after the data modification!");
         
@@ -510,13 +512,17 @@ public class ControlEnums {
                             + "(By pressing [Yes], cell phone will have focus," 
                             + System.getProperty("line.separator") 
                             + "Otherwise, creation will be discarded.)"),
-        
-        DRIVER_CREATE_FAIL_DIALOG("운전자 이름을입력하지 않으셧습니다." 
-                            + System.getProperty("line.separator")
-                            + "운전자 생성이 자동적으로 종료됩니다." ,
-                "As the driver's name is missing," 
+
+        MISSING_NAME_HANDLING("\"필수사항\"인 운전자 이름이 누락 되었습니다."
                             + System.getProperty("line.separator") 
-                            + "driver creation is automatically cancelled."),
+                            + "([예] 버튼을 누르면 이름 입력란으로 이동합니다." 
+                            + System.getProperty("line.separator") 
+                            + "그렇지 않으면, 수정정보가 포기됩니다.)", 
+              "\"Required\" driver name isn't provided!" 
+                            + System.getProperty("line.separator") 
+                            + "By pressing [Yes], focus will move to name field." 
+                            + System.getProperty("line.separator") 
+                            + "Otherwise, registration will be given up."),
         
         USER_RIGHTS_DESCRIPTION("1. 관리자(ID: admin) : 상위" + System.getProperty("line.separator") +
                 "    - 매니저 및 일반에 대한 모든 권한" + System.getProperty("line.separator") +

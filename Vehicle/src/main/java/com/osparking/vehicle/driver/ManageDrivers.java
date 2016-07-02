@@ -17,7 +17,14 @@
 package com.osparking.vehicle.driver;
 
 import static com.mysql.jdbc.MysqlErrorNumbers.ER_DUP_ENTRY;
+import com.osparking.global.CommonData;
+import static com.osparking.global.CommonData.buttonHeightNorm;
+import static com.osparking.global.CommonData.buttonWidthNorm;
+import static com.osparking.global.CommonData.normGUIheight;
+import static com.osparking.global.CommonData.normGUIwidth;
+import static com.osparking.global.CommonData.pointColor;
 import static com.osparking.global.CommonData.tableRowHeight;
+import static com.osparking.global.CommonData.tipColor;
 import static com.osparking.vehicle.driver.DriverTable.modifyingRowM;
 import static com.osparking.vehicle.driver.ODSReader.getWrongCellPointString;
 import java.awt.Dimension;
@@ -73,20 +80,27 @@ import static com.osparking.global.Globals.font_Style;
 import static com.osparking.global.Globals.font_Type;
 import static com.osparking.global.Globals.highlightTableRow;
 import static com.osparking.global.Globals.OSPiconList;
+import static com.osparking.global.Globals.head_font_Size;
 import static com.osparking.global.Globals.initializeLoggers;
 import static com.osparking.global.Globals.language;
 import static com.osparking.global.Globals.logParkingException;
 import static com.osparking.global.Globals.logParkingOperation;
 import static com.osparking.global.Globals.rejectUserInput;
 import static com.osparking.global.Globals.removeEmptyRow;
+import static com.osparking.global.Globals.showLicensePanel;
 import static com.osparking.global.names.ControlEnums.ButtonTypes.*;
 import static com.osparking.global.names.ControlEnums.ComboBoxItemTypes.*;
 import static com.osparking.global.names.ControlEnums.DialogMSGTypes.*;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.*;
 import com.osparking.global.names.ControlEnums.FormMode;
+import static com.osparking.global.names.ControlEnums.FormModeString.SEARCH;
+import static com.osparking.global.names.ControlEnums.LabelContent.COUNT_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.CREATE_MODE_LABEL;
+import static com.osparking.global.names.ControlEnums.LabelContent.MODE_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.MODIFY_MODE_LABEL;
+import static com.osparking.global.names.ControlEnums.LabelContent.REQUIRE_FIELD_NOTE;
 import static com.osparking.global.names.ControlEnums.LabelContent.SEARCH_MODE_LABEL;
+import static com.osparking.global.names.ControlEnums.MenuITemTypes.META_KEY_LABEL;
 import static com.osparking.global.names.ControlEnums.TitleTypes.DRIVER_LIST_FRAME_TITLE;
 import static com.osparking.global.names.ControlEnums.TableTypes.*;
 import static com.osparking.global.names.ControlEnums.TextType.*;
@@ -103,6 +117,8 @@ import static com.osparking.global.names.OSP_enums.DriverCol.LandLine;
 import static com.osparking.global.names.OSP_enums.DriverCol.UnitNo;
 import com.osparking.global.names.PComboBox;
 import com.osparking.global.names.WrappedInt;
+import com.osparking.vehicle.LabelBlinker;
+import javax.swing.JLabel;
 import org.jopendocument.dom.spreadsheet.Sheet;
 import org.jopendocument.dom.spreadsheet.SpreadSheet;
 
@@ -415,26 +431,30 @@ public class ManageDrivers extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
         odsFileChooser = new javax.swing.JFileChooser();
+        northPanel = new javax.swing.JPanel();
+        westPanel = new javax.swing.JPanel();
         wholePanel = new javax.swing.JPanel();
-        filler13 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 20), new java.awt.Dimension(0, 20), new java.awt.Dimension(32767, 20));
+        titlePanel = new javax.swing.JPanel();
+        seeLicenseButton = new javax.swing.JButton();
+        filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
+        titleLabel = new javax.swing.JLabel();
+        filler3 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
         jPanel1 = new javax.swing.JPanel();
-        filler22 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(100, 0), new java.awt.Dimension(32767, 0));
-        jLabel1 = new javax.swing.JLabel();
-        filler23 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
-        closeFormButton = new javax.swing.JButton();
-        filler6 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 32767));
-        jPanel2 = new javax.swing.JPanel();
-        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
+        myMetaKeyLabel = new javax.swing.JLabel();
+        topButtonPanel = new javax.swing.JPanel();
+        topLTpanel = new javax.swing.JPanel();
+        countLbl = new javax.swing.JLabel();
+        countValue = new javax.swing.JLabel();
+        topMid_1 = new javax.swing.JPanel();
+        requiredLabel = new javax.swing.JLabel();
+        topMid_2 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
-        filler14 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 32767));
         formModeLabel = new javax.swing.JLabel();
-        filler15 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 32767));
+        topRHpanel = new javax.swing.JPanel();
         clearButton = new javax.swing.JButton();
-        filler16 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 32767));
         searchButton = new javax.swing.JButton();
-        filler5 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 32767));
+        filler15_6 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 15), new java.awt.Dimension(0, 15), new java.awt.Dimension(32767, 15));
         searchPanel = new javax.swing.JPanel();
-        filler3 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 32767));
         jLabel3 = new javax.swing.JLabel();
         filler66 = new javax.swing.Box.Filler(new java.awt.Dimension(5, 0), new java.awt.Dimension(5, 0), new java.awt.Dimension(5, 32767));
         searchName = new javax.swing.JTextField();
@@ -444,28 +464,22 @@ public class ManageDrivers extends javax.swing.JFrame {
         searchL2ComboBox = new PComboBox<InnoComboBoxItem>();
         searchBuildingComboBox = new PComboBox();
         searchUnitComboBox = new PComboBox();
-        filler4 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 32767));
-        jPanel3 = new javax.swing.JPanel();
-        filler7 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 32767));
         driversScrollPane = new javax.swing.JScrollPane();
         driversTable = new javax.swing.JTable();
-        filler8 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 32767));
-        jPanel4 = new javax.swing.JPanel();
-        filler10 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 32767));
-        filler11 = new javax.swing.Box.Filler(new java.awt.Dimension(80, 0), new java.awt.Dimension(80, 0), new java.awt.Dimension(80, 32767));
-        requiredLabel = new javax.swing.JLabel();
-        filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
-        readSheet_Button = new javax.swing.JButton();
-        filler20 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 32767));
-        deleteAllDrivers = new javax.swing.JButton();
-        filler19 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 32767));
-        deleteDriver_Button = new javax.swing.JButton();
-        filler18 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 32767));
-        modifyDriver_Button = new javax.swing.JButton();
-        filler17 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 32767));
+        filler15_5 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 15), new java.awt.Dimension(0, 15), new java.awt.Dimension(32767, 15));
+        bottomButtonPanel = new javax.swing.JPanel();
+        leftButtons = new javax.swing.JPanel();
         createDriver_Button = new javax.swing.JButton();
-        filler9 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 32767));
-        filler21 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 20), new java.awt.Dimension(0, 20), new java.awt.Dimension(32767, 20));
+        modifyDriver_Button = new javax.swing.JButton();
+        deleteDriver_Button = new javax.swing.JButton();
+        deleteDriver_Button2 = new javax.swing.JButton();
+        rightButtons = new javax.swing.JPanel();
+        deleteAllDrivers = new javax.swing.JButton();
+        readSheet_Button1 = new javax.swing.JButton();
+        readSheet_Button = new javax.swing.JButton();
+        closeFormButton = new javax.swing.JButton();
+        eastPanel = new javax.swing.JPanel();
+        southPanel = new javax.swing.JPanel();
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -482,93 +496,173 @@ public class ManageDrivers extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle(DRIVER_LIST_FRAME_TITLE.getContent());
-        setMinimumSize(new java.awt.Dimension(991, 566));
+        setMaximumSize(new java.awt.Dimension(32000, 24000));
+        setMinimumSize(new Dimension(normGUIwidth, normGUIheight));
+        setPreferredSize(new Dimension(normGUIwidth, normGUIheight));
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 formWindowClosing(evt);
             }
         });
 
+        northPanel.setMaximumSize(new java.awt.Dimension(32767, 40));
+        northPanel.setMinimumSize(new java.awt.Dimension(10, 40));
+        northPanel.setPreferredSize(new java.awt.Dimension(100, 40));
+        northPanel.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 45, 15));
+        getContentPane().add(northPanel, java.awt.BorderLayout.NORTH);
+
+        westPanel.setMaximumSize(new java.awt.Dimension(40, 32767));
+        westPanel.setMinimumSize(new java.awt.Dimension(40, 10));
+        westPanel.setPreferredSize(new java.awt.Dimension(40, 100));
+        getContentPane().add(westPanel, java.awt.BorderLayout.WEST);
+
         wholePanel.setLayout(new javax.swing.BoxLayout(wholePanel, javax.swing.BoxLayout.PAGE_AXIS));
-        wholePanel.add(filler13);
 
-        jPanel1.setMaximumSize(new java.awt.Dimension(2147483647, 40));
-        jPanel1.setLayout(new javax.swing.BoxLayout(jPanel1, javax.swing.BoxLayout.LINE_AXIS));
-        jPanel1.add(filler22);
+        titlePanel.setMaximumSize(new java.awt.Dimension(2147483647, 40));
+        titlePanel.setMinimumSize(new java.awt.Dimension(110, 40));
+        titlePanel.setPreferredSize(new java.awt.Dimension(210, 40));
+        titlePanel.setLayout(new javax.swing.BoxLayout(titlePanel, javax.swing.BoxLayout.LINE_AXIS));
 
-        jLabel1.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("Driver List");
-        jLabel1.setMaximumSize(new java.awt.Dimension(110, 28));
-        jLabel1.setMinimumSize(new java.awt.Dimension(110, 28));
-        jLabel1.setPreferredSize(new java.awt.Dimension(110, 28));
-        jPanel1.add(jLabel1);
-        jPanel1.add(filler23);
-
-        closeFormButton.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        closeFormButton.setMnemonic('c');
-        closeFormButton.setText("Close");
-        closeFormButton.setMaximumSize(new java.awt.Dimension(90, 40));
-        closeFormButton.setMinimumSize(new java.awt.Dimension(90, 40));
-        closeFormButton.setPreferredSize(new java.awt.Dimension(90, 40));
-        closeFormButton.addActionListener(new java.awt.event.ActionListener() {
+        seeLicenseButton.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        seeLicenseButton.setText("About");
+        seeLicenseButton.setMaximumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
+        seeLicenseButton.setMinimumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
+        seeLicenseButton.setPreferredSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
+        seeLicenseButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                closeFormButtonActionPerformed(evt);
+                seeLicenseButtonActionPerformed(evt);
             }
         });
-        jPanel1.add(closeFormButton);
-        jPanel1.add(filler6);
+        titlePanel.add(seeLicenseButton);
+        titlePanel.add(filler2);
 
-        wholePanel.add(jPanel1);
+        titleLabel.setFont(new java.awt.Font(font_Type, font_Style, head_font_Size));
+        titleLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        titleLabel.setText(DRIVER_LIST_FRAME_TITLE.getContent());
+        titleLabel.setMaximumSize(new java.awt.Dimension(110, 28));
+        titleLabel.setMinimumSize(new java.awt.Dimension(110, 28));
+        titleLabel.setPreferredSize(new java.awt.Dimension(110, 28));
+        titlePanel.add(titleLabel);
+        titlePanel.add(filler3);
 
-        jPanel2.setMaximumSize(new java.awt.Dimension(33095, 40));
-        jPanel2.setLayout(new javax.swing.BoxLayout(jPanel2, javax.swing.BoxLayout.LINE_AXIS));
-        jPanel2.add(filler1);
+        jPanel1.setMaximumSize(new java.awt.Dimension(90, 30));
+        jPanel1.setMinimumSize(new java.awt.Dimension(90, 30));
+        jPanel1.setPreferredSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
+        jPanel1.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 0, 0));
+
+        myMetaKeyLabel.setText(META_KEY_LABEL.getContent());
+        myMetaKeyLabel.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        myMetaKeyLabel.setForeground(tipColor);
+        jPanel1.add(myMetaKeyLabel);
+
+        titlePanel.add(jPanel1);
+
+        wholePanel.add(titlePanel);
+
+        topButtonPanel.setMaximumSize(new java.awt.Dimension(33095, 40));
+
+        topLTpanel.setMaximumSize(new java.awt.Dimension(300, 40));
+        topLTpanel.setMinimumSize(new java.awt.Dimension(159, 40));
+        topLTpanel.setPreferredSize(new java.awt.Dimension(210, 40));
+        topLTpanel.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 3, 22));
+
+        countLbl.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        countLbl.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        countLbl.setText(COUNT_LABEL.getContent());
+        JLabel tempLabel = new JLabel(COUNT_LABEL.getContent());
+        tempLabel.setFont(countLbl.getFont());
+        Dimension dim = tempLabel.getPreferredSize();
+        countLbl.setMaximumSize(new java.awt.Dimension(110, 27));
+        countLbl.setMinimumSize(new java.awt.Dimension(90, 27));
+        countLbl.setPreferredSize(new Dimension(dim.width + 1, dim.height));
+        topLTpanel.add(countLbl);
+
+        countValue.setForeground(pointColor);
+        countValue.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        countValue.setText("count");
+        topLTpanel.add(countValue);
+
+        topMid_1.setMaximumSize(new java.awt.Dimension(300, 40));
+        topMid_1.setMinimumSize(new java.awt.Dimension(159, 40));
+        topMid_1.setPreferredSize(new java.awt.Dimension(210, 40));
+        topMid_1.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 0, 10));
+
+        requiredLabel.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        requiredLabel.setText(REQUIRE_FIELD_NOTE.getContent());
+        topMid_1.add(requiredLabel);
+
+        topMid_2.setMaximumSize(new java.awt.Dimension(300, 40));
+        topMid_2.setMinimumSize(new java.awt.Dimension(159, 40));
+        topMid_2.setPreferredSize(new java.awt.Dimension(210, 40));
+        topMid_2.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 0, 10));
 
         jLabel2.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        jLabel2.setText("Form Mode:");
-        jPanel2.add(jLabel2);
-        jPanel2.add(filler14);
+        jLabel2.setText(MODE_LABEL.getContent());
+        topMid_2.add(jLabel2);
 
         formModeLabel.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        formModeLabel.setText("Searching");
+        formModeLabel.setForeground(pointColor);
+        formModeLabel.setText(SEARCH.getContent());
         formModeLabel.setToolTipText("");
-        jPanel2.add(formModeLabel);
-        jPanel2.add(filler15);
+        topMid_2.add(formModeLabel);
+
+        topRHpanel.setMaximumSize(new java.awt.Dimension(300, 40));
+        topRHpanel.setMinimumSize(new java.awt.Dimension(159, 40));
+        topRHpanel.setPreferredSize(new java.awt.Dimension(210, 40));
+        topRHpanel.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT, 10, 0));
 
         clearButton.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         clearButton.setMnemonic('l');
-        clearButton.setText("Clear");
-        clearButton.setMaximumSize(new java.awt.Dimension(90, 40));
-        clearButton.setMinimumSize(new java.awt.Dimension(90, 40));
-        clearButton.setPreferredSize(new java.awt.Dimension(90, 40));
+        clearButton.setText(CLEAR_BTN.getContent());
+        clearButton.setMaximumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
+        clearButton.setMinimumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
+        clearButton.setPreferredSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
         clearButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 clearButtonActionPerformed(evt);
             }
         });
-        jPanel2.add(clearButton);
-        jPanel2.add(filler16);
+        topRHpanel.add(clearButton);
 
         searchButton.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         searchButton.setMnemonic('s');
-        searchButton.setText("Search");
-        searchButton.setMaximumSize(new java.awt.Dimension(90, 40));
-        searchButton.setMinimumSize(new java.awt.Dimension(90, 40));
-        searchButton.setPreferredSize(new java.awt.Dimension(90, 40));
+        searchButton.setText(SEARCH_BTN.getContent());
+        searchButton.setMaximumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
+        searchButton.setMinimumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
+        searchButton.setPreferredSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
         searchButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 searchButtonActionPerformed(evt);
             }
         });
-        jPanel2.add(searchButton);
-        jPanel2.add(filler5);
+        topRHpanel.add(searchButton);
 
-        wholePanel.add(jPanel2);
+        javax.swing.GroupLayout topButtonPanelLayout = new javax.swing.GroupLayout(topButtonPanel);
+        topButtonPanel.setLayout(topButtonPanelLayout);
+        topButtonPanelLayout.setHorizontalGroup(
+            topButtonPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(topButtonPanelLayout.createSequentialGroup()
+                .addComponent(topLTpanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 54, Short.MAX_VALUE)
+                .addComponent(topMid_1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 50, Short.MAX_VALUE)
+                .addComponent(topMid_2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 55, Short.MAX_VALUE)
+                .addComponent(topRHpanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+        topButtonPanelLayout.setVerticalGroup(
+            topButtonPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(topLTpanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(topMid_2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(topRHpanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(topMid_1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+        );
+
+        wholePanel.add(topButtonPanel);
+        wholePanel.add(filler15_6);
 
         searchPanel.setMaximumSize(new java.awt.Dimension(2095, 28));
         searchPanel.setLayout(new javax.swing.BoxLayout(searchPanel, javax.swing.BoxLayout.LINE_AXIS));
-        searchPanel.add(filler3);
 
         jLabel3.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
@@ -726,12 +820,9 @@ public class ManageDrivers extends javax.swing.JFrame {
         searchPanel.add(searchUnitComboBox);
         searchUnitComboBox.getAccessibleContext().setAccessibleName("");
 
-        searchPanel.add(filler4);
-
         wholePanel.add(searchPanel);
 
-        jPanel3.setLayout(new javax.swing.BoxLayout(jPanel3, javax.swing.BoxLayout.LINE_AXIS));
-        jPanel3.add(filler7);
+        driversScrollPane.setPreferredSize(new java.awt.Dimension(452, 0));
 
         driversTable.setAutoCreateRowSorter(true);
         driversTable.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
@@ -758,102 +849,162 @@ public class ManageDrivers extends javax.swing.JFrame {
         });
         driversScrollPane.setViewportView(driversTable);
 
-        jPanel3.add(driversScrollPane);
-        jPanel3.add(filler8);
+        wholePanel.add(driversScrollPane);
+        wholePanel.add(filler15_5);
 
-        wholePanel.add(jPanel3);
+        bottomButtonPanel.setMaximumSize(new java.awt.Dimension(33727, 40));
 
-        jPanel4.setMaximumSize(new java.awt.Dimension(33727, 40));
-        jPanel4.setLayout(new javax.swing.BoxLayout(jPanel4, javax.swing.BoxLayout.LINE_AXIS));
-        jPanel4.add(filler10);
-        jPanel4.add(filler11);
-
-        requiredLabel.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        requiredLabel.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        requiredLabel.setText("* : required field");
-        requiredLabel.setMaximumSize(new java.awt.Dimension(400, 40));
-        requiredLabel.setPreferredSize(new java.awt.Dimension(200, 40));
-        jPanel4.add(requiredLabel);
-        jPanel4.add(filler2);
-
-        readSheet_Button.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        readSheet_Button.setMnemonic('u');
-        readSheet_Button.setText("Upload Sheet");
-        readSheet_Button.setEnabled(false);
-        readSheet_Button.setMaximumSize(new java.awt.Dimension(150, 40));
-        readSheet_Button.setMinimumSize(new java.awt.Dimension(90, 40));
-        readSheet_Button.setPreferredSize(new java.awt.Dimension(150, 40));
-        readSheet_Button.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                readSheet_ButtonActionPerformed(evt);
-            }
-        });
-        jPanel4.add(readSheet_Button);
-        jPanel4.add(filler20);
-
-        deleteAllDrivers.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        deleteAllDrivers.setMnemonic('a');
-        deleteAllDrivers.setText("Delete All");
-        deleteAllDrivers.setEnabled(false);
-        deleteAllDrivers.setMaximumSize(new java.awt.Dimension(120, 40));
-        deleteAllDrivers.setMinimumSize(new java.awt.Dimension(90, 40));
-        deleteAllDrivers.setPreferredSize(new java.awt.Dimension(120, 40));
-        deleteAllDrivers.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                deleteAllDriversActionPerformed(evt);
-            }
-        });
-        jPanel4.add(deleteAllDrivers);
-        jPanel4.add(filler19);
-
-        deleteDriver_Button.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        deleteDriver_Button.setMnemonic('d');
-        deleteDriver_Button.setText("Delete");
-        deleteDriver_Button.setEnabled(false);
-        deleteDriver_Button.setMaximumSize(new java.awt.Dimension(90, 40));
-        deleteDriver_Button.setMinimumSize(new java.awt.Dimension(90, 40));
-        deleteDriver_Button.setPreferredSize(new java.awt.Dimension(90, 40));
-        deleteDriver_Button.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                deleteDriver_ButtonActionPerformed(evt);
-            }
-        });
-        jPanel4.add(deleteDriver_Button);
-        jPanel4.add(filler18);
-
-        modifyDriver_Button.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        modifyDriver_Button.setMnemonic('m');
-        modifyDriver_Button.setText("Modify");
-        modifyDriver_Button.setEnabled(false);
-        modifyDriver_Button.setMaximumSize(new java.awt.Dimension(90, 40));
-        modifyDriver_Button.setMinimumSize(new java.awt.Dimension(90, 40));
-        modifyDriver_Button.setPreferredSize(new java.awt.Dimension(90, 40));
-        modifyDriver_Button.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                modifyDriver_ButtonActionPerformed(evt);
-            }
-        });
-        jPanel4.add(modifyDriver_Button);
-        jPanel4.add(filler17);
+        leftButtons.setMaximumSize(new java.awt.Dimension(32767, 40));
+        leftButtons.setMinimumSize(new java.awt.Dimension(300, 40));
+        leftButtons.setPreferredSize(new java.awt.Dimension(400, 40));
+        leftButtons.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 10, 0));
 
         createDriver_Button.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         createDriver_Button.setMnemonic('r');
         createDriver_Button.setText("Create");
-        createDriver_Button.setMaximumSize(new java.awt.Dimension(90, 40));
-        createDriver_Button.setMinimumSize(new java.awt.Dimension(90, 40));
-        createDriver_Button.setPreferredSize(new java.awt.Dimension(90, 40));
+        createDriver_Button.setMaximumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
+        createDriver_Button.setMinimumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
+        createDriver_Button.setPreferredSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
         createDriver_Button.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 createDriver_ButtonActionPerformed(evt);
             }
         });
-        jPanel4.add(createDriver_Button);
-        jPanel4.add(filler9);
+        leftButtons.add(createDriver_Button);
 
-        wholePanel.add(jPanel4);
-        wholePanel.add(filler21);
+        modifyDriver_Button.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        modifyDriver_Button.setMnemonic('m');
+        modifyDriver_Button.setText("Modify");
+        modifyDriver_Button.setEnabled(false);
+        modifyDriver_Button.setMaximumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
+        modifyDriver_Button.setMinimumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
+        modifyDriver_Button.setPreferredSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
+        modifyDriver_Button.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                modifyDriver_ButtonActionPerformed(evt);
+            }
+        });
+        leftButtons.add(modifyDriver_Button);
+
+        deleteDriver_Button.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        deleteDriver_Button.setMnemonic('d');
+        deleteDriver_Button.setText("Delete");
+        deleteDriver_Button.setEnabled(false);
+        deleteDriver_Button.setMaximumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
+        deleteDriver_Button.setMinimumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
+        deleteDriver_Button.setPreferredSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
+        deleteDriver_Button.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deleteDriver_ButtonActionPerformed(evt);
+            }
+        });
+        leftButtons.add(deleteDriver_Button);
+
+        deleteDriver_Button2.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        deleteDriver_Button2.setMnemonic('d');
+        deleteDriver_Button2.setText("취소");
+        deleteDriver_Button2.setEnabled(false);
+        deleteDriver_Button2.setMaximumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
+        deleteDriver_Button2.setMinimumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
+        deleteDriver_Button2.setPreferredSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
+        deleteDriver_Button2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deleteDriver_Button2ActionPerformed(evt);
+            }
+        });
+        leftButtons.add(deleteDriver_Button2);
+
+        rightButtons.setMaximumSize(new java.awt.Dimension(32767, 40));
+        rightButtons.setMinimumSize(new java.awt.Dimension(350, 40));
+        rightButtons.setPreferredSize(new java.awt.Dimension(470, 40));
+        rightButtons.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT, 10, 0));
+
+        deleteAllDrivers.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        deleteAllDrivers.setMnemonic('a');
+        deleteAllDrivers.setText("Delete All");
+        deleteAllDrivers.setEnabled(false);
+        deleteAllDrivers.setMargin(new java.awt.Insets(0, 0, 0, 0));
+        deleteAllDrivers.setMaximumSize(new Dimension(CommonData.buttonWidthWide, buttonHeightNorm));
+        deleteAllDrivers.setMinimumSize(new Dimension(CommonData.buttonWidthWide, buttonHeightNorm));
+        deleteAllDrivers.setPreferredSize(new Dimension(CommonData.buttonWidthWide, buttonHeightNorm));
+        deleteAllDrivers.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deleteAllDriversActionPerformed(evt);
+            }
+        });
+        rightButtons.add(deleteAllDrivers);
+
+        readSheet_Button1.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        readSheet_Button1.setMnemonic('u');
+        readSheet_Button1.setText("Upload Sheet");
+        readSheet_Button1.setEnabled(false);
+        readSheet_Button1.setMargin(new java.awt.Insets(0, 0, 0, 0));
+        readSheet_Button1.setMaximumSize(new Dimension(CommonData.buttonWidthWide, buttonHeightNorm));
+        readSheet_Button1.setMinimumSize(new Dimension(CommonData.buttonWidthWide, buttonHeightNorm));
+        readSheet_Button1.setPreferredSize(new Dimension(CommonData.buttonWidthWide, buttonHeightNorm));
+        readSheet_Button1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                readSheet_Button1ActionPerformed(evt);
+            }
+        });
+        rightButtons.add(readSheet_Button1);
+
+        readSheet_Button.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        readSheet_Button.setMnemonic('u');
+        readSheet_Button.setText("Upload Sheet");
+        readSheet_Button.setEnabled(false);
+        readSheet_Button.setMargin(new java.awt.Insets(0, 0, 0, 0));
+        readSheet_Button.setMaximumSize(new Dimension(CommonData.buttonWidthWide, buttonHeightNorm));
+        readSheet_Button.setMinimumSize(new Dimension(CommonData.buttonWidthWide, buttonHeightNorm));
+        readSheet_Button.setPreferredSize(new Dimension(CommonData.buttonWidthWide, buttonHeightNorm));
+        readSheet_Button.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                readSheet_ButtonActionPerformed(evt);
+            }
+        });
+        rightButtons.add(readSheet_Button);
+
+        closeFormButton.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        closeFormButton.setMnemonic('c');
+        closeFormButton.setText("Close");
+        closeFormButton.setMaximumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
+        closeFormButton.setMinimumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
+        closeFormButton.setPreferredSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
+        closeFormButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                closeFormButtonActionPerformed(evt);
+            }
+        });
+        rightButtons.add(closeFormButton);
+
+        javax.swing.GroupLayout bottomButtonPanelLayout = new javax.swing.GroupLayout(bottomButtonPanel);
+        bottomButtonPanel.setLayout(bottomButtonPanelLayout);
+        bottomButtonPanelLayout.setHorizontalGroup(
+            bottomButtonPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(bottomButtonPanelLayout.createSequentialGroup()
+                .addComponent(leftButtons, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 129, Short.MAX_VALUE)
+                .addComponent(rightButtons, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+        bottomButtonPanelLayout.setVerticalGroup(
+            bottomButtonPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(leftButtons, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(rightButtons, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+        );
+
+        wholePanel.add(bottomButtonPanel);
 
         getContentPane().add(wholePanel, java.awt.BorderLayout.CENTER);
+
+        eastPanel.setMaximumSize(new java.awt.Dimension(40, 32767));
+        eastPanel.setMinimumSize(new java.awt.Dimension(40, 10));
+        eastPanel.setPreferredSize(new java.awt.Dimension(40, 100));
+        getContentPane().add(eastPanel, java.awt.BorderLayout.EAST);
+
+        southPanel.setMaximumSize(new java.awt.Dimension(32767, 40));
+        southPanel.setMinimumSize(new java.awt.Dimension(10, 40));
+        southPanel.setPreferredSize(new java.awt.Dimension(100, 40));
+        getContentPane().add(southPanel, java.awt.BorderLayout.SOUTH);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -1418,6 +1569,18 @@ public class ManageDrivers extends javax.swing.JFrame {
         searchPhone.selectAll();
     }//GEN-LAST:event_searchPhoneMousePressed
 
+    private void deleteDriver_Button2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteDriver_Button2ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_deleteDriver_Button2ActionPerformed
+
+    private void readSheet_Button1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_readSheet_Button1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_readSheet_Button1ActionPerformed
+
+    private void seeLicenseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_seeLicenseButtonActionPerformed
+        showLicensePanel(this, "License Notice on Vehicle Manager");
+    }//GEN-LAST:event_seeLicenseButtonActionPerformed
+
     public static void loadUnitComboBox(JComboBox level1ComboBox, JComboBox buildingComboBox,
             JComboBox unitComboBox) {
         
@@ -1592,6 +1755,7 @@ public class ManageDrivers extends javax.swing.JFrame {
             logParkingException(Level.SEVERE, ex, excepMsg);
         } finally {            
             closeDBstuff(conn, selectStmt, rs, excepMsg);
+            countValue.setText(String.valueOf(driverTable.getRowCount()));                        
         }
             
         int numRows = model.getRowCount();
@@ -1618,50 +1782,38 @@ public class ManageDrivers extends javax.swing.JFrame {
         
     // <editor-fold defaultstate="collapsed" desc="-- Netbeans Generated Control Item Variables ">                               
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPanel bottomButtonPanel;
     private javax.swing.JButton clearButton;
     public javax.swing.JButton closeFormButton;
+    private javax.swing.JLabel countLbl;
+    private javax.swing.JLabel countValue;
     public javax.swing.JButton createDriver_Button;
     private javax.swing.JButton deleteAllDrivers;
     private javax.swing.JButton deleteDriver_Button;
+    private javax.swing.JButton deleteDriver_Button2;
     private javax.swing.JScrollPane driversScrollPane;
     public static javax.swing.JTable driversTable;
-    private javax.swing.Box.Filler filler1;
-    private javax.swing.Box.Filler filler10;
-    private javax.swing.Box.Filler filler11;
-    private javax.swing.Box.Filler filler13;
-    private javax.swing.Box.Filler filler14;
-    private javax.swing.Box.Filler filler15;
-    private javax.swing.Box.Filler filler16;
-    private javax.swing.Box.Filler filler17;
-    private javax.swing.Box.Filler filler18;
-    private javax.swing.Box.Filler filler19;
+    private javax.swing.JPanel eastPanel;
+    private javax.swing.Box.Filler filler15_5;
+    private javax.swing.Box.Filler filler15_6;
     private javax.swing.Box.Filler filler2;
-    private javax.swing.Box.Filler filler20;
-    private javax.swing.Box.Filler filler21;
-    private javax.swing.Box.Filler filler22;
-    private javax.swing.Box.Filler filler23;
     private javax.swing.Box.Filler filler3;
-    private javax.swing.Box.Filler filler4;
-    private javax.swing.Box.Filler filler5;
-    private javax.swing.Box.Filler filler6;
     private javax.swing.Box.Filler filler66;
-    private javax.swing.Box.Filler filler7;
-    private javax.swing.Box.Filler filler8;
-    private javax.swing.Box.Filler filler9;
     private javax.swing.JLabel formModeLabel;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
-    private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
+    private javax.swing.JPanel leftButtons;
     private javax.swing.JButton modifyDriver_Button;
+    private javax.swing.JLabel myMetaKeyLabel;
+    private javax.swing.JPanel northPanel;
     private javax.swing.JFileChooser odsFileChooser;
     private javax.swing.JButton readSheet_Button;
+    private javax.swing.JButton readSheet_Button1;
     private javax.swing.JLabel requiredLabel;
+    private javax.swing.JPanel rightButtons;
     private javax.swing.JComboBox searchBuildingComboBox;
     public javax.swing.JButton searchButton;
     private javax.swing.JTextField searchCell;
@@ -1671,6 +1823,16 @@ public class ManageDrivers extends javax.swing.JFrame {
     private javax.swing.JPanel searchPanel;
     private javax.swing.JTextField searchPhone;
     private javax.swing.JComboBox searchUnitComboBox;
+    private javax.swing.JButton seeLicenseButton;
+    private javax.swing.JPanel southPanel;
+    private javax.swing.JLabel titleLabel;
+    private javax.swing.JPanel titlePanel;
+    private javax.swing.JPanel topButtonPanel;
+    private javax.swing.JPanel topLTpanel;
+    private javax.swing.JPanel topMid_1;
+    private javax.swing.JPanel topMid_2;
+    private javax.swing.JPanel topRHpanel;
+    private javax.swing.JPanel westPanel;
     private javax.swing.JPanel wholePanel;
     // End of variables declaration//GEN-END:variables
     //</editor-fold>       
@@ -2074,16 +2236,16 @@ public class ManageDrivers extends javax.swing.JFrame {
         }
     }    
 
-    private void removeRealEmptyRow() {
-        JOptionPane.showConfirmDialog(this, DRIVER_CREATE_FAIL_DIALOG.getContent(),
-//                ((String[])Globals.DialogMSGList.get(DRIVER_CREATE_FAIL_DIALOG.getContent(), 
-                CREATTION_FAIL_DIALOGTITLE.getContent(), 
-                JOptionPane.PLAIN_MESSAGE, INFORMATION_MESSAGE);
-        
-        // remove last row which lacks driver name
-        ((DefaultTableModel)driverTable.getModel())
-                .setRowCount(driverTable.getRowCount() - 1); 
-    }       
+//    private void removeRealEmptyRow() {
+//        JOptionPane.showConfirmDialog(this, DRIVER_CREATE_FAIL_DIALOG.getContent(),
+////                ((String[])Globals.DialogMSGList.get(DRIVER_CREATE_FAIL_DIALOG.getContent(), 
+//                CREATTION_FAIL_DIALOGTITLE.getContent(), 
+//                JOptionPane.PLAIN_MESSAGE, INFORMATION_MESSAGE);
+//        
+//        // remove last row which lacks driver name
+//        ((DefaultTableModel)driverTable.getModel())
+//                .setRowCount(driverTable.getRowCount() - 1); 
+//    }       
     
     /**
      * Handles new driver information insertion trial in one of the following three ways
@@ -2093,12 +2255,12 @@ public class ManageDrivers extends javax.swing.JFrame {
      */
     public void finalizeDriverCreation() {
         int row = driverTable.getRowCount() - 1;
-        int colM = driverTable.convertColumnIndexToModel(DriverCol.DriverName.getNumVal());
+        int colName = driverTable.convertColumnIndexToModel(DriverCol.DriverName.getNumVal());
         
         // conditions that make driver information insufficient: 1, 2
-        String name = ((String)driverTable.getModel().getValueAt(row, colM)).trim(); 
-        colM = driverTable.convertColumnIndexToModel(DriverCol.CellPhone.getNumVal());
-        String cell = String.valueOf(driverTable.getValueAt(row, colM)).toLowerCase();
+        String name = ((String)driverTable.getModel().getValueAt(row, colName)).trim(); 
+        int colCell = driverTable.convertColumnIndexToModel(DriverCol.CellPhone.getNumVal());
+        String cell = String.valueOf(driverTable.getValueAt(row, colCell)).toLowerCase();
         String L1_item = driverTable.getValueAt(row, AffiliationL1.getNumVal()).toString();
         InnoComboBoxItem L2_item = (InnoComboBoxItem)driverTable.getValueAt(row, AffiliationL2.getNumVal());
         int L2_NO = (Integer) L2_item.getKeys()[0];
@@ -2109,8 +2271,31 @@ public class ManageDrivers extends javax.swing.JFrame {
         if (name == null || name.trim().length() == 0)
         {
             // without driver name, system just discard such insertion request with a warning
-            setFormMode(FormMode.NormalMode);
-            removeRealEmptyRow();
+//            setFormMode(FormMode.NormalMode);
+//            removeRealEmptyRow();
+            
+            // <editor-fold defaultstate="collapsed" desc="-- handle missing cell phone">   
+            // it has driver's name, but not his/her cell phone number  
+            int response = JOptionPane.showConfirmDialog(null, MISSING_NAME_HANDLING.getContent(),
+                    WARING_DIALOGTITLE.getContent(), 
+                    JOptionPane.YES_NO_OPTION);                    
+        
+            if (response == JOptionPane.YES_OPTION) 
+            {
+                if (driverTable.editCellAt(row, colName))
+                {
+                    selectionListenerDisabled = true;
+                    highlightTableRow(driverTable, row);
+                    startEditingCell(row, colName);
+                    selectionListenerDisabled = false;
+                }                  
+
+            } else {
+                setFormMode(FormMode.NormalMode);
+                ((DefaultTableModel)driverTable.getModel())
+                        .setRowCount(driverTable.getRowCount() - 1);             
+            }            
+            //</editor-fold>               
         } 
         // 2. driver cell phone isn't provided
         else if (cell == null || cell.trim().length() == 0) 
@@ -2118,17 +2303,16 @@ public class ManageDrivers extends javax.swing.JFrame {
             // <editor-fold defaultstate="collapsed" desc="-- handle missing cell phone">   
             // it has driver's name, but not his/her cell phone number  
             int response = JOptionPane.showConfirmDialog(null, DRIVER_CREATE_CHECK_CELL_DIALOG.getContent(),
-//                    ((String[])Globals.DialogMSGList.get(DRIVER_CREATE_CHECK_CELL_DIALOG.getContent(), 
                     WARING_DIALOGTITLE.getContent(), 
                     JOptionPane.YES_NO_OPTION);                    
         
             if (response == JOptionPane.YES_OPTION) 
             {
-                if (driverTable.editCellAt(row, colM))
+                if (driverTable.editCellAt(row, colCell))
                 {
                     selectionListenerDisabled = true;
                     highlightTableRow(driverTable, row);
-                    startEditingCell(row, colM);
+                    startEditingCell(row, colCell);
                     selectionListenerDisabled = false;
                 }                  
 
@@ -2149,25 +2333,25 @@ public class ManageDrivers extends javax.swing.JFrame {
                                     JOptionPane.YES_NO_OPTION, WARNING_MESSAGE);
             if(respone == JOptionPane.YES_OPTION){
                 //수정
-                colM = driverTable.convertColumnIndexToModel(
+                colName = driverTable.convertColumnIndexToModel(
                             DriverCol.AffiliationL2.getNumVal());  
-                if (driverTable.editCellAt(row, colM))
+                if (driverTable.editCellAt(row, colName))
                 {
                     selectionListenerDisabled = true;
                     highlightTableRow(driverTable, row);
-                    startEditingCell(row, colM);
+                    startEditingCell(row, colName);
                     selectionListenerDisabled = false;
                 }
             }else{
                 //L1을 초기값으로 생성
-                colM = driverTable.convertColumnIndexToModel(
+                colName = driverTable.convertColumnIndexToModel(
                         DriverCol.AffiliationL1.getNumVal());  
-                driverTable.setValueAt(ManageDrivers.getPrompter(AffiliationL1, null), row, colM);
-                if (driverTable.editCellAt(row, colM))
+                driverTable.setValueAt(ManageDrivers.getPrompter(AffiliationL1, null), row, colName);
+                if (driverTable.editCellAt(row, colName))
                 {
                     selectionListenerDisabled = true;
                     highlightTableRow(driverTable, row);
-                    startEditingCell(row, colM);
+                    startEditingCell(row, colName);
                     selectionListenerDisabled = false;
                 }
             }
@@ -2184,25 +2368,25 @@ public class ManageDrivers extends javax.swing.JFrame {
                                     JOptionPane.YES_NO_OPTION, WARNING_MESSAGE);
             if(respone == JOptionPane.YES_OPTION){
                 //수정
-                colM = driverTable.convertColumnIndexToModel(
+                colName = driverTable.convertColumnIndexToModel(
                             DriverCol.UnitNo.getNumVal());  
-                if (driverTable.editCellAt(row, colM))
+                if (driverTable.editCellAt(row, colName))
                 {
                     selectionListenerDisabled = true;
                     highlightTableRow(driverTable, row);
-                    startEditingCell(row, colM);
+                    startEditingCell(row, colName);
                     selectionListenerDisabled = false;
                 }
             }else{
                 //Building을 초기값으로 바꾸고 저장
-                colM = driverTable.convertColumnIndexToModel(
+                colName = driverTable.convertColumnIndexToModel(
                         DriverCol.BuildingNo.getNumVal());    
-                driverTable.setValueAt(ManageDrivers.getPrompter(BuildingNo, null), row, colM);
-                if (driverTable.editCellAt(row, colM))
+                driverTable.setValueAt(ManageDrivers.getPrompter(BuildingNo, null), row, colName);
+                if (driverTable.editCellAt(row, colName))
                 {
                     selectionListenerDisabled = true;
                     highlightTableRow(driverTable, row);
-                    startEditingCell(row, colM);
+                    startEditingCell(row, colName);
                     selectionListenerDisabled = false;
                 }
             }
@@ -2380,6 +2564,12 @@ public class ManageDrivers extends javax.swing.JFrame {
     private void startEditingCell(int rowM, int columnIndex) {
         driverTable.requestFocusInWindow();
         driverTable.changeSelection(rowM, columnIndex, false, false);
+        if (columnIndex == 1 || columnIndex == 2) {
+            (new LabelBlinker()).displayHelpMessage(requiredLabel, 
+                    REQUIRE_FIELD_NOTE.getContent(), true);  
+        } else {
+            requiredLabel.setText("");
+        }
         driverTable.getEditorComponent().requestFocusInWindow();
     }
 
