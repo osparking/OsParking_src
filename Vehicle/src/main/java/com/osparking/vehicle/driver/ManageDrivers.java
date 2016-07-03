@@ -25,6 +25,7 @@ import static com.osparking.global.CommonData.normGUIwidth;
 import static com.osparking.global.CommonData.pointColor;
 import static com.osparking.global.CommonData.tableRowHeight;
 import static com.osparking.global.CommonData.tipColor;
+import com.osparking.global.Globals;
 import static com.osparking.vehicle.driver.DriverTable.modifyingRowM;
 import static com.osparking.vehicle.driver.ODSReader.getWrongCellPointString;
 import java.awt.Dimension;
@@ -115,6 +116,7 @@ import static com.osparking.global.names.OSP_enums.DriverCol.CellPhone;
 import static com.osparking.global.names.OSP_enums.DriverCol.DriverName;
 import static com.osparking.global.names.OSP_enums.DriverCol.LandLine;
 import static com.osparking.global.names.OSP_enums.DriverCol.UnitNo;
+import static com.osparking.global.names.OSP_enums.OpLogLevel.EBDsettingsChange;
 import com.osparking.global.names.PComboBox;
 import com.osparking.global.names.WrappedInt;
 import com.osparking.vehicle.LabelBlinker;
@@ -256,7 +258,7 @@ public class ManageDrivers extends javax.swing.JFrame {
                 
                 createDriver_Button.setText(CREATE_BTN.getContent());
                 createDriver_Button.setMnemonic('r');
-                requiredLabel.setVisible(true);
+                requiredLabel.setVisible(false);
                 
                 searchKeyGroupEnabled(true);
                 formModeLabel.setText(SEARCH_MODE_LABEL.getContent());
@@ -331,6 +333,9 @@ public class ManageDrivers extends javax.swing.JFrame {
         String excepMsg = "failed creation of a car driver: " + driverName;
 
         int result = 0;
+        String landLine = null;
+        String itemL2name = null;
+        String itemUnitName = null;
         try {
             //<editor-fold desc="insert the new driver into the database">
             String sql = "Insert Into cardriver (name, CELLPHONE, PHONE, L2_NO" +
@@ -341,22 +346,26 @@ public class ManageDrivers extends javax.swing.JFrame {
             TableModel model = driverTable.getModel();
             String cellPhone = ((String)model.getValueAt(rowIndex, 
                     DriverCol.CellPhone.getNumVal())).trim();
-            String landLine = ((String)model.getValueAt(rowIndex, 
+            landLine = ((String)model.getValueAt(rowIndex, 
                     DriverCol.LandLine.getNumVal())).trim();
 
             String itemL2_NO = null;
             InnoComboBoxItem itemL2 = (InnoComboBoxItem)(model.getValueAt(rowIndex, 
                     DriverCol.AffiliationL2.getNumVal()));
             
-            if (itemL2.getKeys()[0] != -1)
+            if (itemL2.getKeys()[0] != -1) {
                 itemL2_NO = String.valueOf(itemL2.getKeys()[0]);
+                itemL2name = itemL2.getLabels()[0];
+            }
 
             String itemUnitSEQ_NO = null;
             InnoComboBoxItem itemUnit = (InnoComboBoxItem)(model.getValueAt(rowIndex, 
                     DriverCol.UnitNo.getNumVal()));
             
-            if (itemUnit.getKeys()[0] != -1) 
+            if (itemUnit.getKeys()[0] != -1) {
                 itemUnitSEQ_NO = String.valueOf(itemUnit.getKeys()[0]);
+                itemUnitName = itemUnit.getLabels()[0];
+            }
             //</editor-fold>
                             
             conn = getConnection();
@@ -398,9 +407,11 @@ public class ManageDrivers extends javax.swing.JFrame {
                 StringBuffer driverProperties = new StringBuffer();
             
                 driverProperties.append("Driver Creation Summary: " + System.lineSeparator());
-                getDriverProperties(driverName, cell, driverProperties, rowIndex);  
-            
-                // Redisplay the skinny driver selection form which this driver manage form is invoked from
+                
+                getDriverProperties(driverName, cell, driverProperties, rowIndex, landLine, itemL2name, itemUnitName);  
+                Globals.logParkingOperation(EBDsettingsChange, driverProperties.toString(), Globals.GENERAL_DEVICE);
+                
+                // Redisplay the skinny driver selection form which this driver manage form is invoked
                 if (driverSelectionForm != null) {
                     driverSelectionForm.loadSkinnyDriverTable(0); // 0: highlight first row
                 }      
@@ -411,7 +422,6 @@ public class ManageDrivers extends javax.swing.JFrame {
                 //</editor-fold>
             }else {
                 JOptionPane.showConfirmDialog(null, DRIVER_CREATRION_FAIL_DIALOG.getContent(),
-//                        ((String[])Globals.DialogMSGList.get(DRIVER_CREATRION_FAIL_DIALOG.ordinal()))[ourLang], 
                         CREATION_RESULT_DIALOGTITLE.getContent(), 
                         JOptionPane.PLAIN_MESSAGE, WARNING_MESSAGE);
             }            
@@ -563,7 +573,7 @@ public class ManageDrivers extends javax.swing.JFrame {
 
         topLTpanel.setMaximumSize(new java.awt.Dimension(300, 40));
         topLTpanel.setMinimumSize(new java.awt.Dimension(159, 40));
-        topLTpanel.setPreferredSize(new java.awt.Dimension(210, 40));
+        topLTpanel.setPreferredSize(new java.awt.Dimension(160, 40));
         topLTpanel.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 3, 22));
 
         countLbl.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
@@ -584,8 +594,8 @@ public class ManageDrivers extends javax.swing.JFrame {
 
         topMid_1.setMaximumSize(new java.awt.Dimension(300, 40));
         topMid_1.setMinimumSize(new java.awt.Dimension(159, 40));
-        topMid_1.setPreferredSize(new java.awt.Dimension(210, 40));
-        topMid_1.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 0, 10));
+        topMid_1.setPreferredSize(new java.awt.Dimension(160, 40));
+        topMid_1.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 0, 22));
 
         requiredLabel.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         requiredLabel.setText(REQUIRE_FIELD_NOTE.getContent());
@@ -643,11 +653,11 @@ public class ManageDrivers extends javax.swing.JFrame {
             topButtonPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(topButtonPanelLayout.createSequentialGroup()
                 .addComponent(topLTpanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 54, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(topMid_1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 50, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 76, Short.MAX_VALUE)
                 .addComponent(topMid_2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 55, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 175, Short.MAX_VALUE)
                 .addComponent(topRHpanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         topButtonPanelLayout.setVerticalGroup(
@@ -677,7 +687,7 @@ public class ManageDrivers extends javax.swing.JFrame {
 
         searchName.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         searchName.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        searchName.setText("(Name)");
+        searchName.setText(DRIVER_TF.getContent());
         searchName.setToolTipText("Search Name");
         searchName.setMaximumSize(new java.awt.Dimension(350, 28));
         searchName.setMinimumSize(new java.awt.Dimension(110, 28));
@@ -697,7 +707,7 @@ public class ManageDrivers extends javax.swing.JFrame {
 
         searchCell.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         searchCell.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        searchCell.setText("(Cell Phone)");
+        searchCell.setText(CELL_PHONE_TF.getContent());
         searchCell.setToolTipText("Search CellPhone");
         searchCell.setMaximumSize(new java.awt.Dimension(140, 28));
         searchCell.setMinimumSize(new java.awt.Dimension(120, 28));
@@ -717,7 +727,7 @@ public class ManageDrivers extends javax.swing.JFrame {
 
         searchPhone.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         searchPhone.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        searchPhone.setText("(LandLine)");
+        searchPhone.setText(LANDLINE_TF.getContent());
         searchPhone.setToolTipText("Search Phone");
         searchPhone.setMaximumSize(new java.awt.Dimension(140, 28));
         searchPhone.setMinimumSize(new java.awt.Dimension(120, 28));
@@ -822,7 +832,7 @@ public class ManageDrivers extends javax.swing.JFrame {
 
         wholePanel.add(searchPanel);
 
-        driversScrollPane.setPreferredSize(new java.awt.Dimension(452, 0));
+        driversScrollPane.setPreferredSize(new java.awt.Dimension(452, 200));
 
         driversTable.setAutoCreateRowSorter(true);
         driversTable.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
@@ -836,6 +846,7 @@ public class ManageDrivers extends javax.swing.JFrame {
             }
         ));
         driversTable.setInheritsPopupMenu(true);
+        driversTable.setPreferredSize(new java.awt.Dimension(300, 0));
         driversTable.setRowHeight(tableRowHeight);
         driversTable.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
@@ -1757,10 +1768,11 @@ public class ManageDrivers extends javax.swing.JFrame {
             closeDBstuff(conn, selectStmt, rs, excepMsg);
             countValue.setText(String.valueOf(driverTable.getRowCount()));                        
         }
+        setFormMode(FormMode.NormalMode);
             
         int numRows = model.getRowCount();
+        
         if (numRows > 0) {  
-            setFormMode(FormMode.NormalMode);
             deleteAllDrivers.setEnabled(true);
             // <editor-fold defaultstate="collapsed" desc="-- Highlight a selected driver">                          
             if (driverName.length() > 0) {
@@ -1774,8 +1786,6 @@ public class ManageDrivers extends javax.swing.JFrame {
             if (0 <= viewIndex && viewIndex < numRows)
                 highlightTableRow(driverTable, viewIndex);
             //</editor-fold>
-        } else {
-            setFormMode(FormMode.NormalMode);
         }
         createDriver_Button.setEnabled(true);
     }
@@ -1909,7 +1919,7 @@ public class ManageDrivers extends javax.swing.JFrame {
             modifyDriver.setString(DriverName.getNumVal(), (String)driverName);
             
             driverProperties.append("Driver Update Summary: " + System.lineSeparator());
-            getDriverProperties((String)driverName, (String)cellPhone, driverProperties, modifyingRowM);  
+//            getDriverProperties((String)driverName, (String)cellPhone, driverProperties, modifyingRowM);  
             
             modifyDriver.setString(CellPhone.getNumVal(), (String)cellPhone); 
             modifyDriver.setString(LandLine.getNumVal(), (String)drvModel.getValueAt(index, LandLine.getNumVal()));
@@ -2843,38 +2853,45 @@ public class ManageDrivers extends javax.swing.JFrame {
         searchUnitComboBox.setEnabled(flag);
     }
 
-    private void getDriverProperties(String name, String cell, StringBuffer driverProperties, int row) {
+    private void getDriverProperties(String name, String cell, StringBuffer driverProperties, int row,
+            String landLine, String itemL2name, String itemUnitName) 
+    {
+
+//    private void getDriverProperties(String name, String cell, StringBuffer driverProperties, int row) {
         TableModel drvModel = driverTable.getModel();
         
         driverProperties.append("  name: " + (String)name + System.lineSeparator());
         driverProperties.append("  cell phone: " + (String)cell + System.lineSeparator());
-        driverProperties.append("  phone: " + (String)drvModel.getValueAt(row, LandLine.getNumVal()) 
-                + System.lineSeparator());    
+//        Object theObj = drvModel.getValueAt(row, LandLine.getNumVal());
+//        Object theObj = drvModel.getValueAt(row, LandLine.getNumVal());
+        driverProperties.append("  phone: " + landLine + System.lineSeparator());    
         
+        driverProperties.append("  2nd affiliation: " + itemL2name + System.lineSeparator());
         // prepare affiliation level 2 key(L2_NO) value to store
-        InnoComboBoxItem item 
-                = (InnoComboBoxItem)drvModel.getValueAt(row, AffiliationL2.getNumVal());
+//        InnoComboBoxItem item 
+//                = (InnoComboBoxItem)drvModel.getValueAt(row, AffiliationL2.getNumVal());
+//        
+//        if (item.toString() == null) {
+//            driverProperties.append("  2nd affiliation: (null)" + System.lineSeparator());
+//        } else {
+//            if ((Integer)item.getKeys()[0] == -1) {
+//                driverProperties.append("  2nd affiliation: (null)" + System.lineSeparator());
+//            } else {
+//                driverProperties.append("  2nd affiliation: " + item.getLabels()[0] + System.lineSeparator());
+//            }
+//        }    
         
-        if (item.toString() == null) {
-            driverProperties.append("  2nd affiliation: (null)" + System.lineSeparator());
-        } else {
-            if ((Integer)item.getKeys()[0] == -1) {
-                driverProperties.append("  2nd affiliation: (null)" + System.lineSeparator());
-            } else {
-                driverProperties.append("  2nd affiliation: " + item.getLabels()[0] + System.lineSeparator());
-            }
-        }    
-        
+        driverProperties.append("  Room#: " + itemUnitName + System.lineSeparator());
         // prepare building unit key(SEQ_NO) value to store
-        item = (InnoComboBoxItem)drvModel.getValueAt(row, UnitNo.getNumVal());
-        if (item.toString() == null) {
-            driverProperties.append("  Room#: (null)" + System.lineSeparator());
-        } else {
-            if ((Integer)item.getKeys()[0] == -1) {
-                driverProperties.append("  Room#: (null)" + System.lineSeparator());
-            } else {
-                driverProperties.append("  Room#: " + item.getLabels()[0] + System.lineSeparator());
-            }
-        }            
+//        item = (InnoComboBoxItem)drvModel.getValueAt(row, UnitNo.getNumVal());
+//        if (item.toString() == null) {
+//            driverProperties.append("  Room#: (null)" + System.lineSeparator());
+//        } else {
+//            if ((Integer)item.getKeys()[0] == -1) {
+//                driverProperties.append("  Room#: (null)" + System.lineSeparator());
+//            } else {
+//                driverProperties.append("  Room#: " + item.getLabels()[0] + System.lineSeparator());
+//            }
+//        }            
     }
 }
