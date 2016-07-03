@@ -41,6 +41,7 @@ import com.osparking.global.Globals;
 import static com.osparking.global.Globals.OSPiconList;
 import static com.osparking.global.Globals.SetAColumnWidth;
 import static com.osparking.global.Globals.checkOptions;
+import static com.osparking.global.Globals.closeDBstuff;
 import static com.osparking.global.Globals.font_Size;
 import static com.osparking.global.Globals.font_Style;
 import static com.osparking.global.Globals.font_Type;
@@ -303,7 +304,7 @@ public class DriverSelection extends javax.swing.JFrame {
         searchCell.setForeground(tipColor);
         searchCell.setHorizontalAlignment(javax.swing.JTextField.LEFT);
         searchCell.setText(CELL_PHONE_TF.getContent());
-        searchCell.setToolTipText((CELL_PHONE_INPUT_TOOLTIP.getContent()));
+        searchCell.setToolTipText(CELL_PHONE_INPUT_TOOLTIP.getContent());
         searchCell.setMinimumSize(new java.awt.Dimension(6, 28));
         searchCell.setPreferredSize(new java.awt.Dimension(145, 28));
         searchCell.addFocusListener(new java.awt.event.FocusAdapter() {
@@ -692,7 +693,7 @@ public class DriverSelection extends javax.swing.JFrame {
         } catch (SQLException ex) {
             logParkingException(Level.SEVERE, ex, excepMsg);
         } finally {
-            Globals.closeDBstuff(conn, selectStmt, rs, excepMsg);
+            closeDBstuff(conn, selectStmt, rs, excepMsg);
         }
         if (highlightRow != -1 && model.getRowCount() > 0) {
             skinnyDriverTable.setRowSelectionInterval(highlightRow, highlightRow);
@@ -746,8 +747,8 @@ public class DriverSelection extends javax.swing.JFrame {
     
     private String formSearchCondition() {
         StringBuffer cond = new StringBuffer();
-        
         String searchStr = searchName.getText().trim();
+        
         if(!nameHintShown && searchStr.length() > 0) {
             attachCondition(cond, "name", searchStr);
         }
@@ -785,7 +786,6 @@ public class DriverSelection extends javax.swing.JFrame {
     }
 
     private void changeSearchButtonEnabled() {
-        // prevSearchCondition
         String currSearchCondition = formSearchCondition();
         if (currSearchCondition.equals(prevSearchCondition)) {
             searchButton.setEnabled(false);
