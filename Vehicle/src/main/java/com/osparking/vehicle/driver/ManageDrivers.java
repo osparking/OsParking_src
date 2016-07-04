@@ -2388,8 +2388,18 @@ public class ManageDrivers extends javax.swing.JFrame {
         addDriverSelectionListener();
     }
 
+    private int getINNOkey(int row, int col) {
+        Object cellObj = driverTable.getValueAt(row, col);
+        int key = -1;
+        
+        if (cellObj.getClass() == InnoComboBoxItem.class) {
+            key = (Integer)((InnoComboBoxItem)cellObj).getKeys()[0];
+        }
+        return key;
+    }
+    
     /**
-     * Handles driver information update trial in one of the following three ways
+     * Handles driver information update trial in one of the following three ways.
      * 1. requires the user enter driver name information
      * 2. requires the user enter driver cell phone number
      * 3. update driver information in the database in case everything is OK
@@ -2402,23 +2412,20 @@ public class ManageDrivers extends javax.swing.JFrame {
         // conditions that make driver information insufficient: 1, 2        
         String name = ((String)driverTable.getModel().getValueAt(row, col1)).trim(); 
         int col2 = driverTable.convertColumnIndexToModel(DriverCol.CellPhone.getNumVal());        
-        String cell = ((String)driverTable.getModel().getValueAt(row, col2)).trim();    
+        String cell = ((String)driverTable.getModel().getValueAt(row, col2)).trim();  
+        
         String L1_item = driverTable.getValueAt(row, AffiliationL1.getNumVal()).toString();
-        InnoComboBoxItem L2_item = (InnoComboBoxItem)driverTable.getValueAt(row, AffiliationL2.getNumVal());
-        int L2_NO = (Integer) L2_item.getKeys()[0];
+        int L2_NO = getINNOkey(row, AffiliationL2.getNumVal());
+        
         String building_item = driverTable.getValueAt(row, BuildingNo.getNumVal()).toString();
-        Object unitObj = driverTable.getValueAt(row, UnitNo.getNumVal());
-        int SEQ_NO = -1;
-        if (unitObj.getClass() == InnoComboBoxItem.class) {
-            SEQ_NO = (Integer)((InnoComboBoxItem)unitObj).getKeys()[0];
-        }
-
+        int SEQ_NO = getINNOkey(row, UnitNo.getNumVal());
+        
         Object[] options = new Object[2];
         
         switch(language){
             case KOREAN:
-                options[0] = "예(입력)";
-                options[1] = "아니요(종료)";
+                options[0] = "예(입력,Y)";
+                options[1] = "아니요(종료, N)";
                 break;
                 
             case ENGLISH:
@@ -2608,20 +2615,23 @@ public class ManageDrivers extends javax.swing.JFrame {
         int row = driverTable.getRowCount() - 1;
         int colName = driverTable.convertColumnIndexToModel(DriverCol.DriverName.getNumVal());
         
-        // conditions that make driver information insufficient: 1, 2
         String name = ((String)driverTable.getModel().getValueAt(row, colName)).trim(); 
         int colCell = driverTable.convertColumnIndexToModel(DriverCol.CellPhone.getNumVal());
         String cell = String.valueOf(driverTable.getValueAt(row, colCell)).toLowerCase().trim();
+        
         String L1_item = driverTable.getValueAt(row, AffiliationL1.getNumVal()).toString();
         InnoComboBoxItem L2_item = (InnoComboBoxItem)driverTable.getValueAt(row, AffiliationL2.getNumVal());
         int L2_NO = (Integer) L2_item.getKeys()[0];
+//        int L2_NO = getINNOkey(row, AffiliationL2.getNumVal());
+        
+        
         String building_item = driverTable.getValueAt(row, BuildingNo.getNumVal()).toString();
         InnoComboBoxItem unit_item = (InnoComboBoxItem)driverTable.getValueAt(row, UnitNo.getNumVal());
         int SEQ_NO = (Integer)unit_item.getKeys()[0];
-        // 1. driver name isn't provided
+        
         if (name.length() <= 1)
         {
-            //<editor-fold defaultstate="collapsed" desc="-- handle missing cell phone">   
+            //<editor-fold defaultstate="collapsed" desc="-- handle missing driver name">   
             // it has driver's name, but not his/her cell phone number  
             int response = JOptionPane.showConfirmDialog(null, MISSING_NAME_HANDLING.getContent(),
                     WARING_DIALOGTITLE.getContent(), 
@@ -2676,7 +2686,7 @@ public class ManageDrivers extends javax.swing.JFrame {
                 }
             }            
             //</editor-fold>          
-        } else if(!L1_item.equals(HIGHER_CB_ITEM.getContent()) 
+        } else if (!L1_item.equals(HIGHER_CB_ITEM.getContent()) 
                         && L2_NO == -1)
         {
             // <editor-fold defaultstate="collapsed" desc="-- handle missing L2 item"> 
