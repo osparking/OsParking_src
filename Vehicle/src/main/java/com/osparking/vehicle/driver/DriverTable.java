@@ -64,7 +64,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 public class DriverTable extends JTable {
 
     /**
-     * table model row index for the driver currently being modified
+     * table model modRow index for the driver currently being modified
      * 
      */
     static int modifyingRowM = -1;    
@@ -88,7 +88,7 @@ public class DriverTable extends JTable {
         setRowHeight(tableRowHeight);        
     }   
     
-    public boolean isCellEditable(int row, int column) {
+    public boolean isCellEditable(int modRow, int column) {
         if ((parent.getFormMode() == FormMode.CreateMode ||
                 parent.getFormMode() == FormMode.UpdateMode)
                 && column != DriverCol.RowNo.getNumVal()) 
@@ -164,22 +164,22 @@ public class DriverTable extends JTable {
         
         // if new driver is being created and the cell is outside the new driver, then quit
         int tabSize = driverTable.getRowCount();
-        if (parent.getFormMode() == FormMode.UpdateMode && row != modifyingRowM 
+        if (parent.getFormMode() == FormMode.UpdateMode && modRow != modifyingRowM 
                 ||
-                parent.getFormMode() == FormMode.CreateMode && row != tabSize -1)
+                parent.getFormMode() == FormMode.CreateMode && modRow != tabSize -1)
         {
             return null;
         }
 
-
         TableCellEditor cellEditor = null; 
         
         // <editor-fold defaultstate="collapsed" desc="-- Make ComboBox for the Cell">                        
-        if (column == DriverCol.AffiliationL2.getNumVal()) {
-            Object itemObj = getValueAt(row, DriverCol.AffiliationL1.getNumVal() );
+        if (modCol == DriverCol.AffiliationL2.getNumVal()) {
+            //<editor-fold desc="-- Level 2 affiliation">
+            Object itemObj = getValueAt(modRow, DriverCol.AffiliationL1.getNumVal() );
             int L1_NO = (Integer)(((ConvComboBoxItem)itemObj).getValue());
             
-            TableColumn comboCol = driverTable.getColumnModel().getColumn(column);        
+            TableColumn comboCol = driverTable.getColumnModel().getColumn(modCol);        
             PComboBox<InnoComboBoxItem> comboBox = (PComboBox<InnoComboBoxItem>)
                     ((DefaultCellEditor)comboCol.getCellEditor()).getComponent();
             
@@ -189,15 +189,17 @@ public class DriverTable extends JTable {
                             driverTable.getSelectedRow(), AffiliationL1.getNumVal()) ) );
             parent.loadComboBoxItems(comboBox, DriverCol.AffiliationL2, L1_NO);
             comboBox.setEditable(true);
-            Object item = driverTable.getValueAt(driverTable.getSelectedRow(), column);
+            Object item = driverTable.getValueAt(driverTable.getSelectedRow(), modCol);
             comboBox.setSelectedItem((InnoComboBoxItem)item);
             
-            cellEditor = new DefaultCellEditor(comboBox); 
-        } else if (column == DriverCol.UnitNo.getNumVal()) {
-            Object itemObj = getValueAt(row, DriverCol.BuildingNo.getNumVal());
+            cellEditor = new DefaultCellEditor(comboBox);
+            //</editor-fold>
+        } else if (modCol == DriverCol.UnitNo.getNumVal()) {
+            //<editor-fold desc="-- Building unit">
+            Object itemObj = getValueAt(modRow, DriverCol.BuildingNo.getNumVal());
             int bldgSeqNo = (Integer)(((ConvComboBoxItem)itemObj).getValue());
             
-            TableColumn comboCol = driverTable.getColumnModel().getColumn(column);        
+            TableColumn comboCol = driverTable.getColumnModel().getColumn(modCol);        
             PComboBox<InnoComboBoxItem> comboBox = (PComboBox<InnoComboBoxItem>)
                     ((DefaultCellEditor)comboCol.getCellEditor()).getComponent();
 
@@ -206,14 +208,15 @@ public class DriverTable extends JTable {
                     ManageDrivers.getPrompter (DriverCol.UnitNo, driverTable.getValueAt(
                             driverTable.getSelectedRow(), BuildingNo.getNumVal()) ) );    
             comboBox.setEditable(true);
-            Object item = driverTable.getValueAt(driverTable.getSelectedRow(), column);
+            Object item = driverTable.getValueAt(driverTable.getSelectedRow(), modCol);
             comboBox.setSelectedItem((InnoComboBoxItem)item);            
             
             parent.loadComboBoxItems(comboBox, DriverCol.UnitNo, bldgSeqNo);
             
             cellEditor = new DefaultCellEditor(comboBox);
-        } else if (column == DriverCol.AffiliationL1.getNumVal()) {
-            
+            //</editor-fold>
+        } else if (modCol == DriverCol.AffiliationL1.getNumVal()) {
+            //<editor-fold desc="-- Level 1 affiliation">            
             cellEditor = new DefaultCellEditor(ManageDrivers.affiliationL1CBox); 
             cellEditor.addCellEditorListener(new CellEditorListener() {
 
@@ -234,9 +237,9 @@ public class DriverTable extends JTable {
                 public void editingCanceled(ChangeEvent e) {
                 }
             });
-
-        } else if (column == DriverCol.BuildingNo.getNumVal()) {
-            
+            //</editor-fold>
+        } else if (modCol == DriverCol.BuildingNo.getNumVal()) {
+            //<editor-fold desc="-- Building">            
             cellEditor = new DefaultCellEditor(ManageDrivers.buildingCBox); 
             cellEditor.addCellEditorListener(new CellEditorListener() {
 
@@ -257,8 +260,9 @@ public class DriverTable extends JTable {
                 public void editingCanceled(ChangeEvent e) {
                 }
             });
+            //</editor-fold>
         } else {
-            cellEditor = super.getCellEditor(row, column);
+            cellEditor = super.getCellEditor(modRow, modCol);
         }
         //</editor-fold>
 
@@ -289,8 +293,8 @@ public class DriverTable extends JTable {
         compo.getActionMap().put("handleEnter", handleEnter);  
         // </editor-fold>
         
-        if (column >= DriverCol.AffiliationL1.getNumVal()
-            && column <= DriverCol.UnitNo.getNumVal())
+        if (modCol >= DriverCol.AffiliationL1.getNumVal()
+            && modCol <= DriverCol.UnitNo.getNumVal())
         {
             Component comp = ((DefaultCellEditor)cellEditor).getComponent();
             comp.addMouseListener(new MouseAdapter() {
