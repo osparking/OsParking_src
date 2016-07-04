@@ -24,6 +24,7 @@ import static com.osparking.global.CommonData.buttonHeightNorm;
 import static com.osparking.global.CommonData.buttonWidthNorm;
 import static com.osparking.global.CommonData.buttonWidthWide;
 import static com.osparking.global.CommonData.normGUIheight;
+import static com.osparking.global.CommonData.numberCellRenderer;
 import static com.osparking.global.CommonData.pointColor;
 import static com.osparking.global.CommonData.tableRowHeight;
 import static com.osparking.global.DataSheet.saveODSfile;
@@ -130,14 +131,12 @@ import static com.osparking.global.names.JDBCMySQL.getConnection;
 import com.osparking.global.names.OSP_enums.ODS_TYPE;
 import static com.osparking.global.names.OSP_enums.ODS_TYPE.AFFILIATION;
 import static com.osparking.global.names.OSP_enums.ODS_TYPE.BUILDING;
-//import static com.osparking.global.names.OSP_enums.VehicleCol.Building;
 import com.osparking.global.names.OdsFileOnly;
 import com.osparking.global.names.WrappedInt;
 import com.osparking.vehicle.driver.ODSReader;
 import static com.osparking.vehicle.driver.ODSReader.getWrongCellPointString;
 import java.awt.Color;
 import static java.awt.Color.black;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Rectangle;
@@ -153,7 +152,6 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
@@ -165,7 +163,6 @@ import static javax.swing.JOptionPane.showMessageDialog;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.border.BevelBorder;
-import javax.swing.border.Border;
 import javax.swing.border.SoftBevelBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -469,8 +466,9 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
                 return String.class;
             }
         }
-
     );
+    ((DefaultTableCellRenderer)L1_Affiliation.getTableHeader().getDefaultRenderer())
+    .setHorizontalAlignment(JLabel.CENTER);
     L1_Affiliation.setDoubleBuffered(true);
     L1_Affiliation.setRowHeight(tableRowHeight);
     L1_Affiliation.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -667,6 +665,8 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
         }
     }
     );
+    ((DefaultTableCellRenderer)L2_Affiliation.getTableHeader().getDefaultRenderer())
+    .setHorizontalAlignment(JLabel.CENTER);
     L2_Affiliation.setDoubleBuffered(true);
     L2_Affiliation.setEnabled(false);
     L2_Affiliation.setRowHeight(tableRowHeight);
@@ -868,7 +868,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     );
     ((DefaultTableCellRenderer)BuildingTable.getTableHeader().getDefaultRenderer())
     .setHorizontalAlignment(JLabel.CENTER);
-    BuildingTable.getColumnModel().getColumn(1).setCellRenderer(bnoCellRenderer);
+    BuildingTable.getColumnModel().getColumn(1).setCellRenderer(numberCellRenderer);
     BuildingTable.setDoubleBuffered(true);
     BuildingTable.setEnabled(false);
     BuildingTable.setRowHeight(tableRowHeight);
@@ -1065,7 +1065,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     );
     ((DefaultTableCellRenderer)UnitTable.getTableHeader().getDefaultRenderer())
     .setHorizontalAlignment(JLabel.CENTER);
-    UnitTable.getColumnModel().getColumn(1).setCellRenderer(bnoCellRenderer);
+    UnitTable.getColumnModel().getColumn(1).setCellRenderer(numberCellRenderer);
     UnitTable.setDoubleBuffered(true);
     UnitTable.setRowHeight(tableRowHeight);
     L2_Affiliation.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -2850,13 +2850,9 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
                 viewIndex--;
             }
             highlightTableRow(BuildingTable, viewIndex);
-//            deleteBuilding_Button.setEnabled(true);                
-//            modifyBuilding_Button.setEnabled(true);  
         }
         else
         {
-//            deleteBuilding_Button.setEnabled(false);                
-//            modifyBuilding_Button.setEnabled(false);                         
             loadUnitNumberTable(0, null, 0, 0);
         }
         //</editor-fold>
@@ -3474,21 +3470,6 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
             }
         }
     }
-
-    DefaultTableCellRenderer bnoCellRenderer = new DefaultTableCellRenderer() {
-        Border padding = BorderFactory.createEmptyBorder(0, 15, 0, 15);
-
-        @Override
-        public Component getTableCellRendererComponent(JTable table, Object value, 
-                boolean isSelected, boolean hasFocus, int row, int column) 
-        {
-            super.getTableCellRendererComponent(table, value, isSelected, hasFocus,
-                    row, column);
-            setBorder(BorderFactory.createCompoundBorder(getBorder(), padding));
-            setHorizontalAlignment(JLabel.RIGHT);
-            return this;            
-        }
-    };
 
     private void addDummyFirstRow(DefaultTableModel model) {
         if (model.getRowCount() == 0) {

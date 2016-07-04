@@ -2192,21 +2192,6 @@ public class AttListForm extends javax.swing.JFrame {
         new2Password.setText("");
     }
 
-    private int getNumericDigitCount(String cellPhone) {
-        int numCount = 0;
-        
-        if (cellPhone == null || cellPhone.length() == 0)
-        {
-            return 0;
-        }
-        for (char aChar : cellPhone.toCharArray()) {
-            if (aChar >= '0' && aChar <= '9') {
-                numCount++;
-            }
-        }
-        return numCount;
-    }
-
     private void changeTextFieldEnabled(boolean b) {
         userNameText.setEnabled(b);
         cellPhoneText.setEnabled(b);

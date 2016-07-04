@@ -16,6 +16,8 @@
  */
 package com.osparking.vehicle.driver;
 
+import static com.osparking.global.CommonData.numberCellRenderer;
+import static com.osparking.global.CommonData.tableRowHeight;
 import static com.osparking.vehicle.driver.ManageDrivers.driverTable;
 import java.awt.Component;
 import java.awt.Point;
@@ -52,6 +54,8 @@ import java.awt.event.KeyListener;
 import java.util.HashSet;
 import java.util.Set;
 import javax.swing.JDialog;
+import javax.swing.JLabel;
+import javax.swing.table.DefaultTableCellRenderer;
 
 /**
  *
@@ -70,6 +74,18 @@ public class DriverTable extends JTable {
     public DriverTable(Object[][] rowData, Object[] columnNames, ManageDrivers parent) {
         this.parent = parent;
         setModel(new DriverTableModel(rowData, columnNames, parent));
+        
+        ((DefaultTableCellRenderer)getTableHeader().getDefaultRenderer())
+            .setHorizontalAlignment(JLabel.CENTER);
+        
+        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+        centerRenderer.setHorizontalAlignment(JLabel.CENTER);        
+        getColumnModel().getColumn(1).setCellRenderer(centerRenderer);
+        
+        getColumnModel().getColumn(0).setCellRenderer(numberCellRenderer);
+        getColumnModel().getColumn(6).setCellRenderer(numberCellRenderer);
+        getColumnModel().getColumn(7).setCellRenderer(numberCellRenderer);
+        setRowHeight(tableRowHeight);        
     }   
     
     public boolean isCellEditable(int row, int column) {
@@ -283,9 +299,9 @@ public class DriverTable extends JTable {
                     if (me.getClickCount() == 2 && !me.isConsumed()) {
                         me.consume();
                     
-                        if (emptyLastRowPossible(parent.createDriver_Button, driverTable))
+                        if (emptyLastRowPossible(parent.insertSave_Button, driverTable))
                         {
-                            removeEmptyRow(parent.createDriver_Button, driverTable);
+                            removeEmptyRow(parent.insertSave_Button, driverTable);
                         }                        
 
                         if (parent.getFormMode() != FormMode.UpdateMode) {

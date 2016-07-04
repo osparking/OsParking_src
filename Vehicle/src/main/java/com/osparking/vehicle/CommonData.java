@@ -32,4 +32,15 @@ public class CommonData {
     public static final int vOtherWidth = 60; // 
     public static final int vCauseWidth = 80; // 
     
+    public static final int DTC_MARGIN = 5; // Driver Table Column Margin
+    public static final int DTCW_MAX = 3; // Driver Table Column Margin
+    public static final int DTCW_RN = 80;
+    public static final int DTCW_DN = 100;
+    public static final int DTCW_CP = 130;
+    public static final int DTCW_LL = 120;
+    public static final int DTCW_L1 = 110;
+    public static final int DTCW_L2 = 110;
+    public static final int DTCW_BN = 110;
+    public static final int DTCW_UN = 110;
+    
 }

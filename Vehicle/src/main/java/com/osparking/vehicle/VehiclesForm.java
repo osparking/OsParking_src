@@ -1991,7 +1991,6 @@ public class VehiclesForm extends javax.swing.JFrame {
         cancel_Button.setEnabled(!flag);        
         
         saveSheet_Button.setEnabled(flag);
-        
     }
 
     /**

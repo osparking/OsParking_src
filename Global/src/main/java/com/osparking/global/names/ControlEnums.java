@@ -228,9 +228,9 @@ public class ControlEnums {
         ID_CHECK_BTN("<HTML>중복검사(<U>K</U>)</HTML>", "<HTML>Check(<U>K</U>)</HTML>"),
         EMAIL_CHECK_BTN("<HTML>중복검사(<U>L</U>)</HTML>", "<HTML>Check(<U>L</U>)</HTML>"),
         CLEAR_BTN("초기화(L)", "Clear"),
-        DELETE_ALL_BTN("전체삭제(E)", "Delete All"),
-        READ_ODS_BTN("<HTML>ods읽기(<U>O</U>)</HTML>", "<HTML>Read  <U>O</U>ds</HTML>"),
-        SAVE_ODS_BTN("<HTML>ods저장(<U>A</U>)</HTML>", "<HTML>S<U>a</U>ve Ods"),
+        DELETE_ALL_BTN("전체삭제(E)", "dElete All"),
+        READ_ODS_BTN("ods읽기", "read ods"),
+        SAVE_ODS_BTN("ods저장(A)", "SAve Ods"),
         DELETE_ALL_NO_SHORT_BTN("전체삭제", "Delete All"),
         READ_ODS_NO_SHORT_BTN("시트읽기", "Read ods"),
         SAVE_NO_SHORT_BTN("저장", "Save"),
@@ -502,27 +502,27 @@ public class ControlEnums {
                             + System.getProperty("line.separator") 
                             + "Otherwise, modification will be discarded.)"),
         
-        DRIVER_CREATE_CHECK_CELL_DIALOG("\"필수사항\" 인 휴대전화을 입력하시겟습니까?" 
+        MISSING_CELL_HANDLING("\"휴대전화\" 번호는 11 자리이어야 합니다." 
                             + System.getProperty("line.separator") 
-                            + "([예] 버튼을 누르면 휴대전화 입력란으로 이동합니다." 
+                            + "[예] 버튼을 누르면, 휴대전화 란으로 이동합니다." 
                             + System.getProperty("line.separator") 
-                            + "그렇지 않으면, 수정정보가 포기됩니다.)", 
-              "Want to input a \"required\" cell phone number?" 
+                            + "[아니오]를 누르면, 현재 연산이 포기됩니다.", 
+                "\"Cell phone number\" should be 11 digits." 
                             + System.getProperty("line.separator") 
-                            + "(By pressing [Yes], cell phone will have focus," 
+                            + "Press [Yes], to edit cell phone number," 
                             + System.getProperty("line.separator") 
-                            + "Otherwise, creation will be discarded.)"),
+                            + "Press [No], to finish operation."),
 
-        MISSING_NAME_HANDLING("\"필수사항\"인 운전자 이름이 누락 되었습니다."
+        MISSING_NAME_HANDLING("\"운전자 이름\"이 두 글자를 넘어야 됩니다."
                             + System.getProperty("line.separator") 
-                            + "([예] 버튼을 누르면 이름 입력란으로 이동합니다." 
+                            + "[예] 버튼을 누르면 이름 입력란으로 이동하고," 
                             + System.getProperty("line.separator") 
-                            + "그렇지 않으면, 수정정보가 포기됩니다.)", 
-              "\"Required\" driver name isn't provided!" 
+                            + "[아니오]를 선택하면 생성이 포기됩니다!", 
+                "\"Name\" should be longer than 1 character." 
                             + System.getProperty("line.separator") 
                             + "By pressing [Yes], focus will move to name field." 
                             + System.getProperty("line.separator") 
-                            + "Otherwise, registration will be given up."),
+                            + "To give up creation, press [No]."),
         
         USER_RIGHTS_DESCRIPTION("1. 관리자(ID: admin) : 상위" + System.getProperty("line.separator") +
                 "    - 매니저 및 일반에 대한 모든 권한" + System.getProperty("line.separator") +
@@ -871,7 +871,7 @@ public class ControlEnums {
     public enum ComboBoxItemTypes {
         LOWER_HIGHER_CB_ITEM("(하위-상위)", "(Lower-Higher)"),
         HIGHER_LOWER_CB_ITEM("(상위-하위)", "(Higher-Lower)"),
-        ROOM_BUILDING_CB_ITEM("(호수-건물)", "(Room-Bldg)"),
+        ROOM_BUILDING_CB_ITEM("(호실-건물)", "(Room-Bldg)"),
         BUILDING_ROOM_CB_ITEM("(건물-호실)", "(Bldg-Room)"),
         HIGHER_CB_ITEM("(상위 소속)", "(Higher Group)"),
         LOWER_CB_ITEM("(하위 소속)", "(Lower Group)"),

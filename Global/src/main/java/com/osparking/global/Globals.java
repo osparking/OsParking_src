@@ -16,7 +16,6 @@
  */
 package com.osparking.global;
 
-import com.mysql.jdbc.MysqlErrorNumbers;
 import static com.mysql.jdbc.MysqlErrorNumbers.ER_DUP_ENTRY;
 import static com.mysql.jdbc.MysqlErrorNumbers.ER_NO;
 import static com.mysql.jdbc.MysqlErrorNumbers.ER_YES;
@@ -1402,7 +1401,7 @@ public class Globals {
 
     public static void highlightTableRow(JTable table, int rowIndex) {
         table.getSelectionModel().setSelectionInterval(rowIndex, rowIndex);
-        table.scrollRectToVisible(new Rectangle(table.getCellRect(rowIndex, 2, true)));        
+        table.scrollRectToVisible(new Rectangle(table.getCellRect(rowIndex, 2, true)));
     }   
     
     public static void rejectEmptyInput(JTable thisTable, int rowIndex, String msg) {
@@ -1412,6 +1411,21 @@ public class Globals {
         }                  
         showMessageDialog(null, msg, "Input Date Error", JOptionPane.INFORMATION_MESSAGE);            
     }
+    
+    public static int getNumericDigitCount(String cellPhone) {
+        int numCount = 0;
+        
+        if (cellPhone == null || cellPhone.length() == 0)
+        {
+            return 0;
+        }
+        for (char aChar : cellPhone.toCharArray()) {
+            if (aChar >= '0' && aChar <= '9') {
+                numCount++;
+            }
+        }
+        return numCount;
+    }    
     
     public static void rejectUserInput(JTable thisTable, int rowIndex, String tableName) {
         if (thisTable.editCellAt(rowIndex, 1))

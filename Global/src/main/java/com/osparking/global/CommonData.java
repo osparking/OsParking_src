@@ -21,7 +21,11 @@ import static com.osparking.global.Globals.font_Style;
 import static com.osparking.global.Globals.font_Type;
 import static com.osparking.global.names.ControlEnums.MenuITemTypes.META_KEY_LABEL;
 import java.awt.Color;
+import java.awt.Component;
+import javax.swing.BorderFactory;
 import javax.swing.JLabel;
+import javax.swing.JTable;
+import javax.swing.border.Border;
 import javax.swing.table.DefaultTableCellRenderer;
 
 /**
@@ -51,4 +55,19 @@ public class CommonData { // new Dimension(carTagWidth, 30)
     static {
         putCellCenter.setHorizontalAlignment(JLabel.CENTER);    
     }
+
+    public static DefaultTableCellRenderer numberCellRenderer = new DefaultTableCellRenderer() {
+        Border padding = BorderFactory.createEmptyBorder(0, 15, 0, 15);
+
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value, 
+                boolean isSelected, boolean hasFocus, int row, int column) 
+        {
+            super.getTableCellRendererComponent(table, value, isSelected, hasFocus,
+                    row, column);
+            setBorder(BorderFactory.createCompoundBorder(getBorder(), padding));
+            setHorizontalAlignment(JLabel.RIGHT);
+            return this;            
+        }
+    };    
 }

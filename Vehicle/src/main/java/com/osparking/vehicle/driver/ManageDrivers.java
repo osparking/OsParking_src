@@ -81,6 +81,7 @@ import static com.osparking.global.Globals.font_Style;
 import static com.osparking.global.Globals.font_Type;
 import static com.osparking.global.Globals.highlightTableRow;
 import static com.osparking.global.Globals.OSPiconList;
+import static com.osparking.global.Globals.getNumericDigitCount;
 import static com.osparking.global.Globals.head_font_Size;
 import static com.osparking.global.Globals.initializeLoggers;
 import static com.osparking.global.Globals.language;
@@ -100,6 +101,7 @@ import static com.osparking.global.names.ControlEnums.LabelContent.CREATE_MODE_L
 import static com.osparking.global.names.ControlEnums.LabelContent.MODE_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.MODIFY_MODE_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.REQUIRE_FIELD_NOTE;
+import static com.osparking.global.names.ControlEnums.LabelContent.SEARCH_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.SEARCH_MODE_LABEL;
 import static com.osparking.global.names.ControlEnums.MenuITemTypes.META_KEY_LABEL;
 import static com.osparking.global.names.ControlEnums.TitleTypes.DRIVER_LIST_FRAME_TITLE;
@@ -122,6 +124,16 @@ import static com.osparking.global.names.OSP_enums.DriverCol.UnitNo;
 import static com.osparking.global.names.OSP_enums.OpLogLevel.EBDsettingsChange;
 import com.osparking.global.names.PComboBox;
 import com.osparking.global.names.WrappedInt;
+import static com.osparking.vehicle.CommonData.DTCW_BN;
+import static com.osparking.vehicle.CommonData.DTCW_CP;
+import static com.osparking.vehicle.CommonData.DTCW_DN;
+import static com.osparking.vehicle.CommonData.DTCW_L1;
+import static com.osparking.vehicle.CommonData.DTCW_L2;
+import static com.osparking.vehicle.CommonData.DTCW_LL;
+import static com.osparking.vehicle.CommonData.DTCW_MAX;
+import static com.osparking.vehicle.CommonData.DTCW_RN;
+import static com.osparking.vehicle.CommonData.DTCW_UN;
+import static com.osparking.vehicle.CommonData.DTC_MARGIN;
 import com.osparking.vehicle.LabelBlinker;
 import java.awt.Color;
 import java.util.Locale;
@@ -154,6 +166,17 @@ public class ManageDrivers extends javax.swing.JFrame {
         initComponents();
         setIconImages(OSPiconList);                
         
+        /**
+         * Change buttons text.
+         */
+        insertSave_Button.setText(CREATE_BTN.getContent());
+        deleteDriver_Button.setText(DELETE_BTN.getContent());
+        cancelDriver_Button.setText(CANCEL_BTN.getContent());
+        deleteAllDrivers.setText(DELETE_ALL_BTN.getContent());
+        readSheet_Button.setText(READ_ODS_BTN.getContent());
+        saveSheet_Button.setText(SAVE_ODS_BTN.getContent());
+        closeFormButton.setText(CLOSE_BTN.getContent());
+        
         Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
         setLocation(screen.width - this.getSize().width, 0);
         
@@ -185,11 +208,7 @@ public class ManageDrivers extends javax.swing.JFrame {
                 tableMouseClicked(evt);
             }
         });
-        setupComboBoxColumn(DriverCol.AffiliationL2);
-        setupComboBoxColumn(DriverCol.UnitNo);
-        
         loadDriverData(UNKNOWN, "", "");
-//        searchName.requestFocus();
     }
     
     static boolean checkIfUserWantsToSave() {
@@ -216,88 +235,80 @@ public class ManageDrivers extends javax.swing.JFrame {
         }
         releaseCount = 0;
     }    
+
+    private void setSearchEnabled(boolean flag) {
+        searchName.setEnabled(flag);
+        searchCell.setEnabled(flag);
+        searchPhone.setEnabled(flag);
+        searchL1ComboBox.setEnabled(flag);
+        searchL2ComboBox.setEnabled(flag);
+        searchBuildingComboBox.setEnabled(flag);
+        searchUnitComboBox.setEnabled(flag);
+        clearButton.setEnabled(flag);
+        searchButton.setEnabled(flag);
+//        deleteDriver_Button.setEnabled(flag);    
+        closeFormButton.setEnabled(flag);           // 
+        cancelDriver_Button.setEnabled(!flag);        
+        saveSheet_Button.setEnabled(flag);          // 
+        deleteAllDrivers.setEnabled(flag);          // in normal !(not)
+    }    
     
     /**
      * @param newMode the formMode to set
      */
     public void setFormMode(FormMode newMode) {
+        FormMode prevMode = formMode;
+
+        formMode = newMode;
         switch (newMode) {
             case CreateMode:
-                closeFormButton.setEnabled(false);
-                
-                searchButton.setEnabled(false);
-//                clearButton.setEnabled(false);
-                readSheet_Button.setEnabled(false);
-                deleteAllDrivers.setEnabled(false);
-                
-                deleteDriver_Button.setText(CANCEL_BTN.getContent());
-                deleteDriver_Button.setMnemonic('c');
-                deleteDriver_Button.setEnabled(true);
-                modifyDriver_Button.setEnabled(false);
-                
-                createDriver_Button.setText(SAVE_BTN.getContent());
-                createDriver_Button.setMnemonic('s');
-                requiredLabel.setVisible(true);
-                
-                searchKeyGroupEnabled(false);
                 formModeLabel.setText(CREATE_MODE_LABEL.getContent());
+                setSearchEnabled(false);
+                modiSave_Button.setEnabled(false);
+                insertSave_Button.setText(SAVE_BTN.getContent());
+                insertSave_Button.setMnemonic('s');
+                requiredLabel.setVisible(true);
                 break;
                 
             case UpdateMode:
-                closeFormButton.setEnabled(false);
-                
-                searchButton.setEnabled(false);
-//                clearButton.setEnabled(false);
-                readSheet_Button.setEnabled(false);
-                deleteAllDrivers.setEnabled(false);
-                
-                deleteDriver_Button.setText(CANCEL_BTN.getContent());
-                deleteDriver_Button.setMnemonic('c');
-                deleteDriver_Button.setEnabled(true);
-                createDriver_Button.setEnabled(false);
-                
-                modifyDriver_Button.setText(SAVE_BTN.getContent());
-                modifyDriver_Button.setMnemonic('s');
-                requiredLabel.setVisible(true);
-                
-                searchKeyGroupEnabled(false);                
                 formModeLabel.setText(MODIFY_MODE_LABEL.getContent());
+                setSearchEnabled(false);
+                insertSave_Button.setEnabled(false);
+//                deleteDriver_Button.setText(CANCEL_BTN.getContent());
+//                deleteDriver_Button.setMnemonic('c');
+//                deleteDriver_Button.setEnabled(true);
+                modiSave_Button.setText(SAVE_BTN.getContent());
+                modiSave_Button.setMnemonic('s');
+                requiredLabel.setVisible(true);
+//                searchKeyGroupEnabled(false);                
                 break;
                 
             case NormalMode:
-                closeFormButton.setEnabled(true);
-                
-//                searchButton.setEnabled(true);
-//                clearButton.setEnabled(true);
-                readSheet_Button.setEnabled(true);
-                deleteAllDrivers.setEnabled(false);
-                
-                deleteDriver_Button.setText(DELETE_BTN.getContent());
-                deleteDriver_Button.setMnemonic('d');
-                deleteDriver_Button.setEnabled(false);
-                
-                modifyDriver_Button.setText(MODIFY_BTN.getContent());
-                modifyDriver_Button.setMnemonic('m');
-                modifyDriver_Button.setEnabled(false);
-                
-                createDriver_Button.setText(CREATE_BTN.getContent());
-                createDriver_Button.setMnemonic('r');
-                requiredLabel.setVisible(false);
-                
-                searchKeyGroupEnabled(true);
                 formModeLabel.setText(SEARCH_MODE_LABEL.getContent());
+                setSearchEnabled(true);
+                if (prevMode == FormMode.CreateMode) {
+                    insertSave_Button.setText(CREATE_BTN.getContent());
+                    insertSave_Button.setMnemonic('r');
+                } else if (prevMode == FormMode.UpdateMode) {
+                    modiSave_Button.setText(MODIFY_BTN.getContent());
+                    modiSave_Button.setMnemonic('m');
+                    modiSave_Button.setEnabled(false);
+                }
+                requiredLabel.setVisible(false);
+//                deleteDriver_Button.setText(DELETE_BTN.getContent());
+//                deleteDriver_Button.setMnemonic('d');
+//                deleteDriver_Button.setEnabled(false);
                 break;
             default:
                 break;
         }
-        formMode = newMode;
     }
 
     private void tableMouseClicked(MouseEvent evt) {
-        int row = driverTable.rowAtPoint(evt.getPoint());
-
-        ConvComboBoxItem item = (ConvComboBoxItem)(driverTable.getValueAt(row, 
-                DriverCol.AffiliationL1.getNumVal()));
+//        int row = driverTable.rowAtPoint(evt.getPoint());
+//
+//        ConvComboBoxItem item = (ConvComboBoxItem)(driverTable.getValueAt(row, 
+//                DriverCol.AffiliationL1.getNumVal()));
     }
     
     private static boolean selectionListenerDisabled = false;
@@ -313,11 +324,10 @@ public class ManageDrivers extends javax.swing.JFrame {
                 if (e.getValueIsAdjusting()) 
                     return;
                 
-//                System.out.println(++changeCount + ". manage drivers form : value changed");
                 if (selectionListenerDisabled || getFormMode() == FormMode.NormalMode) 
                 {
                     if (driverTable.getSelectedRowCount() > 0) {
-                        modifyDriver_Button.setEnabled(true);
+                        modiSave_Button.setEnabled(true);
                         deleteAllDrivers.setEnabled(true);
                         deleteDriver_Button.setEnabled(true);
                     }                    
@@ -498,19 +508,20 @@ public class ManageDrivers extends javax.swing.JFrame {
         searchL2ComboBox = new PComboBox<InnoComboBoxItem>();
         searchBuildingComboBox = new PComboBox();
         searchUnitComboBox = new PComboBox();
+        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(15, 0), new java.awt.Dimension(15, 0), new java.awt.Dimension(15, 32767));
         driversScrollPane = new javax.swing.JScrollPane();
         driversTable = new javax.swing.JTable();
         filler15_5 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 15), new java.awt.Dimension(0, 15), new java.awt.Dimension(32767, 15));
         bottomButtonPanel = new javax.swing.JPanel();
         leftButtons = new javax.swing.JPanel();
-        createDriver_Button = new javax.swing.JButton();
-        modifyDriver_Button = new javax.swing.JButton();
+        insertSave_Button = new javax.swing.JButton();
+        modiSave_Button = new javax.swing.JButton();
         deleteDriver_Button = new javax.swing.JButton();
-        deleteDriver_Button2 = new javax.swing.JButton();
+        cancelDriver_Button = new javax.swing.JButton();
         rightButtons = new javax.swing.JPanel();
         deleteAllDrivers = new javax.swing.JButton();
-        readSheet_Button1 = new javax.swing.JButton();
         readSheet_Button = new javax.swing.JButton();
+        saveSheet_Button = new javax.swing.JButton();
         closeFormButton = new javax.swing.JButton();
         eastPanel = new javax.swing.JPanel();
         southPanel = new javax.swing.JPanel();
@@ -530,9 +541,7 @@ public class ManageDrivers extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle(DRIVER_LIST_FRAME_TITLE.getContent());
-        setMaximumSize(new java.awt.Dimension(32000, 24000));
         setMinimumSize(new Dimension(normGUIwidth, normGUIheight));
-        setPreferredSize(new Dimension(normGUIwidth, normGUIheight));
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 formWindowClosing(evt);
@@ -647,7 +656,7 @@ public class ManageDrivers extends javax.swing.JFrame {
 
         clearButton.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         clearButton.setMnemonic('l');
-        clearButton.setText(CLEAR_BTN.getContent());
+        clearButton.setText("초기화(L)");
         clearButton.setEnabled(false);
         clearButton.setMaximumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
         clearButton.setMinimumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
@@ -661,7 +670,7 @@ public class ManageDrivers extends javax.swing.JFrame {
 
         searchButton.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         searchButton.setMnemonic('s');
-        searchButton.setText(SEARCH_BTN.getContent());
+        searchButton.setText("검색(S)");
         searchButton.setEnabled(false);
         searchButton.setMaximumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
         searchButton.setMinimumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
@@ -702,10 +711,10 @@ public class ManageDrivers extends javax.swing.JFrame {
 
         jLabel3.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        jLabel3.setText("Search Key");
-        jLabel3.setMaximumSize(new java.awt.Dimension(80, 27));
-        jLabel3.setMinimumSize(new java.awt.Dimension(80, 27));
-        jLabel3.setPreferredSize(new java.awt.Dimension(80, 27));
+        jLabel3.setText(SEARCH_LABEL.getContent());
+        jLabel3.setMaximumSize(new Dimension(DTCW_RN - DTC_MARGIN, 28));
+        jLabel3.setMinimumSize(new Dimension(DTCW_RN - DTC_MARGIN, 28));
+        jLabel3.setPreferredSize(new Dimension(DTCW_RN - DTC_MARGIN, 28));
         searchPanel.add(jLabel3);
         jLabel3.getAccessibleContext().setAccessibleName("default");
 
@@ -716,9 +725,9 @@ public class ManageDrivers extends javax.swing.JFrame {
         searchName.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         searchName.setText(DRIVER_TF.getContent());
         searchName.setToolTipText(DRIVER_INPUT_TOOLTIP.getContent());
-        searchName.setMaximumSize(new java.awt.Dimension(350, 28));
-        searchName.setMinimumSize(new java.awt.Dimension(110, 28));
-        searchName.setPreferredSize(new java.awt.Dimension(110, 28));
+        searchName.setMaximumSize(new Dimension(DTCW_DN * DTCW_MAX - DTC_MARGIN, 28));
+        searchName.setMinimumSize(new Dimension(DTCW_DN - DTC_MARGIN, 28));
+        searchName.setPreferredSize(new Dimension(DTCW_DN - DTC_MARGIN, 28));
         searchName.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 searchNameFocusGained(evt);
@@ -733,10 +742,10 @@ public class ManageDrivers extends javax.swing.JFrame {
             }
         });
         searchName.addInputMethodListener(new java.awt.event.InputMethodListener() {
-            public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
-            }
             public void inputMethodTextChanged(java.awt.event.InputMethodEvent evt) {
                 searchNameInputMethodTextChanged(evt);
+            }
+            public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
             }
         });
         searchName.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -755,9 +764,9 @@ public class ManageDrivers extends javax.swing.JFrame {
         searchCell.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         searchCell.setText(CELL_PHONE_TF.getContent());
         searchCell.setToolTipText(CELL_PHONE_INPUT_TOOLTIP.getContent());
-        searchCell.setMaximumSize(new java.awt.Dimension(140, 28));
-        searchCell.setMinimumSize(new java.awt.Dimension(120, 28));
-        searchCell.setPreferredSize(new java.awt.Dimension(120, 28));
+        searchCell.setMaximumSize(new Dimension(DTCW_CP*DTCW_MAX - DTC_MARGIN, 28));
+        searchCell.setMinimumSize(new Dimension(DTCW_CP - DTC_MARGIN, 28));
+        searchCell.setPreferredSize(new Dimension(DTCW_CP - DTC_MARGIN, 28));
         searchCell.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 searchCellFocusGained(evt);
@@ -784,9 +793,9 @@ public class ManageDrivers extends javax.swing.JFrame {
         searchPhone.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         searchPhone.setText(LANDLINE_TF.getContent());
         searchPhone.setToolTipText(LANDLINE_INPUT_TOOLTIP.getContent());
-        searchPhone.setMaximumSize(new java.awt.Dimension(140, 28));
-        searchPhone.setMinimumSize(new java.awt.Dimension(120, 28));
-        searchPhone.setPreferredSize(new java.awt.Dimension(120, 28));
+        searchPhone.setMaximumSize(new Dimension(DTCW_LL * DTCW_MAX - DTC_MARGIN, 28));
+        searchPhone.setMinimumSize(new Dimension(DTCW_LL - DTC_MARGIN, 28));
+        searchPhone.setPreferredSize(new Dimension(DTCW_LL - DTC_MARGIN, 28));
         searchPhone.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 searchPhoneFocusGained(evt);
@@ -811,9 +820,9 @@ public class ManageDrivers extends javax.swing.JFrame {
         searchL1ComboBox.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         searchL1ComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] {}));
         searchL1ComboBox.setToolTipText("Search Affiliation2");
-        searchL1ComboBox.setMaximumSize(new java.awt.Dimension(340, 30));
-        searchL1ComboBox.setMinimumSize(new java.awt.Dimension(110, 28));
-        searchL1ComboBox.setPreferredSize(new java.awt.Dimension(110, 28));
+        searchL1ComboBox.setMaximumSize(new Dimension(DTCW_L1*DTCW_MAX - DTC_MARGIN, 28));
+        searchL1ComboBox.setMinimumSize(new Dimension(DTCW_L1 - DTC_MARGIN, 28));
+        searchL1ComboBox.setPreferredSize(new Dimension(DTCW_L1 - DTC_MARGIN, 28));
         searchL1ComboBox.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
             public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
             }
@@ -836,9 +845,9 @@ public class ManageDrivers extends javax.swing.JFrame {
         searchL2ComboBox.setModel(
             new javax.swing.DefaultComboBoxModel(new String[] {}));
         searchL2ComboBox.setToolTipText("Search Affiliation1");
-        searchL2ComboBox.setMaximumSize(new java.awt.Dimension(340, 30));
-        searchL2ComboBox.setMinimumSize(new java.awt.Dimension(110, 28));
-        searchL2ComboBox.setPreferredSize(new java.awt.Dimension(110, 28));
+        searchL2ComboBox.setMaximumSize(new Dimension(DTCW_L2*DTCW_MAX - DTC_MARGIN, 28));
+        searchL2ComboBox.setMinimumSize(new Dimension(DTCW_L2 - DTC_MARGIN, 28));
+        searchL2ComboBox.setPreferredSize(new Dimension(DTCW_L2 - DTC_MARGIN, 28));
         searchL2ComboBox.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
             public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
             }
@@ -856,9 +865,9 @@ public class ManageDrivers extends javax.swing.JFrame {
         searchBuildingComboBox.setModel(
             new javax.swing.DefaultComboBoxModel(new String[] {}));
         searchBuildingComboBox.setToolTipText("Search Building");
-        searchBuildingComboBox.setMaximumSize(new java.awt.Dimension(340, 30));
-        searchBuildingComboBox.setMinimumSize(new java.awt.Dimension(110, 28));
-        searchBuildingComboBox.setPreferredSize(new java.awt.Dimension(110, 28));
+        searchBuildingComboBox.setMaximumSize(new Dimension(DTCW_BN*DTCW_MAX - DTC_MARGIN, 28));
+        searchBuildingComboBox.setMinimumSize(new Dimension(DTCW_BN - DTC_MARGIN, 28));
+        searchBuildingComboBox.setPreferredSize(new Dimension(DTCW_BN - DTC_MARGIN, 28));
         searchBuildingComboBox.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
             public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
             }
@@ -881,9 +890,9 @@ public class ManageDrivers extends javax.swing.JFrame {
         searchUnitComboBox.setModel(
             new javax.swing.DefaultComboBoxModel(new String[] {}));
         searchUnitComboBox.setToolTipText("Search Unit");
-        searchUnitComboBox.setMaximumSize(new java.awt.Dimension(340, 30));
-        searchUnitComboBox.setMinimumSize(new java.awt.Dimension(110, 28));
-        searchUnitComboBox.setPreferredSize(new java.awt.Dimension(110, 28));
+        searchUnitComboBox.setMaximumSize(new Dimension(DTCW_UN*DTCW_MAX - DTC_MARGIN, 28));
+        searchUnitComboBox.setMinimumSize(new Dimension(DTCW_UN - DTC_MARGIN, 28));
+        searchUnitComboBox.setPreferredSize(new Dimension(DTCW_UN - DTC_MARGIN, 28));
         searchUnitComboBox.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
             public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
             }
@@ -896,6 +905,8 @@ public class ManageDrivers extends javax.swing.JFrame {
         });
         searchPanel.add(searchUnitComboBox);
         searchUnitComboBox.getAccessibleContext().setAccessibleName("");
+
+        searchPanel.add(filler1);
 
         wholePanel.add(searchPanel);
 
@@ -937,36 +948,36 @@ public class ManageDrivers extends javax.swing.JFrame {
         leftButtons.setPreferredSize(new java.awt.Dimension(400, 40));
         leftButtons.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 10, 0));
 
-        createDriver_Button.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        createDriver_Button.setMnemonic('r');
-        createDriver_Button.setText("Create");
-        createDriver_Button.setMaximumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
-        createDriver_Button.setMinimumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
-        createDriver_Button.setPreferredSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
-        createDriver_Button.addActionListener(new java.awt.event.ActionListener() {
+        insertSave_Button.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        insertSave_Button.setMnemonic('r');
+        insertSave_Button.setText("생성(R)");
+        insertSave_Button.setMaximumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
+        insertSave_Button.setMinimumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
+        insertSave_Button.setPreferredSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
+        insertSave_Button.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                createDriver_ButtonActionPerformed(evt);
+                insertSave_ButtonActionPerformed(evt);
             }
         });
-        leftButtons.add(createDriver_Button);
+        leftButtons.add(insertSave_Button);
 
-        modifyDriver_Button.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        modifyDriver_Button.setMnemonic('m');
-        modifyDriver_Button.setText("Modify");
-        modifyDriver_Button.setEnabled(false);
-        modifyDriver_Button.setMaximumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
-        modifyDriver_Button.setMinimumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
-        modifyDriver_Button.setPreferredSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
-        modifyDriver_Button.addActionListener(new java.awt.event.ActionListener() {
+        modiSave_Button.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        modiSave_Button.setMnemonic('m');
+        modiSave_Button.setText("수정(M)");
+        modiSave_Button.setEnabled(false);
+        modiSave_Button.setMaximumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
+        modiSave_Button.setMinimumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
+        modiSave_Button.setPreferredSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
+        modiSave_Button.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                modifyDriver_ButtonActionPerformed(evt);
+                modiSave_ButtonActionPerformed(evt);
             }
         });
-        leftButtons.add(modifyDriver_Button);
+        leftButtons.add(modiSave_Button);
 
         deleteDriver_Button.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         deleteDriver_Button.setMnemonic('d');
-        deleteDriver_Button.setText("Delete");
+        deleteDriver_Button.setText("삭제(D)");
         deleteDriver_Button.setEnabled(false);
         deleteDriver_Button.setMaximumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
         deleteDriver_Button.setMinimumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
@@ -978,19 +989,19 @@ public class ManageDrivers extends javax.swing.JFrame {
         });
         leftButtons.add(deleteDriver_Button);
 
-        deleteDriver_Button2.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        deleteDriver_Button2.setMnemonic('d');
-        deleteDriver_Button2.setText("취소");
-        deleteDriver_Button2.setEnabled(false);
-        deleteDriver_Button2.setMaximumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
-        deleteDriver_Button2.setMinimumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
-        deleteDriver_Button2.setPreferredSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
-        deleteDriver_Button2.addActionListener(new java.awt.event.ActionListener() {
+        cancelDriver_Button.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        cancelDriver_Button.setMnemonic('d');
+        cancelDriver_Button.setText("취소(C)");
+        cancelDriver_Button.setEnabled(false);
+        cancelDriver_Button.setMaximumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
+        cancelDriver_Button.setMinimumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
+        cancelDriver_Button.setPreferredSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
+        cancelDriver_Button.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                deleteDriver_Button2ActionPerformed(evt);
+                cancelDriver_ButtonActionPerformed(evt);
             }
         });
-        leftButtons.add(deleteDriver_Button2);
+        leftButtons.add(cancelDriver_Button);
 
         rightButtons.setMaximumSize(new java.awt.Dimension(32767, 40));
         rightButtons.setMinimumSize(new java.awt.Dimension(350, 40));
@@ -999,7 +1010,7 @@ public class ManageDrivers extends javax.swing.JFrame {
 
         deleteAllDrivers.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         deleteAllDrivers.setMnemonic('a');
-        deleteAllDrivers.setText("Delete All");
+        deleteAllDrivers.setText("전체삭제(E)");
         deleteAllDrivers.setEnabled(false);
         deleteAllDrivers.setMargin(new java.awt.Insets(0, 0, 0, 0));
         deleteAllDrivers.setMaximumSize(new Dimension(CommonData.buttonWidthWide, buttonHeightNorm));
@@ -1012,24 +1023,9 @@ public class ManageDrivers extends javax.swing.JFrame {
         });
         rightButtons.add(deleteAllDrivers);
 
-        readSheet_Button1.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        readSheet_Button1.setMnemonic('u');
-        readSheet_Button1.setText("Upload Sheet");
-        readSheet_Button1.setEnabled(false);
-        readSheet_Button1.setMargin(new java.awt.Insets(0, 0, 0, 0));
-        readSheet_Button1.setMaximumSize(new Dimension(CommonData.buttonWidthWide, buttonHeightNorm));
-        readSheet_Button1.setMinimumSize(new Dimension(CommonData.buttonWidthWide, buttonHeightNorm));
-        readSheet_Button1.setPreferredSize(new Dimension(CommonData.buttonWidthWide, buttonHeightNorm));
-        readSheet_Button1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                readSheet_Button1ActionPerformed(evt);
-            }
-        });
-        rightButtons.add(readSheet_Button1);
-
         readSheet_Button.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        readSheet_Button.setMnemonic('u');
-        readSheet_Button.setText("Upload Sheet");
+        readSheet_Button.setMnemonic('O');
+        readSheet_Button.setText("ods읽기");
         readSheet_Button.setEnabled(false);
         readSheet_Button.setMargin(new java.awt.Insets(0, 0, 0, 0));
         readSheet_Button.setMaximumSize(new Dimension(CommonData.buttonWidthWide, buttonHeightNorm));
@@ -1042,9 +1038,24 @@ public class ManageDrivers extends javax.swing.JFrame {
         });
         rightButtons.add(readSheet_Button);
 
+        saveSheet_Button.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        saveSheet_Button.setMnemonic('A');
+        saveSheet_Button.setText("ods저장(A)");
+        saveSheet_Button.setEnabled(false);
+        saveSheet_Button.setMargin(new java.awt.Insets(0, 0, 0, 0));
+        saveSheet_Button.setMaximumSize(new Dimension(CommonData.buttonWidthWide, buttonHeightNorm));
+        saveSheet_Button.setMinimumSize(new Dimension(CommonData.buttonWidthWide, buttonHeightNorm));
+        saveSheet_Button.setPreferredSize(new Dimension(CommonData.buttonWidthWide, buttonHeightNorm));
+        saveSheet_Button.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                saveSheet_ButtonActionPerformed(evt);
+            }
+        });
+        rightButtons.add(saveSheet_Button);
+
         closeFormButton.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         closeFormButton.setMnemonic('c');
-        closeFormButton.setText("Close");
+        closeFormButton.setText("닫기(C)");
         closeFormButton.setMaximumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
         closeFormButton.setMinimumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
         closeFormButton.setPreferredSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
@@ -1090,7 +1101,7 @@ public class ManageDrivers extends javax.swing.JFrame {
     int rowBeforeCreate = -1;
     int colBeforeCreate = -1;
     
-    private void createDriver_ButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createDriver_ButtonActionPerformed
+    private void insertSave_ButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_insertSave_ButtonActionPerformed
         int rowV = driverTable.getSelectedRow();
         
         if (getFormMode() == FormMode.CreateMode) {
@@ -1125,7 +1136,7 @@ public class ManageDrivers extends javax.swing.JFrame {
             }
             //</editor-fold>
         }
-    }//GEN-LAST:event_createDriver_ButtonActionPerformed
+    }//GEN-LAST:event_insertSave_ButtonActionPerformed
 
     private void deleteAllDriversActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteAllDriversActionPerformed
         int driverCount = getRecordCount("cardriver", -1);
@@ -1179,7 +1190,7 @@ public class ManageDrivers extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_deleteAllDriversActionPerformed
    
-    private void modifyDriver_ButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modifyDriver_ButtonActionPerformed
+    private void modiSave_ButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modiSave_ButtonActionPerformed
         int rowV = driverTable.getSelectedRow();
         int rowM = driverTable.convertRowIndexToModel(rowV);
         int colV = driverTable.getSelectedColumn();
@@ -1220,7 +1231,7 @@ public class ManageDrivers extends javax.swing.JFrame {
                 }   
             }
         }
-    }//GEN-LAST:event_modifyDriver_ButtonActionPerformed
+    }//GEN-LAST:event_modiSave_ButtonActionPerformed
 
     private void deleteDriver_ButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteDriver_ButtonActionPerformed
         int rowV = driverTable.getSelectedRow();
@@ -1230,66 +1241,67 @@ public class ManageDrivers extends javax.swing.JFrame {
         int colV = driverTable.getSelectedColumn();        
 
         if (getFormMode() == FormMode.CreateMode) {
-            //<editor-fold desc="-- Handle driver creation cancellation request">
-            Object[] options = new Object[2];
-            
-            switch(language){
-                case KOREAN:
-                    options[0] = "예(종료)";
-                    options[1] = "아니요(생성)";
-                    break;
-                    
-                case ENGLISH:
-                    options[0] = "Yes(quit)";
-                    options[1] = "No(create)";
-                    break;
-                    
-                default:
-                    break;
-            }
-            
-            int response = JOptionPane.showOptionDialog(this, DRIVER_CREATE_CANCEL_DIALOG.getContent(),
-                                CANCEL_DIALOGTITLE.getContent(), 
-                                JOptionPane.YES_NO_OPTION,
-                    JOptionPane.QUESTION_MESSAGE, 
-                    null, 
-                    options, options[0]);
-        
-            if (response == JOptionPane.YES_OPTION) {
-                // Confirmed cancel request
-                setFormMode(FormMode.NormalMode);
-                
-                // remove last row which was prepared for the new driver information
-                ((DefaultTableModel)driverTable.getModel()).setRowCount(driverTable.getRowCount() - 1);     
-                
-                // highlight originally selected row if existed.
-                if (rowBeforeCreate != -1) {
-                    if (colBeforeCreate != -1)
-                        driverTable.changeSelection(rowBeforeCreate, colBeforeCreate, false, false);
-                    highlightTableRow(driverTable, rowBeforeCreate);
-                    driverTable.requestFocusInWindow();
-                }
-            } else {
-                startEditingCell(rowM, colV);
-            }         
-            //</editor-fold>
-        } else if (getFormMode() == FormMode.UpdateMode) {
-            //<editor-fold desc="-- Process modification cancel request">
-            
-            int response = JOptionPane.showOptionDialog(this, DRIVER_MODIFY_CANCEL_DAILOG.getContent(),
-                                CANCEL_DIALOGTITLE.getContent(), 
-                                JOptionPane.YES_NO_OPTION,
-                    JOptionPane.QUESTION_MESSAGE, null, null, null); 
-            
-            if (response == JOptionPane.NO_OPTION) {
-                startEditingCell(rowV, colV);
-            } else {
-                driverTable.getCellEditor().cancelCellEditing();
-                setFormMode(FormMode.NormalMode);
-                loadDriverData(rowM, "", "");
-                driverTable.requestFocusInWindow();
-            } 
-            //</editor-fold>            
+//            //<editor-fold desc="-- Handle driver creation cancellation request">
+//            Object[] options = new Object[2];
+//            
+//            switch(language){
+//                case KOREAN:
+//                    options[0] = "예(종료)";
+//                    options[1] = "아니요(생성)";
+//                    break;
+//                    
+//                case ENGLISH:
+//                    options[0] = "Yes(quit)";
+//                    options[1] = "No(create)";
+//                    break;
+//                    
+//                default:
+//                    break;
+//            }
+//            
+//            int response = JOptionPane.showOptionDialog(this, DRIVER_CREATE_CANCEL_DIALOG.getContent(),
+//                                CANCEL_DIALOGTITLE.getContent(), 
+//                                JOptionPane.YES_NO_OPTION,
+//                    JOptionPane.QUESTION_MESSAGE, 
+//                    null, 
+//                    options, options[0]);
+//        
+//            if (response == JOptionPane.YES_OPTION) {
+//                // Confirmed cancel request
+//                setFormMode(FormMode.NormalMode);
+//                
+//                // remove last row which was prepared for the new driver information
+//                ((DefaultTableModel)driverTable.getModel()).setRowCount(driverTable.getRowCount() - 1);     
+//                
+//                // highlight originally selected row if existed.
+//                if (rowBeforeCreate != -1) {
+//                    if (colBeforeCreate != -1)
+//                        driverTable.changeSelection(rowBeforeCreate, colBeforeCreate, false, false);
+//                    highlightTableRow(driverTable, rowBeforeCreate);
+//                    deleteDriver_Button.setEnabled(true);
+//                    driverTable.requestFocusInWindow();
+//                }
+//            } else {
+//                startEditingCell(rowM, colV);
+//            }         
+//            //</editor-fold>
+//        } else if (getFormMode() == FormMode.UpdateMode) {
+//            //<editor-fold desc="-- Process modification cancel request">
+//            
+//            int response = JOptionPane.showOptionDialog(this, DRIVER_MODIFY_CANCEL_DAILOG.getContent(),
+//                                CANCEL_DIALOGTITLE.getContent(), 
+//                                JOptionPane.YES_NO_OPTION,
+//                    JOptionPane.QUESTION_MESSAGE, null, null, null); 
+//            
+//            if (response == JOptionPane.NO_OPTION) {
+//                startEditingCell(rowV, colV);
+//            } else {
+//                driverTable.getCellEditor().cancelCellEditing();
+//                setFormMode(FormMode.NormalMode);
+//                loadDriverData(rowM, "", "");
+//                driverTable.requestFocusInWindow();
+//            } 
+//            //</editor-fold>            
         } else {
             // delete a driver's record currently selected 
             int[] deleteIndice = driverTable.getSelectedRows();
@@ -1472,7 +1484,7 @@ public class ManageDrivers extends javax.swing.JFrame {
         loadDriverData(FIRST_ROW, "", "");
     }//GEN-LAST:event_searchButtonActionPerformed
 
-    private void readSheet_ButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_readSheet_ButtonActionPerformed
+    private void saveSheet_ButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveSheet_ButtonActionPerformed
         try {
             int returnVal = odsFileChooser.showOpenDialog(this);
             if (returnVal == JFileChooser.APPROVE_OPTION) {                
@@ -1535,7 +1547,7 @@ public class ManageDrivers extends javax.swing.JFrame {
             logParkingException(Level.SEVERE, ex, 
                     "(User Operation: loading drivers records from an ods file)");
         }         
-    }//GEN-LAST:event_readSheet_ButtonActionPerformed
+    }//GEN-LAST:event_saveSheet_ButtonActionPerformed
 
     private void closeFormButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_closeFormButtonActionPerformed
         closeFrameGracefully();
@@ -1667,13 +1679,196 @@ public class ManageDrivers extends javax.swing.JFrame {
         searchPhone.selectAll();
     }//GEN-LAST:event_searchPhoneMousePressed
 
-    private void deleteDriver_Button2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteDriver_Button2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_deleteDriver_Button2ActionPerformed
+    private void cancelDriver_ButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelDriver_ButtonActionPerformed
+                                                    
+        int rowV = driverTable.getSelectedRow();
+        int rowM = -1;
+        if (rowV != -1)
+            rowM = driverTable.convertRowIndexToModel(rowV);
+        int colV = driverTable.getSelectedColumn();        
 
-    private void readSheet_Button1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_readSheet_Button1ActionPerformed
+        if (getFormMode() == FormMode.CreateMode) {
+            //<editor-fold desc="-- Handle driver creation cancellation request">
+            Object[] options = new Object[2];
+            
+            switch(language){
+                case KOREAN:
+                    options[0] = "예(종료)";
+                    options[1] = "아니요(생성)";
+                    break;
+                    
+                case ENGLISH:
+                    options[0] = "Yes(quit)";
+                    options[1] = "No(create)";
+                    break;
+                    
+                default:
+                    break;
+            }
+            
+            int response = JOptionPane.showOptionDialog(this, DRIVER_CREATE_CANCEL_DIALOG.getContent(),
+                                CANCEL_DIALOGTITLE.getContent(), 
+                                JOptionPane.YES_NO_OPTION,
+                    JOptionPane.QUESTION_MESSAGE, 
+                    null, 
+                    options, options[0]);
+        
+            if (response == JOptionPane.YES_OPTION) {
+                // Confirmed cancel request
+                setFormMode(FormMode.NormalMode);
+                
+                // remove last row which was prepared for the new driver information
+                ((DefaultTableModel)driverTable.getModel()).setRowCount(driverTable.getRowCount() - 1);     
+                
+                // highlight originally selected row if existed.
+                if (rowBeforeCreate != -1) {
+                    if (colBeforeCreate != -1) 
+                        driverTable.changeSelection(rowBeforeCreate, colBeforeCreate, false, false);
+                    highlightTableRow(driverTable, rowBeforeCreate);
+                    deleteDriver_Button.setEnabled(true);
+                    driverTable.requestFocusInWindow();
+                }
+            } else {
+                startEditingCell(rowM, colV);
+            }         
+            //</editor-fold>
+        } else if (getFormMode() == FormMode.UpdateMode) {
+            //<editor-fold desc="-- Process modification cancel request">
+            
+            int response = JOptionPane.showOptionDialog(this, DRIVER_MODIFY_CANCEL_DAILOG.getContent(),
+                                CANCEL_DIALOGTITLE.getContent(), 
+                                JOptionPane.YES_NO_OPTION,
+                    JOptionPane.QUESTION_MESSAGE, null, null, null); 
+            
+            if (response == JOptionPane.NO_OPTION) {
+                startEditingCell(rowV, colV);
+            } else {
+                driverTable.getCellEditor().cancelCellEditing();
+                setFormMode(FormMode.NormalMode);
+                loadDriverData(rowM, "", "");
+                driverTable.requestFocusInWindow();
+            } 
+            //</editor-fold>            
+        } else {
+            // delete a driver's record currently selected 
+            int[] deleteIndice = driverTable.getSelectedRows();
+            if (deleteIndice.length == 0)
+            {
+                return;
+            }
+
+            int result = -1;
+            String driverName = (String)driverTable.getValueAt(deleteIndice[0], 1);
+            int modal_Index = driverTable.convertRowIndexToModel(deleteIndice[0]);
+            int CD_SEQ_NO = (int)driverTable.getModel().getValueAt(modal_Index, 
+                    DriverCol.SEQ_NO.getNumVal());
+            int count = getRecordCount("vehicles", CD_SEQ_NO);
+
+            if (deleteIndice.length == 1) {
+                String dialogMessage = "";
+                
+                switch(language){
+                    case KOREAN:
+                        dialogMessage = "운전자 정보와 운전자 차량에 대한 정보를 삭제하시겠습니까?" + System.getProperty("line.separator") +
+                                "운전자 이름 : '" + driverName + "' (소유차량 " + count + "대)";
+                        break;
+                        
+                    case ENGLISH:
+                        dialogMessage = "Want to delete a driver and every owned cars?" + System.getProperty("line.separator")
+                            + "Driver Name: '" + driverName + "' (" + count + " owned cars)";
+                        break;
+                        
+                    default:
+                        break;
+                }                
+                
+                result = JOptionPane.showConfirmDialog(this, dialogMessage,
+                            DELETE_DIALOGTITLE.getContent(), 
+                            JOptionPane.YES_NO_OPTION);
+            } else {
+                String dialogMessage = "";
+                
+                switch(language){
+                    case KOREAN:
+                        dialogMessage = "선택 된 " + deleteIndice.length + "명의 운전자정보와 차량 정보를 삭제하시겠습니까?"
+                                    + System.getProperty("line.separator")
+                                    + "첫번째 운전자 : '" + driverName + "' (소유차량" + count + "대)";
+                        break;
+
+                    case ENGLISH:
+                        dialogMessage = "Want to delete records of " + deleteIndice.length + " drivers and their car records?"
+                                    + System.getProperty("line.separator")
+                                    + "First Driver Name: '" + driverName + "' (" + count + " owned cars)";
+                        break;
+                        
+                    default:
+                        break;
+                }                
+                
+                result = JOptionPane.showConfirmDialog(this, dialogMessage, 
+                            DELETE_DIALOGTITLE.getContent(), 
+                            JOptionPane.YES_NO_OPTION);
+            }
+
+            if (result == JOptionPane.YES_OPTION) {
+                // <editor-fold defaultstate="collapsed" desc="-- delete driver and car information ">   
+                Connection conn = null;
+                PreparedStatement createBuilding = null;
+                String excepMsg = "(while deleting a driver: " + driverName + ")";
+                int totalDeletion = 0;
+
+                result = -1;
+                try {
+                    String sql = "Delete From carDriver Where SEQ_NO = ?";
+
+                    conn = getConnection();
+                    createBuilding = conn.prepareStatement(sql);
+                    for (int indexNo : deleteIndice) {
+                        modal_Index = driverTable.convertRowIndexToModel(indexNo);
+                        createBuilding.setInt(1, (int)driverTable.getModel().getValueAt(modal_Index, 
+                                DriverCol.SEQ_NO.getNumVal()));
+                        result = createBuilding.executeUpdate();
+                        totalDeletion += result;
+                    }
+                } catch (SQLException ex) {
+                    logParkingException(Level.SEVERE, ex, excepMsg);
+                } finally {
+                    closeDBstuff(conn, createBuilding, null, excepMsg);
+
+                    if (result == 1) {
+                        loadDriverData(deleteIndice[0], "", ""); // passes index of the deleted row
+
+                        String dialogMessage = "";
+                        
+                        switch(language){
+                            case KOREAN: 
+                                dialogMessage = 
+                                    driverName +"을 포함한 총 " + totalDeletion + "명의 운전자 정보가 삭제되었습니다.";  
+                                break;
+                                
+                            case ENGLISH: 
+                                dialogMessage = "Total " + totalDeletion + " driver(s)" + System.lineSeparator() +
+                                                "(including '" + driverName + "') " + System.lineSeparator() +
+                                                "deleted successfully.";
+                                break;
+                                
+                            default:
+                                break;
+                        }                        
+                        
+                        JOptionPane.showConfirmDialog(this, dialogMessage,
+                                DELETE_RESULT_DIALOGTITLE.getContent(),
+                                JOptionPane.PLAIN_MESSAGE, INFORMATION_MESSAGE);
+                    }
+                }
+                //</editor-fold>
+            }
+        }
+    }//GEN-LAST:event_cancelDriver_ButtonActionPerformed
+
+    private void readSheet_ButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_readSheet_ButtonActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_readSheet_Button1ActionPerformed
+    }//GEN-LAST:event_readSheet_ButtonActionPerformed
 
     private void seeLicenseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_seeLicenseButtonActionPerformed
         showLicensePanel(this, "License Notice on Vehicle Manager");
@@ -1880,31 +2075,37 @@ public class ManageDrivers extends javax.swing.JFrame {
                 }
                 //<editor-fold defaultstate="collapsed" desc="-- construct a driver info' to show"> 
                 Object L1Item = null;
-                if (rs.getString("L1_NAME") == null) 
-                    L1Item = ManageDrivers.getPrompter(AffiliationL1, null);
-                else 
+                if (rs.getString("L1_NAME") == null) {
+                    L1Item = ""; 
+                } else {
                     L1Item = new ConvComboBoxItem(rs.getInt("L1_NO"), rs.getString("L1_NAME"));
+                }
                 
                 Object  L2Item = null;
-                if (rs.getString("L2_NAME") == null) 
-                    L2Item = ManageDrivers.getPrompter(AffiliationL2, L1Item);
-                else
+                if (rs.getString("L2_NAME") == null) {
+                    L2Item = ""; 
+                } else {
                     L2Item = new InnoComboBoxItem(
                             new int[]{rs.getInt("L2_NO")}, new String[]{rs.getString("L2_NAME")});
+                }
                 
                 Object bldgItem = null;
-                if (rs.getString("BLDG_NO") == null)
-                    bldgItem = ManageDrivers.getPrompter(BuildingNo, null);
-                else
+                
+                if (rs.getString("BLDG_NO") == null) {
+                    bldgItem = ""; 
+                } else {
                     bldgItem = new ConvComboBoxItem(
                             rs.getInt("B_SEQ_NO"), rs.getString("BLDG_NO"));
+                }
                 
                 Object unitItem = null;
-                if (rs.getString("UNIT_NO") == null)
-                    unitItem = ManageDrivers.getPrompter(UnitNo, bldgItem);
-                else
+                
+                if (rs.getString("UNIT_NO") == null) {
+                    unitItem = ""; 
+                } else {
                     unitItem = new InnoComboBoxItem(
                             new int[]{rs.getInt("U_SEQ_NO")}, new String[] {rs.getString("UNIT_NO")});
+                }
                 
                 model.addRow(new Object[] {
                      rs.getInt("recNo"),   rs.getString("NAME"), rs.getString("CELLPHONE"),
@@ -1935,48 +2136,51 @@ public class ManageDrivers extends javax.swing.JFrame {
                 // In this case, display(highlight) the row just above the deleted one.
                 viewIndex--;
             }
-            if (0 <= viewIndex && viewIndex < numRows)
+            if (0 <= viewIndex && viewIndex < numRows) {
                 highlightTableRow(driverTable, viewIndex);
+                deleteDriver_Button.setEnabled(true);
+            }
             //</editor-fold>
         }
-        createDriver_Button.setEnabled(true);
+        insertSave_Button.setEnabled(true);
         searchButton.setEnabled(false);        
     }
         
     // <editor-fold defaultstate="collapsed" desc="-- Netbeans Generated Control Item Variables ">                               
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel bottomButtonPanel;
+    private javax.swing.JButton cancelDriver_Button;
     private javax.swing.JButton clearButton;
     public javax.swing.JButton closeFormButton;
     private javax.swing.JLabel countLbl;
     private javax.swing.JLabel countValue;
-    public javax.swing.JButton createDriver_Button;
     private javax.swing.JButton deleteAllDrivers;
     private javax.swing.JButton deleteDriver_Button;
-    private javax.swing.JButton deleteDriver_Button2;
     private javax.swing.JScrollPane driversScrollPane;
     public static javax.swing.JTable driversTable;
     private javax.swing.JPanel eastPanel;
+    private javax.swing.Box.Filler filler1;
     private javax.swing.Box.Filler filler15_5;
     private javax.swing.Box.Filler filler15_6;
     private javax.swing.Box.Filler filler2;
     private javax.swing.Box.Filler filler3;
     private javax.swing.Box.Filler filler66;
     private javax.swing.JLabel formModeLabel;
+    public javax.swing.JButton insertSave_Button;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
     private javax.swing.JPanel leftButtons;
-    private javax.swing.JButton modifyDriver_Button;
+    private javax.swing.JButton modiSave_Button;
     private javax.swing.JLabel myMetaKeyLabel;
     private javax.swing.JPanel northPanel;
     private javax.swing.JFileChooser odsFileChooser;
     private javax.swing.JButton readSheet_Button;
-    private javax.swing.JButton readSheet_Button1;
     private javax.swing.JLabel requiredLabel;
     private javax.swing.JPanel rightButtons;
+    private javax.swing.JButton saveSheet_Button;
     private javax.swing.JComboBox searchBuildingComboBox;
     public javax.swing.JButton searchButton;
     private javax.swing.JTextField searchCell;
@@ -2013,8 +2217,8 @@ public class ManageDrivers extends javax.swing.JFrame {
                 else
                 {
                     if (me.getClickCount() == 2) {
-                        if (emptyLastRowPossible(createDriver_Button, driverTable)) {
-                            removeEmptyRow(createDriver_Button, driverTable);
+                        if (emptyLastRowPossible(insertSave_Button, driverTable)) {
+                            removeEmptyRow(insertSave_Button, driverTable);
                         }                        
                         
                         if (getFormMode() != FormMode.UpdateMode) {
@@ -2036,14 +2240,10 @@ public class ManageDrivers extends javax.swing.JFrame {
     void setUpdateMode (boolean toModify) {
         setFormMode(toModify ? FormMode.UpdateMode : FormMode.NormalMode);
         if (toModify) {
-            modifyDriver_Button.setText(SAVE_BTN.getContent());
-            deleteDriver_Button.setText(CANCEL_BTN.getContent());
-            deleteDriver_Button.setEnabled(true);
-            createDriver_Button.setEnabled(false);        }
-        else {
-            modifyDriver_Button.setText(MODIFY_BTN.getContent());
-            deleteDriver_Button.setText(DELETE_BTN.getContent());
-            deleteDriver_Button.setEnabled(false);            
+            modiSave_Button.setText(SAVE_BTN.getContent());
+            insertSave_Button.setEnabled(false);        
+        } else {
+            modiSave_Button.setText(MODIFY_BTN.getContent());
         }
         requiredLabel.setVisible(toModify);
     }
@@ -2072,7 +2272,6 @@ public class ManageDrivers extends javax.swing.JFrame {
             modifyDriver.setString(DriverName.getNumVal(), (String)driverName);
             
             driverProperties.append("Driver Update Summary: " + System.lineSeparator());
-//            getDriverProperties((String)driverName, (String)cellPhone, driverProperties, modifyingRowM);  
             
             modifyDriver.setString(CellPhone.getNumVal(), (String)cellPhone); 
             modifyDriver.setString(LandLine.getNumVal(), (String)drvModel.getValueAt(index, LandLine.getNumVal()));
@@ -2174,18 +2373,17 @@ public class ManageDrivers extends javax.swing.JFrame {
         TableColumnModel tcm = driverTable.getColumnModel();
         
         // Adjust column width one by one
-        SetAColumnWidth(tcm.getColumn(0), 10, 80, 80); // 0: row number
-        SetAColumnWidth(tcm.getColumn(1), 10, 110, 350); // 1: driver name
-        SetAColumnWidth(tcm.getColumn(2), 10, 120, 140); // 2: cell phone
-        SetAColumnWidth(tcm.getColumn(3), 10, 120, 140); // 3: land line
-        SetAColumnWidth(tcm.getColumn(4), 10, 110, 340); // 4: affiliation level 1
-        SetAColumnWidth(tcm.getColumn(5), 10, 110, 340); // 5: affiliation level 2
-        SetAColumnWidth(tcm.getColumn(6), 10, 110, 340); // 6: building number
-        SetAColumnWidth(tcm.getColumn(7), 10, 110, 340); // 7: building unit number  
+        SetAColumnWidth(tcm.getColumn(0), DTCW_RN, DTCW_RN, DTCW_RN); // 0: row number
+        SetAColumnWidth(tcm.getColumn(1), DTCW_DN, DTCW_DN, DTCW_DN* DTCW_MAX); // 1: driver name
+        SetAColumnWidth(tcm.getColumn(2), DTCW_CP, DTCW_CP, DTCW_CP* DTCW_MAX); // 2: cell phone
+        SetAColumnWidth(tcm.getColumn(3), DTCW_LL, DTCW_LL, DTCW_LL* DTCW_MAX); // 3: land line
+        SetAColumnWidth(tcm.getColumn(4), DTCW_L1, DTCW_L1, DTCW_L1* DTCW_MAX); // 4: affiliation level 1
+        SetAColumnWidth(tcm.getColumn(5), DTCW_L2, DTCW_L2, DTCW_L2* DTCW_MAX); // 5: affiliation level 2
+        SetAColumnWidth(tcm.getColumn(6), DTCW_BN, DTCW_BN, DTCW_BN* DTCW_MAX); // 6: building number
+        SetAColumnWidth(tcm.getColumn(7), DTCW_UN, DTCW_UN, DTCW_UN* DTCW_MAX); // 7: building unit number  
         //</editor-fold>
         
         addDriverSelectionListener();
-//        addDoubleClickEventListener();        
     }
 
     /**
@@ -2257,7 +2455,6 @@ public class ManageDrivers extends javax.swing.JFrame {
         {
             // <editor-fold defaultstate="collapsed" desc="-- handle missing cell phone">   
             int response = JOptionPane.showOptionDialog(this, DRIVER_CELL_CHECK_DIALOG.getContent(),
-//                    ((String[])Globals.DialogMSGList.get(DRIVER_CELL_CHECK_DIALOG.getContent(), 
                     WARING_DIALOGTITLE.getContent(),
                     JOptionPane.YES_NO_OPTION,
                     JOptionPane.QUESTION_MESSAGE, 
@@ -2285,7 +2482,6 @@ public class ManageDrivers extends javax.swing.JFrame {
         {
             // <editor-fold defaultstate="collapsed" desc="-- handle missing L2 item"> 
             int respone = JOptionPane.showConfirmDialog(null, L2_INPUT_DIALOG.getContent(),
-//                                    ((String[])Globals.DialogMSGList.get(L2_INPUT_DIALOG.getContent(),
                                     ERROR_DIALOGTITLE.getContent(),
                                     JOptionPane.YES_NO_OPTION, WARNING_MESSAGE);
             if(respone == JOptionPane.YES_OPTION){
@@ -2320,7 +2516,6 @@ public class ManageDrivers extends javax.swing.JFrame {
         {
             // <editor-fold defaultstate="collapsed" desc="-- handle missing Unit item"> 
             int respone = JOptionPane.showConfirmDialog(null, UNIT_INPUTDIALOG.getContent(),
-//                                    ((String[])Globals.DialogMSGList.get(UNIT_INPUTDIALOG.getContent(),
                                     ERROR_DIALOGTITLE.getContent(),
                                     JOptionPane.YES_NO_OPTION, WARNING_MESSAGE);
             if(respone == JOptionPane.YES_OPTION){
@@ -2347,7 +2542,6 @@ public class ManageDrivers extends javax.swing.JFrame {
                     selectionListenerDisabled = false;
                 }
             }
-            
             //</editor-fold>   
         }
         else // both driver name and his/her cell phone number exists
@@ -2397,18 +2591,7 @@ public class ManageDrivers extends javax.swing.JFrame {
             driverTable.requestFocusInWindow();
             //</editor-fold>            
         }
-    }    
-
-//    private void removeRealEmptyRow() {
-//        JOptionPane.showConfirmDialog(this, DRIVER_CREATE_FAIL_DIALOG.getContent(),
-////                ((String[])Globals.DialogMSGList.get(DRIVER_CREATE_FAIL_DIALOG.getContent(), 
-//                CREATTION_FAIL_DIALOGTITLE.getContent(), 
-//                JOptionPane.PLAIN_MESSAGE, INFORMATION_MESSAGE);
-//        
-//        // remove last row which lacks driver name
-//        ((DefaultTableModel)driverTable.getModel())
-//                .setRowCount(driverTable.getRowCount() - 1); 
-//    }       
+    }     
     
     /**
      * Handles new driver information insertion trial in one of the following three ways
@@ -2423,7 +2606,7 @@ public class ManageDrivers extends javax.swing.JFrame {
         // conditions that make driver information insufficient: 1, 2
         String name = ((String)driverTable.getModel().getValueAt(row, colName)).trim(); 
         int colCell = driverTable.convertColumnIndexToModel(DriverCol.CellPhone.getNumVal());
-        String cell = String.valueOf(driverTable.getValueAt(row, colCell)).toLowerCase();
+        String cell = String.valueOf(driverTable.getValueAt(row, colCell)).toLowerCase().trim();
         String L1_item = driverTable.getValueAt(row, AffiliationL1.getNumVal()).toString();
         InnoComboBoxItem L2_item = (InnoComboBoxItem)driverTable.getValueAt(row, AffiliationL2.getNumVal());
         int L2_NO = (Integer) L2_item.getKeys()[0];
@@ -2431,13 +2614,9 @@ public class ManageDrivers extends javax.swing.JFrame {
         InnoComboBoxItem unit_item = (InnoComboBoxItem)driverTable.getValueAt(row, UnitNo.getNumVal());
         int SEQ_NO = (Integer)unit_item.getKeys()[0];
         // 1. driver name isn't provided
-        if (name == null || name.trim().length() == 0)
+        if (name.length() <= 1)
         {
-            // without driver name, system just discard such insertion request with a warning
-//            setFormMode(FormMode.NormalMode);
-//            removeRealEmptyRow();
-            
-            // <editor-fold defaultstate="collapsed" desc="-- handle missing cell phone">   
+            //<editor-fold defaultstate="collapsed" desc="-- handle missing cell phone">   
             // it has driver's name, but not his/her cell phone number  
             int response = JOptionPane.showConfirmDialog(null, MISSING_NAME_HANDLING.getContent(),
                     WARING_DIALOGTITLE.getContent(), 
@@ -2456,16 +2635,19 @@ public class ManageDrivers extends javax.swing.JFrame {
             } else {
                 setFormMode(FormMode.NormalMode);
                 ((DefaultTableModel)driverTable.getModel())
-                        .setRowCount(driverTable.getRowCount() - 1);             
+                        .setRowCount(driverTable.getRowCount() - 1);  
+                if (rowBeforeCreate != -1) {
+                    highlightTableRow(driverTable, rowBeforeCreate);
+                    deleteDriver_Button.setEnabled(true);
+                }                
             }            
             //</editor-fold>               
-        } 
+        }
         // 2. driver cell phone isn't provided
-        else if (cell == null || cell.trim().length() == 0) 
-        {
+        else if (getNumericDigitCount(cell) <= 10) {
             // <editor-fold defaultstate="collapsed" desc="-- handle missing cell phone">   
             // it has driver's name, but not his/her cell phone number  
-            int response = JOptionPane.showConfirmDialog(null, DRIVER_CREATE_CHECK_CELL_DIALOG.getContent(),
+            int response = JOptionPane.showConfirmDialog(null, MISSING_CELL_HANDLING.getContent(),
                     WARING_DIALOGTITLE.getContent(), 
                     JOptionPane.YES_NO_OPTION);                    
         
@@ -2482,16 +2664,18 @@ public class ManageDrivers extends javax.swing.JFrame {
             } else {
                 setFormMode(FormMode.NormalMode);
                 ((DefaultTableModel)driverTable.getModel())
-                        .setRowCount(driverTable.getRowCount() - 1);             
+                        .setRowCount(driverTable.getRowCount() - 1);  
+                if (rowBeforeCreate != -1) {
+                    highlightTableRow(driverTable, rowBeforeCreate);
+                    deleteDriver_Button.setEnabled(true);
+                }
             }            
             //</editor-fold>          
-        } 
-        else if(!L1_item.equals(HIGHER_CB_ITEM.getContent()) 
+        } else if(!L1_item.equals(HIGHER_CB_ITEM.getContent()) 
                         && L2_NO == -1)
         {
             // <editor-fold defaultstate="collapsed" desc="-- handle missing L2 item"> 
             int respone = JOptionPane.showConfirmDialog(null, L2_INPUT_DIALOG.getContent(),
-//                                    ((String[])Globals.DialogMSGList.get(L2_INPUT_DIALOG.getContent(),
                                     ERROR_DIALOGTITLE.getContent(),
                                     JOptionPane.YES_NO_OPTION, WARNING_MESSAGE);
             if(respone == JOptionPane.YES_OPTION){
@@ -2526,7 +2710,6 @@ public class ManageDrivers extends javax.swing.JFrame {
         {
             // <editor-fold defaultstate="collapsed" desc="-- handle missing Unit item"> 
             int respone = JOptionPane.showConfirmDialog(null, UNIT_INPUTDIALOG.getContent(),
-//                                    ((String[])Globals.DialogMSGList.get(UNIT_INPUTDIALOG.getContent(),
                                     ERROR_DIALOGTITLE.getContent(),
                                     JOptionPane.YES_NO_OPTION, WARNING_MESSAGE);
             if(respone == JOptionPane.YES_OPTION){
