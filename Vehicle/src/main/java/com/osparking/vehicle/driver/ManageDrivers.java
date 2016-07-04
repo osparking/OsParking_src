@@ -1213,7 +1213,7 @@ public class ManageDrivers extends javax.swing.JFrame {
             //</editor-fold>
         } else {        
             if (colV <= 0) {
-                colV = 2;
+                colV = 2; 
             }
 
             int driverSeqNo = (Integer)driverTable.getModel().getValueAt(rowM, 
@@ -2407,8 +2407,11 @@ public class ManageDrivers extends javax.swing.JFrame {
         InnoComboBoxItem L2_item = (InnoComboBoxItem)driverTable.getValueAt(row, AffiliationL2.getNumVal());
         int L2_NO = (Integer) L2_item.getKeys()[0];
         String building_item = driverTable.getValueAt(row, BuildingNo.getNumVal()).toString();
-        InnoComboBoxItem unit_item = (InnoComboBoxItem)driverTable.getValueAt(row, UnitNo.getNumVal());
-        int SEQ_NO = (Integer)unit_item.getKeys()[0];
+        Object unitObj = driverTable.getValueAt(row, UnitNo.getNumVal());
+        int SEQ_NO = -1;
+        if (unitObj.getClass() == InnoComboBoxItem.class) {
+            SEQ_NO = (Integer)((InnoComboBoxItem)unitObj).getKeys()[0];
+        }
 
         Object[] options = new Object[2];
         
