@@ -208,6 +208,8 @@ public class ManageDrivers extends javax.swing.JFrame {
                 tableMouseClicked(evt);
             }
         });
+        setupComboBoxColumn(DriverCol.AffiliationL2);
+        setupComboBoxColumn(DriverCol.UnitNo);        
         loadDriverData(UNKNOWN, "", "");
     }
     
