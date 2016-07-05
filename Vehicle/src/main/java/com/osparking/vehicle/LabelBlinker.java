@@ -57,5 +57,35 @@ public class LabelBlinker {
             service = Executors.newSingleThreadScheduledExecutor();
             service.scheduleAtFixedRate(runnable, 0, 750, TimeUnit.MILLISECONDS);
         }
-    }     
+    } 
+    
+    public void displayHelpMessages(JLabel messageLabel, String message, 
+            String message2, boolean blinker) {
+
+        Runnable runnable = new Runnable() {
+            public void run() {
+                // task to run goes here
+                if (counter++ >= 4) {
+                    service.shutdown();
+                    messageLabel.setForeground(Color.gray);
+                    counter = 0;
+                } else {
+                    if (counter % 2 == 1) {
+                        messageLabel.setForeground(tipColor);
+                    } else {
+                        messageLabel.setForeground(tipColorTrans);
+                    }
+                }
+            }
+        };
+
+        messageLabel.setForeground(Color.gray);
+        if (blinker) {
+            messageLabel.setText(message);
+            service = Executors.newSingleThreadScheduledExecutor();
+            service.scheduleAtFixedRate(runnable, 0, 750, TimeUnit.MILLISECONDS);
+        } else {
+            messageLabel.setText(message2);
+        }
+    }
 }

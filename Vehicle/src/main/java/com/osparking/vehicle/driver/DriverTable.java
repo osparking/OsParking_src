@@ -50,6 +50,7 @@ import static com.osparking.global.names.OSP_enums.DriverCol.AffiliationL2;
 import static com.osparking.global.names.OSP_enums.DriverCol.BuildingNo;
 import static com.osparking.global.names.OSP_enums.DriverCol.UnitNo;
 import com.osparking.global.names.PComboBox;
+import static com.osparking.vehicle.driver.ManageDrivers.getPrompter;
 import java.awt.AWTKeyStroke;
 import java.awt.event.ItemEvent;
 import static java.awt.event.ItemEvent.SELECTED;
@@ -175,41 +176,22 @@ public class DriverTable extends JTable {
             PComboBox<InnoComboBoxItem> comboBox = (PComboBox<InnoComboBoxItem>)
                     ((DefaultCellEditor)cBxCol.getCellEditor()).getComponent();
 
-            // Check if affiliation level 1 combo box selected
-            if (level2RefreshNeeded(L1_NO)) {
-                System.out.println("needed");
-                comboBox.removeAllItems();
-                comboBox.addItem((InnoComboBoxItem) 
-                        ManageDrivers.getPrompter (DriverCol.AffiliationL2, driverTable.getValueAt(
-                                driverTable.getSelectedRow(), AffiliationL1.getNumVal()) ) );
-                parent.loadComboBoxItems(comboBox, DriverCol.AffiliationL2, L1_NO);
-            } else {
-                System.out.println("needless");
-            }
+            comboBox.removeAllItems();
+            Object objL1 = driverTable.getValueAt(modRow, AffiliationL1.getNumVal());
+            Object prompter = getPrompter(DriverCol.AffiliationL2, objL1);
+            comboBox.addItem((InnoComboBoxItem)prompter);
+            parent.loadComboBoxItems(comboBox, DriverCol.AffiliationL2, L1_NO);
             
             comboBox.setEditable(true); 
-            Object item = driverTable.getValueAt(driverTable.getSelectedRow(), modCol);
+            Object item = driverTable.getValueAt(modRow, modCol);
             comboBox.setSelectedItem((InnoComboBoxItem)item);
-            comboBox.addItemListener(new ItemListener() {
-                @Override
-                public void itemStateChanged(ItemEvent e) {
-                    java.awt.EventQueue.invokeLater(new Runnable() {
-                        public void run() {                     
-                            if (e.getStateChange() == SELECTED) {
-                                Object item = e.getID();
-                                System.out.println("Selected item: " + e.getItem());
-                            }
-                        }
-                    });
-                }                
-            });
             cellEditor = new DefaultCellEditor(comboBox);
 
             //</editor-fold>
         } else if (modCol == DriverCol.UnitNo.getNumVal()) {
             //<editor-fold desc="-- Building unit">
             Object itemObj = getValueAt(modRow, DriverCol.BuildingNo.getNumVal());
-            int bldgSeqNo = (Integer)(((ConvComboBoxItem)itemObj).getKeyValue());
+                int bldgSeqNo = (Integer)(((ConvComboBoxItem)itemObj).getKeyValue());
             
             TableColumn comboCol = driverTable.getColumnModel().getColumn(modCol);        
             PComboBox<InnoComboBoxItem> comboBox = (PComboBox<InnoComboBoxItem>)
@@ -228,29 +210,29 @@ public class DriverTable extends JTable {
             cellEditor = new DefaultCellEditor(comboBox);
             //</editor-fold>
         } else if (modCol == DriverCol.AffiliationL1.getNumVal()) {
-            //<editor-fold desc="-- Level 1 affiliation">            
+            //<editor-fold desc="-- Level 1 affiliation">    
+            // Save current affili' key value.
+            Object objLevelOne = driverTable.getValueAt(modRow, modCol);
+            prevL1_NO = (Integer)(((ConvComboBoxItem)objLevelOne).getKeyValue());
             cellEditor = new DefaultCellEditor(ManageDrivers.affiliationL1CBox); 
             cellEditor.addCellEditorListener(new CellEditorListener() {
 
                 @Override
                 public void editingStopped(ChangeEvent e) {
                     JComboBox cBox = (JComboBox)(((DefaultCellEditor)(e.getSource())).getComponent());
-                    boolean isCBoxVisible = cBox.isPopupVisible();
-                    if (isCBoxVisible) {
-                        System.out.println("Visible");
-                    } else {
-                        System.out.println("in-Visible");
-                        
+                    int newL1_NO = (Integer)(((ConvComboBoxItem)cBox.getSelectedItem()).getKeyValue());
+
+                    if (level2RefreshNeeded(newL1_NO)) {
+                        java.awt.EventQueue.invokeLater(new Runnable() {
+                            public void run() {                     
+                                int rIdx = driverTable.getSelectedRow();
+
+                                driverTable.setValueAt(ManageDrivers.getPrompter(AffiliationL2, 
+                                        driverTable.getValueAt(rIdx, AffiliationL1.getNumVal())),
+                                        rIdx, AffiliationL2.getNumVal());   
+                            }
+                        });
                     }
-                    java.awt.EventQueue.invokeLater(new Runnable() {
-                        public void run() {                     
-                            int rIdx = driverTable.getSelectedRow();
-                            
-                            driverTable.setValueAt(ManageDrivers.getPrompter(AffiliationL2, 
-                                    driverTable.getValueAt(rIdx, AffiliationL1.getNumVal())),
-                                    rIdx, AffiliationL2.getNumVal());   
-                        }
-                    });
                 }
 
                 @Override
@@ -259,21 +241,29 @@ public class DriverTable extends JTable {
             });
             //</editor-fold>
         } else if (modCol == DriverCol.BuildingNo.getNumVal()) {
-            //<editor-fold desc="-- Building">            
+            //<editor-fold desc="-- Building">    
+            // Save current affili' key value.
+            Object objBldg = driverTable.getValueAt(modRow, modCol);
+            prevBldgKey = (Integer)(((ConvComboBoxItem)objBldg).getKeyValue());            
             cellEditor = new DefaultCellEditor(ManageDrivers.buildingCBox); 
             cellEditor.addCellEditorListener(new CellEditorListener() {
 
                 @Override
                 public void editingStopped(ChangeEvent e) {
-                    java.awt.EventQueue.invokeLater(new Runnable() {
-                        public void run() {                     
-                            int rIdx = driverTable.getSelectedRow();
-                            
-                            driverTable.setValueAt(ManageDrivers.getPrompter(UnitNo,
-                                    driverTable.getValueAt(rIdx, BuildingNo.getNumVal())),
-                                    rIdx, UnitNo.getNumVal());                               
-                        }
-                    });
+                    JComboBox cBox = (JComboBox)(((DefaultCellEditor)(e.getSource())).getComponent());
+                    int newBldgKey = (Integer)(((ConvComboBoxItem)cBox.getSelectedItem()).getKeyValue());
+
+                    if (unitRefreshNeeded(newBldgKey)) {                    
+                        java.awt.EventQueue.invokeLater(new Runnable() {
+                            public void run() {                     
+                                int rIdx = driverTable.getSelectedRow();
+
+                                driverTable.setValueAt(ManageDrivers.getPrompter(UnitNo,
+                                        driverTable.getValueAt(rIdx, BuildingNo.getNumVal())),
+                                        rIdx, UnitNo.getNumVal());                               
+                            }
+                        });
+                    }
                 }
 
                 @Override
@@ -363,6 +353,7 @@ public class DriverTable extends JTable {
     }
 
     static int prevL1_NO = -2;
+    
     /**
      * Check if affiliation level 2 combobox needs change.
      * @param L1_NO key value of the selected affiliation level 1 item.
@@ -375,6 +366,23 @@ public class DriverTable extends JTable {
             result = false;
         }
         prevL1_NO = L1_NO;
+        return result;
+    }
+    
+    static int prevBldgKey = -2;
+
+    /**
+     * Check if (building) unit combobox needs change.
+     * @param newBldgKey key value of the selected building item.
+     * @return true when refresh is needed, false otherwise.
+     */
+    private boolean unitRefreshNeeded(int newBldgKey) {
+        boolean result = true;
+        
+        if (prevBldgKey == newBldgKey) {
+            result = false;
+        }
+        prevBldgKey = newBldgKey;
         return result;
     }
 }

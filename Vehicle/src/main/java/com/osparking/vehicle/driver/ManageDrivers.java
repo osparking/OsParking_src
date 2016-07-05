@@ -98,6 +98,7 @@ import com.osparking.global.names.ControlEnums.FormMode;
 import static com.osparking.global.names.ControlEnums.FormModeString.SEARCH;
 import static com.osparking.global.names.ControlEnums.LabelContent.COUNT_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.CREATE_MODE_LABEL;
+import static com.osparking.global.names.ControlEnums.LabelContent.FOCUS_MOVE_NOTE;
 import static com.osparking.global.names.ControlEnums.LabelContent.MODE_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.MODIFY_MODE_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.REQUIRE_FIELD_NOTE;
@@ -282,7 +283,7 @@ public class ManageDrivers extends javax.swing.JFrame {
                 modiSave_Button.setEnabled(false);
                 insertSave_Button.setText(SAVE_BTN.getContent());
                 insertSave_Button.setMnemonic('s');
-                requiredLabel.setVisible(true);
+                tipLabel.setVisible(true);
                 break;
                 
             case UpdateMode:
@@ -294,7 +295,7 @@ public class ManageDrivers extends javax.swing.JFrame {
 //                deleteDriver_Button.setEnabled(true);
                 modiSave_Button.setText(SAVE_BTN.getContent());
                 modiSave_Button.setMnemonic('s');
-                requiredLabel.setVisible(true);
+                tipLabel.setVisible(true);
 //                searchKeyGroupEnabled(false);                
                 break;
                 
@@ -309,7 +310,7 @@ public class ManageDrivers extends javax.swing.JFrame {
                     modiSave_Button.setMnemonic('m');
                     modiSave_Button.setEnabled(false);
                 }
-                requiredLabel.setVisible(false);
+                tipLabel.setVisible(false);
 //                deleteDriver_Button.setText(DELETE_BTN.getContent());
 //                deleteDriver_Button.setMnemonic('d');
 //                deleteDriver_Button.setEnabled(false);
@@ -505,7 +506,7 @@ public class ManageDrivers extends javax.swing.JFrame {
         countLbl = new javax.swing.JLabel();
         countValue = new javax.swing.JLabel();
         topMid_1 = new javax.swing.JPanel();
-        requiredLabel = new javax.swing.JLabel();
+        tipLabel = new javax.swing.JLabel();
         filler4 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(100, 0), new java.awt.Dimension(32767, 0));
         topCenter = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
@@ -560,6 +561,7 @@ public class ManageDrivers extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle(DRIVER_LIST_FRAME_TITLE.getContent());
         setMinimumSize(new Dimension(normGUIwidth, normGUIheight));
+        setPreferredSize(new Dimension(normGUIwidth, normGUIheight));
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 formWindowClosing(evt);
@@ -650,14 +652,17 @@ public class ManageDrivers extends javax.swing.JFrame {
 
         topButtonPanel.add(topLTpanel);
 
-        topMid_1.setMaximumSize(new java.awt.Dimension(160, 40));
-        topMid_1.setMinimumSize(new java.awt.Dimension(160, 40));
-        topMid_1.setPreferredSize(new java.awt.Dimension(160, 40));
+        topMid_1.setMaximumSize(new java.awt.Dimension(210, 40));
+        topMid_1.setMinimumSize(new java.awt.Dimension(210, 40));
+        topMid_1.setPreferredSize(new java.awt.Dimension(210, 40));
         topMid_1.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 0, 22));
 
-        requiredLabel.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        requiredLabel.setText(REQUIRE_FIELD_NOTE.getContent());
-        topMid_1.add(requiredLabel);
+        tipLabel.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        tipLabel.setText(REQUIRE_FIELD_NOTE.getContent());
+        tipLabel.setMaximumSize(new java.awt.Dimension(200, 18));
+        tipLabel.setMinimumSize(new java.awt.Dimension(200, 18));
+        tipLabel.setPreferredSize(new java.awt.Dimension(200, 18));
+        topMid_1.add(tipLabel);
 
         topButtonPanel.add(topMid_1);
         topButtonPanel.add(filler4);
@@ -680,16 +685,16 @@ public class ManageDrivers extends javax.swing.JFrame {
         topButtonPanel.add(topCenter);
         topButtonPanel.add(filler5);
 
-        balancer.setMaximumSize(new java.awt.Dimension(113, 40));
-        balancer.setMinimumSize(new java.awt.Dimension(113, 40));
+        balancer.setMaximumSize(new java.awt.Dimension(163, 40));
+        balancer.setMinimumSize(new java.awt.Dimension(163, 40));
         balancer.setName(""); // NOI18N
-        balancer.setPreferredSize(new java.awt.Dimension(113, 40));
+        balancer.setPreferredSize(new java.awt.Dimension(163, 40));
 
         javax.swing.GroupLayout balancerLayout = new javax.swing.GroupLayout(balancer);
         balancer.setLayout(balancerLayout);
         balancerLayout.setHorizontalGroup(
             balancerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 113, Short.MAX_VALUE)
+            .addGap(0, 163, Short.MAX_VALUE)
         );
         balancerLayout.setVerticalGroup(
             balancerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1102,7 +1107,7 @@ public class ManageDrivers extends javax.swing.JFrame {
             bottomButtonPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(bottomButtonPanelLayout.createSequentialGroup()
                 .addComponent(leftButtons, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 32, Short.MAX_VALUE)
                 .addComponent(rightButtons, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         bottomButtonPanelLayout.setVerticalGroup(
@@ -2212,7 +2217,6 @@ public class ManageDrivers extends javax.swing.JFrame {
     private javax.swing.JPanel northPanel;
     private javax.swing.JFileChooser odsFileChooser;
     private javax.swing.JButton readSheet_Button;
-    private javax.swing.JLabel requiredLabel;
     private javax.swing.JPanel rightButtons;
     private javax.swing.JButton saveSheet_Button;
     private javax.swing.JComboBox searchBuildingComboBox;
@@ -2226,6 +2230,7 @@ public class ManageDrivers extends javax.swing.JFrame {
     private javax.swing.JComboBox searchUnitComboBox;
     private javax.swing.JButton seeLicenseButton;
     private javax.swing.JPanel southPanel;
+    private javax.swing.JLabel tipLabel;
     private javax.swing.JLabel titleLabel;
     private javax.swing.JPanel titlePanel;
     private javax.swing.JPanel topButtonPanel;
@@ -2279,7 +2284,7 @@ public class ManageDrivers extends javax.swing.JFrame {
         } else {
             modiSave_Button.setText(MODIFY_BTN.getContent());
         }
-        requiredLabel.setVisible(toModify);
+        tipLabel.setVisible(toModify);
     }
 
     public int saveModifiedDriverInfo(StringBuffer driverProperties) {
@@ -2952,15 +2957,23 @@ public class ManageDrivers extends javax.swing.JFrame {
             closeDBstuff(conn, stmt, rs, excepMsg);
         }        
     }
-
+    
+    boolean nameReqBlinked = false;
+    boolean cellReqBlinked = false;
+    
     private void startEditingCell(int rowM, int columnIndex) {
         driverTable.requestFocusInWindow();
         driverTable.changeSelection(rowM, columnIndex, false, false);
-        if (columnIndex == 1 || columnIndex == 2) {
-            (new LabelBlinker()).displayHelpMessage(requiredLabel, 
-                    REQUIRE_FIELD_NOTE.getContent(), true);  
+        if (columnIndex == 1) {
+            (new LabelBlinker()).displayHelpMessages(tipLabel, 
+                    REQUIRE_FIELD_NOTE.getContent(), FOCUS_MOVE_NOTE.getContent(), !nameReqBlinked);  
+            nameReqBlinked = true;
+        } else if (columnIndex == 2) {
+            (new LabelBlinker()).displayHelpMessages(tipLabel, 
+                    REQUIRE_FIELD_NOTE.getContent(), FOCUS_MOVE_NOTE.getContent(), !cellReqBlinked);  
+            cellReqBlinked = true;
         } else {
-            requiredLabel.setText("");
+            tipLabel.setText(FOCUS_MOVE_NOTE.getContent());
         }
         driverTable.getEditorComponent().requestFocusInWindow();
     }
