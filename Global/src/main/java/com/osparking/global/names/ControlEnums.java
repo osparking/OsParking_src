@@ -426,6 +426,10 @@ public class ControlEnums {
     }
 
     public enum DialogMSGTypes {
+         
+        DRIVER_UPDATE_QUEST_P1 ("이 운전자를 수정하시겠습니까?", "Do you want to modify this driver?"),
+        DRIVER_UPDATE_QUEST_P2 (" - 운전자 이름 : ", " - Driver name: "),
+        DRIVER_UPDATE_QUEST_P3 ("(소유 차량 대수 : ", "(owning car count : "),
         HOWTO_CLOSE_WINDOW_DIALOG ("(창단기: 엔터키)", "(To close window: Enter Key)."),
         ID_CHECK_DIALOG ("아이디 중복검사가 필요합니다.", "Need to check if 'id' is usable(unoccupied)."),
         EMAIL_CHECK_DIALOG("이메일 중복검사가 필요합니다.", "Need to check if 'E-Mail' is usable(unoccupied)."),
@@ -502,12 +506,12 @@ public class ControlEnums {
                             + System.getProperty("line.separator") 
                             + "Otherwise, modification will be discarded.)"),
         
-        MISSING_CELL_HANDLING("\"휴대전화\" 번호는 11 자리이어야 합니다." 
+        MISSING_CELL_HANDLING("\"휴대전화\" 번호는 최소 10 자리입니다." 
                             + System.getProperty("line.separator") 
                             + "[예] 버튼을 누르면, 휴대전화 란으로 이동합니다." 
                             + System.getProperty("line.separator") 
                             + "[아니오]를 누르면, 현재 연산이 포기됩니다.", 
-                "\"Cell phone number\" should be 11 digits." 
+                "\"Cell phone number\" is at least 10 digits." 
                             + System.getProperty("line.separator") 
                             + "Press [Yes], to edit cell phone number," 
                             + System.getProperty("line.separator") 

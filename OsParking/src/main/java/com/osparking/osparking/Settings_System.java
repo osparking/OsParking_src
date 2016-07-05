@@ -2345,7 +2345,7 @@ public class Settings_System extends javax.swing.JFrame {
             updateSettings.setInt(pIndex++, blinkCycle);
 
             ConvComboBoxItem item = (ConvComboBoxItem)ImageDurationCBox.getSelectedItem();
-            imageKeepDuration = (Integer)(item.getValue());
+            imageKeepDuration = (Integer)(item.getKeyValue());
             updateSettings.setInt(pIndex++, imageKeepDuration);
             // </editor-fold>
 
@@ -3376,7 +3376,7 @@ public class Settings_System extends javax.swing.JFrame {
         for (short idx = 0; idx < maxArrivalComboBox.getItemCount(); idx++) {
             item = maxArrivalComboBox.getItemAt(idx);
             if (item.getClass() == ConvComboBoxItem.class 
-                    && (Integer)((ConvComboBoxItem)item).getValue() == maxArrival) {
+                    && (Integer)((ConvComboBoxItem)item).getKeyValue() == maxArrival) {
                 index = idx;
                 break;
             }

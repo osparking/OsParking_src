@@ -1445,19 +1445,19 @@ public class Settings_EBoard extends javax.swing.JFrame {
         comboBox = (JComboBox)getComponentByName("combo_ContentType" + usage_row.ordinal());
         
         EBD_ContentType typeItem = (EBD_ContentType)
-                (((ConvComboBoxItem)comboBox.getSelectedItem()).getValue());
+                (((ConvComboBoxItem)comboBox.getSelectedItem()).getKeyValue());
         
         comboBox = (JComboBox) getComponentByName("combo_DisplayEffect" + usage_row.ordinal());
         EBD_Effects patternItem = (EBD_Effects)
-                (((ConvComboBoxItem)comboBox.getSelectedItem()).getValue());
+                (((ConvComboBoxItem)comboBox.getSelectedItem()).getKeyValue());
         
         comboBox = (JComboBox) getComponentByName("combo_TextColor" + usage_row.ordinal());
         EBD_Colors colorItem = (EBD_Colors)
-                (((ConvComboBoxItem)comboBox.getSelectedItem()).getValue());
+                (((ConvComboBoxItem)comboBox.getSelectedItem()).getKeyValue());
         
         comboBox = (JComboBox) getComponentByName("combo_TextFont" + usage_row.ordinal());
         EBD_Fonts fontItem = (EBD_Fonts)
-                (((ConvComboBoxItem)comboBox.getSelectedItem()).getValue());
+                (((ConvComboBoxItem)comboBox.getSelectedItem()).getKeyValue());
         
         int result = 0;
         try {
@@ -1837,7 +1837,7 @@ public class Settings_EBoard extends javax.swing.JFrame {
     private void setButtonEnabledIfContentTypeChanged(EBD_DisplayUsage usage) {
         JComboBox typeCBox = (JComboBox) getComponentByName("combo_ContentType" + usage.ordinal());
         EBD_ContentType selectedType 
-                = (EBD_ContentType) ((ConvComboBoxItem)typeCBox.getSelectedItem()).getValue();
+                = (EBD_ContentType) ((ConvComboBoxItem)typeCBox.getSelectedItem()).getKeyValue();
         if (selectedType == ControlGUI.EBD_DisplaySettings[currentTab.ordinal()].contentType) {
             changeEnabled_of_SaveCancelButtons(false);
         }
@@ -1848,7 +1848,7 @@ public class Settings_EBoard extends javax.swing.JFrame {
 
     private void setButtonEnabledIfColorChanged(EBD_DisplayUsage usage) {
         JComboBox colorCBox = (JComboBox) getComponentByName("combo_TextColor" + usage.ordinal());
-        EBD_Colors selectedColor = (EBD_Colors) ((ConvComboBoxItem)colorCBox.getSelectedItem()).getValue();
+        EBD_Colors selectedColor = (EBD_Colors) ((ConvComboBoxItem)colorCBox.getSelectedItem()).getKeyValue();
         
         if (selectedColor == ControlGUI.EBD_DisplaySettings[currentTab.ordinal()].textColor) {
             changeEnabled_of_SaveCancelButtons(false);
@@ -1860,7 +1860,7 @@ public class Settings_EBoard extends javax.swing.JFrame {
 
     private void setButtonEnabledIfEffectChanged(EBD_DisplayUsage usage) {
         JComboBox effectCBox = (JComboBox) getComponentByName("combo_DisplayEffect" + usage.ordinal());
-        EBD_Effects selectedEffect = (EBD_Effects) ((ConvComboBoxItem)effectCBox.getSelectedItem()).getValue();
+        EBD_Effects selectedEffect = (EBD_Effects) ((ConvComboBoxItem)effectCBox.getSelectedItem()).getKeyValue();
         
         if (selectedEffect == ControlGUI.EBD_DisplaySettings[currentTab.ordinal()].displayPattern) {
             changeEnabled_of_SaveCancelButtons(false);
@@ -1872,7 +1872,7 @@ public class Settings_EBoard extends javax.swing.JFrame {
 
     private void setButtonEnabledIfFontChanged(EBD_DisplayUsage usage) {
         JComboBox fontCBox = (JComboBox) getComponentByName("combo_TextFont" + usage.ordinal());
-        EBD_Fonts selectedFont = (EBD_Fonts) ((ConvComboBoxItem)fontCBox.getSelectedItem()).getValue();
+        EBD_Fonts selectedFont = (EBD_Fonts) ((ConvComboBoxItem)fontCBox.getSelectedItem()).getKeyValue();
         
         if (selectedFont == ControlGUI.EBD_DisplaySettings[currentTab.ordinal()].textFont) {
             changeEnabled_of_SaveCancelButtons(false);

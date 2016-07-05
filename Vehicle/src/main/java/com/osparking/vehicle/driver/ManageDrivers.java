@@ -136,6 +136,8 @@ import static com.osparking.vehicle.CommonData.DTCW_UN;
 import static com.osparking.vehicle.CommonData.DTC_MARGIN;
 import com.osparking.vehicle.LabelBlinker;
 import java.awt.Color;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.util.Locale;
 import javax.swing.JLabel;
 import javax.swing.SwingUtilities;
@@ -209,7 +211,18 @@ public class ManageDrivers extends javax.swing.JFrame {
             }
         });
         setupComboBoxColumn(DriverCol.AffiliationL2);
-        setupComboBoxColumn(DriverCol.UnitNo);        
+        setupComboBoxColumn(DriverCol.UnitNo);    
+        
+        
+//        Set<AWTKeyStroke> forward = new HashSet<AWTKeyStroke>(
+//                driverTable.getFocusTraversalKeys(KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS));
+//        forward.add(KeyStroke.getKeyStroke("TAB"));
+//        table.setFocusTraversalKeys(KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS, forward);
+//        Set<AWTKeyStroke> backward = new HashSet<AWTKeyStroke>(
+//                driverTable.getFocusTraversalKeys(KeyboardFocusManager.BACKWARD_TRAVERSAL_KEYS));
+//        backward.add(KeyStroke.getKeyStroke("shift TAB"));
+//        table.setFocusTraversalKeys(KeyboardFocusManager.BACKWARD_TRAVERSAL_KEYS, backward);        
+        
         loadDriverData(UNKNOWN, "", "");
     }
     
@@ -493,9 +506,12 @@ public class ManageDrivers extends javax.swing.JFrame {
         countValue = new javax.swing.JLabel();
         topMid_1 = new javax.swing.JPanel();
         requiredLabel = new javax.swing.JLabel();
-        topMid_2 = new javax.swing.JPanel();
+        filler4 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(100, 0), new java.awt.Dimension(32767, 0));
+        topCenter = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         formModeLabel = new javax.swing.JLabel();
+        filler5 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(100, 0), new java.awt.Dimension(32767, 0));
+        balancer = new javax.swing.JPanel();
         topRHpanel = new javax.swing.JPanel();
         clearButton = new javax.swing.JButton();
         searchButton = new javax.swing.JButton();
@@ -570,6 +586,7 @@ public class ManageDrivers extends javax.swing.JFrame {
 
         seeLicenseButton.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         seeLicenseButton.setText("About");
+        seeLicenseButton.setMargin(new java.awt.Insets(2, 0, 2, 0));
         seeLicenseButton.setMaximumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
         seeLicenseButton.setMinimumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
         seeLicenseButton.setPreferredSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
@@ -590,12 +607,15 @@ public class ManageDrivers extends javax.swing.JFrame {
         titlePanel.add(titleLabel);
         titlePanel.add(filler3);
 
-        jPanel1.setMaximumSize(new java.awt.Dimension(90, 30));
-        jPanel1.setMinimumSize(new java.awt.Dimension(90, 30));
+        jPanel1.setMaximumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
+        jPanel1.setMinimumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
         jPanel1.setPreferredSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
         jPanel1.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 0, 0));
 
         myMetaKeyLabel.setText(META_KEY_LABEL.getContent());
+        myMetaKeyLabel.setMaximumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
+        myMetaKeyLabel.setMinimumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
+        myMetaKeyLabel.setPreferredSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
         myMetaKeyLabel.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         myMetaKeyLabel.setForeground(tipColor);
         jPanel1.add(myMetaKeyLabel);
@@ -605,9 +625,10 @@ public class ManageDrivers extends javax.swing.JFrame {
         wholePanel.add(titlePanel);
 
         topButtonPanel.setMaximumSize(new java.awt.Dimension(33095, 40));
+        topButtonPanel.setLayout(new javax.swing.BoxLayout(topButtonPanel, javax.swing.BoxLayout.LINE_AXIS));
 
-        topLTpanel.setMaximumSize(new java.awt.Dimension(300, 40));
-        topLTpanel.setMinimumSize(new java.awt.Dimension(159, 40));
+        topLTpanel.setMaximumSize(new java.awt.Dimension(160, 40));
+        topLTpanel.setMinimumSize(new java.awt.Dimension(160, 40));
         topLTpanel.setPreferredSize(new java.awt.Dimension(160, 40));
         topLTpanel.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 3, 22));
 
@@ -627,8 +648,10 @@ public class ManageDrivers extends javax.swing.JFrame {
         countValue.setText("count");
         topLTpanel.add(countValue);
 
-        topMid_1.setMaximumSize(new java.awt.Dimension(300, 40));
-        topMid_1.setMinimumSize(new java.awt.Dimension(159, 40));
+        topButtonPanel.add(topLTpanel);
+
+        topMid_1.setMaximumSize(new java.awt.Dimension(160, 40));
+        topMid_1.setMinimumSize(new java.awt.Dimension(160, 40));
         topMid_1.setPreferredSize(new java.awt.Dimension(160, 40));
         topMid_1.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 0, 22));
 
@@ -636,23 +659,47 @@ public class ManageDrivers extends javax.swing.JFrame {
         requiredLabel.setText(REQUIRE_FIELD_NOTE.getContent());
         topMid_1.add(requiredLabel);
 
-        topMid_2.setMaximumSize(new java.awt.Dimension(300, 40));
-        topMid_2.setMinimumSize(new java.awt.Dimension(159, 40));
-        topMid_2.setPreferredSize(new java.awt.Dimension(210, 40));
-        topMid_2.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 0, 10));
+        topButtonPanel.add(topMid_1);
+        topButtonPanel.add(filler4);
+
+        topCenter.setMaximumSize(new java.awt.Dimension(300, 40));
+        topCenter.setMinimumSize(new java.awt.Dimension(159, 40));
+        topCenter.setPreferredSize(new java.awt.Dimension(210, 40));
+        topCenter.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 0, 10));
 
         jLabel2.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         jLabel2.setText(MODE_LABEL.getContent());
-        topMid_2.add(jLabel2);
+        topCenter.add(jLabel2);
 
         formModeLabel.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         formModeLabel.setForeground(pointColor);
         formModeLabel.setText(SEARCH.getContent());
         formModeLabel.setToolTipText("");
-        topMid_2.add(formModeLabel);
+        topCenter.add(formModeLabel);
 
-        topRHpanel.setMaximumSize(new java.awt.Dimension(300, 40));
-        topRHpanel.setMinimumSize(new java.awt.Dimension(159, 40));
+        topButtonPanel.add(topCenter);
+        topButtonPanel.add(filler5);
+
+        balancer.setMaximumSize(new java.awt.Dimension(113, 40));
+        balancer.setMinimumSize(new java.awt.Dimension(113, 40));
+        balancer.setName(""); // NOI18N
+        balancer.setPreferredSize(new java.awt.Dimension(113, 40));
+
+        javax.swing.GroupLayout balancerLayout = new javax.swing.GroupLayout(balancer);
+        balancer.setLayout(balancerLayout);
+        balancerLayout.setHorizontalGroup(
+            balancerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 113, Short.MAX_VALUE)
+        );
+        balancerLayout.setVerticalGroup(
+            balancerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 40, Short.MAX_VALUE)
+        );
+
+        topButtonPanel.add(balancer);
+
+        topRHpanel.setMaximumSize(new java.awt.Dimension(210, 40));
+        topRHpanel.setMinimumSize(new java.awt.Dimension(210, 40));
         topRHpanel.setPreferredSize(new java.awt.Dimension(210, 40));
         topRHpanel.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT, 10, 0));
 
@@ -684,26 +731,7 @@ public class ManageDrivers extends javax.swing.JFrame {
         });
         topRHpanel.add(searchButton);
 
-        javax.swing.GroupLayout topButtonPanelLayout = new javax.swing.GroupLayout(topButtonPanel);
-        topButtonPanel.setLayout(topButtonPanelLayout);
-        topButtonPanelLayout.setHorizontalGroup(
-            topButtonPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(topButtonPanelLayout.createSequentialGroup()
-                .addComponent(topLTpanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(topMid_1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 76, Short.MAX_VALUE)
-                .addComponent(topMid_2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 175, Short.MAX_VALUE)
-                .addComponent(topRHpanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-        );
-        topButtonPanelLayout.setVerticalGroup(
-            topButtonPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(topLTpanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-            .addComponent(topMid_2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-            .addComponent(topRHpanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-            .addComponent(topMid_1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-        );
+        topButtonPanel.add(topRHpanel);
 
         wholePanel.add(topButtonPanel);
         wholePanel.add(filler15_6);
@@ -744,10 +772,10 @@ public class ManageDrivers extends javax.swing.JFrame {
             }
         });
         searchName.addInputMethodListener(new java.awt.event.InputMethodListener() {
+            public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
+            }
             public void inputMethodTextChanged(java.awt.event.InputMethodEvent evt) {
                 searchNameInputMethodTextChanged(evt);
-            }
-            public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
             }
         });
         searchName.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -1074,7 +1102,7 @@ public class ManageDrivers extends javax.swing.JFrame {
             bottomButtonPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(bottomButtonPanelLayout.createSequentialGroup()
                 .addComponent(leftButtons, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 129, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(rightButtons, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         bottomButtonPanelLayout.setVerticalGroup(
@@ -1596,7 +1624,7 @@ public class ManageDrivers extends javax.swing.JFrame {
         Object selItem = searchL2ComboBox.getSelectedItem();
         
         ConvComboBoxItem l1Item = (ConvComboBoxItem)searchL1ComboBox.getSelectedItem(); 
-        int L1No = (Integer) l1Item.getValue();        // normalize child combobox item 
+        int L1No = (Integer) l1Item.getKeyValue();        // normalize child combobox item 
         searchL2ComboBox.removeAllItems();
         searchL2ComboBox.addItem(getPrompter(AffiliationL2, searchL1ComboBox));     
         loadComboBoxItems(searchL2ComboBox, DriverCol.AffiliationL2, L1No); 
@@ -1967,7 +1995,7 @@ public class ManageDrivers extends javax.swing.JFrame {
         
         ConvComboBoxItem bldgItem
                 = (ConvComboBoxItem)buildingComboBox.getSelectedItem(); 
-        int bldgNo = (Integer) bldgItem.getValue();        // normalize child combobox item 
+        int bldgNo = (Integer) bldgItem.getKeyValue();        // normalize child combobox item 
         
         unitComboBox.removeAllItems();
         unitComboBox.addItem(getPrompter(UnitNo, buildingComboBox));     
@@ -2011,6 +2039,7 @@ public class ManageDrivers extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 ManageDrivers mainForm = new ManageDrivers(null);
+                mainForm.setLocation(0, 0);
                 mainForm.setVisible(true);
             }
         });
@@ -2150,6 +2179,7 @@ public class ManageDrivers extends javax.swing.JFrame {
         
     // <editor-fold defaultstate="collapsed" desc="-- Netbeans Generated Control Item Variables ">                               
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPanel balancer;
     private javax.swing.JPanel bottomButtonPanel;
     private javax.swing.JButton cancelDriver_Button;
     private javax.swing.JButton clearButton;
@@ -2166,6 +2196,8 @@ public class ManageDrivers extends javax.swing.JFrame {
     private javax.swing.Box.Filler filler15_6;
     private javax.swing.Box.Filler filler2;
     private javax.swing.Box.Filler filler3;
+    private javax.swing.Box.Filler filler4;
+    private javax.swing.Box.Filler filler5;
     private javax.swing.Box.Filler filler66;
     private javax.swing.JLabel formModeLabel;
     public javax.swing.JButton insertSave_Button;
@@ -2197,9 +2229,9 @@ public class ManageDrivers extends javax.swing.JFrame {
     private javax.swing.JLabel titleLabel;
     private javax.swing.JPanel titlePanel;
     private javax.swing.JPanel topButtonPanel;
+    private javax.swing.JPanel topCenter;
     private javax.swing.JPanel topLTpanel;
     private javax.swing.JPanel topMid_1;
-    private javax.swing.JPanel topMid_2;
     private javax.swing.JPanel topRHpanel;
     private javax.swing.JPanel westPanel;
     private javax.swing.JPanel wholePanel;
@@ -2622,7 +2654,6 @@ public class ManageDrivers extends javax.swing.JFrame {
         String L1_item = driverTable.getValueAt(row, AffiliationL1.getNumVal()).toString();
         InnoComboBoxItem L2_item = (InnoComboBoxItem)driverTable.getValueAt(row, AffiliationL2.getNumVal());
         int L2_NO = (Integer) L2_item.getKeys()[0];
-//        int L2_NO = getINNOkey(row, AffiliationL2.getNumVal());
         
         
         String building_item = driverTable.getValueAt(row, BuildingNo.getNumVal()).toString();
@@ -2659,7 +2690,7 @@ public class ManageDrivers extends javax.swing.JFrame {
             //</editor-fold>               
         }
         // 2. driver cell phone isn't provided
-        else if (getNumericDigitCount(cell) <= 10) {
+        else if (getNumericDigitCount(cell) < 10) {
             // <editor-fold defaultstate="collapsed" desc="-- handle missing cell phone">   
             // it has driver's name, but not his/her cell phone number  
             int response = JOptionPane.showConfirmDialog(null, MISSING_CELL_HANDLING.getContent(),
@@ -2783,13 +2814,13 @@ public class ManageDrivers extends javax.swing.JFrame {
                             comboboxRippleEffectStop = true;
 
                             int rowV = driverTable.getSelectedRow();
-                            int rowM = driverTable.convertRowIndexToModel(rowV);
-
                             int colV = driverTable.getSelectedColumn();
-                            int colM = driverTable.convertColumnIndexToModel(colV);
 
-                            if (rowV >= 0 && colV >= 0)
-                                handleItemChange(rowV, rowM, colV, colM);                                
+                            if (rowV >= 0 && colV >= 0) {
+                                int rowM = driverTable.convertRowIndexToModel(rowV);
+                                int colM = driverTable.convertColumnIndexToModel(colV);
+                                handleItemChange(rowV, rowM, colM);
+                            }
                             comboboxRippleEffectStop = false;
                         }
                     });  
@@ -2805,11 +2836,11 @@ public class ManageDrivers extends javax.swing.JFrame {
         DefaultTableCellRenderer renderer = new DefaultTableCellRenderer();
         renderer.setToolTipText("ComboBox pops up if clicked");
         renderer.setHorizontalTextPosition(SwingConstants.LEFT);
+        
         comboCol.setCellRenderer(renderer);            
         
         JComboBox comboBox = new PComboBox();
-        addItemChangeListener(comboBox);                
-        comboBox.addItem(new ConvComboBoxItem(new Integer(-1), "(select)"));
+        addItemChangeListener(comboBox);
     
         comboCol.setCellEditor(new DefaultCellEditor(comboBox));
     }
@@ -2934,18 +2965,18 @@ public class ManageDrivers extends javax.swing.JFrame {
         driverTable.getEditorComponent().requestFocusInWindow();
     }
 
-    private void handleItemChange(int rowV, int rowM, int colV, int colM) {
+    private void handleItemChange(int rowV, int rowM, int colM) {
         // user wants to change driver info or continues changing it
         int colV2 = driverTable.convertColumnIndexToView(colM + 1); 
-
-        if (colM == DriverCol.AffiliationL1.getNumVal())
+        
+        if (colM == AffiliationL1.getNumVal())
         {
             int colM2 = DriverCol.AffiliationL2.getNumVal();
             driverTable.setValueAt(ManageDrivers.getPrompter(AffiliationL1, null), rowM, colM2);
         } 
-        else if (colM == DriverCol.BuildingNo.getNumVal())
+        else if (colM == BuildingNo.getNumVal())
         {
-            int colM2 = DriverCol.UnitNo.getNumVal();
+            int colM2 = UnitNo.getNumVal();
             driverTable.setValueAt(ManageDrivers.getPrompter(BuildingNo, null), rowM, colM2); 
         }
         else
@@ -2954,7 +2985,7 @@ public class ManageDrivers extends javax.swing.JFrame {
             // get higher level category(affiliation level 1 or building) item
             ConvComboBoxItem l1Item = (ConvComboBoxItem)driverTable.getValueAt(rowV, colM - 1);
             
-            if ((Integer) l1Item.getValue() == -1) 
+            if ((Integer) l1Item.getKeyValue() == -1) 
             {
                 // higher level item isn't selected yet, so select it here
                 if (colM == AffiliationL2.getNumVal() || colM == UnitNo.getNumVal()) 
@@ -3094,7 +3125,7 @@ public class ManageDrivers extends javax.swing.JFrame {
                         complexItem = true;
                 }
                 else {
-                    int parentIndex = (Integer) (((ConvComboBoxItem)parentObj).getValue());
+                    int parentIndex = (Integer) (((ConvComboBoxItem)parentObj).getKeyValue());
                     if (parentIndex == -1)
                         complexItem = true;
                 }
@@ -3196,16 +3227,6 @@ public class ManageDrivers extends javax.swing.JFrame {
         }                            
     }    
 
-    private void searchKeyGroupEnabled(boolean flag) {
-        searchName.setEnabled(flag);
-        searchCell.setEnabled(flag);
-        searchPhone.setEnabled(flag);
-        searchL1ComboBox.setEnabled(flag);
-        searchL2ComboBox.setEnabled(flag);
-        searchBuildingComboBox.setEnabled(flag);
-        searchUnitComboBox.setEnabled(flag);
-    }
-
     private void getDriverProperties(String name, String cell, StringBuffer driverProperties, int row,
             String landLine, String itemL2name, String itemUnitName) 
     {
@@ -3243,7 +3264,7 @@ public class ManageDrivers extends javax.swing.JFrame {
         int lower_Index = lower_Item.getKeys().length - 1;
         
         attachNumberCondition(cond, "L1_NO", "L2_NO", 
-                (Integer)((ConvComboBoxItem)searchL1ComboBox.getSelectedItem()).getValue(),
+                (Integer)((ConvComboBoxItem)searchL1ComboBox.getSelectedItem()).getKeyValue(),
                 (Integer)(lower_Item.getKeys()[lower_Index]));
 
         /**
@@ -3252,7 +3273,7 @@ public class ManageDrivers extends javax.swing.JFrame {
         lower_Item = (InnoComboBoxItem)searchUnitComboBox.getSelectedItem();
         lower_Index = lower_Item.getKeys().length - 1;
         attachNumberCondition(cond, "B_SEQ_NO", "U_SEQ_NO", (Integer)
-                ((ConvComboBoxItem)searchBuildingComboBox.getSelectedItem()).getValue(),
+                ((ConvComboBoxItem)searchBuildingComboBox.getSelectedItem()).getKeyValue(),
                 (Integer)(lower_Item.getKeys()[lower_Index]));   
         
         if (cond.length() > 0) {

@@ -37,8 +37,10 @@ import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableColumn;
 import com.osparking.global.names.ConvComboBoxItem;
 import static com.osparking.global.Globals.emptyLastRowPossible;
-import static com.osparking.global.Globals.language;
 import static com.osparking.global.Globals.removeEmptyRow;
+import static com.osparking.global.names.ControlEnums.DialogMSGTypes.DRIVER_UPDATE_QUEST_P1;
+import static com.osparking.global.names.ControlEnums.DialogMSGTypes.DRIVER_UPDATE_QUEST_P2;
+import static com.osparking.global.names.ControlEnums.DialogMSGTypes.DRIVER_UPDATE_QUEST_P3;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.MODIFY_DAILOGTITLE;
 import com.osparking.global.names.ControlEnums.FormMode;
 import com.osparking.global.names.InnoComboBoxItem;
@@ -49,10 +51,14 @@ import static com.osparking.global.names.OSP_enums.DriverCol.BuildingNo;
 import static com.osparking.global.names.OSP_enums.DriverCol.UnitNo;
 import com.osparking.global.names.PComboBox;
 import java.awt.AWTKeyStroke;
+import java.awt.event.ItemEvent;
+import static java.awt.event.ItemEvent.SELECTED;
+import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.HashSet;
 import java.util.Set;
+import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -86,7 +92,7 @@ public class DriverTable extends JTable {
         getColumnModel().getColumn(6).setCellRenderer(numberCellRenderer);
         getColumnModel().getColumn(7).setCellRenderer(numberCellRenderer);
         setRowHeight(tableRowHeight);        
-    }   
+    }
     
     public boolean isCellEditable(int modRow, int column) {
         if ((parent.getFormMode() == FormMode.CreateMode ||
@@ -109,27 +115,14 @@ public class DriverTable extends JTable {
     
     public int askUserOnUpdate(String name, int vCount) {
         
-        String optionMessage = "";
-        
-        switch(language){
-            case KOREAN :
-                optionMessage = "해당 운전자 정보를 수정하시겟습니까?"+ System.getProperty("line.separator") + 
-                        " - 운전자 이름 : "+ name + "(소유 차량 : " + vCount + "대)";
-                break;
-                
-            case ENGLISH:
-                optionMessage = "Do you want to Modify driver information?" + System.getProperty("line.separator") + 
-                        " - Driver name: " + name + " (owns " + vCount + " cars)";
-                break;
-                
-            default :
-                break;
-        }        
-        
+        String optionMessage = DRIVER_UPDATE_QUEST_P1.getContent() + System.getProperty("line.separator") 
+                + DRIVER_UPDATE_QUEST_P2.getContent() + name 
+                + DRIVER_UPDATE_QUEST_P3.getContent() + vCount + ")";
         JOptionPane optionPane = new JOptionPane(optionMessage,
                 JOptionPane.QUESTION_MESSAGE, 
                 JOptionPane.YES_NO_OPTION, null, null, null); // options[0]);
         JDialog dialog = optionPane.createDialog(MODIFY_DAILOGTITLE.getContent());
+        
         dialog.addKeyListener(new KeyListener () {
             @Override
             public void keyTyped(KeyEvent e) {
@@ -151,7 +144,6 @@ public class DriverTable extends JTable {
         dialog.setFocusTraversalKeys(0, focusTraversalKeys);
         dialog.setVisible(true);
         dialog.dispose();
-//        int response = (Integer) optionPane.getValue();           
         return (Integer) optionPane.getValue();
     }
 
@@ -176,28 +168,48 @@ public class DriverTable extends JTable {
         // <editor-fold defaultstate="collapsed" desc="-- Make ComboBox for the Cell">                        
         if (modCol == DriverCol.AffiliationL2.getNumVal()) {
             //<editor-fold desc="-- Level 2 affiliation">
-            Object itemObj = getValueAt(modRow, DriverCol.AffiliationL1.getNumVal() );
-            int L1_NO = (Integer)(((ConvComboBoxItem)itemObj).getValue());
+            Object objLevelOne = getValueAt(modRow, DriverCol.AffiliationL1.getNumVal() );
+            int L1_NO = (Integer)(((ConvComboBoxItem)objLevelOne).getKeyValue());
             
-            TableColumn comboCol = driverTable.getColumnModel().getColumn(modCol);        
+            TableColumn cBxCol = driverTable.getColumnModel().getColumn(modCol);        
             PComboBox<InnoComboBoxItem> comboBox = (PComboBox<InnoComboBoxItem>)
-                    ((DefaultCellEditor)comboCol.getCellEditor()).getComponent();
+                    ((DefaultCellEditor)cBxCol.getCellEditor()).getComponent();
+
+            // Check if affiliation level 1 combo box selected
+            if (level2RefreshNeeded(L1_NO)) {
+                System.out.println("needed");
+                comboBox.removeAllItems();
+                comboBox.addItem((InnoComboBoxItem) 
+                        ManageDrivers.getPrompter (DriverCol.AffiliationL2, driverTable.getValueAt(
+                                driverTable.getSelectedRow(), AffiliationL1.getNumVal()) ) );
+                parent.loadComboBoxItems(comboBox, DriverCol.AffiliationL2, L1_NO);
+            } else {
+                System.out.println("needless");
+            }
             
-            comboBox.removeAllItems();
-            comboBox.addItem( (InnoComboBoxItem) 
-                    ManageDrivers.getPrompter (DriverCol.AffiliationL2, driverTable.getValueAt(
-                            driverTable.getSelectedRow(), AffiliationL1.getNumVal()) ) );
-            parent.loadComboBoxItems(comboBox, DriverCol.AffiliationL2, L1_NO);
-            comboBox.setEditable(true);
+            comboBox.setEditable(true); 
             Object item = driverTable.getValueAt(driverTable.getSelectedRow(), modCol);
             comboBox.setSelectedItem((InnoComboBoxItem)item);
-            
+            comboBox.addItemListener(new ItemListener() {
+                @Override
+                public void itemStateChanged(ItemEvent e) {
+                    java.awt.EventQueue.invokeLater(new Runnable() {
+                        public void run() {                     
+                            if (e.getStateChange() == SELECTED) {
+                                Object item = e.getID();
+                                System.out.println("Selected item: " + e.getItem());
+                            }
+                        }
+                    });
+                }                
+            });
             cellEditor = new DefaultCellEditor(comboBox);
+
             //</editor-fold>
         } else if (modCol == DriverCol.UnitNo.getNumVal()) {
             //<editor-fold desc="-- Building unit">
             Object itemObj = getValueAt(modRow, DriverCol.BuildingNo.getNumVal());
-            int bldgSeqNo = (Integer)(((ConvComboBoxItem)itemObj).getValue());
+            int bldgSeqNo = (Integer)(((ConvComboBoxItem)itemObj).getKeyValue());
             
             TableColumn comboCol = driverTable.getColumnModel().getColumn(modCol);        
             PComboBox<InnoComboBoxItem> comboBox = (PComboBox<InnoComboBoxItem>)
@@ -222,6 +234,14 @@ public class DriverTable extends JTable {
 
                 @Override
                 public void editingStopped(ChangeEvent e) {
+                    JComboBox cBox = (JComboBox)(((DefaultCellEditor)(e.getSource())).getComponent());
+                    boolean isCBoxVisible = cBox.isPopupVisible();
+                    if (isCBoxVisible) {
+                        System.out.println("Visible");
+                    } else {
+                        System.out.println("in-Visible");
+                        
+                    }
                     java.awt.EventQueue.invokeLater(new Runnable() {
                         public void run() {                     
                             int rIdx = driverTable.getSelectedRow();
@@ -293,8 +313,10 @@ public class DriverTable extends JTable {
         compo.getActionMap().put("handleEnter", handleEnter);  
         // </editor-fold>
         
-        if (modCol >= DriverCol.AffiliationL1.getNumVal()
-            && modCol <= DriverCol.UnitNo.getNumVal())
+        if (modCol == AffiliationL1.getNumVal() 
+                || modCol == AffiliationL2.getNumVal() 
+                || modCol == BuildingNo.getNumVal()
+                || modCol == UnitNo.getNumVal())
         {
             Component comp = ((DefaultCellEditor)cellEditor).getComponent();
             comp.addMouseListener(new MouseAdapter() {
@@ -338,5 +360,21 @@ public class DriverTable extends JTable {
             }
             parent.setFormMode(FormMode.NormalMode);
         }        
+    }
+
+    static int prevL1_NO = -2;
+    /**
+     * Check if affiliation level 2 combobox needs change.
+     * @param L1_NO key value of the selected affiliation level 1 item.
+     * @return true when refresh is needed, false otherwise.
+     */
+    private boolean level2RefreshNeeded(int L1_NO) {
+        boolean result = true;
+        
+        if (prevL1_NO == L1_NO) {
+            result = false;
+        }
+        prevL1_NO = L1_NO;
+        return result;
     }
 }

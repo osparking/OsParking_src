@@ -24,11 +24,11 @@ package com.osparking.global.names;
 
 // <editor-fold defaultstate="collapsed" desc="-- ComboBox Item Class Definition ">                           
 public class ConvComboBoxItem { // Conv stands for Conventional 
-    private Object value;
+    private Object keyValue;
     private String label;
     
     public ConvComboBoxItem(Object value, String label) {
-        this.value= value;
+        this.keyValue= value;
         this.label = label;
     }
     
@@ -61,15 +61,15 @@ public class ConvComboBoxItem { // Conv stands for Conventional
      * Returns the key value associated with this item
      * @return the keyValue
      */
-    public Object getValue() {
-        return value;
+    public Object getKeyValue() {
+        return keyValue;
     }
 
     /**
      * @param keyValue the keyValue to set
      */
     public void setKeyValue(int keyValue) {
-        this.value = keyValue;
+        this.keyValue = keyValue;
     }
 
     /**

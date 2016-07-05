@@ -536,7 +536,7 @@ public class VisitingCar extends javax.swing.JFrame {
         Object selItem = lowLevelComboBox.getSelectedItem();
         
         ConvComboBoxItem l1Item = (ConvComboBoxItem)highLevelComboBox.getSelectedItem(); 
-        int L1No = (Integer) l1Item.getValue();        // normalize child combobox item 
+        int L1No = (Integer) l1Item.getKeyValue();        // normalize child combobox item 
         lowLevelComboBox.removeAllItems();
         lowLevelComboBox.addItem(ManageDrivers.getPrompter(AffiliationL2, highLevelComboBox));     
         loadComboBoxItems(lowLevelComboBox, DriverCol.AffiliationL2, L1No);        

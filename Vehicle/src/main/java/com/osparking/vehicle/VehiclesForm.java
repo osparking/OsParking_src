@@ -1775,10 +1775,10 @@ public class VehiclesForm extends javax.swing.JFrame {
             if (!searchDriver.getText().trim().equals(DRIVER_TF.getContent()))
                 attachCondition(cond, "NAME", searchDriver.getText().trim());
 
-            Object keyObj =((ConvComboBoxItem)searchAffiliCBox.getSelectedItem()).getValue();
+            Object keyObj =((ConvComboBoxItem)searchAffiliCBox.getSelectedItem()).getKeyValue();
             attachIntCondition(cond, "L2_NO", (Integer) keyObj); 
 
-            keyObj =((ConvComboBoxItem)searchBldgCBox.getSelectedItem()).getValue();
+            keyObj =((ConvComboBoxItem)searchBldgCBox.getSelectedItem()).getKeyValue();
             attachIntCondition(cond, "UNIT_SEQ_NO", (Integer)keyObj);
 
             if (!searchETC.getText().trim().equals(OTHER_INFO_TF.getContent()))

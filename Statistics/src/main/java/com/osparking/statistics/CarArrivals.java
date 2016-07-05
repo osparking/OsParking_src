@@ -1234,7 +1234,7 @@ public class CarArrivals extends javax.swing.JFrame {
         Object selItem = searchL2ComboBox.getSelectedItem();
 
         ConvComboBoxItem l1Item = (ConvComboBoxItem)searchL1ComboBox.getSelectedItem();
-        int L1No = (Integer) l1Item.getValue();        // normalize child combobox item
+        int L1No = (Integer) l1Item.getKeyValue();        // normalize child combobox item
         searchL2ComboBox.removeAllItems();
         searchL2ComboBox.addItem(getPrompter(AffiliationL2, searchL1ComboBox));
         loadComboBoxItems(searchL2ComboBox, DriverCol.AffiliationL2, L1No);
@@ -1438,13 +1438,13 @@ public class CarArrivals extends javax.swing.JFrame {
             sb.append("  CA.TagEnteredAs = VH.PLATE_NUMBER "); 
             sb.append("  and VH.DRIVER_SEQ_NO = CD.SEQ_NO "); 
             sb.append("  and CD.L2_NO = L2.L2_NO  "); 
-            sb.append("  and L2.L1_NO = " + item.getValue() + ") "); 
+            sb.append("  and L2.L1_NO = " + item.getKeyValue() + ") "); 
             sb.append("Union "); 
             sb.append("(Select ArrivalTime, tagRecognized, arrSeqNo  "); 
             sb.append("From car_arrival CA, l2_affiliation L2 "); 
             sb.append("Where " + (cond.length() > 0 ? cond + " and " : ""));
             sb.append("  CA.L2_NO = L2.L2_NO  "); 
-            sb.append("  and L2.L1_NO =  " + item.getValue() + ") "); 
+            sb.append("  and L2.L1_NO =  " + item.getKeyValue() + ") "); 
             sb.append("Order by arrSeqNo desc "); 
             //</editor-fold>   
         } else if (buildingRadioButton.isSelected() && searchUnitComboBox.getSelectedIndex() > 0) {
@@ -1476,25 +1476,25 @@ public class CarArrivals extends javax.swing.JFrame {
             sb.append("  CA.TagEnteredAs = VH.PLATE_NUMBER ");
             sb.append("  and VH.DRIVER_SEQ_NO = CD.SEQ_NO ");
             sb.append("  and CD.unit_seq_no = UT.SEQ_NO ");
-            sb.append("  and UT.BLDG_SEQ_NO = " + item.getValue() + ") ");
+            sb.append("  and UT.BLDG_SEQ_NO = " + item.getKeyValue() + ") ");
             sb.append("Union ");
             sb.append("(Select ArrivalTime, tagRecognized, arrSeqNo ");
             sb.append("From car_arrival CA, building_unit UT ");
             sb.append("Where " + (cond.length() > 0 ? cond + " and " : ""));
             sb.append("  CA.unitSeqNo = UT.SEQ_NO ");
-            sb.append("  and UT.BLDG_SEQ_NO = " + item.getValue() + ") ");
+            sb.append("  and UT.BLDG_SEQ_NO = " + item.getKeyValue() + ") ");
             sb.append("Order by arrSeqNo desc");
             //</editor-fold>               
         } else {
             // <editor-fold defaultstate="collapsed" desc="-- without affiliation or building condition">  
             attachTimeCondition(null, cond);
 
-            Object keyObj =((ConvComboBoxItem)gateCB.getSelectedItem()).getValue();
+            Object keyObj =((ConvComboBoxItem)gateCB.getSelectedItem()).getKeyValue();
             attachIntCondition(cond, "GateNo", (Integer) keyObj);   
 
             attachCondition(cond, "tagRecognized", carTagTF.getText().trim());
 
-            Object selValue = ((ConvComboBoxItem)attendantCB.getSelectedItem()).getValue();
+            Object selValue = ((ConvComboBoxItem)attendantCB.getSelectedItem()).getKeyValue();
             if (selValue == null) {
                 cond.append("and attendantID is null");
             } else {
@@ -1503,7 +1503,7 @@ public class CarArrivals extends javax.swing.JFrame {
 
             if (gateBarCB.getSelectedIndex() != 0) {
                 ConvComboBoxItem item = (ConvComboBoxItem)gateBarCB.getSelectedItem();
-                attachIntCondition(cond, "BarOperation", ((BarOperation)(item.getValue())).ordinal()) ;
+                attachIntCondition(cond, "BarOperation", ((BarOperation)(item.getKeyValue())).ordinal()) ;
             }
 
             sb.append("Select ArrivalTime, tagRecognized, arrSeqNo "); 
@@ -1827,19 +1827,19 @@ public class CarArrivals extends javax.swing.JFrame {
     }
 
     private void createConditionWithCA(StringBuffer cond) {
-        Object keyObj =((ConvComboBoxItem)gateCB.getSelectedItem()).getValue();
+        Object keyObj =((ConvComboBoxItem)gateCB.getSelectedItem()).getKeyValue();
         attachIntConditionCA(cond, "GateNo", (Integer) keyObj);   
 
         attachConditionCA(cond, "tagRecognized", carTagTF.getText().trim());
 
-        Object selValue = ((ConvComboBoxItem)attendantCB.getSelectedItem()).getValue();
+        Object selValue = ((ConvComboBoxItem)attendantCB.getSelectedItem()).getKeyValue();
         if (selValue == null) {
             cond.append(" attendantID is null");
         } else {
             attachConditionCA(cond, "attendantID", (String)selValue);
         }
 
-        keyObj =((ConvComboBoxItem)gateBarCB.getSelectedItem()).getValue();
+        keyObj =((ConvComboBoxItem)gateBarCB.getSelectedItem()).getKeyValue();
         attachIntConditionCA(cond, "BarOperation", (Integer) keyObj);           
     }
 
