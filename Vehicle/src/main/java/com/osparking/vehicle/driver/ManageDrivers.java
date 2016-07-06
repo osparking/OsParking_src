@@ -299,9 +299,6 @@ public class ManageDrivers extends javax.swing.JFrame {
                     modiSave_Button.setEnabled(false);
                 }
                 tipLabel.setVisible(false);
-//                deleteDriver_Button.setText(DELETE_BTN.getContent());
-//                deleteDriver_Button.setMnemonic('d');
-//                deleteDriver_Button.setEnabled(false);
                 break;
             default:
                 break;
@@ -765,10 +762,10 @@ public class ManageDrivers extends javax.swing.JFrame {
             }
         });
         searchName.addInputMethodListener(new java.awt.event.InputMethodListener() {
+            public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
+            }
             public void inputMethodTextChanged(java.awt.event.InputMethodEvent evt) {
                 searchNameInputMethodTextChanged(evt);
-            }
-            public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
             }
         });
         searchName.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -1165,22 +1162,9 @@ public class ManageDrivers extends javax.swing.JFrame {
         int driverCount = getRecordCount("cardriver", -1);
         int vehiclecount = getRecordCount("vehicles", -1);
         
-        String dialogMessage = "";
-        
-        switch(language){
-            case KOREAN:
-                dialogMessage = driverCount + "명의 정보를 삭제 하시겟습니까?" + System.lineSeparator() 
-                        + "총 " + vehiclecount +"대의 소유 차량정보가 함께 삭제됩니다!";
-                break;
-                
-            case ENGLISH:
-                dialogMessage = "Do you want to delete " + driverCount + " drivers all?" + System.lineSeparator() 
-                        + "Total " + vehiclecount + " owned vehicles will also be destroyed!";
-                break;
-                
-            default:
-                break;
-        }        
+        String dialogMessage = DELETE_ALL_DRIVER_P1.getContent() + System.lineSeparator() +
+                DELETE_ALL_DRIVER_P2.getContent() + driverCount + System.lineSeparator() +
+                DELETE_ALL_DRIVER_P3.getContent() + vehiclecount;
         
         int result = JOptionPane.showConfirmDialog(this, dialogMessage,
                 DELETE_ALL_DAILOGTITLE.getContent(),
@@ -1263,182 +1247,118 @@ public class ManageDrivers extends javax.swing.JFrame {
             rowM = driverTable.convertRowIndexToModel(rowV);
         int colV = driverTable.getSelectedColumn();        
 
-        if (getFormMode() == FormMode.CreateMode) {
-//            //<editor-fold desc="-- Handle driver creation cancellation request">
-//            Object[] options = new Object[2];
-//            
-//            switch(language){
-//                case KOREAN:
-//                    options[0] = "예(종료)";
-//                    options[1] = "아니요(생성)";
-//                    break;
-//                    
-//                case ENGLISH:
-//                    options[0] = "Yes(quit)";
-//                    options[1] = "No(create)";
-//                    break;
-//                    
-//                default:
-//                    break;
-//            }
-//            
-//            int response = JOptionPane.showOptionDialog(this, DRIVER_CREATE_CANCEL_DIALOG.getContent(),
-//                                CANCEL_DIALOGTITLE.getContent(), 
-//                                JOptionPane.YES_NO_OPTION,
-//                    JOptionPane.QUESTION_MESSAGE, 
-//                    null, 
-//                    options, options[0]);
-//        
-//            if (response == JOptionPane.YES_OPTION) {
-//                // Confirmed cancel request
-//                setFormMode(FormMode.NormalMode);
-//                
-//                // remove last row which was prepared for the new driver information
-//                ((DefaultTableModel)driverTable.getModel()).setRowCount(driverTable.getRowCount() - 1);     
-//                
-//                // highlight originally selected row if existed.
-//                if (rowBeforeCreate != -1) {
-//                    if (colBeforeCreate != -1)
-//                        driverTable.changeSelection(rowBeforeCreate, colBeforeCreate, false, false);
-//                    highlightTableRow(driverTable, rowBeforeCreate);
-//                    deleteDriver_Button.setEnabled(true);
-//                    driverTable.requestFocusInWindow();
-//                }
-//            } else {
-//                startEditingCell(rowM, colV);
-//            }         
-//            //</editor-fold>
-//        } else if (getFormMode() == FormMode.UpdateMode) {
-//            //<editor-fold desc="-- Process modification cancel request">
-//            
-//            int response = JOptionPane.showOptionDialog(this, DRIVER_MODIFY_CANCEL_DAILOG.getContent(),
-//                                CANCEL_DIALOGTITLE.getContent(), 
-//                                JOptionPane.YES_NO_OPTION,
-//                    JOptionPane.QUESTION_MESSAGE, null, null, null); 
-//            
-//            if (response == JOptionPane.NO_OPTION) {
-//                startEditingCell(rowV, colV);
-//            } else {
-//                driverTable.getCellEditor().cancelCellEditing();
-//                setFormMode(FormMode.NormalMode);
-//                loadDriverData(rowM, "", "");
-//                driverTable.requestFocusInWindow();
-//            } 
-//            //</editor-fold>            
+        // delete a driver's record currently selected 
+        int[] deleteIndice = driverTable.getSelectedRows();
+        if (deleteIndice.length == 0)
+        {
+            return;
+        }
+
+        int result = -1;
+        String driverName = (String)driverTable.getValueAt(deleteIndice[0], 1);
+        int modal_Index = driverTable.convertRowIndexToModel(deleteIndice[0]);
+        int CD_SEQ_NO = (int)driverTable.getModel().getValueAt(modal_Index, 
+                DriverCol.SEQ_NO.getNumVal());
+        int count = getRecordCount("vehicles", CD_SEQ_NO);
+
+        if (deleteIndice.length == 1) {
+            String dialogMessage = "";
+
+            switch(language){
+                case KOREAN:
+                    dialogMessage = "운전자 정보와 운전자 차량에 대한 정보를 삭제하시겠습니까?" + System.getProperty("line.separator") +
+                            "운전자 이름 : '" + driverName + "' (소유차량 " + count + "대)";
+                    break;
+
+                case ENGLISH:
+                    dialogMessage = "Want to delete a driver and every owned cars?" + System.getProperty("line.separator")
+                        + "Driver Name: '" + driverName + "' (" + count + " owned cars)";
+                    break;
+
+                default:
+                    break;
+            }                
+
+            result = JOptionPane.showConfirmDialog(this, dialogMessage,
+                        DELETE_DIALOGTITLE.getContent(), 
+                        JOptionPane.YES_NO_OPTION);
         } else {
-            // delete a driver's record currently selected 
-            int[] deleteIndice = driverTable.getSelectedRows();
-            if (deleteIndice.length == 0)
-            {
-                return;
-            }
+            String dialogMessage = "";
 
-            int result = -1;
-            String driverName = (String)driverTable.getValueAt(deleteIndice[0], 1);
-            int modal_Index = driverTable.convertRowIndexToModel(deleteIndice[0]);
-            int CD_SEQ_NO = (int)driverTable.getModel().getValueAt(modal_Index, 
-                    DriverCol.SEQ_NO.getNumVal());
-            int count = getRecordCount("vehicles", CD_SEQ_NO);
+            switch(language){
+                case KOREAN:
+                    dialogMessage = "선택 된 " + deleteIndice.length + "명의 운전자정보와 차량 정보를 삭제하시겠습니까?"
+                                + System.getProperty("line.separator")
+                                + "첫번째 운전자 : '" + driverName + "' (소유차량" + count + "대)";
+                    break;
 
-            if (deleteIndice.length == 1) {
-                String dialogMessage = "";
-                
-                switch(language){
-                    case KOREAN:
-                        dialogMessage = "운전자 정보와 운전자 차량에 대한 정보를 삭제하시겠습니까?" + System.getProperty("line.separator") +
-                                "운전자 이름 : '" + driverName + "' (소유차량 " + count + "대)";
-                        break;
-                        
-                    case ENGLISH:
-                        dialogMessage = "Want to delete a driver and every owned cars?" + System.getProperty("line.separator")
-                            + "Driver Name: '" + driverName + "' (" + count + " owned cars)";
-                        break;
-                        
-                    default:
-                        break;
-                }                
-                
-                result = JOptionPane.showConfirmDialog(this, dialogMessage,
-                            DELETE_DIALOGTITLE.getContent(), 
-                            JOptionPane.YES_NO_OPTION);
-            } else {
-                String dialogMessage = "";
-                
-                switch(language){
-                    case KOREAN:
-                        dialogMessage = "선택 된 " + deleteIndice.length + "명의 운전자정보와 차량 정보를 삭제하시겠습니까?"
-                                    + System.getProperty("line.separator")
-                                    + "첫번째 운전자 : '" + driverName + "' (소유차량" + count + "대)";
-                        break;
+                case ENGLISH:
+                    dialogMessage = "Want to delete records of " + deleteIndice.length + " drivers and their car records?"
+                                + System.getProperty("line.separator")
+                                + "First Driver Name: '" + driverName + "' (" + count + " owned cars)";
+                    break;
 
-                    case ENGLISH:
-                        dialogMessage = "Want to delete records of " + deleteIndice.length + " drivers and their car records?"
-                                    + System.getProperty("line.separator")
-                                    + "First Driver Name: '" + driverName + "' (" + count + " owned cars)";
-                        break;
-                        
-                    default:
-                        break;
-                }                
-                
-                result = JOptionPane.showConfirmDialog(this, dialogMessage, 
-                            DELETE_DIALOGTITLE.getContent(), 
-                            JOptionPane.YES_NO_OPTION);
-            }
+                default:
+                    break;
+            }                
 
-            if (result == JOptionPane.YES_OPTION) {
-                // <editor-fold defaultstate="collapsed" desc="-- delete driver and car information ">   
-                Connection conn = null;
-                PreparedStatement createBuilding = null;
-                String excepMsg = "(while deleting a driver: " + driverName + ")";
-                int totalDeletion = 0;
+            result = JOptionPane.showConfirmDialog(this, dialogMessage, 
+                        DELETE_DIALOGTITLE.getContent(), 
+                        JOptionPane.YES_NO_OPTION);
+        }
 
-                result = -1;
-                try {
-                    String sql = "Delete From carDriver Where SEQ_NO = ?";
+        if (result == JOptionPane.YES_OPTION) {
+            // <editor-fold defaultstate="collapsed" desc="-- delete driver and car information ">   
+            Connection conn = null;
+            PreparedStatement createBuilding = null;
+            String excepMsg = "(while deleting a driver: " + driverName + ")";
+            int totalDeletion = 0;
 
-                    conn = getConnection();
-                    createBuilding = conn.prepareStatement(sql);
-                    for (int indexNo : deleteIndice) {
-                        modal_Index = driverTable.convertRowIndexToModel(indexNo);
-                        createBuilding.setInt(1, (int)driverTable.getModel().getValueAt(modal_Index, 
-                                DriverCol.SEQ_NO.getNumVal()));
-                        result = createBuilding.executeUpdate();
-                        totalDeletion += result;
-                    }
-                } catch (SQLException ex) {
-                    logParkingException(Level.SEVERE, ex, excepMsg);
-                } finally {
-                    closeDBstuff(conn, createBuilding, null, excepMsg);
+            result = -1;
+            try {
+                String sql = "Delete From carDriver Where SEQ_NO = ?";
 
-                    if (result == 1) {
-                        loadDriverData(deleteIndice[0], "", ""); // passes index of the deleted row
-
-                        String dialogMessage = "";
-                        
-                        switch(language){
-                            case KOREAN: 
-                                dialogMessage = 
-                                    driverName +"을 포함한 총 " + totalDeletion + "명의 운전자 정보가 삭제되었습니다.";  
-                                break;
-                                
-                            case ENGLISH: 
-                                dialogMessage = "Total " + totalDeletion + " driver(s)" + System.lineSeparator() +
-                                                "(including '" + driverName + "') " + System.lineSeparator() +
-                                                "deleted successfully.";
-                                break;
-                                
-                            default:
-                                break;
-                        }                        
-                        
-                        JOptionPane.showConfirmDialog(this, dialogMessage,
-                                DELETE_RESULT_DIALOGTITLE.getContent(),
-                                JOptionPane.PLAIN_MESSAGE, INFORMATION_MESSAGE);
-                    }
+                conn = getConnection();
+                createBuilding = conn.prepareStatement(sql);
+                for (int indexNo : deleteIndice) {
+                    modal_Index = driverTable.convertRowIndexToModel(indexNo);
+                    createBuilding.setInt(1, (int)driverTable.getModel().getValueAt(modal_Index, 
+                            DriverCol.SEQ_NO.getNumVal()));
+                    result = createBuilding.executeUpdate();
+                    totalDeletion += result;
                 }
-                //</editor-fold>
+            } catch (SQLException ex) {
+                logParkingException(Level.SEVERE, ex, excepMsg);
+            } finally {
+                closeDBstuff(conn, createBuilding, null, excepMsg);
+
+                if (result == 1) {
+                    loadDriverData(deleteIndice[0], "", ""); // passes index of the deleted row
+
+                    String dialogMessage = "";
+
+                    switch(language){
+                        case KOREAN: 
+                            dialogMessage = 
+                                driverName +"을 포함한 총 " + totalDeletion + "명의 운전자 정보가 삭제되었습니다.";  
+                            break;
+
+                        case ENGLISH: 
+                            dialogMessage = "Total " + totalDeletion + " driver(s)" + System.lineSeparator() +
+                                            "(including '" + driverName + "') " + System.lineSeparator() +
+                                            "deleted successfully.";
+                            break;
+
+                        default:
+                            break;
+                    }                        
+
+                    JOptionPane.showConfirmDialog(this, dialogMessage,
+                            DELETE_RESULT_DIALOGTITLE.getContent(),
+                            JOptionPane.PLAIN_MESSAGE, INFORMATION_MESSAGE);
+                }
             }
+            //</editor-fold>
         }
     }//GEN-LAST:event_deleteDriver_ButtonActionPerformed
 
@@ -2361,8 +2281,8 @@ public class ManageDrivers extends javax.swing.JFrame {
         };
         String[] columnNames = {
             ORDER_HEADER.getContent(), 
-            NAME_HEADER.getContent(), 
-            CELL_PHONE_HEADER.getContent(), 
+            NAME_HEADER.getContent() + " \u25CF", 
+            CELL_PHONE_HEADER.getContent() + " \u25CF", 
             PHONE_HEADER.getContent(), 
             HIGHER_HEADER.getContent(), 
             LOWER_HEADER.getContent(), 
@@ -2829,7 +2749,7 @@ public class ManageDrivers extends javax.swing.JFrame {
         
         DefaultTableCellRenderer renderer = new DefaultTableCellRenderer();
         renderer.setToolTipText("ComboBox pops up if clicked");
-        renderer.setHorizontalTextPosition(SwingConstants.LEFT);
+        renderer.setHorizontalTextPosition(SwingConstants.CENTER);
         
         JComboBox comboBox = new PComboBox();
         addItemChangeListener(comboBox);
@@ -2949,7 +2869,7 @@ public class ManageDrivers extends javax.swing.JFrame {
     boolean cellReqBlinked = false;
     
     private void startEditingCell(int rowM, int columnIndex) {
-        driverTable.requestFocusInWindow();
+//        driverTable.requestFocusInWindow();
         driverTable.changeSelection(rowM, columnIndex, false, false);
         if (columnIndex == 1) {
             (new LabelBlinker()).displayHelpMessages(tipLabel, 
@@ -2962,7 +2882,7 @@ public class ManageDrivers extends javax.swing.JFrame {
         } else {
             tipLabel.setText(FOCUS_MOVE_NOTE.getContent());
         }
-        driverTable.getEditorComponent().requestFocusInWindow();
+        //driverTable.getEditorComponent().requestFocusInWindow();
     }
 
     private void handleItemChange(int rowV, int rowM, int colM) {

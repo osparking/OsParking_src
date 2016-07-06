@@ -395,8 +395,8 @@ public class ControlEnums {
         ORDER_HEADER("순번", "Order"),
         HIGHER_HEADER("상위 소속", "Higher Affiliation"),
         LOWER_HEADER("하위 소속", "Lower Affiliation"),
-        BUILDING_HEADER("건물번호(숫자)", "Building(0~9)"),
-        ROOM_HEADER("호실번호(숫자)", "Room No(0~9)"),
+        BUILDING_HEADER("건물번호", "Building"),
+        ROOM_HEADER("호실번호", "Room No."),
         CAR_TAG_HEADER("차량번호", "Tag No."),
         DRIVER_HEADER("운전자", "Driver"),
         HIGH_LOW_HEADER("상위-하위 소속", "Higher-Lower"),
@@ -428,6 +428,9 @@ public class ControlEnums {
 
     public enum DialogMSGTypes {
          
+        DELETE_ALL_DRIVER_P1 ("아래 운전자 및 차량 정보를 삭제합니까?", "Want to delete below drivers and vehicles?"),
+        DELETE_ALL_DRIVER_P2 (" - 운전자 정보 건수 : ", " - Driver record count : "),
+        DELETE_ALL_DRIVER_P3 (" - 소유 차량 건수 : ",    " - Owned vehicle count : "),
         DRIVER_UPDATE_QUEST_P1 ("이 운전자를 수정하시겠습니까?", "Do you want to modify this driver?"),
         DRIVER_UPDATE_QUEST_P2 (" - 운전자 이름 : ", " - Driver name: "),
         DRIVER_UPDATE_QUEST_P3 ("(소유 차량 대수 : ", "(owning car count : "),

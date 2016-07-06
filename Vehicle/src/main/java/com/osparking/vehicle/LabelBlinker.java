@@ -59,29 +59,30 @@ public class LabelBlinker {
         }
     } 
     
-    public void displayHelpMessages(JLabel messageLabel, String message, 
-            String message2, boolean blinker) {
-
+    public void displayHelpMessages(JLabel messageLabel, String message1, 
+            String message2, boolean blinker) 
+    {
         Runnable runnable = new Runnable() {
             public void run() {
                 // task to run goes here
-                if (counter++ >= 4) {
-                    service.shutdown();
-                    messageLabel.setForeground(Color.gray);
-                    counter = 0;
-                } else {
+                if (counter++ < 4) {
                     if (counter % 2 == 1) {
                         messageLabel.setForeground(tipColor);
                     } else {
                         messageLabel.setForeground(tipColorTrans);
                     }
+                } else {
+                    service.shutdown();
+                    messageLabel.setText(message2);
+                    messageLabel.setForeground(Color.gray);
+                    counter = 0; // init for the next column/control
                 }
             }
         };
 
         messageLabel.setForeground(Color.gray);
         if (blinker) {
-            messageLabel.setText(message);
+            messageLabel.setText(message1);
             service = Executors.newSingleThreadScheduledExecutor();
             service.scheduleAtFixedRate(runnable, 0, 750, TimeUnit.MILLISECONDS);
         } else {
