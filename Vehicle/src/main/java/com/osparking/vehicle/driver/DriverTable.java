@@ -87,11 +87,18 @@ public class DriverTable extends JTable {
         
         DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
         centerRenderer.setHorizontalAlignment(JLabel.CENTER);        
-        getColumnModel().getColumn(1).setCellRenderer(centerRenderer);
         
-        getColumnModel().getColumn(0).setCellRenderer(numberCellRenderer);
-        getColumnModel().getColumn(6).setCellRenderer(numberCellRenderer);
-        getColumnModel().getColumn(7).setCellRenderer(numberCellRenderer);
+        for (DriverCol col : DriverCol.values()) {
+            if (col == DriverCol.RowNo ||
+                    col == DriverCol.BuildingNo ||
+                    col == DriverCol.UnitNo) 
+            {
+                getColumnModel().getColumn(col.getNumVal()).setCellRenderer(numberCellRenderer);
+            } else if (col != DriverCol.SEQ_NO) {
+                getColumnModel().getColumn(col.getNumVal()).setCellRenderer(centerRenderer);
+            }
+        }
+        
         setRowHeight(tableRowHeight);        
     }
     

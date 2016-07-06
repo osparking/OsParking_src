@@ -137,8 +137,6 @@ import static com.osparking.vehicle.CommonData.DTCW_UN;
 import static com.osparking.vehicle.CommonData.DTC_MARGIN;
 import com.osparking.vehicle.LabelBlinker;
 import java.awt.Color;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 import java.util.Locale;
 import javax.swing.JLabel;
 import javax.swing.SwingUtilities;
@@ -212,17 +210,7 @@ public class ManageDrivers extends javax.swing.JFrame {
             }
         });
         setupComboBoxColumn(DriverCol.AffiliationL2);
-        setupComboBoxColumn(DriverCol.UnitNo);    
-        
-        
-//        Set<AWTKeyStroke> forward = new HashSet<AWTKeyStroke>(
-//                driverTable.getFocusTraversalKeys(KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS));
-//        forward.add(KeyStroke.getKeyStroke("TAB"));
-//        table.setFocusTraversalKeys(KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS, forward);
-//        Set<AWTKeyStroke> backward = new HashSet<AWTKeyStroke>(
-//                driverTable.getFocusTraversalKeys(KeyboardFocusManager.BACKWARD_TRAVERSAL_KEYS));
-//        backward.add(KeyStroke.getKeyStroke("shift TAB"));
-//        table.setFocusTraversalKeys(KeyboardFocusManager.BACKWARD_TRAVERSAL_KEYS, backward);        
+        setupComboBoxColumn(DriverCol.UnitNo);
         
         loadDriverData(UNKNOWN, "", "");
     }
@@ -777,10 +765,10 @@ public class ManageDrivers extends javax.swing.JFrame {
             }
         });
         searchName.addInputMethodListener(new java.awt.event.InputMethodListener() {
-            public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
-            }
             public void inputMethodTextChanged(java.awt.event.InputMethodEvent evt) {
                 searchNameInputMethodTextChanged(evt);
+            }
+            public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
             }
         });
         searchName.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -2381,6 +2369,7 @@ public class ManageDrivers extends javax.swing.JFrame {
             BUILDING_HEADER.getContent(), 
             ROOM_HEADER.getContent(), 
             "CD_SEQ_NO"};
+        
         driverTable = new DriverTable(data, columnNames, this);
         driverTable.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         driverTable.getTableHeader().setFont(new java.awt.Font(font_Type, font_Style, font_Size));
@@ -2841,8 +2830,6 @@ public class ManageDrivers extends javax.swing.JFrame {
         DefaultTableCellRenderer renderer = new DefaultTableCellRenderer();
         renderer.setToolTipText("ComboBox pops up if clicked");
         renderer.setHorizontalTextPosition(SwingConstants.LEFT);
-        
-        comboCol.setCellRenderer(renderer);            
         
         JComboBox comboBox = new PComboBox();
         addItemChangeListener(comboBox);
