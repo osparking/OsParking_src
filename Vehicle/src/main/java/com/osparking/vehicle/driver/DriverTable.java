@@ -52,6 +52,8 @@ import static com.osparking.global.names.OSP_enums.DriverCol.UnitNo;
 import com.osparking.global.names.PComboBox;
 import static com.osparking.vehicle.driver.ManageDrivers.getPrompter;
 import java.awt.AWTKeyStroke;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.HashSet;
@@ -185,7 +187,6 @@ public class DriverTable extends JTable {
             Object prompter = getPrompter(DriverCol.AffiliationL2, objL1);
             comboBox.addItem((InnoComboBoxItem)prompter);
             parent.loadComboBoxItems(comboBox, DriverCol.AffiliationL2, L1_NO);
-            
             comboBox.setEditable(true); 
             Object item = driverTable.getValueAt(modRow, modCol);
             comboBox.setSelectedItem((InnoComboBoxItem)item);

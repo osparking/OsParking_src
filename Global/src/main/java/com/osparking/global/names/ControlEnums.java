@@ -199,7 +199,9 @@ public class ControlEnums {
         CREATE_SAVE_HELP("자료 생성 후 [엔터] 키로 마감(=저장)할 것!",
                 "Press enter after the data creation!"),
         REQUIRE_FIELD_NOTE("필수 입력 항목임!", "It's a Required field!"),
-        FOCUS_MOVE_NOTE("열 이동: Ctrl, Sht-Ctrl, 마우스", "Column move: Ctrl, Sht-Ctrl, Mouse"),
+        FOCUS_MOVE_NOTE(
+                "열 이동: 탭, Shift+탭, 마우스", 
+                "Col' move: Tab, Sh+Tab, Mouse"),
         
         UPDATE_SAVE_HELP("자료 갱신 후 [엔터] 키로 마감(=저장)할 것!",
                 "Press enter after the data modification!");

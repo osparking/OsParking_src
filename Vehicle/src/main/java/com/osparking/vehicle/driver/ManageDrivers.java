@@ -1010,7 +1010,7 @@ public class ManageDrivers extends javax.swing.JFrame {
         leftButtons.add(deleteDriver_Button);
 
         cancelDriver_Button.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        cancelDriver_Button.setMnemonic('d');
+        cancelDriver_Button.setMnemonic('C');
         cancelDriver_Button.setText("취소(C)");
         cancelDriver_Button.setEnabled(false);
         cancelDriver_Button.setMaximumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
@@ -1142,6 +1142,8 @@ public class ManageDrivers extends javax.swing.JFrame {
 
             int rowIndex = driverTable.getRowCount() - 1;
             boolean isNameEmpty = driverTable.getValueAt(rowIndex, 1).equals("");
+            
+            creatingRowM = rowIndex;
             if (!isNameEmpty) 
             {
                 rowIndex = 0;
@@ -1158,6 +1160,8 @@ public class ManageDrivers extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_insertSave_ButtonActionPerformed
 
+    static int creatingRowM = -1;    
+    
     private void deleteAllDriversActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteAllDriversActionPerformed
         int driverCount = getRecordCount("cardriver", -1);
         int vehiclecount = getRecordCount("vehicles", -1);
@@ -1372,12 +1376,12 @@ public class ManageDrivers extends javax.swing.JFrame {
             int col = driverTable.getSelectedColumn();
             int row = driverTable.convertRowIndexToModel(driverTable.getSelectedRow());
             
-            if (row == modifyingRowM)
+            if (row == modifyingRowM || row == creatingRowM && getFormMode() == FormMode.CreateMode)
             {
                 if (driverTable.editCellAt(row, col)) {
                     startEditingCell(row, col);
                 }
-                return; // driver info is still being updated
+                    return; // driver info is still being updated
             }
         }
 
@@ -1411,9 +1415,9 @@ public class ManageDrivers extends javax.swing.JFrame {
                     }
                 }
             }
-        } else {
-            if (getFormMode() == FormMode.CreateMode) {
-                if (driverTable.getModel().getValueAt(row, 0) == null) {
+        } else if (getFormMode() == FormMode.CreateMode) {
+            if (driverTable.getModel().getValueAt(row, 0) == null) {
+                if (col != editingCol) {
                     if (driverTable.editCellAt(row, col))
                     {
                         startEditingCell(row, col);
@@ -2867,9 +2871,17 @@ public class ManageDrivers extends javax.swing.JFrame {
     
     boolean nameReqBlinked = false;
     boolean cellReqBlinked = false;
-    
+    int callCount = 0;
+    int editingRow = -1;
+    int editingCol = -1;
     private void startEditingCell(int rowM, int columnIndex) {
-//        driverTable.requestFocusInWindow();
+        System.out.println("call count : " + callCount++);
+        if (callCount == 2) {
+            int i = 8;
+        }
+        
+        editingRow = rowM;
+        editingCol = columnIndex;
         driverTable.changeSelection(rowM, columnIndex, false, false);
         if (columnIndex == 1) {
             (new LabelBlinker()).displayHelpMessages(tipLabel, 
@@ -2882,7 +2894,8 @@ public class ManageDrivers extends javax.swing.JFrame {
         } else {
             tipLabel.setText(FOCUS_MOVE_NOTE.getContent());
         }
-        //driverTable.getEditorComponent().requestFocusInWindow();
+        driverTable.requestFocusInWindow();
+        driverTable.getEditorComponent().requestFocusInWindow();
     }
 
     private void handleItemChange(int rowV, int rowM, int colM) {
@@ -2991,8 +3004,9 @@ public class ManageDrivers extends javax.swing.JFrame {
     private void attachEnterHandler(JComponent compo) {
         Action handleEnter = new AbstractAction() {
             public void actionPerformed(ActionEvent e) {
-                if (e.getSource().getClass() == PComboBox.class) {
+            if (e.getSource().getClass() == PComboBox.class) {
                     PComboBox cBox = (PComboBox)e.getSource();
+                    
                     if (cBox.isPopupVisible()) {
                         ConvComboBoxItem item = (ConvComboBoxItem)cBox.getHighlightedCbxItem();
                         cBox.setSelectedItem(item);
