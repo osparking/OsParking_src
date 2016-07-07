@@ -3050,6 +3050,7 @@ public class ManageDrivers extends javax.swing.JFrame {
     public static Object getPrompter(DriverCol column, Object parentObj) {
         boolean complexItem = false;
         
+        System.out.println("getPrompter called");
         if (column == AffiliationL2 || column == UnitNo) {
             if (parentObj == null)
                 complexItem = true;
