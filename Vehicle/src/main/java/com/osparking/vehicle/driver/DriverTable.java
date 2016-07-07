@@ -54,6 +54,7 @@ import static com.osparking.vehicle.CommonData.refreshComboBox;
 import static com.osparking.vehicle.driver.ManageDrivers.getPrompter;
 import static com.osparking.vehicle.driver.ManageDrivers.loadComboBoxItems;
 import java.awt.AWTKeyStroke;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.HashSet;
@@ -182,23 +183,48 @@ public class DriverTable extends JTable {
             PComboBox<InnoComboBoxItem> comboBox = (PComboBox<InnoComboBoxItem>)
                     ((DefaultCellEditor)cBxCol.getCellEditor()).getComponent();
 
+            // Add essential event handlers to the ComboBox.
+            comboBox.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (((PComboBox)e.getSource()).isPopupVisible()) {
+                    System.out.println("L2 pop visible");
+                } else {
+                    System.out.println("L2 popup invisible");
+                    return;
+                }
+                java.awt.EventQueue.invokeLater(new Runnable() {
+                    public void run() { 
+//                        comboboxRippleEffectStop = true;
+
+                        int rowV = driverTable.getSelectedRow();
+                        int colV = driverTable.getSelectedColumn();
+
+                        if (rowV >= 0 && colV >= 0) {
+                            int rowM = driverTable.convertRowIndexToModel(rowV);
+                            int colM = driverTable.convertColumnIndexToModel(colV);
+//                            handleItemChange(rowV, rowM, colM);
+                        }
+//                        comboboxRippleEffectStop = false;
+                    }
+                });  
+            }
+        });
             // Construct combo box item list only when needed.
-            int cnt = comboBox.getItemCount();
+//            int cnt = comboBox.getItemCount();
             
-            if (level2RefreshNeeded(L1_key) || cnt == 0) {
+            if (level2RefreshNeeded(L1_key)) { //  || cnt == 0) {
                 System.out.println("L2 refreshing..............................");
-                Object objL1 = 
-                        driverTable.getValueAt(modRow, AffiliationL1.getNumVal());
+                Object objL1 = driverTable.getValueAt(modRow, AffiliationL1.getNumVal());
                 Object prompter = getPrompter(DriverCol.AffiliationL2, objL1);
                 
-                L1keyForWhichL2formed =
-                        refreshComboBox(comboBox, prompter, AffiliationL2, L1_key);
+                L1keyForWhichL2formed = refreshComboBox(comboBox, prompter, AffiliationL2, L1_key);
             
-                Object item = driverTable.getValueAt(modRow, modCol);
+//                Object item = driverTable.getValueAt(modRow, modCol);
 //                comboBox.setSelectedItem(item.toString());
 //                comboBox.setSelectedItem((InnoComboBoxItem)item);
                 cellEditor = new DefaultCellEditor(comboBox);
-                cBxCol.setCellEditor(cellEditor);
+//                cBxCol.setCellEditor(cellEditor);
             } else {
                 cellEditor = new DefaultCellEditor(comboBox);
             }
