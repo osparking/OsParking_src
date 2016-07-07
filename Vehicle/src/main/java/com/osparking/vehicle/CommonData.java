@@ -16,6 +16,10 @@
  */
 package com.osparking.vehicle;
 
+import com.osparking.global.names.OSP_enums;
+import static com.osparking.vehicle.driver.ManageDrivers.loadComboBoxItems;
+import javax.swing.JComboBox;
+
 /**
  *
  * @author Open Source Parking, Inc.(www.osparking.com)
@@ -43,4 +47,13 @@ public class CommonData {
     public static final int DTCW_BN = 110;
     public static final int DTCW_UN = 110;
     
+    public static int refreshComboBox(JComboBox comboBox, 
+            Object prompter, OSP_enums.DriverCol column, int parentkey) 
+    {
+        comboBox.removeAllItems();
+        comboBox.addItem(prompter);
+        loadComboBoxItems(comboBox, column, parentkey);
+        
+        return parentkey;
+    }
 }

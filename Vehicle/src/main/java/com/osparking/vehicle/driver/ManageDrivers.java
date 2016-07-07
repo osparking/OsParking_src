@@ -135,8 +135,10 @@ import static com.osparking.vehicle.CommonData.DTCW_MAX;
 import static com.osparking.vehicle.CommonData.DTCW_RN;
 import static com.osparking.vehicle.CommonData.DTCW_UN;
 import static com.osparking.vehicle.CommonData.DTC_MARGIN;
+import static com.osparking.vehicle.CommonData.refreshComboBox;
 import com.osparking.vehicle.LabelBlinker;
 import java.awt.Color;
+import java.awt.event.ActionListener;
 import java.util.Locale;
 import javax.swing.JLabel;
 import javax.swing.SwingUtilities;
@@ -192,14 +194,10 @@ public class ManageDrivers extends javax.swing.JFrame {
 
         affiliationL1CBox.setFont(null);
         
-        affiliationL1CBox.removeAllItems();
-        affiliationL1CBox.addItem(ManageDrivers.getPrompter(AffiliationL1, null));             
-        loadComboBoxItems(affiliationL1CBox, DriverCol.AffiliationL1, -1);
-        
-        buildingCBox.removeAllItems();
-        buildingCBox.addItem(ManageDrivers.getPrompter(DriverCol.BuildingNo, null));             
-        loadComboBoxItems(buildingCBox, DriverCol.BuildingNo, -1);
-        
+        refreshComboBox(affiliationL1CBox, 
+                ManageDrivers.getPrompter(AffiliationL1, null), AffiliationL1, -1);
+        refreshComboBox(buildingCBox, 
+                getPrompter(BuildingNo, null), BuildingNo, -1);
         initAffiliationComboBoxes(searchL1ComboBox, searchL2ComboBox, searchBuildingComboBox,
                 searchUnitComboBox);
         
@@ -762,10 +760,10 @@ public class ManageDrivers extends javax.swing.JFrame {
             }
         });
         searchName.addInputMethodListener(new java.awt.event.InputMethodListener() {
-            public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
-            }
             public void inputMethodTextChanged(java.awt.event.InputMethodEvent evt) {
                 searchNameInputMethodTextChanged(evt);
+            }
+            public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
             }
         });
         searchName.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -1531,9 +1529,8 @@ public class ManageDrivers extends javax.swing.JFrame {
     private void searchL1ComboBoxPopupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_searchL1ComboBoxPopupMenuWillBecomeVisible
         Object selItem = searchL1ComboBox.getSelectedItem();
 
-        searchL1ComboBox.removeAllItems();
-        searchL1ComboBox.addItem(getPrompter(AffiliationL1, searchL1ComboBox));     
-        loadComboBoxItems(searchL1ComboBox, AffiliationL1, -1);
+        refreshComboBox(searchL1ComboBox, getPrompter(AffiliationL1, searchL1ComboBox),
+                AffiliationL1, -1);
         searchL1ComboBox.setSelectedItem(selItem);        
     }//GEN-LAST:event_searchL1ComboBoxPopupMenuWillBecomeVisible
 
@@ -1542,23 +1539,29 @@ public class ManageDrivers extends javax.swing.JFrame {
         
         ConvComboBoxItem l1Item = (ConvComboBoxItem)searchL1ComboBox.getSelectedItem(); 
         int L1No = (Integer) l1Item.getKeyValue();        // normalize child combobox item 
-        searchL2ComboBox.removeAllItems();
-        searchL2ComboBox.addItem(getPrompter(AffiliationL2, searchL1ComboBox));     
-        loadComboBoxItems(searchL2ComboBox, DriverCol.AffiliationL2, L1No); 
+        
+        refreshComboBox(searchL2ComboBox, getPrompter(AffiliationL2, searchL1ComboBox),
+                AffiliationL2, L1No);        
         searchL2ComboBox.setSelectedItem(selItem);        
     }//GEN-LAST:event_searchL2ComboBoxPopupMenuWillBecomeVisible
 
     private void searchBuildingComboBoxPopupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_searchBuildingComboBoxPopupMenuWillBecomeVisible
         Object selItem = searchBuildingComboBox.getSelectedItem();
-        
-        searchBuildingComboBox.removeAllItems();
-        searchBuildingComboBox.addItem(getPrompter(BuildingNo, null));     
-        loadComboBoxItems(searchBuildingComboBox, BuildingNo, -1);
+
+        refreshComboBox(searchBuildingComboBox, getPrompter(BuildingNo, searchBuildingComboBox),
+                BuildingNo, -1);
         searchBuildingComboBox.setSelectedItem(selItem); 
     }//GEN-LAST:event_searchBuildingComboBoxPopupMenuWillBecomeVisible
 
     private void searchUnitComboBoxPopupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_searchUnitComboBoxPopupMenuWillBecomeVisible
-        loadUnitComboBox(searchL1ComboBox, searchBuildingComboBox, searchUnitComboBox);            
+        Object selItem = searchUnitComboBox.getSelectedItem();
+        ConvComboBoxItem bldgItem = (ConvComboBoxItem)searchBuildingComboBox.getSelectedItem(); 
+        int bldgNo = (Integer) bldgItem.getKeyValue();
+        
+        refreshComboBox(searchUnitComboBox, 
+                getPrompter(UnitNo, searchBuildingComboBox), UnitNo, bldgNo);
+        
+        searchUnitComboBox.setSelectedItem(selItem);            
     }//GEN-LAST:event_searchUnitComboBoxPopupMenuWillBecomeVisible
 
     private void clearButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearButtonActionPerformed
@@ -1904,21 +1907,6 @@ public class ManageDrivers extends javax.swing.JFrame {
             }
         });        
     }//GEN-LAST:event_searchUnitComboBoxPopupMenuWillBecomeInvisible
-
-    public static void loadUnitComboBox(JComboBox level1ComboBox, JComboBox buildingComboBox,
-            JComboBox unitComboBox) {
-        
-        Object selItem = unitComboBox.getSelectedItem();
-        
-        ConvComboBoxItem bldgItem
-                = (ConvComboBoxItem)buildingComboBox.getSelectedItem(); 
-        int bldgNo = (Integer) bldgItem.getKeyValue();        // normalize child combobox item 
-        
-        unitComboBox.removeAllItems();
-        unitComboBox.addItem(getPrompter(UnitNo, buildingComboBox));     
-        loadComboBoxItems(unitComboBox, UnitNo, bldgNo);
-        unitComboBox.setSelectedItem(selItem);         
-    }
 
     /**
      * @param args the command line arguments
@@ -2723,10 +2711,13 @@ public class ManageDrivers extends javax.swing.JFrame {
         comboBox.addItemListener(new ItemListener() {
             @Override
             public void itemStateChanged(ItemEvent e) {
-
                 if (e.getStateChange() == ItemEvent.SELECTED) {
-                    if (!((PComboBox)e.getSource()).isPopupVisible())
+                    if (((PComboBox)e.getSource()).isPopupVisible()) {
+                        System.out.println("pop visible");
+                    } else {
+                        System.out.println("pop invisible");
                         return;
+                    }
                     java.awt.EventQueue.invokeLater(new Runnable() {
                         public void run() { 
                             comboboxRippleEffectStop = true;
@@ -2756,7 +2747,36 @@ public class ManageDrivers extends javax.swing.JFrame {
         renderer.setHorizontalTextPosition(SwingConstants.CENTER);
         
         JComboBox comboBox = new PComboBox();
-        addItemChangeListener(comboBox);
+        comboBox.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JComboBox cb = (JComboBox)e.getSource();
+                cb.getSelectedItem();
+                
+                if (((PComboBox)e.getSource()).isPopupVisible()) {
+                    System.out.println("pop visible");
+                } else {
+                    System.out.println("pop invisible");
+                    return;
+                }
+                java.awt.EventQueue.invokeLater(new Runnable() {
+                    public void run() { 
+                        comboboxRippleEffectStop = true;
+
+                        int rowV = driverTable.getSelectedRow();
+                        int colV = driverTable.getSelectedColumn();
+
+                        if (rowV >= 0 && colV >= 0) {
+                            int rowM = driverTable.convertRowIndexToModel(rowV);
+                            int colM = driverTable.convertColumnIndexToModel(colV);
+                            handleItemChange(rowV, rowM, colM);
+                        }
+                        comboboxRippleEffectStop = false;
+                    }
+                });  
+            }
+        });
+//        addItemChangeListener(comboBox);
     
         comboCol.setCellEditor(new DefaultCellEditor(comboBox));
     }
@@ -3141,9 +3161,8 @@ public class ManageDrivers extends javax.swing.JFrame {
         int keyValue = (Integer)(currItem.getKeys()[0]);
 
         if (keyValue != -1) { // Child item is selected
-            // Select parent combo box item, in a kind of reverse direction.
+            // Assign parent combo box two items.
             parentCBox.removeAllItems();
-
             parentCBox.addItem(getPrompter((currColumn == AffiliationL2 ? AffiliationL1 : BuildingNo),
                     parentCBox));
             ConvComboBoxItem pItem 
@@ -3151,10 +3170,9 @@ public class ManageDrivers extends javax.swing.JFrame {
             parentCBox.addItem(pItem);
             parentCBox.setSelectedItem(pItem);
 
-            // Make current combo box to have only two items.
+            // Assign child combo box two items.
             currCBox.removeAllItems();
             currCBox.addItem(getPrompter(currColumn, parentCBox));
-
             InnoComboBoxItem onlyItem = new InnoComboBoxItem(
                     new int[]{keyValue}, new String[]{currItem.getLabels()[0]});
             currCBox.addItem(onlyItem);
