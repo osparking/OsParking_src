@@ -33,6 +33,11 @@ import javax.swing.table.DefaultTableCellRenderer;
  * @author Open Source Parking, Inc.
  */
 public class CommonData { // new Dimension(carTagWidth, 30)
+    /**
+     * Combobox selected item index when not selected.
+     */
+    public static final int NOT_SELECTED = -1; 
+    
     public static final int carTagWidth = 125; // Normal Width
     public static final int buttonWidthNorm = 90; // Normal Width
     public static final int buttonWidthWide = 110; // Wide Width

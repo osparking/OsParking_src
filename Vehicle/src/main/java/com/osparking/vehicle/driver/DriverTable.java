@@ -16,6 +16,7 @@
  */
 package com.osparking.vehicle.driver;
 
+import static com.osparking.global.CommonData.NOT_SELECTED;
 import static com.osparking.global.CommonData.numberCellRenderer;
 import static com.osparking.global.CommonData.tableRowHeight;
 import static com.osparking.vehicle.driver.ManageDrivers.driverTable;
@@ -52,8 +53,9 @@ import static com.osparking.global.names.OSP_enums.DriverCol.UnitNo;
 import com.osparking.global.names.PComboBox;
 import static com.osparking.vehicle.CommonData.refreshComboBox;
 import static com.osparking.vehicle.driver.ManageDrivers.getPrompter;
-import static com.osparking.vehicle.driver.ManageDrivers.loadComboBoxItems;
+import static com.osparking.vehicle.driver.ManageDrivers.handleItemChange;
 import java.awt.AWTKeyStroke;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.HashSet;
@@ -176,12 +178,51 @@ public class DriverTable extends JTable {
         if (modCol == DriverCol.AffiliationL2.getNumVal()) {
             //<editor-fold desc="-- Level 2 affiliation">
             Object objLevelOne = getValueAt(modRow, DriverCol.AffiliationL1.getNumVal() );
-            int L1_key = (Integer)(((ConvComboBoxItem)objLevelOne).getKeyValue());
+            int L1_key = (Integer)(((ConvComboBoxItem)objLevelOne).getKeyValue());            
             
             TableColumn cBxCol = driverTable.getColumnModel().getColumn(modCol);        
             PComboBox<InnoComboBoxItem> comboBox = (PComboBox<InnoComboBoxItem>)
                     ((DefaultCellEditor)cBxCol.getCellEditor()).getComponent();
+            
+            comboBox.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    propagateBackward(L1_key, e);
+                }
 
+                private void propagateBackward(int highKey, ActionEvent e) {
+                    JComboBox cb = (JComboBox)e.getSource();
+                    if (cb == null ) {
+                        int i = 0;
+                        return;
+                    }
+                    if ((InnoComboBoxItem)cb.getSelectedItem() == null ) {
+                        int i = 0;
+                        return;
+                    }
+                    int lowKey = ((InnoComboBoxItem)cb.getSelectedItem()).getKeys()[0];
+            
+                    if (highKey == NOT_SELECTED && lowKey != NOT_SELECTED) {
+                        System.out.println("Propagation is needed!");
+                        java.awt.EventQueue.invokeLater(new Runnable() {
+                            public void run() { 
+                                ManageDrivers.comboboxRippleEffectStop = true;
+
+                                int rowV = driverTable.getSelectedRow();
+                                int colV = driverTable.getSelectedColumn();
+
+                                if (rowV >= 0 && colV >= 0) {
+                                    int rowM = driverTable.convertRowIndexToModel(rowV);
+                                    int colM = driverTable.convertColumnIndexToModel(colV);
+                                    handleItemChange(rowV, rowM, colM);
+                                }
+                                ManageDrivers.comboboxRippleEffectStop = false;
+                            }
+                        });  
+                    }
+                }
+            });
+            
             // Construct combo box item list only when needed.
             int cnt = comboBox.getItemCount();
             
@@ -333,7 +374,7 @@ public class DriverTable extends JTable {
         
         JComponent compo = (JComponent)((DefaultCellEditor)cellEditor).getComponent();
         compo.getInputMap().put(KeyStroke.getKeyStroke("ENTER"), "handleEnter");
-        compo.getActionMap().put("handleEnter", handleEnter);  
+//        compo.getActionMap().put("handleEnter", handleEnter);  
         // </editor-fold>
         
         if (modCol == AffiliationL1.getNumVal() 

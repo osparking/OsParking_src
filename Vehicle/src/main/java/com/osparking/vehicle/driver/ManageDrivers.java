@@ -175,7 +175,7 @@ public class ManageDrivers extends javax.swing.JFrame {
         insertSave_Button.setText(CREATE_BTN.getContent());
         deleteDriver_Button.setText(DELETE_BTN.getContent());
         cancelDriver_Button.setText(CANCEL_BTN.getContent());
-        deleteAllDrivers.setText(DELETE_ALL_BTN.getContent());
+        deleteAll_button.setText(DELETE_ALL_BTN.getContent());
         readSheet_Button.setText(READ_ODS_BTN.getContent());
         saveSheet_Button.setText(SAVE_ODS_BTN.getContent());
         closeFormButton.setText(CLOSE_BTN.getContent());
@@ -252,7 +252,7 @@ public class ManageDrivers extends javax.swing.JFrame {
         closeFormButton.setEnabled(flag);           // 
         cancelDriver_Button.setEnabled(!flag);        
         saveSheet_Button.setEnabled(flag);          // 
-        deleteAllDrivers.setEnabled(flag);          // in normal !(not)
+        deleteAll_button.setEnabled(flag);          // in normal !(not)
     }    
     
     /**
@@ -327,7 +327,7 @@ public class ManageDrivers extends javax.swing.JFrame {
                 {
                     if (driverTable.getSelectedRowCount() > 0) {
                         modiSave_Button.setEnabled(true);
-                        deleteAllDrivers.setEnabled(true);
+                        deleteAll_button.setEnabled(true);
                         deleteDriver_Button.setEnabled(true);
                     }                    
                     return;
@@ -521,7 +521,7 @@ public class ManageDrivers extends javax.swing.JFrame {
         deleteDriver_Button = new javax.swing.JButton();
         cancelDriver_Button = new javax.swing.JButton();
         rightButtons = new javax.swing.JPanel();
-        deleteAllDrivers = new javax.swing.JButton();
+        deleteAll_button = new javax.swing.JButton();
         readSheet_Button = new javax.swing.JButton();
         saveSheet_Button = new javax.swing.JButton();
         closeFormButton = new javax.swing.JButton();
@@ -760,10 +760,10 @@ public class ManageDrivers extends javax.swing.JFrame {
             }
         });
         searchName.addInputMethodListener(new java.awt.event.InputMethodListener() {
+            public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
+            }
             public void inputMethodTextChanged(java.awt.event.InputMethodEvent evt) {
                 searchNameInputMethodTextChanged(evt);
-            }
-            public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
             }
         });
         searchName.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -1026,20 +1026,20 @@ public class ManageDrivers extends javax.swing.JFrame {
         rightButtons.setPreferredSize(new java.awt.Dimension(470, 40));
         rightButtons.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT, 10, 0));
 
-        deleteAllDrivers.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        deleteAllDrivers.setMnemonic('a');
-        deleteAllDrivers.setText("전체삭제(E)");
-        deleteAllDrivers.setEnabled(false);
-        deleteAllDrivers.setMargin(new java.awt.Insets(0, 0, 0, 0));
-        deleteAllDrivers.setMaximumSize(new Dimension(CommonData.buttonWidthWide, buttonHeightNorm));
-        deleteAllDrivers.setMinimumSize(new Dimension(CommonData.buttonWidthWide, buttonHeightNorm));
-        deleteAllDrivers.setPreferredSize(new Dimension(CommonData.buttonWidthWide, buttonHeightNorm));
-        deleteAllDrivers.addActionListener(new java.awt.event.ActionListener() {
+        deleteAll_button.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        deleteAll_button.setMnemonic('a');
+        deleteAll_button.setText("전체삭제(E)");
+        deleteAll_button.setEnabled(false);
+        deleteAll_button.setMargin(new java.awt.Insets(0, 0, 0, 0));
+        deleteAll_button.setMaximumSize(new Dimension(CommonData.buttonWidthWide, buttonHeightNorm));
+        deleteAll_button.setMinimumSize(new Dimension(CommonData.buttonWidthWide, buttonHeightNorm));
+        deleteAll_button.setPreferredSize(new Dimension(CommonData.buttonWidthWide, buttonHeightNorm));
+        deleteAll_button.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                deleteAllDriversActionPerformed(evt);
+                deleteAll_buttonActionPerformed(evt);
             }
         });
-        rightButtons.add(deleteAllDrivers);
+        rightButtons.add(deleteAll_button);
 
         readSheet_Button.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         readSheet_Button.setMnemonic('O');
@@ -1160,7 +1160,7 @@ public class ManageDrivers extends javax.swing.JFrame {
 
     static int creatingRowM = -1;    
     
-    private void deleteAllDriversActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteAllDriversActionPerformed
+    private void deleteAll_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteAll_buttonActionPerformed
         int driverCount = getRecordCount("cardriver", -1);
         int vehiclecount = getRecordCount("vehicles", -1);
         
@@ -1197,7 +1197,7 @@ public class ManageDrivers extends javax.swing.JFrame {
                         JOptionPane.PLAIN_MESSAGE, INFORMATION_MESSAGE);
             }
         }
-    }//GEN-LAST:event_deleteAllDriversActionPerformed
+    }//GEN-LAST:event_deleteAll_buttonActionPerformed
    
     private void modiSave_ButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modiSave_ButtonActionPerformed
         int rowV = driverTable.getSelectedRow();
@@ -2062,7 +2062,7 @@ public class ManageDrivers extends javax.swing.JFrame {
         int numRows = model.getRowCount();
         
         if (numRows > 0) {  
-            deleteAllDrivers.setEnabled(true);
+            deleteAll_button.setEnabled(true);
             // <editor-fold defaultstate="collapsed" desc="-- Highlight a selected driver">                          
             if (driverName.length() > 0) {
                 viewIndex = driverTable.convertRowIndexToView(model_Index);
@@ -2091,7 +2091,7 @@ public class ManageDrivers extends javax.swing.JFrame {
     public javax.swing.JButton closeFormButton;
     private javax.swing.JLabel countLbl;
     private javax.swing.JLabel countValue;
-    private javax.swing.JButton deleteAllDrivers;
+    private javax.swing.JButton deleteAll_button;
     private javax.swing.JButton deleteDriver_Button;
     private javax.swing.JScrollPane driversScrollPane;
     public static javax.swing.JTable driversTable;
@@ -2705,7 +2705,7 @@ public class ManageDrivers extends javax.swing.JFrame {
         driverTable.requestFocusInWindow();
     }
 
-    static boolean comboboxRippleEffectStop = false;
+    public static boolean comboboxRippleEffectStop = false;
         
     public void addItemChangeListener(JComboBox comboBox) {
         comboBox.addItemListener(new ItemListener() {
@@ -2738,46 +2738,50 @@ public class ManageDrivers extends javax.swing.JFrame {
         });          
     }    
     
-    private void setupComboBoxColumn(DriverCol column) {
-        TableColumn comboCol 
-                = driverTable.getColumnModel().getColumn(column.getNumVal());
-        
+    /**
+     * Set up complex item selection upward propagation for the lower 
+     * comboboxes.
+     * @param column Table column index for the lower level combo boxes.
+     */
+    private void setupComboBoxColumn(DriverCol column) {        
         DefaultTableCellRenderer renderer = new DefaultTableCellRenderer();
         renderer.setToolTipText("ComboBox pops up if clicked");
         renderer.setHorizontalTextPosition(SwingConstants.CENTER);
         
         JComboBox comboBox = new PComboBox();
-        comboBox.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                JComboBox cb = (JComboBox)e.getSource();
-                cb.getSelectedItem();
-                
-                if (((PComboBox)e.getSource()).isPopupVisible()) {
-                    System.out.println("pop visible");
-                } else {
-                    System.out.println("pop invisible");
-                    return;
-                }
-                java.awt.EventQueue.invokeLater(new Runnable() {
-                    public void run() { 
-                        comboboxRippleEffectStop = true;
-
-                        int rowV = driverTable.getSelectedRow();
-                        int colV = driverTable.getSelectedColumn();
-
-                        if (rowV >= 0 && colV >= 0) {
-                            int rowM = driverTable.convertRowIndexToModel(rowV);
-                            int colM = driverTable.convertColumnIndexToModel(colV);
-                            handleItemChange(rowV, rowM, colM);
-                        }
-                        comboboxRippleEffectStop = false;
-                    }
-                });  
-            }
-        });
+//        comboBox.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//                JComboBox cb = (JComboBox)e.getSource();
+//                Object selObj = cb.getSelectedItem();
+//                
+//                if (((PComboBox)e.getSource()).isPopupVisible()) {
+//                    System.out.println("pop visible");
+//                } else {
+//                    System.out.println("pop invisible");
+//                    return;
+//                }
+//                java.awt.EventQueue.invokeLater(new Runnable() {
+//                    public void run() { 
+//                        comboboxRippleEffectStop = true;
+//
+//                        int rowV = driverTable.getSelectedRow();
+//                        int colV = driverTable.getSelectedColumn();
+//
+//                        if (rowV >= 0 && colV >= 0) {
+//                            int rowM = driverTable.convertRowIndexToModel(rowV);
+//                            int colM = driverTable.convertColumnIndexToModel(colV);
+//                            handleItemChange(rowV, rowM, colM);
+//                        }
+//                        comboboxRippleEffectStop = false;
+//                    }
+//                });  
+//            }
+//        });
 //        addItemChangeListener(comboBox);
-    
+        TableColumn comboCol 
+                = driverTable.getColumnModel().getColumn(column.getNumVal());    
+        
         comboCol.setCellEditor(new DefaultCellEditor(comboBox));
     }
 
@@ -2918,19 +2922,19 @@ public class ManageDrivers extends javax.swing.JFrame {
         driverTable.getEditorComponent().requestFocusInWindow();
     }
 
-    private void handleItemChange(int rowV, int rowM, int colM) {
+    public static void handleItemChange(int rowV, int rowM, int colM) {
         // user wants to change driver info or continues changing it
         int colV2 = driverTable.convertColumnIndexToView(colM + 1); 
         
         if (colM == AffiliationL1.getNumVal())
         {
-            int colM2 = DriverCol.AffiliationL2.getNumVal();
-            driverTable.setValueAt(ManageDrivers.getPrompter(AffiliationL1, null), rowM, colM2);
+            int colM2 = AffiliationL2.getNumVal();
+            driverTable.setValueAt(getPrompter(AffiliationL1, null), rowM, colM2);
         } 
         else if (colM == BuildingNo.getNumVal())
         {
             int colM2 = UnitNo.getNumVal();
-            driverTable.setValueAt(ManageDrivers.getPrompter(BuildingNo, null), rowM, colM2); 
+            driverTable.setValueAt(getPrompter(BuildingNo, null), rowM, colM2); 
         }
         else
         {
