@@ -224,22 +224,20 @@ public class DriverTable extends JTable {
             });
             
             // Construct combo box item list only when needed.
-            int cnt = comboBox.getItemCount();
+//            int cnt = comboBox.getItemCount();
             
-            if (level2RefreshNeeded(L1_key) || cnt == 0) {
+            if (level2RefreshNeeded(L1_key)) { //  || cnt == 0) {
                 System.out.println("L2 refreshing..............................");
-                Object objL1 = 
-                        driverTable.getValueAt(modRow, AffiliationL1.getNumVal());
+                Object objL1 = driverTable.getValueAt(modRow, AffiliationL1.getNumVal());
                 Object prompter = getPrompter(DriverCol.AffiliationL2, objL1);
                 
-                L1keyForWhichL2formed =
-                        refreshComboBox(comboBox, prompter, AffiliationL2, L1_key);
+                L1keyForWhichL2formed = refreshComboBox(comboBox, prompter, AffiliationL2, L1_key);
             
-                Object item = driverTable.getValueAt(modRow, modCol);
+//                Object item = driverTable.getValueAt(modRow, modCol);
 //                comboBox.setSelectedItem(item.toString());
 //                comboBox.setSelectedItem((InnoComboBoxItem)item);
                 cellEditor = new DefaultCellEditor(comboBox);
-                cBxCol.setCellEditor(cellEditor);
+//                cBxCol.setCellEditor(cellEditor);
             } else {
                 cellEditor = new DefaultCellEditor(comboBox);
             }
