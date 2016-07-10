@@ -52,6 +52,11 @@ public class InnoComboBoxItem { // Inno stands for Innovative
         }
     }
     
+    /**
+     * Check the equality of this item with the given item.
+     * @param rhs the given item to compare with this item
+     * @return true when the two items have the same size and contents.
+     */
     @Override
     public boolean equals(Object rhs) {
         
@@ -64,12 +69,14 @@ public class InnoComboBoxItem { // Inno stands for Innovative
                         && rightOne.labels.length == this.labels.length) 
                 {
                     for (int idx = 0; idx < this.keys.length; idx++) {
-                        if (rightOne.keys[idx] != this.keys[idx])
+                        if (rightOne.keys[idx] != this.keys[idx]) {
                             return false;
+                        }
                     }
                     for (int idx = 0; idx < this.labels.length; idx++) {
-                        if (rightOne.labels[idx] != this.labels[idx])
+                        if (!rightOne.labels[idx].equals(this.labels[idx])) {
                             return false;
+                        }
                     }
                     return true;
                 } else {

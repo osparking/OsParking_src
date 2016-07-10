@@ -47,13 +47,41 @@ public class CommonData {
     public static final int DTCW_BN = 110;
     public static final int DTCW_UN = 110;
     
+    /**
+     * Key of the parent combobox item for which (this) child combobox item
+     * listing is formed.
+     */
+    private static int[] prevParentKey = new int[OSP_enums.DriverCol.values().length];    
+    
+    /**
+     * Update(=refresh) items listing for a combo box.
+     * 
+     * @param comboBox the combo box to refresh
+     * @param prompter the prompter(=first placeholder) item of the combo box
+     * @param column table column index of the combo box
+     * @param parentkey the key value of the parent combo box item for which 
+     *                     this combo box item listing is to be formed.
+     * @return 
+     */
     public static int refreshComboBox(JComboBox comboBox, 
             Object prompter, OSP_enums.DriverCol column, int parentkey) 
     {
         comboBox.removeAllItems();
         comboBox.addItem(prompter);
         loadComboBoxItems(comboBox, column, parentkey);
-        
+        if (column == OSP_enums.DriverCol.AffiliationL2 
+                || column == OSP_enums.DriverCol.UnitNo) 
+        {
+            setPrevParentKey(column, parentkey);
+        }
         return parentkey;
+    }
+
+    public static void setPrevParentKey(OSP_enums.DriverCol column, int parentkey) {
+        prevParentKey[column.getNumVal()] = parentkey;
+    }
+    
+    public static int getPrevParentKey(OSP_enums.DriverCol column) {
+        return prevParentKey[column.getNumVal()];
     }
 }

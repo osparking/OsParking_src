@@ -17,7 +17,7 @@
 package com.osparking.osparking;
 
 import com.osparking.vehicle.driver.ManageDrivers;
-import static com.osparking.vehicle.driver.ManageDrivers.initAffiliationComboBoxes;
+import static com.osparking.vehicle.driver.ManageDrivers.initSearchComboBox;
 import static com.osparking.vehicle.driver.ManageDrivers.loadComboBoxItems;
 import static com.osparking.vehicle.driver.ManageDrivers.loadUnitComboBox;
 import java.awt.Point;
@@ -85,7 +85,7 @@ public class VisitingCar extends javax.swing.JFrame {
         visitTimeTextField.setText("'" + new SimpleDateFormat ("a hh:mm:ss").
                 format(arrivalTime));
         
-        initAffiliationComboBoxes(highLevelComboBox, lowLevelComboBox, 
+        initSearchComboBox(highLevelComboBox, lowLevelComboBox, 
                 buildingComboBox, unitComboBox);
         visitReasonTextField.setText("");
         gateNameTextField.setText(gateNames[gateNo]);

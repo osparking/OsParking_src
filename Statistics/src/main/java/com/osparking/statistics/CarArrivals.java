@@ -84,7 +84,7 @@ import static com.osparking.global.names.OSP_enums.DriverCol.UnitNo;
 import com.osparking.global.names.PComboBox;
 import com.osparking.global.names.OSP_enums.SearchPeriod;
 import static com.osparking.vehicle.driver.ManageDrivers.getPrompter;
-import static com.osparking.vehicle.driver.ManageDrivers.initAffiliationComboBoxes;
+import static com.osparking.vehicle.driver.ManageDrivers.initSearchComboBox;
 import static com.osparking.vehicle.driver.ManageDrivers.loadComboBoxItems;
 import static com.osparking.vehicle.driver.ManageDrivers.loadUnitComboBox;
 import java.awt.event.ActionEvent;
@@ -1796,7 +1796,7 @@ public class CarArrivals extends javax.swing.JFrame {
             gateCB.addItem(new ConvComboBoxItem(new Integer(i), gateNames[i]));
         }
         
-        initAffiliationComboBoxes(searchL1ComboBox, searchL2ComboBox,
+        initSearchComboBox(searchL1ComboBox, searchL2ComboBox,
                 searchBuildingComboBox, searchUnitComboBox);        
         
         addBarOperationItems();

@@ -386,6 +386,7 @@ public class ControlEnums {
     }
     
     public enum TableTypes {
+        REQUIRED("필수", "Req'"),
         USER_ID_HEADER("아이디", "User ID"),
         NAME_HEADER("이름", "Name"),
         MANAGER_HEADER("매니저", "Manager"),
