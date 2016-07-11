@@ -17,6 +17,8 @@
 package com.osparking.vehicle;
 
 import com.osparking.global.names.OSP_enums;
+import static com.osparking.global.names.OSP_enums.DriverCol.AffiliationL2;
+import static com.osparking.global.names.OSP_enums.DriverCol.UnitNo;
 import static com.osparking.vehicle.driver.ManageDrivers.loadComboBoxItems;
 import javax.swing.JComboBox;
 
@@ -64,14 +66,12 @@ public class CommonData {
      * @return 
      */
     public static int refreshComboBox(JComboBox comboBox, 
-            Object prompter, OSP_enums.DriverCol column, int parentkey) 
+            Object prompter, OSP_enums.DriverCol column, int parentkey)
     {
         comboBox.removeAllItems();
         comboBox.addItem(prompter);
         loadComboBoxItems(comboBox, column, parentkey);
-        if (column == OSP_enums.DriverCol.AffiliationL2 
-                || column == OSP_enums.DriverCol.UnitNo) 
-        {
+        if (column == AffiliationL2 || column == UnitNo) {
             setPrevParentKey(column, parentkey);
         }
         return parentkey;

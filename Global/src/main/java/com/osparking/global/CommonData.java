@@ -38,6 +38,7 @@ public class CommonData { // new Dimension(carTagWidth, 30)
      * Combobox selected item index when not selected.
      */
     public static final int NOT_SELECTED = -1; 
+    public static final int PROMPTER_KEY = 0; 
     
     public static final int carTagWidth = 125; // Normal Width
     public static final int buttonWidthNorm = 90; // Normal Width

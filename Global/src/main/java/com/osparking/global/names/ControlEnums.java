@@ -122,7 +122,7 @@ public class ControlEnums {
         BUILDING_MODE_STRING("건물, 호실", "Building, Units"), 
         WORK_PANEL_LABEL("작업 대상 : ",  "Work Panel :"), 
         SEARCH_MODE_LABEL("검색",  "Searching"), 
-        CREATE_MODE_LABEL("등록",  "Car Creation"), 
+        CREATE_MODE_LABEL("생성",  "Car Creation"), 
         MODIFY_MODE_LABEL("수정",  "Modification"), 
         SEARCH_LABEL("검색키",  "S'Key"), 
         ORDER_LABEL("순번",  "List#"), 
@@ -144,7 +144,7 @@ public class ControlEnums {
         REGISTERED_LABEL("등록된 차량번호",  "Tag Registered"),
         AFFILIATION_LABEL ("소속부서",  "Affiliations"),
         BUILDING_LABEL ("소속건물",  "Building"),
-        ROOM_LABEL("호수",  "Room No."),
+        ROOM_LABEL("호실",  "Room No."),
         VISIT_PURPOSE_LABEL("방문목적",  "Purpose of Visit"),
         VISIT_WHERE_LABEL ("방문 하는 곳",  "Where to go"),
         FILE_SIZE_LABEL ("파일 크기",  "File Size"),
@@ -364,7 +364,7 @@ public class ControlEnums {
         LANDLINE_INPUT_TOOLTIP("유선전화로 검색", "Search LandLine"),
         HIGHER_TOOLTIP("상위 소속으로 검색", "Search Higher Affiliation"),
         LOWER_TOOLTIP("하위 소속로 검색", "Search Lower Affiliation"),
-        UNIT_TOOLTIP("호수로 검색", "Search Unit"),
+        UNIT_TOOLTIP("호실번호로 검색", "Search Unit"),
         CLEAR_BTN_TOOLTIP("영역 초기화", "Clears Criteria"),
         FIX_IT_BTN_TOOLTIP("선택된 라디오 버튼을 적용", "Remember Radio Button Selection"),
         CAR_TAG_TF_TOOLTIP("입력 후 [엔터]", "Type and [Enter]"),
@@ -522,7 +522,18 @@ public class ControlEnums {
                             + System.getProperty("line.separator") 
                             + "Press [Yes], to edit cell phone number," 
                             + System.getProperty("line.separator") 
-                            + "Press [No], to finish operation."),
+                            + "Press [No], to give up operation."),
+        
+        MISSING_PHONE_HANDLING("\"전화\" 번호는 최소 4 자리입니다." 
+                            + System.getProperty("line.separator") 
+                            + "[예] 버튼을 누르면, 전화 란으로 이동합니다." 
+                            + System.getProperty("line.separator") 
+                            + "[아니오]를 누르면, 현재 연산이 포기됩니다.", 
+                "\"Phone number\" is at least 4 digits." 
+                            + System.getProperty("line.separator") 
+                            + "Press [Yes], to edit phone number," 
+                            + System.getProperty("line.separator") 
+                            + "Press [No], to give up operation."),
 
         MISSING_NAME_HANDLING("\"운전자 이름\"이 두 글자를 넘어야 됩니다."
                             + System.getProperty("line.separator") 
@@ -560,7 +571,7 @@ public class ControlEnums {
                 "* No one can delete own account" + System.getProperty("line.separator")
         ),
         DRIVER_CLOSE_FORM_DIALOG(
-                "생성/수정 중인정보를 포기하시겟습니까?", "Want to desert car information being created/modified?"),
+                " 중인 운전자 정보를 버리겠습니까?", "Want to desert driver in "),
         
         DATE_INPUT_CHECK_DIALOG("시작일과 종료일을 모두 입력하십시오", "Enter starting and ending date both"),
         
@@ -887,7 +898,7 @@ public class ControlEnums {
         HIGHER_CB_ITEM("(상위 소속)", "(Higher Group)"),
         LOWER_CB_ITEM("(하위 소속)", "(Lower Group)"),
         BUILDING_CB_ITEM("(건물 번호)", "(Building No,)"),
-        ROOM_CB_ITEM("(호수)", "(Room No.)"),
+        ROOM_CB_ITEM("(호실)", "(Room No.)"),
         GATE_CB_ITEM("(입구)", "(Gate)"),
         ATTENDANT_CB_ITEM("(관리원)", "(Attendant)"),
         BAR_CB_ITEM("(차단기)", "(Unselected)"),
