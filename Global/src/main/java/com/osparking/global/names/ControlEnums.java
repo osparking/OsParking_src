@@ -122,7 +122,7 @@ public class ControlEnums {
         BUILDING_MODE_STRING("건물, 호실", "Building, Units"), 
         WORK_PANEL_LABEL("작업 대상 : ",  "Work Panel :"), 
         SEARCH_MODE_LABEL("검색",  "Searching"), 
-        CREATE_MODE_LABEL("생성",  "Car Creation"), 
+        CREATE_MODE_LABEL("생성",  "Creation"), 
         MODIFY_MODE_LABEL("수정",  "Modification"), 
         SEARCH_LABEL("검색키",  "S'Key"), 
         ORDER_LABEL("순번",  "List#"), 
@@ -493,37 +493,33 @@ public class ControlEnums {
         
         MISSING_CELL_HANDLING("\"휴대전화\" 번호는 최소 10 자리입니다." 
                             + System.getProperty("line.separator") 
-                            + "[예] 버튼을 누르면, 휴대전화 란으로 이동합니다." 
+                            + "[예] => 바른 휴대전화 번호 입력" 
                             + System.getProperty("line.separator") 
-                            + "[아니오]를 선택하면 작업을 포기합니다!", 
+                            + "[아니오] => 운전자 ", 
                 "\"Cell phone number\" is at least 10 digits." 
                             + System.getProperty("line.separator") 
-                            + "Press [Yes], to edit cell phone number," 
+                            + "[Yes] => to edit cell phone number" 
                             + System.getProperty("line.separator") 
-                            + "Press [No], to give up work."),
+                            + "[No] => to give up driver "),
         
         MISSING_PHONE_HANDLING("\"전화\" 번호는 최소 4 자리입니다." 
                             + System.getProperty("line.separator") 
-                            + "[예] 버튼을 누르면, 전화 란으로 이동합니다." 
+                            + "[예] => 바른 전화번호 입력" 
                             + System.getProperty("line.separator") 
-                            + "[아니오]를 선택하면 작업을 포기합니다!", 
+                            + "[아니오] => 운전자 ", 
                 "\"Phone number\" is at least 4 digits." 
                             + System.getProperty("line.separator") 
-                            + "Press [Yes], to edit phone number," 
+                            + "[Yes] => to edit phone number" 
                             + System.getProperty("line.separator") 
-                            + "Press [No], to give up work."),
+                            + "[No] => to give up driver "),
 
-        MISSING_NAME_HANDLING("\"운전자 이름\"이 두 글자를 넘어야 됩니다."
-                            + System.getProperty("line.separator") 
-                            + "[예] 버튼을 누르면 이름 입력란으로 이동하고," 
-                            + System.getProperty("line.separator") 
-                            + "[아니오]를 선택하면 작업을 포기합니다!", 
-                "\"Name\" should be longer than 1 character." 
-                            + System.getProperty("line.separator") 
-                            + "By pressing [Yes], focus will move to name field." 
-                            + System.getProperty("line.separator") 
-                            + "Press [No], to give up work."),
-        
+        MISSING_NAME_HANDLING("\"운전자 이름\"은 두 자를 넘어야 합니다." + System.getProperty("line.separator") 
+                            + "[예] => 바른 이름 입력" + System.getProperty("line.separator") 
+                            + "[아니오] => 운전자 ", 
+                "\"Name\" should be longer than 1 character." + System.getProperty("line.separator") 
+                            + "[Yes] => to enter right name" + System.getProperty("line.separator") 
+                            + "[No] => to give up driver "),
+        MISSING_NAME_2(" 포기!", ""),
         USER_RIGHTS_DESCRIPTION("1. 관리자(ID: admin) : 상위" + System.getProperty("line.separator") +
                 "    - 매니저 및 일반에 대한 모든 권한" + System.getProperty("line.separator") +
                 "      (모든 권한: 삽입, 갱신, 삭제)" + System.getProperty("line.separator") +
@@ -549,7 +545,7 @@ public class ControlEnums {
                 "* No one can delete own account" + System.getProperty("line.separator")
         ),
         DRIVER_CLOSE_FORM_DIALOG(
-                " 중인 운전자 정보를 버리겠습니까?", "Want to desert driver in "),
+                " 중인 운전자 정보를 버리겠습니까?", " will be discarded, is it OK?"),
         
         DATE_INPUT_CHECK_DIALOG("시작일과 종료일을 모두 입력하십시오", "Enter starting and ending date both"),
         
@@ -639,19 +635,21 @@ public class ControlEnums {
         INPUT_ID_DIALOG("\"아이디\"를 입력하세요.", "Enter \'Login ID\'!"),
         INPUT_PW_DIALOG("\"비밀번호\"를 입력하세요.", "Enter \'Password\'"),
         
-        L2_INPUT_DIALOG("\"하위소속\"을 선택하지 않으셨습니다.\n"
-                + "하위소속을 선택 하시겠습니까 ?\n"
-                + "아니요 버튼을 누르게 되면 상위 소속이 초기화됩니다.\n", 
-                "You did not select \'Lower Affiliation\'\n"
-                + "Do you want to Select Lower Affiliation ?\n"
-                + "If you choose \'no\',  Higher will be reset"),
+        L2_INPUT_DIALOG("\"하위소속\"을 선택 하시겠습니까?.\n"
+                + "[예] => 하위소속 선택\n"
+                + "[아니오] => 소속 수정 취소\n"
+                + "[취소] => 전체 수정 취소\n", 
+                " Want to select \'Lower Affiliation\'?\n"
+                + "[Yes] => to select Lower Affiliation\n"
+                + "[No] => to cancel affiliation update\n"
+                + "[Cancel] => to cancel driver update"),
         
         UNIT_INPUTDIALOG("\"호실번호\"를 선택하지 않으셨습니다.\n"
-                + "\"호실번호\" 선택 하시겠습니까 ?\n"
-                + "아니요 버튼을 누르게 되면 건물 번호가 초기화됩니다.\n", 
+                + "[예] => 호실번호 선택\n"
+                + "[아니오] => 건물번호 제거\n", 
                 "You did not select \'Room\'\n"
-                + "Do you want to Select Room ?\n"
-                + "If you choose \'no\' button will delete the changes"),
+                + "[Yes] => to select a Room\n"
+                + "[No] => to remove Building selection"),
         
         PW_FOURDIGIT_DIALOG("  - 숫자(0~9) 네 자리로 구성", "  - four digit number (0~9)"),
         
@@ -687,8 +685,8 @@ public class ControlEnums {
                 "Driver Creation Succeeded" + System.getProperty("line.separator") + "Driver Name: "),
         
         USER_UPDATE_SUCCESS_DIALOG(
-                "수정하신 운전자 정보를 저장하시겠습니까?" + System.getProperty("line.separator") + " - 운전자 이름: ",
-                "Do you want to save modified driver?" +  System.getProperty("line.separator") + " - Driver Name: "
+                "수정 중인 운전자 정보를 저장하겠습니까?" + System.getProperty("line.separator") + " - 운전자 이름: ",
+                "Do you want to save the modified driver?" +  System.getProperty("line.separator") + " - Driver Name: "
         ),
         
         USER_CREATE_SUCCESS_DIALOG(
