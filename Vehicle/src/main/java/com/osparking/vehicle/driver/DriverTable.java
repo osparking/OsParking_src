@@ -48,6 +48,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.HashSet;
 import java.util.Set;
+import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
@@ -64,7 +65,7 @@ public class DriverTable extends JTable {
      * table model modRow index for the driver currently being modified
      * 
      */
-    static int modifyingRowM = -1;    
+    static int updateRow = -1;    
     
     ManageDrivers parent = null;
     
@@ -107,7 +108,7 @@ public class DriverTable extends JTable {
         int rowM = driverTable.convertRowIndexToModel(rowV);
 
         parent.setUpdateMode(true);
-        modifyingRowM = rowM;
+        updateRow = rowM;
         return true;
     } 
     
@@ -166,7 +167,7 @@ public class DriverTable extends JTable {
          * then return null editor.
          */
         int tabSize = driverTable.getRowCount();
-        if (parent.getFormMode() == FormMode.UpdateMode && modRow != modifyingRowM 
+        if (parent.getFormMode() == FormMode.UpdateMode && modRow != updateRow 
                 ||
                 parent.getFormMode() == FormMode.CreateMode && modRow != tabSize -1)
         {
@@ -225,9 +226,23 @@ public class DriverTable extends JTable {
         //</editor-fold>
 
         //<editor-fold defaultstate="collapsed" desc="-- Enter Key Handler ">            
-//        Action handleEnter = new AbstractAction() {
-//            public void actionPerformed(ActionEvent e) {
-//                
+        Action handleEnter = new AbstractAction() {
+            public void actionPerformed(ActionEvent e) {
+                Object itemSource = e.getSource();
+                
+                if (itemSource instanceof PComboBox) {
+                    Object cBoxItem = ((PComboBox)e.getSource()).getHighlightedCbxItem();
+                    ((PComboBox)itemSource).setSelectedItem(cBoxItem);
+                }
+                        
+                if (driverTable.getSelectedColumn() == UnitNo.getNumVal()) {
+                    finalizeDataEntry(parent);
+                } else {
+                    if (driverTable.editCellAt(driverTable.getSelectedRow(), driverTable.getSelectedColumn() + 1))
+                    {
+                        parent.startEditingCell(driverTable.getSelectedRow(), driverTable.getSelectedColumn() + 1);
+                    }                    
+                }
 //                if (e.getSource().getClass() == PComboBox.class) {
 //                    PComboBox comboBox = (PComboBox)e.getSource();
 //                    if (comboBox.isPopupVisible()) {
@@ -237,17 +252,17 @@ public class DriverTable extends JTable {
 //                        int curRow = driverTable.getSelectedRow();
 //                        if (curRow < driverTable.getRowCount() - 1)
 //                            driverTable.setRowSelectionInterval(curRow + 1, curRow + 1);
-//                        finalizeDataEntry(parent);
+////                        finalizeDataEntry(parent);
 //                    }
 //                } else {
 //                    // finalize update or insert operation here
-//                    finalizeDataEntry(parent);
+////                    finalizeDataEntry(parent);
 //                }                           
-//            }
-//        };
-//        JComponent compo = (JComponent)((DefaultCellEditor)cellEditor).getComponent();
-//        compo.getInputMap().put(KeyStroke.getKeyStroke("ENTER"), "handleEnter");
-//        compo.getActionMap().put("handleEnter", handleEnter);  
+            }
+        };
+        JComponent compo = (JComponent)((DefaultCellEditor)cellEditor).getComponent();
+        compo.getInputMap().put(KeyStroke.getKeyStroke("ENTER"), "handleEnter");
+        compo.getActionMap().put("handleEnter", handleEnter);  
         // </editor-fold>
         
         /*
@@ -282,21 +297,17 @@ public class DriverTable extends JTable {
         return cellEditor;
     }
 
-//    public static void finalizeDataEntry(ManageDrivers parent){
-//        System.out.println("finalizeDataEntry called");
-//        if (parent.getFormMode() == FormMode.CreateMode) {
-//            if (driverTable.getCellEditor() != null) {
-//                driverTable.getCellEditor().stopCellEditing(); // store user input
-//                parent.finalizeDriverCreation();
-//            }
-//            parent.setFormMode(FormMode.NormalMode);
-//        } else if (parent.getFormMode() == FormMode.UpdateMode) {
-//            if (driverTable.getCellEditor() != null) {
-//                driverTable.getCellEditor().stopCellEditing(); // store user input
-//                int rowV = driverTable.getSelectedRow();
-//                parent.finalizeDriverUpdate(rowV);
-//            }
-//            parent.setFormMode(FormMode.NormalMode);
-//        }        
-//    }
+    public static void finalizeDataEntry(ManageDrivers parent){
+      
+        if (driverTable.getCellEditor() != null) {
+            driverTable.getCellEditor().stopCellEditing();
+        }
+        
+        if (parent.getFormMode() == FormMode.CreateMode) {
+            parent.finalizeDriverCreation();
+        } else {
+            int rowV = driverTable.getSelectedRow();
+            parent.finalizeDriverUpdate(rowV);
+        }
+    }
 }

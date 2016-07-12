@@ -491,60 +491,38 @@ public class ControlEnums {
         DRIVER_MODIFY_CANCEL_DAILOG(
                 "변경 중인 운전자 정보를 취소하시겟습니까?", "Do you want to cancel modifying driver information?"),
         
-        DRIVER_NAME_CHECK_DIALOG("\"필수사항\" 인 이름을 입력하시겟습니까?" 
-                            + System.getProperty("line.separator") 
-                            + "([예] 버튼을 누르면 이름 입력란으로 이동합니다." 
-                            + System.getProperty("line.separator") 
-                            + "그렇지 않으면, 수정정보가 포기됩니다.)", 
-                "Want to input a \"required\" driver name?" 
-                            + System.getProperty("line.separator") 
-                            + "(By pressing [Yes] name field will have focus." 
-                            + System.getProperty("line.separator") 
-                            + "Otherwise, modification will be discarded.)"),
-        
-        DRIVER_CELL_CHECK_DIALOG("\"필수사항\" 인 휴대전화을 입력하시겟습니까?" 
-                            + System.getProperty("line.separator") 
-                            + "([예] 버튼을 누르면 휴대전화 입력란으로 이동합니다." 
-                            + System.getProperty("line.separator") 
-                            + "그렇지 않으면, 수정정보가 포기됩니다.)",
-                "Want to input a \"required\" cell phone number?"  
-                            + System.getProperty("line.separator") 
-                            + "(By pressing [Yes], cell phone will have focus," 
-                            + System.getProperty("line.separator") 
-                            + "Otherwise, modification will be discarded.)"),
-        
         MISSING_CELL_HANDLING("\"휴대전화\" 번호는 최소 10 자리입니다." 
                             + System.getProperty("line.separator") 
                             + "[예] 버튼을 누르면, 휴대전화 란으로 이동합니다." 
                             + System.getProperty("line.separator") 
-                            + "[아니오]를 누르면, 현재 연산이 포기됩니다.", 
+                            + "[아니오]를 선택하면 작업을 포기합니다!", 
                 "\"Cell phone number\" is at least 10 digits." 
                             + System.getProperty("line.separator") 
                             + "Press [Yes], to edit cell phone number," 
                             + System.getProperty("line.separator") 
-                            + "Press [No], to give up operation."),
+                            + "Press [No], to give up work."),
         
         MISSING_PHONE_HANDLING("\"전화\" 번호는 최소 4 자리입니다." 
                             + System.getProperty("line.separator") 
                             + "[예] 버튼을 누르면, 전화 란으로 이동합니다." 
                             + System.getProperty("line.separator") 
-                            + "[아니오]를 누르면, 현재 연산이 포기됩니다.", 
+                            + "[아니오]를 선택하면 작업을 포기합니다!", 
                 "\"Phone number\" is at least 4 digits." 
                             + System.getProperty("line.separator") 
                             + "Press [Yes], to edit phone number," 
                             + System.getProperty("line.separator") 
-                            + "Press [No], to give up operation."),
+                            + "Press [No], to give up work."),
 
         MISSING_NAME_HANDLING("\"운전자 이름\"이 두 글자를 넘어야 됩니다."
                             + System.getProperty("line.separator") 
                             + "[예] 버튼을 누르면 이름 입력란으로 이동하고," 
                             + System.getProperty("line.separator") 
-                            + "[아니오]를 선택하면 생성이 포기됩니다!", 
+                            + "[아니오]를 선택하면 작업을 포기합니다!", 
                 "\"Name\" should be longer than 1 character." 
                             + System.getProperty("line.separator") 
                             + "By pressing [Yes], focus will move to name field." 
                             + System.getProperty("line.separator") 
-                            + "To give up creation, press [No]."),
+                            + "Press [No], to give up work."),
         
         USER_RIGHTS_DESCRIPTION("1. 관리자(ID: admin) : 상위" + System.getProperty("line.separator") +
                 "    - 매니저 및 일반에 대한 모든 권한" + System.getProperty("line.separator") +

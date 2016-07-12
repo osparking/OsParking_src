@@ -28,7 +28,7 @@ import static com.osparking.global.CommonData.pointColor;
 import static com.osparking.global.CommonData.tableRowHeight;
 import static com.osparking.global.CommonData.tipColor;
 import com.osparking.global.Globals;
-import static com.osparking.vehicle.driver.DriverTable.modifyingRowM;
+import static com.osparking.vehicle.driver.DriverTable.updateRow;
 import static com.osparking.vehicle.driver.ODSReader.getWrongCellPointString;
 import java.awt.Dimension;
 import java.awt.Point;
@@ -218,7 +218,6 @@ public class ManageDrivers extends javax.swing.JFrame {
             public void actionPerformed(ActionEvent e) {
                 System.out.println(((JComboBox)e.getSource()).isPopupVisible());                
                 mayChangeLowerCBoxPrompt(e, affiliationL1CBox, AffiliationL2);
-                mayEditNextColumn(affiliationL1CBox, AffiliationL1, AffiliationL2);
             }
         }); 
         setupLowerComboBox(AffiliationL2);
@@ -227,7 +226,6 @@ public class ManageDrivers extends javax.swing.JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 mayChangeLowerCBoxPrompt(e, buildingCBox, UnitNo);
-                mayEditNextColumn(buildingCBox, BuildingNo, UnitNo);
             }
         }); 
         setupLowerComboBox(UnitNo);
@@ -264,30 +262,6 @@ public class ManageDrivers extends javax.swing.JFrame {
         }
     }
 
-     /**
-      * Given this combobox item selected, start to edit next column.
-      * thisCBox parentCBox the(=this) combobox to check if item selected
-      * @param nextColumn table column of this column
-      */
-    public void mayEditNextColumn(JComboBox thisCBox, DriverCol CURRColumn, DriverCol nextColumn) 
-    {
-//        if (thisCBox.getSelectedIndex() > 0) {
-//            CellEditor cellEditor = driverTable.getCellEditor();
-//            if (cellEditor != null) {
-//                if (cellEditor.getCellEditorValue() != null) {
-//                    cellEditor.stopCellEditing();
-//                } else {
-//                    cellEditor.cancelCellEditing();
-//                }
-//            }                    
-//                    
-//            if (driverTable.editCellAt(driverTable.getSelectedRow(), nextColumn.getNumVal()))
-//            {
-//                startEditingCell(driverTable.getSelectedRow(), nextColumn.getNumVal());
-//            }                
-//        }        
-    }
-    
     static boolean checkIfUserWantsToSave() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
@@ -344,11 +318,12 @@ public class ManageDrivers extends javax.swing.JFrame {
                 modiSave_Button.setEnabled(false);
                 insertSave_Button.setText(SAVE_BTN.getContent());
                 insertSave_Button.setMnemonic('s');
+                deleteDriver_Button.setEnabled(false);
                 tipLabel.setVisible(true);
                 break;
                 
             case UpdateMode:
-                driverTable.setRowSorter(null);
+//                driverTable.setRowSorter(null);
                 formModeLabel.setText(MODIFY_MODE_LABEL.getContent());
                 setSearchEnabled(false);
                 insertSave_Button.setEnabled(false);
@@ -357,6 +332,7 @@ public class ManageDrivers extends javax.swing.JFrame {
 //                deleteDriver_Button.setEnabled(true);
                 modiSave_Button.setText(SAVE_BTN.getContent());
                 modiSave_Button.setMnemonic('s');
+                deleteDriver_Button.setEnabled(false);
                 tipLabel.setVisible(true);
 //                searchKeyGroupEnabled(false);                
                 break;
@@ -369,9 +345,13 @@ public class ManageDrivers extends javax.swing.JFrame {
                     insertSave_Button.setText(CREATE_BTN.getContent());
                     insertSave_Button.setMnemonic('r');
                 } else if (prevMode == FormMode.UpdateMode) {
+                    insertSave_Button.setEnabled(true);
                     modiSave_Button.setText(MODIFY_BTN.getContent());
                     modiSave_Button.setMnemonic('m');
-                    modiSave_Button.setEnabled(false);
+//                    modiSave_Button.setEnabled(false);
+                }
+                if (driverTable.getSelectedRowCount() > 0) {
+                    deleteDriver_Button.setEnabled(false);
                 }
                 tipLabel.setVisible(false);
                 break;
@@ -387,8 +367,6 @@ public class ManageDrivers extends javax.swing.JFrame {
 //                DriverCol.AffiliationL1.getNumVal()));
     }
     
-    private static boolean selectionListenerDisabled = false;
-    
     static int changeCount = 0;
     private void addDriverSelectionListener() {
         
@@ -400,42 +378,40 @@ public class ManageDrivers extends javax.swing.JFrame {
                 if (e.getValueIsAdjusting()) 
                     return;
                 
-                if (selectionListenerDisabled || getFormMode() == FormMode.NormalMode) 
-                {
-                    if (driverTable.getSelectedRowCount() > 0) {
-                        modiSave_Button.setEnabled(true);
-                        deleteAll_button.setEnabled(true);
-                        deleteDriver_Button.setEnabled(true);
-                    }                    
-                    return;
-                }
-                
-                if (getFormMode() == FormMode.CreateMode) {
-                    int rowIndex = driverTable.getRowCount() - 1;
-                    
-                    if (driverTable.getSelectedRow() != rowIndex) {
-                        // return to the row being created and and start editing the cell
-                        // that is at the same column as the selected cell.
-                        int clickCol = driverTable.getSelectedColumn();
-                        
-                        if (driverTable.editCellAt(rowIndex, clickCol)) {
-                            startEditingCell(rowIndex, (clickCol == 0 ? 1 : clickCol));
+                switch(getFormMode()) {
+                    case NormalMode:
+                        if (driverTable.getSelectedRowCount() > 0) {
+                            modiSave_Button.setEnabled(true);
+                            deleteAll_button.setEnabled(true);
+                            deleteDriver_Button.setEnabled(true);
                         }
-                        //processSaveAction();
-                    }
-                }
-                else 
-                {   // now in update mode
-                    if (driverTable.getCellEditor() != null) {
-                        driverTable.getCellEditor().stopCellEditing(); // store user input
-                    }
-                    int rowSel = e.getFirstIndex();
-                    if (driverTable.convertRowIndexToModel(rowSel) == modifyingRowM)
-                        rowSel = e.getLastIndex();
-                    finalizeDriverUpdate(rowSel);
+                        break;
+                    case CreateMode: 
+                        int rowIndex = driverTable.getRowCount() - 1;
+
+                        if (driverTable.getSelectedRow() != rowIndex) {
+                            // return to the row being created and and start editing the cell
+                            // that is at the same column as the selected cell.
+                            int clickCol = driverTable.getSelectedColumn();
+
+                            if (driverTable.editCellAt(rowIndex, clickCol)) {
+                                startEditingCell(rowIndex, (clickCol == 0 ? 1 : clickCol));
+                            }
+                        }
+                        break;
+                    case UpdateMode:
+                        if (driverTable.getCellEditor() != null) {
+                            driverTable.getCellEditor().stopCellEditing(); // store user input
+                        }
+                        int rowSel = e.getFirstIndex();
+                        if (driverTable.convertRowIndexToModel(rowSel) == updateRow)
+                            rowSel = e.getLastIndex();
+                        finalizeDriverUpdate(rowSel);
+                        break;
+                    default:
+                        break;
                 }
             }
-
         }); 
     }
 
@@ -446,10 +422,10 @@ public class ManageDrivers extends javax.swing.JFrame {
         finalizeDriverCreation();
     }
 
-    private int createNewDriver(String driverName, int rowIndex) {
+    private int insertCarDriver(String driverName, int rowIndex) {
             
         Connection conn = null;
-        PreparedStatement createDriver = null;
+        PreparedStatement insertDriver = null;
         String excepMsg = "failed creation of a car driver: " + driverName;
 
         int result = 0;
@@ -473,7 +449,7 @@ public class ManageDrivers extends javax.swing.JFrame {
             InnoComboBoxItem itemL2 = (InnoComboBoxItem)(model.getValueAt(rowIndex, 
                     DriverCol.AffiliationL2.getNumVal()));
             
-            if (itemL2.getKeys()[0] != -1) {
+            if (itemL2.getKeys()[0] != PROMPTER_KEY) {
                 itemL2_NO = String.valueOf(itemL2.getKeys()[0]);
                 itemL2name = itemL2.getLabels()[0];
             }
@@ -482,21 +458,22 @@ public class ManageDrivers extends javax.swing.JFrame {
             InnoComboBoxItem itemUnit = (InnoComboBoxItem)(model.getValueAt(rowIndex, 
                     DriverCol.UnitNo.getNumVal()));
             
-            if (itemUnit.getKeys()[0] != -1) {
+            if (itemUnit.getKeys()[0] != PROMPTER_KEY) {
                 itemUnitSEQ_NO = String.valueOf(itemUnit.getKeys()[0]);
                 itemUnitName = itemUnit.getLabels()[0];
             }
             //</editor-fold>
                             
             conn = getConnection();
-            createDriver = conn.prepareStatement(sql);
-            createDriver.setString(DriverCol.DriverName.getNumVal(), driverName);
-            createDriver.setString(DriverCol.CellPhone.getNumVal(), cellPhone);
-            createDriver.setString(DriverCol.LandLine.getNumVal(), landLine);
-            createDriver.setString(DriverCol.AffiliationL2.getNumVal() - 1, itemL2_NO);
-            createDriver.setString(DriverCol.UnitNo.getNumVal() - 2, itemUnitSEQ_NO);
+            insertDriver = conn.prepareStatement(sql);
+            int paraIdx = 1;
+            insertDriver.setString(paraIdx++, driverName);
+            insertDriver.setString(paraIdx++, cellPhone);
+            insertDriver.setString(paraIdx++, landLine);
+            insertDriver.setString(paraIdx++, itemL2_NO);
+            insertDriver.setString(paraIdx++, itemUnitSEQ_NO);
 
-            result = createDriver.executeUpdate();
+            result = insertDriver.executeUpdate();
             //</editor-fold>
         } catch (SQLException ex) {
             if (ex.getErrorCode() == ER_DUP_ENTRY) {
@@ -506,7 +483,7 @@ public class ManageDrivers extends javax.swing.JFrame {
                 logParkingException(Level.SEVERE, ex, excepMsg);
             }                 
         } finally {
-            closeDBstuff(conn, createDriver, null, excepMsg);
+            closeDBstuff(conn, insertDriver, null, excepMsg);
             if (result == 1)
             {
                 //<editor-fold desc="redisplay driver list with a new driver just added">     
@@ -1320,12 +1297,13 @@ public class ManageDrivers extends javax.swing.JFrame {
 
             if (response == JOptionPane.YES_OPTION) {        
                 setUpdateMode(true);   
-                modifyingRowM = rowM;
+                updateRow = rowM;
                 highlightTableRow(driverTable, rowV);
                 if (driverTable.editCellAt(rowV, colV))
                 {
                     startEditingCell(rowV, colV);
-                }   
+                }  
+                initPrevParentKey();
             }
         }
     }//GEN-LAST:event_modiSave_ButtonActionPerformed
@@ -1495,7 +1473,7 @@ public class ManageDrivers extends javax.swing.JFrame {
         }
 
         if (getFormMode() == FormMode.UpdateMode) {
-            if (modifyingRowM == row) {
+            if (updateRow == row) {
                 if (driverTable.getValueAt(row, col).toString() != null) {
                     if (driverTable.editCellAt(row, col)) {
                         startEditingCell(row, col);
@@ -2100,14 +2078,14 @@ public class ManageDrivers extends javax.swing.JFrame {
                 //<editor-fold defaultstate="collapsed" desc="-- construct a driver info' to show"> 
                 Object L1Item = null;
                 if (rs.getString("L1_NAME") == null) {
-                    L1Item = ""; 
+                    L1Item = getPrompter(AffiliationL1, null); // ""; 
                 } else {
                     L1Item = new ConvComboBoxItem(rs.getInt("L1_NO"), rs.getString("L1_NAME"));
                 }
                 
                 Object  L2Item = null;
                 if (rs.getString("L2_NAME") == null) {
-                    L2Item = ""; 
+                    L2Item = getPrompter(AffiliationL2, null); //""; 
                 } else {
                     L2Item = new InnoComboBoxItem(
                             new int[]{rs.getInt("L2_NO")}, new String[]{rs.getString("L2_NAME")});
@@ -2116,7 +2094,7 @@ public class ManageDrivers extends javax.swing.JFrame {
                 Object bldgItem = null;
                 
                 if (rs.getString("BLDG_NO") == null) {
-                    bldgItem = ""; 
+                    bldgItem = getPrompter(BuildingNo, null); // ""; 
                 } else {
                     bldgItem = new ConvComboBoxItem(
                             rs.getInt("B_SEQ_NO"), rs.getString("BLDG_NO"));
@@ -2125,7 +2103,7 @@ public class ManageDrivers extends javax.swing.JFrame {
                 Object unitItem = null;
                 
                 if (rs.getString("UNIT_NO") == null) {
-                    unitItem = ""; 
+                    unitItem = getPrompter(UnitNo, null); // ""; 
                 } else {
                     unitItem = new InnoComboBoxItem(
                             new int[]{rs.getInt("U_SEQ_NO")}, new String[] {rs.getString("UNIT_NO")});
@@ -2145,7 +2123,7 @@ public class ManageDrivers extends javax.swing.JFrame {
             closeDBstuff(conn, selectStmt, rs, excepMsg);
             countValue.setText(String.valueOf(driverTable.getRowCount()));                        
         }
-        setFormMode(FormMode.NormalMode);
+//        setFormMode(FormMode.NormalMode);
             
         int numRows = model.getRowCount();
         
@@ -2166,8 +2144,6 @@ public class ManageDrivers extends javax.swing.JFrame {
             }
             //</editor-fold>
         }
-        insertSave_Button.setEnabled(true);
-        searchButton.setEnabled(false);        
     }
         
     // <editor-fold defaultstate="collapsed" desc="-- Netbeans Generated Control Item Variables ">                               
@@ -2268,92 +2244,90 @@ public class ManageDrivers extends javax.swing.JFrame {
         setFormMode(toModify ? FormMode.UpdateMode : FormMode.NormalMode);
         if (toModify) {
             modiSave_Button.setText(SAVE_BTN.getContent());
-            insertSave_Button.setEnabled(false);        
         } else {
             modiSave_Button.setText(MODIFY_BTN.getContent());
         }
         tipLabel.setVisible(toModify);
     }
 
-    public int saveModifiedDriverInfo(StringBuffer driverProperties) {
-        TableModel drvModel = driverTable.getModel();
-        int index = modifyingRowM;
-        Object driverName = drvModel.getValueAt(index, 1);
-        
+    public int updateCarDriver(String driverName, StringBuffer driverProperties) {
+        TableModel model = driverTable.getModel();
         int result = 0;
-        Object cellPhone = (String)drvModel.getValueAt(index, 2);
-
-        Connection conn = null;
-        PreparedStatement modifyDriver = null;
+        String cellPhone = (String)model.getValueAt(updateRow, CellPhone.getNumVal());
+        String landLine = (String)model.getValueAt(updateRow, LandLine.getNumVal());
+        String itemL2name = null, itemUnitName = null;
         String excepMsg = "modifying info for (<name, cellphone>: " + driverName + ", " 
                 +  (String)cellPhone + ")";
 
+        Connection conn = null;
+        PreparedStatement updateDriver = null;
         try {
-            // <editor-fold defaultstate="collapsed" desc="-- Driver information update">                          
-            StringBuffer sb = new StringBuffer("Update cardriver Set NAME = ?,");
-            sb.append(" CELLPHONE = ?, phone = ?, L2_NO = ?, UNIT_SEQ_NO = ?");
-            sb.append(" Where SEQ_NO = ?");
+            // <editor-fold defaultstate="collapsed" desc="-- Driver information update">                 
+            String sql = "Update cardriver Set NAME = ?," 
+                    + " CELLPHONE = ?, phone = ?, L2_NO = ?, UNIT_SEQ_NO = ?"
+                    + " Where SEQ_NO = ?";
+
+            //<editor-fold desc="-- Collect driver properties for the update">            
+            String itemL2key = null;
+            InnoComboBoxItem itemL2 = (InnoComboBoxItem)(model.getValueAt(updateRow, 
+                    DriverCol.AffiliationL2.getNumVal()));
+            
+            if (itemL2.getKeys()[0] != PROMPTER_KEY) {
+                itemL2key = String.valueOf(itemL2.getKeys()[0]);
+                itemL2name = itemL2.getLabels()[0];
+            }
+
+            String itemUnitKey = null;
+            InnoComboBoxItem itemUnit = (InnoComboBoxItem)(model.getValueAt(updateRow, 
+                    DriverCol.UnitNo.getNumVal()));
+            
+            if (itemUnit.getKeys()[0] != PROMPTER_KEY) {
+                itemUnitKey = String.valueOf(itemUnit.getKeys()[0]);
+                itemUnitName = itemUnit.getLabels()[0];
+            }
+            //</editor-fold>
 
             conn = getConnection();
-            modifyDriver = conn.prepareStatement(sb.toString());
-            modifyDriver.setString(DriverName.getNumVal(), (String)driverName);
+            updateDriver = conn.prepareStatement(sql);
             
-            driverProperties.append("Driver Update Summary: " + System.lineSeparator());
-            
-            modifyDriver.setString(CellPhone.getNumVal(), (String)cellPhone); 
-            modifyDriver.setString(LandLine.getNumVal(), (String)drvModel.getValueAt(index, LandLine.getNumVal()));
-
-            // prepare affiliation level 2 key(L2_NO) value to store
-            String item1 = drvModel.getValueAt(index, AffiliationL1.getNumVal()).toString();
-            InnoComboBoxItem item = (InnoComboBoxItem)drvModel.getValueAt(index, AffiliationL2.getNumVal());
-
-            if (item.toString().equals(LOWER_CB_ITEM.getContent())
-                    || item.toString().equals(LOWER_HIGHER_CB_ITEM.getContent())) {
-                modifyDriver.setString(AffiliationL1.getNumVal(), null); // level 1 not selected
-            } else {
-                int L2_NO = (Integer)item.getKeys()[0];
-                if (L2_NO == -1) {
-                    modifyDriver.setString(AffiliationL2.getNumVal(), null); // level 2 not selected
-                } else {
-                    modifyDriver.setInt(AffiliationL1.getNumVal(), L2_NO); // both level 1 and 2 selected
-                }
-            }
-                
-            // prepare building unit key(SEQ_NO) value to store
-            item = (InnoComboBoxItem)drvModel.getValueAt(index, UnitNo.getNumVal());
-            if (item.toString().equals(ROOM_CB_ITEM.getContent())
-                    || item.toString().equals(ROOM_BUILDING_CB_ITEM.getContent())) {
-                modifyDriver.setString(5, null); // building not selected
-            } else {
-                int SEQ_NO = (Integer)item.getKeys()[0];
-                if (SEQ_NO == -1) {
-                    modifyDriver.setString(BuildingNo.getNumVal(), null); // building unit not selected
-                } else {
-                    modifyDriver.setInt(BuildingNo.getNumVal(), SEQ_NO); // both building and its unit selected                        
-                }
-            }                
-            modifyDriver.setInt(6, (Integer)drvModel.getValueAt(index, DriverCol.SEQ_NO.getNumVal()));
-
-            result = modifyDriver.executeUpdate();
+            int paraIdx = 1;            
+            updateDriver.setString(paraIdx++, driverName);
+            updateDriver.setString(paraIdx++, cellPhone); 
+            updateDriver.setString(paraIdx++, landLine);
+            updateDriver.setString(paraIdx++, itemL2key);
+            updateDriver.setString(paraIdx++, itemUnitKey);
+            updateDriver.setInt(paraIdx++, (Integer)model.getValueAt(updateRow, DriverCol.SEQ_NO.getNumVal()));
+            result = updateDriver.executeUpdate();
             //</editor-fold>
         } catch (SQLException ex) {
             // <editor-fold defaultstate="collapsed" desc="-- handle exception">                                          
             if (ex.getErrorCode() == ER_DUP_ENTRY) {
-                rejectUserInput(driverTable, index, excepMsg);                     
+                rejectUserInput(driverTable, updateRow, excepMsg);                     
             }
             else {
                 logParkingException(Level.SEVERE, ex, excepMsg);
                 JOptionPane.showConfirmDialog(null, "see log/exception folder for details.",
-                        "Driver Update Failure", JOptionPane.PLAIN_MESSAGE, 
-                        WARNING_MESSAGE);                
+                        "Driver '" + driverName + "' Update Failure", 
+                        JOptionPane.PLAIN_MESSAGE, WARNING_MESSAGE);                
             }
             //</editor-fold>                
         } finally {
-            closeDBstuff(conn, modifyDriver, null, excepMsg);                             
+            //<editor-fold desc="-- Return resources and summarize update.">
+            closeDBstuff(conn, updateDriver, null, excepMsg);  
+            if (result == 1) {
+                driverProperties.append("Driver Update Summary: " + System.lineSeparator());
+                driverProperties.append(" - Name: " + driverName + System.lineSeparator());                
+                driverProperties.append(" - Cell phone: " + cellPhone + System.lineSeparator());                
+                driverProperties.append(" - Landline: " + landLine + System.lineSeparator());                
+                driverProperties.append(" - Level 2: " + itemL2name + System.lineSeparator());                
+                driverProperties.append(" - Unit no: " + itemUnitName + System.lineSeparator());                
+            } else {
+                driverProperties.append("Update for driver '" + driverName + "' failed.");
+            }
+            //</editor-fold>
         }     
         return result;
     }
-
 
     private void changeDriverTable() {
         Object[][] data = { /*{1, "Henry Ford", "452-1234-5678", "567-1111-2222", {"Engineering", 2},
@@ -2427,203 +2401,43 @@ public class ManageDrivers extends javax.swing.JFrame {
      * @param nextRowV Row number to highlight after update operation
      */
     public void finalizeDriverUpdate(int nextRowV) {
-        int row = modifyingRowM;
-        int col1 = driverTable.convertColumnIndexToModel(DriverCol.DriverName.getNumVal());
-        
-        // conditions that make driver information insufficient: 1, 2        
-        String name = ((String)driverTable.getModel().getValueAt(row, col1)).trim(); 
-        int col2 = driverTable.convertColumnIndexToModel(DriverCol.CellPhone.getNumVal());        
-        String cell = ((String)driverTable.getModel().getValueAt(row, col2)).trim();  
-        
-        String L1_item = driverTable.getValueAt(row, AffiliationL1.getNumVal()).toString();
-        int L2_NO = getINNOkey(row, AffiliationL2.getNumVal());
-        
-        String building_item = driverTable.getValueAt(row, BuildingNo.getNumVal()).toString();
-        int SEQ_NO = getINNOkey(row, UnitNo.getNumVal());
-        
-        Object[] options = new Object[2];
-        
-        switch(language){
-            case KOREAN:
-                options[0] = "예(입력,Y)";
-                options[1] = "아니요(종료, N)";
-                break;
-                
-            case ENGLISH:
-                options[0] = "Yes(input)";
-                options[1] = "No(discard)";
-                break;
-                
-            default:
-                break;
-        }
-                
-        // 1. driver name isn't provided
-        if (name == null || name.trim().length() == 0)
-        {
-            // <editor-fold defaultstate="collapsed" desc="-- handle missing driver name">   
-            int response = JOptionPane.showOptionDialog(this, DRIVER_NAME_CHECK_DIALOG.getContent(),
-                    WARING_DIALOGTITLE.getContent(), 
-                    JOptionPane.YES_NO_OPTION,
-                    JOptionPane.QUESTION_MESSAGE, 
-                    null, 
-                    options, options[0]);                    
-        
-            if (response == JOptionPane.YES_OPTION) 
-            {
-                if (driverTable.editCellAt(row, col1))
-                {
-                    selectionListenerDisabled = true;
-                    highlightTableRow(driverTable, row);
-                    startEditingCell(row, col1);
-                    selectionListenerDisabled = false;
-                }                  
-            } else {
-                setUpdateMode(false);
-                loadDriverData(nextRowV, "", "");
-            }            
-            //</editor-fold>    
-        }   
-        else if (cell == null || cell.trim().length() == 0) 
-        {
-            // <editor-fold defaultstate="collapsed" desc="-- handle missing cell phone">   
-            int response = JOptionPane.showOptionDialog(this, DRIVER_CELL_CHECK_DIALOG.getContent(),
-                    WARING_DIALOGTITLE.getContent(),
-                    JOptionPane.YES_NO_OPTION,
-                    JOptionPane.QUESTION_MESSAGE, 
-                    null, 
-                    options, options[0]);
-        
-            if (response == JOptionPane.YES_OPTION) 
-            {
-                if (driverTable.editCellAt(row, col2))
-                {
-                    selectionListenerDisabled = true;
-                    highlightTableRow(driverTable, row);
-                    startEditingCell(row, col2);
-                    selectionListenerDisabled = false;
-                }                  
+        int row = driverTable.getSelectedRow();
+        int colName = driverTable.convertColumnIndexToModel(DriverCol.DriverName.getNumVal());
+        String name = ((String)driverTable.getModel().getValueAt(row, colName)).trim();     
+        int colCell = driverTable.convertColumnIndexToModel(DriverCol.CellPhone.getNumVal());
+        String cell = String.valueOf(driverTable.getValueAt(row, colCell)).toLowerCase().trim();        
 
-            } else {
-                setUpdateMode(false);
-                loadDriverData(nextRowV, "", "");
-            }            
-            //</editor-fold>            
-        } 
-        else if(!L1_item.equals(HIGHER_CB_ITEM.getContent()) 
-                        && L2_NO == -1)
-        {
-            // <editor-fold defaultstate="collapsed" desc="-- handle missing L2 item"> 
-            int respone = JOptionPane.showConfirmDialog(null, L2_INPUT_DIALOG.getContent(),
-                                    ERROR_DIALOGTITLE.getContent(),
-                                    JOptionPane.YES_NO_OPTION, WARNING_MESSAGE);
-            if(respone == JOptionPane.YES_OPTION){
-                //수정
-                col2 = driverTable.convertColumnIndexToModel(
-                            DriverCol.AffiliationL2.getNumVal());  
-                if (driverTable.editCellAt(row, col2))
-                {
-                    selectionListenerDisabled = true;
-                    highlightTableRow(driverTable, row);
-                    startEditingCell(row, col2);
-                    selectionListenerDisabled = false;
-                }
-            }else{
-                //L1을 초기값으로 바꾸고 저장
-                col2 = driverTable.convertColumnIndexToModel(
-                        DriverCol.AffiliationL1.getNumVal());  
-                driverTable.setValueAt(ManageDrivers.getPrompter(AffiliationL1, null), row, col2);
-                if (driverTable.editCellAt(row, col2))
-                {
-                    selectionListenerDisabled = true;
-                    highlightTableRow(driverTable, row);
-                    startEditingCell(row, col2);
-                    selectionListenerDisabled = false;
-                }
-            }
-            
-            //</editor-fold>   
-        }
-        else if(!building_item.equals(BUILDING_CB_ITEM.getContent()) 
-                        && SEQ_NO == -1)
-        {
-            // <editor-fold defaultstate="collapsed" desc="-- handle missing Unit item"> 
-            int respone = JOptionPane.showConfirmDialog(null, UNIT_INPUTDIALOG.getContent(),
-                                    ERROR_DIALOGTITLE.getContent(),
-                                    JOptionPane.YES_NO_OPTION, WARNING_MESSAGE);
-            if(respone == JOptionPane.YES_OPTION){
-                //수정
-                col2 = driverTable.convertColumnIndexToModel(
-                            DriverCol.UnitNo.getNumVal());  
-                if (driverTable.editCellAt(row, col2))
-                {
-                    selectionListenerDisabled = true;
-                    highlightTableRow(driverTable, row);
-                    startEditingCell(row, col2);
-                    selectionListenerDisabled = false;
-                }
-            }else{
-                //Building을 초기값으로 바꾸고 저장
-                col2 = driverTable.convertColumnIndexToModel(
-                        DriverCol.BuildingNo.getNumVal());    
-                driverTable.setValueAt(ManageDrivers.getPrompter(BuildingNo, null), row, col2);
-                if (driverTable.editCellAt(row, col2))
-                {
-                    selectionListenerDisabled = true;
-                    highlightTableRow(driverTable, row);
-                    startEditingCell(row, col2);
-                    selectionListenerDisabled = false;
-                }
-            }
-            //</editor-fold>   
-        }
-        else // both driver name and his/her cell phone number exists
-        {
-            // <editor-fold defaultstate="collapsed" desc="-- save modified driver info">  
-            int response = JOptionPane.showOptionDialog(this, 
-                    USER_UPDATE_SUCCESS_DIALOG.getContent() + name,
-                    SAVE_DIALOGTITLE.getContent(),
-                    JOptionPane.YES_NO_OPTION,
-                    JOptionPane.QUESTION_MESSAGE, 
-                    null, null, null);
-            
-            TableModel drvModel = driverTable.getModel();
-            InnoComboBoxItem L2_Item = (InnoComboBoxItem)drvModel.getValueAt(
-                    modifyingRowM, AffiliationL2.getNumVal());
-            InnoComboBoxItem unit_Item = (InnoComboBoxItem)drvModel.getValueAt(
-                    modifyingRowM, UnitNo.getNumVal());
-            if (response == 0) {
-                StringBuffer driverProperties = new StringBuffer();
-                if (saveModifiedDriverInfo(driverProperties) == 1) {
-                    // if insertion was successful, then redisplay the list
-                    setFormMode(FormMode.NormalMode);
+        if (!validDriverProperties(row, colName, name, colCell, cell))
+            return;
+        
+        // <editor-fold defaultstate="collapsed" desc="-- save modified driver info">  
+        int response = JOptionPane.showOptionDialog(this, 
+                USER_UPDATE_SUCCESS_DIALOG.getContent() + name,
+                SAVE_DIALOGTITLE.getContent(),
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE, 
+                null, null, null);
 
-                    int rowM = driverTable.convertRowIndexToModel(nextRowV);
-                    col1 = driverTable.convertColumnIndexToModel(
-                            DriverCol.DriverName.getNumVal());
+        setFormMode(FormMode.NormalMode);
+        if (response == JOptionPane.YES_OPTION) {
+            StringBuffer driverProperties = new StringBuffer();
+            if (updateCarDriver(name, driverProperties) == 1) {
+                // if insertion was successful, then redisplay the list
+                int rowM = driverTable.convertRowIndexToModel(nextRowV);
 
-                    // conditions that make driver information insufficient: 1, 2        
-                    name = ((String)driverTable.getModel().getValueAt(rowM, col1)).trim();
-                    col2 = driverTable.convertColumnIndexToModel(
-                            DriverCol.CellPhone.getNumVal());        
-                    cell = ((String)driverTable.getModel().getValueAt(rowM, col2)).trim();                       
-                    
-                    loadDriverData(UNKNOWN, name, cell); // in case, name and/or cell changed
-                    
-                    // also redisplay driver selection form this form invoked from it
-                    if (driverSelectionForm != null) {
-                        driverSelectionForm.loadSkinnyDriverTable(0); // 0: highlight first row
-                    }
-                    logParkingOperation(OSP_enums.OpLogLevel.SettingsChange, driverProperties.toString());
+                // conditions that make driver information insufficient: 1, 2        
+                name = ((String)driverTable.getModel().getValueAt(rowM, colName)).trim();
+
+                // also redisplay driver selection form this form invoked from it
+                if (driverSelectionForm != null) {
+                    driverSelectionForm.loadSkinnyDriverTable(0); // 0: highlight first row
                 }
-            } else {
-                // load original data back again 
-                setFormMode(FormMode.NormalMode);
-                loadDriverData(UNKNOWN, name, cell);
+                logParkingOperation(OSP_enums.OpLogLevel.SettingsChange, driverProperties.toString());
             }
-            driverTable.requestFocusInWindow();
-            //</editor-fold>            
+            loadDriverData(UNKNOWN, name, cell);
         }
+        driverTable.requestFocusInWindow();
+        //</editor-fold>            
     }     
     
     /**
@@ -2633,177 +2447,15 @@ public class ManageDrivers extends javax.swing.JFrame {
      * 3. insert new driver information into the database table in case everything is fine.
      */
     public void finalizeDriverCreation() {
-        int row = driverTable.getRowCount() - 1;
+//        int row = driverTable.getRowCount() - 1;
+        int row = driverTable.getSelectedRow();
         int colName = driverTable.convertColumnIndexToModel(DriverCol.DriverName.getNumVal());
-        String name = ((String)driverTable.getModel().getValueAt(row, colName)).trim(); 
-        
+        String name = ((String)driverTable.getModel().getValueAt(row, colName)).trim();
         int colCell = driverTable.convertColumnIndexToModel(DriverCol.CellPhone.getNumVal());
         String cell = String.valueOf(driverTable.getValueAt(row, colCell)).toLowerCase().trim();
         
-        int colPhone = driverTable.convertColumnIndexToModel(DriverCol.LandLine.getNumVal());
-        String phone = String.valueOf(driverTable.getValueAt(row, colPhone)).toLowerCase().trim();
-        
-        String L1_item = driverTable.getValueAt(row, AffiliationL1.getNumVal()).toString();
-        InnoComboBoxItem L2_item = (InnoComboBoxItem)driverTable.getValueAt(row, AffiliationL2.getNumVal());
-        int L2_NO = (Integer) L2_item.getKeys()[0];
-        
-        String building_item = driverTable.getValueAt(row, BuildingNo.getNumVal()).toString();
-        InnoComboBoxItem unit_item = (InnoComboBoxItem)driverTable.getValueAt(row, UnitNo.getNumVal());
-        int SEQ_NO = (Integer)unit_item.getKeys()[0];
-        
-        if (name.length() <= 1)
-        {
-            //<editor-fold defaultstate="collapsed" desc="-- handle missing driver name">   
-            // it has driver's name, but not his/her cell phone number  
-            int response = JOptionPane.showConfirmDialog(null, MISSING_NAME_HANDLING.getContent(),
-                    WARING_DIALOGTITLE.getContent(), 
-                    JOptionPane.YES_NO_OPTION);                    
-        
-            if (response == JOptionPane.YES_OPTION) 
-            {
-                if (driverTable.editCellAt(row, colName))
-                {
-                    selectionListenerDisabled = true;
-                    highlightTableRow(driverTable, row);
-                    startEditingCell(row, colName);
-                    selectionListenerDisabled = false;
-                }                  
-
-            } else {
-                setFormMode(FormMode.NormalMode);
-                ((DefaultTableModel)driverTable.getModel())
-                        .setRowCount(driverTable.getRowCount() - 1);  
-                if (rowBeforeCreate != -1) {
-                    highlightTableRow(driverTable, rowBeforeCreate);
-                    deleteDriver_Button.setEnabled(true);
-                }                
-            }            
+        if (!validDriverProperties(row, colName, name, colCell, cell))
             return;
-            //</editor-fold>               
-        } else if (getNumericDigitCount(cell) < 10) {
-            // <editor-fold defaultstate="collapsed" desc="-- handle insufficient cell phone">   
-            // it has driver's name, but not his/her cell phone number  
-            int response = JOptionPane.showConfirmDialog(null, MISSING_CELL_HANDLING.getContent(),
-                    WARING_DIALOGTITLE.getContent(), 
-                    JOptionPane.YES_NO_OPTION);                    
-        
-            if (response == JOptionPane.YES_OPTION) 
-            {
-                if (driverTable.editCellAt(row, colCell))
-                {
-                    selectionListenerDisabled = true;
-                    highlightTableRow(driverTable, row);
-                    startEditingCell(row, colCell);
-                    selectionListenerDisabled = false;
-                }                  
-
-            } else {
-                setFormMode(FormMode.NormalMode);
-                ((DefaultTableModel)driverTable.getModel())
-                        .setRowCount(driverTable.getRowCount() - 1);  
-                if (rowBeforeCreate != -1) {
-                    highlightTableRow(driverTable, rowBeforeCreate);
-                    deleteDriver_Button.setEnabled(true);
-                }
-            }    
-            return;
-            //</editor-fold>          
-        } else if (0 < getNumericDigitCount(phone) && getNumericDigitCount(phone) < 4) {
-            // <editor-fold defaultstate="collapsed" desc="-- handle insufficient cell phone">   
-            // it has driver's name, but not his/her cell phone number  
-            int response = JOptionPane.showConfirmDialog(null, MISSING_PHONE_HANDLING.getContent(),
-                    WARING_DIALOGTITLE.getContent(), 
-                    JOptionPane.YES_NO_OPTION);                    
-        
-            if (response == JOptionPane.YES_OPTION) 
-            {
-                if (driverTable.editCellAt(row, colPhone))
-                {
-                    selectionListenerDisabled = true;
-                    highlightTableRow(driverTable, row);
-                    startEditingCell(row, colPhone);
-                    selectionListenerDisabled = false;
-                }                  
-            } else {
-                setFormMode(FormMode.NormalMode);
-                ((DefaultTableModel)driverTable.getModel())
-                        .setRowCount(driverTable.getRowCount() - 1);  
-                if (rowBeforeCreate != -1) {
-                    highlightTableRow(driverTable, rowBeforeCreate);
-                    deleteDriver_Button.setEnabled(true);
-                }
-            }            
-            return;
-            //</editor-fold>          
-        }
-        
-        if (!L1_item.equals(HIGHER_CB_ITEM.getContent()) && L2_NO == PROMPTER_KEY) {
-            // <editor-fold defaultstate="collapsed" desc="-- handle missing L2 item"> 
-            int respone = JOptionPane.showConfirmDialog(null, L2_INPUT_DIALOG.getContent(),
-                                    ERROR_DIALOGTITLE.getContent(),
-                                    JOptionPane.YES_NO_OPTION, WARNING_MESSAGE);
-            if(respone == JOptionPane.YES_OPTION){
-                //수정
-                colName = driverTable.convertColumnIndexToModel(
-                            DriverCol.AffiliationL2.getNumVal());  
-                if (driverTable.editCellAt(row, colName))
-                {
-                    selectionListenerDisabled = true;
-                    highlightTableRow(driverTable, row);
-                    startEditingCell(row, colName);
-                    selectionListenerDisabled = false;
-                }
-                return;
-            }else{
-                //L1을 초기값으로 생성
-                colName = driverTable.convertColumnIndexToModel(
-                        DriverCol.AffiliationL1.getNumVal());  
-                driverTable.setValueAt(ManageDrivers.getPrompter(AffiliationL1, null), row, colName);
-                if (driverTable.editCellAt(row, colName))
-                {
-                    selectionListenerDisabled = true;
-                    highlightTableRow(driverTable, row);
-                    startEditingCell(row, colName);
-                    selectionListenerDisabled = false;
-                }
-            }
-            //</editor-fold>   
-        }
-        
-        if(!building_item.equals(BUILDING_CB_ITEM.getContent()) && SEQ_NO == PROMPTER_KEY)
-        {
-            // <editor-fold defaultstate="collapsed" desc="-- handle missing Unit item"> 
-            int respone = JOptionPane.showConfirmDialog(null, UNIT_INPUTDIALOG.getContent(),
-                                    ERROR_DIALOGTITLE.getContent(),
-                                    JOptionPane.YES_NO_OPTION, WARNING_MESSAGE);
-            if(respone == JOptionPane.YES_OPTION){
-                //수정
-                colName = driverTable.convertColumnIndexToModel(
-                            DriverCol.UnitNo.getNumVal());  
-                if (driverTable.editCellAt(row, colName))
-                {
-                    selectionListenerDisabled = true;
-                    highlightTableRow(driverTable, row);
-                    startEditingCell(row, colName);
-                    selectionListenerDisabled = false;
-                    return;
-                }
-            }else{
-                //Building을 초기값으로 바꾸고 저장
-                colName = driverTable.convertColumnIndexToModel(
-                        DriverCol.BuildingNo.getNumVal());    
-                driverTable.setValueAt(ManageDrivers.getPrompter(BuildingNo, null), row, colName);
-                if (driverTable.editCellAt(row, colName))
-                {
-                    selectionListenerDisabled = true;
-                    highlightTableRow(driverTable, row);
-                    startEditingCell(row, colName);
-                    selectionListenerDisabled = false;
-                }
-            }
-            
-            //</editor-fold>   
-        }
         
         // both driver name and his/her cell phone number are supplied
         int response = JOptionPane.showConfirmDialog(this, 
@@ -2812,7 +2464,7 @@ public class ManageDrivers extends javax.swing.JFrame {
                 JOptionPane.YES_NO_OPTION,
                 JOptionPane.QUESTION_MESSAGE);
         if (response == JOptionPane.YES_OPTION){
-            createNewDriver(name, row);
+            insertCarDriver(name, row);
         }
             
         driverTable.requestFocusInWindow();
@@ -2859,8 +2511,6 @@ public class ManageDrivers extends javax.swing.JFrame {
                                 }
                             }
                         }                        
-                        mayEditNextColumn(comboBox, AffiliationL2, 
-                            (column == AffiliationL2 ? BuildingNo : DriverName));
                     }
                 });                    
             }
@@ -2983,7 +2633,7 @@ public class ManageDrivers extends javax.swing.JFrame {
     boolean cellReqBlinked = false;
     int callCount = 0;
     int editingCol = -1;
-    private void startEditingCell(int rowM, int columnIndex) {
+    public void startEditingCell(int rowM, int columnIndex) {
         System.out.println("startEditingCell call count : " + callCount++);
         
         editingCol = columnIndex;
@@ -3014,58 +2664,43 @@ public class ManageDrivers extends javax.swing.JFrame {
         // user wants to change driver info or continues changing it
         DriverCol driverColM = DriverCol.values()[colM];
         
-        if (colM == AffiliationL1.getNumVal())
+        //<editor-fold defaultstate="collapsed" desc="-- propagate selection upward, etc.">            
+        // get higher level category(affiliation level 1 or building) item
+        ConvComboBoxItem hi_Item = (ConvComboBoxItem)driverTable.getValueAt(rowV, colM - 1);
+
+        if ((Integer) hi_Item.getKeyValue() == PROMPTER_KEY) // higher level item isn't selected yet
         {
-            int colM2 = AffiliationL2.getNumVal();
-            System.out.println("chg1");
-            driverTable.setValueAt(getPrompter(AffiliationL1, null), rowM, colM2);
-        } 
-        else if (colM == BuildingNo.getNumVal())
-        {
-            int colM2 = UnitNo.getNumVal();
-            System.out.println("chg2");
-            driverTable.setValueAt(getPrompter(BuildingNo, null), rowM, colM2); 
-        }
-        else
-        {
-            //<editor-fold defaultstate="collapsed" desc="-- propagate selection upward, etc.">            
-            // get higher level category(affiliation level 1 or building) item
-            ConvComboBoxItem hi_Item = (ConvComboBoxItem)driverTable.getValueAt(rowV, colM - 1);
-            
-            if ((Integer) hi_Item.getKeyValue() == PROMPTER_KEY) // higher level item isn't selected yet
+            if (driverColM == AffiliationL2 || driverColM == UnitNo) 
             {
-                if (driverColM == AffiliationL2 || driverColM == UnitNo) 
-                {
-                    InnoComboBoxItem innoItem = (InnoComboBoxItem)driverTable.getValueAt(rowV, colM);
-                    int keyValue = innoItem.getKeys()[0];
-                    if (keyValue != PROMPTER_KEY) { // lower level item is selected.
-                        // Real propagation happens here...
-                        int highKey = (Integer)(innoItem.getKeys()[1]);
-                        hi_Item = new ConvComboBoxItem(highKey, innoItem.getLabels()[1]); 
-                        
-                        int colHi = driverTable.convertColumnIndexToView(colM - 1);
-                        driverTable.setValueAt(hi_Item, rowV, colHi);                        
-                        
+                InnoComboBoxItem innoItem = (InnoComboBoxItem)driverTable.getValueAt(rowV, colM);
+                int keyValue = innoItem.getKeys()[0];
+                if (keyValue != PROMPTER_KEY) { // lower level item is selected.
+                    // Real propagation happens here...
+                    int highKey = (Integer)(innoItem.getKeys()[1]);
+                    hi_Item = new ConvComboBoxItem(highKey, innoItem.getLabels()[1]); 
+
+                    int colHi = driverTable.convertColumnIndexToView(colM - 1);
+                    driverTable.setValueAt(hi_Item, rowV, colHi);                        
+
 //                        Object objLevel1 = driverTable.getValueAt(rowV, DriverCol.AffiliationL1.getNumVal() );
 //                        int LOne_key = (Integer)(((ConvComboBoxItem)objLevel1).getKeyValue());            
 //                        System.out.println("LOne_keyX: " + LOne_key);                        
-                        
-                        TableCellEditor editor = driverTable.getCellEditor(rowV, colM);
-                        ((JComboBox)(((DefaultCellEditor)editor).getComponent())).removeAllItems();
-                        
-                        InnoComboBoxItem low_item = 
-                             new InnoComboBoxItem (new int[]{keyValue}, new String[]{innoItem.getLabels()[0]});
-                        System.out.println("low item label: " + innoItem.getLabels()[0]);      
-                        
-                        driverTable.setValueAt(low_item, rowV, colM);
-                        
-                        // Update prevParentKey 
-                        setPrevParentKey(driverColM, highKey);
-                    }
+
+                    TableCellEditor editor = driverTable.getCellEditor(rowV, colM);
+                    ((JComboBox)(((DefaultCellEditor)editor).getComponent())).removeAllItems();
+
+                    InnoComboBoxItem low_item = 
+                         new InnoComboBoxItem (new int[]{keyValue}, new String[]{innoItem.getLabels()[0]});
+                    System.out.println("low item label: " + innoItem.getLabels()[0]);      
+
+                    driverTable.setValueAt(low_item, rowV, colM);
+
+                    // Update prevParentKey 
+                    setPrevParentKey(driverColM, highKey);
                 }
             }
-            //</editor-fold>            
-        }        
+        }
+        //</editor-fold>            
     }
 
     public static String getL2PartyName(int L2No) {
@@ -3308,5 +2943,168 @@ public class ManageDrivers extends javax.swing.JFrame {
         } else if (searchUnitComboBox.getSelectedIndex() > 0) {
             searchUnitComboBox.requestFocus();
         }
+    }
+
+    private boolean validDriverProperties(int row, 
+            int colName, String name, int colCell, String cell) {       
+        int colPhone = driverTable.convertColumnIndexToModel(DriverCol.LandLine.getNumVal());
+        String phone = String.valueOf(driverTable.getValueAt(row, colPhone)).toLowerCase().trim();
+        
+        String L1_item = driverTable.getValueAt(row, AffiliationL1.getNumVal()).toString();
+        InnoComboBoxItem L2_item = (InnoComboBoxItem)driverTable.getValueAt(row, AffiliationL2.getNumVal());
+        int L2_NO = (Integer) L2_item.getKeys()[0];
+        
+        String building_item = driverTable.getValueAt(row, BuildingNo.getNumVal()).toString();
+        InnoComboBoxItem unit_item = (InnoComboBoxItem)driverTable.getValueAt(row, UnitNo.getNumVal());
+        int SEQ_NO = (Integer)unit_item.getKeys()[0];
+        
+        if (name.length() <= 1)
+        {
+            //<editor-fold defaultstate="collapsed" desc="-- handle missing driver name">   
+            // it has driver's name, but not his/her cell phone number  
+            int response = JOptionPane.showConfirmDialog(null, MISSING_NAME_HANDLING.getContent(),
+                    WARING_DIALOGTITLE.getContent(), 
+                    JOptionPane.YES_NO_OPTION);                    
+        
+            if (response == JOptionPane.YES_OPTION) 
+            {
+                if (driverTable.editCellAt(row, colName))
+                {
+                    highlightTableRow(driverTable, row);
+                    startEditingCell(row, colName);
+                }                  
+
+            } else {
+                setFormMode(FormMode.NormalMode);
+                ((DefaultTableModel)driverTable.getModel())
+                        .setRowCount(driverTable.getRowCount() - 1);  
+                if (rowBeforeCreate != -1) {
+                    highlightTableRow(driverTable, rowBeforeCreate);
+                    deleteDriver_Button.setEnabled(true);
+                }                
+            }            
+            return false;
+            //</editor-fold>               
+        } else if (getNumericDigitCount(cell) < 10) {
+            // <editor-fold defaultstate="collapsed" desc="-- handle insufficient cell phone">   
+            // it has driver's name, but not his/her cell phone number  
+            int response = JOptionPane.showConfirmDialog(null, MISSING_CELL_HANDLING.getContent(),
+                    WARING_DIALOGTITLE.getContent(), 
+                    JOptionPane.YES_NO_OPTION);                    
+        
+            if (response == JOptionPane.YES_OPTION) 
+            {
+                if (driverTable.editCellAt(row, colCell))
+                {
+                    highlightTableRow(driverTable, row);
+                    startEditingCell(row, colCell);
+                }                  
+
+            } else {
+                setFormMode(FormMode.NormalMode);
+                ((DefaultTableModel)driverTable.getModel())
+                        .setRowCount(driverTable.getRowCount() - 1);  
+                if (rowBeforeCreate != -1) {
+                    highlightTableRow(driverTable, rowBeforeCreate);
+                    deleteDriver_Button.setEnabled(true);
+                }
+            }    
+            return false;
+            //</editor-fold>          
+        } else if (0 < getNumericDigitCount(phone) && getNumericDigitCount(phone) < 4) {
+            // <editor-fold defaultstate="collapsed" desc="-- handle insufficient landline phone">   
+            // it has driver's name, but not his/her cell phone number  
+            int response = JOptionPane.showConfirmDialog(null, MISSING_PHONE_HANDLING.getContent(),
+                    WARING_DIALOGTITLE.getContent(), 
+                    JOptionPane.YES_NO_OPTION);                    
+        
+            if (response == JOptionPane.YES_OPTION) 
+            {
+                if (driverTable.editCellAt(row, colPhone))
+                {
+                    highlightTableRow(driverTable, row);
+                    startEditingCell(row, colPhone);
+                }                  
+            } else {
+                setFormMode(FormMode.NormalMode);
+                ((DefaultTableModel)driverTable.getModel())
+                        .setRowCount(driverTable.getRowCount() - 1);  
+                if (rowBeforeCreate != -1) {
+                    highlightTableRow(driverTable, rowBeforeCreate);
+                    deleteDriver_Button.setEnabled(true);
+                }
+            }            
+            return false;
+            //</editor-fold>          
+        }
+        
+        if (!L1_item.equals(HIGHER_CB_ITEM.getContent()) && L2_NO == PROMPTER_KEY) {
+            // <editor-fold defaultstate="collapsed" desc="-- handle missing L2 item"> 
+            int respone = JOptionPane.showConfirmDialog(null, L2_INPUT_DIALOG.getContent(),
+                                    ERROR_DIALOGTITLE.getContent(),
+                                    JOptionPane.YES_NO_OPTION, WARNING_MESSAGE);
+            if(respone == JOptionPane.YES_OPTION){
+                //수정
+                colName = driverTable.convertColumnIndexToModel(
+                            DriverCol.AffiliationL2.getNumVal());  
+                if (driverTable.editCellAt(row, colName))
+                {
+                    highlightTableRow(driverTable, row);
+                    startEditingCell(row, colName);
+                }
+            }else{
+                //L1을 초기값으로 생성
+                colName = driverTable.convertColumnIndexToModel(
+                        DriverCol.AffiliationL1.getNumVal());  
+                driverTable.setValueAt(ManageDrivers.getPrompter(AffiliationL1, null), row, colName);
+                if (driverTable.editCellAt(row, colName))
+                {
+                    highlightTableRow(driverTable, row);
+                    startEditingCell(row, colName);
+                }
+            }
+            //</editor-fold>  
+            return false;            
+        }
+        
+        if(!building_item.equals(BUILDING_CB_ITEM.getContent()) && SEQ_NO == PROMPTER_KEY)
+        {
+            // <editor-fold defaultstate="collapsed" desc="-- handle missing Unit item"> 
+            int respone = JOptionPane.showConfirmDialog(null, UNIT_INPUTDIALOG.getContent(),
+                                    ERROR_DIALOGTITLE.getContent(),
+                                    JOptionPane.YES_NO_OPTION, WARNING_MESSAGE);
+            if(respone == JOptionPane.YES_OPTION){
+                //수정
+                colName = driverTable.convertColumnIndexToModel(
+                            DriverCol.UnitNo.getNumVal());  
+                if (driverTable.editCellAt(row, colName))
+                {
+                    highlightTableRow(driverTable, row);
+                    startEditingCell(row, colName);
+                }
+            }else{
+                //Building을 초기값으로 바꾸고 저장
+                colName = driverTable.convertColumnIndexToModel(
+                        DriverCol.BuildingNo.getNumVal());    
+                driverTable.setValueAt(ManageDrivers.getPrompter(BuildingNo, null), row, colName);
+                if (driverTable.editCellAt(row, colName))
+                {
+                    highlightTableRow(driverTable, row);
+                    startEditingCell(row, colName);
+                }
+            }
+            return false;            
+            //</editor-fold>   
+        }
+        return true;
+    }
+
+    private void initPrevParentKey() {
+        Object parentObj = driverTable.getValueAt(updateRow, AffiliationL1.getNumVal());
+        int test = (Integer)(((ConvComboBoxItem)parentObj).getKeyValue());
+        setPrevParentKey(AffiliationL2, (Integer)(((ConvComboBoxItem)parentObj).getKeyValue()));
+        parentObj = driverTable.getValueAt(updateRow, BuildingNo.getNumVal());
+        test = (Integer)(((ConvComboBoxItem)parentObj).getKeyValue());
+        setPrevParentKey(UnitNo, (Integer)(((ConvComboBoxItem)parentObj).getKeyValue()));        
     }
 }

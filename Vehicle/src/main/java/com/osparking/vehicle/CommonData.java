@@ -78,7 +78,7 @@ public class CommonData {
     }
 
     public static void setPrevParentKey(OSP_enums.DriverCol column, int parentkey) {
-        prevParentKey[column.getNumVal()] = parentkey;
+        prevParentKey[column.getNumVal()] = parentkey;  
     }
     
     public static int getPrevParentKey(OSP_enums.DriverCol column) {
