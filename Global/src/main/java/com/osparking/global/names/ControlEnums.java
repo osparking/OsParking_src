@@ -635,14 +635,14 @@ public class ControlEnums {
         INPUT_ID_DIALOG("\"아이디\"를 입력하세요.", "Enter \'Login ID\'!"),
         INPUT_PW_DIALOG("\"비밀번호\"를 입력하세요.", "Enter \'Password\'"),
         
-        L2_INPUT_DIALOG("\"하위소속\"을 선택 하시겠습니까?.\n"
+        SUGGEST_SUPPLY_L2("\"하위소속\"을 선택 하시겠습니까?.\n"
                 + "[예] => 하위소속 선택\n"
-                + "[아니오] => 소속 수정 취소\n"
-                + "[취소] => 전체 수정 취소\n", 
+                + "[아니오] => 전체 수정 취소\n"
+                + "[취소] => 소속 수정 취소\n", 
                 " Want to select \'Lower Affiliation\'?\n"
                 + "[Yes] => to select Lower Affiliation\n"
-                + "[No] => to cancel affiliation update\n"
-                + "[Cancel] => to cancel driver update"),
+                + "[No] => to cancel driver update\n"
+                + "[Cancel] => to cancel affiliation update"),
         
         UNIT_INPUTDIALOG("\"호실번호\"를 선택하지 않으셨습니다.\n"
                 + "[예] => 호실번호 선택\n"

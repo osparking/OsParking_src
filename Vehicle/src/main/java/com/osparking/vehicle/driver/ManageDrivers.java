@@ -135,12 +135,10 @@ import static com.osparking.vehicle.CommonData.getPrevParentKey;
 import static com.osparking.vehicle.CommonData.refreshComboBox;
 import static com.osparking.vehicle.CommonData.setPrevParentKey;
 import com.osparking.vehicle.LabelBlinker;
-import static com.sun.xml.internal.fastinfoset.alphabet.BuiltInRestrictedAlphabets.table;
 import java.awt.Color;
 import java.awt.event.ActionListener;
 import java.util.Locale;
 import javax.swing.JLabel;
-import static javax.swing.JOptionPane.NO_OPTION;
 import javax.swing.SwingUtilities;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableRowSorter;
@@ -2058,7 +2056,7 @@ public class ManageDrivers extends javax.swing.JFrame {
                 
                 Object  L2Item = null;
                 if (rs.getString("L2_NAME") == null) {
-                    L2Item = getPrompter(AffiliationL2, null); //""; 
+                    L2Item = getPrompter(AffiliationL2, null);
                 } else {
                     L2Item = new InnoComboBoxItem(
                             new int[]{rs.getInt("L2_NO")}, new String[]{rs.getString("L2_NAME")});
@@ -2939,8 +2937,7 @@ public class ManageDrivers extends javax.swing.JFrame {
         InnoComboBoxItem unit_item = (InnoComboBoxItem)driverTable.getValueAt(row, UnitNo.getNumVal());
         int SEQ_NO = (Integer)unit_item.getKeys()[0];
         
-        if (name.length() <= 1)
-        {
+        if (name.length() <= 1) {
             //<editor-fold defaultstate="collapsed" desc="-- handle missing driver name">   
             // it has driver's name, but not his/her cell phone number  
             int response = JOptionPane.showConfirmDialog(null, 
@@ -2949,7 +2946,7 @@ public class ManageDrivers extends javax.swing.JFrame {
                             + MISSING_NAME_2.getContent(),
                     WARING_DIALOGTITLE.getContent(), 
                     JOptionPane.YES_NO_OPTION, WARNING_MESSAGE);                    
-            correctORrestore(response, row, colName);       
+            supplyORrestore(response, row, colName);       
             return true;
             //</editor-fold>               
         } else if (getNumericDigitCount(cell) < 10) {
@@ -2961,7 +2958,7 @@ public class ManageDrivers extends javax.swing.JFrame {
                             + MISSING_NAME_2.getContent(),
                     WARING_DIALOGTITLE.getContent(), 
                     JOptionPane.YES_NO_OPTION, WARNING_MESSAGE);                    
-            correctORrestore(response, row, colCell);
+            supplyORrestore(response, row, colCell);
             return true;
             //</editor-fold>          
         } else if (0 < getNumericDigitCount(phone) && getNumericDigitCount(phone) < 4) {
@@ -2973,17 +2970,17 @@ public class ManageDrivers extends javax.swing.JFrame {
                             + MISSING_NAME_2.getContent(),
                     WARING_DIALOGTITLE.getContent(), 
                     JOptionPane.YES_NO_OPTION, WARNING_MESSAGE);                    
-            correctORrestore(response, row, colPhone);
+            supplyORrestore(response, row, colPhone);
             return true;
             //</editor-fold>          
         }
         
         if (!L1_item.equals(HIGHER_CB_ITEM.getContent()) && L2_NO == PROMPTER_KEY) {
             // <editor-fold defaultstate="collapsed" desc="-- handle missing L2 item"> 
-            int response = JOptionPane.showConfirmDialog(null, L2_INPUT_DIALOG.getContent(),
+            int response = JOptionPane.showConfirmDialog(null, SUGGEST_SUPPLY_L2.getContent(),
                     ERROR_DIALOGTITLE.getContent(), JOptionPane.YES_NO_CANCEL_OPTION, WARNING_MESSAGE);
             
-            if(response == JOptionPane.YES_OPTION){
+            if (response == JOptionPane.YES_OPTION){
                 colName = driverTable.convertColumnIndexToModel(
                             DriverCol.AffiliationL2.getNumVal());  
                 if (driverTable.editCellAt(row, colName))
@@ -2992,17 +2989,51 @@ public class ManageDrivers extends javax.swing.JFrame {
                     startEditingCell(row, colName);
                 }
             }else if (response == JOptionPane.NO_OPTION) {
-                // cancel affiliation update
-                colName = driverTable.convertColumnIndexToModel(
-                        DriverCol.AffiliationL1.getNumVal());  
-                driverTable.setValueAt(ManageDrivers.getPrompter(AffiliationL1, null), row, colName);
-                if (driverTable.editCellAt(row, colName))
-                {
-                    highlightTableRow(driverTable, row);
-                    startEditingCell(row, colName);
-                }
-            } else {
                 // cancel whole drive update
+                if (getFormMode() == FormMode.CreateMode) {
+                    ((DefaultTableModel)driverTable.getModel()).setRowCount(driverTable.getRowCount() - 1);
+                    setFormMode(FormMode.NormalMode);
+                    if (rowBeforeCreate != -1) {
+                        highlightTableRow(driverTable, rowBeforeCreate);
+                        deleteDriver_Button.setEnabled(true);
+                    }                
+                } else {
+                    restoreDriverList(updateRow);                  
+                }                
+            } else {
+                // In UPDATE mode, restore affiliation level 2 to the original setting
+                int L2_key = (Integer)driverTable.getModel().getValueAt(updateRow, DriverCol.SEQ_NO.getNumVal());
+                assert(L2_key > 1000);
+                String label = getLowerCBoxLabel(AffiliationL2, L2_key);
+                InnoComboBoxItem original = new InnoComboBoxItem(
+                        new int[]{60}, new String[]{label});
+                driverTable.setValueAt(original, updateRow, AffiliationL2.getNumVal());
+
+                if (driverTable.editCellAt(updateRow, AffiliationL2.getNumVal()))
+                {
+                    highlightTableRow(driverTable, updateRow);
+                    startEditingCell(updateRow, AffiliationL2.getNumVal());
+                }                
+                
+                /*
+(Integer)model.getValueAt(updateRow, DriverCol.SEQ_NO.getNumVal())
+
+0  "(하위-상위)" INNO
+
+60 "마케팅과" INNO
+
+select party_name
+from l2_affiliation
+where l2_affiliation.L2_NO = 0;
+
+select party_name
+from l2_affiliation
+where l2_affiliation.L2_NO = 60;                
+                */
+                /*
+                select 0  "(하위-상위)"
+                for updateRow, L2_col // 2, DriverCol.AffiliationL2.getNumVal()
+                */
             }
             //</editor-fold>  
             return true;            
@@ -3056,7 +3087,7 @@ public class ManageDrivers extends javax.swing.JFrame {
         driverTable.requestFocusInWindow();      
     }
 
-    private void correctORrestore(int response, int row, int colName) {
+    private void supplyORrestore(int response, int row, int colName) {
         if (response == JOptionPane.YES_OPTION) 
         {
             if (driverTable.editCellAt(row, colName))
@@ -3076,5 +3107,11 @@ public class ManageDrivers extends javax.swing.JFrame {
                 restoreDriverList(updateRow);                  
             }
         }         
+    }
+
+    private String getLowerCBoxLabel(DriverCol driverCol, int L2_key) {
+        String sql = "Select L2.party_name From l2_affiliation L2, cardriver C "
+                + "Where L2.L2_NO = C.L2_NO AND C.SEQ_NO = ?";
+        return "마케팅과";
     }
 }
