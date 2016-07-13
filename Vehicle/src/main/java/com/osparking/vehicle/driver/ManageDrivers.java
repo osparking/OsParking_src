@@ -232,6 +232,9 @@ public class ManageDrivers extends javax.swing.JFrame {
         }
         driverTable.setRowSorter(sorter);  
         
+        if (Globals.loginID != null && Globals.loginID.equals("admin")) {
+            deleteAll_button.setEnabled(true);
+        }
         /**
          * Initialize table with real driver information
          */
@@ -302,10 +305,9 @@ public class ManageDrivers extends javax.swing.JFrame {
         searchUnitComboBox.setEnabled(flag);
         clearButton.setEnabled(flag);
         searchButton.setEnabled(flag);
-        closeFormButton.setEnabled(flag);           // 
+        closeFormButton.setEnabled(flag);     
         cancelButton.setEnabled(!flag);        
-        saveSheet_Button.setEnabled(flag);          // 
-        deleteAll_button.setEnabled(flag);          // in normal !(not)
+        saveSheet_Button.setEnabled(flag);    
     }    
     
     /**
@@ -376,7 +378,6 @@ public class ManageDrivers extends javax.swing.JFrame {
                             saveSheet_Button.setEnabled(false);
                         } else {
                             modiSave_Button.setEnabled(true);
-                            deleteAll_button.setEnabled(true);
                             deleteDriver_Button.setEnabled(true);
                             saveSheet_Button.setEnabled(true);
                         }
@@ -1251,12 +1252,10 @@ public class ManageDrivers extends javax.swing.JFrame {
                 closeDBstuff(conn, deleteDrivers, null, excepMsg);
             }
 
-            if (result >= 1) {
                 loadDriverData(UNKNOWN, "", "");
                 JOptionPane.showConfirmDialog(this, DRIVER_DELETE_ALL_RESULT_DAILOG.getContent(),
                         DELETE_ALL_RESULT_DIALOGTITLE.getContent(),
                         JOptionPane.PLAIN_MESSAGE, INFORMATION_MESSAGE);
-            }
         }
     }//GEN-LAST:event_deleteAll_buttonActionPerformed
    
@@ -1982,6 +1981,7 @@ public class ManageDrivers extends javax.swing.JFrame {
         initializeLoggers();
         checkOptions(args);
         readSettings();
+        Globals.loginID = "admin";
         
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -2019,7 +2019,6 @@ public class ManageDrivers extends javax.swing.JFrame {
         int model_Index = 0;
         
         try {
-//            driversTable.removeAll();
             model.setRowCount(0);
             // <editor-fold defaultstate="collapsed" desc="-- load car driver list">     
             // <editor-fold defaultstate="collapsed" desc="-- construct SQL statement">  
@@ -2101,12 +2100,10 @@ public class ManageDrivers extends javax.swing.JFrame {
             closeDBstuff(conn, selectStmt, rs, excepMsg);
             countValue.setText(String.valueOf(driverTable.getRowCount()));                        
         }
-//        setFormMode(FormMode.NormalMode);
             
         int numRows = model.getRowCount();
         
         if (numRows > 0) {  
-            deleteAll_button.setEnabled(true);
             // <editor-fold defaultstate="collapsed" desc="-- Highlight a selected driver">                          
             if (driverName.length() > 0) {
                 viewIndex = driverTable.convertRowIndexToView(model_Index);
@@ -2122,6 +2119,7 @@ public class ManageDrivers extends javax.swing.JFrame {
             }
             //</editor-fold>
         }
+        searchButton.setEnabled(false);
     }
         
     // <editor-fold defaultstate="collapsed" desc="-- Netbeans Generated Control Item Variables ">                               
@@ -2186,38 +2184,7 @@ public class ManageDrivers extends javax.swing.JFrame {
     //</editor-fold>       
     
     static DriverTable driverTable = (DriverTable) driversTable;
-
-    private void addDoubleClickEventListener() {
-        driverTable.addMouseListener(new MouseAdapter() {
-            public void mousePressed(MouseEvent me) {
-                JTable table =(JTable) me.getSource();
-                Point p = me.getPoint();
-                if (table.columnAtPoint(p) == 0) {
-                    return;
-                }
-                else
-                {
-                    if (me.getClickCount() == 2) {
-                        if (emptyLastRowPossible(insertSave_Button, driverTable)) {
-                            removeEmptyRow(insertSave_Button, driverTable);
-                        }                        
-                        
-                        if (getFormMode() != FormMode.UpdateMode) {
-                            int rowV = table.rowAtPoint(p);
-                            int colV = table.columnAtPoint(p);
-                            ((DriverTable)driverTable).userWantsToUpdateRow(rowV, colV);
-                            // Open the combobox here for easy use
-                            Object obj2 = (driverTable.getCellEditor(rowV, colV));
-                            DefaultCellEditor box = (DefaultCellEditor)obj2;
-                            Object obj3 = box.getComponent();
-                            ((PComboBox)obj3).setPopupVisible(true) ;
-                        }
-                    }
-                }
-            }
-        });        
-    }
-    
+ 
     void setUpdateMode (boolean toModify) {
         setFormMode(toModify ? FormMode.UpdateMode : FormMode.NormalMode);
         if (toModify) {

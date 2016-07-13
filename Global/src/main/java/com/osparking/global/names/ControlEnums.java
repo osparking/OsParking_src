@@ -483,7 +483,11 @@ public class ControlEnums {
         USER_SAVE_ODS_FAIL_DIALOG(
                 "저장할 사용자 목록이 없습니다!", "No user list to save!"),
         DRIVER_CREATRION_FAIL_DIALOG("운전자 정보 생성 실패.", "Failed to create a owner/driver record."), 
-        DRIVER_DELETE_ALL_RESULT_DAILOG("모든 운전자가 삭제되었습니다.", "All drivers were deleted"),
+        DRIVER_DELETE_ALL_RESULT_DAILOG("모든 운전자가 삭제되었고" + System.getProperty("line.separator")
+                + "그들에게 등록된 모든 차량도 삭제되었습니다.", 
+                "All drivers are deleted" + System.getProperty("line.separator")
+                + "and all vehicles registered are deleted, too."
+),
         DRIVER_MODIFY_FAIL_DAILOG(
                 "하나의 운전자만 선택하여 변경하십시오.", "Please narrow down to a single driver to update!"),
         DRIVER_CREATE_CANCEL_DIALOG(
