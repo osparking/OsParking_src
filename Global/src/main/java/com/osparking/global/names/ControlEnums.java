@@ -637,19 +637,17 @@ public class ControlEnums {
         
         SUGGEST_SUPPLY_L2("\"하위소속\"을 선택 하시겠습니까?.\n"
                 + "[예] => 하위소속 선택\n"
-                + "[아니오] => 전체 수정 취소\n"
-                + "[취소] => 소속 수정 취소\n", 
+                + "[아니오] => 전체 수정 취소\n", 
                 " Want to select \'Lower Affiliation\'?\n"
                 + "[Yes] => to select Lower Affiliation\n"
-                + "[No] => to cancel driver update\n"
-                + "[Cancel] => to cancel affiliation update"),
+                + "[No] => to cancel driver update"),
         
-        UNIT_INPUTDIALOG("\"호실번호\"를 선택하지 않으셨습니다.\n"
+        SUGGEST_SUPPLY_UNIT("\"호실번호\"를 선택 하시겠습니까?\n"
                 + "[예] => 호실번호 선택\n"
-                + "[아니오] => 건물번호 제거\n", 
-                "You did not select \'Room\'\n"
-                + "[Yes] => to select a Room\n"
-                + "[No] => to remove Building selection"),
+                + "[아니오] => 전체 수정 취소\n",
+                "Want to select \'Room\'?\n"
+                + "[Yes] => to select Room(number)\n"
+                + "[No] => to cancel driver update"),
         
         PW_FOURDIGIT_DIALOG("  - 숫자(0~9) 네 자리로 구성", "  - four digit number (0~9)"),
         
@@ -766,6 +764,8 @@ public class ControlEnums {
         VEHICLE_MODIFY_FAIL_DIALOGTITLE("차량 수정 실패", "Vehicle Modification Failure"),
         WARING_DIALOGTITLE("경고", "WARNING"),
         NOTICE_DIALOGTITLE("알림", "Notice"),
+        LOW_AFFILI_MISSING("하위 소속 부재 ", "Lower Affiliation "),
+        LOW_UNIT_MISSING("호실 비 선택 ", "Missing Unit "),
         ERROR_DIALOGTITLE("오류", "Error"),
         WORK_MODE_DIALOGTITLE("작업 모드 환기", "Current Work Mode"),
         CREATION_RESULT_DIALOGTITLE("생성 결과", "Creation Result"),

@@ -228,72 +228,28 @@ public class DriverTable extends JTable {
         //<editor-fold defaultstate="collapsed" desc="-- Enter Key Handler ">            
         Action handleEnter = new AbstractAction() {
             public void actionPerformed(ActionEvent e) {
-                Object itemSource = e.getSource();
-                
-                if (itemSource instanceof PComboBox) {
-                    Object cBoxItem = ((PComboBox)e.getSource()).getHighlightedCbxItem();
-                    ((PComboBox)itemSource).setSelectedItem(cBoxItem);
-                }
-                        
-                if (driverTable.getSelectedColumn() == UnitNo.getNumVal()) {
-                    finalizeDataEntry(parent);
-                } else {
-                    if (driverTable.editCellAt(driverTable.getSelectedRow(), driverTable.getSelectedColumn() + 1))
-                    {
-                        parent.startEditingCell(driverTable.getSelectedRow(), driverTable.getSelectedColumn() + 1);
-                    }                    
-                }
-//                if (e.getSource().getClass() == PComboBox.class) {
-//                    PComboBox comboBox = (PComboBox)e.getSource();
-//                    if (comboBox.isPopupVisible()) {
-//                        comboBox.setSelectedItem(comboBox.getHighlightedCbxItem());
-//                    } else {
-//                        // finalize update or insert operation here
-//                        int curRow = driverTable.getSelectedRow();
-//                        if (curRow < driverTable.getRowCount() - 1)
-//                            driverTable.setRowSelectionInterval(curRow + 1, curRow + 1);
-////                        finalizeDataEntry(parent);
-//                    }
-//                } else {
-//                    // finalize update or insert operation here
-////                    finalizeDataEntry(parent);
-//                }                           
+                java.awt.EventQueue.invokeLater(new Runnable() {
+                    public void run() {
+                        Object itemSource = e.getSource();
+
+                        if (itemSource instanceof PComboBox) {
+                            Object cBoxItem = ((PComboBox)e.getSource()).getHighlightedCbxItem();
+                            ((PComboBox)itemSource).setSelectedItem(cBoxItem);
+                        }
+        //                if (driverTable.getSelectedColumn() != UnitNo.getNumVal()
+                        if (column != UnitNo.getNumVal()
+                                && column != AffiliationL2.getNumVal()) 
+                        {
+                            parent.editNextColumn();
+                        }                        
+                    }
+                });                  
             }
         };
         JComponent compo = (JComponent)((DefaultCellEditor)cellEditor).getComponent();
         compo.getInputMap().put(KeyStroke.getKeyStroke("ENTER"), "handleEnter");
         compo.getActionMap().put("handleEnter", handleEnter);  
         // </editor-fold>
-        
-        /*
-        if (modCol == AffiliationL1.getNumVal() 
-                || modCol == AffiliationL2.getNumVal() 
-                || modCol == BuildingNo.getNumVal()
-                || modCol == UnitNo.getNumVal())
-        {
-            Component comp = ((DefaultCellEditor)cellEditor).getComponent();
-            comp.addMouseListener(new MouseAdapter() {
-                public void mousePressed (MouseEvent me) { 
-                   
-                    if (me.getClickCount() == 2 && !me.isConsumed()) {
-                        me.consume();
-                    
-                        if (emptyLastRowPossible(parent.insertSave_Button, driverTable))
-                        {
-                            removeEmptyRow(parent.insertSave_Button, driverTable);
-                        }                        
-
-                        if (parent.getFormMode() != FormMode.UpdateMode) {
-                            Point cBoxLoc = ((PComboBox)me.getSource()).getLocation();
-                            int rowV = driverTable.rowAtPoint(cBoxLoc);                                    
-                            int colV = driverTable.columnAtPoint(cBoxLoc);
-                            ((DriverTable)driverTable).userWantsToUpdateRow(rowV, colV);
-                        }
-                    }
-                }
-            });
-        }
-        */
         return cellEditor;
     }
 

@@ -117,6 +117,7 @@ import static com.osparking.global.names.OSP_enums.DriverCol.AffiliationL1;
 import static com.osparking.global.names.OSP_enums.DriverCol.AffiliationL2;
 import static com.osparking.global.names.OSP_enums.DriverCol.BuildingNo;
 import static com.osparking.global.names.OSP_enums.DriverCol.CellPhone;
+import static com.osparking.global.names.OSP_enums.DriverCol.DriverName;
 import static com.osparking.global.names.OSP_enums.DriverCol.LandLine;
 import static com.osparking.global.names.OSP_enums.DriverCol.UnitNo;
 import static com.osparking.global.names.OSP_enums.OpLogLevel.EBDsettingsChange;
@@ -369,10 +370,15 @@ public class ManageDrivers extends javax.swing.JFrame {
                 
                 switch(getFormMode()) {
                     case NormalMode:
-                        if (driverTable.getSelectedRowCount() > 0) {
+                        if (driverTable.getSelectedRowCount() == 0) {
+                            modiSave_Button.setEnabled(false);
+                            deleteDriver_Button.setEnabled(false);
+                            saveSheet_Button.setEnabled(false);
+                        } else {
                             modiSave_Button.setEnabled(true);
                             deleteAll_button.setEnabled(true);
                             deleteDriver_Button.setEnabled(true);
+                            saveSheet_Button.setEnabled(true);
                         }
                         break;
                     case CreateMode: 
@@ -813,10 +819,10 @@ public class ManageDrivers extends javax.swing.JFrame {
             }
         });
         searchName.addInputMethodListener(new java.awt.event.InputMethodListener() {
+            public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
+            }
             public void inputMethodTextChanged(java.awt.event.InputMethodEvent evt) {
                 searchNameInputMethodTextChanged(evt);
-            }
-            public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
             }
         });
         searchName.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -2379,7 +2385,7 @@ public class ManageDrivers extends javax.swing.JFrame {
         int colCell = driverTable.convertColumnIndexToModel(DriverCol.CellPhone.getNumVal());
         String cell = String.valueOf(driverTable.getValueAt(row, colCell)).toLowerCase().trim();        
 
-        if (somePropertiesInvalid(row, colName, name, colCell, cell)) {
+        if (somePropertiesInvalid(row, name, cell)) {
             return;
         }
         
@@ -2428,7 +2434,7 @@ public class ManageDrivers extends javax.swing.JFrame {
         int colCell = driverTable.convertColumnIndexToModel(DriverCol.CellPhone.getNumVal());
         String cell = String.valueOf(driverTable.getValueAt(row, colCell)).toLowerCase().trim();
         
-        if (somePropertiesInvalid(row, colName, name, colCell, cell))
+        if (somePropertiesInvalid(row, name, cell))
             return;
         
         // both driver name and his/her cell phone number are supplied
@@ -2447,10 +2453,10 @@ public class ManageDrivers extends javax.swing.JFrame {
     /**
      * Set up complex item selection upward propagation for the lower 
      * comboboxes. Lower comboboxes are for AffiliationL2 and UnitNo columns.
-     * @param column Index of the table column for the lower level combobox.
+     * @param driverCol table column for which a lower level combobox is the editor.
      */
-    private void setupLowerComboBox(DriverCol column) {    
-        if (column != AffiliationL2 && column != UnitNo) {
+    private void setupLowerComboBox(DriverCol driverCol) {    
+        if (driverCol != AffiliationL2 && driverCol != UnitNo) {
             return;
         }
         DefaultTableCellRenderer renderer = new DefaultTableCellRenderer();
@@ -2462,38 +2468,62 @@ public class ManageDrivers extends javax.swing.JFrame {
         comboBox.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                String cmd = e.getActionCommand();
                 java.awt.EventQueue.invokeLater(new Runnable() {
                     public void run() {
-                        Object parentObj = driverTable.getValueAt(driverTable.getSelectedRow(), 
-                                (column == AffiliationL2 ? AffiliationL1.getNumVal() : BuildingNo.getNumVal()));
-                        int parentKey = (Integer)(((ConvComboBoxItem)parentObj).getKeyValue());       
-                        System.out.println("parentKey: " + parentKey);
-                        JComboBox cb = (JComboBox)e.getSource();
-
-                        InnoComboBoxItem innoItem = (InnoComboBoxItem)cb.getSelectedItem();
+                        InnoComboBoxItem innoItem = (InnoComboBoxItem)
+                                ((JComboBox)e.getSource()).getSelectedItem();
+                        
                         if (innoItem != null) {
-                            int lowKey = ((InnoComboBoxItem)cb.getSelectedItem()).getKeys()[0];
-
-                            if (parentKey == PROMPTER_KEY && lowKey != PROMPTER_KEY) {
+                            int colM = driverTable.convertColumnIndexToModel(driverTable.getSelectedColumn());
+                            
+                            if (innoItem.getKeys().length > 1) 
+                            {
                                 int rowV = driverTable.getSelectedRow();
-                                int colV = driverTable.getSelectedColumn();
 
-                                if (rowV >= 0 && colV >= 0) {
-                                    int rowM = driverTable.convertRowIndexToModel(rowV);
-                                    int colM = driverTable.convertColumnIndexToModel(colV);
-                                    propagateComplexItem(rowV, rowM, colM);
+                                //<editor-fold defaultstate="collapsed" desc="-- propagate selection upward, etc.">            
+                                int highKey = (Integer)(innoItem.getKeys()[1]);
+
+                                driverTable.setValueAt(
+                                        new ConvComboBoxItem(highKey, innoItem.getLabels()[1]), 
+                                        rowV, driverTable.convertColumnIndexToView(colM - 1));                        
+
+                                TableCellEditor editor = driverTable.getCellEditor(rowV, colM);
+
+                                ((PComboBox)(((DefaultCellEditor)editor).getComponent())).removeAllItems();
+
+                                driverTable.setValueAt(
+                                        new InnoComboBoxItem (new int[]{innoItem.getKeys()[0]},
+                                                new String[]{innoItem.getLabels()[0]}), 
+                                        rowV, colM);
+
+                                // Update prevParentKey 
+                                setPrevParentKey(driverCol, highKey);
+                                
+                                if (colM == AffiliationL2.getNumVal()) {
+                                    editNextColumn();
                                 }
                             }
-                        }                        
+                        }
                     }
+
                 });                    
             }
         });      
         
-        TableColumn comboCol = driverTable.getColumnModel().getColumn(column.getNumVal());    
+        TableColumn comboCol = driverTable.getColumnModel().getColumn(driverCol.getNumVal());    
         comboCol.setCellEditor(new DefaultCellEditor(comboBox));
     }
 
+    public void editNextColumn() {
+        if (driverTable.editCellAt(driverTable.getSelectedRow(), 
+                driverTable.getSelectedColumn() + 1))
+        {
+            startEditingCell(driverTable.getSelectedRow(), 
+                    driverTable.getSelectedColumn() + 1);
+        }            
+    }
+    
     /**
      * load item list for a comboBox given
      * @param comboBox box for which item list is created
@@ -2634,7 +2664,7 @@ public class ManageDrivers extends javax.swing.JFrame {
      * @param rowM (model) row index of the cell where the low combobox is.
      * @param colM (model) column index of the cell where the low combobox is.
      */
-    public static void propagateComplexItem(int rowV, int rowM, int colM) {
+    public static void propagateComplexItem(int rowV, int colM) {
         // user wants to change driver info or continues changing it
         DriverCol driverColM = DriverCol.values()[colM];
         
@@ -2656,16 +2686,11 @@ public class ManageDrivers extends javax.swing.JFrame {
                     int colHi = driverTable.convertColumnIndexToView(colM - 1);
                     driverTable.setValueAt(hi_Item, rowV, colHi);                        
 
-//                        Object objLevel1 = driverTable.getValueAt(rowV, DriverCol.AffiliationL1.getNumVal() );
-//                        int LOne_key = (Integer)(((ConvComboBoxItem)objLevel1).getKeyValue());            
-//                        System.out.println("LOne_keyX: " + LOne_key);                        
-
                     TableCellEditor editor = driverTable.getCellEditor(rowV, colM);
                     ((JComboBox)(((DefaultCellEditor)editor).getComponent())).removeAllItems();
 
                     InnoComboBoxItem low_item = 
                          new InnoComboBoxItem (new int[]{keyValue}, new String[]{innoItem.getLabels()[0]});
-                    System.out.println("low item label: " + innoItem.getLabels()[0]);      
 
                     driverTable.setValueAt(low_item, rowV, colM);
 
@@ -2924,8 +2949,7 @@ public class ManageDrivers extends javax.swing.JFrame {
         }
     }
 
-    private boolean somePropertiesInvalid(int row, 
-            int colName, String name, int colCell, String cell) 
+    private boolean somePropertiesInvalid(int row, String name, String cell) 
     {       
         int colPhone = driverTable.convertColumnIndexToModel(DriverCol.LandLine.getNumVal());
         String phone = String.valueOf(driverTable.getValueAt(row, colPhone)).toLowerCase().trim();
@@ -2947,7 +2971,7 @@ public class ManageDrivers extends javax.swing.JFrame {
                             + MISSING_NAME_2.getContent(),
                     WARING_DIALOGTITLE.getContent(), 
                     JOptionPane.YES_NO_OPTION, WARNING_MESSAGE);                    
-            supplyORrestore(response, row, colName);       
+            supplyORrestore(response, row, DriverName);
             return true;
             //</editor-fold>               
         } else if (getNumericDigitCount(cell) < 10) {
@@ -2959,7 +2983,7 @@ public class ManageDrivers extends javax.swing.JFrame {
                             + MISSING_NAME_2.getContent(),
                     WARING_DIALOGTITLE.getContent(), 
                     JOptionPane.YES_NO_OPTION, WARNING_MESSAGE);                    
-            supplyORrestore(response, row, colCell);
+            supplyORrestore(response, row, CellPhone);
             return true;
             //</editor-fold>          
         } else if (0 < getNumericDigitCount(phone) && getNumericDigitCount(phone) < 4) {
@@ -2971,7 +2995,7 @@ public class ManageDrivers extends javax.swing.JFrame {
                             + MISSING_NAME_2.getContent(),
                     WARING_DIALOGTITLE.getContent(), 
                     JOptionPane.YES_NO_OPTION, WARNING_MESSAGE);                    
-            supplyORrestore(response, row, colPhone);
+            supplyORrestore(response, row, LandLine);
             return true;
             //</editor-fold>          
         }
@@ -2979,52 +3003,9 @@ public class ManageDrivers extends javax.swing.JFrame {
         if (!L1_item.equals(HIGHER_CB_ITEM.getContent()) && L2_NO == PROMPTER_KEY) {
             // <editor-fold defaultstate="collapsed" desc="-- handle missing L2 item"> 
             int response = JOptionPane.showConfirmDialog(null, SUGGEST_SUPPLY_L2.getContent(),
-                    ERROR_DIALOGTITLE.getContent(), JOptionPane.YES_NO_CANCEL_OPTION, WARNING_MESSAGE);
-            
-            if (response == JOptionPane.YES_OPTION){
-                colName = driverTable.convertColumnIndexToModel(
-                            DriverCol.AffiliationL2.getNumVal());  
-                if (driverTable.editCellAt(row, colName))
-                {
-                    highlightTableRow(driverTable, row);
-                    startEditingCell(row, colName);
-                }
-            }else if (response == JOptionPane.NO_OPTION) {
-                // cancel whole drive update
-                if (getFormMode() == FormMode.CreateMode) {
-                    ((DefaultTableModel)driverTable.getModel()).setRowCount(driverTable.getRowCount() - 1);
-                    setFormMode(FormMode.NormalMode);
-                    if (rowBeforeCreate != -1) {
-                        highlightTableRow(driverTable, rowBeforeCreate);
-                        deleteDriver_Button.setEnabled(true);
-                    }                
-                } else {
-                    restoreDriverList(updateRow);                  
-                }                
-            } else {
-                // In UPDATE mode, restore affiliation level 2 to the original setting
-                int driverKey = (Integer)driverTable.getModel().getValueAt(updateRow, DriverCol.SEQ_NO.getNumVal());
-                if (driverKey < 0) {
-                    logParkingException(Level.SEVERE, null, 
-                            "Affiliation Level 2 item key is unexpected: " + driverKey);
-                }
-
-                String sql = "Select L2.L2_NO, L2.party_name From l2_affiliation L2, cardriver C "
-                        + "Where L2.L2_NO = C.L2_NO AND C.SEQ_NO = ?";                
-                driverTable.setValueAt(getHigherConvItem(sql, driverKey), 
-                        updateRow, AffiliationL2.getNumVal());
-                
-                sql = "Select L2.L2_NO, L2.party_name From l2_affiliation L2, cardriver C "
-                        + "Where L2.L2_NO = C.L2_NO AND C.SEQ_NO = ?";                
-                driverTable.setValueAt(getLowerInnoItem(sql, driverKey), 
-                        updateRow, AffiliationL2.getNumVal());
-
-                if (driverTable.editCellAt(updateRow, AffiliationL2.getNumVal()))
-                {
-                    highlightTableRow(driverTable, updateRow);
-                    startEditingCell(updateRow, AffiliationL2.getNumVal());
-                }                
-            }
+                    LOW_AFFILI_MISSING.getContent() + ERROR_DIALOGTITLE.getContent(), 
+                    JOptionPane.YES_NO_OPTION, WARNING_MESSAGE);
+            supplyORrestore(response, row, AffiliationL2);
             //</editor-fold>  
             return true;            
         }
@@ -3032,27 +3013,10 @@ public class ManageDrivers extends javax.swing.JFrame {
         if(!building_item.equals(BUILDING_CB_ITEM.getContent()) && SEQ_NO == PROMPTER_KEY)
         {
             // <editor-fold defaultstate="collapsed" desc="-- handle missing Unit item"> 
-            int respone = JOptionPane.showConfirmDialog(null, UNIT_INPUTDIALOG.getContent(),
-                    ERROR_DIALOGTITLE.getContent(), JOptionPane.YES_NO_OPTION, WARNING_MESSAGE);
-            if(respone == JOptionPane.YES_OPTION){
-                colName = driverTable.convertColumnIndexToModel(
-                            DriverCol.UnitNo.getNumVal());  
-                if (driverTable.editCellAt(row, colName))
-                {
-                    highlightTableRow(driverTable, row);
-                    startEditingCell(row, colName);
-                }
-            }else{
-                //Building을 초기값으로 바꾸고 저장
-                colName = driverTable.convertColumnIndexToModel(
-                        DriverCol.BuildingNo.getNumVal());    
-                driverTable.setValueAt(ManageDrivers.getPrompter(BuildingNo, null), row, colName);
-                if (driverTable.editCellAt(row, colName))
-                {
-                    highlightTableRow(driverTable, row);
-                    startEditingCell(row, colName);
-                }
-            }
+            int response = JOptionPane.showConfirmDialog(null, SUGGEST_SUPPLY_UNIT.getContent(),
+                    LOW_UNIT_MISSING.getContent() + ERROR_DIALOGTITLE.getContent(), 
+                    JOptionPane.YES_NO_OPTION, WARNING_MESSAGE);
+            supplyORrestore(response, row, UnitNo);
             return true;
             //</editor-fold>   
         }
@@ -3077,13 +3041,15 @@ public class ManageDrivers extends javax.swing.JFrame {
         driverTable.requestFocusInWindow();      
     }
 
-    private void supplyORrestore(int response, int row, int colName) {
+    private void supplyORrestore(int response, int row, DriverCol driverCol) {
         if (response == JOptionPane.YES_OPTION) 
         {
-            if (driverTable.editCellAt(row, colName))
+            int column = driverTable.convertColumnIndexToModel(driverCol.getNumVal());
+            
+            if (driverTable.editCellAt(row, column))
             {
                 highlightTableRow(driverTable, row);
-                startEditingCell(row, colName);
+                startEditingCell(row, column);
             }                  
         } else {
             if (getFormMode() == FormMode.CreateMode) {
@@ -3097,32 +3063,5 @@ public class ManageDrivers extends javax.swing.JFrame {
                 restoreDriverList(updateRow);                  
             }
         }         
-    }
-
-    private InnoComboBoxItem getLowerInnoItem(String sql, int driverKey) {
-
-        InnoComboBoxItem innoItem = null;
-        
-        Connection conn = null;
-        PreparedStatement selectStmt = null;
-        ResultSet rs = null;
-        
-        String logMsg = "while getting L2 Inno' item for driver with key: "+ driverKey;
-        try {
-            conn = JDBCMySQL.getConnection();
-            selectStmt = conn.prepareStatement(sql);
-            selectStmt.setInt(1, driverKey);
-            rs = selectStmt.executeQuery();
-            if (rs.next()) {
-                innoItem =  new InnoComboBoxItem(
-                        new int[]{rs.getInt(1)}, new String[]{rs.getString(2)});
-            }
-        } catch (SQLException ex) {
-            logParkingException(Level.SEVERE, ex, logMsg);
-        } finally {
-            closeDBstuff(conn, selectStmt, rs, logMsg);
-        }    
-        
-        return innoItem;            
     }
 }
