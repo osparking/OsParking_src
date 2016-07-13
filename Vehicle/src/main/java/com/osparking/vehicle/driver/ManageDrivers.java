@@ -70,13 +70,13 @@ import static com.osparking.global.names.DB_Access.readSettings;
 import static com.osparking.global.Globals.SetAColumnWidth;
 import static com.osparking.global.Globals.attachCondition;
 import static com.osparking.global.Globals.checkOptions;
-import static com.osparking.global.Globals.closeDBstuff;
 import static com.osparking.global.Globals.emptyLastRowPossible;
 import static com.osparking.global.Globals.font_Size;
 import static com.osparking.global.Globals.font_Style;
 import static com.osparking.global.Globals.font_Type;
 import static com.osparking.global.Globals.highlightTableRow;
 import static com.osparking.global.Globals.OSPiconList;
+import static com.osparking.global.Globals.closeDBstuff;
 import static com.osparking.global.Globals.getNumericDigitCount;
 import static com.osparking.global.Globals.head_font_Size;
 import static com.osparking.global.Globals.initializeLoggers;
@@ -109,6 +109,7 @@ import static com.osparking.global.names.ControlEnums.ToolTipContent.CELL_PHONE_
 import static com.osparking.global.names.ControlEnums.ToolTipContent.DRIVER_INPUT_TOOLTIP;
 import static com.osparking.global.names.ControlEnums.ToolTipContent.LANDLINE_INPUT_TOOLTIP;
 import com.osparking.global.names.InnoComboBoxItem;
+import com.osparking.global.names.JDBCMySQL;
 import static com.osparking.global.names.JDBCMySQL.getConnection;
 import com.osparking.global.names.OSP_enums;
 import com.osparking.global.names.OSP_enums.DriverCol;
@@ -3002,38 +3003,27 @@ public class ManageDrivers extends javax.swing.JFrame {
                 }                
             } else {
                 // In UPDATE mode, restore affiliation level 2 to the original setting
-                int L2_key = (Integer)driverTable.getModel().getValueAt(updateRow, DriverCol.SEQ_NO.getNumVal());
-                assert(L2_key > 1000);
-                String label = getLowerCBoxLabel(AffiliationL2, L2_key);
-                InnoComboBoxItem original = new InnoComboBoxItem(
-                        new int[]{60}, new String[]{label});
-                driverTable.setValueAt(original, updateRow, AffiliationL2.getNumVal());
+                int driverKey = (Integer)driverTable.getModel().getValueAt(updateRow, DriverCol.SEQ_NO.getNumVal());
+                if (driverKey < 0) {
+                    logParkingException(Level.SEVERE, null, 
+                            "Affiliation Level 2 item key is unexpected: " + driverKey);
+                }
+
+                String sql = "Select L2.L2_NO, L2.party_name From l2_affiliation L2, cardriver C "
+                        + "Where L2.L2_NO = C.L2_NO AND C.SEQ_NO = ?";                
+                driverTable.setValueAt(getHigherConvItem(sql, driverKey), 
+                        updateRow, AffiliationL2.getNumVal());
+                
+                sql = "Select L2.L2_NO, L2.party_name From l2_affiliation L2, cardriver C "
+                        + "Where L2.L2_NO = C.L2_NO AND C.SEQ_NO = ?";                
+                driverTable.setValueAt(getLowerInnoItem(sql, driverKey), 
+                        updateRow, AffiliationL2.getNumVal());
 
                 if (driverTable.editCellAt(updateRow, AffiliationL2.getNumVal()))
                 {
                     highlightTableRow(driverTable, updateRow);
                     startEditingCell(updateRow, AffiliationL2.getNumVal());
                 }                
-                
-                /*
-(Integer)model.getValueAt(updateRow, DriverCol.SEQ_NO.getNumVal())
-
-0  "(하위-상위)" INNO
-
-60 "마케팅과" INNO
-
-select party_name
-from l2_affiliation
-where l2_affiliation.L2_NO = 0;
-
-select party_name
-from l2_affiliation
-where l2_affiliation.L2_NO = 60;                
-                */
-                /*
-                select 0  "(하위-상위)"
-                for updateRow, L2_col // 2, DriverCol.AffiliationL2.getNumVal()
-                */
             }
             //</editor-fold>  
             return true;            
@@ -3109,9 +3099,30 @@ where l2_affiliation.L2_NO = 60;
         }         
     }
 
-    private String getLowerCBoxLabel(DriverCol driverCol, int L2_key) {
-        String sql = "Select L2.party_name From l2_affiliation L2, cardriver C "
-                + "Where L2.L2_NO = C.L2_NO AND C.SEQ_NO = ?";
-        return "마케팅과";
+    private InnoComboBoxItem getLowerInnoItem(String sql, int driverKey) {
+
+        InnoComboBoxItem innoItem = null;
+        
+        Connection conn = null;
+        PreparedStatement selectStmt = null;
+        ResultSet rs = null;
+        
+        String logMsg = "while getting L2 Inno' item for driver with key: "+ driverKey;
+        try {
+            conn = JDBCMySQL.getConnection();
+            selectStmt = conn.prepareStatement(sql);
+            selectStmt.setInt(1, driverKey);
+            rs = selectStmt.executeQuery();
+            if (rs.next()) {
+                innoItem =  new InnoComboBoxItem(
+                        new int[]{rs.getInt(1)}, new String[]{rs.getString(2)});
+            }
+        } catch (SQLException ex) {
+            logParkingException(Level.SEVERE, ex, logMsg);
+        } finally {
+            closeDBstuff(conn, selectStmt, rs, logMsg);
+        }    
+        
+        return innoItem;            
     }
 }
