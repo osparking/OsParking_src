@@ -19,6 +19,7 @@ package com.osparking.global;
 import static com.mysql.jdbc.MysqlErrorNumbers.ER_DUP_ENTRY;
 import static com.mysql.jdbc.MysqlErrorNumbers.ER_NO;
 import static com.mysql.jdbc.MysqlErrorNumbers.ER_YES;
+import static com.osparking.global.CommonData.ADMIN_ID;
 import com.osparking.global.names.ControlEnums.Languages;
 import static com.osparking.global.names.ControlEnums.Languages.KOREAN;
 import static com.osparking.global.names.DB_Access.PIC_HEIGHT;
@@ -138,6 +139,24 @@ public class Globals {
     public static SimpleDateFormat timeFormatMMSS = new SimpleDateFormat("mm_ss"); 
     public static SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");    
     public static int SIX_HOURS = 3600 * 1000 * 6;
+    
+    public static void determineLoginID() {
+        String managerID = "manager";
+        String guestID = "guest";
+        Object[] possibleValues = { ADMIN_ID, managerID, guestID};
+        
+        Object selectedValue = JOptionPane.showInputDialog(null,
+            "Choose Login User Level", "User Type", 
+            JOptionPane.QUESTION_MESSAGE, null,
+            possibleValues, possibleValues[0]);
+        
+        loginID = (String)selectedValue;
+        if (loginID.equals(ADMIN_ID) || loginID.equals(managerID)) {
+            Globals.isManager = true;
+        } else if (loginID.equals(guestID)) {
+            Globals.isManager = false;                 
+        }        
+    }
     
     public static void augmentComponentMap(
             Object component, HashMap<String, Component> componentMap) 

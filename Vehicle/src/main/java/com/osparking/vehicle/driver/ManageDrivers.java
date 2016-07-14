@@ -75,15 +75,16 @@ import static com.osparking.global.Globals.font_Type;
 import static com.osparking.global.Globals.highlightTableRow;
 import static com.osparking.global.Globals.OSPiconList;
 import static com.osparking.global.Globals.closeDBstuff;
+import static com.osparking.global.Globals.determineLoginID;
 import static com.osparking.global.Globals.head_font_Size;
 import static com.osparking.global.Globals.initializeLoggers;
 import static com.osparking.global.Globals.isManager;
 import static com.osparking.global.Globals.language;
 import static com.osparking.global.Globals.logParkingException;
 import static com.osparking.global.Globals.logParkingOperation;
+import static com.osparking.global.Globals.loginID;
 import static com.osparking.global.Globals.rejectUserInput;
 import static com.osparking.global.Globals.showLicensePanel;
-import com.osparking.global.UserLeveSelect;
 import static com.osparking.global.names.ControlEnums.ButtonTypes.*;
 import static com.osparking.global.names.ControlEnums.ComboBoxItemTypes.*;
 import static com.osparking.global.names.ControlEnums.DialogMessages.*;
@@ -140,8 +141,6 @@ import com.osparking.vehicle.LabelBlinker;
 import java.awt.Color;
 import java.awt.event.ActionListener;
 import java.util.Locale;
-import javax.swing.JDialog;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.SwingUtilities;
 import javax.swing.table.TableCellEditor;
@@ -1956,49 +1955,16 @@ public class ManageDrivers extends javax.swing.JFrame {
         initializeLoggers();
         checkOptions(args);
         readSettings();
-        String managerID = "manager";
-        String guestID = "guest";
-        Object[] possibleValues = { ADMIN_ID, managerID, guestID};
-        
-        Object selectedValue = JOptionPane.showInputDialog(null,
-            "Choose Login User Level", "User Type", JOptionPane.INFORMATION_MESSAGE, null,
-            possibleValues, possibleValues[0]);
-        
-        if 
-        
-        System.out.println("Result: " + selectedValue);
-//        final JOptionPane optionPane = new JOptionPane(
-//                        "The only way to close this dialog is by\n"
-//                        + "pressing one of the following buttons.\n"
-//                        + "Do you understand?",
-//                        JOptionPane.QUESTION_MESSAGE,
-//                        JOptionPane.YES_NO_OPTION);
-//
-//        final JDialog dialog = new JDialog(frame, 
-//                                     "Click a button",
-//                                     true);
-//        dialog.setContentPane(optionPane);
-//        dialog.setDefaultCloseOperation(
-//            JDialog.DO_NOTHING_ON_CLOSE);
-//        dialog.addWindowListener(new WindowAdapter() {
-//            public void windowClosing(WindowEvent we) {
-//                setLabel("Thwarted user attempt to close window.");
-//            }
-//        });        
-//        
-//        JFrame seleceGUI = new UserLeveSelect();
-//        JDialog userSelection = new JDialog(null, true);
-//        userSelection.setContentPane(seleceGUI.getContentPane());
-//        userSelection.setVisible(true);
+        determineLoginID();
         
         /* Create and display the form */
-//        java.awt.EventQueue.invokeLater(new Runnable() {
-//            public void run() {
-//                ManageDrivers mainForm = new ManageDrivers(null);
-//                mainForm.setLocation(0, 0);
-//                mainForm.setVisible(true);
-//            }
-//        });
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                ManageDrivers mainForm = new ManageDrivers(null);
+                mainForm.setLocation(0, 0);
+                mainForm.setVisible(true);
+            }
+        });
     }
     
     static ConvComboBoxItem prevItem = null;
