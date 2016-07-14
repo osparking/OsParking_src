@@ -1483,7 +1483,7 @@ public class ManageDrivers extends javax.swing.JFrame {
     }//GEN-LAST:event_searchButtonActionPerformed
 
     private void saveSheet_ButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveSheet_ButtonActionPerformed
-        saveODSfile(this, driversTable, saveFileChooser, VEHICLE_SAVE_ODS_FAIL_DIALOG.getContent());
+        saveODSfile(this, driverTable, saveFileChooser, DRIVER_SAVE_ODS_FAIL_DIALOG.getContent());
     }//GEN-LAST:event_saveSheet_ButtonActionPerformed
 
     private void closeFormButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_closeFormButtonActionPerformed
