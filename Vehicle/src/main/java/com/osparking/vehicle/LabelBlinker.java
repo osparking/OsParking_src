@@ -29,7 +29,14 @@ import javax.swing.JLabel;
  * @author Open Source Parking Inc.(www.osparking.com)
  */
 public class LabelBlinker {
-    int counter = 0;
+    private static int counter = 0;
+
+    /**
+     * @param aCounter the counter to set
+     */
+    public static void setCounter(int aCounter) {
+        counter = aCounter;
+    }
     ScheduledExecutorService service;    
     
     public void displayHelpMessage(JLabel messageLabel, String message, boolean blinker) {
@@ -40,7 +47,7 @@ public class LabelBlinker {
                 if (counter++ >= 6) {
                     service.shutdown();
                     messageLabel.setForeground(Color.gray);
-                    counter = 0;
+                    setCounter(0);
                 } else {
                     if (counter % 2 == 1) {
                         messageLabel.setForeground(tipColor);
@@ -54,6 +61,9 @@ public class LabelBlinker {
         messageLabel.setText(message);
         messageLabel.setForeground(Color.gray);
         if (blinker) {
+            if (service != null) {
+                service.shutdown();
+            }
             service = Executors.newSingleThreadScheduledExecutor();
             service.scheduleAtFixedRate(runnable, 0, 750, TimeUnit.MILLISECONDS);
         }
@@ -62,7 +72,7 @@ public class LabelBlinker {
     public void displayHelpMessages(JLabel messageLabel, String message1, 
             String message2, boolean blinker) 
     {
-        Runnable runnable = new Runnable() {
+        Runnable runnable = new Runnable(       ) {
             public void run() {
                 // task to run goes here
                 if (counter++ < 4) {
@@ -75,7 +85,7 @@ public class LabelBlinker {
                     service.shutdown();
                     messageLabel.setText(message2);
                     messageLabel.setForeground(Color.gray);
-                    counter = 0; // init for the next column/control
+                    setCounter(0); // init for the next column/control
                 }
             }
         };
@@ -83,9 +93,15 @@ public class LabelBlinker {
         messageLabel.setForeground(Color.gray);
         if (blinker) {
             messageLabel.setText(message1);
+            if (service != null) {
+                service.shutdown();
+            }
             service = Executors.newSingleThreadScheduledExecutor();
             service.scheduleAtFixedRate(runnable, 0, 750, TimeUnit.MILLISECONDS);
         } else {
+            if (service != null) {
+                service.shutdown();
+            }
             messageLabel.setText(message2);
         }
     }

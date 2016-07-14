@@ -35,8 +35,6 @@ import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import static java.awt.event.KeyEvent.VK_SHIFT;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
 import java.sql.Connection;
@@ -53,7 +51,6 @@ import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import static javax.swing.JOptionPane.INFORMATION_MESSAGE;
 import static javax.swing.JOptionPane.WARNING_MESSAGE;
-import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.MutableComboBoxModel;
 import javax.swing.SwingConstants;
@@ -70,7 +67,6 @@ import static com.osparking.global.names.DB_Access.readSettings;
 import static com.osparking.global.Globals.SetAColumnWidth;
 import static com.osparking.global.Globals.attachCondition;
 import static com.osparking.global.Globals.checkOptions;
-import static com.osparking.global.Globals.emptyLastRowPossible;
 import static com.osparking.global.Globals.font_Size;
 import static com.osparking.global.Globals.font_Style;
 import static com.osparking.global.Globals.font_Type;
@@ -84,7 +80,6 @@ import static com.osparking.global.Globals.language;
 import static com.osparking.global.Globals.logParkingException;
 import static com.osparking.global.Globals.logParkingOperation;
 import static com.osparking.global.Globals.rejectUserInput;
-import static com.osparking.global.Globals.removeEmptyRow;
 import static com.osparking.global.Globals.showLicensePanel;
 import static com.osparking.global.names.ControlEnums.ButtonTypes.*;
 import static com.osparking.global.names.ControlEnums.ComboBoxItemTypes.*;
@@ -109,7 +104,6 @@ import static com.osparking.global.names.ControlEnums.ToolTipContent.CELL_PHONE_
 import static com.osparking.global.names.ControlEnums.ToolTipContent.DRIVER_INPUT_TOOLTIP;
 import static com.osparking.global.names.ControlEnums.ToolTipContent.LANDLINE_INPUT_TOOLTIP;
 import com.osparking.global.names.InnoComboBoxItem;
-import com.osparking.global.names.JDBCMySQL;
 import static com.osparking.global.names.JDBCMySQL.getConnection;
 import com.osparking.global.names.OSP_enums;
 import com.osparking.global.names.OSP_enums.DriverCol;
@@ -231,10 +225,8 @@ public class ManageDrivers extends javax.swing.JFrame {
             sorter.setSortable(i, false);
         }
         driverTable.setRowSorter(sorter);  
-        
-        if (Globals.loginID != null && Globals.loginID.equals("admin")) {
-            deleteAll_button.setEnabled(true);
-        }
+        determineDeleteAllEnabled();
+
         /**
          * Initialize table with real driver information
          */
@@ -325,6 +317,7 @@ public class ManageDrivers extends javax.swing.JFrame {
                 insertSave_Button.setText(SAVE_BTN.getContent());
                 insertSave_Button.setMnemonic('s');
                 deleteDriver_Button.setEnabled(false);
+                deleteAll_button.setEnabled(false);
                 tipLabel.setVisible(true);
                 break;
                 
@@ -335,6 +328,7 @@ public class ManageDrivers extends javax.swing.JFrame {
                 modiSave_Button.setText(SAVE_BTN.getContent());
                 modiSave_Button.setMnemonic('s');
                 deleteDriver_Button.setEnabled(false);
+                deleteAll_button.setEnabled(false);
                 tipLabel.setVisible(true);
                 break;
                 
@@ -352,6 +346,7 @@ public class ManageDrivers extends javax.swing.JFrame {
                 if (driverTable.getSelectedRowCount() > 0) {
                     deleteDriver_Button.setEnabled(true);
                 }
+                determineDeleteAllEnabled();
                 tipLabel.setVisible(false);
                 break;
             default:
@@ -2470,6 +2465,10 @@ public class ManageDrivers extends javax.swing.JFrame {
                                 if (colM == AffiliationL2.getNumVal()) {
                                     editNextColumn();
                                 }
+                            } else {
+                                if (innoItem.getKeys()[0] != PROMPTER_KEY) {
+                                    editNextColumn();
+                                }
                             }
                         }
                     }
@@ -2618,6 +2617,8 @@ public class ManageDrivers extends javax.swing.JFrame {
                     REQUIRE_FIELD_NOTE.getContent(), FOCUS_MOVE_NOTE.getContent(), !cellReqBlinked);  
             cellReqBlinked = true;
         } else {
+            LabelBlinker.setCounter(4);
+            tipLabel.setForeground(Color.gray);
             tipLabel.setText(FOCUS_MOVE_NOTE.getContent());
         }
         driverTable.requestFocusInWindow();
@@ -3030,5 +3031,11 @@ public class ManageDrivers extends javax.swing.JFrame {
                 restoreDriverList(updateRow);                  
             }
         }         
+    }
+
+    private void determineDeleteAllEnabled() {
+        if (Globals.loginID != null && Globals.loginID.equals("admin")) {
+            deleteAll_button.setEnabled(true);
+        }
     }
 }
