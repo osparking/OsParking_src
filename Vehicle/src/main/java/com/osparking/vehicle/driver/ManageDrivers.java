@@ -18,6 +18,7 @@ package com.osparking.vehicle.driver;
 
 import static com.mysql.jdbc.MysqlErrorNumbers.ER_DUP_ENTRY;
 import com.osparking.global.CommonData;
+import static com.osparking.global.CommonData.ADMIN_ID;
 import static com.osparking.global.CommonData.NOT_SELECTED;
 import static com.osparking.global.CommonData.PROMPTER_KEY;
 import static com.osparking.global.CommonData.buttonHeightNorm;
@@ -27,6 +28,7 @@ import static com.osparking.global.CommonData.normGUIwidth;
 import static com.osparking.global.CommonData.pointColor;
 import static com.osparking.global.CommonData.tableRowHeight;
 import static com.osparking.global.CommonData.tipColor;
+import static com.osparking.global.DataSheet.saveODSfile;
 import com.osparking.global.Globals;
 import static com.osparking.vehicle.driver.DriverTable.updateRow;
 import static com.osparking.vehicle.driver.ODSReader.getWrongCellPointString;
@@ -73,17 +75,18 @@ import static com.osparking.global.Globals.font_Type;
 import static com.osparking.global.Globals.highlightTableRow;
 import static com.osparking.global.Globals.OSPiconList;
 import static com.osparking.global.Globals.closeDBstuff;
-import static com.osparking.global.Globals.getNumericDigitCount;
 import static com.osparking.global.Globals.head_font_Size;
 import static com.osparking.global.Globals.initializeLoggers;
+import static com.osparking.global.Globals.isManager;
 import static com.osparking.global.Globals.language;
 import static com.osparking.global.Globals.logParkingException;
 import static com.osparking.global.Globals.logParkingOperation;
 import static com.osparking.global.Globals.rejectUserInput;
 import static com.osparking.global.Globals.showLicensePanel;
+import com.osparking.global.UserLeveSelect;
 import static com.osparking.global.names.ControlEnums.ButtonTypes.*;
 import static com.osparking.global.names.ControlEnums.ComboBoxItemTypes.*;
-import static com.osparking.global.names.ControlEnums.DialogMSGTypes.*;
+import static com.osparking.global.names.ControlEnums.DialogMessages.*;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.*;
 import com.osparking.global.names.ControlEnums.FormMode;
 import static com.osparking.global.names.ControlEnums.FormModeString.SEARCH;
@@ -128,12 +131,17 @@ import static com.osparking.vehicle.CommonData.DTCW_RN;
 import static com.osparking.vehicle.CommonData.DTCW_UN;
 import static com.osparking.vehicle.CommonData.DTC_MARGIN;
 import static com.osparking.vehicle.CommonData.getPrevParentKey;
+import static com.osparking.vehicle.CommonData.invalidCell;
+import static com.osparking.vehicle.CommonData.invalidName;
+import static com.osparking.vehicle.CommonData.invalidPhone;
 import static com.osparking.vehicle.CommonData.refreshComboBox;
 import static com.osparking.vehicle.CommonData.setPrevParentKey;
 import com.osparking.vehicle.LabelBlinker;
 import java.awt.Color;
 import java.awt.event.ActionListener;
 import java.util.Locale;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.SwingUtilities;
 import javax.swing.table.TableCellEditor;
@@ -225,12 +233,13 @@ public class ManageDrivers extends javax.swing.JFrame {
             sorter.setSortable(i, false);
         }
         driverTable.setRowSorter(sorter);  
-        determineDeleteAllEnabled();
+        adminOperationEnabled(true);
 
         /**
          * Initialize table with real driver information
          */
         loadDriverData(UNKNOWN, "", "");
+        setSearchEnabled(true);
     }
     
     /** 
@@ -295,11 +304,13 @@ public class ManageDrivers extends javax.swing.JFrame {
         searchL2ComboBox.setEnabled(flag);
         searchBuildingComboBox.setEnabled(flag);
         searchUnitComboBox.setEnabled(flag);
-        clearButton.setEnabled(flag);
-        searchButton.setEnabled(flag);
         closeFormButton.setEnabled(flag);     
         cancelButton.setEnabled(!flag);        
-        saveSheet_Button.setEnabled(flag);    
+        if (flag && isManager && driverTable.getRowCount() > 0) {
+            saveSheet_Button.setEnabled(true);
+        } else {
+            saveSheet_Button.setEnabled(false);
+        }
     }    
     
     /**
@@ -318,6 +329,7 @@ public class ManageDrivers extends javax.swing.JFrame {
                 insertSave_Button.setMnemonic('s');
                 deleteDriver_Button.setEnabled(false);
                 deleteAll_button.setEnabled(false);
+                adminOperationEnabled(false);
                 tipLabel.setVisible(true);
                 break;
                 
@@ -329,6 +341,7 @@ public class ManageDrivers extends javax.swing.JFrame {
                 modiSave_Button.setMnemonic('s');
                 deleteDriver_Button.setEnabled(false);
                 deleteAll_button.setEnabled(false);
+                adminOperationEnabled(false);
                 tipLabel.setVisible(true);
                 break;
                 
@@ -346,7 +359,7 @@ public class ManageDrivers extends javax.swing.JFrame {
                 if (driverTable.getSelectedRowCount() > 0) {
                     deleteDriver_Button.setEnabled(true);
                 }
-                determineDeleteAllEnabled();
+                adminOperationEnabled(true);
                 tipLabel.setVisible(false);
                 break;
             default:
@@ -370,11 +383,9 @@ public class ManageDrivers extends javax.swing.JFrame {
                         if (driverTable.getSelectedRowCount() == 0) {
                             modiSave_Button.setEnabled(false);
                             deleteDriver_Button.setEnabled(false);
-                            saveSheet_Button.setEnabled(false);
                         } else {
                             modiSave_Button.setEnabled(true);
                             deleteDriver_Button.setEnabled(true);
-                            saveSheet_Button.setEnabled(true);
                         }
                         break;
                     case CreateMode: 
@@ -404,13 +415,6 @@ public class ManageDrivers extends javax.swing.JFrame {
                 }
             }
         }); 
-    }
-
-    private void processSaveAction() {
-        if (driverTable.getCellEditor() != null) {
-            driverTable.getCellEditor().stopCellEditing(); // store user input
-        }
-        finalizeDriverCreation();
     }
 
     private int insertCarDriver(String driverName, int rowIndex) {
@@ -529,6 +533,7 @@ public class ManageDrivers extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
         odsFileChooser = new javax.swing.JFileChooser();
+        saveFileChooser = new javax.swing.JFileChooser();
         northPanel = new javax.swing.JPanel();
         westPanel = new javax.swing.JPanel();
         wholePanel = new javax.swing.JPanel();
@@ -596,10 +601,11 @@ public class ManageDrivers extends javax.swing.JFrame {
         ));
         jScrollPane1.setViewportView(jTable1);
 
+        saveFileChooser.setDialogType(javax.swing.JFileChooser.SAVE_DIALOG);
+
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle(DRIVER_LIST_FRAME_TITLE.getContent());
         setMinimumSize(new Dimension(normGUIwidth, normGUIheight));
-        setPreferredSize(new Dimension(normGUIwidth, normGUIheight));
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 formWindowClosing(evt);
@@ -1180,7 +1186,10 @@ public class ManageDrivers extends javax.swing.JFrame {
         int rowV = driverTable.getSelectedRow();
         
         if (getFormMode() == FormMode.CreateMode) {
-            processSaveAction();
+            if (driverTable.getCellEditor() != null) {
+                driverTable.getCellEditor().stopCellEditing(); // store user input
+            }
+            finalizeDriverCreation();            
         } else {
             //<editor-fold desc="-- Process driver creation request">            
             if (rowV != -1)
@@ -1247,10 +1256,10 @@ public class ManageDrivers extends javax.swing.JFrame {
                 closeDBstuff(conn, deleteDrivers, null, excepMsg);
             }
 
-                loadDriverData(UNKNOWN, "", "");
-                JOptionPane.showConfirmDialog(this, DRIVER_DELETE_ALL_RESULT_DAILOG.getContent(),
-                        DELETE_ALL_RESULT_DIALOGTITLE.getContent(),
-                        JOptionPane.PLAIN_MESSAGE, INFORMATION_MESSAGE);
+            loadDriverData(UNKNOWN, "", "");
+            JOptionPane.showConfirmDialog(this, DRIVER_DELETE_ALL_RESULT_DAILOG.getContent(),
+                    DELETE_ALL_RESULT_DIALOGTITLE.getContent(),
+                    JOptionPane.PLAIN_MESSAGE, INFORMATION_MESSAGE);
         }
     }//GEN-LAST:event_deleteAll_buttonActionPerformed
    
@@ -1475,68 +1484,7 @@ public class ManageDrivers extends javax.swing.JFrame {
     }//GEN-LAST:event_searchButtonActionPerformed
 
     private void saveSheet_ButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveSheet_ButtonActionPerformed
-        try {
-            int returnVal = odsFileChooser.showOpenDialog(this);
-            if (returnVal == JFileChooser.APPROVE_OPTION) {                
-                File file = odsFileChooser.getSelectedFile();
-                ArrayList<Point> wrongCells = new ArrayList<Point>();
-
-                Sheet sheet = null;
-                try {
-                    sheet = SpreadSheet.createFromFile(file).getSheet(0);
-                } catch (IOException ex) {
-                    Logger.getLogger(ODSReader.class.getName()).log(Level.SEVERE, null, ex);
-                }
-
-                if (sheet != null)
-                {
-                    ODSReader objODSReader = new ODSReader();
-
-                    WrappedInt driverTotal = new WrappedInt();
-
-                    if (objODSReader.checkDriverODS(sheet, wrongCells, driverTotal))
-                    {
-                        StringBuilder sb = new StringBuilder();
-
-                        switch(language){
-                            case KOREAN:
-                                sb.append("자료를 불러오시겟습니까?");
-                                sb.append(System.getProperty("line.separator"));
-                                sb.append(" -자료 갯수: 운전자 정보 " + driverTotal.getValue() + " 개");
-                                break;
-                                
-                            case ENGLISH:
-                                sb.append("Following data has been recognized. Want to load these data?");
-                                sb.append(System.getProperty("line.separator"));
-                                sb.append(" -Data content: driver records " + driverTotal.getValue() + " rows");
-                                break;
-                                
-                            default:
-                                break;
-                        }
-                        
-                        int result = JOptionPane.showConfirmDialog(null, sb.toString(),
-//                                getTextFor(READ_ODS_DIALOG, sb, driverTotal.getValue()).toString(),
-                                READ_ODS_DIALOGTITLE.getContent(), 
-                                JOptionPane.YES_NO_OPTION);            
-                        if (result == JOptionPane.YES_OPTION) {                
-                            objODSReader.readDriverODS(sheet, this);
-                        }
-                    } else {
-                        // display wrong cell points if existed
-                        if (wrongCells.size() > 0) {
-                            JOptionPane.showConfirmDialog(null, READ_ODS_FAIL_DIALOG.getContent() 
-                                    + System.getProperty("line.separator") + getWrongCellPointString(wrongCells),
-                                    READ_ODS_FAIL_DIALOGTITLE.getContent(),
-                                    JOptionPane.PLAIN_MESSAGE, WARNING_MESSAGE);                      
-                        }                        
-                    }
-                }
-            }
-        } catch (Exception ex) {
-            logParkingException(Level.SEVERE, ex, 
-                    "(User Operation: loading drivers records from an ods file)");
-        }         
+        saveODSfile(this, driversTable, saveFileChooser, VEHICLE_SAVE_ODS_FAIL_DIALOG.getContent());
     }//GEN-LAST:event_saveSheet_ButtonActionPerformed
 
     private void closeFormButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_closeFormButtonActionPerformed
@@ -1680,29 +1628,11 @@ public class ManageDrivers extends javax.swing.JFrame {
 
         if (getFormMode() == FormMode.CreateMode) {
             //<editor-fold desc="-- Handle driver creation cancellation request">
-            Object[] options = new Object[2];
-            
-            switch(language){
-                case KOREAN:
-                    options[0] = "예(종료)";
-                    options[1] = "아니요(생성)";
-                    break;
-                    
-                case ENGLISH:
-                    options[0] = "Yes(quit)";
-                    options[1] = "No(create)";
-                    break;
-                    
-                default:
-                    break;
-            }
-            
-            int response = JOptionPane.showOptionDialog(this, DRIVER_CREATE_CANCEL_DIALOG.getContent(),
-                                CANCEL_DIALOGTITLE.getContent(), 
-                                JOptionPane.YES_NO_OPTION,
-                    JOptionPane.QUESTION_MESSAGE, 
-                    null, 
-                    options, options[0]);
+            int response = JOptionPane.showConfirmDialog(this, 
+                    DRIVER_CREATE_CANCEL_DIALOG.getContent(),
+                    CANCEL_DIALOGTITLE.getContent(), 
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.QUESTION_MESSAGE);
         
             if (response == JOptionPane.YES_OPTION) {
                 // Confirmed cancel request
@@ -1725,11 +1655,11 @@ public class ManageDrivers extends javax.swing.JFrame {
             //</editor-fold>
         } else if (getFormMode() == FormMode.UpdateMode) {
             //<editor-fold desc="-- Process modification cancel request">
-            
-            int response = JOptionPane.showOptionDialog(this, DRIVER_MODIFY_CANCEL_DAILOG.getContent(),
-                                CANCEL_DIALOGTITLE.getContent(), 
-                                JOptionPane.YES_NO_OPTION,
-                    JOptionPane.QUESTION_MESSAGE, null, null, null); 
+            int response = JOptionPane.showConfirmDialog(this, 
+                    DRIVER_MODIFY_CANCEL_DAILOG.getContent(),
+                    CANCEL_DIALOGTITLE.getContent(), 
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.QUESTION_MESSAGE);            
             
             if (response == JOptionPane.NO_OPTION) {
                 startEditingCell(rowV, colV);
@@ -1738,6 +1668,7 @@ public class ManageDrivers extends javax.swing.JFrame {
             } 
             //</editor-fold>            
         } else {
+            // It is Search Mode.
             // delete a driver's record currently selected 
             int[] deleteIndice = driverTable.getSelectedRows();
             if (deleteIndice.length == 0)
@@ -1855,7 +1786,56 @@ public class ManageDrivers extends javax.swing.JFrame {
     }//GEN-LAST:event_cancelButtonActionPerformed
 
     private void readSheet_ButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_readSheet_ButtonActionPerformed
-        // TODO add your handling code here:
+        try {
+            int returnVal = odsFileChooser.showOpenDialog(this);
+            if (returnVal == JFileChooser.APPROVE_OPTION) {                
+                File file = odsFileChooser.getSelectedFile();
+                ArrayList<Point> wrongCells = new ArrayList<Point>();
+
+                Sheet sheet = null;
+                try {
+                    sheet = SpreadSheet.createFromFile(file).getSheet(0);
+                } catch (IOException ex) {
+                    Logger.getLogger(ODSReader.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
+                if (sheet != null)
+                {
+                    ODSReader objODSReader = new ODSReader();
+
+                    WrappedInt driverTotal = new WrappedInt();
+
+                    if (objODSReader.isDriverODScheckGood(sheet, wrongCells, driverTotal))
+                    {
+                        StringBuilder sb = new StringBuilder();
+                        sb.append(READ_DRIVER_ODS_CONF_1.getContent());
+                        sb.append(System.getProperty("line.separator"));
+                        sb.append(READ_DRIVER_ODS_CONF_2.getContent());
+                        sb.append(driverTotal.getValue());
+                        sb.append(System.getProperty("line.separator"));
+                        sb.append(READ_DRIVER_ODS_CONF_3.getContent());
+                        
+                        int result = JOptionPane.showConfirmDialog(null, sb.toString(),
+                                ODS_CHECK_RESULT_TITLE.getContent(), 
+                                JOptionPane.YES_NO_OPTION);            
+                        if (result == JOptionPane.YES_OPTION) {                
+                            objODSReader.readDriverODS(sheet, this);
+                        }
+                    } else {
+                        // display wrong cell points if existed
+                        if (wrongCells.size() > 0) {
+                            JOptionPane.showConfirmDialog(null, READ_ODS_FAIL_DIALOG.getContent() 
+                                    + System.getProperty("line.separator") + getWrongCellPointString(wrongCells),
+                                    READ_ODS_FAIL_DIALOGTITLE.getContent(),
+                                    JOptionPane.PLAIN_MESSAGE, WARNING_MESSAGE);                      
+                        }                        
+                    }
+                }
+            }
+        } catch (Exception ex) {
+            logParkingException(Level.SEVERE, ex, 
+                    "(User Operation: loading drivers records from an ods file)");
+        }         
     }//GEN-LAST:event_readSheet_ButtonActionPerformed
 
     private void seeLicenseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_seeLicenseButtonActionPerformed
@@ -1976,16 +1956,49 @@ public class ManageDrivers extends javax.swing.JFrame {
         initializeLoggers();
         checkOptions(args);
         readSettings();
-        Globals.loginID = "admin";
+        String managerID = "manager";
+        String guestID = "guest";
+        Object[] possibleValues = { ADMIN_ID, managerID, guestID};
+        
+        Object selectedValue = JOptionPane.showInputDialog(null,
+            "Choose Login User Level", "User Type", JOptionPane.INFORMATION_MESSAGE, null,
+            possibleValues, possibleValues[0]);
+        
+        if 
+        
+        System.out.println("Result: " + selectedValue);
+//        final JOptionPane optionPane = new JOptionPane(
+//                        "The only way to close this dialog is by\n"
+//                        + "pressing one of the following buttons.\n"
+//                        + "Do you understand?",
+//                        JOptionPane.QUESTION_MESSAGE,
+//                        JOptionPane.YES_NO_OPTION);
+//
+//        final JDialog dialog = new JDialog(frame, 
+//                                     "Click a button",
+//                                     true);
+//        dialog.setContentPane(optionPane);
+//        dialog.setDefaultCloseOperation(
+//            JDialog.DO_NOTHING_ON_CLOSE);
+//        dialog.addWindowListener(new WindowAdapter() {
+//            public void windowClosing(WindowEvent we) {
+//                setLabel("Thwarted user attempt to close window.");
+//            }
+//        });        
+//        
+//        JFrame seleceGUI = new UserLeveSelect();
+//        JDialog userSelection = new JDialog(null, true);
+//        userSelection.setContentPane(seleceGUI.getContentPane());
+//        userSelection.setVisible(true);
         
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                ManageDrivers mainForm = new ManageDrivers(null);
-                mainForm.setLocation(0, 0);
-                mainForm.setVisible(true);
-            }
-        });
+//        java.awt.EventQueue.invokeLater(new Runnable() {
+//            public void run() {
+//                ManageDrivers mainForm = new ManageDrivers(null);
+//                mainForm.setLocation(0, 0);
+//                mainForm.setVisible(true);
+//            }
+//        });
     }
     
     static ConvComboBoxItem prevItem = null;
@@ -2098,6 +2111,7 @@ public class ManageDrivers extends javax.swing.JFrame {
             
         int numRows = model.getRowCount();
         
+        saveSheet_Button.setEnabled(false);
         if (numRows > 0) {  
             // <editor-fold defaultstate="collapsed" desc="-- Highlight a selected driver">                          
             if (driverName.length() > 0) {
@@ -2112,8 +2126,11 @@ public class ManageDrivers extends javax.swing.JFrame {
                 highlightTableRow(driverTable, viewIndex);
                 deleteDriver_Button.setEnabled(true);
             }
+            if (isManager) {
+                saveSheet_Button.setEnabled(true);
+            }
             //</editor-fold>
-        }
+        }        
         searchButton.setEnabled(false);
     }
         
@@ -2153,6 +2170,7 @@ public class ManageDrivers extends javax.swing.JFrame {
     private javax.swing.JFileChooser odsFileChooser;
     private javax.swing.JButton readSheet_Button;
     private javax.swing.JPanel rightButtons;
+    private javax.swing.JFileChooser saveFileChooser;
     private javax.swing.JButton saveSheet_Button;
     private javax.swing.JComboBox searchBuildingComboBox;
     public javax.swing.JButton searchButton;
@@ -2389,7 +2407,6 @@ public class ManageDrivers extends javax.swing.JFrame {
      * 3. insert new driver information into the database table in case everything is fine.
      */
     public void finalizeDriverCreation() {
-//        int row = driverTable.getRowCount() - 1;
         int row = driverTable.getSelectedRow();
         int colName = driverTable.convertColumnIndexToModel(DriverCol.DriverName.getNumVal());
         String name = ((String)driverTable.getModel().getValueAt(row, colName)).trim();
@@ -2756,7 +2773,6 @@ public class ManageDrivers extends javax.swing.JFrame {
         if (pcount == 16) {
             int j = 5;
         }
-        System.out.println("getPrompter called " + pcount);
         if (column == AffiliationL2 || column == UnitNo) {
             if (parentObj == null)
                 complexItem = true;
@@ -2930,7 +2946,7 @@ public class ManageDrivers extends javax.swing.JFrame {
         InnoComboBoxItem unit_item = (InnoComboBoxItem)driverTable.getValueAt(row, UnitNo.getNumVal());
         int SEQ_NO = (Integer)unit_item.getKeys()[0];
         
-        if (name.length() <= 1) {
+        if (invalidName(name)) {
             //<editor-fold defaultstate="collapsed" desc="-- handle missing driver name">   
             // it has driver's name, but not his/her cell phone number  
             int response = JOptionPane.showConfirmDialog(null, 
@@ -2942,7 +2958,7 @@ public class ManageDrivers extends javax.swing.JFrame {
             supplyORrestore(response, row, DriverName);
             return true;
             //</editor-fold>               
-        } else if (getNumericDigitCount(cell) < 10) {
+        } else if (invalidCell(cell)) {
             // <editor-fold defaultstate="collapsed" desc="-- handle insufficient cell phone">   
             // request correct driver cell phone number              
             int response = JOptionPane.showConfirmDialog(null, 
@@ -2954,7 +2970,7 @@ public class ManageDrivers extends javax.swing.JFrame {
             supplyORrestore(response, row, CellPhone);
             return true;
             //</editor-fold>          
-        } else if (0 < getNumericDigitCount(phone) && getNumericDigitCount(phone) < 4) {
+        } else if (invalidPhone(phone)) {
             // <editor-fold defaultstate="collapsed" desc="-- handle insufficient landline phone">  
             // give chance to supply correct phone number
             int response = JOptionPane.showConfirmDialog(null, 
@@ -3033,9 +3049,13 @@ public class ManageDrivers extends javax.swing.JFrame {
         }         
     }
 
-    private void determineDeleteAllEnabled() {
-        if (Globals.loginID != null && Globals.loginID.equals("admin")) {
+    private void adminOperationEnabled(boolean flag) {
+        if (flag && Globals.loginID != null && Globals.loginID.equals(ADMIN_ID)) {
             deleteAll_button.setEnabled(true);
+            readSheet_Button.setEnabled(true);
+        } else {
+            deleteAll_button.setEnabled(false);
+            readSheet_Button.setEnabled(false);
         }
     }
 }

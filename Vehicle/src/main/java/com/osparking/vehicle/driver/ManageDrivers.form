@@ -25,6 +25,11 @@
     </Container>
     <Component class="javax.swing.JFileChooser" name="odsFileChooser">
     </Component>
+    <Component class="javax.swing.JFileChooser" name="saveFileChooser">
+      <Properties>
+        <Property name="dialogType" type="int" value="1"/>
+      </Properties>
+    </Component>
   </NonVisualComponents>
   <Properties>
     <Property name="defaultCloseOperation" type="int" value="0"/>
@@ -32,9 +37,6 @@
       <Connection code="DRIVER_LIST_FRAME_TITLE.getContent()" type="code"/>
     </Property>
     <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-      <Connection code="new Dimension(normGUIwidth, normGUIheight)" type="code"/>
-    </Property>
-    <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
       <Connection code="new Dimension(normGUIwidth, normGUIheight)" type="code"/>
     </Property>
   </Properties>

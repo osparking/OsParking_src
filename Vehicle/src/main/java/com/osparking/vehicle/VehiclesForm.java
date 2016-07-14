@@ -60,7 +60,7 @@ import static com.osparking.global.names.DB_Access.readSettings;
 import static com.osparking.global.Globals.*;
 import static com.osparking.global.names.ControlEnums.ButtonTypes.*;
 import static com.osparking.global.names.ControlEnums.ComboBoxItemTypes.*;
-import static com.osparking.global.names.ControlEnums.DialogMSGTypes.*;
+import static com.osparking.global.names.ControlEnums.DialogMessages.*;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.*;
 import com.osparking.global.names.ControlEnums.FormMode;
 import static com.osparking.global.names.ControlEnums.LabelContent.CAR_TAG_LABEL;
@@ -1469,7 +1469,7 @@ public class VehiclesForm extends javax.swing.JFrame {
                         }
                         
                         int result = JOptionPane.showConfirmDialog(null, sb.toString(),
-                                        READ_ODS_DIALOGTITLE.getContent(), 
+                                        ODS_CHECK_RESULT_TITLE.getContent(), 
                                         JOptionPane.YES_NO_OPTION);            
                         if (result == JOptionPane.YES_OPTION) {                
                             objODSReader.readVehiclesODS(sheet, this);

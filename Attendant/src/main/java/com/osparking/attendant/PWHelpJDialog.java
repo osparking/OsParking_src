@@ -24,7 +24,7 @@ import static com.osparking.global.Globals.font_Size;
 import static com.osparking.global.Globals.font_Style;
 import static com.osparking.global.Globals.font_Type;
 import static com.osparking.global.names.ControlEnums.ButtonTypes.CLOSE_BTN;
-import static com.osparking.global.names.ControlEnums.DialogMSGTypes.HOWTO_CLOSE_WINDOW_DIALOG;
+import static com.osparking.global.names.ControlEnums.DialogMessages.HOWTO_CLOSE_WINDOW_DIALOG;
 import static com.osparking.global.names.ControlEnums.LabelContent.HOWTO_CHANGE_PW_STRENGTH;
 import static com.osparking.global.names.ControlEnums.LabelContent.PASSWORD_LEVEL_LABEL;
 import static com.osparking.global.names.ControlEnums.MenuITemTypes.SETTING_MENU_ITEM;

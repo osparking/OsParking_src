@@ -64,7 +64,7 @@ import com.osparking.global.names.ChangeSettings;
 import static com.osparking.global.names.ControlEnums.ButtonTypes.CANCEL_BTN;
 import static com.osparking.global.names.ControlEnums.ButtonTypes.CLOSE_BTN;
 import static com.osparking.global.names.ControlEnums.ButtonTypes.SAVE_BTN;
-import static com.osparking.global.names.ControlEnums.DialogMSGTypes.REBOOT_MESSAGE;
+import static com.osparking.global.names.ControlEnums.DialogMessages.REBOOT_MESSAGE;
 import static com.osparking.global.names.ControlEnums.LabelContent.BLINGKING_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.CAMERA_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.CYCLE_LABEL;

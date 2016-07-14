@@ -16,6 +16,7 @@
  */
 package com.osparking.vehicle;
 
+import static com.osparking.global.Globals.getNumericDigitCount;
 import com.osparking.global.names.OSP_enums;
 import static com.osparking.global.names.OSP_enums.DriverCol.AffiliationL2;
 import static com.osparking.global.names.OSP_enums.DriverCol.UnitNo;
@@ -83,5 +84,29 @@ public class CommonData {
     
     public static int getPrevParentKey(OSP_enums.DriverCol column) {
         return prevParentKey[column.getNumVal()];
+    }
+    
+    public static boolean invalidName(String name) {
+        if (name.length() <= 1) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    
+    public static boolean invalidCell(String cell) {
+        if (getNumericDigitCount(cell) < 10) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    
+    public static boolean invalidPhone(String phone) {
+        if (0 < getNumericDigitCount(phone) && getNumericDigitCount(phone) < 4) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }

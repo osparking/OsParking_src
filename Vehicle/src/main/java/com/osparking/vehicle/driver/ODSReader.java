@@ -45,13 +45,20 @@ import static com.osparking.global.Globals.insertLevel1Affiliation;
 import static com.osparking.global.Globals.insertLevel2Affiliation;
 import static com.osparking.global.Globals.language;
 import static com.osparking.global.Globals.logParkingException;
-import static com.osparking.global.names.ControlEnums.DialogMSGTypes.CHECK_BUILDING_ODS_DIALOG;
-import static com.osparking.global.names.ControlEnums.DialogMSGTypes.READ_FAIL_AFFILIATION_ODS_DIALOG;
+import static com.osparking.global.names.ControlEnums.DialogMessages.CHECK_BUILDING_ODS_DIALOG;
+import static com.osparking.global.names.ControlEnums.DialogMessages.DRIVER_ODS_READ_RESULT1;
+import static com.osparking.global.names.ControlEnums.DialogMessages.DRIVER_ODS_READ_RESULT2;
+import static com.osparking.global.names.ControlEnums.DialogMessages.DRIVER_ODS_READ_RESULT3;
+import static com.osparking.global.names.ControlEnums.DialogMessages.DRIVER_ODS_READ_RESULT4;
+import static com.osparking.global.names.ControlEnums.DialogMessages.READ_FAIL_AFFILIATION_ODS_DIALOG;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.*;
 import static com.osparking.global.names.JDBCMySQL.getConnection;
 import com.osparking.global.names.OSP_enums.DriverCol;
 import com.osparking.global.names.OSP_enums.VehicleCol;
 import com.osparking.global.names.WrappedInt;
+import static com.osparking.vehicle.CommonData.invalidCell;
+import static com.osparking.vehicle.CommonData.invalidName;
+import static com.osparking.vehicle.CommonData.invalidPhone;
 import com.osparking.vehicle.VehiclesForm;
 import java.sql.Statement;
 import org.jopendocument.dom.spreadsheet.MutableCell;
@@ -220,7 +227,7 @@ public class ODSReader {
                             }
                             
                             JOptionPane.showConfirmDialog(null, sb.toString(),
-                                    READ_ODS_DIALOGTITLE.getContent(), 
+                                    ODS_CHECK_RESULT_TITLE.getContent(), 
                                     JOptionPane.PLAIN_MESSAGE, INFORMATION_MESSAGE);                               
                             //</editor-fold>
                             return;
@@ -591,7 +598,7 @@ public class ODSReader {
                                     break;
                             }
                             JOptionPane.showConfirmDialog(null, sb.toString(),
-                                     READ_ODS_DIALOGTITLE.getContent(), 
+                                     ODS_CHECK_RESULT_TITLE.getContent(), 
                                     JOptionPane.PLAIN_MESSAGE, INFORMATION_MESSAGE);                               
                             //</editor-fold>
                             return;
@@ -768,7 +775,7 @@ public class ODSReader {
                     JOptionPane.showConfirmDialog(null, sb.toString(),
 //                            getTextFor(READ_VEHICLE_ODS_DIALOG, sb, 
 //                                    vehicleCount, duplicateCount, vehicleReject).toString(), 
-                            READ_ODS_DIALOGTITLE.getContent(), 
+                            ODS_CHECK_RESULT_TITLE.getContent(), 
                             JOptionPane.PLAIN_MESSAGE, INFORMATION_MESSAGE);                               
                     return;                    
                 } else {
@@ -879,34 +886,16 @@ public class ODSReader {
                     }
                     
                     StringBuilder sb = new StringBuilder();
-                    
-                    switch (language) {
-                        case KOREAN:
-                            sb.append("자료 불러오기 결과");
-                            sb.append(System.getProperty("line.separator"));
-                            sb.append(" - 불러온 운전자: " + driverCount);
-                            sb.append(System.getProperty("line.separator"));
-                            sb.append(" - 중복 자료: " + duplicateCount);
-                            sb.append(System.getProperty("line.separator"));
-                            sb.append(" - 총 거부 자료: " + driverReject);
-                            break;
-                            
-                        case ENGLISH:
-                            sb.append("Sheet Loading Result");
-                            sb.append(System.getProperty("line.separator"));
-                            sb.append(" - Loaded drivers: " + driverCount);
-                            sb.append(System.getProperty("line.separator"));
-                            sb.append(" - Duplicates rejected: " + duplicateCount);
-                            sb.append(System.getProperty("line.separator"));
-                            sb.append(" - Total rejected: " + driverReject);
-                            break;
-                            
-                        default:
-                            break;
-                    }
+                    sb.append(DRIVER_ODS_READ_RESULT1.getContent());
+                    sb.append(System.getProperty("line.separator"));
+                    sb.append(DRIVER_ODS_READ_RESULT2.getContent() + driverCount);
+                    sb.append(System.getProperty("line.separator"));
+                    sb.append(DRIVER_ODS_READ_RESULT3.getContent() + duplicateCount);
+                    sb.append(System.getProperty("line.separator"));
+                    sb.append(DRIVER_ODS_READ_RESULT4.getContent() + driverReject);
                     
                     JOptionPane.showConfirmDialog(null, sb.toString(),
-                            READ_ODS_DIALOGTITLE.getContent(), 
+                            ODS_READ_RESULT_TITLE.getContent(), 
                             JOptionPane.PLAIN_MESSAGE, INFORMATION_MESSAGE);                               
                     return;                    
                 } else {
@@ -1048,7 +1037,7 @@ public class ODSReader {
         }
     }
     
-    boolean checkDriverODS(Sheet sheet, ArrayList<Point> wrongCells, WrappedInt driverTotal) {
+    boolean isDriverODScheckGood(Sheet sheet, ArrayList<Point> wrongCells, WrappedInt driverTotal) {
         int numBlankRow = 0;
         MutableCell cell = null;
         
@@ -1073,11 +1062,15 @@ public class ODSReader {
                 int column = nColIndex + 1;
                 
                 if (column == DriverCol.DriverName.getNumVal()) {
-                    if (cellObj.toString().trim().length() == 0) {
+                    if (invalidName(cellObj.toString().trim())) {
                         wrongCells.add(new Point(nRowIndex+1, column));
                     }
                 } else if (column == DriverCol.CellPhone.getNumVal()) {
-                    if (cellObj.toString().trim().length() == 0) {
+                    if (invalidCell(cellObj.toString().trim())) {
+                        wrongCells.add(new Point(nRowIndex+1, column));
+                    }
+                } else if (column == DriverCol.LandLine.getNumVal()) {
+                    if (invalidPhone(cellObj.toString().trim())) {
                         wrongCells.add(new Point(nRowIndex+1, column));
                     }
                 } else if (column == DriverCol.AffiliationL2.getNumVal()) {

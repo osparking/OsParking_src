@@ -91,6 +91,8 @@ public class ControlEnums {
     }
     
     public enum LabelContent {
+        levelSelectionNotice("허용되는 연산의 범위를 결정하기 위한 선택!", 
+                "Selection that determines allowed operations!"), 
         LOGIN_ID_LABEL("아이디", "User ID"), 
         ID_LABEL("아이디 : ", "User ID : "), 
         PW_LABEL("비밀번호",  "Password"), 
@@ -429,8 +431,19 @@ public class ControlEnums {
         NAME, ID
     }
 
-    public enum DialogMSGTypes {
+    public enum DialogMessages {
          
+        DRIVER_ODS_READ_RESULT1("운전자 읽어들인 결과", "Driver Upload Result"),
+        DRIVER_ODS_READ_RESULT2(" - 성공적으로 읽힌 운전자: ", " - Uploaded drivers: "),
+        DRIVER_ODS_READ_RESULT3(" - 중복으로 제외된 운전자: ", " - Rejected duplicates: "),
+        DRIVER_ODS_READ_RESULT4(" - 총 거부된 운전자 수: ", " - Total rejected drivers: "),
+        
+        READ_DRIVER_ODS_CONF_1("ods 파일에서 다음 운전자 정보가 식별되었습니다.",
+                "Following drivers exists in the ods file."),
+        READ_DRIVER_ODS_CONF_2(" - 운전자 항목 수 : ", " - Driver count : "),
+        READ_DRIVER_ODS_CONF_3("이들 정보를 읽어 옵니까?",
+                "Want to read this information?"),
+        
         DELETE_ALL_DRIVER_P1 ("아래 운전자 및 차량 정보를 삭제합니까?", "Want to delete below drivers and vehicles?"),
         DELETE_ALL_DRIVER_P2 (" - 운전자 정보 건수 : ", " - Driver record count : "),
         DELETE_ALL_DRIVER_P3 (" - 소유 차량 건수 : ",    " - Owned vehicle count : "),
@@ -480,6 +493,8 @@ public class ControlEnums {
                 "모든 차량 정보가 삭제되었습니다.", "All Vehicles are Deleted"),
         VEHICLE_SAVE_ODS_FAIL_DIALOG(
                 "저장할 차량 목록이 없습니다.", "No vehicle list to save!"),
+        DRIVER_SAVE_ODS_FAIL_DIALOG(
+                "저장할 운전자 목록이 없습니다.", "Empty driver list can't be saved!"),
         USER_SAVE_ODS_FAIL_DIALOG(
                 "저장할 사용자 목록이 없습니다!", "No user list to save!"),
         DRIVER_CREATRION_FAIL_DIALOG("운전자 정보 생성 실패.", "Failed to create a owner/driver record."), 
@@ -490,10 +505,8 @@ public class ControlEnums {
 ),
         DRIVER_MODIFY_FAIL_DAILOG(
                 "하나의 운전자만 선택하여 변경하십시오.", "Please narrow down to a single driver to update!"),
-        DRIVER_CREATE_CANCEL_DIALOG(
-                "새로 생성중인 운전자 정보를 취소하시겟습니까?", "Do you want to quit creating a new driver?"),
-        DRIVER_MODIFY_CANCEL_DAILOG(
-                "변경 중인 운전자 정보를 취소하시겟습니까?", "Do you want to cancel modifying driver information?"),
+        DRIVER_CREATE_CANCEL_DIALOG("정말 운전자 생성을 취소합니까?", "Really cancel driver creation?"),
+        DRIVER_MODIFY_CANCEL_DAILOG("정말 운전자 변경을 취소합니까?", "Really cancel driver update?"),
         
         MISSING_CELL_HANDLING("\"휴대전화\" 번호는 최소 10 자리입니다." 
                             + System.getProperty("line.separator") 
@@ -735,7 +748,7 @@ public class ControlEnums {
                 "If you need, restart OsParking!"
         );
         
-        DialogMSGTypes(String korean, String english) {
+        DialogMessages(String korean, String english) {
             contents[KOREAN.ordinal()] = korean;
             contents[ENGLISH.ordinal()] = english;
         }
@@ -748,6 +761,7 @@ public class ControlEnums {
     }
     
     public static enum DialogTitleTypes {
+        UserLevelSelectionGUItitle("로그인 사용자 수준 결정 폼", "Login User Level Selection GUI"),
         ATT_SAVE_AS_FAIL_DIALOGTITLE("파일명 변경 필요성 알림", "Choose Different File Name"), 
         ATT_EMAIL_DUP_DIALOGTITLE("이메일 중복 검사 결과", "Duplicate Check Result"), 
         ATT_EMAIL_SYNTAX_CHECK_DIALOG("이메일 주소 검사 결과", "Syntax Check Result"),            
@@ -757,7 +771,8 @@ public class ControlEnums {
         ATT_HELP_DIALOGTITLE("비밀번호 요구조건", "Password Requirements"),
         RIGHTS_DIALOGTITLE("사용자 권한 3 단계", "User 3 level rights"),
         CONFIRM_LOGOUT("로그아웃 확인", "Confirm Logout"),                
-        READ_ODS_DIALOGTITLE("차트 분석 결과", "Sheet Analysis Result"),                
+        ODS_CHECK_RESULT_TITLE("ods 분석 결과", "ods check result"),                
+        ODS_READ_RESULT_TITLE("ods 읽은 결과", "ods read result"),                
         READ_ODS_FAIL_DIALOGTITLE("차트 형식 오류", "Sheet Cell Data Format Error"),       
         AFFILIATION_MODIFY_DIALOGTITLE("상위 소속 변경", "Higher Affiliation Change"),  
         BUILDING_MODIFY_DIALOGTITLE("건물 변경 확인", "Building Change Confirm'"),

@@ -29,9 +29,9 @@ import static com.osparking.global.names.ControlEnums.ButtonTypes.CAR_ARRIVAL_BT
 import static com.osparking.global.names.ControlEnums.ButtonTypes.STATISTICS_BTN;
 import static com.osparking.global.names.ControlEnums.ButtonTypes.USERS_BTN;
 import static com.osparking.global.names.ControlEnums.ButtonTypes.VEHICLES_BTN;
-import static com.osparking.global.names.ControlEnums.DialogMSGTypes.AUTO_LOGOUT;
-import static com.osparking.global.names.ControlEnums.DialogMSGTypes.OSPARKING_STOPS;
-import static com.osparking.global.names.ControlEnums.DialogMSGTypes.SHUT_DOWN_CONFIRM_DIALOG;
+import static com.osparking.global.names.ControlEnums.DialogMessages.AUTO_LOGOUT;
+import static com.osparking.global.names.ControlEnums.DialogMessages.OSPARKING_STOPS;
+import static com.osparking.global.names.ControlEnums.DialogMessages.SHUT_DOWN_CONFIRM_DIALOG;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.CONFIRM_LOGOUT;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.MAIN_GUI_TITLE;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.SYSTEM_SHUTDOWN_CONFIRM;

@@ -51,18 +51,18 @@ import static com.osparking.global.Globals.logParkingException;
 import static com.osparking.global.Globals.rejectEmptyInput;
 import static com.osparking.global.Globals.removeEmptyRow;
 import static com.osparking.global.names.ControlEnums.ButtonTypes.*;
-import static com.osparking.global.names.ControlEnums.DialogMSGTypes.AFFILIATION_DELETE_ALL_DAILOG;
-import static com.osparking.global.names.ControlEnums.DialogMSGTypes.AFFILIATION_DELETE_ALL_RESULT_DAILOG;
-import static com.osparking.global.names.ControlEnums.DialogMSGTypes.BUILDING_DELETE_ALL_DAILOG;
-import static com.osparking.global.names.ControlEnums.DialogMSGTypes.BUILDING_DELETE_ALL_RESULT_DAILOG;
-import static com.osparking.global.names.ControlEnums.DialogMSGTypes.BUILDING_IN_DIALOG;
-import static com.osparking.global.names.ControlEnums.DialogMSGTypes.DUPLICATE_BUILDING;
-import static com.osparking.global.names.ControlEnums.DialogMSGTypes.DUPLICATE_HIGH_AFFILI;
-import static com.osparking.global.names.ControlEnums.DialogMSGTypes.DUPLICATE_LOW_AFFILI;
-import static com.osparking.global.names.ControlEnums.DialogMSGTypes.DUPLICATE_UNIT;
-import static com.osparking.global.names.ControlEnums.DialogMSGTypes.EMPTY_HIGH_AFFILI;
-import static com.osparking.global.names.ControlEnums.DialogMSGTypes.EMPTY_LOW_AFFILI;
-import static com.osparking.global.names.ControlEnums.DialogMSGTypes.USER_SAVE_ODS_FAIL_DIALOG;
+import static com.osparking.global.names.ControlEnums.DialogMessages.AFFILIATION_DELETE_ALL_DAILOG;
+import static com.osparking.global.names.ControlEnums.DialogMessages.AFFILIATION_DELETE_ALL_RESULT_DAILOG;
+import static com.osparking.global.names.ControlEnums.DialogMessages.BUILDING_DELETE_ALL_DAILOG;
+import static com.osparking.global.names.ControlEnums.DialogMessages.BUILDING_DELETE_ALL_RESULT_DAILOG;
+import static com.osparking.global.names.ControlEnums.DialogMessages.BUILDING_IN_DIALOG;
+import static com.osparking.global.names.ControlEnums.DialogMessages.DUPLICATE_BUILDING;
+import static com.osparking.global.names.ControlEnums.DialogMessages.DUPLICATE_HIGH_AFFILI;
+import static com.osparking.global.names.ControlEnums.DialogMessages.DUPLICATE_LOW_AFFILI;
+import static com.osparking.global.names.ControlEnums.DialogMessages.DUPLICATE_UNIT;
+import static com.osparking.global.names.ControlEnums.DialogMessages.EMPTY_HIGH_AFFILI;
+import static com.osparking.global.names.ControlEnums.DialogMessages.EMPTY_LOW_AFFILI;
+import static com.osparking.global.names.ControlEnums.DialogMessages.USER_SAVE_ODS_FAIL_DIALOG;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.AFFILIATION_MODIFY_DIALOGTITLE;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.BUILDING_MODIFY_DIALOGTITLE;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.DELETE_ALL_DAILOGTITLE;
@@ -71,7 +71,7 @@ import static com.osparking.global.names.ControlEnums.DialogTitleTypes.DELETE_DI
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.DELETE_RESULT_DIALOGTITLE;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.ERROR_DIALOGTITLE;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.LOWER_MODIFY_DIALOGTITLE;
-import static com.osparking.global.names.ControlEnums.DialogTitleTypes.READ_ODS_DIALOGTITLE;
+import static com.osparking.global.names.ControlEnums.DialogTitleTypes.ODS_CHECK_RESULT_TITLE;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.READ_ODS_FAIL_DIALOGTITLE;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.REJECT_USER_DIALOGTITLE;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.UNIT_MODIFY_DIALOGTITLE;
@@ -3562,7 +3562,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
                         }
                         
                         int result = JOptionPane.showConfirmDialog(null, sb.toString(),
-                                READ_ODS_DIALOGTITLE.getContent(), 
+                                ODS_CHECK_RESULT_TITLE.getContent(), 
                                 JOptionPane.YES_NO_OPTION);            
                         if (result == JOptionPane.YES_OPTION) {                
                             objODSReader.readAffiliationODS(sheet, this);
@@ -3620,7 +3620,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
                         }
                         
                         int result = JOptionPane.showConfirmDialog(null, sb.toString(),
-                                READ_ODS_DIALOGTITLE.getContent(), 
+                                ODS_CHECK_RESULT_TITLE.getContent(), 
                                 JOptionPane.YES_NO_OPTION);            
                         if (result == JOptionPane.YES_OPTION) {                
                             objODSReader.readODS(sheet, this);

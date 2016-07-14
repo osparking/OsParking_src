@@ -18,6 +18,7 @@
 package com.osparking.attendant;
 
 import static com.osparking.attendant.AttListForm.dataExistsInDB;
+import static com.osparking.global.CommonData.ADMIN_ID;
 import static com.osparking.global.CommonData.buttonHeightNorm;
 import static com.osparking.global.CommonData.buttonWidthNorm;
 import static com.osparking.global.CommonData.buttonWidthWide;
@@ -32,9 +33,9 @@ import static com.osparking.global.Globals.initializeLoggers;
 import static com.osparking.global.Globals.logParkingException;
 import static com.osparking.global.names.ControlEnums.ButtonTypes.CLOSE_BTN;
 import static com.osparking.global.names.ControlEnums.ButtonTypes.LOGIN_BTN;
-import static com.osparking.global.names.ControlEnums.DialogMSGTypes.INPUT_ID_DIALOG;
-import static com.osparking.global.names.ControlEnums.DialogMSGTypes.INPUT_PW_DIALOG;
-import static com.osparking.global.names.ControlEnums.DialogMSGTypes.LOGIN_WRONG_DIALOG;
+import static com.osparking.global.names.ControlEnums.DialogMessages.INPUT_ID_DIALOG;
+import static com.osparking.global.names.ControlEnums.DialogMessages.INPUT_PW_DIALOG;
+import static com.osparking.global.names.ControlEnums.DialogMessages.LOGIN_WRONG_DIALOG;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.ERROR_DIALOGTITLE;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.WARING_DIALOGTITLE;
 import static com.osparking.global.names.ControlEnums.LabelContent.LOGIN_ID_LABEL;
@@ -417,7 +418,7 @@ public class LoginDialog extends javax.swing.JDialog {
      */
     private void checkAdminExistance() {
         String sql = "Select count(*) as dataCount From users_osp Where id = ?";
-        if (!dataExistsInDB(sql, "admin")) {
+        if (!dataExistsInDB(sql, ADMIN_ID)) {
             String errorMsg = MISSING_ADMIN.getContent();
             logParkingException(Level.SEVERE, null, errorMsg);
             JOptionPane.showMessageDialog(this, errorMsg,

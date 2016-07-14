@@ -16,9 +16,9 @@
  */
 package com.osparking.global.names;
 
-import static com.osparking.global.names.ControlEnums.DialogMSGTypes.PW_COMPLEX_DIALOG;
-import static com.osparking.global.names.ControlEnums.DialogMSGTypes.PW_FOURDIGIT_DIALOG;
-import static com.osparking.global.names.ControlEnums.DialogMSGTypes.PW_SIXDIGIT_DIALOG;
+import static com.osparking.global.names.ControlEnums.DialogMessages.PW_COMPLEX_DIALOG;
+import static com.osparking.global.names.ControlEnums.DialogMessages.PW_FOURDIGIT_DIALOG;
+import static com.osparking.global.names.ControlEnums.DialogMessages.PW_SIXDIGIT_DIALOG;
 import static com.osparking.global.names.ControlEnums.LabelContent.HOWTO_CHANGE_PW_STRENGTH;
 import static com.osparking.global.names.ControlEnums.LabelContent.PASSWORD_LEVEL_LABEL;
 import static com.osparking.global.names.ControlEnums.MenuITemTypes.SETTING_MENU_ITEM;
@@ -79,20 +79,20 @@ public class PasswordValidator {
     {
         if (level == PWStrengthLevel.FourDigit.ordinal()) 
         {
-            return getTextFor(ControlEnums.DialogMSGTypes.PW_FOURDIGIT_DIALOG);
+            return getTextFor(ControlEnums.DialogMessages.PW_FOURDIGIT_DIALOG);
         } 
         else if (level == PWStrengthLevel.SixDigit.ordinal()) 
         {
-            return getTextFor(ControlEnums.DialogMSGTypes.PW_SIXDIGIT_DIALOG);
+            return getTextFor(ControlEnums.DialogMessages.PW_SIXDIGIT_DIALOG);
         } 
         else 
         {
-            return getTextFor(ControlEnums.DialogMSGTypes.PW_COMPLEX_DIALOG);
+            return getTextFor(ControlEnums.DialogMessages.PW_COMPLEX_DIALOG);
         }   
     }
     
     
-    private String getTextFor(ControlEnums.DialogMSGTypes msgType){
+    private String getTextFor(ControlEnums.DialogMessages msgType){
         StringBuilder sBuilder = new StringBuilder();
         
         switch (msgType) {

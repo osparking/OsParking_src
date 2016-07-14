@@ -17,6 +17,7 @@
 package com.osparking.attendant;
 
 import com.osparking.global.CommonData;
+import static com.osparking.global.CommonData.ADMIN_ID;
 import static com.osparking.global.CommonData.buttonHeightNorm;
 import static com.osparking.global.CommonData.buttonHeightShort;
 import static com.osparking.global.CommonData.buttonWidthNorm;
@@ -59,7 +60,7 @@ import static com.osparking.global.names.DB_Access.*;
 import com.osparking.global.Globals;
 import com.osparking.global.names.ControlEnums.ATTLIST_ComboBoxTypes;
 import static com.osparking.global.names.ControlEnums.ButtonTypes.*;
-import static com.osparking.global.names.ControlEnums.DialogMSGTypes.*;
+import static com.osparking.global.names.ControlEnums.DialogMessages.*;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.ATT_EMAIL_DUP_DIALOGTITLE;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.ATT_EMAIL_SYNTAX_CHECK_DIALOG;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.ATT_HELP_DIALOGTITLE;
@@ -1793,7 +1794,7 @@ public class AttListForm extends javax.swing.JFrame {
             userIDText.setEditable(true);
             userIDText.requestFocusInWindow();
 
-            if (loginID.equals("admin")) {
+            if (loginID.equals(ADMIN_ID)) {
                 managerCBoxEnabled(true);
             }
             // </editor-fold>     
@@ -2477,13 +2478,13 @@ public class AttListForm extends javax.swing.JFrame {
     }
 
     private void setModificationState(boolean flag) {
-        boolean isAdminRerocd = (loginID.equals("admin"));
+        boolean isAdminRerocd = (loginID.equals(ADMIN_ID));
         boolean notOwnRecord = !(loginID.equals(userIDText.getText()));
         
         if (!isAdminRerocd && notOwnRecord) {
             // No user can change self 'admin' property
             // No user with admin right can change admin property of user 'admin'
-            if (loginID.equals("admin")) {
+            if (loginID.equals(ADMIN_ID)) {
                 managerCBoxEnabled(flag);
                 if (flag) {
                     managerCheckBox.requestFocusInWindow();
@@ -2890,15 +2891,15 @@ public class AttListForm extends javax.swing.JFrame {
      * @return true if deletable, false otherwise.
      */
     private boolean isDeletableByMe(String rowID) {
-        if (loginID.equals("admin")) {
-            if (rowID.equals("admin")) {
+        if (loginID.equals(ADMIN_ID)) {
+            if (rowID.equals(ADMIN_ID)) {
                 return false;
             } else {
                 return true;
             }
         } else {
             if (isManager) {
-                if (!rowID.equals("admin") && rowID.equals(loginID)) {
+                if (!rowID.equals(ADMIN_ID) && rowID.equals(loginID)) {
                     return true;
                 } else {
                     return false;
@@ -2919,7 +2920,7 @@ public class AttListForm extends javax.swing.JFrame {
             changeUserPasswordEnabled(false);
             changeTextFieldEnabled(true);
             multiFuncButton.setEnabled(true);              
-        } else if (loginID.equals("admin") || // non-admin is handled row by admin
+        } else if (loginID.equals(ADMIN_ID) || // non-admin is handled row by admin
                 isManager && !rowForManager) // non-manager is handled row by manager
         { 
             deleteButton.setEnabled(true);
