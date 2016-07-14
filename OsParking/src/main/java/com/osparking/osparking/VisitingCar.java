@@ -17,7 +17,6 @@
 package com.osparking.osparking;
 
 import com.osparking.vehicle.driver.ManageDrivers;
-import static com.osparking.vehicle.driver.ManageDrivers.initSearchComboBox;
 import static com.osparking.vehicle.driver.ManageDrivers.loadComboBoxItems;
 import static com.osparking.vehicle.driver.ManageDrivers.loadUnitComboBox;
 import java.awt.Point;
@@ -85,8 +84,13 @@ public class VisitingCar extends javax.swing.JFrame {
         visitTimeTextField.setText("'" + new SimpleDateFormat ("a hh:mm:ss").
                 format(arrivalTime));
         
-        initSearchComboBox(highLevelComboBox, lowLevelComboBox, 
-                buildingComboBox, unitComboBox);
+//        initSearchComboBox(highLevelComboBox, lowLevelComboBox, 
+//                buildingComboBox, unitComboBox);
+        highLevelComboBox.addItem(getPrompter(AffiliationL1, null));
+        lowLevelComboBox.addItem(getPrompter(AffiliationL2, searchL1ComboBox));
+        searchBuildingComboBox.addItem(getPrompter(BuildingNo, null));
+        searchUnitComboBox.addItem(getPrompter(UnitNo, searchBuildingComboBox));           
+        
         visitReasonTextField.setText("");
         gateNameTextField.setText(gateNames[gateNo]);
         addWindowListener( new WindowAdapter() {
@@ -323,6 +327,7 @@ public class VisitingCar extends javax.swing.JFrame {
             public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
             }
             public void popupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {
+                lowLevelComboBoxPopupMenuWillBecomeInvisible(evt);
             }
             public void popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {
                 lowLevelComboBoxPopupMenuWillBecomeVisible(evt);
@@ -613,6 +618,10 @@ public class VisitingCar extends javax.swing.JFrame {
             notAllowButtonActionPerformed(null);
         }
     }//GEN-LAST:event_notAllowButtonKeyTyped
+
+    private void lowLevelComboBoxPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_lowLevelComboBoxPopupMenuWillBecomeInvisible
+        propagateComplexItem(AffiliationL2, lowLevelComboBox, highLevelComboBox);
+    }//GEN-LAST:event_lowLevelComboBoxPopupMenuWillBecomeInvisible
 
     /**
      * @param args the command line arguments

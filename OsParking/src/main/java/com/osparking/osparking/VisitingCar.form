@@ -514,6 +514,7 @@
                             </Property>
                           </Properties>
                           <Events>
+                            <EventHandler event="popupMenuWillBecomeInvisible" listener="javax.swing.event.PopupMenuListener" parameters="javax.swing.event.PopupMenuEvent" handler="lowLevelComboBoxPopupMenuWillBecomeInvisible"/>
                             <EventHandler event="popupMenuWillBecomeVisible" listener="javax.swing.event.PopupMenuListener" parameters="javax.swing.event.PopupMenuEvent" handler="lowLevelComboBoxPopupMenuWillBecomeVisible"/>
                           </Events>
                           <AuxValues>

@@ -74,7 +74,7 @@
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
-                      <Component id="searchPanel" pref="993" max="32767" attributes="0"/>
+                      <Component id="searchPanel" pref="983" max="32767" attributes="0"/>
                       <EmptySpace min="-2" pref="0" max="-2" attributes="0"/>
                       <Component id="closePanel" min="-2" max="-2" attributes="0"/>
                   </Group>
@@ -120,7 +120,7 @@
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" attributes="0">
                           <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
-                          <Component id="criteriaPanel" pref="887" max="32767" attributes="0"/>
+                          <Component id="criteriaPanel" pref="877" max="32767" attributes="0"/>
                           <EmptySpace min="-2" pref="7" max="-2" attributes="0"/>
                           <Component id="searchButton" min="-2" max="-2" attributes="0"/>
                           <EmptySpace min="-2" pref="7" max="-2" attributes="0"/>
@@ -159,8 +159,8 @@
                           <Group type="102" attributes="0">
                               <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="searchTop" pref="887" max="32767" attributes="0"/>
-                                  <Component id="searchBottom" alignment="0" pref="887" max="32767" attributes="0"/>
+                                  <Component id="searchTop" pref="877" max="32767" attributes="0"/>
+                                  <Component id="searchBottom" alignment="0" pref="877" max="32767" attributes="0"/>
                               </Group>
                               <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
                           </Group>
@@ -258,7 +258,7 @@
                                           <Component id="clearSearchPropertiesButton" min="-2" max="-2" attributes="0"/>
                                       </Group>
                                   </Group>
-                                  <EmptySpace pref="15" max="32767" attributes="0"/>
+                                  <EmptySpace pref="11" max="32767" attributes="0"/>
                               </Group>
                           </Group>
                         </DimensionLayout>
@@ -857,7 +857,7 @@
                                           </Group>
                                       </Group>
                                   </Group>
-                                  <EmptySpace pref="34" max="32767" attributes="0"/>
+                                  <EmptySpace pref="30" max="32767" attributes="0"/>
                               </Group>
                           </Group>
                         </DimensionLayout>

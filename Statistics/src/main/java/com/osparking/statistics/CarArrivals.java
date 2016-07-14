@@ -84,9 +84,7 @@ import static com.osparking.global.names.OSP_enums.DriverCol.UnitNo;
 import com.osparking.global.names.PComboBox;
 import com.osparking.global.names.OSP_enums.SearchPeriod;
 import static com.osparking.vehicle.driver.ManageDrivers.getPrompter;
-import static com.osparking.vehicle.driver.ManageDrivers.initSearchComboBox;
 import static com.osparking.vehicle.driver.ManageDrivers.loadComboBoxItems;
-import static com.osparking.vehicle.driver.ManageDrivers.loadUnitComboBox;
 import java.awt.event.ActionEvent;
 import java.io.IOException;
 import java.io.InputStream;
@@ -292,7 +290,7 @@ public class CarArrivals extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setLabelFor(gateCB);
-        jLabel1.setText(GATE_NAME_LABEL.getContent());
+        jLabel1.setText(((String[])Globals.LabelsText.get(GATE_NAME_LABEL.ordinal()))[ourLang]);
         jLabel1.setMaximumSize(new java.awt.Dimension(32767, 32767));
         gatePanel.add(jLabel1, java.awt.BorderLayout.CENTER);
 
@@ -309,12 +307,12 @@ public class CarArrivals extends javax.swing.JFrame {
         jLabel2.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel2.setLabelFor(carTagTF);
-        jLabel2.setText(CAR_TAG_LABEL.getContent());
+        jLabel2.setText(((String[])Globals.LabelsText.get(CAR_TAG_LABEL.ordinal()))[ourLang]);
         jLabel2.setMaximumSize(new java.awt.Dimension(32767, 32767));
         carTagPanel.add(jLabel2, java.awt.BorderLayout.CENTER);
 
         carTagTF.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        carTagTF.setToolTipText(CAR_TAG_TF_TOOLTIP.getContent());
+        carTagTF.setToolTipText(((String[])Globals.ToolTipLabels.get(CAR_TAG_TF_TOOLTIP.ordinal()))[ourLang]);
         carTagTF.setMaximumSize(new java.awt.Dimension(32767, 32767));
         carTagTF.setPreferredSize(new java.awt.Dimension(120, 23));
         carTagPanel.add(carTagTF, java.awt.BorderLayout.PAGE_END);
@@ -327,13 +325,13 @@ public class CarArrivals extends javax.swing.JFrame {
         jLabel15.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         jLabel15.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel15.setLabelFor(attendantCB);
-        jLabel15.setText(ATTENDANT_LABEL.getContent());
+        jLabel15.setText(((String[])Globals.LabelsText.get(ATTENDANT_LABEL.ordinal()))[ourLang]);
         jLabel15.setMaximumSize(new java.awt.Dimension(32767, 32767));
         attendPanel.add(jLabel15, java.awt.BorderLayout.CENTER);
 
         attendantCB.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         attendantCB.setModel(new javax.swing.DefaultComboBoxModel(new Object[] {
-            new ConvComboBoxItem("", ATTENDANT_CB_ITEM.getContent())
+            new ConvComboBoxItem("", ((String[])Globals.ComboBoxItemList.get(ATTENDANT_CB_ITEM.ordinal()))[ourLang])
         }));
         attendantCB.setMinimumSize(new java.awt.Dimension(120, 23));
         attendantCB.setPreferredSize(new java.awt.Dimension(120, 23));
@@ -355,7 +353,7 @@ public class CarArrivals extends javax.swing.JFrame {
         jLabel20.setBackground(new java.awt.Color(243, 243, 243));
         jLabel20.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         jLabel20.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel20.setText(BAR_OP_LABEL.getContent());
+        jLabel20.setText(((String[])Globals.LabelsText.get(BAR_OP_LABEL.ordinal()))[ourLang]);
         jLabel20.setMaximumSize(new java.awt.Dimension(32767, 32767));
         barOptnPanel.add(jLabel20, java.awt.BorderLayout.CENTER);
 
@@ -380,7 +378,7 @@ public class CarArrivals extends javax.swing.JFrame {
         affiliationRadioButton.setBackground(new java.awt.Color(243, 243, 243));
         affiliationGroup.add(affiliationRadioButton);
         affiliationRadioButton.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        affiliationRadioButton.setText(AFFILIATION_LABEL.getContent());
+        affiliationRadioButton.setText(((String[])Globals.LabelsText.get(AFFILIATION_LABEL.ordinal()))[ourLang]);
         affiliationRadioButton.setAlignmentX(0.5F);
         affiliationRadioButton.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         affiliationRadioButton.setMargin(new java.awt.Insets(2, 20, 2, 2));
@@ -454,7 +452,7 @@ public class CarArrivals extends javax.swing.JFrame {
         buildingRadioButton.setBackground(new java.awt.Color(243, 243, 243));
         affiliationGroup.add(buildingRadioButton);
         buildingRadioButton.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        buildingRadioButton.setText(BUILDING_LABEL.getContent());
+        buildingRadioButton.setText(((String[])Globals.LabelsText.get(BUILDING_LABEL.ordinal()))[ourLang]);
         buildingRadioButton.setAlignmentX(0.5F);
         buildingRadioButton.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         buildingRadioButton.setMargin(new java.awt.Insets(2, 20, 2, 2));
@@ -528,7 +526,7 @@ public class CarArrivals extends javax.swing.JFrame {
         clearSearchPropertiesButton.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         clearSearchPropertiesButton.setMnemonic('l');
         clearSearchPropertiesButton.setText(CLEAR_BTN.getContent());
-        clearSearchPropertiesButton.setToolTipText(CLEAR_BTN_TOOLTIP.getContent());
+        clearSearchPropertiesButton.setToolTipText(((String[])Globals.ToolTipLabels.get(CLEAR_BTN_TOOLTIP.ordinal()))[ourLang]);
         clearSearchPropertiesButton.setPreferredSize(new java.awt.Dimension(100, 35));
         clearSearchPropertiesButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -542,7 +540,7 @@ public class CarArrivals extends javax.swing.JFrame {
             searchTopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(searchTopLayout.createSequentialGroup()
                 .addGap(10, 10, 10)
-                .addComponent(gatePanel, javax.swing.GroupLayout.DEFAULT_SIZE, 76, Short.MAX_VALUE)
+                .addComponent(gatePanel, javax.swing.GroupLayout.PREFERRED_SIZE, 76, Short.MAX_VALUE)
                 .addGap(5, 5, 5)
                 .addComponent(carTagPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(5, 5, 5)
@@ -577,7 +575,7 @@ public class CarArrivals extends javax.swing.JFrame {
                     .addGroup(searchTopLayout.createSequentialGroup()
                         .addGap(23, 23, 23)
                         .addComponent(clearSearchPropertiesButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(15, Short.MAX_VALUE))
+                .addContainerGap(11, Short.MAX_VALUE))
         );
 
         searchBottom.setBackground(new java.awt.Color(244, 244, 244));
@@ -592,7 +590,7 @@ public class CarArrivals extends javax.swing.JFrame {
         periodOptionGroup.add(oneHourRadioButton);
         oneHourRadioButton.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         oneHourRadioButton.setSelected(true);
-        oneHourRadioButton.setText(LAST_1HOUR_LABEL.getContent());
+        oneHourRadioButton.setText(((String[])Globals.LabelsText.get(LAST_1HOUR_LABEL.ordinal()))[ourLang]);
         oneHourRadioButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 oneHourRadioButtonActionPerformed(evt);
@@ -601,7 +599,7 @@ public class CarArrivals extends javax.swing.JFrame {
 
         periodOptionGroup.add(oneDayRadioButton);
         oneDayRadioButton.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        oneDayRadioButton.setText(LAST_24HOURS_LABEL.getContent());
+        oneDayRadioButton.setText(((String[])Globals.LabelsText.get(LAST_24HOURS_LABEL.ordinal()))[ourLang]);
         oneDayRadioButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 oneDayRadioButtonActionPerformed(evt);
@@ -610,7 +608,7 @@ public class CarArrivals extends javax.swing.JFrame {
 
         periodOptionGroup.add(periodRadioButton);
         periodRadioButton.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        periodRadioButton.setText(DURATION_SET_LABEL.getContent());
+        periodRadioButton.setText(((String[])Globals.LabelsText.get(DURATION_SET_LABEL.ordinal()))[ourLang]);
         periodRadioButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 periodRadioButtonActionPerformed(evt);
@@ -625,8 +623,8 @@ public class CarArrivals extends javax.swing.JFrame {
 
         setSearchPeriodOptionButton.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         setSearchPeriodOptionButton.setMnemonic('f');
-        setSearchPeriodOptionButton.setText(FIX_IT_BTN.getContent());
-        setSearchPeriodOptionButton.setToolTipText(FIX_IT_BTN_TOOLTIP.getContent());
+        setSearchPeriodOptionButton.setText(((String[])Globals.ButtonLabels.get(FIX_IT_BTN.ordinal()))[ourLang]);
+        setSearchPeriodOptionButton.setToolTipText(((String[])Globals.ToolTipLabels.get(FIX_IT_BTN_TOOLTIP.ordinal()))[ourLang]);
         setSearchPeriodOptionButton.setPreferredSize(new java.awt.Dimension(77, 35));
         setSearchPeriodOptionButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -708,7 +706,7 @@ public class CarArrivals extends javax.swing.JFrame {
                             .addComponent(BeginDateChooser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(setSearchPeriodOptionButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(EndDateChooser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(34, Short.MAX_VALUE))
+                .addContainerGap(30, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout criteriaPanelLayout = new javax.swing.GroupLayout(criteriaPanel);
@@ -718,8 +716,8 @@ public class CarArrivals extends javax.swing.JFrame {
             .addGroup(criteriaPanelLayout.createSequentialGroup()
                 .addGap(0, 0, 0)
                 .addGroup(criteriaPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(searchTop, javax.swing.GroupLayout.DEFAULT_SIZE, 887, Short.MAX_VALUE)
-                    .addComponent(searchBottom, javax.swing.GroupLayout.DEFAULT_SIZE, 887, Short.MAX_VALUE))
+                    .addComponent(searchTop, javax.swing.GroupLayout.DEFAULT_SIZE, 877, Short.MAX_VALUE)
+                    .addComponent(searchBottom, javax.swing.GroupLayout.DEFAULT_SIZE, 877, Short.MAX_VALUE))
                 .addGap(0, 0, 0))
         );
         criteriaPanelLayout.setVerticalGroup(
@@ -733,7 +731,7 @@ public class CarArrivals extends javax.swing.JFrame {
 
         searchButton.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         searchButton.setMnemonic('s');
-        searchButton.setText(SEARCH_BTN.getContent());
+        searchButton.setText(((String[])Globals.ButtonLabels.get(SEARCH_BTN.ordinal()))[ourLang]);
         searchButton.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 5, 10, 5));
         searchButton.setMaximumSize(new java.awt.Dimension(80, 80));
         searchButton.setMinimumSize(new java.awt.Dimension(80, 80));
@@ -750,7 +748,7 @@ public class CarArrivals extends javax.swing.JFrame {
             searchPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(searchPanelLayout.createSequentialGroup()
                 .addGap(0, 0, 0)
-                .addComponent(criteriaPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 887, Short.MAX_VALUE)
+                .addComponent(criteriaPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 877, Short.MAX_VALUE)
                 .addGap(7, 7, 7)
                 .addComponent(searchButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(7, 7, 7))
@@ -770,7 +768,7 @@ public class CarArrivals extends javax.swing.JFrame {
 
         closeButton.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         closeButton.setMnemonic('c');
-        closeButton.setText(CLOSE_BTN.getContent());
+        closeButton.setText(((String[])Globals.ButtonLabels.get(CLOSE_BTN.ordinal()))[ourLang]);
         closeButton.setMaximumSize(new java.awt.Dimension(77, 52));
         closeButton.setMinimumSize(new java.awt.Dimension(77, 52));
         closeButton.setPreferredSize(new java.awt.Dimension(85, 52));
@@ -786,7 +784,7 @@ public class CarArrivals extends javax.swing.JFrame {
         topPanelLayout.setHorizontalGroup(
             topPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(topPanelLayout.createSequentialGroup()
-                .addComponent(searchPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 993, Short.MAX_VALUE)
+                .addComponent(searchPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 983, Short.MAX_VALUE)
                 .addGap(0, 0, 0)
                 .addComponent(closePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
@@ -820,7 +818,7 @@ public class CarArrivals extends javax.swing.JFrame {
 
         jLabel3.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel3.setText(ORDER_LABEL.getContent());
+        jLabel3.setText(((String[])Globals.LabelsText.get(ORDER_LABEL.ordinal()))[ourLang]);
         jLabel3.setMaximumSize(new java.awt.Dimension(80, 35));
         jLabel3.setMinimumSize(new java.awt.Dimension(80, 35));
         jLabel3.setPreferredSize(new java.awt.Dimension(80, 35));
@@ -835,7 +833,7 @@ public class CarArrivals extends javax.swing.JFrame {
 
         jLabel5.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel5.setText(ARRIVAL_TIME_LABEL.getContent());
+        jLabel5.setText(((String[])Globals.LabelsText.get(ARRIVAL_TIME_LABEL.ordinal()))[ourLang]);
         jLabel5.setMaximumSize(new java.awt.Dimension(100, 35));
         jLabel5.setMinimumSize(new java.awt.Dimension(100, 35));
         jLabel5.setPreferredSize(new java.awt.Dimension(100, 35));
@@ -851,7 +849,7 @@ public class CarArrivals extends javax.swing.JFrame {
 
         jLabel8.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         jLabel8.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel8.setText(RECOGNIZED_LABEL.getContent());
+        jLabel8.setText(((String[])Globals.LabelsText.get(RECOGNIZED_LABEL.ordinal()))[ourLang]);
         jLabel8.setMaximumSize(new java.awt.Dimension(100, 35));
         jLabel8.setMinimumSize(new java.awt.Dimension(100, 35));
         jLabel8.setPreferredSize(new java.awt.Dimension(120, 35));
@@ -871,7 +869,7 @@ public class CarArrivals extends javax.swing.JFrame {
 
         jLabel4.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel4.setText(GATE_NAME_LABEL.getContent());
+        jLabel4.setText(((String[])Globals.LabelsText.get(GATE_NAME_LABEL.ordinal()))[ourLang]);
         jLabel4.setMaximumSize(new java.awt.Dimension(80, 35));
         jLabel4.setMinimumSize(new java.awt.Dimension(80, 35));
         jLabel4.setPreferredSize(new java.awt.Dimension(80, 35));
@@ -885,7 +883,7 @@ public class CarArrivals extends javax.swing.JFrame {
 
         jLabel6.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel6.setText(ATTENDANT_LABEL.getContent());
+        jLabel6.setText(((String[])Globals.LabelsText.get(ATTENDANT_LABEL.ordinal()))[ourLang]);
         jLabel6.setMaximumSize(new java.awt.Dimension(100, 35));
         jLabel6.setMinimumSize(new java.awt.Dimension(100, 35));
         jLabel6.setPreferredSize(new java.awt.Dimension(100, 35));
@@ -899,7 +897,7 @@ public class CarArrivals extends javax.swing.JFrame {
 
         jLabel7.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel7.setText(REGISTERED_LABEL.getContent());
+        jLabel7.setText(((String[])Globals.LabelsText.get(REGISTERED_LABEL.ordinal()))[ourLang]);
         jLabel7.setMaximumSize(new java.awt.Dimension(100, 35));
         jLabel7.setMinimumSize(new java.awt.Dimension(100, 35));
         jLabel7.setPreferredSize(new java.awt.Dimension(120, 35));
@@ -920,7 +918,7 @@ public class CarArrivals extends javax.swing.JFrame {
 
         buildingLabel.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         buildingLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        buildingLabel.setText(BUILDING_LABEL.getContent());
+        buildingLabel.setText(((String[])Globals.LabelsText.get(BUILDING_LABEL.ordinal()))[ourLang]);
         buildingLabel.setMaximumSize(new java.awt.Dimension(130, 35));
         buildingLabel.setMinimumSize(new java.awt.Dimension(130, 35));
         buildingLabel.setPreferredSize(new java.awt.Dimension(130, 35));
@@ -935,7 +933,7 @@ public class CarArrivals extends javax.swing.JFrame {
 
         jLabel10.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         jLabel10.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel10.setText(ROOM_LABEL.getContent());
+        jLabel10.setText(((String[])Globals.LabelsText.get(ROOM_LABEL.ordinal()))[ourLang]);
         jLabel10.setMaximumSize(new java.awt.Dimension(80, 35));
         jLabel10.setMinimumSize(new java.awt.Dimension(80, 35));
         jLabel10.setPreferredSize(new java.awt.Dimension(80, 35));
@@ -955,7 +953,7 @@ public class CarArrivals extends javax.swing.JFrame {
 
         affiliationLabel.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         affiliationLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        affiliationLabel.setText(AFFILIATION_LABEL.getContent());
+        affiliationLabel.setText(((String[])Globals.LabelsText.get(AFFILIATION_LABEL.ordinal()))[ourLang]);
         affiliationLabel.setMaximumSize(new java.awt.Dimension(130, 35));
         affiliationLabel.setMinimumSize(new java.awt.Dimension(130, 35));
         affiliationLabel.setPreferredSize(new java.awt.Dimension(130, 35));
@@ -975,7 +973,7 @@ public class CarArrivals extends javax.swing.JFrame {
 
         jLabel14.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         jLabel14.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel14.setText(VISIT_PURPOSE_LABEL.getContent());
+        jLabel14.setText(((String[])Globals.LabelsText.get(VISIT_PURPOSE_LABEL.ordinal()))[ourLang]);
         jLabel14.setMaximumSize(new java.awt.Dimension(130, 35));
         jLabel14.setMinimumSize(new java.awt.Dimension(130, 35));
         jLabel14.setPreferredSize(new java.awt.Dimension(130, 35));
@@ -995,7 +993,7 @@ public class CarArrivals extends javax.swing.JFrame {
 
         jLabel13.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         jLabel13.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel13.setText(FILE_SIZE_LABEL.getContent());
+        jLabel13.setText(((String[])Globals.LabelsText.get(FILE_SIZE_LABEL.ordinal()))[ourLang]);
         jLabel13.setMaximumSize(new java.awt.Dimension(80, 35));
         jLabel13.setMinimumSize(new java.awt.Dimension(80, 35));
         jLabel13.setPreferredSize(new java.awt.Dimension(80, 35));
@@ -1011,7 +1009,7 @@ public class CarArrivals extends javax.swing.JFrame {
 
         jLabel12.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         jLabel12.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel12.setText(BAR_OP_LABEL.getContent());
+        jLabel12.setText(((String[])Globals.LabelsText.get(BAR_OP_LABEL.ordinal()))[ourLang]);
         jLabel12.setMaximumSize(new java.awt.Dimension(120, 35));
         jLabel12.setMinimumSize(new java.awt.Dimension(120, 35));
         jLabel12.setPreferredSize(new java.awt.Dimension(120, 35));
@@ -1027,7 +1025,7 @@ public class CarArrivals extends javax.swing.JFrame {
 
         jLabel16.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         jLabel16.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel16.setText(RECORD_COUNT_LABEL.getContent());
+        jLabel16.setText(((String[])Globals.LabelsText.get(RECORD_COUNT_LABEL.ordinal()))[ourLang]);
         jLabel16.setMaximumSize(new java.awt.Dimension(120, 35));
         jLabel16.setMinimumSize(new java.awt.Dimension(120, 35));
         jLabel16.setPreferredSize(new java.awt.Dimension(120, 35));
@@ -1082,9 +1080,9 @@ public class CarArrivals extends javax.swing.JFrame {
                 {null, null, null, null}
             },
             new String[] {
-                ORDER_HEADER.getContent(),
-                ARRIVAL_TIME_HEADER.getContent(),
-                CAR_TAG_HEADER.getContent(),
+                ((String[])Globals.TableHeaderList.get(ORDER_HEADER.ordinal()))[ourLang],
+                ((String[])Globals.TableHeaderList.get(ARRIVAL_TIME_HEADER.ordinal()))[ourLang],
+                ((String[])Globals.TableHeaderList.get(CAR_TAG_HEADER.ordinal()))[ourLang],
                 "arrSeqNo"
             }
 

@@ -2790,7 +2790,7 @@ public class ManageDrivers extends javax.swing.JFrame {
      * @param currCBox lower level combobox
      * @param parentCBox higher level(=parent) combobox
      */
-    private static void propagateComplexItem(final DriverCol currColumn, 
+    public static void propagateComplexItem(final DriverCol currColumn, 
         final JComboBox currCBox, final JComboBox parentCBox) 
     {
         InnoComboBoxItem currItem = (InnoComboBoxItem)currCBox.getSelectedItem();
