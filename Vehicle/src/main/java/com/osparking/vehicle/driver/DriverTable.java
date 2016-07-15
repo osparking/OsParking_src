@@ -48,7 +48,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.HashSet;
 import java.util.Set;
-import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
@@ -233,15 +232,17 @@ public class DriverTable extends JTable {
                         Object itemSource = e.getSource();
 
                         if (itemSource instanceof PComboBox) {
-                            Object cBoxItem = ((PComboBox)e.getSource()).getHighlightedCbxItem();
+                            Object cBoxItem = ((PComboBox)e.getSource()).getHighlightedCbxItem();               
                             ((PComboBox)itemSource).setSelectedItem(cBoxItem);
+                            
                         }
-        //                if (driverTable.getSelectedColumn() != UnitNo.getNumVal()
-                        if (column != UnitNo.getNumVal()
-                                && column != AffiliationL2.getNumVal()) 
+                        int currCol = driverTable.getSelectedColumn(), nextCol;
+                        
+                        nextCol = (currCol == UnitNo.getNumVal()) ? 1 : currCol + 1;
+                        if (driverTable.editCellAt(driverTable.getSelectedRow(), nextCol))
                         {
-                            parent.editNextColumn();
-                        }                        
+                            parent.startEditingCell(driverTable.getSelectedRow(), nextCol);
+                        }                          
                     }
                 });                  
             }

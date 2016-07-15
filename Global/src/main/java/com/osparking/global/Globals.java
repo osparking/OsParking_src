@@ -139,6 +139,13 @@ public class Globals {
     public static SimpleDateFormat timeFormatMMSS = new SimpleDateFormat("mm_ss"); 
     public static SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");    
     public static int SIX_HOURS = 3600 * 1000 * 6;
+
+    public static void setTableFocusAt(JTable driverTable, 
+            int rowIdx, int colIdx) 
+    {
+        driverTable.setRowSelectionInterval(rowIdx, rowIdx); 
+        driverTable.setColumnSelectionInterval(colIdx, colIdx);     
+    }    
     
     public static void determineLoginID() {
         String managerID = "manager";
@@ -151,11 +158,13 @@ public class Globals {
             possibleValues, possibleValues[0]);
         
         loginID = (String)selectedValue;
-        if (loginID.equals(ADMIN_ID) || loginID.equals(managerID)) {
-            Globals.isManager = true;
-        } else if (loginID.equals(guestID)) {
-            Globals.isManager = false;                 
-        }        
+        if (loginID != null) {
+            if (loginID.equals(ADMIN_ID) || loginID.equals(managerID)) {
+                Globals.isManager = true;
+            } else if (loginID.equals(guestID)) {
+                Globals.isManager = false;                 
+            }        
+        }
     }
     
     public static void augmentComponentMap(
