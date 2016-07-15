@@ -687,12 +687,26 @@ public class ODSReader {
         readSettings();
         
         ODSReader objODSReader = new ODSReader();
-
         URL url = null;
         File file = null;
+        
         try {
-            url = objODSReader.getClass().getResource("/AffiliBuild.ods");
-            file = new File(url.toURI());
+            String fileName = "/buildings.ods";
+//            String fileName = "/Affiliations.ods";
+            
+            url = objODSReader.getClass().getResource(fileName);
+            if (url == null) {
+                String path = objODSReader.getClass().getResource("/").getPath();
+                String message = "File doesn't exist at the directory =>" +
+                        System.lineSeparator() +
+                        " - File: " + fileName + System.lineSeparator() +
+                        " - Directory: 'src/main/resources'";
+                JOptionPane.showConfirmDialog(null, message, "File Not Found", 
+                        JOptionPane.OK_OPTION, WARNING_MESSAGE);
+                System.exit(0);
+            } else {
+                file = new File(url.toURI());
+            }
         } catch(URISyntaxException e) {
             file = new File(url.getPath());
         }            
@@ -719,6 +733,8 @@ public class ODSReader {
                     "Sheed Scan Result", JOptionPane.YES_NO_OPTION);            
             if (result == JOptionPane.YES_OPTION) {                
                 objODSReader.readODS(sheet, null);
+            } else {
+                System.exit(0);
             }
         } else {
             // display wrong cell points if existed

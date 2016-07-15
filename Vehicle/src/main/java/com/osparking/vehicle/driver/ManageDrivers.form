@@ -683,7 +683,6 @@
               </AccessibilityProperties>
               <Events>
                 <EventHandler event="popupMenuWillBecomeInvisible" listener="javax.swing.event.PopupMenuListener" parameters="javax.swing.event.PopupMenuEvent" handler="searchL1ComboBoxPopupMenuWillBecomeInvisible"/>
-                <EventHandler event="popupMenuWillBecomeVisible" listener="javax.swing.event.PopupMenuListener" parameters="javax.swing.event.PopupMenuEvent" handler="searchL1ComboBoxPopupMenuWillBecomeVisible"/>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="searchL1ComboBoxActionPerformed"/>
               </Events>
               <AuxValues>
@@ -744,7 +743,6 @@
               </AccessibilityProperties>
               <Events>
                 <EventHandler event="popupMenuWillBecomeInvisible" listener="javax.swing.event.PopupMenuListener" parameters="javax.swing.event.PopupMenuEvent" handler="searchBuildingComboBoxPopupMenuWillBecomeInvisible"/>
-                <EventHandler event="popupMenuWillBecomeVisible" listener="javax.swing.event.PopupMenuListener" parameters="javax.swing.event.PopupMenuEvent" handler="searchBuildingComboBoxPopupMenuWillBecomeVisible"/>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="searchBuildingComboBoxActionPerformed"/>
               </Events>
               <AuxValues>

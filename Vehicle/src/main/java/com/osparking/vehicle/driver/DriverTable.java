@@ -193,7 +193,6 @@ public class DriverTable extends JTable {
             }
 
             int parentKey = (Integer)(((ConvComboBoxItem)parentObj).getKeyValue());            
-            System.out.println("parentKey: " + parentKey);
             
             TableColumn cBoxCol = driverTable.getColumnModel().getColumn(modCol);        
             PComboBox<InnoComboBoxItem> comboBox = (PComboBox<InnoComboBoxItem>)
@@ -201,10 +200,7 @@ public class DriverTable extends JTable {
 
             // Construct combo box item list only when needed.
             int len = comboBox.getItemCount();
-            System.out.println("len: " + len + ", CommonData.getPrevParentKey(thisCol): " 
-                    + CommonData.getPrevParentKey(thisCol) + ", parentKey: " + parentKey);
             if (len == 0 || CommonData.getPrevParentKey(thisCol) != parentKey) {
-                System.out.println(thisCol.toString() + " refreshing................");
                 Object thisObj = driverTable.getValueAt(modRow, modCol);
                 Object prompter = getPrompter(thisCol, parentObj);
                 

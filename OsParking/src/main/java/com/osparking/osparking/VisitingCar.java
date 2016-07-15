@@ -18,7 +18,6 @@ package com.osparking.osparking;
 
 import com.osparking.vehicle.driver.ManageDrivers;
 import static com.osparking.vehicle.driver.ManageDrivers.loadComboBoxItems;
-import static com.osparking.vehicle.driver.ManageDrivers.loadUnitComboBox;
 import java.awt.Point;
 import java.awt.image.BufferedImage;
 import java.text.SimpleDateFormat;
@@ -42,6 +41,10 @@ import static com.osparking.global.names.OSP_enums.DriverCol.AffiliationL2;
 import static com.osparking.global.names.OSP_enums.DriverCol.BuildingNo;
 import static com.osparking.global.names.OSP_enums.DriverCol.UnitNo;
 import com.osparking.global.names.PComboBox;
+import static com.osparking.vehicle.CommonData.refreshComboBox;
+import static com.osparking.vehicle.driver.ManageDrivers.getPrompter;
+import static com.osparking.vehicle.driver.ManageDrivers.mayChangeChildPrompter;
+import static com.osparking.vehicle.driver.ManageDrivers.mayPropagateBackward;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -86,10 +89,10 @@ public class VisitingCar extends javax.swing.JFrame {
         
 //        initSearchComboBox(highLevelComboBox, lowLevelComboBox, 
 //                buildingComboBox, unitComboBox);
-        highLevelComboBox.addItem(getPrompter(AffiliationL1, null));
-        lowLevelComboBox.addItem(getPrompter(AffiliationL2, searchL1ComboBox));
-        searchBuildingComboBox.addItem(getPrompter(BuildingNo, null));
-        searchUnitComboBox.addItem(getPrompter(UnitNo, searchBuildingComboBox));           
+        visitL1ComboBox.addItem(getPrompter(AffiliationL1, null));
+        visitL2ComboBox.addItem(getPrompter(AffiliationL2, visitL1ComboBox));
+        visitBuildingComboBox.addItem(getPrompter(BuildingNo, null));
+        visitUnitComboBox.addItem(getPrompter(UnitNo, visitBuildingComboBox));           
         
         visitReasonTextField.setText("");
         gateNameTextField.setText(gateNames[gateNo]);
@@ -137,22 +140,22 @@ public class VisitingCar extends javax.swing.JFrame {
         jPanel11 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         filler18 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 32767));
-        highLevelComboBox = new PComboBox();
+        visitL1ComboBox = new PComboBox();
         filler7 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 10), new java.awt.Dimension(0, 10), new java.awt.Dimension(32767, 10));
         jPanel12 = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
         filler19 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 32767));
-        lowLevelComboBox = new PComboBox();
+        visitL2ComboBox = new PComboBox();
         jPanel3 = new javax.swing.JPanel();
         jPanel13 = new javax.swing.JPanel();
         jLabel9 = new javax.swing.JLabel();
         filler20 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 32767));
-        buildingComboBox = new PComboBox();
+        visitBuildingComboBox = new PComboBox();
         filler12 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 10), new java.awt.Dimension(0, 10), new java.awt.Dimension(32767, 10));
         jPanel14 = new javax.swing.JPanel();
         jLabel10 = new javax.swing.JLabel();
         filler21 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 32767));
-        unitComboBox = new PComboBox();
+        visitUnitComboBox = new PComboBox();
         filler13 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 10), new java.awt.Dimension(0, 10), new java.awt.Dimension(32767, 10));
         jPanel9 = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
@@ -172,7 +175,6 @@ public class VisitingCar extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Visitor Information Entry");
-        setPreferredSize(new java.awt.Dimension(800, 600));
         setResizable(false);
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
@@ -283,26 +285,26 @@ public class VisitingCar extends javax.swing.JFrame {
         jPanel11.add(jLabel3);
         jPanel11.add(filler18);
 
-        highLevelComboBox.setFont(new java.awt.Font(font_Type, font_Style, font_Size+6));
-        highLevelComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] {}));
-        highLevelComboBox.setMaximumSize(null);
-        highLevelComboBox.setMinimumSize(new java.awt.Dimension(210, 50));
-        highLevelComboBox.setPreferredSize(new java.awt.Dimension(210, 50));
-        highLevelComboBox.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
+        visitL1ComboBox.setFont(new java.awt.Font(font_Type, font_Style, font_Size+6));
+        visitL1ComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] {}));
+        visitL1ComboBox.setMaximumSize(null);
+        visitL1ComboBox.setMinimumSize(new java.awt.Dimension(210, 50));
+        visitL1ComboBox.setPreferredSize(new java.awt.Dimension(210, 50));
+        visitL1ComboBox.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
             public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
             }
             public void popupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {
             }
             public void popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {
-                highLevelComboBoxPopupMenuWillBecomeVisible(evt);
+                visitL1ComboBoxPopupMenuWillBecomeVisible(evt);
             }
         });
-        highLevelComboBox.addActionListener(new java.awt.event.ActionListener() {
+        visitL1ComboBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                highLevelComboBoxActionPerformed(evt);
+                visitL1ComboBoxActionPerformed(evt);
             }
         });
-        jPanel11.add(highLevelComboBox);
+        jPanel11.add(visitL1ComboBox);
 
         jPanel2.add(jPanel11);
         jPanel2.add(filler7);
@@ -318,22 +320,22 @@ public class VisitingCar extends javax.swing.JFrame {
         jPanel12.add(jLabel5);
         jPanel12.add(filler19);
 
-        lowLevelComboBox.setFont(new java.awt.Font(font_Type, font_Style, font_Size+6));
-        lowLevelComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] {}));
-        lowLevelComboBox.setMaximumSize(null);
-        lowLevelComboBox.setMinimumSize(new java.awt.Dimension(210, 50));
-        lowLevelComboBox.setPreferredSize(new java.awt.Dimension(210, 50));
-        lowLevelComboBox.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
+        visitL2ComboBox.setFont(new java.awt.Font(font_Type, font_Style, font_Size+6));
+        visitL2ComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] {}));
+        visitL2ComboBox.setMaximumSize(null);
+        visitL2ComboBox.setMinimumSize(new java.awt.Dimension(210, 50));
+        visitL2ComboBox.setPreferredSize(new java.awt.Dimension(210, 50));
+        visitL2ComboBox.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
             public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
             }
             public void popupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {
-                lowLevelComboBoxPopupMenuWillBecomeInvisible(evt);
+                visitL2ComboBoxPopupMenuWillBecomeInvisible(evt);
             }
             public void popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {
-                lowLevelComboBoxPopupMenuWillBecomeVisible(evt);
+                visitL2ComboBoxPopupMenuWillBecomeVisible(evt);
             }
         });
-        jPanel12.add(lowLevelComboBox);
+        jPanel12.add(visitL2ComboBox);
 
         jPanel2.add(jPanel12);
 
@@ -353,26 +355,26 @@ public class VisitingCar extends javax.swing.JFrame {
         jPanel13.add(jLabel9);
         jPanel13.add(filler20);
 
-        buildingComboBox.setFont(new java.awt.Font(font_Type, font_Style, font_Size+6));
-        buildingComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] {}));
-        buildingComboBox.setMaximumSize(null);
-        buildingComboBox.setMinimumSize(new java.awt.Dimension(100, 50));
-        buildingComboBox.setPreferredSize(new java.awt.Dimension(100, 50));
-        buildingComboBox.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
+        visitBuildingComboBox.setFont(new java.awt.Font(font_Type, font_Style, font_Size+6));
+        visitBuildingComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] {}));
+        visitBuildingComboBox.setMaximumSize(null);
+        visitBuildingComboBox.setMinimumSize(new java.awt.Dimension(100, 50));
+        visitBuildingComboBox.setPreferredSize(new java.awt.Dimension(100, 50));
+        visitBuildingComboBox.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
             public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
             }
             public void popupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {
             }
             public void popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {
-                buildingComboBoxPopupMenuWillBecomeVisible(evt);
+                visitBuildingComboBoxPopupMenuWillBecomeVisible(evt);
             }
         });
-        buildingComboBox.addActionListener(new java.awt.event.ActionListener() {
+        visitBuildingComboBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                buildingComboBoxActionPerformed(evt);
+                visitBuildingComboBoxActionPerformed(evt);
             }
         });
-        jPanel13.add(buildingComboBox);
+        jPanel13.add(visitBuildingComboBox);
 
         jPanel3.add(jPanel13);
         jPanel3.add(filler12);
@@ -388,21 +390,21 @@ public class VisitingCar extends javax.swing.JFrame {
         jPanel14.add(jLabel10);
         jPanel14.add(filler21);
 
-        unitComboBox.setFont(new java.awt.Font(font_Type, font_Style, font_Size+6));
-        unitComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] {}));
-        unitComboBox.setMaximumSize(null);
-        unitComboBox.setMinimumSize(new java.awt.Dimension(100, 50));
-        unitComboBox.setPreferredSize(new java.awt.Dimension(100, 50));
-        unitComboBox.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
+        visitUnitComboBox.setFont(new java.awt.Font(font_Type, font_Style, font_Size+6));
+        visitUnitComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] {}));
+        visitUnitComboBox.setMaximumSize(null);
+        visitUnitComboBox.setMinimumSize(new java.awt.Dimension(100, 50));
+        visitUnitComboBox.setPreferredSize(new java.awt.Dimension(100, 50));
+        visitUnitComboBox.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
             public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
             }
             public void popupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {
             }
             public void popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {
-                unitComboBoxPopupMenuWillBecomeVisible(evt);
+                visitUnitComboBoxPopupMenuWillBecomeVisible(evt);
             }
         });
-        jPanel14.add(unitComboBox);
+        jPanel14.add(visitUnitComboBox);
 
         jPanel3.add(jPanel14);
 
@@ -515,63 +517,69 @@ public class VisitingCar extends javax.swing.JFrame {
     }//GEN-LAST:event_notAllowButtonActionPerformed
 
     @SuppressWarnings("unchecked") 
-    private void highLevelComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_highLevelComboBoxActionPerformed
-        if (highLevelComboBox.isPopupVisible()) {
-            MutableComboBoxModel model 
-                    = (MutableComboBoxModel)lowLevelComboBox.getModel();
-            model.removeElementAt(0);
-//            model.insertElementAt(getPrompter(AffiliationL2), 0);
-            model.insertElementAt(ManageDrivers.getPrompter(AffiliationL2, highLevelComboBox), 0);
-            lowLevelComboBox.setSelectedIndex(0);            
-        }        
-    }//GEN-LAST:event_highLevelComboBoxActionPerformed
+    private void visitL1ComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_visitL1ComboBoxActionPerformed
+        mayChangeChildPrompter(visitL1ComboBox, visitL2ComboBox, AffiliationL2);
+//        if (visitL1ComboBox.isPopupVisible()) {
+//            MutableComboBoxModel model = (MutableComboBoxModel)visitL2ComboBox.getModel();
+//            model.removeElementAt(0);
+//            model.insertElementAt(getPrompter(AffiliationL2, visitL1ComboBox), 0);
+//            visitL2ComboBox.setSelectedIndex(0);            
+//        }        
+    }//GEN-LAST:event_visitL1ComboBoxActionPerformed
 
     @SuppressWarnings("unchecked") 
-    private void highLevelComboBoxPopupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_highLevelComboBoxPopupMenuWillBecomeVisible
-        Object selItem = highLevelComboBox.getSelectedItem();
+    private void visitL1ComboBoxPopupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_visitL1ComboBoxPopupMenuWillBecomeVisible
+        Object selItem = visitL1ComboBox.getSelectedItem();
 
-        highLevelComboBox.removeAllItems();
-        highLevelComboBox.addItem(ManageDrivers.getPrompter(AffiliationL1, highLevelComboBox));     
-        loadComboBoxItems(highLevelComboBox, AffiliationL1, -1);
-        highLevelComboBox.setSelectedItem(selItem);         
-    }//GEN-LAST:event_highLevelComboBoxPopupMenuWillBecomeVisible
+        visitL1ComboBox.removeAllItems();
+        visitL1ComboBox.addItem(ManageDrivers.getPrompter(AffiliationL1, visitL1ComboBox));     
+        loadComboBoxItems(visitL1ComboBox, AffiliationL1, -1);
+        visitL1ComboBox.setSelectedItem(selItem);         
+    }//GEN-LAST:event_visitL1ComboBoxPopupMenuWillBecomeVisible
 
     @SuppressWarnings("unchecked") 
-    private void lowLevelComboBoxPopupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_lowLevelComboBoxPopupMenuWillBecomeVisible
-        Object selItem = lowLevelComboBox.getSelectedItem();
+    private void visitL2ComboBoxPopupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_visitL2ComboBoxPopupMenuWillBecomeVisible
+        Object selItem = visitL2ComboBox.getSelectedItem();
         
-        ConvComboBoxItem l1Item = (ConvComboBoxItem)highLevelComboBox.getSelectedItem(); 
+        ConvComboBoxItem l1Item = (ConvComboBoxItem)visitL1ComboBox.getSelectedItem(); 
         int L1No = (Integer) l1Item.getKeyValue();        // normalize child combobox item 
-        lowLevelComboBox.removeAllItems();
-        lowLevelComboBox.addItem(ManageDrivers.getPrompter(AffiliationL2, highLevelComboBox));     
-        loadComboBoxItems(lowLevelComboBox, DriverCol.AffiliationL2, L1No);        
-        lowLevelComboBox.setSelectedItem(selItem);           
-    }//GEN-LAST:event_lowLevelComboBoxPopupMenuWillBecomeVisible
+        visitL2ComboBox.removeAllItems();
+        visitL2ComboBox.addItem(ManageDrivers.getPrompter(AffiliationL2, visitL1ComboBox));     
+        loadComboBoxItems(visitL2ComboBox, DriverCol.AffiliationL2, L1No);        
+        visitL2ComboBox.setSelectedItem(selItem);           
+    }//GEN-LAST:event_visitL2ComboBoxPopupMenuWillBecomeVisible
 
     @SuppressWarnings("unchecked") 
-    private void buildingComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buildingComboBoxActionPerformed
-        if (buildingComboBox.isPopupVisible()) {
-            MutableComboBoxModel model 
-                    = (MutableComboBoxModel)unitComboBox.getModel();
-            model.removeElementAt(0);
-            model.insertElementAt(ManageDrivers.getPrompter(UnitNo, buildingComboBox), 0);
-            unitComboBox.setSelectedIndex(0);            
-        }
-    }//GEN-LAST:event_buildingComboBoxActionPerformed
+    private void visitBuildingComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_visitBuildingComboBoxActionPerformed
+        mayChangeChildPrompter(visitBuildingComboBox, visitUnitComboBox, UnitNo);
+//        if (visitBuildingComboBox.isPopupVisible()) {
+//            MutableComboBoxModel model 
+//                    = (MutableComboBoxModel)visitUnitComboBox.getModel();
+//            model.removeElementAt(0);
+//            model.insertElementAt(ManageDrivers.getPrompter(UnitNo, visitBuildingComboBox), 0);
+//            visitUnitComboBox.setSelectedIndex(0);            
+//        }
+    }//GEN-LAST:event_visitBuildingComboBoxActionPerformed
 
     @SuppressWarnings("unchecked") 
-    private void buildingComboBoxPopupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_buildingComboBoxPopupMenuWillBecomeVisible
-        Object selItem = buildingComboBox.getSelectedItem();
+    private void visitBuildingComboBoxPopupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_visitBuildingComboBoxPopupMenuWillBecomeVisible
+        Object selItem = visitBuildingComboBox.getSelectedItem();
         
-        buildingComboBox.removeAllItems();
-        buildingComboBox.addItem(ManageDrivers.getPrompter(BuildingNo, null));     
-        loadComboBoxItems(buildingComboBox, BuildingNo, -1);
-        buildingComboBox.setSelectedItem(selItem);         
-    }//GEN-LAST:event_buildingComboBoxPopupMenuWillBecomeVisible
+        visitBuildingComboBox.removeAllItems();
+        visitBuildingComboBox.addItem(ManageDrivers.getPrompter(BuildingNo, null));     
+        loadComboBoxItems(visitBuildingComboBox, BuildingNo, -1);
+        visitBuildingComboBox.setSelectedItem(selItem);         
+    }//GEN-LAST:event_visitBuildingComboBoxPopupMenuWillBecomeVisible
 
-    private void unitComboBoxPopupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_unitComboBoxPopupMenuWillBecomeVisible
-        loadUnitComboBox(highLevelComboBox, buildingComboBox, unitComboBox);               
-    }//GEN-LAST:event_unitComboBoxPopupMenuWillBecomeVisible
+    private void visitUnitComboBoxPopupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_visitUnitComboBoxPopupMenuWillBecomeVisible
+//        loadUnitComboBox(visitL1ComboBox, visitBuildingComboBox, visitUnitComboBox);   
+        Object selItem = visitUnitComboBox.getSelectedItem();
+        ConvComboBoxItem bldgItem = (ConvComboBoxItem)visitBuildingComboBox.getSelectedItem(); 
+        int bldgNo = (Integer) bldgItem.getKeyValue();
+        
+        refreshComboBox(visitUnitComboBox, getPrompter(UnitNo, visitBuildingComboBox), UnitNo, bldgNo);
+        visitUnitComboBox.setSelectedItem(selItem);         
+    }//GEN-LAST:event_visitUnitComboBoxPopupMenuWillBecomeVisible
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         if(parent != null){
@@ -619,9 +627,9 @@ public class VisitingCar extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_notAllowButtonKeyTyped
 
-    private void lowLevelComboBoxPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_lowLevelComboBoxPopupMenuWillBecomeInvisible
-        propagateComplexItem(AffiliationL2, lowLevelComboBox, highLevelComboBox);
-    }//GEN-LAST:event_lowLevelComboBoxPopupMenuWillBecomeInvisible
+    private void visitL2ComboBoxPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_visitL2ComboBoxPopupMenuWillBecomeInvisible
+        mayPropagateBackward(visitL2ComboBox, visitL1ComboBox);
+    }//GEN-LAST:event_visitL2ComboBoxPopupMenuWillBecomeInvisible
 
     /**
      * @param args the command line arguments
@@ -665,7 +673,6 @@ public class VisitingCar extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JComboBox buildingComboBox;
     private javax.swing.Box.Filler filler1;
     private javax.swing.Box.Filler filler10;
     private javax.swing.Box.Filler filler11;
@@ -693,7 +700,6 @@ public class VisitingCar extends javax.swing.JFrame {
     private javax.swing.Box.Filler filler8;
     private javax.swing.Box.Filler filler9;
     private javax.swing.JTextField gateNameTextField;
-    private javax.swing.JComboBox highLevelComboBox;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
@@ -717,13 +723,15 @@ public class VisitingCar extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
     private javax.swing.JPanel jPanel9;
-    private javax.swing.JComboBox lowLevelComboBox;
     private javax.swing.JButton notAllowButton;
     private javax.swing.JButton openBarButton;
     private javax.swing.JTextField recogTextField;
-    private javax.swing.JComboBox unitComboBox;
+    private javax.swing.JComboBox visitBuildingComboBox;
+    private javax.swing.JComboBox visitL1ComboBox;
+    private javax.swing.JComboBox visitL2ComboBox;
     private javax.swing.JTextField visitReasonTextField;
     private javax.swing.JTextField visitTimeTextField;
+    private javax.swing.JComboBox visitUnitComboBox;
     private javax.swing.JPanel wholePanel;
     // End of variables declaration//GEN-END:variables
 
@@ -741,17 +749,17 @@ public class VisitingCar extends javax.swing.JFrame {
                 parent.raiseGateBar(gateNo, imageSN, delay);
             }
 
-            if (lowLevelComboBox.getSelectedIndex() == -1) {
+            if (visitL2ComboBox.getSelectedIndex() == -1) {
                 l2No = -1;
             } else {
                 l2No = (Integer)
-                        ((InnoComboBoxItem)lowLevelComboBox.getSelectedItem()).getKeys()[0];
+                        ((InnoComboBoxItem)visitL2ComboBox.getSelectedItem()).getKeys()[0];
             }
-            if (unitComboBox.getSelectedIndex() == -1) {
+            if (visitUnitComboBox.getSelectedIndex() == -1) {
                 unitSeqNo = -1;
             } else {
                 unitSeqNo = (Integer)
-                        ((InnoComboBoxItem)unitComboBox.getSelectedItem()).getKeys()[0];
+                        ((InnoComboBoxItem)visitUnitComboBox.getSelectedItem()).getKeys()[0];
             }
             BarOperation barOperation = BarOperation.MANUAL;
             if (!openGate) {

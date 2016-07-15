@@ -185,9 +185,12 @@ public class ManageDrivers extends javax.swing.JFrame {
         Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
         setLocation(screen.width - this.getSize().width, 0);
         
-        searchL1ComboBox.addItem(getPrompter(AffiliationL1, null));
+        refreshComboBox(searchL1ComboBox, getPrompter(AffiliationL1, searchL1ComboBox),
+                AffiliationL1, -1);
         searchL2ComboBox.addItem(getPrompter(AffiliationL2, searchL1ComboBox));
-        searchBuildingComboBox.addItem(getPrompter(BuildingNo, null));
+        
+        refreshComboBox(searchBuildingComboBox, getPrompter(BuildingNo, searchBuildingComboBox),
+                BuildingNo, -1);        
         searchUnitComboBox.addItem(getPrompter(UnitNo, searchBuildingComboBox));        
 
         affiliationL1CBox.setFont(null);
@@ -901,7 +904,6 @@ public class ManageDrivers extends javax.swing.JFrame {
                 searchL1ComboBoxPopupMenuWillBecomeInvisible(evt);
             }
             public void popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {
-                searchL1ComboBoxPopupMenuWillBecomeVisible(evt);
             }
         });
         searchL1ComboBox.addActionListener(new java.awt.event.ActionListener() {
@@ -946,7 +948,6 @@ public class ManageDrivers extends javax.swing.JFrame {
                 searchBuildingComboBoxPopupMenuWillBecomeInvisible(evt);
             }
             public void popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {
-                searchBuildingComboBoxPopupMenuWillBecomeVisible(evt);
             }
         });
         searchBuildingComboBox.addActionListener(new java.awt.event.ActionListener() {
@@ -1444,7 +1445,6 @@ public class ManageDrivers extends javax.swing.JFrame {
 
         int row = driverTable. getSelectedRow();
         int col = driverTable. getSelectedColumn();
-        System.out.println("focus at--> row: " + row + ", col: " + col);
         
         if (col == -1) {
             col = 2;
@@ -1496,35 +1496,12 @@ public class ManageDrivers extends javax.swing.JFrame {
     }//GEN-LAST:event_formWindowClosing
 
     private void searchL1ComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchL1ComboBoxActionPerformed
-        /**
-         * Check if parent combo box is opened by the user -- Patent Requested technology
-         */
-        if (searchL1ComboBox.isPopupVisible()) {
-            // Change the just prompter of the child combobox and select the prompter.
-            MutableComboBoxModel model = (MutableComboBoxModel)searchL2ComboBox.getModel();
-            model.insertElementAt(getPrompter(AffiliationL2, searchL1ComboBox), 0);
-            searchL2ComboBox.setSelectedIndex(0);            
-        }
+        mayChangeChildPrompter(searchL1ComboBox, searchL2ComboBox, AffiliationL2);
     }//GEN-LAST:event_searchL1ComboBoxActionPerformed
 
     private void searchBuildingComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchBuildingComboBoxActionPerformed
-        /**
-         * Check if parent combo box is opened by the user -- Patent Requested technology
-         */
-        if (searchBuildingComboBox.isPopupVisible()) {
-            // Change the just prompter of the child combobox and select the prompter.
-            MutableComboBoxModel model = (MutableComboBoxModel)searchUnitComboBox.getModel();
-            model.insertElementAt(getPrompter(UnitNo, searchBuildingComboBox), 0);
-            searchUnitComboBox.setSelectedIndex(0);            
-        }
+        mayChangeChildPrompter(searchBuildingComboBox, searchUnitComboBox, UnitNo);
     }//GEN-LAST:event_searchBuildingComboBoxActionPerformed
-
-    private void searchL1ComboBoxPopupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_searchL1ComboBoxPopupMenuWillBecomeVisible
-        if (searchL1ComboBox.getItemCount() == 1) {
-            refreshComboBox(searchL1ComboBox, getPrompter(AffiliationL1, searchL1ComboBox),
-                    AffiliationL1, -1);
-        }
-    }//GEN-LAST:event_searchL1ComboBoxPopupMenuWillBecomeVisible
 
     private void searchL2ComboBoxPopupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_searchL2ComboBoxPopupMenuWillBecomeVisible
         Object selItem = searchL2ComboBox.getSelectedItem();
@@ -1536,13 +1513,6 @@ public class ManageDrivers extends javax.swing.JFrame {
                 AffiliationL2, L1No);        
         searchL2ComboBox.setSelectedItem(selItem);     
     }//GEN-LAST:event_searchL2ComboBoxPopupMenuWillBecomeVisible
-
-    private void searchBuildingComboBoxPopupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_searchBuildingComboBoxPopupMenuWillBecomeVisible
-        if (searchBuildingComboBox.getItemCount() == 1) {
-            refreshComboBox(searchBuildingComboBox, getPrompter(BuildingNo, searchBuildingComboBox),
-                    BuildingNo, -1);
-        }
-    }//GEN-LAST:event_searchBuildingComboBoxPopupMenuWillBecomeVisible
 
     private void searchUnitComboBoxPopupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_searchUnitComboBoxPopupMenuWillBecomeVisible
         Object selItem = searchUnitComboBox.getSelectedItem();
@@ -1915,7 +1885,7 @@ public class ManageDrivers extends javax.swing.JFrame {
 
     private void searchL2ComboBoxPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_searchL2ComboBoxPopupMenuWillBecomeInvisible
         changeSearchButtonEnabled();
-        propagateComplexItem(AffiliationL2, searchL2ComboBox, searchL1ComboBox);
+        mayPropagateBackward(searchL2ComboBox, searchL1ComboBox);
     }//GEN-LAST:event_searchL2ComboBoxPopupMenuWillBecomeInvisible
 
     private void searchBuildingComboBoxPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_searchBuildingComboBoxPopupMenuWillBecomeInvisible
@@ -1924,7 +1894,7 @@ public class ManageDrivers extends javax.swing.JFrame {
 
     private void searchUnitComboBoxPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_searchUnitComboBoxPopupMenuWillBecomeInvisible
         changeSearchButtonEnabled();
-        propagateComplexItem(UnitNo, searchUnitComboBox, searchBuildingComboBox);
+        mayPropagateBackward(searchUnitComboBox, searchBuildingComboBox);
     }//GEN-LAST:event_searchUnitComboBoxPopupMenuWillBecomeInvisible
 
     /**
@@ -2406,43 +2376,35 @@ public class ManageDrivers extends javax.swing.JFrame {
         comboBox.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String cmd = e.getActionCommand();
+                JComboBox childCBox = (JComboBox)e.getSource();
+                InnoComboBoxItem innoItem = (InnoComboBoxItem)childCBox.getSelectedItem();
+                
+                if (innoItem == null || innoItem.getKeys().length == 1) {
+                    return; // Lower combobox item is just a prompter or an atomic item.
+                }
+                
                 java.awt.EventQueue.invokeLater(new Runnable() {
                     public void run() {
-                        InnoComboBoxItem innoItem = (InnoComboBoxItem)
-                                ((JComboBox)e.getSource()).getSelectedItem();
-                        
-                        if (innoItem == null) {
-                            // When a lower combobox is assigned just a prompter.
-                        } else {
-                            int colM = driverTable.convertColumnIndexToModel(driverCol.getNumVal());
-                            
-                            if (innoItem.getKeys().length > 1) 
-                            {
-                                int rowV = driverTable.getSelectedRow();
+                        //<editor-fold defaultstate="collapsed" desc="-- propagate selection to parent">            
+                        int colM = driverTable.convertColumnIndexToModel(driverCol.getNumVal());
+                        int row = driverTable.getSelectedRow();
+                        int highKey = (Integer)(innoItem.getKeys()[1]);
 
-                                //<editor-fold defaultstate="collapsed" desc="-- propagate selection upward, etc.">            
-                                int highKey = (Integer)(innoItem.getKeys()[1]);
+                        driverTable.setValueAt(
+                                new ConvComboBoxItem(highKey, innoItem.getLabels()[1]), 
+                                row, driverTable.convertColumnIndexToView(colM - 1));                        
 
-                                driverTable.setValueAt(
-                                        new ConvComboBoxItem(highKey, innoItem.getLabels()[1]), 
-                                        rowV, driverTable.convertColumnIndexToView(colM - 1));                        
+                        TableCellEditor editor = driverTable.getCellEditor(row, colM);
 
-                                TableCellEditor editor = driverTable.getCellEditor(rowV, colM);
+                        ((PComboBox)(((DefaultCellEditor)editor).getComponent())).removeAllItems();
 
-                                ((PComboBox)(((DefaultCellEditor)editor).getComponent())).removeAllItems();
-
-                                driverTable.setValueAt(
-                                        new InnoComboBoxItem (new int[]{innoItem.getKeys()[0]},
-                                                new String[]{innoItem.getLabels()[0]}), 
-                                        rowV, colM);
-
-                                // Update prevParentKey 
-                                setPrevParentKey(driverCol, highKey);
-                            }
-                        }
+                        driverTable.setValueAt(
+                                new InnoComboBoxItem (new int[]{innoItem.getKeys()[0]},
+                                        new String[]{innoItem.getLabels()[0]}), 
+                                row, colM);
+                        //</editor-fold>
+                        setPrevParentKey(driverCol, highKey);                        
                     }
-
                 });                    
             }
         });      
@@ -2562,10 +2524,8 @@ public class ManageDrivers extends javax.swing.JFrame {
     
     boolean nameReqBlinked = false;
     boolean cellReqBlinked = false;
-    int callCount = 0;
     int editingCol = -1;
     public void startEditingCell(int rowM, int columnIndex) {
-        System.out.println("startEditingCell call coun      t : " + callCount++);
         
         editingCol = columnIndex;
         driverTable.changeSelection(rowM, columnIndex, false, false);
@@ -2584,51 +2544,6 @@ public class ManageDrivers extends javax.swing.JFrame {
         }
         driverTable.requestFocusInWindow();
         driverTable.getEditorComponent().requestFocusInWindow();
-    }
-
-    /**
-     * Propagate a complex item of a lower level combobox to its parent.
-     * First, it checks if high level not selected while low level is selected.
-     * @param rowV (visual) row index of the cell where the low combobox is.
-     * @param rowM (model) row index of the cell where the low combobox is.
-     * @param colM (model) column index of the cell where the low combobox is.
-     */
-    public static void propagateComplexItem(int rowV, int colM) {
-        // user wants to change driver info or continues changing it
-        DriverCol driverColM = DriverCol.values()[colM];
-        
-        //<editor-fold defaultstate="collapsed" desc="-- propagate selection upward, etc.">            
-        // get higher level category(affiliation level 1 or building) item
-        ConvComboBoxItem hi_Item = (ConvComboBoxItem)driverTable.getValueAt(rowV, colM - 1);
-
-        if ((Integer) hi_Item.getKeyValue() == PROMPTER_KEY) // higher level item isn't selected yet
-        {
-            if (driverColM == AffiliationL2 || driverColM == UnitNo) 
-            {
-                InnoComboBoxItem innoItem = (InnoComboBoxItem)driverTable.getValueAt(rowV, colM);
-                int keyValue = innoItem.getKeys()[0];
-                if (keyValue != PROMPTER_KEY) { // lower level item is selected.
-                    // Real propagation happens here...
-                    int highKey = (Integer)(innoItem.getKeys()[1]);
-                    hi_Item = new ConvComboBoxItem(highKey, innoItem.getLabels()[1]); 
-
-                    int colHi = driverTable.convertColumnIndexToView(colM - 1);
-                    driverTable.setValueAt(hi_Item, rowV, colHi);                        
-
-                    TableCellEditor editor = driverTable.getCellEditor(rowV, colM);
-                    ((JComboBox)(((DefaultCellEditor)editor).getComponent())).removeAllItems();
-
-                    InnoComboBoxItem low_item = 
-                         new InnoComboBoxItem (new int[]{keyValue}, new String[]{innoItem.getLabels()[0]});
-
-                    driverTable.setValueAt(low_item, rowV, colM);
-
-                    // Update prevParentKey 
-                    setPrevParentKey(driverColM, highKey);
-                }
-            }
-        }
-        //</editor-fold>            
     }
 
     public static String getL2PartyName(int L2No) {
@@ -2759,38 +2674,33 @@ public class ManageDrivers extends javax.swing.JFrame {
     /**
      * Propagate a complex item of a lower level combobox to its parent.
      * First, it checks if an item were selected and were a complex one.
-     * @param currColumn column index of the lower level combobox in a table
-     * @param currCBox lower level combobox
+     * @param childCBox lower level combobox
      * @param parentCBox higher level(=parent) combobox
      */
-    public static void propagateComplexItem(final DriverCol currColumn, 
-        final JComboBox currCBox, final JComboBox parentCBox) 
+    public static void mayPropagateBackward(final JComboBox childCBox, final JComboBox parentCBox) 
     {
-        InnoComboBoxItem currItem = (InnoComboBoxItem)currCBox.getSelectedItem();
+        InnoComboBoxItem innoItem = (InnoComboBoxItem)childCBox.getSelectedItem();
         
         // Check if the selected item of the lower level combobox is not a complex one.
-        if (currItem == null || currItem.getKeys().length == 1) {
+        if (innoItem == null || innoItem.getKeys().length == 1) {
             return; // not selected or atomic item selected, so nothing to propagate.
         }
 
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                // Assign parent combo box two items.
-                parentCBox.addItem(getPrompter((currColumn == AffiliationL2 ? AffiliationL1 : BuildingNo),
-                        parentCBox));
-                ConvComboBoxItem pItem 
-                        = new ConvComboBoxItem(currItem.getKeys()[1], currItem.getLabels()[1]);
-                parentCBox.addItem(pItem);
-                parentCBox.setSelectedItem(pItem); // select part of the ocomplex item
+                ConvComboBoxItem parent = new ConvComboBoxItem(
+                        innoItem.getKeys()[1], innoItem.getLabels()[1]);
+                parentCBox.setSelectedItem(parent); // select part of the ocomplex item
 
-                // Assign child combo box two items.
-                currCBox.removeAllItems();
-                currCBox.addItem(getPrompter(currColumn, parentCBox));
-                InnoComboBoxItem onlyItem = new InnoComboBoxItem(
-                        new int[]{(Integer)(currItem.getKeys()[0])}, 
-                        new String[]{currItem.getLabels()[0]});
-                currCBox.addItem(onlyItem);
-                currCBox.setSelectedItem(onlyItem); // select part of the ocomplex item
+                childCBox.removeAllItems();
+                /**
+                 * Assign the child combobox a single item 'child'.
+                 */
+                InnoComboBoxItem child = new InnoComboBoxItem(
+                        new int[]{(Integer)(innoItem.getKeys()[0])}, 
+                        new String[]{innoItem.getLabels()[0]});
+                childCBox.addItem(child);
+                childCBox.setSelectedItem(child);
             }
         });  
     }
@@ -2994,5 +2904,18 @@ public class ManageDrivers extends javax.swing.JFrame {
             deleteAll_button.setEnabled(false);
             readSheet_Button.setEnabled(false);
         }
+    }
+
+    public static void mayChangeChildPrompter(
+            JComboBox parentCBox, JComboBox childCBox, DriverCol childCol) {
+        /**
+         * Check if parent combo box is opened by the user -- Patent Requested technology
+         */
+        if (parentCBox.isPopupVisible()) {
+            // Change the just prompter of the child combobox and select the prompter.
+            MutableComboBoxModel model = (MutableComboBoxModel)childCBox.getModel();
+            model.insertElementAt(getPrompter(childCol, parentCBox), 0);
+            childCBox.setSelectedIndex(0);            
+        }    
     }
 }
