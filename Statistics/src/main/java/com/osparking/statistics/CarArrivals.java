@@ -46,7 +46,7 @@ import static com.osparking.global.names.ControlEnums.LabelContent.FILE_SIZE_LAB
 import static com.osparking.global.names.ControlEnums.LabelContent.GATE_NAME_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.LAST_1HOUR_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.LAST_24HOURS_LABEL;
-import static com.osparking.global.names.ControlEnums.LabelContent.NON_REGI_TAG1_LABEL;
+import static com.osparking.global.names.ControlEnums.LabelContent.VISIT_TARGET_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.NON_REGI_TAG2_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.ORDER_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.RECOGNIZED_LABEL;
@@ -1642,7 +1642,7 @@ public class CarArrivals extends javax.swing.JFrame {
                         if (regiTag == null) {
                             // handle unregistered vehicle
                             registeredTF.setText(UNREGISTERED_TF.getContent());
-                            buildingLabel.setText(NON_REGI_TAG1_LABEL.getContent());
+                            buildingLabel.setText(VISIT_TARGET_LABEL.getContent());
                             affiliationLabel.setText(NON_REGI_TAG2_LABEL.getContent());
                             l2No = rs.getInt("visitL2No");
                             unitSN = rs.getInt("visitUnitSN");
@@ -1762,7 +1762,7 @@ public class CarArrivals extends javax.swing.JFrame {
         gateNameTF.setText("");    
         attendantTF.setText(""); 
         registeredTF.setText("");
-        buildingLabel.setText(NON_REGI_TAG1_LABEL.getContent());
+        buildingLabel.setText(VISIT_TARGET_LABEL.getContent());
         affiliationLabel.setText(NON_REGI_TAG2_LABEL.getContent());
         buildingTF.setText("");
         unitTF.setText("");

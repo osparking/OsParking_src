@@ -23,13 +23,14 @@ import static com.osparking.global.names.ControlEnums.MenuITemTypes.META_KEY_LAB
 import com.osparking.global.names.OSP_enums;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dimension;
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.border.Border;
 import javax.swing.table.DefaultTableCellRenderer;
 
-/**
+/** new Dimension(CommonData.bigButtonWidth, bigButtonHeight)
  *
  * @author Open Source Parking, Inc.
  */
@@ -49,6 +50,10 @@ public class CommonData { // new Dimension(carTagWidth, 30)
     public static final int normGUIwidth = 1027; 
     public static final int normGUIheight = 720; 
     public static final int tableRowHeight = 25; 
+    public static final int bigButtonWidth = 160;
+    public static final int bigButtonHeight = 60;
+    public static final Dimension bigButtonDim = 
+            new Dimension(CommonData.bigButtonWidth, bigButtonHeight);
     
     public static JLabel metaKeyLabel = new JLabel(META_KEY_LABEL.getContent());  
     public static final Color tipColor = new java.awt.Color(0xff, 0x85, 0x33);

@@ -29,6 +29,7 @@ import static com.osparking.global.CommonData.tableRowHeight;
 import static com.osparking.global.CommonData.tipColor;
 import static com.osparking.global.DataSheet.saveODSfile;
 import com.osparking.global.Globals;
+import static com.osparking.global.Globals.DEBUG;
 import static com.osparking.vehicle.driver.DriverTable.updateRow;
 import static com.osparking.vehicle.driver.ODSReader.getWrongCellPointString;
 import java.awt.Dimension;
@@ -82,7 +83,6 @@ import static com.osparking.global.Globals.language;
 import static com.osparking.global.Globals.logParkingException;
 import static com.osparking.global.Globals.logParkingOperation;
 import static com.osparking.global.Globals.rejectUserInput;
-import static com.osparking.global.Globals.setTableFocusAt;
 import static com.osparking.global.Globals.showLicensePanel;
 import static com.osparking.global.names.ControlEnums.ButtonTypes.*;
 import static com.osparking.global.names.ControlEnums.ComboBoxItemTypes.*;
@@ -130,15 +130,16 @@ import static com.osparking.vehicle.CommonData.DTCW_MAX;
 import static com.osparking.vehicle.CommonData.DTCW_RN;
 import static com.osparking.vehicle.CommonData.DTCW_UN;
 import static com.osparking.vehicle.CommonData.DTC_MARGIN;
-import static com.osparking.vehicle.CommonData.getPrevParentKey;
 import static com.osparking.vehicle.CommonData.invalidCell;
 import static com.osparking.vehicle.CommonData.invalidName;
 import static com.osparking.vehicle.CommonData.invalidPhone;
 import static com.osparking.vehicle.CommonData.refreshComboBox;
-import static com.osparking.vehicle.CommonData.setPrevParentKey;
 import com.osparking.vehicle.LabelBlinker;
+import java.awt.AWTEvent;
 import java.awt.Color;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.util.Locale;
 import javax.swing.JLabel;
 import javax.swing.SwingUtilities;
@@ -163,12 +164,26 @@ public class ManageDrivers extends javax.swing.JFrame {
     private String currSearchCondition = null;    
 
     /**
+     * Key of the parent combobox item for which (this) child combobox item
+     * listing is formed.
+     */
+    private int[] prevListParentKey = new int[OSP_enums.DriverCol.values().length];    
+    private int[] prevItemParentKey = new int[OSP_enums.DriverCol.values().length];    
+    private int[] prevParentSKey = new int[OSP_enums.DriverCol.values().length];    
+
+    private boolean lowerComboboxIsVisible = false;
+    private boolean higherComboboxIsVisible = false;
+    public static boolean justPrompt = false;
+    /**
      * Creates new form ManageDrivers
      */
     public ManageDrivers(DriverSelection driverSelectionForm) {
         this.driverSelectionForm = driverSelectionForm;
         initComponents();
-        setIconImages(OSPiconList);                
+        setIconImages(OSPiconList);      
+        for (int i = 0; i <prevItemParentKey.length; i++) {
+            prevItemParentKey[i] = -1;
+        }
         
         /**
          * Change buttons text.
@@ -186,34 +201,57 @@ public class ManageDrivers extends javax.swing.JFrame {
         setLocation(screen.width - this.getSize().width, 0);
         
         refreshComboBox(searchL1ComboBox, getPrompter(AffiliationL1, searchL1ComboBox),
-                AffiliationL1, -1);
+                AffiliationL1, -1, getPrevParentSKey());
         searchL2ComboBox.addItem(getPrompter(AffiliationL2, searchL1ComboBox));
         
         refreshComboBox(searchBuildingComboBox, getPrompter(BuildingNo, searchBuildingComboBox),
-                BuildingNo, -1);        
+                BuildingNo, -1, getPrevParentSKey());        
         searchUnitComboBox.addItem(getPrompter(UnitNo, searchBuildingComboBox));        
+
+        initPrevParentSKey();
 
         affiliationL1CBox.setFont(null);
         
         /**
          * Build driver table higher comboboxes' item list.
          */
-        refreshComboBox(affiliationL1CBox, 
-                getPrompter(AffiliationL1, null), AffiliationL1, PROMPTER_KEY);
-        refreshComboBox(buildingCBox, 
-                getPrompter(BuildingNo, null), BuildingNo, PROMPTER_KEY);
+        refreshComboBox(affiliationL1CBox, getPrompter(AffiliationL1, null), 
+                AffiliationL1, PROMPTER_KEY, getPrevListParentKey());
+        refreshComboBox(buildingCBox, getPrompter(BuildingNo, null), 
+                BuildingNo, PROMPTER_KEY, getPrevListParentKey());
         
         /**
          * Tune driver table visual effects.
          */
         changeDriverTable();
         
+        affiliationL1CBox.addItemListener(new ItemListener() {
+
+            @Override
+            public void itemStateChanged(ItemEvent event) {
+                if (event.getStateChange() == ItemEvent.SELECTED) {
+                    mayChangeLowerCBoxPrompt(event, AffiliationL2);
+                }
+            }
+        });
         affiliationL1CBox.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 mayChangeLowerCBoxPrompt(e, AffiliationL2);
             }
         }); 
+        
+        affiliationL1CBox.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
+            public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
+            }
+            public void popupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {
+//                setHigherComboboxIsVisible(false);                
+            }
+            public void popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {
+                setHigherComboboxIsVisible(true);
+            }
+        });            
+        
         setupLowerComboBox(AffiliationL2);
         
         buildingCBox.addActionListener(new ActionListener() {
@@ -247,19 +285,20 @@ public class ManageDrivers extends javax.swing.JFrame {
      * @param thisCBox current(=this) level combobox where possibly an item is selected.
      * @param childColumn table column for the lower level combobox.
      */
-    private void mayChangeLowerCBoxPrompt(ActionEvent e, DriverCol childColumn) 
+//    private void mayChangeLowerCBoxPrompt(ItemEvent e, DriverCol childColumn) 
+    private void mayChangeLowerCBoxPrompt(AWTEvent e, DriverCol childColumn) 
     {
         JComboBox cBox = (JComboBox)(e.getSource());
         int currKey = (Integer)(((ConvComboBoxItem)cBox.getSelectedItem()).getKeyValue()); 
         int rowIdx = driverTable.getSelectedRow();
-        int colIdx = driverTable.getSelectedColumn();
+        int colIdx = childColumn.getNumVal() - 1; 
 
-        if (getPrevParentKey(childColumn) != currKey) {
-            setPrevParentKey(childColumn, currKey);
-            TableCellEditor editor = driverTable.getCellEditor(rowIdx, childColumn.getNumVal());
-            ((JComboBox)(((DefaultCellEditor)editor).getComponent())).removeAllItems();
+        if (getPrevItemParentKey()[childColumn.getNumVal()] != currKey) {
+            getPrevItemParentKey()[childColumn.getNumVal()] = currKey;
+            TableCellEditor editor = driverTable.getCellEditor(rowIdx, colIdx);
+            Object parentCBox = (JComboBox)(((DefaultCellEditor)editor).getComponent());
             driverTable.setValueAt(
-                    getPrompter(childColumn, driverTable.getValueAt(rowIdx, colIdx)),
+                    getPrompter(childColumn, parentCBox),
                     rowIdx, 
                     childColumn.getNumVal());
         }
@@ -1504,23 +1543,30 @@ public class ManageDrivers extends javax.swing.JFrame {
     }//GEN-LAST:event_searchBuildingComboBoxActionPerformed
 
     private void searchL2ComboBoxPopupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_searchL2ComboBoxPopupMenuWillBecomeVisible
-        Object selItem = searchL2ComboBox.getSelectedItem();
+        int L1No = (Integer)((ConvComboBoxItem)searchL1ComboBox.getSelectedItem()).getKeyValue();
         
-        ConvComboBoxItem l1Item = (ConvComboBoxItem)searchL1ComboBox.getSelectedItem(); 
-        int L1No = (Integer) l1Item.getKeyValue();        // normalize child combobox item 
-        
-        refreshComboBox(searchL2ComboBox, getPrompter(AffiliationL2, searchL1ComboBox),
-                AffiliationL2, L1No);        
-        searchL2ComboBox.setSelectedItem(selItem);     
+        if (searchL2ComboBox.getItemCount() == 1 || 
+                getPrevParentSKey()[AffiliationL2.getNumVal()] != L1No) 
+        {
+            Object selItem = searchL2ComboBox.getSelectedItem();
+            refreshComboBox(searchL2ComboBox, getPrompter(AffiliationL2, searchL1ComboBox),
+                    AffiliationL2, L1No, getPrevParentSKey());        
+            searchL2ComboBox.setSelectedItem(selItem);
+        }
     }//GEN-LAST:event_searchL2ComboBoxPopupMenuWillBecomeVisible
 
     private void searchUnitComboBoxPopupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_searchUnitComboBoxPopupMenuWillBecomeVisible
-        Object selItem = searchUnitComboBox.getSelectedItem();
-        ConvComboBoxItem bldgItem = (ConvComboBoxItem)searchBuildingComboBox.getSelectedItem(); 
-        int bldgNo = (Integer) bldgItem.getKeyValue();
+        int bldgNo = (Integer)
+                ((ConvComboBoxItem)searchBuildingComboBox.getSelectedItem()).getKeyValue();
         
-        refreshComboBox(searchUnitComboBox, getPrompter(UnitNo, searchBuildingComboBox), UnitNo, bldgNo);
-        searchUnitComboBox.setSelectedItem(selItem);            
+        if (searchUnitComboBox.getItemCount() == 1 || 
+                getPrevParentSKey()[UnitNo.getNumVal()] != bldgNo) 
+        {
+            Object selItem = searchUnitComboBox.getSelectedItem();
+            refreshComboBox(searchUnitComboBox, getPrompter(UnitNo, searchBuildingComboBox), 
+                UnitNo, bldgNo, getPrevParentSKey());
+            searchUnitComboBox.setSelectedItem(selItem); 
+        }
     }//GEN-LAST:event_searchUnitComboBoxPopupMenuWillBecomeVisible
 
     private void clearButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearButtonActionPerformed
@@ -2373,6 +2419,59 @@ public class ManageDrivers extends javax.swing.JFrame {
         
         PComboBox<InnoComboBoxItem> comboBox = new PComboBox<InnoComboBoxItem>();
 
+        comboBox.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
+            public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
+            }
+            public void popupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {
+//                searchL2ComboBoxPopupMenuWillBecomeInvisible(evt);
+                setLowerComboboxIsVisible(false);                
+            }
+            public void popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {
+                setLowerComboboxIsVisible(true);
+//                Object src = evt.getSource();
+//                System.out.println(driverCol + "will become visible");
+//                int modRow = driversTable.getSelectedRow();
+//                int modCol = driverCol.getNumVal();
+//                Object parentObj;
+//
+//                if (modRow == -1) {
+//                    modRow = driverTable.getRowCount() - 1;
+//                }
+//                if (driverCol == AffiliationL2) {
+//                    parentObj = driverTable.getModel().getValueAt(modRow, AffiliationL1.getNumVal() );
+////                    parentObj = affiliationL1CBox.getSelectedItem();
+//                } else {
+//                    parentObj = driverTable.getModel().getValueAt(modRow, BuildingNo.getNumVal() );
+////                    parentObj = buildingCBox.getSelectedItem();
+//                }                
+//                
+//                int parentKey = (Integer)(((ConvComboBoxItem)parentObj).getKeyValue());            
+//                int len = comboBox.getItemCount();
+//                if (len == 0 || 
+//                        getPrevParentKey()[driverCol.getNumVal()] != parentKey) 
+//                {
+//                    if (DEBUG) {
+//                        DriverTable.printReason(len, 
+//                                getPrevParentKey()[driverCol.getNumVal()], 
+//                                parentKey, driverCol);
+//                    }
+////                    Object thisObj = driverTable.getValueAt(modRow, modCol);
+////                    Object thisObj = null;
+////                    if (comboBox.isVisible()) {
+////                        thisObj = comboBox.getSelectedItem();
+////                    }
+//                    Object prompter = getPrompter(driverCol, parentObj);
+//                    refreshComboBox(comboBox, prompter, driverCol, parentKey,
+//                            getPrevParentKey());
+////                    if (thisObj != null) {
+////                        comboBox.setSelectedItem((InnoComboBoxItem)thisObj);
+////                    }
+////                    cellEditor = new DefaultCellEditor(comboBox);
+////                searchL2ComboBoxPopupMenuWillBecomeVisible(evt);
+//                }
+            }
+        });        
+        
         comboBox.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -2390,20 +2489,24 @@ public class ManageDrivers extends javax.swing.JFrame {
                         int row = driverTable.getSelectedRow();
                         int highKey = (Integer)(innoItem.getKeys()[1]);
 
+                        TableCellEditor editor = driverTable.getCellEditor(row, colM - 1);
+                        PComboBox<ConvComboBoxItem> cCoBox = 
+                                ((PComboBox)(((DefaultCellEditor)editor).getComponent()));
+                        cCoBox.setSelectedItem(new ConvComboBoxItem(highKey, innoItem.getLabels()[1]));
                         driverTable.setValueAt(
                                 new ConvComboBoxItem(highKey, innoItem.getLabels()[1]), 
                                 row, driverTable.convertColumnIndexToView(colM - 1));                        
 
-                        TableCellEditor editor = driverTable.getCellEditor(row, colM);
+//                        TableCellEditor editor = driverTable.getCellEditor(row, colM);
 
-                        ((PComboBox)(((DefaultCellEditor)editor).getComponent())).removeAllItems();
+//                        ((PComboBox)(((DefaultCellEditor)editor).getComponent())).removeAllItems();
 
                         driverTable.setValueAt(
                                 new InnoComboBoxItem (new int[]{innoItem.getKeys()[0]},
                                         new String[]{innoItem.getLabels()[0]}), 
                                 row, colM);
                         //</editor-fold>
-                        setPrevParentKey(driverCol, highKey);                        
+                        getPrevItemParentKey()[driverCol.getNumVal()] = highKey;
                     }
                 });                    
             }
@@ -2856,11 +2959,9 @@ public class ManageDrivers extends javax.swing.JFrame {
 
     private void initPrevParentKey() {
         Object parentObj = driverTable.getValueAt(updateRow, AffiliationL1.getNumVal());
-        int test = (Integer)(((ConvComboBoxItem)parentObj).getKeyValue());
-        setPrevParentKey(AffiliationL2, (Integer)(((ConvComboBoxItem)parentObj).getKeyValue()));
+        getPrevListParentKey()[AffiliationL2.getNumVal()] = (Integer)(((ConvComboBoxItem)parentObj).getKeyValue());
         parentObj = driverTable.getValueAt(updateRow, BuildingNo.getNumVal());
-        test = (Integer)(((ConvComboBoxItem)parentObj).getKeyValue());
-        setPrevParentKey(UnitNo, (Integer)(((ConvComboBoxItem)parentObj).getKeyValue()));        
+        getPrevListParentKey()[UnitNo.getNumVal()] = (Integer)(((ConvComboBoxItem)parentObj).getKeyValue());
     }
 
     private void restoreDriverList(int updateRow) {
@@ -2912,10 +3013,69 @@ public class ManageDrivers extends javax.swing.JFrame {
          * Check if parent combo box is opened by the user -- Patent Requested technology
          */
         if (parentCBox.isPopupVisible()) {
+            justPrompt = true;
             // Change the just prompter of the child combobox and select the prompter.
             MutableComboBoxModel model = (MutableComboBoxModel)childCBox.getModel();
             model.insertElementAt(getPrompter(childCol, parentCBox), 0);
             childCBox.setSelectedIndex(0);            
         }    
+    }
+
+    /**
+     * @return the prevParentKey
+     */
+    public int[] getPrevListParentKey() {
+        return prevListParentKey;
+    }
+    
+    /**
+     * @return the prevParentKey
+     */
+    public int[] getPrevParentSKey() {
+        return prevParentSKey;
+    }
+
+    private void initPrevParentSKey() {
+        Object parentObj = searchL1ComboBox.getSelectedItem();
+        getPrevParentSKey()[AffiliationL2.getNumVal()] = 
+                (Integer)(((ConvComboBoxItem)parentObj).getKeyValue());
+        parentObj = searchBuildingComboBox.getSelectedItem();
+        getPrevParentSKey()[UnitNo.getNumVal()] =
+                (Integer)(((ConvComboBoxItem)parentObj).getKeyValue());    
+    }
+
+    /**
+     * @return the lowerComboboxIsVisible
+     */
+    public boolean isLowerComboboxIsVisible() {
+        return lowerComboboxIsVisible;
+    }
+
+    /**
+     * @param lowerComboboxIsVisible the lowerComboboxIsVisible to set
+     */
+    public void setLowerComboboxIsVisible(boolean lowerComboboxIsVisible) {
+        this.lowerComboboxIsVisible = lowerComboboxIsVisible;
+    }
+
+    /**
+     * @return the higherComboboxIsVisible
+     */
+    public boolean isHigherComboboxIsVisible() {
+        return higherComboboxIsVisible;
+    }
+
+    /**
+     * @param higherComboboxIsVisible the higherComboboxIsVisible to set
+     */
+    public void setHigherComboboxIsVisible(boolean higherComboboxIsVisible) {
+        this.higherComboboxIsVisible = higherComboboxIsVisible;
+    }
+
+    /**
+     * @return the prevItemParentKey
+     */
+    public int[] getPrevItemParentKey() {
+        return prevItemParentKey;
     }
 }

@@ -18,6 +18,7 @@ package com.osparking.vehicle.driver;
 
 import static com.osparking.global.CommonData.numberCellRenderer;
 import static com.osparking.global.CommonData.tableRowHeight;
+import static com.osparking.global.Globals.DEBUG;
 import static com.osparking.vehicle.driver.ManageDrivers.driverTable;
 import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
@@ -40,7 +41,6 @@ import static com.osparking.global.names.OSP_enums.DriverCol.AffiliationL2;
 import static com.osparking.global.names.OSP_enums.DriverCol.BuildingNo;
 import static com.osparking.global.names.OSP_enums.DriverCol.UnitNo;
 import com.osparking.global.names.PComboBox;
-import com.osparking.vehicle.CommonData;
 import static com.osparking.vehicle.CommonData.refreshComboBox;
 import static com.osparking.vehicle.driver.ManageDrivers.getPrompter;
 import java.awt.AWTKeyStroke;
@@ -181,35 +181,55 @@ public class DriverTable extends JTable {
         // <editor-fold defaultstate="collapsed" desc="-- ComboBox Cell Editor">        
         if (modCol == AffiliationL2.getNumVal() || modCol == UnitNo.getNumVal()) {
             //<editor-fold desc="-- Two lower level comboboxes">
-            DriverCol thisCol;
+            DriverCol driverCol;
             Object parentObj;
             
             if (modCol == AffiliationL2.getNumVal()) {
                 parentObj = getValueAt(modRow, AffiliationL1.getNumVal() );
-                thisCol = AffiliationL2;
+                driverCol = AffiliationL2;
             } else {
                 parentObj = getValueAt(modRow, BuildingNo.getNumVal() );
-                thisCol = UnitNo;
+                driverCol = UnitNo;
             }
-
+            
             int parentKey = (Integer)(((ConvComboBoxItem)parentObj).getKeyValue());            
+            
+//            TableColumn pBoxCol = driverTable.getColumnModel().getColumn(modCol - 1);        
+//            PComboBox<ConvComboBoxItem> pComboBox = (PComboBox<ConvComboBoxItem>)
+//                    ((DefaultCellEditor)pBoxCol.getCellEditor()).getComponent();              
             
             TableColumn cBoxCol = driverTable.getColumnModel().getColumn(modCol);        
             PComboBox<InnoComboBoxItem> comboBox = (PComboBox<InnoComboBoxItem>)
-                    ((DefaultCellEditor)cBoxCol.getCellEditor()).getComponent();
+                    ((DefaultCellEditor)cBoxCol.getCellEditor()).getComponent();            
 
             // Construct combo box item list only when needed.
             int len = comboBox.getItemCount();
-            if (len == 0 || CommonData.getPrevParentKey(thisCol) != parentKey) {
-                Object thisObj = driverTable.getValueAt(modRow, modCol);
-                Object prompter = getPrompter(thisCol, parentObj);
-                
-                refreshComboBox(comboBox, prompter, thisCol, parentKey);
-                comboBox.setSelectedItem((InnoComboBoxItem)thisObj);
-                cellEditor = new DefaultCellEditor(comboBox);
+//            boolean parentComboBoxInvisible = !(parent.isHigherComboboxIsVisible());
+            boolean parentComboBoxInvisible = !(parent.affiliationL1CBox.isVisible());
+
+            if (parent.justPrompt) {
+                parent.justPrompt = false;
             } else {
-                cellEditor = new DefaultCellEditor(comboBox);
+                if (len == 0
+//                if ((pComboBox.isPopupVisible() && len == 0) 
+    //            if ((parentComboBoxInvisible && len == 0) 
+    //            if ((!parent.isHigherComboboxIsVisible() && len == 0) 
+                        || parent.getPrevListParentKey()[driverCol.getNumVal()] != parentKey) 
+                {
+                    if (DEBUG) {
+                        printReason(parentComboBoxInvisible, len, 
+                                parent.getPrevListParentKey()[driverCol.getNumVal()], 
+                                parentKey, driverCol);
+                    }
+                    Object thisObj = driverTable.getValueAt(modRow, modCol);
+                    Object prompter = getPrompter(driverCol, parentObj);
+
+                    refreshComboBox(comboBox, prompter, driverCol, parentKey,
+                            parent.getPrevListParentKey());
+                    comboBox.setSelectedItem((InnoComboBoxItem)thisObj);
+                }
             }
+            cellEditor = new DefaultCellEditor(comboBox);
             //</editor-fold>
         } else if (modCol == DriverCol.AffiliationL1.getNumVal()) {
             cellEditor = new DefaultCellEditor(ManageDrivers.affiliationL1CBox); 
@@ -261,6 +281,17 @@ public class DriverTable extends JTable {
         } else {
             int rowV = driverTable.getSelectedRow();
             parent.finalizeDriverUpdate(rowV);
+        }
+    }
+
+    public static void printReason(boolean parVis, int len, int prevParentKey, int parentKey,
+            DriverCol modCol) {
+        System.out.println(modCol + " Refreshing as: ");
+//        if (parVis && len == 0)
+        if (len == 0)
+            System.out.println("- parent combobox is invisible and length == 0");
+        else {
+            System.out.println("- key diffs: prev; " + prevParentKey + " vs curr; " + parentKey);
         }
     }
 }
