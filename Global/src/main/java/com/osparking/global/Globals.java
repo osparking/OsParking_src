@@ -20,8 +20,16 @@ import static com.mysql.jdbc.MysqlErrorNumbers.ER_DUP_ENTRY;
 import static com.mysql.jdbc.MysqlErrorNumbers.ER_NO;
 import static com.mysql.jdbc.MysqlErrorNumbers.ER_YES;
 import static com.osparking.global.CommonData.ADMIN_ID;
+import static com.osparking.global.CommonData.PROMPTER_KEY;
+import static com.osparking.global.names.ControlEnums.ComboBoxItemTypes.BUILDING_CB_ITEM;
+import static com.osparking.global.names.ControlEnums.ComboBoxItemTypes.HIGHER_CB_ITEM;
+import static com.osparking.global.names.ControlEnums.ComboBoxItemTypes.LOWER_CB_ITEM;
+import static com.osparking.global.names.ControlEnums.ComboBoxItemTypes.LOWER_HIGHER_CB_ITEM;
+import static com.osparking.global.names.ControlEnums.ComboBoxItemTypes.ROOM_BUILDING_CB_ITEM;
+import static com.osparking.global.names.ControlEnums.ComboBoxItemTypes.ROOM_CB_ITEM;
 import com.osparking.global.names.ControlEnums.Languages;
 import static com.osparking.global.names.ControlEnums.Languages.KOREAN;
+import com.osparking.global.names.ConvComboBoxItem;
 import static com.osparking.global.names.DB_Access.PIC_HEIGHT;
 import java.awt.Color;
 import java.awt.Component;
@@ -91,6 +99,8 @@ import static com.osparking.global.names.DB_Access.gateCount;
 import static com.osparking.global.names.DB_Access.gateNames;
 import static com.osparking.global.names.DB_Access.maxMessageLines;
 import static com.osparking.global.names.DB_Access.opLoggingIndex;
+import com.osparking.global.names.InnoComboBoxItem;
+import static com.osparking.global.names.JDBCMySQL.getConnection;
 import com.osparking.global.names.OSP_enums;
 import com.osparking.global.names.OSP_enums.CameraType;
 import com.osparking.global.names.OSP_enums.E_BoardType;
@@ -100,9 +110,14 @@ import com.osparking.global.names.OSP_enums.DeviceType;
 import static com.osparking.global.names.OSP_enums.DeviceType.Camera;
 import static com.osparking.global.names.OSP_enums.DeviceType.E_Board;
 import static com.osparking.global.names.OSP_enums.DeviceType.GateBar;
+import static com.osparking.global.names.OSP_enums.DriverCol.AffiliationL1;
+import static com.osparking.global.names.OSP_enums.DriverCol.AffiliationL2;
+import static com.osparking.global.names.OSP_enums.DriverCol.BuildingNo;
+import static com.osparking.global.names.OSP_enums.DriverCol.UnitNo;
 import com.osparking.global.names.OSP_enums.EBD_ContentType;
 import com.osparking.global.names.OSP_enums.OpLogLevel;
 import com.osparking.global.names.OSP_enums.VersionType;
+import com.osparking.global.names.PComboBox;
 import com.osparking.global.names.ParkingTimer;
 import com.osparking.global.names.SocketConnStat;
 import java.awt.Container;
@@ -1856,6 +1871,215 @@ public class Globals {
         String tmStr = timeFormat.format(arrivalTime);
         return dateFormat.format(arrivalTime) + tmStr + "_" + tagRecognized + ".jpg";        
     }
+    
+    /**
+     * load item list for a comboBox given
+     * @param comboBox box for which item list is created
+     * @param column number that identifies comboBox type
+     * @param keyValue key of the higher level comboBox item, in case the comboBox is 
+     * lower in level. It will be used to select the lower level items from the DB table. 
+     * keyValue of PROMPTER_KEY(=0) means either the comboBox is not a lower one or 
+     * the higher combobox item is not selected.
+     */
+    public static void loadComboBoxItems(JComboBox comboBox, OSP_enums.DriverCol column, int keyValue) 
+    {
+        Connection conn = null;
+        Statement stmt = null; 
+        ResultSet rs = null;      
+        String excepMsg = "(CBox Item Loading for : " + column + "column";
+
+        try {
+            conn = getConnection();
+            stmt = conn.createStatement();
+            StringBuffer sb = new StringBuffer();
+            
+            //<editor-fold defaultstate="collapsed" desc="-- make SQL statement">            
+            switch (column) {
+                case AffiliationL1: 
+                    sb.append("select * from L1_affiliation order by PARTY_NAME");
+                    break;
+                    
+                case BuildingNo: 
+                    sb.append("select * from building_table order by bldg_no");
+                    break;
+                    
+                case AffiliationL2: 
+                    if (keyValue == PROMPTER_KEY) {
+                        // Patent Requested SQL select statement
+                        sb.append("SELECT L2.L2_NO, L2.PARTY_NAME AS L2_NAME, "
+                                + "L1.L1_NO, L1.PARTY_NAME AS L1_NAME ");
+                        sb.append("FROM L2_affiliation L2, L1_affiliation L1 "); 
+                        sb.append("WHERE L2.L1_NO = L1.L1_NO "); 
+                        sb.append("ORDER BY L2.PARTY_NAME, L1.PARTY_NAME"); 
+                    } else {
+                        sb.append("Select party_name as L2_NAME, L2_NO From L2_affiliation ");
+                        sb.append("Where L1_NO = ").append(keyValue);
+                        sb.append(" Order by PARTY_NAME");
+                    }
+                    break;
+                    
+                case UnitNo: 
+                    if (keyValue == PROMPTER_KEY) {
+                        // Patent Requested SQL select statement                        
+                        sb.append("SELECT U.SEQ_NO AS UNIT_SN, U.UNIT_NO, ");
+                        sb.append("  T.SEQ_NO BLDG_SN, T.BLDG_NO ");
+                        sb.append("FROM building_unit U, building_table T ");
+                        sb.append("WHERE U.BLDG_SEQ_NO = T.SEQ_NO ");
+                        sb.append("ORDER BY U.UNIT_NO, T.BLDG_NO; ");
+                    } else {
+                        sb.append("SELECT UNIT_NO, SEQ_NO as UNIT_SN FROM building_UNIT ");
+                        sb.append("WHERE BLDG_SEQ_NO = ").append(keyValue);
+                        sb.append(" Order by UNIT_NO");                    
+                    }
+                    break;
+                    
+                default:
+                    break;
+            }
+            //</editor-fold>
+            rs = stmt.executeQuery(sb.toString());
+            while (rs.next()) {
+                //<editor-fold defaultstate="collapsed" desc="-- Add combobox items one by one">                            
+                Object item = null;
+                switch (column) {
+                    case AffiliationL1: 
+                        item = new ConvComboBoxItem(new Integer(rs.getInt("L1_NO")), rs.getString("PARTY_NAME"));
+                        break;
+                    case AffiliationL2: 
+                        if (keyValue == PROMPTER_KEY) {
+                            item = new InnoComboBoxItem(
+                                    new int[] {rs.getInt("L2_NO"), rs.getInt("L1_NO")},
+                                    new String[] {rs.getString("L2_NAME"), rs.getString("L1_NAME")});
+                        } else {
+                            item = new InnoComboBoxItem(
+                                    new int[] {rs.getInt("L2_NO")}, new String[] {rs.getString("L2_NAME")});
+                        }
+                        break;
+                    case BuildingNo: 
+                        item = new ConvComboBoxItem(new Integer(rs.getInt("SEQ_NO")), rs.getString("BLDG_NO"));
+                        break;
+                    case UnitNo: 
+                        if (keyValue == PROMPTER_KEY) {
+                            item = new InnoComboBoxItem(
+                                    new int[] {rs.getInt("UNIT_SN"), rs.getInt("BLDG_SN")},
+                                    new String[] {rs.getString("UNIT_NO"), rs.getString("BLDG_NO")});   
+                        } else {
+                            item = new InnoComboBoxItem(
+                                    new int[] {rs.getInt("UNIT_SN")}, new String[] {rs.getString("UNIT_NO")});
+                        }                             
+                        break;
+                    default:
+                        break;
+                }                
+                comboBox.addItem(item);
+            //</editor-fold>                
+            }
+        } catch (SQLException ex) {
+            logParkingException(Level.SEVERE, ex, excepMsg);
+        } finally {
+            closeDBstuff(conn, stmt, rs, excepMsg);
+        }        
+    }    
+    
+    /**
+     * Update(=refresh) items listing for a combo box.
+     * 
+     * @param comboBox the combo box to refresh
+     * @param prompter the prompter(=first placeholder) item of the combo box
+     * @param column table column index of the combo box
+     * @param parentkey the key value of the parent combo box item for which 
+     *                     this combo box item listing is to be formed.
+     */
+    public static void refreshComboBox(JComboBox comboBox, 
+            Object prompter, OSP_enums.DriverCol column, int parentkey,
+            int[] getPrevListParentKey)
+    {
+        if (DEBUG) {
+            System.out.println(++count + " refreshing ...............");
+        }
+        comboBox.removeAllItems();
+        comboBox.addItem(prompter);
+        loadComboBoxItems(comboBox, column, parentkey);
+        if (column == AffiliationL2 || column == UnitNo) {
+            getPrevListParentKey[column.getNumVal()] = parentkey;
+        }
+    }
+
+    public static void mayChangeLowerCBoxPrompt(JComboBox parentCBox, JComboBox childCBox, 
+            OSP_enums.DriverCol childCol, int[] prevItemParentKey) {
+        /**
+         * Check if parent combo box is opened by the user -- Patent Requested technology
+         */
+        int currKey = (Integer)(((ConvComboBoxItem)parentCBox.getSelectedItem()).getKeyValue()); 
+        
+        if (prevItemParentKey[childCol.getNumVal()] != currKey) {
+            prevItemParentKey[childCol.getNumVal()] = currKey;        
+            // Change the just prompter of the child combobox and select the prompter.
+            childCBox.removeAllItems();
+            childCBox.addItem(new InnoComboBoxItem(
+                    new int[]{PROMPTER_KEY}, 
+                    new String[]{getPrompter(childCol, parentCBox).toString()}));
+            childCBox.setSelectedIndex(0);            
+        }    
+    }    
+    
+    /**
+     * Finds appropriate prompter for a combo box -- Patent Requested Technology Implementing method.
+     * 
+     * @param column table ComboBox column for which the prompter is sought for
+     * @param parentObj 1st level affiliation ComboBox, should be not null when 
+     *                      column is of the 2nd level affiliation
+     * @return 
+     */
+    public static Object getPrompter(OSP_enums.DriverCol column, Object parentObj) {
+        boolean complexItem = false;
+
+        if (column == AffiliationL2 || column == UnitNo) {
+            if (parentObj == null)
+                complexItem = true;
+            else {
+                if (parentObj.getClass().equals(PComboBox.class)) {
+                    if (((PComboBox)parentObj).getSelectedIndex() <= 0)
+                        complexItem = true;
+                }
+                else {
+                    if (parentObj.getClass() != InnoComboBoxItem.class) {
+                        int parentIndex =   (Integer) (((ConvComboBoxItem)parentObj).getKeyValue());
+                        if (parentIndex == PROMPTER_KEY)
+                            complexItem = true;
+                    }
+                }
+            }
+        }
+        
+        String label = null;
+        switch (column) {
+            case AffiliationL1: 
+                label = HIGHER_CB_ITEM.getContent();
+                break;
+            case BuildingNo: 
+                label  = BUILDING_CB_ITEM.getContent();
+                break;
+            case AffiliationL2:  
+                label = complexItem ? LOWER_HIGHER_CB_ITEM.getContent() 
+                        : LOWER_CB_ITEM.getContent();
+                break;
+            case UnitNo: 
+                label = complexItem ? ROOM_BUILDING_CB_ITEM.getContent() 
+                        : ROOM_CB_ITEM.getContent();
+                break;
+            default:
+                break;
+        }
+        if (column == AffiliationL1 || column == BuildingNo) {
+            return new ConvComboBoxItem(new Integer(PROMPTER_KEY), label);
+        } else {
+            return new InnoComboBoxItem(new int [] {PROMPTER_KEY}, new String[] {label});
+        }
+    }
+    
+    
+    static int count = 0;
     
     public static Languages language;
 }

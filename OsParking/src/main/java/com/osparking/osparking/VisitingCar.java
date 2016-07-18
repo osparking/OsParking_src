@@ -17,10 +17,10 @@
 package com.osparking.osparking;
 
 import static com.osparking.global.CommonData.bigButtonDim;
+import com.osparking.global.Globals;
 import static com.osparking.global.Globals.CONTENT_INC;
 import static com.osparking.global.Globals.LABEL_INC;
 import com.osparking.vehicle.driver.ManageDrivers;
-import static com.osparking.vehicle.driver.ManageDrivers.loadComboBoxItems;
 import java.awt.Point;
 import java.awt.image.BufferedImage;
 import java.text.SimpleDateFormat;
@@ -34,7 +34,10 @@ import static com.osparking.global.Globals.OSPiconList;
 import static com.osparking.global.Globals.font_Size;
 import static com.osparking.global.Globals.font_Style;
 import static com.osparking.global.Globals.font_Type;
+import static com.osparking.global.Globals.getPrompter;
 import static com.osparking.global.Globals.initializeLoggers;
+import static com.osparking.global.Globals.loadComboBoxItems;
+import static com.osparking.global.Globals.refreshComboBox;
 import static com.osparking.global.names.ControlEnums.LabelContent.DISALLOW_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.GATE_NAME_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.OPEN_LABEL;
@@ -57,9 +60,6 @@ import static com.osparking.global.names.OSP_enums.DriverCol.AffiliationL2;
 import static com.osparking.global.names.OSP_enums.DriverCol.BuildingNo;
 import static com.osparking.global.names.OSP_enums.DriverCol.UnitNo;
 import com.osparking.global.names.PComboBox;
-import static com.osparking.vehicle.CommonData.refreshComboBox;
-import static com.osparking.vehicle.driver.ManageDrivers.getPrompter;
-import static com.osparking.vehicle.driver.ManageDrivers.mayChangeChildPrompter;
 import static com.osparking.vehicle.driver.ManageDrivers.mayPropagateBackward;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
@@ -80,7 +80,7 @@ public class VisitingCar extends javax.swing.JFrame {
     BufferedImage bImg;
     int delay;
     
-    private int[] prevParentKey = new int[OSP_enums.DriverCol.values().length];    
+    private int[] prevItemParentKey = new int[OSP_enums.DriverCol.values().length];    
     
     /**
      * Creates new form VisitingCar
@@ -515,7 +515,8 @@ public class VisitingCar extends javax.swing.JFrame {
 
     @SuppressWarnings("unchecked") 
     private void visitL1ComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_visitL1ComboBoxActionPerformed
-        mayChangeChildPrompter(visitL1ComboBox, visitL2ComboBox, AffiliationL2);
+        Globals.mayChangeLowerCBoxPrompt(visitL1ComboBox, visitL2ComboBox, 
+                AffiliationL2, getPrevItemParentKey());
 //        if (visitL1ComboBox.isPopupVisible()) {
 //            MutableComboBoxModel model = (MutableComboBoxModel)visitL2ComboBox.getModel();
 //            model.removeElementAt(0);
@@ -529,7 +530,7 @@ public class VisitingCar extends javax.swing.JFrame {
         Object selItem = visitL1ComboBox.getSelectedItem();
 
         visitL1ComboBox.removeAllItems();
-        visitL1ComboBox.addItem(ManageDrivers.getPrompter(AffiliationL1, visitL1ComboBox));     
+        visitL1ComboBox.addItem(getPrompter(AffiliationL1, visitL1ComboBox));     
         loadComboBoxItems(visitL1ComboBox, AffiliationL1, -1);
         visitL1ComboBox.setSelectedItem(selItem);         
     }//GEN-LAST:event_visitL1ComboBoxPopupMenuWillBecomeVisible
@@ -542,7 +543,7 @@ public class VisitingCar extends javax.swing.JFrame {
         int L1No = (Integer) l1Item.getKeyValue();        // normalize child combobox item 
         
         visitL2ComboBox.removeAllItems();
-        visitL2ComboBox.addItem(ManageDrivers.getPrompter(AffiliationL2, visitL1ComboBox));     
+        visitL2ComboBox.addItem(getPrompter(AffiliationL2, visitL1ComboBox));     
         loadComboBoxItems(visitL2ComboBox, DriverCol.AffiliationL2, L1No);   
         
         visitL2ComboBox.setSelectedItem(selItem);           
@@ -550,7 +551,8 @@ public class VisitingCar extends javax.swing.JFrame {
 
     @SuppressWarnings("unchecked") 
     private void visitBuildingComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_visitBuildingComboBoxActionPerformed
-        mayChangeChildPrompter(visitBuildingComboBox, visitUnitComboBox, UnitNo);
+        Globals.mayChangeLowerCBoxPrompt(visitBuildingComboBox, visitUnitComboBox, 
+                UnitNo, getPrevItemParentKey());
 //        if (visitBuildingComboBox.isPopupVisible()) {
 //            MutableComboBoxModel model 
 //                    = (MutableComboBoxModel)visitUnitComboBox.getModel();
@@ -565,7 +567,7 @@ public class VisitingCar extends javax.swing.JFrame {
         Object selItem = visitBuildingComboBox.getSelectedItem();
         
         visitBuildingComboBox.removeAllItems();
-        visitBuildingComboBox.addItem(ManageDrivers.getPrompter(BuildingNo, null));     
+        visitBuildingComboBox.addItem(getPrompter(BuildingNo, null));     
         loadComboBoxItems(visitBuildingComboBox, BuildingNo, -1);
         visitBuildingComboBox.setSelectedItem(selItem);         
     }//GEN-LAST:event_visitBuildingComboBoxPopupMenuWillBecomeVisible
@@ -577,7 +579,7 @@ public class VisitingCar extends javax.swing.JFrame {
         int bldgNo = (Integer) bldgItem.getKeyValue();
         
         refreshComboBox(visitUnitComboBox, getPrompter(UnitNo, visitBuildingComboBox), 
-                UnitNo, bldgNo, getPrevParentKey());
+                UnitNo, bldgNo, getPrevItemParentKey());
         visitUnitComboBox.setSelectedItem(selItem);         
     }//GEN-LAST:event_visitUnitComboBoxPopupMenuWillBecomeVisible
 
@@ -762,7 +764,7 @@ public class VisitingCar extends javax.swing.JFrame {
     /**
      * @return the prevParentKey
      */
-    public int[] getPrevParentKey() {
-        return prevParentKey;
+    public int[] getPrevItemParentKey() {
+        return prevItemParentKey;
     }
 }

@@ -17,11 +17,6 @@
 package com.osparking.vehicle;
 
 import static com.osparking.global.Globals.getNumericDigitCount;
-import com.osparking.global.names.OSP_enums;
-import static com.osparking.global.names.OSP_enums.DriverCol.AffiliationL2;
-import static com.osparking.global.names.OSP_enums.DriverCol.UnitNo;
-import static com.osparking.vehicle.driver.ManageDrivers.loadComboBoxItems;
-import javax.swing.JComboBox;
 
 /**
  *
@@ -50,27 +45,6 @@ public class CommonData {
     public static final int DTCW_BN = 110;
     public static final int DTCW_UN = 110;
         
-    /**
-     * Update(=refresh) items listing for a combo box.
-     * 
-     * @param comboBox the combo box to refresh
-     * @param prompter the prompter(=first placeholder) item of the combo box
-     * @param column table column index of the combo box
-     * @param parentkey the key value of the parent combo box item for which 
-     *                     this combo box item listing is to be formed.
-     */
-    public static void refreshComboBox(JComboBox comboBox, 
-            Object prompter, OSP_enums.DriverCol column, int parentkey,
-            int[] getPrevListParentKey)
-    {
-        System.out.println(++count + " refreshing ...............");
-        comboBox.removeAllItems();
-        comboBox.addItem(prompter);
-        loadComboBoxItems(comboBox, column, parentkey);
-        if (column == AffiliationL2 || column == UnitNo) {
-            getPrevListParentKey[column.getNumVal()] = parentkey;
-        }
-    }
     static int count = 0;
     
     public static boolean invalidName(String name) {

@@ -16,7 +16,8 @@
  */
 package com.osparking.statistics;
 
-import com.osparking.global.Globals;
+import static com.osparking.global.CommonData.normGUIheight;
+import static com.osparking.global.CommonData.normGUIwidth;
 import java.awt.Component;
 import java.awt.image.BufferedImage;
 import javax.swing.JLabel;
@@ -71,20 +72,23 @@ import com.osparking.global.names.ImageDisplay;
 import com.osparking.global.names.InnoComboBoxItem;
 import com.osparking.global.names.JDBCMySQL;
 import static com.osparking.global.names.JDBCMySQL.getConnection;
+import com.osparking.global.names.OSP_enums;
 import com.osparking.global.names.OSP_enums.BarOperation;
 import static com.osparking.global.names.OSP_enums.BarOperation.REGISTERED_CAR_OPENED;
 import static com.osparking.global.names.OSP_enums.BarOperation.AUTO_OPENED;
 import static com.osparking.global.names.OSP_enums.BarOperation.MANUAL;
 import static com.osparking.global.names.OSP_enums.BarOperation.REMAIN_CLOSED;
-import com.osparking.global.names.OSP_enums.DriverCol;
 import static com.osparking.global.names.OSP_enums.DriverCol.AffiliationL1;
 import static com.osparking.global.names.OSP_enums.DriverCol.AffiliationL2;
 import static com.osparking.global.names.OSP_enums.DriverCol.BuildingNo;
 import static com.osparking.global.names.OSP_enums.DriverCol.UnitNo;
 import com.osparking.global.names.PComboBox;
 import com.osparking.global.names.OSP_enums.SearchPeriod;
-import static com.osparking.vehicle.driver.ManageDrivers.getPrompter;
-import static com.osparking.vehicle.driver.ManageDrivers.loadComboBoxItems;
+import static com.osparking.vehicle.CommonData.DTCW_BN;
+import static com.osparking.vehicle.CommonData.DTCW_L1;
+import static com.osparking.vehicle.CommonData.DTC_MARGIN;
+import static com.osparking.vehicle.driver.ManageDrivers.mayPropagateBackward;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.io.IOException;
 import java.io.InputStream;
@@ -102,6 +106,7 @@ import javax.imageio.ImageIO;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.ImageIcon;
+import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 import static javax.swing.JOptionPane.WARNING_MESSAGE;
@@ -123,10 +128,17 @@ public class CarArrivals extends javax.swing.JFrame {
     ListSelectionListener valueChangeListener = null; 
     
     /**
+     * Keys of parent combobox items for which their children combobox 
+     * item list is formed -- comboboxes in the search panel area.
+     */
+    private int[] prevParentSKey = new int[OSP_enums.DriverCol.values().length];    
+    
+    /**
      * Creates new form CarArrivals
      */
     public CarArrivals() {
-        initComponents();      
+        initComponents();
+        
         BeginDateChooser.setLocale(parkingLotLocale);
         EndDateChooser.setLocale(parkingLotLocale);    
         loadSearchControls();
@@ -255,8 +267,8 @@ public class CarArrivals extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle(CAR_ARRIVALS_FRAME_TITLE.getContent());
         setFocusCycleRoot(false);
-        setMinimumSize(new java.awt.Dimension(1200, 850));
-        setPreferredSize(new java.awt.Dimension(1150, 850));
+        setMinimumSize(new Dimension(normGUIwidth, normGUIheight));
+        setPreferredSize(new Dimension(normGUIwidth, normGUIheight));
 
         wholePanel.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 3, 3, 3));
         wholePanel.setLayout(new javax.swing.BoxLayout(wholePanel, javax.swing.BoxLayout.PAGE_AXIS));
@@ -290,7 +302,7 @@ public class CarArrivals extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setLabelFor(gateCB);
-        jLabel1.setText(((String[])Globals.LabelsText.get(GATE_NAME_LABEL.ordinal()))[ourLang]);
+        jLabel1.setText(GATE_NAME_LABEL.getContent());
         jLabel1.setMaximumSize(new java.awt.Dimension(32767, 32767));
         gatePanel.add(jLabel1, java.awt.BorderLayout.CENTER);
 
@@ -307,14 +319,15 @@ public class CarArrivals extends javax.swing.JFrame {
         jLabel2.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel2.setLabelFor(carTagTF);
-        jLabel2.setText(((String[])Globals.LabelsText.get(CAR_TAG_LABEL.ordinal()))[ourLang]);
+        jLabel2.setText(CAR_TAG_LABEL.getContent());
         jLabel2.setMaximumSize(new java.awt.Dimension(32767, 32767));
         carTagPanel.add(jLabel2, java.awt.BorderLayout.CENTER);
 
         carTagTF.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        carTagTF.setToolTipText(((String[])Globals.ToolTipLabels.get(CAR_TAG_TF_TOOLTIP.ordinal()))[ourLang]);
+        carTagTF.setToolTipText(CAR_TAG_TF_TOOLTIP.getContent());
         carTagTF.setMaximumSize(new java.awt.Dimension(32767, 32767));
-        carTagTF.setPreferredSize(new java.awt.Dimension(120, 23));
+        carTagTF.setMinimumSize(new Dimension(DTCW_BN - DTC_MARGIN, 28));
+        carTagTF.setPreferredSize(new Dimension(DTCW_BN - DTC_MARGIN, 28));
         carTagPanel.add(carTagTF, java.awt.BorderLayout.PAGE_END);
 
         attendPanel.setBackground(new java.awt.Color(243, 243, 243));
@@ -325,16 +338,16 @@ public class CarArrivals extends javax.swing.JFrame {
         jLabel15.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         jLabel15.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel15.setLabelFor(attendantCB);
-        jLabel15.setText(((String[])Globals.LabelsText.get(ATTENDANT_LABEL.ordinal()))[ourLang]);
+        jLabel15.setText(ATTENDANT_LABEL.getContent());
         jLabel15.setMaximumSize(new java.awt.Dimension(32767, 32767));
         attendPanel.add(jLabel15, java.awt.BorderLayout.CENTER);
 
         attendantCB.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         attendantCB.setModel(new javax.swing.DefaultComboBoxModel(new Object[] {
-            new ConvComboBoxItem("", ((String[])Globals.ComboBoxItemList.get(ATTENDANT_CB_ITEM.ordinal()))[ourLang])
+            new ConvComboBoxItem("", ATTENDANT_CB_ITEM.getContent())
         }));
-        attendantCB.setMinimumSize(new java.awt.Dimension(120, 23));
-        attendantCB.setPreferredSize(new java.awt.Dimension(120, 23));
+        attendantCB.setMinimumSize(new Dimension(DTCW_BN - DTC_MARGIN, 28));
+        attendantCB.setPreferredSize(new Dimension(DTCW_BN - DTC_MARGIN, 28));
         attendantCB.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
             public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
             }
@@ -353,13 +366,14 @@ public class CarArrivals extends javax.swing.JFrame {
         jLabel20.setBackground(new java.awt.Color(243, 243, 243));
         jLabel20.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         jLabel20.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel20.setText(((String[])Globals.LabelsText.get(BAR_OP_LABEL.ordinal()))[ourLang]);
+        jLabel20.setText(BAR_OP_LABEL.getContent());
         jLabel20.setMaximumSize(new java.awt.Dimension(32767, 32767));
         barOptnPanel.add(jLabel20, java.awt.BorderLayout.CENTER);
 
         gateBarCB.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         gateBarCB.setModel(new javax.swing.DefaultComboBoxModel(new String[] {}));
-        gateBarCB.setPreferredSize(new java.awt.Dimension(120, 23));
+        gateBarCB.setMinimumSize(new Dimension(DTCW_BN - DTC_MARGIN, 28));
+        gateBarCB.setPreferredSize(new Dimension(DTCW_BN - DTC_MARGIN, 28));
         barOptnPanel.add(gateBarCB, java.awt.BorderLayout.PAGE_END);
 
         affiliationBuildingPanel.setBackground(new java.awt.Color(243, 243, 243));
@@ -378,7 +392,7 @@ public class CarArrivals extends javax.swing.JFrame {
         affiliationRadioButton.setBackground(new java.awt.Color(243, 243, 243));
         affiliationGroup.add(affiliationRadioButton);
         affiliationRadioButton.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        affiliationRadioButton.setText(((String[])Globals.LabelsText.get(AFFILIATION_LABEL.ordinal()))[ourLang]);
+        affiliationRadioButton.setText(AFFILIATION_LABEL.getContent());
         affiliationRadioButton.setAlignmentX(0.5F);
         affiliationRadioButton.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         affiliationRadioButton.setMargin(new java.awt.Insets(2, 20, 2, 2));
@@ -394,29 +408,11 @@ public class CarArrivals extends javax.swing.JFrame {
 
         searchL1ComboBox.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         searchL1ComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[]{}));
-        searchL1ComboBox.setMinimumSize(new java.awt.Dimension(100, 23));
-        searchL1ComboBox.setPreferredSize(new java.awt.Dimension(100, 23));
-        searchL1ComboBox.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
-            public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
-            }
-            public void popupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {
-            }
-            public void popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {
-                searchL1ComboBoxPopupMenuWillBecomeVisible(evt);
-            }
-        });
+        searchL1ComboBox.setMinimumSize(new Dimension(DTCW_L1 - DTC_MARGIN, 28));
+        searchL1ComboBox.setPreferredSize(new Dimension(DTCW_L1 - DTC_MARGIN, 28));
         searchL1ComboBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 searchL1ComboBoxActionPerformed(evt);
-            }
-        });
-        searchL1ComboBox.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
-            public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
-            }
-            public void popupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {
-            }
-            public void popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {
-                searchL1ComboBoxPopupMenuWillBecomeVisible(evt);
             }
         });
         searchL1ComboBox.addActionListener(new java.awt.event.ActionListener() {
@@ -434,6 +430,7 @@ public class CarArrivals extends javax.swing.JFrame {
             public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
             }
             public void popupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {
+                searchL2ComboBoxPopupMenuWillBecomeInvisible(evt);
             }
             public void popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {
                 searchL2ComboBoxPopupMenuWillBecomeVisible(evt);
@@ -452,7 +449,7 @@ public class CarArrivals extends javax.swing.JFrame {
         buildingRadioButton.setBackground(new java.awt.Color(243, 243, 243));
         affiliationGroup.add(buildingRadioButton);
         buildingRadioButton.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        buildingRadioButton.setText(((String[])Globals.LabelsText.get(BUILDING_LABEL.ordinal()))[ourLang]);
+        buildingRadioButton.setText(BUILDING_LABEL.getContent());
         buildingRadioButton.setAlignmentX(0.5F);
         buildingRadioButton.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         buildingRadioButton.setMargin(new java.awt.Insets(2, 20, 2, 2));
@@ -469,17 +466,8 @@ public class CarArrivals extends javax.swing.JFrame {
         searchBuildingComboBox.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         searchBuildingComboBox.setModel(
             new javax.swing.DefaultComboBoxModel(new String[]{}));
-        searchBuildingComboBox.setMinimumSize(new java.awt.Dimension(80, 21));
-        searchBuildingComboBox.setPreferredSize(new java.awt.Dimension(80, 23));
-        searchBuildingComboBox.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
-            public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
-            }
-            public void popupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {
-            }
-            public void popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {
-                searchBuildingComboBoxPopupMenuWillBecomeVisible(evt);
-            }
-        });
+        searchBuildingComboBox.setMinimumSize(new Dimension(DTCW_BN - DTC_MARGIN - 30, 28));
+        searchBuildingComboBox.setPreferredSize(new Dimension(DTCW_BN - DTC_MARGIN - 30, 28));
         searchBuildingComboBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 searchBuildingComboBoxActionPerformed(evt);
@@ -490,12 +478,13 @@ public class CarArrivals extends javax.swing.JFrame {
         searchUnitComboBox.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         searchUnitComboBox.setModel(
             new javax.swing.DefaultComboBoxModel(new String[]{}));
-        searchUnitComboBox.setMinimumSize(new java.awt.Dimension(80, 21));
-        searchUnitComboBox.setPreferredSize(new java.awt.Dimension(80, 23));
+        searchUnitComboBox.setMinimumSize(new Dimension(DTCW_BN - DTC_MARGIN - 30, 28));
+        searchUnitComboBox.setPreferredSize(new Dimension(DTCW_BN - DTC_MARGIN - 30, 28));
         searchUnitComboBox.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
             public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
             }
             public void popupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {
+                searchUnitComboBoxPopupMenuWillBecomeInvisible(evt);
             }
             public void popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {
                 searchUnitComboBoxPopupMenuWillBecomeVisible(evt);
@@ -526,7 +515,7 @@ public class CarArrivals extends javax.swing.JFrame {
         clearSearchPropertiesButton.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         clearSearchPropertiesButton.setMnemonic('l');
         clearSearchPropertiesButton.setText(CLEAR_BTN.getContent());
-        clearSearchPropertiesButton.setToolTipText(((String[])Globals.ToolTipLabels.get(CLEAR_BTN_TOOLTIP.ordinal()))[ourLang]);
+        clearSearchPropertiesButton.setToolTipText(CLEAR_BTN_TOOLTIP.getContent());
         clearSearchPropertiesButton.setPreferredSize(new java.awt.Dimension(100, 35));
         clearSearchPropertiesButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -540,11 +529,11 @@ public class CarArrivals extends javax.swing.JFrame {
             searchTopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(searchTopLayout.createSequentialGroup()
                 .addGap(10, 10, 10)
-                .addComponent(gatePanel, javax.swing.GroupLayout.PREFERRED_SIZE, 76, Short.MAX_VALUE)
+                .addComponent(gatePanel, javax.swing.GroupLayout.DEFAULT_SIZE, 76, Short.MAX_VALUE)
                 .addGap(5, 5, 5)
                 .addComponent(carTagPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(5, 5, 5)
-                .addComponent(attendPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 120, Short.MAX_VALUE)
+                .addComponent(attendPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 78, Short.MAX_VALUE)
                 .addGap(5, 5, 5)
                 .addComponent(barOptnPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(5, 5, 5)
@@ -575,7 +564,7 @@ public class CarArrivals extends javax.swing.JFrame {
                     .addGroup(searchTopLayout.createSequentialGroup()
                         .addGap(23, 23, 23)
                         .addComponent(clearSearchPropertiesButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(11, Short.MAX_VALUE))
+                .addContainerGap(15, Short.MAX_VALUE))
         );
 
         searchBottom.setBackground(new java.awt.Color(244, 244, 244));
@@ -590,7 +579,7 @@ public class CarArrivals extends javax.swing.JFrame {
         periodOptionGroup.add(oneHourRadioButton);
         oneHourRadioButton.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         oneHourRadioButton.setSelected(true);
-        oneHourRadioButton.setText(((String[])Globals.LabelsText.get(LAST_1HOUR_LABEL.ordinal()))[ourLang]);
+        oneHourRadioButton.setText(LAST_1HOUR_LABEL.getContent());
         oneHourRadioButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 oneHourRadioButtonActionPerformed(evt);
@@ -599,7 +588,7 @@ public class CarArrivals extends javax.swing.JFrame {
 
         periodOptionGroup.add(oneDayRadioButton);
         oneDayRadioButton.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        oneDayRadioButton.setText(((String[])Globals.LabelsText.get(LAST_24HOURS_LABEL.ordinal()))[ourLang]);
+        oneDayRadioButton.setText(LAST_24HOURS_LABEL.getContent());
         oneDayRadioButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 oneDayRadioButtonActionPerformed(evt);
@@ -608,7 +597,7 @@ public class CarArrivals extends javax.swing.JFrame {
 
         periodOptionGroup.add(periodRadioButton);
         periodRadioButton.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        periodRadioButton.setText(((String[])Globals.LabelsText.get(DURATION_SET_LABEL.ordinal()))[ourLang]);
+        periodRadioButton.setText(DURATION_SET_LABEL.getContent());
         periodRadioButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 periodRadioButtonActionPerformed(evt);
@@ -623,8 +612,8 @@ public class CarArrivals extends javax.swing.JFrame {
 
         setSearchPeriodOptionButton.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         setSearchPeriodOptionButton.setMnemonic('f');
-        setSearchPeriodOptionButton.setText(((String[])Globals.ButtonLabels.get(FIX_IT_BTN.ordinal()))[ourLang]);
-        setSearchPeriodOptionButton.setToolTipText(((String[])Globals.ToolTipLabels.get(FIX_IT_BTN_TOOLTIP.ordinal()))[ourLang]);
+        setSearchPeriodOptionButton.setText(FIX_IT_BTN.getContent());
+        setSearchPeriodOptionButton.setToolTipText(FIX_IT_BTN_TOOLTIP.getContent());
         setSearchPeriodOptionButton.setPreferredSize(new java.awt.Dimension(77, 35));
         setSearchPeriodOptionButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -653,9 +642,9 @@ public class CarArrivals extends javax.swing.JFrame {
                 .addComponent(oneHourRadioButton)
                 .addGap(5, 5, 5)
                 .addComponent(filler3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(5, 5, 5)
+                .addGap(7, 7, 7)
                 .addComponent(oneDayRadioButton)
-                .addGap(5, 5, 5)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(filler4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(5, 5, 5)
                 .addComponent(periodRadioButton)
@@ -683,14 +672,13 @@ public class CarArrivals extends javax.swing.JFrame {
                         .addGap(22, 22, 22)
                         .addComponent(filler3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(searchBottomLayout.createSequentialGroup()
-                        .addGap(11, 11, 11)
-                        .addComponent(oneDayRadioButton))
-                    .addGroup(searchBottomLayout.createSequentialGroup()
                         .addGap(22, 22, 22)
                         .addComponent(filler4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(searchBottomLayout.createSequentialGroup()
                         .addGap(11, 11, 11)
-                        .addComponent(periodRadioButton))
+                        .addGroup(searchBottomLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(periodRadioButton)
+                            .addComponent(oneDayRadioButton)))
                     .addGroup(searchBottomLayout.createSequentialGroup()
                         .addGap(22, 22, 22)
                         .addComponent(filler5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -706,7 +694,7 @@ public class CarArrivals extends javax.swing.JFrame {
                             .addComponent(BeginDateChooser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(setSearchPeriodOptionButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(EndDateChooser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(30, Short.MAX_VALUE))
+                .addContainerGap(34, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout criteriaPanelLayout = new javax.swing.GroupLayout(criteriaPanel);
@@ -716,8 +704,8 @@ public class CarArrivals extends javax.swing.JFrame {
             .addGroup(criteriaPanelLayout.createSequentialGroup()
                 .addGap(0, 0, 0)
                 .addGroup(criteriaPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(searchTop, javax.swing.GroupLayout.DEFAULT_SIZE, 877, Short.MAX_VALUE)
-                    .addComponent(searchBottom, javax.swing.GroupLayout.DEFAULT_SIZE, 877, Short.MAX_VALUE))
+                    .addComponent(searchTop, javax.swing.GroupLayout.DEFAULT_SIZE, 887, Short.MAX_VALUE)
+                    .addComponent(searchBottom, javax.swing.GroupLayout.DEFAULT_SIZE, 887, Short.MAX_VALUE))
                 .addGap(0, 0, 0))
         );
         criteriaPanelLayout.setVerticalGroup(
@@ -731,7 +719,7 @@ public class CarArrivals extends javax.swing.JFrame {
 
         searchButton.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         searchButton.setMnemonic('s');
-        searchButton.setText(((String[])Globals.ButtonLabels.get(SEARCH_BTN.ordinal()))[ourLang]);
+        searchButton.setText(SEARCH_BTN.getContent());
         searchButton.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 5, 10, 5));
         searchButton.setMaximumSize(new java.awt.Dimension(80, 80));
         searchButton.setMinimumSize(new java.awt.Dimension(80, 80));
@@ -748,7 +736,7 @@ public class CarArrivals extends javax.swing.JFrame {
             searchPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(searchPanelLayout.createSequentialGroup()
                 .addGap(0, 0, 0)
-                .addComponent(criteriaPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 877, Short.MAX_VALUE)
+                .addComponent(criteriaPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 887, Short.MAX_VALUE)
                 .addGap(7, 7, 7)
                 .addComponent(searchButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(7, 7, 7))
@@ -768,7 +756,7 @@ public class CarArrivals extends javax.swing.JFrame {
 
         closeButton.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         closeButton.setMnemonic('c');
-        closeButton.setText(((String[])Globals.ButtonLabels.get(CLOSE_BTN.ordinal()))[ourLang]);
+        closeButton.setText(CLOSE_BTN.getContent());
         closeButton.setMaximumSize(new java.awt.Dimension(77, 52));
         closeButton.setMinimumSize(new java.awt.Dimension(77, 52));
         closeButton.setPreferredSize(new java.awt.Dimension(85, 52));
@@ -784,7 +772,7 @@ public class CarArrivals extends javax.swing.JFrame {
         topPanelLayout.setHorizontalGroup(
             topPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(topPanelLayout.createSequentialGroup()
-                .addComponent(searchPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 983, Short.MAX_VALUE)
+                .addComponent(searchPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 993, Short.MAX_VALUE)
                 .addGap(0, 0, 0)
                 .addComponent(closePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
@@ -818,7 +806,7 @@ public class CarArrivals extends javax.swing.JFrame {
 
         jLabel3.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel3.setText(((String[])Globals.LabelsText.get(ORDER_LABEL.ordinal()))[ourLang]);
+        jLabel3.setText(ORDER_LABEL.getContent());
         jLabel3.setMaximumSize(new java.awt.Dimension(80, 35));
         jLabel3.setMinimumSize(new java.awt.Dimension(80, 35));
         jLabel3.setPreferredSize(new java.awt.Dimension(80, 35));
@@ -833,7 +821,7 @@ public class CarArrivals extends javax.swing.JFrame {
 
         jLabel5.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel5.setText(((String[])Globals.LabelsText.get(ARRIVAL_TIME_LABEL.ordinal()))[ourLang]);
+        jLabel5.setText(ARRIVAL_TIME_LABEL.getContent());
         jLabel5.setMaximumSize(new java.awt.Dimension(100, 35));
         jLabel5.setMinimumSize(new java.awt.Dimension(100, 35));
         jLabel5.setPreferredSize(new java.awt.Dimension(100, 35));
@@ -849,7 +837,7 @@ public class CarArrivals extends javax.swing.JFrame {
 
         jLabel8.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         jLabel8.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel8.setText(((String[])Globals.LabelsText.get(RECOGNIZED_LABEL.ordinal()))[ourLang]);
+        jLabel8.setText(RECOGNIZED_LABEL.getContent());
         jLabel8.setMaximumSize(new java.awt.Dimension(100, 35));
         jLabel8.setMinimumSize(new java.awt.Dimension(100, 35));
         jLabel8.setPreferredSize(new java.awt.Dimension(120, 35));
@@ -869,7 +857,7 @@ public class CarArrivals extends javax.swing.JFrame {
 
         jLabel4.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel4.setText(((String[])Globals.LabelsText.get(GATE_NAME_LABEL.ordinal()))[ourLang]);
+        jLabel4.setText(GATE_NAME_LABEL.getContent());
         jLabel4.setMaximumSize(new java.awt.Dimension(80, 35));
         jLabel4.setMinimumSize(new java.awt.Dimension(80, 35));
         jLabel4.setPreferredSize(new java.awt.Dimension(80, 35));
@@ -883,7 +871,7 @@ public class CarArrivals extends javax.swing.JFrame {
 
         jLabel6.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel6.setText(((String[])Globals.LabelsText.get(ATTENDANT_LABEL.ordinal()))[ourLang]);
+        jLabel6.setText(ATTENDANT_LABEL.getContent());
         jLabel6.setMaximumSize(new java.awt.Dimension(100, 35));
         jLabel6.setMinimumSize(new java.awt.Dimension(100, 35));
         jLabel6.setPreferredSize(new java.awt.Dimension(100, 35));
@@ -897,7 +885,7 @@ public class CarArrivals extends javax.swing.JFrame {
 
         jLabel7.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel7.setText(((String[])Globals.LabelsText.get(REGISTERED_LABEL.ordinal()))[ourLang]);
+        jLabel7.setText(REGISTERED_LABEL.getContent());
         jLabel7.setMaximumSize(new java.awt.Dimension(100, 35));
         jLabel7.setMinimumSize(new java.awt.Dimension(100, 35));
         jLabel7.setPreferredSize(new java.awt.Dimension(120, 35));
@@ -918,7 +906,7 @@ public class CarArrivals extends javax.swing.JFrame {
 
         buildingLabel.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         buildingLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        buildingLabel.setText(((String[])Globals.LabelsText.get(BUILDING_LABEL.ordinal()))[ourLang]);
+        buildingLabel.setText(BUILDING_LABEL.getContent());
         buildingLabel.setMaximumSize(new java.awt.Dimension(130, 35));
         buildingLabel.setMinimumSize(new java.awt.Dimension(130, 35));
         buildingLabel.setPreferredSize(new java.awt.Dimension(130, 35));
@@ -933,7 +921,7 @@ public class CarArrivals extends javax.swing.JFrame {
 
         jLabel10.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         jLabel10.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel10.setText(((String[])Globals.LabelsText.get(ROOM_LABEL.ordinal()))[ourLang]);
+        jLabel10.setText(ROOM_LABEL.getContent());
         jLabel10.setMaximumSize(new java.awt.Dimension(80, 35));
         jLabel10.setMinimumSize(new java.awt.Dimension(80, 35));
         jLabel10.setPreferredSize(new java.awt.Dimension(80, 35));
@@ -953,7 +941,7 @@ public class CarArrivals extends javax.swing.JFrame {
 
         affiliationLabel.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         affiliationLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        affiliationLabel.setText(((String[])Globals.LabelsText.get(AFFILIATION_LABEL.ordinal()))[ourLang]);
+        affiliationLabel.setText(AFFILIATION_LABEL.getContent());
         affiliationLabel.setMaximumSize(new java.awt.Dimension(130, 35));
         affiliationLabel.setMinimumSize(new java.awt.Dimension(130, 35));
         affiliationLabel.setPreferredSize(new java.awt.Dimension(130, 35));
@@ -973,7 +961,7 @@ public class CarArrivals extends javax.swing.JFrame {
 
         jLabel14.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         jLabel14.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel14.setText(((String[])Globals.LabelsText.get(VISIT_PURPOSE_LABEL.ordinal()))[ourLang]);
+        jLabel14.setText(VISIT_PURPOSE_LABEL.getContent());
         jLabel14.setMaximumSize(new java.awt.Dimension(130, 35));
         jLabel14.setMinimumSize(new java.awt.Dimension(130, 35));
         jLabel14.setPreferredSize(new java.awt.Dimension(130, 35));
@@ -993,7 +981,7 @@ public class CarArrivals extends javax.swing.JFrame {
 
         jLabel13.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         jLabel13.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel13.setText(((String[])Globals.LabelsText.get(FILE_SIZE_LABEL.ordinal()))[ourLang]);
+        jLabel13.setText(FILE_SIZE_LABEL.getContent());
         jLabel13.setMaximumSize(new java.awt.Dimension(80, 35));
         jLabel13.setMinimumSize(new java.awt.Dimension(80, 35));
         jLabel13.setPreferredSize(new java.awt.Dimension(80, 35));
@@ -1009,7 +997,7 @@ public class CarArrivals extends javax.swing.JFrame {
 
         jLabel12.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         jLabel12.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel12.setText(((String[])Globals.LabelsText.get(BAR_OP_LABEL.ordinal()))[ourLang]);
+        jLabel12.setText(BAR_OP_LABEL.getContent());
         jLabel12.setMaximumSize(new java.awt.Dimension(120, 35));
         jLabel12.setMinimumSize(new java.awt.Dimension(120, 35));
         jLabel12.setPreferredSize(new java.awt.Dimension(120, 35));
@@ -1025,7 +1013,7 @@ public class CarArrivals extends javax.swing.JFrame {
 
         jLabel16.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         jLabel16.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel16.setText(((String[])Globals.LabelsText.get(RECORD_COUNT_LABEL.ordinal()))[ourLang]);
+        jLabel16.setText(RECORD_COUNT_LABEL.getContent());
         jLabel16.setMaximumSize(new java.awt.Dimension(120, 35));
         jLabel16.setMinimumSize(new java.awt.Dimension(120, 35));
         jLabel16.setPreferredSize(new java.awt.Dimension(120, 35));
@@ -1080,9 +1068,9 @@ public class CarArrivals extends javax.swing.JFrame {
                 {null, null, null, null}
             },
             new String[] {
-                ((String[])Globals.TableHeaderList.get(ORDER_HEADER.ordinal()))[ourLang],
-                ((String[])Globals.TableHeaderList.get(ARRIVAL_TIME_HEADER.ordinal()))[ourLang],
-                ((String[])Globals.TableHeaderList.get(CAR_TAG_HEADER.ordinal()))[ourLang],
+                ORDER_HEADER.getContent(),
+                ARRIVAL_TIME_HEADER.getContent(),
+                CAR_TAG_HEADER.getContent(),
                 "arrSeqNo"
             }
 
@@ -1112,7 +1100,6 @@ public class CarArrivals extends javax.swing.JFrame {
         // TODO add your handling code here:
         if (originalImg != null)
         {
-//            ImageDisplay bigImage = new ImageDisplay(originalImg, "100% " + ((String[])Globals.TitleList.get(FULL_SIZE_IMAGE_FRAME_TITLE.ordinal()))[ourLang]);
             ImageDisplay bigImage = new ImageDisplay(originalImg, "100% " + FULL_SIZE_IMAGE_FRAME_TITLE.getContent());
             bigImage.setVisible(true);               
         }        
@@ -1201,7 +1188,6 @@ public class CarArrivals extends javax.swing.JFrame {
     }//GEN-LAST:event_periodRadioButtonActionPerformed
 
     private void oneDayRadioButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_oneDayRadioButtonActionPerformed
-        // TODO add your handling code here:
         disablePeriodChooser();
     }//GEN-LAST:event_oneDayRadioButtonActionPerformed
 
@@ -1210,7 +1196,6 @@ public class CarArrivals extends javax.swing.JFrame {
     }//GEN-LAST:event_oneHourRadioButtonActionPerformed
 
     private void closeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_closeButtonActionPerformed
-        // TODO add your handling code here:
         Thread.currentThread().setPriority(Thread.MAX_PRIORITY);
         this.dispose();
     }//GEN-LAST:event_closeButtonActionPerformed
@@ -1220,8 +1205,17 @@ public class CarArrivals extends javax.swing.JFrame {
     }//GEN-LAST:event_searchUnitComboBoxActionPerformed
 
     private void searchUnitComboBoxPopupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_searchUnitComboBoxPopupMenuWillBecomeVisible
-        // TODO add your handling code here:
-        loadUnitComboBox(searchL1ComboBox, searchBuildingComboBox, searchUnitComboBox);
+        int bldgNo = (Integer)
+                ((ConvComboBoxItem)searchBuildingComboBox.getSelectedItem()).getKeyValue();
+        
+        if (searchUnitComboBox.getItemCount() == 1 || 
+                getPrevParentSKey()[UnitNo.getNumVal()] != bldgNo) 
+        {
+            Object selItem = searchUnitComboBox.getSelectedItem();
+            refreshComboBox(searchUnitComboBox, getPrompter(UnitNo, searchBuildingComboBox), 
+                UnitNo, bldgNo, getPrevParentSKey());
+            searchUnitComboBox.setSelectedItem(selItem); 
+        }        
     }//GEN-LAST:event_searchUnitComboBoxPopupMenuWillBecomeVisible
 
     private void searchL2ComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchL2ComboBoxActionPerformed
@@ -1229,14 +1223,19 @@ public class CarArrivals extends javax.swing.JFrame {
     }//GEN-LAST:event_searchL2ComboBoxActionPerformed
     
     private void searchL2ComboBoxPopupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_searchL2ComboBoxPopupMenuWillBecomeVisible
-        Object selItem = searchL2ComboBox.getSelectedItem();
-
-        ConvComboBoxItem l1Item = (ConvComboBoxItem)searchL1ComboBox.getSelectedItem();
-        int L1No = (Integer) l1Item.getKeyValue();        // normalize child combobox item
-        searchL2ComboBox.removeAllItems();
-        searchL2ComboBox.addItem(getPrompter(AffiliationL2, searchL1ComboBox));
-        loadComboBoxItems(searchL2ComboBox, DriverCol.AffiliationL2, L1No);
-        searchL2ComboBox.setSelectedItem(selItem);
+//        int L1No = (Integer)((ConvComboBoxItem)searchL1ComboBox.getSelectedItem()).getKeyValue();
+//        
+//        if (searchL2ComboBox.getItemCount() == 1 || 
+//                getPrevParentSKey()[AffiliationL2.getNumVal()] != L1No) 
+//        {
+//            Object selItem = searchL2ComboBox.getSelectedItem();
+//            refreshComboBox(searchL2ComboBox, getPrompter(AffiliationL2, searchL1ComboBox),
+//                    AffiliationL2, L1No, getPrevParentSKey());        
+//            searchL2ComboBox.setSelectedItem(selItem);
+//        }       
+        
+        mayRefreshLowerCBox(searchL1ComboBox, searchL2ComboBox, AffiliationL2, 
+                getPrevParentSKey());
     }//GEN-LAST:event_searchL2ComboBoxPopupMenuWillBecomeVisible
 
     private void searchBuildingComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchBuildingComboBoxActionPerformed
@@ -1247,19 +1246,9 @@ public class CarArrivals extends javax.swing.JFrame {
             model.removeElementAt(0);
             model.insertElementAt(getPrompter(UnitNo,
                 searchBuildingComboBox), 0);
-        searchUnitComboBox.setSelectedIndex(0);
+            searchUnitComboBox.setSelectedIndex(0);
         }
     }//GEN-LAST:event_searchBuildingComboBoxActionPerformed
-
-    private void searchBuildingComboBoxPopupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_searchBuildingComboBoxPopupMenuWillBecomeVisible
-        Object selItem = searchBuildingComboBox.getSelectedItem();
-
-        searchBuildingComboBox.removeAllItems();
-        searchBuildingComboBox.addItem(getPrompter(BuildingNo, null
-        ));
-        loadComboBoxItems(searchBuildingComboBox, BuildingNo, -1);
-        searchBuildingComboBox.setSelectedItem(selItem);
-    }//GEN-LAST:event_searchBuildingComboBoxPopupMenuWillBecomeVisible
 
     private void searchL1ComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchL1ComboBoxActionPerformed
         if (searchL1ComboBox.isPopupVisible()) {
@@ -1271,16 +1260,6 @@ public class CarArrivals extends javax.swing.JFrame {
             searchL2ComboBox.setSelectedIndex(0);
         }
     }//GEN-LAST:event_searchL1ComboBoxActionPerformed
-
-    private void searchL1ComboBoxPopupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_searchL1ComboBoxPopupMenuWillBecomeVisible
-        // TODO add your handling code here:
-        Object selItem = searchL1ComboBox.getSelectedItem();
-
-        searchL1ComboBox.removeAllItems();
-        searchL1ComboBox.addItem(getPrompter(AffiliationL1, null));
-        loadComboBoxItems(searchL1ComboBox, AffiliationL1, -1);
-        searchL1ComboBox.setSelectedItem(selItem);
-    }//GEN-LAST:event_searchL1ComboBoxPopupMenuWillBecomeVisible
 
     private void buildingRadioButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buildingRadioButtonActionPerformed
         if (buildingRadioButton.isSelected()) {
@@ -1299,6 +1278,14 @@ public class CarArrivals extends javax.swing.JFrame {
             searchL2ComboBox.setEnabled(true);
         }
     }//GEN-LAST:event_affiliationRadioButtonActionPerformed
+
+    private void searchL2ComboBoxPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_searchL2ComboBoxPopupMenuWillBecomeInvisible
+        mayPropagateBackward(searchL2ComboBox, searchL1ComboBox);
+    }//GEN-LAST:event_searchL2ComboBoxPopupMenuWillBecomeInvisible
+
+    private void searchUnitComboBoxPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_searchUnitComboBoxPopupMenuWillBecomeInvisible
+        mayPropagateBackward(searchUnitComboBox, searchBuildingComboBox);
+    }//GEN-LAST:event_searchUnitComboBoxPopupMenuWillBecomeInvisible
 
     // <editor-fold defaultstate="collapsed" desc="-- Variables defined via GUI creation">
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -1752,7 +1739,6 @@ public class CarArrivals extends javax.swing.JFrame {
                 }                               
             }
         };        
-        
     }
 
     private void clearArrivalDetail() {
@@ -1794,8 +1780,13 @@ public class CarArrivals extends javax.swing.JFrame {
             gateCB.addItem(new ConvComboBoxItem(new Integer(i), gateNames[i]));
         }
         
-        initSearchComboBox(searchL1ComboBox, searchL2ComboBox,
-                searchBuildingComboBox, searchUnitComboBox);        
+        refreshComboBox(searchL1ComboBox, getPrompter(AffiliationL1, searchL1ComboBox),
+                AffiliationL1, -1, getPrevParentSKey());
+        searchL2ComboBox.addItem(getPrompter(AffiliationL2, searchL1ComboBox));
+        
+        refreshComboBox(searchBuildingComboBox, getPrompter(BuildingNo, searchBuildingComboBox),
+                BuildingNo, -1, getPrevParentSKey());
+        searchUnitComboBox.addItem(getPrompter(UnitNo, searchBuildingComboBox));
         
         addBarOperationItems();
         Calendar today = Calendar.getInstance();
@@ -1885,13 +1876,8 @@ public class CarArrivals extends javax.swing.JFrame {
         gateBarCB.addItem(new ConvComboBoxItem(new Integer(-1), BAR_CB_ITEM.getContent()));
 
         for (BarOperation barOperation : BarOperation.values()) {
-            //<editor-fold desc="-- determine label for each item value">
-            String label = "";
-
-            label = getBarOperationLabel(barOperation);
-
-            //</editor-fold>                
-            gateBarCB.addItem(new ConvComboBoxItem(barOperation, label));
+            gateBarCB.addItem(new ConvComboBoxItem(barOperation, 
+                    getBarOperationLabel(barOperation)));
         }
     }
 
@@ -1928,6 +1914,28 @@ public class CarArrivals extends javax.swing.JFrame {
             arrivalsList.getSelectionModel().removeListSelectionListener(valueChangeListener);
         }
     }
+
+    /**
+     * @return the prevParentSKey
+     */
+    public int[] getPrevParentSKey() {
+        return prevParentSKey;
+    }
+
+    private void mayRefreshLowerCBox(JComboBox higherCBox, JComboBox lowerCBox, 
+            OSP_enums.DriverCol lowerCol, int[] prevHigherSKey) 
+    {
+        int higherSKey = (Integer)((ConvComboBoxItem)higherCBox.getSelectedItem()).getKeyValue();
+        
+        if (lowerCBox.getItemCount() == 1 || 
+                prevHigherSKey[lowerCol.getNumVal()] != higherSKey) 
+        {
+            Object selectedLowerItem = lowerCBox.getSelectedItem();
+            refreshComboBox(lowerCBox, getPrompter(lowerCol, higherCBox),
+                    lowerCol, higherSKey, prevHigherSKey);        
+            lowerCBox.setSelectedItem(selectedLowerItem);
+        }    
+    }
 }
 
 class HeaderCellRenderer implements TableCellRenderer {
@@ -1952,4 +1960,3 @@ class HeaderCellRenderer implements TableCellRenderer {
     return label;
   }
 }        
-        

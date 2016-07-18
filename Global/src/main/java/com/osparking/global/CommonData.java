@@ -40,6 +40,7 @@ public class CommonData { // new Dimension(carTagWidth, 30)
      */
         public static final String ADMIN_ID = "admin";
     public static final int NOT_SELECTED = -1; 
+    public static final int NOT_LISTED = -1; 
     public static final int PROMPTER_KEY = 0; 
     
     public static final int carTagWidth = 125; // Normal Width
