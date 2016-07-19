@@ -44,13 +44,13 @@ import static com.osparking.global.names.ControlEnums.DialogMessages.DATE_INPUT_
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.WARING_DIALOGTITLE;
 import static com.osparking.global.names.ControlEnums.LabelContent.AFFILIATION_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.ARRIVAL_TIME_LABEL;
+import static com.osparking.global.names.ControlEnums.LabelContent.ARR_TM_LEGEND;
 import static com.osparking.global.names.ControlEnums.LabelContent.ATTENDANT_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.BAR_OP_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.BUILDING_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.CAR_TAG_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.COUNT_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.DURATION_SET_LABEL;
-import static com.osparking.global.names.ControlEnums.LabelContent.FILE_SIZE_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.GATE_NAME_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.LAST_1HOUR_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.LAST_24HOURS_LABEL;
@@ -58,10 +58,10 @@ import static com.osparking.global.names.ControlEnums.LabelContent.VISIT_TARGET_
 import static com.osparking.global.names.ControlEnums.LabelContent.NON_REGI_TAG2_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.ORDER_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.RECOGNIZED_LABEL;
-import static com.osparking.global.names.ControlEnums.LabelContent.RECORD_COUNT_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.REGISTERED_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.ROOM_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.VISIT_PURPOSE_LABEL;
+import static com.osparking.global.names.ControlEnums.LabelContent.WHERE_TO_LABEL;
 import static com.osparking.global.names.ControlEnums.MenuITemTypes.META_KEY_LABEL;
 import static com.osparking.global.names.ControlEnums.TitleTypes.*;
 import static com.osparking.global.names.ControlEnums.TableTypes.ARRIVAL_TIME_HEADER;
@@ -175,6 +175,7 @@ public class CarArrivals extends javax.swing.JFrame {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
+        java.awt.GridBagConstraints gridBagConstraints;
 
         periodOptionGroup = new javax.swing.ButtonGroup();
         affiliationGroup = new javax.swing.ButtonGroup();
@@ -238,53 +239,42 @@ public class CarArrivals extends javax.swing.JFrame {
         searchButton = new javax.swing.JButton();
         filler_h10_19 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 10), new java.awt.Dimension(0, 10), new java.awt.Dimension(32767, 10));
         bottomPanel = new javax.swing.JPanel();
-        bottomLeftPanel = new javax.swing.JPanel();
-        jPanel4 = new javax.swing.JPanel();
-        jPanel1 = new javax.swing.JPanel();
+        detailWhole = new javax.swing.JPanel();
+        detailTop = new javax.swing.JPanel();
+        gateNoPanel = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         rowNumTF = new javax.swing.JTextField();
-        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
-        jLabel5 = new javax.swing.JLabel();
-        arrivalTmTF = new javax.swing.JTextField();
-        filler7 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
-        jLabel8 = new javax.swing.JLabel();
-        recognizedTF = new javax.swing.JTextField();
-        jPanel3 = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
         gateNameTF = new javax.swing.JTextField();
-        jLabel6 = new javax.swing.JLabel();
-        attendantTF = new javax.swing.JTextField();
-        jLabel7 = new javax.swing.JLabel();
-        registeredTF = new javax.swing.JTextField();
-        jPanel5 = new javax.swing.JPanel();
-        filler13 = new javax.swing.Box.Filler(new java.awt.Dimension(40, 0), new java.awt.Dimension(40, 0), new java.awt.Dimension(40, 32767));
-        buildingLabel = new javax.swing.JLabel();
-        buildingTF = new javax.swing.JTextField();
-        filler12 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
-        jLabel10 = new javax.swing.JLabel();
-        unitTF = new javax.swing.JTextField();
-        jPanel8 = new javax.swing.JPanel();
-        filler15 = new javax.swing.Box.Filler(new java.awt.Dimension(40, 0), new java.awt.Dimension(40, 0), new java.awt.Dimension(40, 32767));
-        affiliationLabel = new javax.swing.JLabel();
-        affiliationTF = new javax.swing.JTextField();
-        jPanel6 = new javax.swing.JPanel();
-        filler14 = new javax.swing.Box.Filler(new java.awt.Dimension(40, 0), new java.awt.Dimension(40, 0), new java.awt.Dimension(40, 32767));
-        jLabel14 = new javax.swing.JLabel();
-        visitPurposeTF = new javax.swing.JTextField();
-        jPanel2 = new javax.swing.JPanel();
-        filler10 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 32767));
-        jLabel13 = new javax.swing.JLabel();
-        imgSizeTF = new javax.swing.JTextField();
-        filler8 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
         jLabel12 = new javax.swing.JLabel();
         barOptnTF = new javax.swing.JTextField();
-        filler9 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
-        jLabel16 = new javax.swing.JLabel();
-        rsCountTF = new javax.swing.JTextField();
-        filler11 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 32767));
-        filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 5), new java.awt.Dimension(0, 5), new java.awt.Dimension(32767, 2));
-        jPanel7 = new javax.swing.JPanel();
+        dateTmPanel = new javax.swing.JPanel();
+        colHead1 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        arrivalTmTF = new javax.swing.JTextField();
+        jLabel6 = new javax.swing.JLabel();
+        attendantTF = new javax.swing.JTextField();
+        tagNoPanel = new javax.swing.JPanel();
+        colHead2 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        recognizedTF = new javax.swing.JTextField();
+        jLabel7 = new javax.swing.JLabel();
+        registeredTF = new javax.swing.JTextField();
+        detailBottom = new javax.swing.JPanel();
+        imagePanel = new javax.swing.JPanel();
         imageLabel = new javax.swing.JLabel();
+        targetPanel = new javax.swing.JPanel();
+        whereToLabel = new javax.swing.JLabel();
+        buildingLabel = new javax.swing.JLabel();
+        buildingTF = new javax.swing.JTextField();
+        jLabel10 = new javax.swing.JLabel();
+        unitTF = new javax.swing.JTextField();
+        affiliPan = new javax.swing.JPanel();
+        affiliationLabel = new javax.swing.JLabel();
+        affiliationTF = new javax.swing.JTextField();
+        targetDescrp = new javax.swing.JPanel();
+        jLabel14 = new javax.swing.JLabel();
+        visitPurposeTF = new javax.swing.JTextField();
         bottomRightPanel = new javax.swing.JPanel();
         arrivalListPanel = new javax.swing.JPanel();
         arrivalsScroPan = new javax.swing.JScrollPane();
@@ -971,119 +961,278 @@ public class CarArrivals extends javax.swing.JFrame {
         bottomPanel.setPreferredSize(new java.awt.Dimension(965, 400));
         bottomPanel.setLayout(new javax.swing.BoxLayout(bottomPanel, javax.swing.BoxLayout.LINE_AXIS));
 
-        bottomLeftPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, VEHICLE_ARIIVAL_DETAILS_PANEL_TITLE.getContent(), javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font(font_Type, font_Style, font_Size)));
-        bottomLeftPanel.setMaximumSize(new java.awt.Dimension(32767, 163835));
-        bottomLeftPanel.setMinimumSize(new java.awt.Dimension(400, 195));
-        bottomLeftPanel.setPreferredSize(new java.awt.Dimension(650, 445));
-        bottomLeftPanel.setLayout(new javax.swing.BoxLayout(bottomLeftPanel, javax.swing.BoxLayout.PAGE_AXIS));
+        detailWhole.setBorder(javax.swing.BorderFactory.createTitledBorder(null, VEHICLE_ARIIVAL_DETAILS_PANEL_TITLE.getContent(), javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font(font_Type, font_Style, font_Size)));
+        detailWhole.setMaximumSize(new java.awt.Dimension(32767, 163835));
+        detailWhole.setMinimumSize(new java.awt.Dimension(400, 195));
+        detailWhole.setPreferredSize(new java.awt.Dimension(650, 445));
 
-        jPanel4.setMinimumSize(new java.awt.Dimension(570, 198));
-        jPanel4.setPreferredSize(new java.awt.Dimension(590, 300));
-        jPanel4.setLayout(new javax.swing.BoxLayout(jPanel4, javax.swing.BoxLayout.PAGE_AXIS));
+        detailTop.setPreferredSize(new java.awt.Dimension(536, 125));
+        detailTop.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 0, 0));
 
-        jPanel1.setMaximumSize(new java.awt.Dimension(196602, 35));
-        jPanel1.setPreferredSize(new java.awt.Dimension(185, 25));
-        jPanel1.setLayout(new javax.swing.BoxLayout(jPanel1, javax.swing.BoxLayout.LINE_AXIS));
+        gateNoPanel.setMaximumSize(new java.awt.Dimension(196602, 35));
+        gateNoPanel.setMinimumSize(new java.awt.Dimension(175, 120));
+        gateNoPanel.setPreferredSize(new java.awt.Dimension(175, 120));
+        gateNoPanel.setLayout(new java.awt.GridBagLayout());
 
         jLabel3.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel3.setText(ORDER_LABEL.getContent());
-        jLabel3.setMaximumSize(new java.awt.Dimension(80, 35));
-        jLabel3.setMinimumSize(new java.awt.Dimension(80, 35));
-        jLabel3.setPreferredSize(new java.awt.Dimension(80, 35));
-        jPanel1.add(jLabel3);
+        jLabel3.setMaximumSize(null);
+        jLabel3.setMinimumSize(new java.awt.Dimension(65, 28));
+        jLabel3.setPreferredSize(new java.awt.Dimension(65, 28));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 3, 0);
+        gateNoPanel.add(jLabel3, gridBagConstraints);
 
         rowNumTF.setEditable(false);
         rowNumTF.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         rowNumTF.setMaximumSize(new java.awt.Dimension(50, 35));
-        rowNumTF.setPreferredSize(new java.awt.Dimension(60, 25));
-        jPanel1.add(rowNumTF);
-        jPanel1.add(filler1);
-
-        jLabel5.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel5.setText(ARRIVAL_TIME_LABEL.getContent());
-        jLabel5.setMaximumSize(new java.awt.Dimension(100, 35));
-        jLabel5.setMinimumSize(new java.awt.Dimension(100, 35));
-        jLabel5.setPreferredSize(new java.awt.Dimension(100, 35));
-        jPanel1.add(jLabel5);
-
-        arrivalTmTF.setEditable(false);
-        arrivalTmTF.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        arrivalTmTF.setMaximumSize(new java.awt.Dimension(100, 35));
-        arrivalTmTF.setMinimumSize(new java.awt.Dimension(100, 35));
-        arrivalTmTF.setPreferredSize(new java.awt.Dimension(100, 35));
-        jPanel1.add(arrivalTmTF);
-        jPanel1.add(filler7);
-
-        jLabel8.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        jLabel8.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel8.setText(RECOGNIZED_LABEL.getContent());
-        jLabel8.setMaximumSize(new java.awt.Dimension(100, 35));
-        jLabel8.setMinimumSize(new java.awt.Dimension(100, 35));
-        jLabel8.setPreferredSize(new java.awt.Dimension(120, 35));
-        jPanel1.add(jLabel8);
-
-        recognizedTF.setEditable(false);
-        recognizedTF.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        recognizedTF.setMaximumSize(new java.awt.Dimension(130, 35));
-        recognizedTF.setMinimumSize(new java.awt.Dimension(130, 35));
-        recognizedTF.setPreferredSize(new java.awt.Dimension(150, 35));
-        jPanel1.add(recognizedTF);
-
-        jPanel4.add(jPanel1);
-
-        jPanel3.setMaximumSize(new java.awt.Dimension(196602, 35));
-        jPanel3.setLayout(new javax.swing.BoxLayout(jPanel3, javax.swing.BoxLayout.LINE_AXIS));
+        rowNumTF.setMinimumSize(new java.awt.Dimension(100, 28));
+        rowNumTF.setPreferredSize(new java.awt.Dimension(100, 28));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 3, 10);
+        gateNoPanel.add(rowNumTF, gridBagConstraints);
 
         jLabel4.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel4.setText(GATE_NAME_LABEL.getContent());
-        jLabel4.setMaximumSize(new java.awt.Dimension(80, 35));
-        jLabel4.setMinimumSize(new java.awt.Dimension(80, 35));
-        jLabel4.setPreferredSize(new java.awt.Dimension(80, 35));
-        jPanel3.add(jLabel4);
+        jLabel4.setMaximumSize(null);
+        jLabel4.setMinimumSize(new java.awt.Dimension(65, 28));
+        jLabel4.setPreferredSize(new java.awt.Dimension(65, 28));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(3, 10, 3, 0);
+        gateNoPanel.add(jLabel4, gridBagConstraints);
 
         gateNameTF.setEditable(false);
         gateNameTF.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         gateNameTF.setMaximumSize(new java.awt.Dimension(32767, 32767));
-        gateNameTF.setPreferredSize(new java.awt.Dimension(59, 25));
-        jPanel3.add(gateNameTF);
+        gateNameTF.setMinimumSize(new java.awt.Dimension(100, 28));
+        gateNameTF.setPreferredSize(new java.awt.Dimension(100, 28));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(3, 10, 3, 10);
+        gateNoPanel.add(gateNameTF, gridBagConstraints);
+
+        jLabel12.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        jLabel12.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jLabel12.setText(BAR_OP_LABEL.getContent());
+        jLabel12.setMaximumSize(null);
+        jLabel12.setMinimumSize(new java.awt.Dimension(65, 28));
+        jLabel12.setPreferredSize(new java.awt.Dimension(65, 28));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(3, 10, 3, 0);
+        gateNoPanel.add(jLabel12, gridBagConstraints);
+
+        barOptnTF.setEditable(false);
+        barOptnTF.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        barOptnTF.setMaximumSize(new java.awt.Dimension(120, 35));
+        barOptnTF.setMinimumSize(new java.awt.Dimension(100, 28));
+        barOptnTF.setPreferredSize(new java.awt.Dimension(100, 28));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(3, 10, 3, 10);
+        gateNoPanel.add(barOptnTF, gridBagConstraints);
+
+        detailTop.add(gateNoPanel);
+
+        dateTmPanel.setMinimumSize(new java.awt.Dimension(165, 120));
+        dateTmPanel.setPreferredSize(new java.awt.Dimension(165, 120));
+        dateTmPanel.setLayout(new java.awt.GridBagLayout());
+
+        colHead1.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        colHead1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        colHead1.setText("M.D H:M");
+        colHead1.setMaximumSize(new java.awt.Dimension(80, 28));
+        colHead1.setMinimumSize(new java.awt.Dimension(80, 28));
+        colHead1.setPreferredSize(new java.awt.Dimension(80, 28));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        dateTmPanel.add(colHead1, gridBagConstraints);
+
+        jLabel5.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jLabel5.setText(ARRIVAL_TIME_LABEL.getContent());
+        jLabel5.setMaximumSize(null);
+        jLabel5.setMinimumSize(new java.awt.Dimension(55, 28));
+        jLabel5.setPreferredSize(new java.awt.Dimension(55, 28));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(3, 10, 3, 0);
+        dateTmPanel.add(jLabel5, gridBagConstraints);
+
+        arrivalTmTF.setEditable(false);
+        arrivalTmTF.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        arrivalTmTF.setToolTipText("");
+        arrivalTmTF.setMaximumSize(new java.awt.Dimension(100, 35));
+        arrivalTmTF.setMinimumSize(new java.awt.Dimension(100, 28));
+        arrivalTmTF.setPreferredSize(new java.awt.Dimension(100, 28));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(3, 10, 3, 0);
+        dateTmPanel.add(arrivalTmTF, gridBagConstraints);
 
         jLabel6.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel6.setText(ATTENDANT_LABEL.getContent());
-        jLabel6.setMaximumSize(new java.awt.Dimension(100, 35));
-        jLabel6.setMinimumSize(new java.awt.Dimension(100, 35));
-        jLabel6.setPreferredSize(new java.awt.Dimension(100, 35));
-        jPanel3.add(jLabel6);
+        jLabel6.setMaximumSize(null);
+        jLabel6.setMinimumSize(new java.awt.Dimension(55, 28));
+        jLabel6.setPreferredSize(new java.awt.Dimension(55, 28));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(3, 10, 3, 0);
+        dateTmPanel.add(jLabel6, gridBagConstraints);
 
         attendantTF.setEditable(false);
         attendantTF.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         attendantTF.setMaximumSize(new java.awt.Dimension(32767, 32767));
-        attendantTF.setPreferredSize(new java.awt.Dimension(100, 25));
-        jPanel3.add(attendantTF);
+        attendantTF.setMinimumSize(new java.awt.Dimension(100, 28));
+        attendantTF.setPreferredSize(new java.awt.Dimension(100, 28));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(3, 10, 3, 0);
+        dateTmPanel.add(attendantTF, gridBagConstraints);
+
+        detailTop.add(dateTmPanel);
+
+        tagNoPanel.setMinimumSize(new java.awt.Dimension(165, 120));
+        tagNoPanel.setPreferredSize(new java.awt.Dimension(165, 120));
+        tagNoPanel.setLayout(new java.awt.GridBagLayout());
+
+        colHead2.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        colHead2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        colHead2.setText("Tag No.");
+        colHead2.setMaximumSize(new java.awt.Dimension(80, 28));
+        colHead2.setMinimumSize(new java.awt.Dimension(80, 28));
+        colHead2.setPreferredSize(new java.awt.Dimension(80, 28));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        tagNoPanel.add(colHead2, gridBagConstraints);
+
+        jLabel8.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        jLabel8.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jLabel8.setText(RECOGNIZED_LABEL.getContent());
+        jLabel8.setMaximumSize(new java.awt.Dimension(65, 28));
+        jLabel8.setMinimumSize(new java.awt.Dimension(55, 28));
+        jLabel8.setPreferredSize(new java.awt.Dimension(55, 28));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(3, 10, 3, 0);
+        tagNoPanel.add(jLabel8, gridBagConstraints);
+
+        recognizedTF.setEditable(false);
+        recognizedTF.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        recognizedTF.setText("서울32가5555");
+        recognizedTF.setMaximumSize(new java.awt.Dimension(130, 35));
+        recognizedTF.setMinimumSize(new java.awt.Dimension(100, 28));
+        recognizedTF.setPreferredSize(new java.awt.Dimension(100, 28));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(3, 10, 3, 0);
+        tagNoPanel.add(recognizedTF, gridBagConstraints);
 
         jLabel7.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel7.setText(REGISTERED_LABEL.getContent());
-        jLabel7.setMaximumSize(new java.awt.Dimension(100, 35));
-        jLabel7.setMinimumSize(new java.awt.Dimension(100, 35));
-        jLabel7.setPreferredSize(new java.awt.Dimension(120, 35));
-        jPanel3.add(jLabel7);
+        jLabel7.setMaximumSize(new java.awt.Dimension(65, 28));
+        jLabel7.setMinimumSize(new java.awt.Dimension(55, 28));
+        jLabel7.setPreferredSize(new java.awt.Dimension(55, 28));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(3, 10, 3, 0);
+        tagNoPanel.add(jLabel7, gridBagConstraints);
 
         registeredTF.setEditable(false);
         registeredTF.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        registeredTF.setText("서울32가5555");
         registeredTF.setMaximumSize(new java.awt.Dimension(130, 35));
-        registeredTF.setMinimumSize(new java.awt.Dimension(130, 35));
-        registeredTF.setPreferredSize(new java.awt.Dimension(150, 35));
-        jPanel3.add(registeredTF);
+        registeredTF.setMinimumSize(new java.awt.Dimension(100, 28));
+        registeredTF.setPreferredSize(new java.awt.Dimension(100, 28));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(3, 10, 3, 0);
+        tagNoPanel.add(registeredTF, gridBagConstraints);
 
-        jPanel4.add(jPanel3);
+        detailTop.add(tagNoPanel);
 
-        jPanel5.setMaximumSize(new java.awt.Dimension(196602, 35));
-        jPanel5.setLayout(new javax.swing.BoxLayout(jPanel5, javax.swing.BoxLayout.LINE_AXIS));
-        jPanel5.add(filler13);
+        detailBottom.setMinimumSize(new java.awt.Dimension(525, 140));
+        detailBottom.setPreferredSize(new java.awt.Dimension(536, 150));
+
+        imagePanel.setMinimumSize(new java.awt.Dimension(300, 240));
+        imagePanel.setPreferredSize(new java.awt.Dimension(300, 240));
+
+        imageLabel.setBackground(new java.awt.Color(0, 0, 204));
+        imageLabel.setForeground(new java.awt.Color(255, 0, 153));
+        imageLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        imageLabel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        imageLabel.setMaximumSize(new java.awt.Dimension(32767, 32767));
+        imageLabel.setMinimumSize(new java.awt.Dimension(300, 240));
+        imageLabel.setPreferredSize(new java.awt.Dimension(300, 240));
+        imageLabel.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                imageLabelMouseClicked(evt);
+            }
+        });
+
+        javax.swing.GroupLayout imagePanelLayout = new javax.swing.GroupLayout(imagePanel);
+        imagePanel.setLayout(imagePanelLayout);
+        imagePanelLayout.setHorizontalGroup(
+            imagePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(imageLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+        );
+        imagePanelLayout.setVerticalGroup(
+            imagePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(imagePanelLayout.createSequentialGroup()
+                .addComponent(imageLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
+        );
+
+        targetPanel.setMinimumSize(new java.awt.Dimension(300, 200));
+        targetPanel.setPreferredSize(new java.awt.Dimension(300, 200));
+        targetPanel.setLayout(new java.awt.GridBagLayout());
+
+        whereToLabel.setText(WHERE_TO_LABEL.getContent());
+        whereToLabel.setMaximumSize(new java.awt.Dimension(110, 28));
+        whereToLabel.setMinimumSize(new java.awt.Dimension(110, 28));
+        whereToLabel.setPreferredSize(new java.awt.Dimension(110, 28));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 2;
+        targetPanel.add(whereToLabel, gridBagConstraints);
 
         buildingLabel.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         buildingLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -1091,14 +1240,19 @@ public class CarArrivals extends javax.swing.JFrame {
         buildingLabel.setMaximumSize(new java.awt.Dimension(130, 35));
         buildingLabel.setMinimumSize(new java.awt.Dimension(130, 35));
         buildingLabel.setPreferredSize(new java.awt.Dimension(130, 35));
-        jPanel5.add(buildingLabel);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 1;
+        targetPanel.add(buildingLabel, gridBagConstraints);
 
         buildingTF.setEditable(false);
         buildingTF.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         buildingTF.setMaximumSize(new java.awt.Dimension(32767, 32767));
         buildingTF.setPreferredSize(new java.awt.Dimension(80, 25));
-        jPanel5.add(buildingTF);
-        jPanel5.add(filler12);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        targetPanel.add(buildingTF, gridBagConstraints);
 
         jLabel10.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         jLabel10.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -1106,19 +1260,23 @@ public class CarArrivals extends javax.swing.JFrame {
         jLabel10.setMaximumSize(new java.awt.Dimension(80, 35));
         jLabel10.setMinimumSize(new java.awt.Dimension(80, 35));
         jLabel10.setPreferredSize(new java.awt.Dimension(80, 35));
-        jPanel5.add(jLabel10);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 1;
+        targetPanel.add(jLabel10, gridBagConstraints);
 
         unitTF.setEditable(false);
         unitTF.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         unitTF.setMaximumSize(new java.awt.Dimension(32767, 32767));
         unitTF.setPreferredSize(new java.awt.Dimension(80, 25));
-        jPanel5.add(unitTF);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 1;
+        targetPanel.add(unitTF, gridBagConstraints);
 
-        jPanel4.add(jPanel5);
-
-        jPanel8.setMaximumSize(new java.awt.Dimension(196602, 35));
-        jPanel8.setLayout(new javax.swing.BoxLayout(jPanel8, javax.swing.BoxLayout.LINE_AXIS));
-        jPanel8.add(filler15);
+        affiliPan.setMaximumSize(new java.awt.Dimension(196602, 35));
+        affiliPan.setPreferredSize(new java.awt.Dimension(140, 35));
+        affiliPan.setLayout(new javax.swing.BoxLayout(affiliPan, javax.swing.BoxLayout.LINE_AXIS));
 
         affiliationLabel.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         affiliationLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -1126,114 +1284,84 @@ public class CarArrivals extends javax.swing.JFrame {
         affiliationLabel.setMaximumSize(new java.awt.Dimension(130, 35));
         affiliationLabel.setMinimumSize(new java.awt.Dimension(130, 35));
         affiliationLabel.setPreferredSize(new java.awt.Dimension(130, 35));
-        jPanel8.add(affiliationLabel);
+        affiliPan.add(affiliationLabel);
 
         affiliationTF.setEditable(false);
         affiliationTF.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         affiliationTF.setMaximumSize(new java.awt.Dimension(32767, 32767));
-        affiliationTF.setPreferredSize(new java.awt.Dimension(340, 25));
-        jPanel8.add(affiliationTF);
+        affiliationTF.setPreferredSize(new java.awt.Dimension(140, 25));
+        affiliPan.add(affiliationTF);
 
-        jPanel4.add(jPanel8);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridwidth = 3;
+        targetPanel.add(affiliPan, gridBagConstraints);
 
-        jPanel6.setMaximumSize(new java.awt.Dimension(196602, 35));
-        jPanel6.setLayout(new javax.swing.BoxLayout(jPanel6, javax.swing.BoxLayout.LINE_AXIS));
-        jPanel6.add(filler14);
+        targetDescrp.setMaximumSize(new java.awt.Dimension(196602, 35));
+        targetDescrp.setPreferredSize(new java.awt.Dimension(140, 35));
+        targetDescrp.setLayout(new javax.swing.BoxLayout(targetDescrp, javax.swing.BoxLayout.LINE_AXIS));
 
         jLabel14.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         jLabel14.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel14.setText(VISIT_PURPOSE_LABEL.getContent());
-        jLabel14.setMaximumSize(new java.awt.Dimension(130, 35));
-        jLabel14.setMinimumSize(new java.awt.Dimension(130, 35));
-        jLabel14.setPreferredSize(new java.awt.Dimension(130, 35));
-        jPanel6.add(jLabel14);
+        jLabel14.setMaximumSize(new java.awt.Dimension(110, 28));
+        jLabel14.setMinimumSize(new java.awt.Dimension(110, 28));
+        jLabel14.setPreferredSize(new java.awt.Dimension(110, 28));
+        targetDescrp.add(jLabel14);
 
         visitPurposeTF.setEditable(false);
         visitPurposeTF.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         visitPurposeTF.setMaximumSize(new java.awt.Dimension(32767, 32767));
-        visitPurposeTF.setPreferredSize(new java.awt.Dimension(340, 25));
-        jPanel6.add(visitPurposeTF);
+        visitPurposeTF.setPreferredSize(new java.awt.Dimension(140, 25));
+        targetDescrp.add(visitPurposeTF);
 
-        jPanel4.add(jPanel6);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridwidth = 5;
+        targetPanel.add(targetDescrp, gridBagConstraints);
 
-        jPanel2.setMaximumSize(new java.awt.Dimension(196602, 35));
-        jPanel2.setLayout(new javax.swing.BoxLayout(jPanel2, javax.swing.BoxLayout.LINE_AXIS));
-        jPanel2.add(filler10);
+        javax.swing.GroupLayout detailBottomLayout = new javax.swing.GroupLayout(detailBottom);
+        detailBottom.setLayout(detailBottomLayout);
+        detailBottomLayout.setHorizontalGroup(
+            detailBottomLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(detailBottomLayout.createSequentialGroup()
+                .addComponent(imagePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, 0)
+                .addComponent(targetPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+        detailBottomLayout.setVerticalGroup(
+            detailBottomLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(detailBottomLayout.createSequentialGroup()
+                .addComponent(targetPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(19, Short.MAX_VALUE))
+            .addComponent(imagePanel, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+        );
 
-        jLabel13.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        jLabel13.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel13.setText(FILE_SIZE_LABEL.getContent());
-        jLabel13.setMaximumSize(new java.awt.Dimension(80, 35));
-        jLabel13.setMinimumSize(new java.awt.Dimension(80, 35));
-        jLabel13.setPreferredSize(new java.awt.Dimension(80, 35));
-        jPanel2.add(jLabel13);
+        javax.swing.GroupLayout detailWholeLayout = new javax.swing.GroupLayout(detailWhole);
+        detailWhole.setLayout(detailWholeLayout);
+        detailWholeLayout.setHorizontalGroup(
+            detailWholeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(detailTop, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(detailBottom, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+        );
+        detailWholeLayout.setVerticalGroup(
+            detailWholeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(detailWholeLayout.createSequentialGroup()
+                .addComponent(detailTop, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, 0)
+                .addComponent(detailBottom, javax.swing.GroupLayout.DEFAULT_SIZE, 169, Short.MAX_VALUE)
+                .addGap(0, 0, 0))
+        );
 
-        imgSizeTF.setEditable(false);
-        imgSizeTF.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        imgSizeTF.setMaximumSize(new java.awt.Dimension(80, 35));
-        imgSizeTF.setMinimumSize(new java.awt.Dimension(80, 35));
-        imgSizeTF.setPreferredSize(new java.awt.Dimension(80, 35));
-        jPanel2.add(imgSizeTF);
-        jPanel2.add(filler8);
-
-        jLabel12.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        jLabel12.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel12.setText(BAR_OP_LABEL.getContent());
-        jLabel12.setMaximumSize(new java.awt.Dimension(120, 35));
-        jLabel12.setMinimumSize(new java.awt.Dimension(120, 35));
-        jLabel12.setPreferredSize(new java.awt.Dimension(120, 35));
-        jPanel2.add(jLabel12);
-
-        barOptnTF.setEditable(false);
-        barOptnTF.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        barOptnTF.setMaximumSize(new java.awt.Dimension(120, 35));
-        barOptnTF.setMinimumSize(new java.awt.Dimension(120, 35));
-        barOptnTF.setPreferredSize(new java.awt.Dimension(120, 35));
-        jPanel2.add(barOptnTF);
-        jPanel2.add(filler9);
-
-        jLabel16.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        jLabel16.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel16.setText(RECORD_COUNT_LABEL.getContent());
-        jLabel16.setMaximumSize(new java.awt.Dimension(120, 35));
-        jLabel16.setMinimumSize(new java.awt.Dimension(120, 35));
-        jLabel16.setPreferredSize(new java.awt.Dimension(120, 35));
-        jPanel2.add(jLabel16);
-
-        rsCountTF.setEditable(false);
-        rsCountTF.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        rsCountTF.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
-        rsCountTF.setMaximumSize(new java.awt.Dimension(80, 35));
-        rsCountTF.setMinimumSize(new java.awt.Dimension(80, 35));
-        rsCountTF.setPreferredSize(new java.awt.Dimension(80, 35));
-        jPanel2.add(rsCountTF);
-        jPanel2.add(filler11);
-
-        jPanel4.add(jPanel2);
-
-        bottomLeftPanel.add(jPanel4);
-        bottomLeftPanel.add(filler2);
-
-        jPanel7.setPreferredSize(new java.awt.Dimension(450, 240));
-
-        imageLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        imageLabel.setMaximumSize(new java.awt.Dimension(32767, 32767));
-        imageLabel.setPreferredSize(new java.awt.Dimension(339, 220));
-        imageLabel.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                imageLabelMouseClicked(evt);
-            }
-        });
-        jPanel7.add(imageLabel);
-
-        bottomLeftPanel.add(jPanel7);
-
-        bottomPanel.add(bottomLeftPanel);
+        bottomPanel.add(detailWhole);
 
         bottomRightPanel.setMaximumSize(new java.awt.Dimension(32779, 33293));
         bottomRightPanel.setPreferredSize(new java.awt.Dimension(400, 300));
 
         arrivalListPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(VEHICLE_ARRIVAL_LIST_PANEL_TITLE.getContent()));
+        arrivalListPanel.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         arrivalListPanel.setPreferredSize(new java.awt.Dimension(323, 0));
 
         arrivalsScroPan.setMinimumSize(new java.awt.Dimension(23, 27));
@@ -1639,6 +1767,7 @@ public class CarArrivals extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.toedter.calendar.JDateChooser BeginDateChooser;
     private com.toedter.calendar.JDateChooser EndDateChooser;
+    private javax.swing.JPanel affiliPan;
     private javax.swing.JPanel affiliPanel;
     private javax.swing.ButtonGroup affiliationGroup;
     private javax.swing.JLabel affiliationLabel;
@@ -1653,7 +1782,6 @@ public class CarArrivals extends javax.swing.JFrame {
     private javax.swing.JTextField attendantTF;
     private javax.swing.JPanel barOptnPanel;
     private javax.swing.JTextField barOptnTF;
-    private javax.swing.JPanel bottomLeftPanel;
     private javax.swing.JPanel bottomPanel;
     private javax.swing.JPanel bottomRightPanel;
     private javax.swing.JLabel buildingLabel;
@@ -1667,22 +1795,20 @@ public class CarArrivals extends javax.swing.JFrame {
     private javax.swing.JPanel clearPanel;
     private javax.swing.JButton clearSearchPropertiesButton;
     private javax.swing.JButton closeButton;
+    private javax.swing.JLabel colHead1;
+    private javax.swing.JLabel colHead2;
     private javax.swing.JLabel countLbl;
     private javax.swing.JPanel countPanel;
     private javax.swing.JLabel countValue;
     private javax.swing.JPanel criteriaPanel;
-    private javax.swing.Box.Filler filler1;
-    private javax.swing.Box.Filler filler10;
-    private javax.swing.Box.Filler filler11;
-    private javax.swing.Box.Filler filler12;
-    private javax.swing.Box.Filler filler13;
-    private javax.swing.Box.Filler filler14;
-    private javax.swing.Box.Filler filler15;
+    private javax.swing.JPanel dateTmPanel;
+    private javax.swing.JPanel detailBottom;
+    private javax.swing.JPanel detailTop;
+    private javax.swing.JPanel detailWhole;
     private javax.swing.Box.Filler filler16;
     private javax.swing.Box.Filler filler17;
     private javax.swing.Box.Filler filler18;
     private javax.swing.Box.Filler filler19;
-    private javax.swing.Box.Filler filler2;
     private javax.swing.Box.Filler filler20;
     private javax.swing.Box.Filler filler21;
     private javax.swing.Box.Filler filler23;
@@ -1690,25 +1816,21 @@ public class CarArrivals extends javax.swing.JFrame {
     private javax.swing.Box.Filler filler4;
     private javax.swing.Box.Filler filler5;
     private javax.swing.Box.Filler filler6;
-    private javax.swing.Box.Filler filler7;
-    private javax.swing.Box.Filler filler8;
-    private javax.swing.Box.Filler filler9;
     private javax.swing.Box.Filler filler_h10_18;
     private javax.swing.Box.Filler filler_h10_19;
     private javax.swing.JPanel fixPanel;
     private javax.swing.JComboBox gateBarCB;
     private javax.swing.JComboBox gateCB;
     private javax.swing.JTextField gateNameTF;
+    private javax.swing.JPanel gateNoPanel;
     private javax.swing.JPanel gatePanel;
     private javax.swing.JLabel imageLabel;
-    private javax.swing.JTextField imgSizeTF;
+    private javax.swing.JPanel imagePanel;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel12;
-    private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
-    private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel3;
@@ -1718,14 +1840,6 @@ public class CarArrivals extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
-    private javax.swing.JPanel jPanel4;
-    private javax.swing.JPanel jPanel5;
-    private javax.swing.JPanel jPanel6;
-    private javax.swing.JPanel jPanel7;
-    private javax.swing.JPanel jPanel8;
     private javax.swing.JLabel myMetaKeyLabel;
     private javax.swing.JRadioButton oneDayRadioButton;
     private javax.swing.JRadioButton oneHourRadioButton;
@@ -1734,7 +1848,6 @@ public class CarArrivals extends javax.swing.JFrame {
     private javax.swing.JTextField recognizedTF;
     private javax.swing.JTextField registeredTF;
     private javax.swing.JTextField rowNumTF;
-    private javax.swing.JTextField rsCountTF;
     private javax.swing.JButton saveSheet_Button;
     private javax.swing.JPanel searchBottom;
     private javax.swing.JComboBox searchBuildingComboBox;
@@ -1747,6 +1860,9 @@ public class CarArrivals extends javax.swing.JFrame {
     private javax.swing.JComboBox searchUnitComboBox;
     private javax.swing.JButton seeLicenseButton;
     private javax.swing.JButton setSearchPeriodOptionButton;
+    private javax.swing.JPanel tagNoPanel;
+    private javax.swing.JPanel targetDescrp;
+    private javax.swing.JPanel targetPanel;
     private javax.swing.JLabel titleLabel;
     private javax.swing.JPanel titlePanel;
     private javax.swing.JPanel topDriver;
@@ -1754,6 +1870,7 @@ public class CarArrivals extends javax.swing.JFrame {
     private javax.swing.JPanel topVehicle;
     private javax.swing.JTextField unitTF;
     private javax.swing.JTextField visitPurposeTF;
+    private javax.swing.JLabel whereToLabel;
     private javax.swing.JPanel wholeBottom;
     private javax.swing.JPanel wholeEast;
     private javax.swing.JPanel wholePanel;
@@ -1911,7 +2028,7 @@ public class CarArrivals extends javax.swing.JFrame {
         
         int numRows = model.getRowCount();
         
-        rsCountTF.setText(Integer.toString(numRows));
+        countValue.setText(Integer.toString(numRows));
         if (numRows == 0) {
             clearArrivalDetail();
         } else {
@@ -1933,6 +2050,7 @@ public class CarArrivals extends javax.swing.JFrame {
 
     private void detailTuneTableProperties() {
         tuneTitlePanelSize();
+        changeLabelText();
         fineTuneColumnWidth();
         TableColumnModel arrivalsTableModel = arrivalsList.getColumnModel();
         DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
@@ -2044,8 +2162,6 @@ public class CarArrivals extends javax.swing.JFrame {
                         //</editor-fold>                        
 
                         // <editor-fold defaultstate="collapsed" desc="-- display car arrival image">
-                        int numBytes = (Integer)rs.getInt("imgBytes");
-                        imgSizeTF.setText(getFilesizeStr(numBytes)); 
                         
                         InputStream imageIS = rs.getBinaryStream("ImageBlob");
                         try {
@@ -2131,7 +2247,6 @@ public class CarArrivals extends javax.swing.JFrame {
         affiliationTF.setText("");    
         visitPurposeTF.setText(""); 
         barOptnTF.setText("");
-        imgSizeTF.setText("");
         try {
             imageLabel.setIcon(null);
             imageLabel.setText("No Image Exists");
@@ -2339,6 +2454,11 @@ public class CarArrivals extends javax.swing.JFrame {
         setComponentSize(searchButton, new Dimension(buttonWidthNorm, bigButtonHeight));
         setComponentSize(saveSheet_Button, new Dimension(CommonData.buttonWidthWide, buttonHeightNorm));
         setComponentSize(closeButton, new Dimension(CommonData.buttonWidthNorm, buttonHeightNorm));
+    }
+
+    private void changeLabelText() {
+        colHead1.setText(ARR_TM_LEGEND.getContent());
+        colHead2.setText(CAR_TAG_HEADER.getContent());
     }
 }
 
