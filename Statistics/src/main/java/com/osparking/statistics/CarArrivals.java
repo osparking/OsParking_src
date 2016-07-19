@@ -22,6 +22,7 @@ import static com.osparking.global.CommonData.buttonHeightNorm;
 import static com.osparking.global.CommonData.buttonWidthNorm;
 import static com.osparking.global.CommonData.normGUIheight;
 import static com.osparking.global.CommonData.normGUIwidth;
+import static com.osparking.global.CommonData.pointColor;
 import static com.osparking.global.CommonData.tipColor;
 import java.awt.Component;
 import java.awt.image.BufferedImage;
@@ -47,6 +48,7 @@ import static com.osparking.global.names.ControlEnums.LabelContent.ATTENDANT_LAB
 import static com.osparking.global.names.ControlEnums.LabelContent.BAR_OP_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.BUILDING_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.CAR_TAG_LABEL;
+import static com.osparking.global.names.ControlEnums.LabelContent.COUNT_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.DURATION_SET_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.FILE_SIZE_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.GATE_NAME_LABEL;
@@ -234,7 +236,7 @@ public class CarArrivals extends javax.swing.JFrame {
         setSearchPeriodOptionButton = new javax.swing.JButton();
         searchButtonPanel = new javax.swing.JPanel();
         searchButton = new javax.swing.JButton();
-        closePanel = new javax.swing.JPanel();
+        filler_h10_19 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 10), new java.awt.Dimension(0, 10), new java.awt.Dimension(32767, 10));
         bottomPanel = new javax.swing.JPanel();
         bottomLeftPanel = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
@@ -285,9 +287,13 @@ public class CarArrivals extends javax.swing.JFrame {
         imageLabel = new javax.swing.JLabel();
         bottomRightPanel = new javax.swing.JPanel();
         arrivalListPanel = new javax.swing.JPanel();
-        jScrollPane1 = new javax.swing.JScrollPane();
+        arrivalsScroPan = new javax.swing.JScrollPane();
         arrivalsList = new javax.swing.JTable();
         buttonPanel = new javax.swing.JPanel();
+        countPanel = new javax.swing.JPanel();
+        countLbl = new javax.swing.JLabel();
+        countValue = new javax.swing.JLabel();
+        filler23 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
         saveSheet_Button = new javax.swing.JButton();
         closeButton = new javax.swing.JButton();
         wholeBottom = new javax.swing.JPanel();
@@ -297,6 +303,7 @@ public class CarArrivals extends javax.swing.JFrame {
         setTitle(CAR_ARRIVALS_FRAME_TITLE.getContent());
         setFocusCycleRoot(false);
         setMinimumSize(new Dimension(normGUIwidth, normGUIheight));
+        setPreferredSize(new Dimension(normGUIwidth, normGUIheight));
         setSize(new Dimension(normGUIwidth, normGUIheight));
 
         wholeTop.setMaximumSize(new java.awt.Dimension(32767, 40));
@@ -664,7 +671,7 @@ public class CarArrivals extends javax.swing.JFrame {
         topDriverLayout.setHorizontalGroup(
             topDriverLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(topDriverLayout.createSequentialGroup()
-                .addComponent(affiliPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 141, Short.MAX_VALUE)
+                .addComponent(affiliPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 151, Short.MAX_VALUE)
                 .addGap(0, 0, 0)
                 .addComponent(filler19, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0)
@@ -705,7 +712,7 @@ public class CarArrivals extends javax.swing.JFrame {
                 .addGap(26, 26, 26)
                 .addComponent(topVehicle, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(5, 5, 5)
-                .addComponent(topDriver, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(topDriver, javax.swing.GroupLayout.DEFAULT_SIZE, 290, Short.MAX_VALUE)
                 .addGap(5, 5, 5)
                 .addComponent(filler18, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGap(5, 5, 5)
@@ -902,8 +909,8 @@ public class CarArrivals extends javax.swing.JFrame {
             .addGroup(criteriaPanelLayout.createSequentialGroup()
                 .addGap(0, 0, 0)
                 .addGroup(criteriaPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(searchTop, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(searchBottom, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(searchTop, javax.swing.GroupLayout.DEFAULT_SIZE, 811, Short.MAX_VALUE)
+                    .addComponent(searchBottom, javax.swing.GroupLayout.DEFAULT_SIZE, 811, Short.MAX_VALUE))
                 .addGap(0, 0, 0))
         );
         criteriaPanelLayout.setVerticalGroup(
@@ -942,7 +949,7 @@ public class CarArrivals extends javax.swing.JFrame {
             searchPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(searchPanelLayout.createSequentialGroup()
                 .addGap(0, 0, 0)
-                .addComponent(criteriaPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(criteriaPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 811, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(searchButtonPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(2, 2, 2))
@@ -958,10 +965,8 @@ public class CarArrivals extends javax.swing.JFrame {
 
         topPanel.add(searchPanel);
 
-        closePanel.setMaximumSize(new java.awt.Dimension(87, 32767));
-        topPanel.add(closePanel);
-
         wholePanel.add(topPanel);
+        wholePanel.add(filler_h10_19);
 
         bottomPanel.setPreferredSize(new java.awt.Dimension(965, 400));
         bottomPanel.setLayout(new javax.swing.BoxLayout(bottomPanel, javax.swing.BoxLayout.LINE_AXIS));
@@ -1231,7 +1236,7 @@ public class CarArrivals extends javax.swing.JFrame {
         arrivalListPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(VEHICLE_ARRIVAL_LIST_PANEL_TITLE.getContent()));
         arrivalListPanel.setPreferredSize(new java.awt.Dimension(323, 0));
 
-        jScrollPane1.setMinimumSize(new java.awt.Dimension(23, 27));
+        arrivalsScroPan.setMinimumSize(new java.awt.Dimension(23, 27));
 
         JTableHeader header = arrivalsList.getTableHeader();
         header.setDefaultRenderer(
@@ -1260,7 +1265,7 @@ public class CarArrivals extends javax.swing.JFrame {
         }
     );
     arrivalsList.setRowHeight(22);
-    jScrollPane1.setViewportView(arrivalsList);
+    arrivalsScroPan.setViewportView(arrivalsList);
 
     javax.swing.GroupLayout arrivalListPanelLayout = new javax.swing.GroupLayout(arrivalListPanel);
     arrivalListPanel.setLayout(arrivalListPanelLayout);
@@ -1268,71 +1273,124 @@ public class CarArrivals extends javax.swing.JFrame {
         arrivalListPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
         .addGap(0, 0, Short.MAX_VALUE)
         .addGroup(arrivalListPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(arrivalListPanelLayout.createSequentialGroup()
-                .addGap(0, 126, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 126, Short.MAX_VALUE)))
+            .addComponent(arrivalsScroPan, javax.swing.GroupLayout.DEFAULT_SIZE, 334, Short.MAX_VALUE))
     );
     arrivalListPanelLayout.setVerticalGroup(
         arrivalListPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-        .addGap(0, 0, Short.MAX_VALUE)
+        .addGap(0, 239, Short.MAX_VALUE)
         .addGroup(arrivalListPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(arrivalListPanelLayout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 304, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE)))
+            .addComponent(arrivalsScroPan, javax.swing.GroupLayout.DEFAULT_SIZE, 254, Short.MAX_VALUE))
     );
 
-    buttonPanel.setLayout(new javax.swing.BoxLayout(buttonPanel, javax.swing.BoxLayout.LINE_AXIS));
+    countPanel.setMinimumSize(new java.awt.Dimension(100, 25));
+    countPanel.setPreferredSize(new java.awt.Dimension(100, 25));
+
+    countLbl.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+    countLbl.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+    countLbl.setText(COUNT_LABEL.getContent());
+    JLabel tempLabel = new JLabel(COUNT_LABEL.getContent());
+    tempLabel.setFont(countLbl.getFont());
+    Dimension dim = tempLabel.getPreferredSize();
+    countLbl.setMaximumSize(new java.awt.Dimension(110, 27));
+    countLbl.setMinimumSize(new java.awt.Dimension(90, 27));
+    countLbl.setPreferredSize(new Dimension(dim.width + 1, dim.height));
+
+    countValue.setForeground(pointColor);
+    countValue.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+    countValue.setText("count");
+
+    javax.swing.GroupLayout countPanelLayout = new javax.swing.GroupLayout(countPanel);
+    countPanel.setLayout(countPanelLayout);
+    countPanelLayout.setHorizontalGroup(
+        countPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addGroup(countPanelLayout.createSequentialGroup()
+            .addGap(0, 0, 0)
+            .addComponent(countLbl, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGap(5, 5, 5)
+            .addComponent(countValue)
+            .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+    );
+    countPanelLayout.setVerticalGroup(
+        countPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addGroup(countPanelLayout.createSequentialGroup()
+            .addGroup(countPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addComponent(countValue)
+                .addComponent(countLbl, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addContainerGap())
+    );
 
     saveSheet_Button.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
     saveSheet_Button.setMnemonic('A');
     saveSheet_Button.setText("ods저장(A)");
     saveSheet_Button.setEnabled(false);
     saveSheet_Button.setMargin(new java.awt.Insets(0, 0, 0, 0));
-    saveSheet_Button.setMaximumSize(new Dimension(CommonData.buttonWidthWide, buttonHeightNorm));
-    saveSheet_Button.setMinimumSize(new Dimension(CommonData.buttonWidthWide, buttonHeightNorm));
-    saveSheet_Button.setPreferredSize(new Dimension(CommonData.buttonWidthWide, buttonHeightNorm));
+    saveSheet_Button.setMaximumSize(new java.awt.Dimension(110, 40));
+    saveSheet_Button.setMinimumSize(new java.awt.Dimension(110, 40));
+    saveSheet_Button.setPreferredSize(new java.awt.Dimension(110, 40));
     saveSheet_Button.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent evt) {
             saveSheet_ButtonActionPerformed(evt);
         }
     });
-    buttonPanel.add(saveSheet_Button);
 
     closeButton.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
     closeButton.setMnemonic('c');
     closeButton.setText(CLOSE_BTN.getContent());
-    closeButton.setMaximumSize(new java.awt.Dimension(77, 52));
-    closeButton.setMinimumSize(new java.awt.Dimension(77, 52));
-    closeButton.setPreferredSize(new java.awt.Dimension(85, 52));
+    closeButton.setMaximumSize(new java.awt.Dimension(90, 40));
+    closeButton.setMinimumSize(new java.awt.Dimension(90, 40));
+    closeButton.setPreferredSize(new java.awt.Dimension(90, 40));
     closeButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent evt) {
             closeButtonActionPerformed(evt);
         }
     });
-    buttonPanel.add(closeButton);
+
+    javax.swing.GroupLayout buttonPanelLayout = new javax.swing.GroupLayout(buttonPanel);
+    buttonPanel.setLayout(buttonPanelLayout);
+    buttonPanelLayout.setHorizontalGroup(
+        buttonPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addGroup(buttonPanelLayout.createSequentialGroup()
+            .addGap(10, 10, 10)
+            .addComponent(countPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGap(5, 5, 5)
+            .addComponent(filler23, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGap(5, 5, 5)
+            .addComponent(saveSheet_Button, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGap(5, 5, 5)
+            .addComponent(closeButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGap(10, 10, 10))
+    );
+    buttonPanelLayout.setVerticalGroup(
+        buttonPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addGroup(buttonPanelLayout.createSequentialGroup()
+            .addGap(0, 0, 0)
+            .addComponent(countPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+        .addGroup(buttonPanelLayout.createSequentialGroup()
+            .addGap(25, 25, 25)
+            .addComponent(filler23, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+        .addGroup(buttonPanelLayout.createSequentialGroup()
+            .addGap(5, 5, 5)
+            .addComponent(saveSheet_Button, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+        .addGroup(buttonPanelLayout.createSequentialGroup()
+            .addGap(5, 5, 5)
+            .addComponent(closeButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+    );
 
     javax.swing.GroupLayout bottomRightPanelLayout = new javax.swing.GroupLayout(bottomRightPanel);
     bottomRightPanel.setLayout(bottomRightPanelLayout);
     bottomRightPanelLayout.setHorizontalGroup(
         bottomRightPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-        .addGroup(bottomRightPanelLayout.createSequentialGroup()
-            .addGroup(bottomRightPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(arrivalListPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 338, Short.MAX_VALUE)
-                .addGroup(bottomRightPanelLayout.createSequentialGroup()
-                    .addGap(84, 84, 84)
-                    .addComponent(buttonPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 254, Short.MAX_VALUE)))
-            .addContainerGap())
+        .addComponent(arrivalListPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 373, Short.MAX_VALUE)
+        .addComponent(buttonPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
     );
     bottomRightPanelLayout.setVerticalGroup(
         bottomRightPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
         .addGroup(bottomRightPanelLayout.createSequentialGroup()
-            .addGap(5, 5, 5)
-            .addComponent(arrivalListPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 248, Short.MAX_VALUE)
-            .addGap(41, 41, 41)
+            .addGap(0, 0, 0)
+            .addComponent(arrivalListPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 262, Short.MAX_VALUE)
+            .addGap(10, 10, 10)
             .addComponent(buttonPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-            .addGap(192, 192, 192))
+            .addGap(0, 0, 0))
     );
 
     bottomPanel.add(bottomRightPanel);
@@ -1589,6 +1647,7 @@ public class CarArrivals extends javax.swing.JFrame {
     private javax.swing.JPanel arrivalListPanel;
     private javax.swing.JTextField arrivalTmTF;
     private javax.swing.JTable arrivalsList;
+    private javax.swing.JScrollPane arrivalsScroPan;
     private javax.swing.JPanel attendPanel;
     private javax.swing.JComboBox attendantCB;
     private javax.swing.JTextField attendantTF;
@@ -1608,7 +1667,9 @@ public class CarArrivals extends javax.swing.JFrame {
     private javax.swing.JPanel clearPanel;
     private javax.swing.JButton clearSearchPropertiesButton;
     private javax.swing.JButton closeButton;
-    private javax.swing.JPanel closePanel;
+    private javax.swing.JLabel countLbl;
+    private javax.swing.JPanel countPanel;
+    private javax.swing.JLabel countValue;
     private javax.swing.JPanel criteriaPanel;
     private javax.swing.Box.Filler filler1;
     private javax.swing.Box.Filler filler10;
@@ -1624,6 +1685,7 @@ public class CarArrivals extends javax.swing.JFrame {
     private javax.swing.Box.Filler filler2;
     private javax.swing.Box.Filler filler20;
     private javax.swing.Box.Filler filler21;
+    private javax.swing.Box.Filler filler23;
     private javax.swing.Box.Filler filler3;
     private javax.swing.Box.Filler filler4;
     private javax.swing.Box.Filler filler5;
@@ -1632,6 +1694,7 @@ public class CarArrivals extends javax.swing.JFrame {
     private javax.swing.Box.Filler filler8;
     private javax.swing.Box.Filler filler9;
     private javax.swing.Box.Filler filler_h10_18;
+    private javax.swing.Box.Filler filler_h10_19;
     private javax.swing.JPanel fixPanel;
     private javax.swing.JComboBox gateBarCB;
     private javax.swing.JComboBox gateCB;
@@ -1663,7 +1726,6 @@ public class CarArrivals extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
-    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel myMetaKeyLabel;
     private javax.swing.JRadioButton oneDayRadioButton;
     private javax.swing.JRadioButton oneHourRadioButton;
@@ -2275,6 +2337,8 @@ public class CarArrivals extends javax.swing.JFrame {
         setComponentSize(searchBottom, new Dimension(800, 90));
         
         setComponentSize(searchButton, new Dimension(buttonWidthNorm, bigButtonHeight));
+        setComponentSize(saveSheet_Button, new Dimension(CommonData.buttonWidthWide, buttonHeightNorm));
+        setComponentSize(closeButton, new Dimension(CommonData.buttonWidthNorm, buttonHeightNorm));
     }
 }
 

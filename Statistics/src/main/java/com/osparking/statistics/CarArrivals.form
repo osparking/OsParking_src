@@ -16,6 +16,9 @@
     <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
       <Connection code="new Dimension(normGUIwidth, normGUIheight)" type="code"/>
     </Property>
+    <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+      <Connection code="new Dimension(normGUIwidth, normGUIheight)" type="code"/>
+    </Property>
     <Property name="size" type="java.awt.Dimension" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
       <Connection code="new Dimension(normGUIwidth, normGUIheight)" type="code"/>
     </Property>
@@ -279,7 +282,7 @@
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" attributes="0">
                           <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
-                          <Component id="criteriaPanel" max="32767" attributes="0"/>
+                          <Component id="criteriaPanel" pref="811" max="32767" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="searchButtonPanel" min="-2" max="-2" attributes="0"/>
                           <EmptySpace min="-2" pref="2" max="-2" attributes="0"/>
@@ -318,8 +321,8 @@
                           <Group type="102" attributes="0">
                               <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="searchTop" max="32767" attributes="0"/>
-                                  <Component id="searchBottom" alignment="0" max="32767" attributes="0"/>
+                                  <Component id="searchTop" pref="811" max="32767" attributes="0"/>
+                                  <Component id="searchBottom" alignment="0" pref="811" max="32767" attributes="0"/>
                               </Group>
                               <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
                           </Group>
@@ -376,7 +379,7 @@
                                   <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
                                   <Component id="topVehicle" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
-                                  <Component id="topDriver" max="32767" attributes="0"/>
+                                  <Component id="topDriver" pref="290" max="32767" attributes="0"/>
                                   <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
                                   <Component id="filler18" max="32767" attributes="0"/>
                                   <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
@@ -717,7 +720,7 @@
                             <DimensionLayout dim="0">
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Group type="102" attributes="0">
-                                      <Component id="affiliPanel" pref="141" max="32767" attributes="0"/>
+                                      <Component id="affiliPanel" pref="151" max="32767" attributes="0"/>
                                       <EmptySpace min="-2" pref="0" max="-2" attributes="0"/>
                                       <Component id="filler19" min="-2" max="-2" attributes="0"/>
                                       <EmptySpace min="-2" pref="0" max="-2" attributes="0"/>
@@ -1465,17 +1468,24 @@
                 </Container>
               </SubComponents>
             </Container>
-            <Container class="javax.swing.JPanel" name="closePanel">
-              <Properties>
-                <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                  <Dimension value="[87, 32767]"/>
-                </Property>
-              </Properties>
-
-              <Layout class="org.netbeans.modules.form.compat2.layouts.DesignFlowLayout"/>
-            </Container>
           </SubComponents>
         </Container>
+        <Component class="javax.swing.Box$Filler" name="filler_h10_19">
+          <Properties>
+            <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+              <Dimension value="[32767, 10]"/>
+            </Property>
+            <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+              <Dimension value="[0, 10]"/>
+            </Property>
+            <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+              <Dimension value="[0, 10]"/>
+            </Property>
+          </Properties>
+          <AuxValues>
+            <AuxValue name="classDetails" type="java.lang.String" value="Box.Filler.VerticalStrut"/>
+          </AuxValues>
+        </Component>
         <Container class="javax.swing.JPanel" name="bottomPanel">
           <Properties>
             <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
@@ -2242,26 +2252,18 @@
               <Layout>
                 <DimensionLayout dim="0">
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="102" attributes="0">
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="arrivalListPanel" pref="338" max="32767" attributes="0"/>
-                              <Group type="102" attributes="0">
-                                  <EmptySpace min="-2" pref="84" max="-2" attributes="0"/>
-                                  <Component id="buttonPanel" pref="254" max="32767" attributes="0"/>
-                              </Group>
-                          </Group>
-                          <EmptySpace max="-2" attributes="0"/>
-                      </Group>
+                      <Component id="arrivalListPanel" pref="373" max="32767" attributes="0"/>
+                      <Component id="buttonPanel" alignment="0" max="32767" attributes="0"/>
                   </Group>
                 </DimensionLayout>
                 <DimensionLayout dim="1">
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="0" attributes="0">
-                          <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
-                          <Component id="arrivalListPanel" pref="248" max="32767" attributes="0"/>
-                          <EmptySpace min="-2" pref="41" max="-2" attributes="0"/>
+                          <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
+                          <Component id="arrivalListPanel" pref="262" max="32767" attributes="0"/>
+                          <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
                           <Component id="buttonPanel" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace min="-2" pref="192" max="-2" attributes="0"/>
+                          <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -2286,29 +2288,21 @@
                       <Group type="103" groupAlignment="0" attributes="0">
                           <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                           <Group type="103" rootIndex="1" groupAlignment="0" attributes="0">
-                              <Group type="102" attributes="0">
-                                  <EmptySpace min="0" pref="126" max="32767" attributes="0"/>
-                                  <Component id="jScrollPane1" min="-2" pref="135" max="-2" attributes="0"/>
-                                  <EmptySpace min="0" pref="126" max="32767" attributes="0"/>
-                              </Group>
+                              <Component id="arrivalsScroPan" alignment="0" pref="334" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                     </DimensionLayout>
                     <DimensionLayout dim="1">
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                          <EmptySpace min="0" pref="239" max="32767" attributes="0"/>
                           <Group type="103" rootIndex="1" groupAlignment="0" attributes="0">
-                              <Group type="102" attributes="0">
-                                  <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-                                  <Component id="jScrollPane1" min="-2" pref="304" max="-2" attributes="0"/>
-                                  <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-                              </Group>
+                              <Component id="arrivalsScroPan" alignment="0" pref="254" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                     </DimensionLayout>
                   </Layout>
                   <SubComponents>
-                    <Container class="javax.swing.JScrollPane" name="jScrollPane1">
+                    <Container class="javax.swing.JScrollPane" name="arrivalsScroPan">
                       <Properties>
                         <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                           <Dimension value="[23, 27]"/>
@@ -2340,8 +2334,122 @@
                 </Container>
                 <Container class="javax.swing.JPanel" name="buttonPanel">
 
-                  <Layout class="org.netbeans.modules.form.compat2.layouts.DesignBoxLayout"/>
+                  <Layout>
+                    <DimensionLayout dim="0">
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="102" attributes="0">
+                              <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
+                              <Component id="countPanel" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
+                              <Component id="filler23" max="32767" attributes="0"/>
+                              <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
+                              <Component id="saveSheet_Button" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
+                              <Component id="closeButton" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
+                          </Group>
+                      </Group>
+                    </DimensionLayout>
+                    <DimensionLayout dim="1">
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="102" attributes="0">
+                              <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
+                              <Component id="countPanel" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <Group type="102" attributes="0">
+                              <EmptySpace min="25" pref="25" max="-2" attributes="0"/>
+                              <Component id="filler23" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <Group type="102" attributes="0">
+                              <EmptySpace min="5" pref="5" max="-2" attributes="0"/>
+                              <Component id="saveSheet_Button" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <Group type="102" attributes="0">
+                              <EmptySpace min="5" pref="5" max="-2" attributes="0"/>
+                              <Component id="closeButton" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                      </Group>
+                    </DimensionLayout>
+                  </Layout>
                   <SubComponents>
+                    <Container class="javax.swing.JPanel" name="countPanel">
+                      <Properties>
+                        <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                          <Dimension value="[100, 25]"/>
+                        </Property>
+                        <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                          <Dimension value="[100, 25]"/>
+                        </Property>
+                      </Properties>
+
+                      <Layout>
+                        <DimensionLayout dim="0">
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Group type="102" alignment="0" attributes="0">
+                                  <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
+                                  <Component id="countLbl" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
+                                  <Component id="countValue" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace max="32767" attributes="0"/>
+                              </Group>
+                          </Group>
+                        </DimensionLayout>
+                        <DimensionLayout dim="1">
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Group type="102" alignment="0" attributes="0">
+                                  <Group type="103" groupAlignment="3" attributes="0">
+                                      <Component id="countValue" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="countLbl" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                                  <EmptySpace max="-2" attributes="0"/>
+                              </Group>
+                          </Group>
+                        </DimensionLayout>
+                      </Layout>
+                      <SubComponents>
+                        <Component class="javax.swing.JLabel" name="countLbl">
+                          <Properties>
+                            <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                              <Connection code="new java.awt.Font(font_Type, font_Style, font_Size)" type="code"/>
+                            </Property>
+                            <Property name="horizontalAlignment" type="int" value="2"/>
+                            <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor" postCode="JLabel tempLabel = new JLabel(COUNT_LABEL.getContent());&#xa;tempLabel.setFont(countLbl.getFont());&#xa;Dimension dim = tempLabel.getPreferredSize();">
+                              <Connection code="COUNT_LABEL.getContent()" type="code"/>
+                            </Property>
+                            <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                              <Dimension value="[110, 27]"/>
+                            </Property>
+                            <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                              <Dimension value="[90, 27]"/>
+                            </Property>
+                            <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                              <Connection code="new Dimension(dim.width + 1, dim.height)" type="code"/>
+                            </Property>
+                          </Properties>
+                        </Component>
+                        <Component class="javax.swing.JLabel" name="countValue">
+                          <Properties>
+                            <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                              <Connection code="new java.awt.Font(font_Type, font_Style, font_Size)" type="code"/>
+                            </Property>
+                            <Property name="text" type="java.lang.String" value="count"/>
+                          </Properties>
+                          <AuxValues>
+                            <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="countValue.setForeground(pointColor);"/>
+                          </AuxValues>
+                        </Component>
+                      </SubComponents>
+                    </Container>
+                    <Component class="javax.swing.Box$Filler" name="filler23">
+                      <Properties>
+                        <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                          <Dimension value="[32767, 0]"/>
+                        </Property>
+                      </Properties>
+                      <AuxValues>
+                        <AuxValue name="classDetails" type="java.lang.String" value="Box.Filler.HorizontalGlue"/>
+                      </AuxValues>
+                    </Component>
                     <Component class="javax.swing.JButton" name="saveSheet_Button">
                       <Properties>
                         <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
@@ -2353,14 +2461,14 @@
                         <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
                           <Insets value="[0, 0, 0, 0]"/>
                         </Property>
-                        <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                          <Connection code="new Dimension(CommonData.buttonWidthWide, buttonHeightNorm)" type="code"/>
+                        <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                          <Dimension value="[110, 40]"/>
                         </Property>
-                        <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                          <Connection code="new Dimension(CommonData.buttonWidthWide, buttonHeightNorm)" type="code"/>
+                        <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                          <Dimension value="[110, 40]"/>
                         </Property>
-                        <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                          <Connection code="new Dimension(CommonData.buttonWidthWide, buttonHeightNorm)" type="code"/>
+                        <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                          <Dimension value="[110, 40]"/>
                         </Property>
                       </Properties>
                       <Events>
@@ -2377,13 +2485,13 @@
                           <Connection code="CLOSE_BTN.getContent()" type="code"/>
                         </Property>
                         <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                          <Dimension value="[77, 52]"/>
+                          <Dimension value="[90, 40]"/>
                         </Property>
                         <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                          <Dimension value="[77, 52]"/>
+                          <Dimension value="[90, 40]"/>
                         </Property>
                         <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                          <Dimension value="[85, 52]"/>
+                          <Dimension value="[90, 40]"/>
                         </Property>
                       </Properties>
                       <Events>
