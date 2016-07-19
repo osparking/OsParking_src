@@ -57,7 +57,7 @@ public class ControlEnums {
         VEHICLESFORM_FRAME_TITLE("차량 등록 관리", "Vehicle Registration"),
         DRIVER_SELECTION_FRAME_TITLE("운전자 선택", "Select Driver"),
         DRIVER_LIST_FRAME_TITLE("운전자 목록", "Driver List"),
-        CAR_ARRIVALS_FRAME_TITLE("도착 목록", "Arrival Records"),
+        CAR_ARRIVALS_FRAME_TITLE("차량 도착 목록", "Vehicle Arrival List"),
         SEARCH_CRITERIA_PANEL_TITLE("검색 기준", "Search Criteria"),
         SEARCH_RESULT_TITLE("검색 결과", "Search Result"),
         ARRIVAL_PROPERTIES_PANEL_TITLE("도착 속성", "Arrival Properties"),

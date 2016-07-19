@@ -44,6 +44,9 @@ public class CommonData {
     public static final int DTCW_L2 = 110;
     public static final int DTCW_BN = 110;
     public static final int DTCW_UN = 110;
+    public static final int CABW_NORM = 90; // Car Arrival Box Width Normal
+    public static final int CABW_WIDE = 120; // Car Arrival Box Width Wide
+    public static final int CABH_NORM = 28; // Car Arrival Box Height Normal
         
     static int count = 0;
     

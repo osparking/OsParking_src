@@ -16,8 +16,13 @@
  */
 package com.osparking.statistics;
 
+import com.osparking.global.CommonData;
+import static com.osparking.global.CommonData.bigButtonHeight;
+import static com.osparking.global.CommonData.buttonHeightNorm;
+import static com.osparking.global.CommonData.buttonWidthNorm;
 import static com.osparking.global.CommonData.normGUIheight;
 import static com.osparking.global.CommonData.normGUIwidth;
+import static com.osparking.global.CommonData.tipColor;
 import java.awt.Component;
 import java.awt.image.BufferedImage;
 import javax.swing.JLabel;
@@ -55,6 +60,7 @@ import static com.osparking.global.names.ControlEnums.LabelContent.RECORD_COUNT_
 import static com.osparking.global.names.ControlEnums.LabelContent.REGISTERED_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.ROOM_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.VISIT_PURPOSE_LABEL;
+import static com.osparking.global.names.ControlEnums.MenuITemTypes.META_KEY_LABEL;
 import static com.osparking.global.names.ControlEnums.TitleTypes.*;
 import static com.osparking.global.names.ControlEnums.TableTypes.ARRIVAL_TIME_HEADER;
 import static com.osparking.global.names.ControlEnums.TableTypes.CAR_TAG_HEADER;
@@ -84,9 +90,9 @@ import static com.osparking.global.names.OSP_enums.DriverCol.BuildingNo;
 import static com.osparking.global.names.OSP_enums.DriverCol.UnitNo;
 import com.osparking.global.names.PComboBox;
 import com.osparking.global.names.OSP_enums.SearchPeriod;
-import static com.osparking.vehicle.CommonData.DTCW_BN;
-import static com.osparking.vehicle.CommonData.DTCW_L1;
-import static com.osparking.vehicle.CommonData.DTC_MARGIN;
+import static com.osparking.vehicle.CommonData.CABH_NORM;
+import static com.osparking.vehicle.CommonData.CABW_NORM;
+import static com.osparking.vehicle.CommonData.CABW_WIDE;
 import static com.osparking.vehicle.driver.ManageDrivers.mayPropagateBackward;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
@@ -170,48 +176,65 @@ public class CarArrivals extends javax.swing.JFrame {
 
         periodOptionGroup = new javax.swing.ButtonGroup();
         affiliationGroup = new javax.swing.ButtonGroup();
+        wholeTop = new javax.swing.JPanel();
+        wholeEast = new javax.swing.JPanel();
         wholePanel = new javax.swing.JPanel();
+        titlePanel = new javax.swing.JPanel();
+        seeLicenseButton = new javax.swing.JButton();
+        filler16 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
+        titleLabel = new javax.swing.JLabel();
+        filler17 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
+        myMetaKeyLabel = new javax.swing.JLabel();
+        filler_h10_18 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 10), new java.awt.Dimension(0, 10), new java.awt.Dimension(32767, 10));
         topPanel = new javax.swing.JPanel();
         searchPanel = new javax.swing.JPanel();
         criteriaPanel = new javax.swing.JPanel();
         searchTop = new javax.swing.JPanel();
-        gatePanel = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        gateCB = new javax.swing.JComboBox();
+        topVehicle = new javax.swing.JPanel();
         carTagPanel = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         carTagTF = new javax.swing.JTextField();
+        carPlus = new javax.swing.JPanel();
+        gatePanel = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        gateCB = new javax.swing.JComboBox();
         attendPanel = new javax.swing.JPanel();
         jLabel15 = new javax.swing.JLabel();
         attendantCB = new javax.swing.JComboBox();
         barOptnPanel = new javax.swing.JPanel();
         jLabel20 = new javax.swing.JLabel();
         gateBarCB = new javax.swing.JComboBox();
-        affiliationBuildingPanel = new javax.swing.JPanel();
+        topDriver = new javax.swing.JPanel();
         affiliPanel = new javax.swing.JPanel();
         affiliationRadioButton = new javax.swing.JRadioButton();
         searchL1ComboBox = new PComboBox();
         searchL2ComboBox = new PComboBox<InnoComboBoxItem>();
+        filler19 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 32767));
         buildingPanel = new javax.swing.JPanel();
         buildingRadioButton = new javax.swing.JRadioButton();
         searchBuildingComboBox = new PComboBox();
         searchUnitComboBox = new PComboBox();
+        filler18 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
+        clearPanel = new javax.swing.JPanel();
         clearSearchPropertiesButton = new javax.swing.JButton();
         searchBottom = new javax.swing.JPanel();
+        filler21 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 32767));
         oneHourRadioButton = new javax.swing.JRadioButton();
         filler3 = new javax.swing.Box.Filler(new java.awt.Dimension(5, 0), new java.awt.Dimension(5, 0), new java.awt.Dimension(32767, 0));
         oneDayRadioButton = new javax.swing.JRadioButton();
         filler4 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(5, 0), new java.awt.Dimension(32767, 0));
         periodRadioButton = new javax.swing.JRadioButton();
         filler5 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(5, 0), new java.awt.Dimension(32767, 0));
-        jLabel9 = new javax.swing.JLabel();
-        filler6 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(5, 0), new java.awt.Dimension(32767, 0));
-        setSearchPeriodOptionButton = new javax.swing.JButton();
         BeginDateChooser = new com.toedter.calendar.JDateChooser();
+        jLabel9 = new javax.swing.JLabel();
         EndDateChooser = new com.toedter.calendar.JDateChooser();
+        filler20 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
+        filler6 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 32767));
+        fixPanel = new javax.swing.JPanel();
+        setSearchPeriodOptionButton = new javax.swing.JButton();
+        searchButtonPanel = new javax.swing.JPanel();
         searchButton = new javax.swing.JButton();
         closePanel = new javax.swing.JPanel();
-        closeButton = new javax.swing.JButton();
         bottomPanel = new javax.swing.JPanel();
         bottomLeftPanel = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
@@ -261,41 +284,154 @@ public class CarArrivals extends javax.swing.JFrame {
         jPanel7 = new javax.swing.JPanel();
         imageLabel = new javax.swing.JLabel();
         bottomRightPanel = new javax.swing.JPanel();
+        arrivalListPanel = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         arrivalsList = new javax.swing.JTable();
+        buttonPanel = new javax.swing.JPanel();
+        saveSheet_Button = new javax.swing.JButton();
+        closeButton = new javax.swing.JButton();
+        wholeBottom = new javax.swing.JPanel();
+        wholeWest = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle(CAR_ARRIVALS_FRAME_TITLE.getContent());
         setFocusCycleRoot(false);
         setMinimumSize(new Dimension(normGUIwidth, normGUIheight));
-        setPreferredSize(new Dimension(normGUIwidth, normGUIheight));
+        setSize(new Dimension(normGUIwidth, normGUIheight));
+
+        wholeTop.setMaximumSize(new java.awt.Dimension(32767, 40));
+        wholeTop.setMinimumSize(new java.awt.Dimension(0, 40));
+        wholeTop.setPreferredSize(new java.awt.Dimension(0, 40));
+
+        javax.swing.GroupLayout wholeTopLayout = new javax.swing.GroupLayout(wholeTop);
+        wholeTop.setLayout(wholeTopLayout);
+        wholeTopLayout.setHorizontalGroup(
+            wholeTopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        wholeTopLayout.setVerticalGroup(
+            wholeTopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 40, Short.MAX_VALUE)
+        );
+
+        getContentPane().add(wholeTop, java.awt.BorderLayout.NORTH);
+
+        wholeEast.setMaximumSize(new java.awt.Dimension(40, 32767));
+        wholeEast.setMinimumSize(new java.awt.Dimension(40, 0));
+        wholeEast.setPreferredSize(new java.awt.Dimension(40, 0));
+
+        javax.swing.GroupLayout wholeEastLayout = new javax.swing.GroupLayout(wholeEast);
+        wholeEast.setLayout(wholeEastLayout);
+        wholeEastLayout.setHorizontalGroup(
+            wholeEastLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        wholeEastLayout.setVerticalGroup(
+            wholeEastLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+
+        getContentPane().add(wholeEast, java.awt.BorderLayout.EAST);
 
         wholePanel.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 3, 3, 3));
         wholePanel.setLayout(new javax.swing.BoxLayout(wholePanel, javax.swing.BoxLayout.PAGE_AXIS));
 
-        topPanel.setMaximumSize(new java.awt.Dimension(2147483647, 210));
-        topPanel.setPreferredSize(new java.awt.Dimension(910, 280));
+        titlePanel.setMaximumSize(new java.awt.Dimension(2147483647, 40));
+        titlePanel.setMinimumSize(new java.awt.Dimension(110, 40));
+        titlePanel.setPreferredSize(new java.awt.Dimension(210, 40));
+        titlePanel.setLayout(new javax.swing.BoxLayout(titlePanel, javax.swing.BoxLayout.LINE_AXIS));
+
+        seeLicenseButton.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        seeLicenseButton.setText("About");
+        seeLicenseButton.setMargin(new java.awt.Insets(2, 0, 2, 0));
+        seeLicenseButton.setMaximumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
+        seeLicenseButton.setMinimumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
+        seeLicenseButton.setPreferredSize(new java.awt.Dimension(90, 40));
+        seeLicenseButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                seeLicenseButtonActionPerformed(evt);
+            }
+        });
+        titlePanel.add(seeLicenseButton);
+        titlePanel.add(filler16);
+
+        titleLabel.setFont(new java.awt.Font(font_Type, font_Style, head_font_Size));
+        titleLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        titleLabel.setText(CAR_ARRIVALS_FRAME_TITLE.getContent());
+        titleLabel.setMaximumSize(new java.awt.Dimension(200, 28));
+        titleLabel.setMinimumSize(new java.awt.Dimension(200, 28));
+        titleLabel.setPreferredSize(new java.awt.Dimension(200, 28));
+        titlePanel.add(titleLabel);
+        titlePanel.add(filler17);
+
+        myMetaKeyLabel.setText(META_KEY_LABEL.getContent());
+        myMetaKeyLabel.setMaximumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
+        myMetaKeyLabel.setMinimumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
+        myMetaKeyLabel.setPreferredSize(new java.awt.Dimension(90, 40));
+        myMetaKeyLabel.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        myMetaKeyLabel.setForeground(tipColor);
+        titlePanel.add(myMetaKeyLabel);
+
+        wholePanel.add(titlePanel);
+        wholePanel.add(filler_h10_18);
+
+        topPanel.setMaximumSize(new java.awt.Dimension(2147483647, 270));
+        topPanel.setMinimumSize(new java.awt.Dimension(810, 290));
+        topPanel.setPreferredSize(new java.awt.Dimension(0, 290));
+        topPanel.setLayout(new javax.swing.BoxLayout(topPanel, javax.swing.BoxLayout.LINE_AXIS));
 
         searchPanel.setBackground(new java.awt.Color(243, 243, 243));
         searchPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, SEARCH_CRITERIA_PANEL_TITLE.getContent(), javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font(font_Type, font_Style, font_Size)));
         searchPanel.setAlignmentX(0.0F);
-        searchPanel.setMinimumSize(new java.awt.Dimension(800, 113));
-        searchPanel.setPreferredSize(new java.awt.Dimension(900, 400));
+        searchPanel.setMinimumSize(new java.awt.Dimension(800, 280));
+        searchPanel.setPreferredSize(new java.awt.Dimension(900, 280));
 
-        criteriaPanel.setMinimumSize(new java.awt.Dimension(800, 80));
-        criteriaPanel.setPreferredSize(new java.awt.Dimension(882, 230));
+        criteriaPanel.setBackground(new java.awt.Color(243, 243, 243));
+        criteriaPanel.setMinimumSize(new java.awt.Dimension(800, 255));
+        criteriaPanel.setPreferredSize(new java.awt.Dimension(800, 255));
 
         searchTop.setBackground(new java.awt.Color(243, 243, 243));
         searchTop.setBorder(javax.swing.BorderFactory.createTitledBorder(null, ARRIVAL_PROPERTIES_PANEL_TITLE.getContent(), javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font(font_Type, font_Style, font_Size)));
         searchTop.setForeground(new java.awt.Color(255, 255, 255));
         searchTop.setAlignmentX(0.0F);
         searchTop.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        searchTop.setMaximumSize(new java.awt.Dimension(32767, 120));
-        searchTop.setMinimumSize(new java.awt.Dimension(800, 70));
-        searchTop.setPreferredSize(new java.awt.Dimension(880, 120));
+        searchTop.setMaximumSize(new java.awt.Dimension(32767, 145));
+        searchTop.setMinimumSize(new java.awt.Dimension(800, 145));
+        searchTop.setPreferredSize(new java.awt.Dimension(800, 145));
+
+        topVehicle.setMinimumSize(new java.awt.Dimension(340, 94));
+        topVehicle.setPreferredSize(new java.awt.Dimension(340, 94));
+        topVehicle.setLayout(new javax.swing.BoxLayout(topVehicle, javax.swing.BoxLayout.Y_AXIS));
+
+        carTagPanel.setBackground(new java.awt.Color(243, 243, 243));
+        carTagPanel.setPreferredSize(new java.awt.Dimension(122, 39));
+        carTagPanel.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 5, 0));
+
+        jLabel2.setBackground(new java.awt.Color(243, 243, 243));
+        jLabel2.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel2.setLabelFor(carTagTF);
+        jLabel2.setText(CAR_TAG_LABEL.getContent());
+        jLabel2.setMaximumSize(new java.awt.Dimension(32767, 32767));
+        carTagPanel.add(jLabel2);
+
+        carTagTF.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        carTagTF.setToolTipText(CAR_TAG_TF_TOOLTIP.getContent());
+        carTagTF.setMaximumSize(new java.awt.Dimension(32767, 32767));
+        carTagTF.setMinimumSize(new java.awt.Dimension(110, 28));
+        carTagTF.setPreferredSize(new java.awt.Dimension(110, 28));
+        carTagPanel.add(carTagTF);
+
+        topVehicle.add(carTagPanel);
+
+        carPlus.setBackground(new java.awt.Color(243, 243, 243));
+        carPlus.setMinimumSize(new java.awt.Dimension(340, 50));
+        carPlus.setPreferredSize(new java.awt.Dimension(320, 55));
+        carPlus.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 10, 0));
 
         gatePanel.setBackground(new java.awt.Color(243, 243, 243));
-        gatePanel.setPreferredSize(new java.awt.Dimension(82, 39));
+        gatePanel.setMinimumSize(new Dimension(CABW_NORM, CABH_NORM));
+        gatePanel.setPreferredSize(new java.awt.Dimension(82, 50));
         gatePanel.setLayout(new java.awt.BorderLayout());
 
         jLabel1.setBackground(new java.awt.Color(243, 243, 243));
@@ -304,34 +440,19 @@ public class CarArrivals extends javax.swing.JFrame {
         jLabel1.setLabelFor(gateCB);
         jLabel1.setText(GATE_NAME_LABEL.getContent());
         jLabel1.setMaximumSize(new java.awt.Dimension(32767, 32767));
-        gatePanel.add(jLabel1, java.awt.BorderLayout.CENTER);
+        jLabel1.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
+        gatePanel.add(jLabel1, java.awt.BorderLayout.NORTH);
 
         gateCB.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         gateCB.setModel(new javax.swing.DefaultComboBoxModel(new String[] {}));
-        gateCB.setPreferredSize(new java.awt.Dimension(82, 23));
-        gatePanel.add(gateCB, java.awt.BorderLayout.PAGE_END);
+        gateCB.setMinimumSize(new Dimension(CABW_NORM, CABH_NORM));
+        gateCB.setPreferredSize(new Dimension(CABW_NORM, CABH_NORM));
+        gatePanel.add(gateCB, java.awt.BorderLayout.CENTER);
 
-        carTagPanel.setBackground(new java.awt.Color(243, 243, 243));
-        carTagPanel.setPreferredSize(new java.awt.Dimension(122, 39));
-        carTagPanel.setLayout(new java.awt.BorderLayout());
-
-        jLabel2.setBackground(new java.awt.Color(243, 243, 243));
-        jLabel2.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel2.setLabelFor(carTagTF);
-        jLabel2.setText(CAR_TAG_LABEL.getContent());
-        jLabel2.setMaximumSize(new java.awt.Dimension(32767, 32767));
-        carTagPanel.add(jLabel2, java.awt.BorderLayout.CENTER);
-
-        carTagTF.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        carTagTF.setToolTipText(CAR_TAG_TF_TOOLTIP.getContent());
-        carTagTF.setMaximumSize(new java.awt.Dimension(32767, 32767));
-        carTagTF.setMinimumSize(new Dimension(DTCW_BN - DTC_MARGIN, 28));
-        carTagTF.setPreferredSize(new Dimension(DTCW_BN - DTC_MARGIN, 28));
-        carTagPanel.add(carTagTF, java.awt.BorderLayout.PAGE_END);
+        carPlus.add(gatePanel);
 
         attendPanel.setBackground(new java.awt.Color(243, 243, 243));
-        attendPanel.setPreferredSize(new java.awt.Dimension(122, 39));
+        attendPanel.setPreferredSize(new java.awt.Dimension(122, 50));
         attendPanel.setLayout(new java.awt.BorderLayout());
 
         jLabel15.setBackground(new java.awt.Color(243, 243, 243));
@@ -340,14 +461,15 @@ public class CarArrivals extends javax.swing.JFrame {
         jLabel15.setLabelFor(attendantCB);
         jLabel15.setText(ATTENDANT_LABEL.getContent());
         jLabel15.setMaximumSize(new java.awt.Dimension(32767, 32767));
-        attendPanel.add(jLabel15, java.awt.BorderLayout.CENTER);
+        jLabel15.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
+        attendPanel.add(jLabel15, java.awt.BorderLayout.NORTH);
 
         attendantCB.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         attendantCB.setModel(new javax.swing.DefaultComboBoxModel(new Object[] {
             new ConvComboBoxItem("", ATTENDANT_CB_ITEM.getContent())
         }));
-        attendantCB.setMinimumSize(new Dimension(DTCW_BN - DTC_MARGIN, 28));
-        attendantCB.setPreferredSize(new Dimension(DTCW_BN - DTC_MARGIN, 28));
+        attendantCB.setMinimumSize(new Dimension(CABW_WIDE, CABH_NORM));
+        attendantCB.setPreferredSize(new Dimension(CABW_WIDE, CABH_NORM));
         attendantCB.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
             public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
             }
@@ -357,37 +479,43 @@ public class CarArrivals extends javax.swing.JFrame {
                 attendantCBPopupMenuWillBecomeVisible(evt);
             }
         });
-        attendPanel.add(attendantCB, java.awt.BorderLayout.PAGE_END);
+        attendPanel.add(attendantCB, java.awt.BorderLayout.CENTER);
+
+        carPlus.add(attendPanel);
 
         barOptnPanel.setBackground(new java.awt.Color(243, 243, 243));
-        barOptnPanel.setPreferredSize(new java.awt.Dimension(130, 39));
-        barOptnPanel.setLayout(new java.awt.BorderLayout());
+        barOptnPanel.setMinimumSize(new Dimension(CABW_NORM, CABH_NORM));
+        barOptnPanel.setPreferredSize(new java.awt.Dimension(90, 50));
+        barOptnPanel.setLayout(new java.awt.BorderLayout(10, 0));
 
         jLabel20.setBackground(new java.awt.Color(243, 243, 243));
         jLabel20.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         jLabel20.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel20.setText(BAR_OP_LABEL.getContent());
         jLabel20.setMaximumSize(new java.awt.Dimension(32767, 32767));
-        barOptnPanel.add(jLabel20, java.awt.BorderLayout.CENTER);
+        jLabel20.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
+        barOptnPanel.add(jLabel20, java.awt.BorderLayout.NORTH);
 
         gateBarCB.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         gateBarCB.setModel(new javax.swing.DefaultComboBoxModel(new String[] {}));
-        gateBarCB.setMinimumSize(new Dimension(DTCW_BN - DTC_MARGIN, 28));
-        gateBarCB.setPreferredSize(new Dimension(DTCW_BN - DTC_MARGIN, 28));
-        barOptnPanel.add(gateBarCB, java.awt.BorderLayout.PAGE_END);
+        gateBarCB.setMinimumSize(new Dimension(CABW_NORM, CABH_NORM));
+        gateBarCB.setPreferredSize(new Dimension(CABW_NORM, CABH_NORM));
+        barOptnPanel.add(gateBarCB, java.awt.BorderLayout.CENTER);
 
-        affiliationBuildingPanel.setBackground(new java.awt.Color(243, 243, 243));
-        affiliationBuildingPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        affiliationBuildingPanel.setDoubleBuffered(false);
-        affiliationBuildingPanel.setMaximumSize(new java.awt.Dimension(1000, 71));
-        affiliationBuildingPanel.setMinimumSize(new java.awt.Dimension(300, 71));
-        affiliationBuildingPanel.setPreferredSize(new java.awt.Dimension(300, 71));
+        carPlus.add(barOptnPanel);
+
+        topVehicle.add(carPlus);
+
+        topDriver.setBackground(new java.awt.Color(243, 243, 243));
+        topDriver.setDoubleBuffered(false);
+        topDriver.setMaximumSize(new java.awt.Dimension(1000, 120));
+        topDriver.setMinimumSize(new java.awt.Dimension(280, 94));
+        topDriver.setPreferredSize(new java.awt.Dimension(280, 94));
 
         affiliPanel.setBackground(new java.awt.Color(243, 243, 243));
-        affiliPanel.setMinimumSize(new java.awt.Dimension(150, 69));
-        affiliPanel.setPreferredSize(new java.awt.Dimension(150, 69));
+        affiliPanel.setMinimumSize(new java.awt.Dimension(120, 94));
+        affiliPanel.setPreferredSize(new java.awt.Dimension(120, 94));
         affiliPanel.setRequestFocusEnabled(false);
-        affiliPanel.setLayout(new javax.swing.BoxLayout(affiliPanel, javax.swing.BoxLayout.Y_AXIS));
 
         affiliationRadioButton.setBackground(new java.awt.Color(243, 243, 243));
         affiliationGroup.add(affiliationRadioButton);
@@ -404,12 +532,11 @@ public class CarArrivals extends javax.swing.JFrame {
                 affiliationRadioButtonActionPerformed(evt);
             }
         });
-        affiliPanel.add(affiliationRadioButton);
 
         searchL1ComboBox.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         searchL1ComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[]{}));
-        searchL1ComboBox.setMinimumSize(new Dimension(DTCW_L1 - DTC_MARGIN, 28));
-        searchL1ComboBox.setPreferredSize(new Dimension(DTCW_L1 - DTC_MARGIN, 28));
+        searchL1ComboBox.setMinimumSize(new Dimension(CABW_WIDE, CABH_NORM));
+        searchL1ComboBox.setPreferredSize(new Dimension(CABW_WIDE, CABH_NORM));
         searchL1ComboBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 searchL1ComboBoxActionPerformed(evt);
@@ -420,12 +547,11 @@ public class CarArrivals extends javax.swing.JFrame {
                 searchL1ComboBoxActionPerformed(evt);
             }
         });
-        affiliPanel.add(searchL1ComboBox);
 
         searchL2ComboBox.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         searchL2ComboBox.setModel(    new javax.swing.DefaultComboBoxModel(new String[]{}));
-        searchL2ComboBox.setMinimumSize(new java.awt.Dimension(100, 23));
-        searchL2ComboBox.setPreferredSize(new java.awt.Dimension(100, 23));
+        searchL2ComboBox.setMinimumSize(new Dimension(CABW_WIDE, CABH_NORM));
+        searchL2ComboBox.setPreferredSize(new Dimension(CABW_WIDE, CABH_NORM));
         searchL2ComboBox.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
             public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
             }
@@ -441,10 +567,31 @@ public class CarArrivals extends javax.swing.JFrame {
                 searchL2ComboBoxActionPerformed(evt);
             }
         });
-        affiliPanel.add(searchL2ComboBox);
+
+        javax.swing.GroupLayout affiliPanelLayout = new javax.swing.GroupLayout(affiliPanel);
+        affiliPanel.setLayout(affiliPanelLayout);
+        affiliPanelLayout.setHorizontalGroup(
+            affiliPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(affiliationRadioButton, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(affiliPanelLayout.createSequentialGroup()
+                .addGroup(affiliPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(searchL1ComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(searchL2ComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(5, 5, 5))
+        );
+        affiliPanelLayout.setVerticalGroup(
+            affiliPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(affiliPanelLayout.createSequentialGroup()
+                .addComponent(affiliationRadioButton, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, 0)
+                .addComponent(searchL1ComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, 0)
+                .addComponent(searchL2ComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
 
         buildingPanel.setBackground(new java.awt.Color(243, 243, 243));
-        buildingPanel.setLayout(new javax.swing.BoxLayout(buildingPanel, javax.swing.BoxLayout.PAGE_AXIS));
+        buildingPanel.setMinimumSize(new java.awt.Dimension(120, 94));
+        buildingPanel.setPreferredSize(new java.awt.Dimension(120, 94));
 
         buildingRadioButton.setBackground(new java.awt.Color(243, 243, 243));
         affiliationGroup.add(buildingRadioButton);
@@ -461,25 +608,23 @@ public class CarArrivals extends javax.swing.JFrame {
                 buildingRadioButtonActionPerformed(evt);
             }
         });
-        buildingPanel.add(buildingRadioButton);
 
         searchBuildingComboBox.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         searchBuildingComboBox.setModel(
             new javax.swing.DefaultComboBoxModel(new String[]{}));
-        searchBuildingComboBox.setMinimumSize(new Dimension(DTCW_BN - DTC_MARGIN - 30, 28));
-        searchBuildingComboBox.setPreferredSize(new Dimension(DTCW_BN - DTC_MARGIN - 30, 28));
+        searchBuildingComboBox.setMinimumSize(new Dimension(CABW_NORM, CABH_NORM));
+        searchBuildingComboBox.setPreferredSize(new Dimension(CABW_NORM, CABH_NORM));
         searchBuildingComboBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 searchBuildingComboBoxActionPerformed(evt);
             }
         });
-        buildingPanel.add(searchBuildingComboBox);
 
         searchUnitComboBox.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         searchUnitComboBox.setModel(
             new javax.swing.DefaultComboBoxModel(new String[]{}));
-        searchUnitComboBox.setMinimumSize(new Dimension(DTCW_BN - DTC_MARGIN - 30, 28));
-        searchUnitComboBox.setPreferredSize(new Dimension(DTCW_BN - DTC_MARGIN - 30, 28));
+        searchUnitComboBox.setMinimumSize(new Dimension(CABW_NORM, CABH_NORM));
+        searchUnitComboBox.setPreferredSize(new Dimension(CABW_NORM, CABH_NORM));
         searchUnitComboBox.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
             public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
             }
@@ -495,86 +640,106 @@ public class CarArrivals extends javax.swing.JFrame {
                 searchUnitComboBoxActionPerformed(evt);
             }
         });
-        buildingPanel.add(searchUnitComboBox);
 
-        javax.swing.GroupLayout affiliationBuildingPanelLayout = new javax.swing.GroupLayout(affiliationBuildingPanel);
-        affiliationBuildingPanel.setLayout(affiliationBuildingPanelLayout);
-        affiliationBuildingPanelLayout.setHorizontalGroup(
-            affiliationBuildingPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(affiliationBuildingPanelLayout.createSequentialGroup()
-                .addComponent(affiliPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(8, 8, 8)
-                .addComponent(buildingPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 125, Short.MAX_VALUE))
+        javax.swing.GroupLayout buildingPanelLayout = new javax.swing.GroupLayout(buildingPanel);
+        buildingPanel.setLayout(buildingPanelLayout);
+        buildingPanelLayout.setHorizontalGroup(
+            buildingPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(buildingRadioButton, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(searchBuildingComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(searchUnitComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
-        affiliationBuildingPanelLayout.setVerticalGroup(
-            affiliationBuildingPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(affiliPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-            .addComponent(buildingPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+        buildingPanelLayout.setVerticalGroup(
+            buildingPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(buildingPanelLayout.createSequentialGroup()
+                .addComponent(buildingRadioButton, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, 0)
+                .addComponent(searchBuildingComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, 0)
+                .addComponent(searchUnitComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
+
+        javax.swing.GroupLayout topDriverLayout = new javax.swing.GroupLayout(topDriver);
+        topDriver.setLayout(topDriverLayout);
+        topDriverLayout.setHorizontalGroup(
+            topDriverLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(topDriverLayout.createSequentialGroup()
+                .addComponent(affiliPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 141, Short.MAX_VALUE)
+                .addGap(0, 0, 0)
+                .addComponent(filler19, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, 0)
+                .addComponent(buildingPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+        topDriverLayout.setVerticalGroup(
+            topDriverLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(affiliPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(filler19, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(buildingPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
+        );
+
+        clearPanel.setBackground(new java.awt.Color(243, 243, 243));
+        clearPanel.setMaximumSize(new java.awt.Dimension(111, 120));
+        clearPanel.setMinimumSize(new java.awt.Dimension(100, 94));
+        clearPanel.setPreferredSize(new java.awt.Dimension(100, 94));
+        clearPanel.setLayout(new javax.swing.BoxLayout(clearPanel, javax.swing.BoxLayout.LINE_AXIS));
 
         clearSearchPropertiesButton.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         clearSearchPropertiesButton.setMnemonic('l');
         clearSearchPropertiesButton.setText(CLEAR_BTN.getContent());
         clearSearchPropertiesButton.setToolTipText(CLEAR_BTN_TOOLTIP.getContent());
+        clearSearchPropertiesButton.setMaximumSize(new java.awt.Dimension(100, 35));
+        clearSearchPropertiesButton.setMinimumSize(new java.awt.Dimension(100, 35));
         clearSearchPropertiesButton.setPreferredSize(new java.awt.Dimension(100, 35));
         clearSearchPropertiesButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 clearSearchPropertiesButtonActionPerformed(evt);
             }
         });
+        clearPanel.add(clearSearchPropertiesButton);
 
         javax.swing.GroupLayout searchTopLayout = new javax.swing.GroupLayout(searchTop);
         searchTop.setLayout(searchTopLayout);
         searchTopLayout.setHorizontalGroup(
             searchTopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(searchTopLayout.createSequentialGroup()
-                .addGap(10, 10, 10)
-                .addComponent(gatePanel, javax.swing.GroupLayout.DEFAULT_SIZE, 76, Short.MAX_VALUE)
+                .addGap(26, 26, 26)
+                .addComponent(topVehicle, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(5, 5, 5)
-                .addComponent(carTagPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(topDriver, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGap(5, 5, 5)
-                .addComponent(attendPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 78, Short.MAX_VALUE)
+                .addComponent(filler18, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGap(5, 5, 5)
-                .addComponent(barOptnPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(5, 5, 5)
-                .addComponent(affiliationBuildingPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(5, 5, 5)
-                .addComponent(clearSearchPropertiesButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(34, 34, 34))
+                .addComponent(clearPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(27, 27, 27))
         );
         searchTopLayout.setVerticalGroup(
             searchTopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(searchTopLayout.createSequentialGroup()
                 .addGroup(searchTopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(searchTopLayout.createSequentialGroup()
-                        .addGap(21, 21, 21)
-                        .addComponent(gatePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(searchTopLayout.createSequentialGroup()
-                        .addGap(21, 21, 21)
-                        .addComponent(carTagPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(searchTopLayout.createSequentialGroup()
-                        .addGap(21, 21, 21)
-                        .addComponent(attendPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(searchTopLayout.createSequentialGroup()
-                        .addGap(21, 21, 21)
-                        .addComponent(barOptnPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(5, 5, 5)
+                        .addComponent(topVehicle, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(searchTopLayout.createSequentialGroup()
                         .addGap(5, 5, 5)
-                        .addComponent(affiliationBuildingPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(topDriver, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(searchTopLayout.createSequentialGroup()
-                        .addGap(23, 23, 23)
-                        .addComponent(clearSearchPropertiesButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(15, Short.MAX_VALUE))
+                        .addGap(52, 52, 52)
+                        .addComponent(filler18, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(searchTopLayout.createSequentialGroup()
+                        .addGap(5, 5, 5)
+                        .addComponent(clearPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(5, 5, 5))
         );
 
         searchBottom.setBackground(new java.awt.Color(244, 244, 244));
         searchBottom.setBorder(javax.swing.BorderFactory.createTitledBorder(null, ARRIVAL_TIME_PANEL_TITLE.getContent(), javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font(font_Type, font_Style, font_Size)));
         searchBottom.setForeground(new java.awt.Color(153, 153, 153));
         searchBottom.setAlignmentX(0.0F);
+        searchBottom.setAlignmentY(0.0F);
         searchBottom.setFocusTraversalPolicyProvider(true);
         searchBottom.setMaximumSize(new java.awt.Dimension(32767, 90));
-        searchBottom.setMinimumSize(new java.awt.Dimension(800, 70));
-        searchBottom.setPreferredSize(new java.awt.Dimension(880, 90));
+        searchBottom.setMinimumSize(new java.awt.Dimension(800, 90));
+        searchBottom.setPreferredSize(new java.awt.Dimension(800, 90));
 
         periodOptionGroup.add(oneHourRadioButton);
         oneHourRadioButton.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
@@ -604,97 +769,130 @@ public class CarArrivals extends javax.swing.JFrame {
             }
         });
 
+        BeginDateChooser.setBackground(new java.awt.Color(243, 243, 243));
+        BeginDateChooser.setAlignmentY(0.0F);
+        BeginDateChooser.setAutoscrolls(true);
+        BeginDateChooser.setEnabled(false);
+        BeginDateChooser.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        BeginDateChooser.setMinimumSize(new java.awt.Dimension(130, 33));
+        BeginDateChooser.setPreferredSize(new java.awt.Dimension(130, 33));
+
         jLabel9.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         jLabel9.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel9.setText("~");
         jLabel9.setFocusable(false);
         jLabel9.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
 
+        EndDateChooser.setBackground(new java.awt.Color(243, 243, 243));
+        EndDateChooser.setAlignmentY(0.0F);
+        EndDateChooser.setAutoscrolls(true);
+        EndDateChooser.setEnabled(false);
+        EndDateChooser.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        EndDateChooser.setMinimumSize(new java.awt.Dimension(130, 33));
+        EndDateChooser.setPreferredSize(new java.awt.Dimension(130, 33));
+
+        fixPanel.setBackground(new java.awt.Color(243, 243, 243));
+        fixPanel.setMinimumSize(new java.awt.Dimension(100, 40));
+        fixPanel.setPreferredSize(new java.awt.Dimension(100, 40));
+
         setSearchPeriodOptionButton.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         setSearchPeriodOptionButton.setMnemonic('f');
         setSearchPeriodOptionButton.setText(FIX_IT_BTN.getContent());
         setSearchPeriodOptionButton.setToolTipText(FIX_IT_BTN_TOOLTIP.getContent());
-        setSearchPeriodOptionButton.setPreferredSize(new java.awt.Dimension(77, 35));
+        setSearchPeriodOptionButton.setMaximumSize(new java.awt.Dimension(100, 35));
+        setSearchPeriodOptionButton.setMinimumSize(new java.awt.Dimension(100, 35));
+        setSearchPeriodOptionButton.setPreferredSize(new java.awt.Dimension(100, 35));
         setSearchPeriodOptionButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 setSearchPeriodOptionButtonActionPerformed(evt);
             }
         });
 
-        BeginDateChooser.setAlignmentY(0.0F);
-        BeginDateChooser.setAutoscrolls(true);
-        BeginDateChooser.setEnabled(false);
-        BeginDateChooser.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        BeginDateChooser.setPreferredSize(new java.awt.Dimension(150, 33));
-
-        EndDateChooser.setAlignmentY(0.0F);
-        EndDateChooser.setAutoscrolls(true);
-        EndDateChooser.setEnabled(false);
-        EndDateChooser.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        EndDateChooser.setPreferredSize(new java.awt.Dimension(150, 33));
+        javax.swing.GroupLayout fixPanelLayout = new javax.swing.GroupLayout(fixPanel);
+        fixPanel.setLayout(fixPanelLayout);
+        fixPanelLayout.setHorizontalGroup(
+            fixPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(setSearchPeriodOptionButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+        );
+        fixPanelLayout.setVerticalGroup(
+            fixPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(setSearchPeriodOptionButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+        );
 
         javax.swing.GroupLayout searchBottomLayout = new javax.swing.GroupLayout(searchBottom);
         searchBottom.setLayout(searchBottomLayout);
         searchBottomLayout.setHorizontalGroup(
             searchBottomLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(searchBottomLayout.createSequentialGroup()
-                .addGap(87, 87, 87)
+                .addGap(13, 13, 13)
+                .addComponent(filler21, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(5, 5, 5)
                 .addComponent(oneHourRadioButton)
                 .addGap(5, 5, 5)
                 .addComponent(filler3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(7, 7, 7)
+                .addGap(5, 5, 5)
                 .addComponent(oneDayRadioButton)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(5, 5, 5)
                 .addComponent(filler4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(5, 5, 5)
                 .addComponent(periodRadioButton)
                 .addGap(5, 5, 5)
                 .addComponent(filler5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(5, 5, 5)
                 .addComponent(BeginDateChooser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(5, 5, 5)
                 .addComponent(jLabel9)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(5, 5, 5)
                 .addComponent(EndDateChooser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(5, 5, 5)
+                .addComponent(filler20, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(5, 5, 5)
                 .addComponent(filler6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(5, 5, 5)
-                .addComponent(setSearchPeriodOptionButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(fixPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(8, 8, 8))
         );
         searchBottomLayout.setVerticalGroup(
             searchBottomLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(searchBottomLayout.createSequentialGroup()
-                .addGroup(searchBottomLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(searchBottomLayout.createSequentialGroup()
-                        .addGap(11, 11, 11)
-                        .addComponent(oneHourRadioButton))
-                    .addGroup(searchBottomLayout.createSequentialGroup()
-                        .addGap(22, 22, 22)
-                        .addComponent(filler3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(searchBottomLayout.createSequentialGroup()
-                        .addGap(22, 22, 22)
-                        .addComponent(filler4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(searchBottomLayout.createSequentialGroup()
-                        .addGap(11, 11, 11)
-                        .addGroup(searchBottomLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(periodRadioButton)
-                            .addComponent(oneDayRadioButton)))
-                    .addGroup(searchBottomLayout.createSequentialGroup()
-                        .addGap(22, 22, 22)
-                        .addComponent(filler5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(searchBottomLayout.createSequentialGroup()
-                        .addGap(14, 14, 14)
-                        .addComponent(jLabel9))
-                    .addGroup(searchBottomLayout.createSequentialGroup()
-                        .addGap(22, 22, 22)
-                        .addComponent(filler6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(searchBottomLayout.createSequentialGroup()
-                        .addGap(5, 5, 5)
-                        .addGroup(searchBottomLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(BeginDateChooser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(setSearchPeriodOptionButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(EndDateChooser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(34, Short.MAX_VALUE))
+                .addGap(25, 25, 25)
+                .addComponent(filler21, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(searchBottomLayout.createSequentialGroup()
+                .addGap(13, 13, 13)
+                .addComponent(oneHourRadioButton))
+            .addGroup(searchBottomLayout.createSequentialGroup()
+                .addGap(25, 25, 25)
+                .addComponent(filler3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(searchBottomLayout.createSequentialGroup()
+                .addGap(13, 13, 13)
+                .addComponent(oneDayRadioButton))
+            .addGroup(searchBottomLayout.createSequentialGroup()
+                .addGap(25, 25, 25)
+                .addComponent(filler4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(searchBottomLayout.createSequentialGroup()
+                .addGap(13, 13, 13)
+                .addComponent(periodRadioButton))
+            .addGroup(searchBottomLayout.createSequentialGroup()
+                .addGap(25, 25, 25)
+                .addComponent(filler5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(searchBottomLayout.createSequentialGroup()
+                .addGap(8, 8, 8)
+                .addComponent(BeginDateChooser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(searchBottomLayout.createSequentialGroup()
+                .addGap(17, 17, 17)
+                .addComponent(jLabel9))
+            .addGroup(searchBottomLayout.createSequentialGroup()
+                .addGap(8, 8, 8)
+                .addComponent(EndDateChooser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(searchBottomLayout.createSequentialGroup()
+                .addGap(25, 25, 25)
+                .addComponent(filler20, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(searchBottomLayout.createSequentialGroup()
+                .addGap(25, 25, 25)
+                .addComponent(filler6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(searchBottomLayout.createSequentialGroup()
+                .addGap(5, 5, 5)
+                .addComponent(fixPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         javax.swing.GroupLayout criteriaPanelLayout = new javax.swing.GroupLayout(criteriaPanel);
@@ -704,31 +902,39 @@ public class CarArrivals extends javax.swing.JFrame {
             .addGroup(criteriaPanelLayout.createSequentialGroup()
                 .addGap(0, 0, 0)
                 .addGroup(criteriaPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(searchTop, javax.swing.GroupLayout.DEFAULT_SIZE, 887, Short.MAX_VALUE)
-                    .addComponent(searchBottom, javax.swing.GroupLayout.DEFAULT_SIZE, 887, Short.MAX_VALUE))
+                    .addComponent(searchTop, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(searchBottom, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(0, 0, 0))
         );
         criteriaPanelLayout.setVerticalGroup(
             criteriaPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(criteriaPanelLayout.createSequentialGroup()
-                .addGap(0, 0, 0)
-                .addComponent(searchTop, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, 0)
-                .addComponent(searchBottom, javax.swing.GroupLayout.DEFAULT_SIZE, 97, Short.MAX_VALUE))
+                .addContainerGap()
+                .addComponent(searchTop, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(searchBottom, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(3, 3, 3))
         );
+
+        searchButtonPanel.setBackground(new java.awt.Color(243, 243, 243));
+        searchButtonPanel.setMaximumSize(new java.awt.Dimension(90, 250));
+        searchButtonPanel.setMinimumSize(new java.awt.Dimension(90, 250));
+        searchButtonPanel.setPreferredSize(new java.awt.Dimension(90, 250));
+        searchButtonPanel.setLayout(new javax.swing.BoxLayout(searchButtonPanel, javax.swing.BoxLayout.LINE_AXIS));
 
         searchButton.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         searchButton.setMnemonic('s');
         searchButton.setText(SEARCH_BTN.getContent());
         searchButton.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 5, 10, 5));
-        searchButton.setMaximumSize(new java.awt.Dimension(80, 80));
-        searchButton.setMinimumSize(new java.awt.Dimension(80, 80));
-        searchButton.setPreferredSize(new java.awt.Dimension(80, 80));
+        searchButton.setMaximumSize(new java.awt.Dimension(90, 60));
+        searchButton.setMinimumSize(new java.awt.Dimension(90, 60));
+        searchButton.setPreferredSize(new java.awt.Dimension(90, 60));
         searchButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 searchButtonActionPerformed(evt);
             }
         });
+        searchButtonPanel.add(searchButton);
 
         javax.swing.GroupLayout searchPanelLayout = new javax.swing.GroupLayout(searchPanel);
         searchPanel.setLayout(searchPanelLayout);
@@ -736,54 +942,24 @@ public class CarArrivals extends javax.swing.JFrame {
             searchPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(searchPanelLayout.createSequentialGroup()
                 .addGap(0, 0, 0)
-                .addComponent(criteriaPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 887, Short.MAX_VALUE)
-                .addGap(7, 7, 7)
-                .addComponent(searchButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(7, 7, 7))
+                .addComponent(criteriaPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(searchButtonPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(2, 2, 2))
         );
         searchPanelLayout.setVerticalGroup(
             searchPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(searchPanelLayout.createSequentialGroup()
                 .addGroup(searchPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(searchPanelLayout.createSequentialGroup()
-                        .addGap(80, 80, 80)
-                        .addComponent(searchButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(criteriaPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(0, 0, 0))
+                    .addComponent(criteriaPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(searchButtonPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
         );
+
+        topPanel.add(searchPanel);
 
         closePanel.setMaximumSize(new java.awt.Dimension(87, 32767));
-
-        closeButton.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        closeButton.setMnemonic('c');
-        closeButton.setText(CLOSE_BTN.getContent());
-        closeButton.setMaximumSize(new java.awt.Dimension(77, 52));
-        closeButton.setMinimumSize(new java.awt.Dimension(77, 52));
-        closeButton.setPreferredSize(new java.awt.Dimension(85, 52));
-        closeButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                closeButtonActionPerformed(evt);
-            }
-        });
-        closePanel.add(closeButton);
-
-        javax.swing.GroupLayout topPanelLayout = new javax.swing.GroupLayout(topPanel);
-        topPanel.setLayout(topPanelLayout);
-        topPanelLayout.setHorizontalGroup(
-            topPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(topPanelLayout.createSequentialGroup()
-                .addComponent(searchPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 993, Short.MAX_VALUE)
-                .addGap(0, 0, 0)
-                .addComponent(closePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-        );
-        topPanelLayout.setVerticalGroup(
-            topPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(topPanelLayout.createSequentialGroup()
-                .addGroup(topPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(closePanel, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(searchPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(0, 0, Short.MAX_VALUE))
-        );
+        topPanel.add(closePanel);
 
         wholePanel.add(topPanel);
 
@@ -1049,10 +1225,11 @@ public class CarArrivals extends javax.swing.JFrame {
 
         bottomPanel.add(bottomLeftPanel);
 
-        bottomRightPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, VEHICLE_ARRIVAL_LIST_PANEL_TITLE.getContent(), javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font(font_Type, font_Style, font_Size)));
         bottomRightPanel.setMaximumSize(new java.awt.Dimension(32779, 33293));
         bottomRightPanel.setPreferredSize(new java.awt.Dimension(400, 300));
-        bottomRightPanel.setLayout(new java.awt.BorderLayout());
+
+        arrivalListPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(VEHICLE_ARRIVAL_LIST_PANEL_TITLE.getContent()));
+        arrivalListPanel.setPreferredSize(new java.awt.Dimension(323, 0));
 
         jScrollPane1.setMinimumSize(new java.awt.Dimension(23, 27));
 
@@ -1085,7 +1262,78 @@ public class CarArrivals extends javax.swing.JFrame {
     arrivalsList.setRowHeight(22);
     jScrollPane1.setViewportView(arrivalsList);
 
-    bottomRightPanel.add(jScrollPane1, java.awt.BorderLayout.CENTER);
+    javax.swing.GroupLayout arrivalListPanelLayout = new javax.swing.GroupLayout(arrivalListPanel);
+    arrivalListPanel.setLayout(arrivalListPanelLayout);
+    arrivalListPanelLayout.setHorizontalGroup(
+        arrivalListPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addGap(0, 0, Short.MAX_VALUE)
+        .addGroup(arrivalListPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(arrivalListPanelLayout.createSequentialGroup()
+                .addGap(0, 126, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 126, Short.MAX_VALUE)))
+    );
+    arrivalListPanelLayout.setVerticalGroup(
+        arrivalListPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addGap(0, 0, Short.MAX_VALUE)
+        .addGroup(arrivalListPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(arrivalListPanelLayout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 304, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE)))
+    );
+
+    buttonPanel.setLayout(new javax.swing.BoxLayout(buttonPanel, javax.swing.BoxLayout.LINE_AXIS));
+
+    saveSheet_Button.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+    saveSheet_Button.setMnemonic('A');
+    saveSheet_Button.setText("ods저장(A)");
+    saveSheet_Button.setEnabled(false);
+    saveSheet_Button.setMargin(new java.awt.Insets(0, 0, 0, 0));
+    saveSheet_Button.setMaximumSize(new Dimension(CommonData.buttonWidthWide, buttonHeightNorm));
+    saveSheet_Button.setMinimumSize(new Dimension(CommonData.buttonWidthWide, buttonHeightNorm));
+    saveSheet_Button.setPreferredSize(new Dimension(CommonData.buttonWidthWide, buttonHeightNorm));
+    saveSheet_Button.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            saveSheet_ButtonActionPerformed(evt);
+        }
+    });
+    buttonPanel.add(saveSheet_Button);
+
+    closeButton.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+    closeButton.setMnemonic('c');
+    closeButton.setText(CLOSE_BTN.getContent());
+    closeButton.setMaximumSize(new java.awt.Dimension(77, 52));
+    closeButton.setMinimumSize(new java.awt.Dimension(77, 52));
+    closeButton.setPreferredSize(new java.awt.Dimension(85, 52));
+    closeButton.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            closeButtonActionPerformed(evt);
+        }
+    });
+    buttonPanel.add(closeButton);
+
+    javax.swing.GroupLayout bottomRightPanelLayout = new javax.swing.GroupLayout(bottomRightPanel);
+    bottomRightPanel.setLayout(bottomRightPanelLayout);
+    bottomRightPanelLayout.setHorizontalGroup(
+        bottomRightPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addGroup(bottomRightPanelLayout.createSequentialGroup()
+            .addGroup(bottomRightPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addComponent(arrivalListPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 338, Short.MAX_VALUE)
+                .addGroup(bottomRightPanelLayout.createSequentialGroup()
+                    .addGap(84, 84, 84)
+                    .addComponent(buttonPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 254, Short.MAX_VALUE)))
+            .addContainerGap())
+    );
+    bottomRightPanelLayout.setVerticalGroup(
+        bottomRightPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addGroup(bottomRightPanelLayout.createSequentialGroup()
+            .addGap(5, 5, 5)
+            .addComponent(arrivalListPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 248, Short.MAX_VALUE)
+            .addGap(41, 41, 41)
+            .addComponent(buttonPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGap(192, 192, 192))
+    );
 
     bottomPanel.add(bottomRightPanel);
 
@@ -1093,7 +1341,41 @@ public class CarArrivals extends javax.swing.JFrame {
 
     getContentPane().add(wholePanel, java.awt.BorderLayout.CENTER);
 
-    setBounds(0, 0, 1102, 726);
+    wholeBottom.setMaximumSize(new java.awt.Dimension(32767, 40));
+    wholeBottom.setMinimumSize(new java.awt.Dimension(0, 40));
+    wholeBottom.setPreferredSize(new java.awt.Dimension(0, 40));
+
+    javax.swing.GroupLayout wholeBottomLayout = new javax.swing.GroupLayout(wholeBottom);
+    wholeBottom.setLayout(wholeBottomLayout);
+    wholeBottomLayout.setHorizontalGroup(
+        wholeBottomLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addGap(0, 0, Short.MAX_VALUE)
+    );
+    wholeBottomLayout.setVerticalGroup(
+        wholeBottomLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addGap(0, 40, Short.MAX_VALUE)
+    );
+
+    getContentPane().add(wholeBottom, java.awt.BorderLayout.SOUTH);
+
+    wholeWest.setMaximumSize(new java.awt.Dimension(40, 32767));
+    wholeWest.setMinimumSize(new java.awt.Dimension(40, 0));
+    wholeWest.setPreferredSize(new java.awt.Dimension(40, 0));
+
+    javax.swing.GroupLayout wholeWestLayout = new javax.swing.GroupLayout(wholeWest);
+    wholeWest.setLayout(wholeWestLayout);
+    wholeWestLayout.setHorizontalGroup(
+        wholeWestLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addGap(0, 0, Short.MAX_VALUE)
+    );
+    wholeWestLayout.setVerticalGroup(
+        wholeWestLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addGap(0, 0, Short.MAX_VALUE)
+    );
+
+    getContentPane().add(wholeWest, java.awt.BorderLayout.WEST);
+
+    setBounds(0, 0, 1016, 780);
     }// </editor-fold>//GEN-END:initComponents
 
     private void imageLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_imageLabelMouseClicked
@@ -1287,16 +1569,24 @@ public class CarArrivals extends javax.swing.JFrame {
         mayPropagateBackward(searchUnitComboBox, searchBuildingComboBox);
     }//GEN-LAST:event_searchUnitComboBoxPopupMenuWillBecomeInvisible
 
+    private void seeLicenseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_seeLicenseButtonActionPerformed
+        showLicensePanel(this, "License Notice on Vehicle Manager");
+    }//GEN-LAST:event_seeLicenseButtonActionPerformed
+
+    private void saveSheet_ButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveSheet_ButtonActionPerformed
+//        saveODSfile(this, driverTable, saveFileChooser, DRIVER_SAVE_ODS_FAIL_DIALOG.getContent());
+    }//GEN-LAST:event_saveSheet_ButtonActionPerformed
+
     // <editor-fold defaultstate="collapsed" desc="-- Variables defined via GUI creation">
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.toedter.calendar.JDateChooser BeginDateChooser;
     private com.toedter.calendar.JDateChooser EndDateChooser;
     private javax.swing.JPanel affiliPanel;
-    private javax.swing.JPanel affiliationBuildingPanel;
     private javax.swing.ButtonGroup affiliationGroup;
     private javax.swing.JLabel affiliationLabel;
     private javax.swing.JRadioButton affiliationRadioButton;
     private javax.swing.JTextField affiliationTF;
+    private javax.swing.JPanel arrivalListPanel;
     private javax.swing.JTextField arrivalTmTF;
     private javax.swing.JTable arrivalsList;
     private javax.swing.JPanel attendPanel;
@@ -1311,8 +1601,11 @@ public class CarArrivals extends javax.swing.JFrame {
     private javax.swing.JPanel buildingPanel;
     private javax.swing.JRadioButton buildingRadioButton;
     private javax.swing.JTextField buildingTF;
+    private javax.swing.JPanel buttonPanel;
+    private javax.swing.JPanel carPlus;
     private javax.swing.JPanel carTagPanel;
     private javax.swing.JTextField carTagTF;
+    private javax.swing.JPanel clearPanel;
     private javax.swing.JButton clearSearchPropertiesButton;
     private javax.swing.JButton closeButton;
     private javax.swing.JPanel closePanel;
@@ -1324,7 +1617,13 @@ public class CarArrivals extends javax.swing.JFrame {
     private javax.swing.Box.Filler filler13;
     private javax.swing.Box.Filler filler14;
     private javax.swing.Box.Filler filler15;
+    private javax.swing.Box.Filler filler16;
+    private javax.swing.Box.Filler filler17;
+    private javax.swing.Box.Filler filler18;
+    private javax.swing.Box.Filler filler19;
     private javax.swing.Box.Filler filler2;
+    private javax.swing.Box.Filler filler20;
+    private javax.swing.Box.Filler filler21;
     private javax.swing.Box.Filler filler3;
     private javax.swing.Box.Filler filler4;
     private javax.swing.Box.Filler filler5;
@@ -1332,6 +1631,8 @@ public class CarArrivals extends javax.swing.JFrame {
     private javax.swing.Box.Filler filler7;
     private javax.swing.Box.Filler filler8;
     private javax.swing.Box.Filler filler9;
+    private javax.swing.Box.Filler filler_h10_18;
+    private javax.swing.JPanel fixPanel;
     private javax.swing.JComboBox gateBarCB;
     private javax.swing.JComboBox gateCB;
     private javax.swing.JTextField gateNameTF;
@@ -1363,6 +1664,7 @@ public class CarArrivals extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel myMetaKeyLabel;
     private javax.swing.JRadioButton oneDayRadioButton;
     private javax.swing.JRadioButton oneHourRadioButton;
     private javax.swing.ButtonGroup periodOptionGroup;
@@ -1371,19 +1673,30 @@ public class CarArrivals extends javax.swing.JFrame {
     private javax.swing.JTextField registeredTF;
     private javax.swing.JTextField rowNumTF;
     private javax.swing.JTextField rsCountTF;
+    private javax.swing.JButton saveSheet_Button;
     private javax.swing.JPanel searchBottom;
     private javax.swing.JComboBox searchBuildingComboBox;
     private javax.swing.JButton searchButton;
+    private javax.swing.JPanel searchButtonPanel;
     private javax.swing.JComboBox searchL1ComboBox;
     private javax.swing.JComboBox searchL2ComboBox;
     private javax.swing.JPanel searchPanel;
     private javax.swing.JPanel searchTop;
     private javax.swing.JComboBox searchUnitComboBox;
+    private javax.swing.JButton seeLicenseButton;
     private javax.swing.JButton setSearchPeriodOptionButton;
+    private javax.swing.JLabel titleLabel;
+    private javax.swing.JPanel titlePanel;
+    private javax.swing.JPanel topDriver;
     private javax.swing.JPanel topPanel;
+    private javax.swing.JPanel topVehicle;
     private javax.swing.JTextField unitTF;
     private javax.swing.JTextField visitPurposeTF;
+    private javax.swing.JPanel wholeBottom;
+    private javax.swing.JPanel wholeEast;
     private javax.swing.JPanel wholePanel;
+    private javax.swing.JPanel wholeTop;
+    private javax.swing.JPanel wholeWest;
     // End of variables declaration//GEN-END:variables
     // </editor-fold>
 
@@ -1557,6 +1870,7 @@ public class CarArrivals extends javax.swing.JFrame {
     }
 
     private void detailTuneTableProperties() {
+        tuneTitlePanelSize();
         fineTuneColumnWidth();
         TableColumnModel arrivalsTableModel = arrivalsList.getColumnModel();
         DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
@@ -1935,6 +2249,32 @@ public class CarArrivals extends javax.swing.JFrame {
                     lowerCol, higherSKey, prevHigherSKey);        
             lowerCBox.setSelectedItem(selectedLowerItem);
         }    
+    }
+
+    private void tuneTitlePanelSize() {
+        setComponentSize(seeLicenseButton, new Dimension(buttonWidthNorm, buttonHeightNorm));
+        setComponentSize(myMetaKeyLabel, new Dimension(buttonWidthNorm, buttonHeightNorm));
+        setComponentSize(carTagTF, new Dimension(CABW_NORM, CABH_NORM));
+        setComponentSize(gateCB, new Dimension(CABW_NORM, CABH_NORM));
+        setComponentSize(attendantCB, new Dimension(CABW_WIDE, CABH_NORM));
+        setComponentSize(gateBarCB, new Dimension(CABW_NORM, CABH_NORM));
+        setComponentSize(carPlus, new Dimension(360, 55));
+        
+        setComponentSize(searchL1ComboBox, new Dimension(CABW_WIDE, CABH_NORM));
+        setComponentSize(searchL2ComboBox, new Dimension(CABW_WIDE, CABH_NORM));
+        setComponentSize(affiliPanel, new Dimension(CABW_WIDE, CABH_NORM * 3));
+        
+        setComponentSize(searchBuildingComboBox, new Dimension(CABW_NORM, CABH_NORM));
+        setComponentSize(searchUnitComboBox, new Dimension(CABW_NORM, CABH_NORM));
+        setComponentSize(buildingPanel, new Dimension(CABW_NORM, CABH_NORM * 3));
+        
+        setComponentSize(clearSearchPropertiesButton, new Dimension(buttonWidthNorm, buttonHeightNorm));
+        setComponentSize(clearPanel, new Dimension(buttonWidthNorm, 94));
+        
+        setComponentSize(setSearchPeriodOptionButton, new Dimension(buttonWidthNorm, buttonHeightNorm));
+        setComponentSize(searchBottom, new Dimension(800, 90));
+        
+        setComponentSize(searchButton, new Dimension(buttonWidthNorm, bigButtonHeight));
     }
 }
 
