@@ -17,6 +17,8 @@
 package com.osparking.statistics;
 
 import com.osparking.global.CommonData;
+import static com.osparking.global.CommonData.ImgHeight;
+import static com.osparking.global.CommonData.ImgWidth;
 import static com.osparking.global.CommonData.bigButtonHeight;
 import static com.osparking.global.CommonData.buttonHeightNorm;
 import static com.osparking.global.CommonData.buttonWidthNorm;
@@ -59,13 +61,16 @@ import static com.osparking.global.names.ControlEnums.LabelContent.NON_REGI_TAG2
 import static com.osparking.global.names.ControlEnums.LabelContent.ORDER_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.RECOGNIZED_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.REGISTERED_LABEL;
-import static com.osparking.global.names.ControlEnums.LabelContent.ROOM_LABEL;
+import static com.osparking.global.names.ControlEnums.LabelContent.VISIT_BUILDING;
 import static com.osparking.global.names.ControlEnums.LabelContent.VISIT_PURPOSE_LABEL;
+import static com.osparking.global.names.ControlEnums.LabelContent.VISIT_UNIT;
 import static com.osparking.global.names.ControlEnums.LabelContent.WHERE_TO_LABEL;
 import static com.osparking.global.names.ControlEnums.MenuITemTypes.META_KEY_LABEL;
 import static com.osparking.global.names.ControlEnums.TitleTypes.*;
 import static com.osparking.global.names.ControlEnums.TableTypes.ARRIVAL_TIME_HEADER;
 import static com.osparking.global.names.ControlEnums.TableTypes.CAR_TAG_HEADER;
+import static com.osparking.global.names.ControlEnums.TableTypes.HIGHER_HEADER;
+import static com.osparking.global.names.ControlEnums.TableTypes.LOWER_HEADER;
 import static com.osparking.global.names.ControlEnums.TableTypes.ORDER_HEADER;
 import static com.osparking.global.names.ControlEnums.TextType.LOG_OUT_TF;
 import static com.osparking.global.names.ControlEnums.TextType.NOT_APPLICABLE_TF;
@@ -264,16 +269,19 @@ public class CarArrivals extends javax.swing.JFrame {
         imagePanel = new javax.swing.JPanel();
         imageLabel = new javax.swing.JLabel();
         targetPanel = new javax.swing.JPanel();
-        whereToLabel = new javax.swing.JLabel();
+        visitBuildingPanel = new javax.swing.JPanel();
         buildingLabel = new javax.swing.JLabel();
         buildingTF = new javax.swing.JTextField();
         jLabel10 = new javax.swing.JLabel();
         unitTF = new javax.swing.JTextField();
-        affiliPan = new javax.swing.JPanel();
-        affiliationLabel = new javax.swing.JLabel();
-        affiliationTF = new javax.swing.JTextField();
-        targetDescrp = new javax.swing.JPanel();
-        jLabel14 = new javax.swing.JLabel();
+        visitHighAffiliPanel = new javax.swing.JPanel();
+        affiliHigher = new javax.swing.JLabel();
+        affiliHighTF = new javax.swing.JTextField();
+        visitLowAffiliPanel = new javax.swing.JPanel();
+        affiliLower = new javax.swing.JLabel();
+        affiliLowTF = new javax.swing.JTextField();
+        visitDetailReason = new javax.swing.JPanel();
+        purposeLabel = new javax.swing.JLabel();
         visitPurposeTF = new javax.swing.JTextField();
         bottomRightPanel = new javax.swing.JPanel();
         arrivalListPanel = new javax.swing.JPanel();
@@ -292,8 +300,8 @@ public class CarArrivals extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle(CAR_ARRIVALS_FRAME_TITLE.getContent());
         setFocusCycleRoot(false);
-        setMinimumSize(new Dimension(normGUIwidth, normGUIheight));
-        setPreferredSize(new Dimension(normGUIwidth, normGUIheight));
+        setMinimumSize(new Dimension(normGUIwidth,780));
+        setPreferredSize(new Dimension(normGUIwidth,780));
         setSize(new Dimension(normGUIwidth, normGUIheight));
 
         wholeTop.setMaximumSize(new java.awt.Dimension(32767, 40));
@@ -325,7 +333,7 @@ public class CarArrivals extends javax.swing.JFrame {
         );
         wholeEastLayout.setVerticalGroup(
             wholeEastLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGap(0, 645, Short.MAX_VALUE)
         );
 
         getContentPane().add(wholeEast, java.awt.BorderLayout.EAST);
@@ -966,12 +974,12 @@ public class CarArrivals extends javax.swing.JFrame {
         detailWhole.setMinimumSize(new java.awt.Dimension(400, 195));
         detailWhole.setPreferredSize(new java.awt.Dimension(650, 445));
 
-        detailTop.setPreferredSize(new java.awt.Dimension(536, 125));
+        detailTop.setPreferredSize(new java.awt.Dimension(536, 105));
         detailTop.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 0, 0));
 
         gateNoPanel.setMaximumSize(new java.awt.Dimension(196602, 35));
-        gateNoPanel.setMinimumSize(new java.awt.Dimension(175, 120));
-        gateNoPanel.setPreferredSize(new java.awt.Dimension(175, 120));
+        gateNoPanel.setMinimumSize(new java.awt.Dimension(165, 100));
+        gateNoPanel.setPreferredSize(new java.awt.Dimension(165, 100));
         gateNoPanel.setLayout(new java.awt.GridBagLayout());
 
         jLabel3.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
@@ -984,7 +992,7 @@ public class CarArrivals extends javax.swing.JFrame {
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(0, 10, 3, 0);
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 0);
         gateNoPanel.add(jLabel3, gridBagConstraints);
 
         rowNumTF.setEditable(false);
@@ -996,7 +1004,7 @@ public class CarArrivals extends javax.swing.JFrame {
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(0, 10, 3, 10);
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 10);
         gateNoPanel.add(rowNumTF, gridBagConstraints);
 
         jLabel4.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
@@ -1009,7 +1017,7 @@ public class CarArrivals extends javax.swing.JFrame {
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(3, 10, 3, 0);
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 0);
         gateNoPanel.add(jLabel4, gridBagConstraints);
 
         gateNameTF.setEditable(false);
@@ -1021,7 +1029,7 @@ public class CarArrivals extends javax.swing.JFrame {
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(3, 10, 3, 10);
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 10);
         gateNoPanel.add(gateNameTF, gridBagConstraints);
 
         jLabel12.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
@@ -1034,7 +1042,7 @@ public class CarArrivals extends javax.swing.JFrame {
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(3, 10, 3, 0);
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 0);
         gateNoPanel.add(jLabel12, gridBagConstraints);
 
         barOptnTF.setEditable(false);
@@ -1046,13 +1054,13 @@ public class CarArrivals extends javax.swing.JFrame {
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(3, 10, 3, 10);
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 10);
         gateNoPanel.add(barOptnTF, gridBagConstraints);
 
         detailTop.add(gateNoPanel);
 
-        dateTmPanel.setMinimumSize(new java.awt.Dimension(165, 120));
-        dateTmPanel.setPreferredSize(new java.awt.Dimension(165, 120));
+        dateTmPanel.setMinimumSize(new java.awt.Dimension(165, 100));
+        dateTmPanel.setPreferredSize(new java.awt.Dimension(165, 100));
         dateTmPanel.setLayout(new java.awt.GridBagLayout());
 
         colHead1.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
@@ -1076,7 +1084,7 @@ public class CarArrivals extends javax.swing.JFrame {
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(3, 10, 3, 0);
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 0);
         dateTmPanel.add(jLabel5, gridBagConstraints);
 
         arrivalTmTF.setEditable(false);
@@ -1089,7 +1097,7 @@ public class CarArrivals extends javax.swing.JFrame {
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(3, 10, 3, 0);
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 0);
         dateTmPanel.add(arrivalTmTF, gridBagConstraints);
 
         jLabel6.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
@@ -1102,7 +1110,7 @@ public class CarArrivals extends javax.swing.JFrame {
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(3, 10, 3, 0);
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 0);
         dateTmPanel.add(jLabel6, gridBagConstraints);
 
         attendantTF.setEditable(false);
@@ -1114,13 +1122,13 @@ public class CarArrivals extends javax.swing.JFrame {
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(3, 10, 3, 0);
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 0);
         dateTmPanel.add(attendantTF, gridBagConstraints);
 
         detailTop.add(dateTmPanel);
 
-        tagNoPanel.setMinimumSize(new java.awt.Dimension(165, 120));
-        tagNoPanel.setPreferredSize(new java.awt.Dimension(165, 120));
+        tagNoPanel.setMinimumSize(new java.awt.Dimension(165, 100));
+        tagNoPanel.setPreferredSize(new java.awt.Dimension(165, 100));
         tagNoPanel.setLayout(new java.awt.GridBagLayout());
 
         colHead2.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
@@ -1144,7 +1152,7 @@ public class CarArrivals extends javax.swing.JFrame {
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(3, 10, 3, 0);
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 0);
         tagNoPanel.add(jLabel8, gridBagConstraints);
 
         recognizedTF.setEditable(false);
@@ -1157,7 +1165,7 @@ public class CarArrivals extends javax.swing.JFrame {
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(3, 10, 3, 0);
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 0);
         tagNoPanel.add(recognizedTF, gridBagConstraints);
 
         jLabel7.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
@@ -1170,7 +1178,7 @@ public class CarArrivals extends javax.swing.JFrame {
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(3, 10, 3, 0);
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 0);
         tagNoPanel.add(jLabel7, gridBagConstraints);
 
         registeredTF.setEditable(false);
@@ -1183,7 +1191,7 @@ public class CarArrivals extends javax.swing.JFrame {
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(3, 10, 3, 0);
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 0);
         tagNoPanel.add(registeredTF, gridBagConstraints);
 
         detailTop.add(tagNoPanel);
@@ -1191,16 +1199,16 @@ public class CarArrivals extends javax.swing.JFrame {
         detailBottom.setMinimumSize(new java.awt.Dimension(525, 140));
         detailBottom.setPreferredSize(new java.awt.Dimension(536, 150));
 
-        imagePanel.setMinimumSize(new java.awt.Dimension(300, 240));
-        imagePanel.setPreferredSize(new java.awt.Dimension(300, 240));
+        imagePanel.setMinimumSize(new java.awt.Dimension(193, 145));
+        imagePanel.setPreferredSize(new java.awt.Dimension(193, 145));
 
         imageLabel.setBackground(new java.awt.Color(0, 0, 204));
         imageLabel.setForeground(new java.awt.Color(255, 0, 153));
         imageLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         imageLabel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         imageLabel.setMaximumSize(new java.awt.Dimension(32767, 32767));
-        imageLabel.setMinimumSize(new java.awt.Dimension(300, 240));
-        imageLabel.setPreferredSize(new java.awt.Dimension(300, 240));
+        imageLabel.setMinimumSize(new java.awt.Dimension(193, 145));
+        imageLabel.setPreferredSize(new java.awt.Dimension(193, 145));
         imageLabel.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 imageLabelMouseClicked(evt);
@@ -1211,147 +1219,179 @@ public class CarArrivals extends javax.swing.JFrame {
         imagePanel.setLayout(imagePanelLayout);
         imagePanelLayout.setHorizontalGroup(
             imagePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(imageLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(imageLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         imagePanelLayout.setVerticalGroup(
             imagePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(imagePanelLayout.createSequentialGroup()
-                .addComponent(imageLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addComponent(imageLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(2, 2, 2))
         );
 
-        targetPanel.setMinimumSize(new java.awt.Dimension(300, 200));
-        targetPanel.setPreferredSize(new java.awt.Dimension(300, 200));
-        targetPanel.setLayout(new java.awt.GridBagLayout());
+        targetPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, WHERE_TO_LABEL.getContent(), javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font(font_Type, font_Style, font_Size)));
+        targetPanel.setMinimumSize(new java.awt.Dimension(300, 145));
+        targetPanel.setPreferredSize(new java.awt.Dimension(300, 145));
 
-        whereToLabel.setText(WHERE_TO_LABEL.getContent());
-        whereToLabel.setMaximumSize(new java.awt.Dimension(110, 28));
-        whereToLabel.setMinimumSize(new java.awt.Dimension(110, 28));
-        whereToLabel.setPreferredSize(new java.awt.Dimension(110, 28));
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridwidth = 2;
-        targetPanel.add(whereToLabel, gridBagConstraints);
+        visitBuildingPanel.setMinimumSize(new java.awt.Dimension(265, 28));
+        visitBuildingPanel.setPreferredSize(new java.awt.Dimension(283, 28));
+        visitBuildingPanel.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 5, 0));
 
         buildingLabel.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        buildingLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        buildingLabel.setText(BUILDING_LABEL.getContent());
-        buildingLabel.setMaximumSize(new java.awt.Dimension(130, 35));
-        buildingLabel.setMinimumSize(new java.awt.Dimension(130, 35));
-        buildingLabel.setPreferredSize(new java.awt.Dimension(130, 35));
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 1;
-        targetPanel.add(buildingLabel, gridBagConstraints);
+        buildingLabel.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        buildingLabel.setText(VISIT_BUILDING.getContent());
+        buildingLabel.setMaximumSize(new java.awt.Dimension(60, 28));
+        buildingLabel.setMinimumSize(new java.awt.Dimension(60, 28));
+        buildingLabel.setPreferredSize(new java.awt.Dimension(60, 28));
+        visitBuildingPanel.add(buildingLabel);
 
         buildingTF.setEditable(false);
         buildingTF.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         buildingTF.setMaximumSize(new java.awt.Dimension(32767, 32767));
-        buildingTF.setPreferredSize(new java.awt.Dimension(80, 25));
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
-        targetPanel.add(buildingTF, gridBagConstraints);
+        buildingTF.setMinimumSize(new java.awt.Dimension(60, 28));
+        buildingTF.setPreferredSize(new java.awt.Dimension(60, 28));
+        visitBuildingPanel.add(buildingTF);
 
         jLabel10.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        jLabel10.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel10.setText(ROOM_LABEL.getContent());
-        jLabel10.setMaximumSize(new java.awt.Dimension(80, 35));
-        jLabel10.setMinimumSize(new java.awt.Dimension(80, 35));
-        jLabel10.setPreferredSize(new java.awt.Dimension(80, 35));
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
-        gridBagConstraints.gridy = 1;
-        targetPanel.add(jLabel10, gridBagConstraints);
+        jLabel10.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jLabel10.setText(VISIT_UNIT.getContent());
+        jLabel10.setMaximumSize(new java.awt.Dimension(60, 28));
+        jLabel10.setMinimumSize(new java.awt.Dimension(60, 28));
+        jLabel10.setPreferredSize(new java.awt.Dimension(60, 28));
+        visitBuildingPanel.add(jLabel10);
 
         unitTF.setEditable(false);
         unitTF.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         unitTF.setMaximumSize(new java.awt.Dimension(32767, 32767));
-        unitTF.setPreferredSize(new java.awt.Dimension(80, 25));
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 1;
-        targetPanel.add(unitTF, gridBagConstraints);
+        unitTF.setMinimumSize(new java.awt.Dimension(60, 28));
+        unitTF.setPreferredSize(new java.awt.Dimension(60, 28));
+        visitBuildingPanel.add(unitTF);
 
-        affiliPan.setMaximumSize(new java.awt.Dimension(196602, 35));
-        affiliPan.setPreferredSize(new java.awt.Dimension(140, 35));
-        affiliPan.setLayout(new javax.swing.BoxLayout(affiliPan, javax.swing.BoxLayout.LINE_AXIS));
+        visitHighAffiliPanel.setMinimumSize(new java.awt.Dimension(265, 28));
+        visitHighAffiliPanel.setPreferredSize(new java.awt.Dimension(283, 28));
+        visitHighAffiliPanel.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 5, 0));
 
-        affiliationLabel.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        affiliationLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        affiliationLabel.setText(AFFILIATION_LABEL.getContent());
-        affiliationLabel.setMaximumSize(new java.awt.Dimension(130, 35));
-        affiliationLabel.setMinimumSize(new java.awt.Dimension(130, 35));
-        affiliationLabel.setPreferredSize(new java.awt.Dimension(130, 35));
-        affiliPan.add(affiliationLabel);
+        affiliHigher.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        affiliHigher.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        affiliHigher.setText(HIGHER_HEADER.getContent());
+        affiliHigher.setMaximumSize(new java.awt.Dimension(130, 28));
+        affiliHigher.setMinimumSize(new java.awt.Dimension(80, 28));
+        affiliHigher.setPreferredSize(new java.awt.Dimension(80, 28));
+        visitHighAffiliPanel.add(affiliHigher);
 
-        affiliationTF.setEditable(false);
-        affiliationTF.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        affiliationTF.setMaximumSize(new java.awt.Dimension(32767, 32767));
-        affiliationTF.setPreferredSize(new java.awt.Dimension(140, 25));
-        affiliPan.add(affiliationTF);
+        affiliHighTF.setEditable(false);
+        affiliHighTF.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        affiliHighTF.setMaximumSize(new java.awt.Dimension(150, 28));
+        affiliHighTF.setMinimumSize(new java.awt.Dimension(120, 28));
+        affiliHighTF.setName(""); // NOI18N
+        affiliHighTF.setPreferredSize(new java.awt.Dimension(120, 28));
+        visitHighAffiliPanel.add(affiliHighTF);
 
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.gridwidth = 3;
-        targetPanel.add(affiliPan, gridBagConstraints);
+        visitLowAffiliPanel.setMinimumSize(new java.awt.Dimension(265, 28));
+        visitLowAffiliPanel.setPreferredSize(new java.awt.Dimension(283, 28));
+        visitLowAffiliPanel.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 5, 0));
 
-        targetDescrp.setMaximumSize(new java.awt.Dimension(196602, 35));
-        targetDescrp.setPreferredSize(new java.awt.Dimension(140, 35));
-        targetDescrp.setLayout(new javax.swing.BoxLayout(targetDescrp, javax.swing.BoxLayout.LINE_AXIS));
+        affiliLower.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        affiliLower.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        affiliLower.setText(LOWER_HEADER.getContent());
+        affiliLower.setMaximumSize(new java.awt.Dimension(130, 28));
+        affiliLower.setMinimumSize(new java.awt.Dimension(80, 28));
+        affiliLower.setPreferredSize(new java.awt.Dimension(80, 28));
+        visitLowAffiliPanel.add(affiliLower);
 
-        jLabel14.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        jLabel14.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel14.setText(VISIT_PURPOSE_LABEL.getContent());
-        jLabel14.setMaximumSize(new java.awt.Dimension(110, 28));
-        jLabel14.setMinimumSize(new java.awt.Dimension(110, 28));
-        jLabel14.setPreferredSize(new java.awt.Dimension(110, 28));
-        targetDescrp.add(jLabel14);
+        affiliLowTF.setEditable(false);
+        affiliLowTF.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        affiliLowTF.setMaximumSize(new java.awt.Dimension(150, 28));
+        affiliLowTF.setMinimumSize(new java.awt.Dimension(120, 28));
+        affiliLowTF.setName(""); // NOI18N
+        affiliLowTF.setPreferredSize(new java.awt.Dimension(120, 28));
+        visitLowAffiliPanel.add(affiliLowTF);
+
+        visitDetailReason.setMinimumSize(new java.awt.Dimension(265, 28));
+        visitDetailReason.setPreferredSize(new java.awt.Dimension(283, 28));
+
+        purposeLabel.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        purposeLabel.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        purposeLabel.setText(VISIT_PURPOSE_LABEL.getContent());
+        purposeLabel.setMaximumSize(new java.awt.Dimension(130, 28));
+        purposeLabel.setMinimumSize(new java.awt.Dimension(65, 28));
+        purposeLabel.setPreferredSize(new java.awt.Dimension(65, 28));
 
         visitPurposeTF.setEditable(false);
         visitPurposeTF.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         visitPurposeTF.setMaximumSize(new java.awt.Dimension(32767, 32767));
-        visitPurposeTF.setPreferredSize(new java.awt.Dimension(140, 25));
-        targetDescrp.add(visitPurposeTF);
+        visitPurposeTF.setMinimumSize(new java.awt.Dimension(185, 28));
+        visitPurposeTF.setPreferredSize(new java.awt.Dimension(185, 28));
 
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 4;
-        gridBagConstraints.gridwidth = 5;
-        targetPanel.add(targetDescrp, gridBagConstraints);
+        javax.swing.GroupLayout visitDetailReasonLayout = new javax.swing.GroupLayout(visitDetailReason);
+        visitDetailReason.setLayout(visitDetailReasonLayout);
+        visitDetailReasonLayout.setHorizontalGroup(
+            visitDetailReasonLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(visitDetailReasonLayout.createSequentialGroup()
+                .addGap(5, 5, 5)
+                .addComponent(purposeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(visitPurposeTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
+        visitDetailReasonLayout.setVerticalGroup(
+            visitDetailReasonLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(purposeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(visitPurposeTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+        );
+
+        javax.swing.GroupLayout targetPanelLayout = new javax.swing.GroupLayout(targetPanel);
+        targetPanel.setLayout(targetPanelLayout);
+        targetPanelLayout.setHorizontalGroup(
+            targetPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(targetPanelLayout.createSequentialGroup()
+                .addGap(5, 5, 5)
+                .addGroup(targetPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(visitBuildingPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(visitHighAffiliPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(visitLowAffiliPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(visitDetailReason, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+        );
+        targetPanelLayout.setVerticalGroup(
+            targetPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(targetPanelLayout.createSequentialGroup()
+                .addGap(2, 2, 2)
+                .addComponent(visitBuildingPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(2, 2, 2)
+                .addComponent(visitHighAffiliPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(2, 2, 2)
+                .addComponent(visitLowAffiliPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(2, 2, 2)
+                .addComponent(visitDetailReason, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
 
         javax.swing.GroupLayout detailBottomLayout = new javax.swing.GroupLayout(detailBottom);
         detailBottom.setLayout(detailBottomLayout);
         detailBottomLayout.setHorizontalGroup(
             detailBottomLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(detailBottomLayout.createSequentialGroup()
-                .addComponent(imagePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(imagePanel, javax.swing.GroupLayout.DEFAULT_SIZE, 236, Short.MAX_VALUE)
                 .addGap(0, 0, 0)
                 .addComponent(targetPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         detailBottomLayout.setVerticalGroup(
             detailBottomLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(detailBottomLayout.createSequentialGroup()
-                .addComponent(targetPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(19, Short.MAX_VALUE))
-            .addComponent(imagePanel, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+            .addComponent(imagePanel, javax.swing.GroupLayout.DEFAULT_SIZE, 161, Short.MAX_VALUE)
+            .addComponent(targetPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 161, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout detailWholeLayout = new javax.swing.GroupLayout(detailWhole);
         detailWhole.setLayout(detailWholeLayout);
         detailWholeLayout.setHorizontalGroup(
             detailWholeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(detailTop, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-            .addComponent(detailBottom, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(detailTop, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(detailBottom, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         detailWholeLayout.setVerticalGroup(
             detailWholeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(detailWholeLayout.createSequentialGroup()
                 .addComponent(detailTop, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0)
-                .addComponent(detailBottom, javax.swing.GroupLayout.DEFAULT_SIZE, 169, Short.MAX_VALUE)
+                .addComponent(detailBottom, javax.swing.GroupLayout.DEFAULT_SIZE, 161, Short.MAX_VALUE)
                 .addGap(0, 0, 0))
         );
 
@@ -1360,7 +1400,7 @@ public class CarArrivals extends javax.swing.JFrame {
         bottomRightPanel.setMaximumSize(new java.awt.Dimension(32779, 33293));
         bottomRightPanel.setPreferredSize(new java.awt.Dimension(400, 300));
 
-        arrivalListPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(VEHICLE_ARRIVAL_LIST_PANEL_TITLE.getContent()));
+        arrivalListPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, VEHICLE_ARRIVAL_LIST_PANEL_TITLE.getContent(), javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font(font_Type, font_Style, font_Size)));
         arrivalListPanel.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         arrivalListPanel.setPreferredSize(new java.awt.Dimension(323, 0));
 
@@ -1369,7 +1409,7 @@ public class CarArrivals extends javax.swing.JFrame {
         JTableHeader header = arrivalsList.getTableHeader();
         header.setDefaultRenderer(
             new HeaderCellRenderer(header.getDefaultRenderer()));
-        arrivalsList.setFont(new java.awt.Font(font_Type, 0, 14));
+        arrivalsList.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         arrivalsList.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
@@ -1405,7 +1445,7 @@ public class CarArrivals extends javax.swing.JFrame {
     );
     arrivalListPanelLayout.setVerticalGroup(
         arrivalListPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-        .addGap(0, 239, Short.MAX_VALUE)
+        .addGap(0, 211, Short.MAX_VALUE)
         .addGroup(arrivalListPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(arrivalsScroPan, javax.swing.GroupLayout.DEFAULT_SIZE, 254, Short.MAX_VALUE))
     );
@@ -1490,9 +1530,7 @@ public class CarArrivals extends javax.swing.JFrame {
     );
     buttonPanelLayout.setVerticalGroup(
         buttonPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-        .addGroup(buttonPanelLayout.createSequentialGroup()
-            .addGap(0, 0, 0)
-            .addComponent(countPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+        .addComponent(countPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         .addGroup(buttonPanelLayout.createSequentialGroup()
             .addGap(25, 25, 25)
             .addComponent(filler23, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -1515,7 +1553,7 @@ public class CarArrivals extends javax.swing.JFrame {
         bottomRightPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
         .addGroup(bottomRightPanelLayout.createSequentialGroup()
             .addGap(0, 0, 0)
-            .addComponent(arrivalListPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 262, Short.MAX_VALUE)
+            .addComponent(arrivalListPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 234, Short.MAX_VALUE)
             .addGap(10, 10, 10)
             .addComponent(buttonPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addGap(0, 0, 0))
@@ -1556,16 +1594,15 @@ public class CarArrivals extends javax.swing.JFrame {
     );
     wholeWestLayout.setVerticalGroup(
         wholeWestLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-        .addGap(0, 0, Short.MAX_VALUE)
+        .addGap(0, 645, Short.MAX_VALUE)
     );
 
     getContentPane().add(wholeWest, java.awt.BorderLayout.WEST);
 
-    setBounds(0, 0, 1016, 780);
+    setBounds(0, 0, 1016, 752);
     }// </editor-fold>//GEN-END:initComponents
 
     private void imageLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_imageLabelMouseClicked
-        // TODO add your handling code here:
         if (originalImg != null)
         {
             ImageDisplay bigImage = new ImageDisplay(originalImg, "100% " + FULL_SIZE_IMAGE_FRAME_TITLE.getContent());
@@ -1767,12 +1804,13 @@ public class CarArrivals extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.toedter.calendar.JDateChooser BeginDateChooser;
     private com.toedter.calendar.JDateChooser EndDateChooser;
-    private javax.swing.JPanel affiliPan;
+    private javax.swing.JTextField affiliHighTF;
+    private javax.swing.JLabel affiliHigher;
+    private javax.swing.JTextField affiliLowTF;
+    private javax.swing.JLabel affiliLower;
     private javax.swing.JPanel affiliPanel;
     private javax.swing.ButtonGroup affiliationGroup;
-    private javax.swing.JLabel affiliationLabel;
     private javax.swing.JRadioButton affiliationRadioButton;
-    private javax.swing.JTextField affiliationTF;
     private javax.swing.JPanel arrivalListPanel;
     private javax.swing.JTextField arrivalTmTF;
     private javax.swing.JTable arrivalsList;
@@ -1829,7 +1867,6 @@ public class CarArrivals extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel12;
-    private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel20;
@@ -1845,6 +1882,7 @@ public class CarArrivals extends javax.swing.JFrame {
     private javax.swing.JRadioButton oneHourRadioButton;
     private javax.swing.ButtonGroup periodOptionGroup;
     private javax.swing.JRadioButton periodRadioButton;
+    private javax.swing.JLabel purposeLabel;
     private javax.swing.JTextField recognizedTF;
     private javax.swing.JTextField registeredTF;
     private javax.swing.JTextField rowNumTF;
@@ -1861,7 +1899,6 @@ public class CarArrivals extends javax.swing.JFrame {
     private javax.swing.JButton seeLicenseButton;
     private javax.swing.JButton setSearchPeriodOptionButton;
     private javax.swing.JPanel tagNoPanel;
-    private javax.swing.JPanel targetDescrp;
     private javax.swing.JPanel targetPanel;
     private javax.swing.JLabel titleLabel;
     private javax.swing.JPanel titlePanel;
@@ -1869,8 +1906,11 @@ public class CarArrivals extends javax.swing.JFrame {
     private javax.swing.JPanel topPanel;
     private javax.swing.JPanel topVehicle;
     private javax.swing.JTextField unitTF;
+    private javax.swing.JPanel visitBuildingPanel;
+    private javax.swing.JPanel visitDetailReason;
+    private javax.swing.JPanel visitHighAffiliPanel;
+    private javax.swing.JPanel visitLowAffiliPanel;
     private javax.swing.JTextField visitPurposeTF;
-    private javax.swing.JLabel whereToLabel;
     private javax.swing.JPanel wholeBottom;
     private javax.swing.JPanel wholeEast;
     private javax.swing.JPanel wholePanel;
@@ -2124,7 +2164,7 @@ public class CarArrivals extends javax.swing.JFrame {
                             // handle unregistered vehicle
                             registeredTF.setText(UNREGISTERED_TF.getContent());
                             buildingLabel.setText(VISIT_TARGET_LABEL.getContent());
-                            affiliationLabel.setText(NON_REGI_TAG2_LABEL.getContent());
+                            affiliHigher.setText(NON_REGI_TAG2_LABEL.getContent());
                             l2No = rs.getInt("visitL2No");
                             unitSN = rs.getInt("visitUnitSN");
                         }
@@ -2132,14 +2172,14 @@ public class CarArrivals extends javax.swing.JFrame {
                             // for registered vehicles
                             registeredTF.setText(regiTag);
                             buildingLabel.setText(BUILDING_LABEL.getContent());
-                            affiliationLabel.setText(AFFILIATION_LABEL.getContent());
+                            affiliHigher.setText(AFFILIATION_LABEL.getContent());
                             l2No = rs.getInt("regisL2No");
                             unitSN = rs.getInt("regisUnitSN");
                         }
                         
                         buildingTF.setText(UNKNOWN_TF.getContent());
                         unitTF.setText(UNKNOWN_TF.getContent());
-                        affiliationTF.setText(UNKNOWN_TF.getContent());
+                        affiliHighTF.setText(UNKNOWN_TF.getContent());
                         //</editor-fold>                        
                                 
                         if (l2No > 0 || unitSN > 0) {
@@ -2221,7 +2261,7 @@ public class CarArrivals extends javax.swing.JFrame {
                     selectStmt = conn.createStatement();
                     rs = selectStmt.executeQuery(sb.toString());
                     if (rs.next()) {
-                        affiliationTF.setText(rs.getString("affiliation"));
+                        affiliHighTF.setText(rs.getString("affiliation"));
                     }
                     //</editor-fold>
                 } catch (SQLException ex) {
@@ -2240,11 +2280,11 @@ public class CarArrivals extends javax.swing.JFrame {
         gateNameTF.setText("");    
         attendantTF.setText(""); 
         registeredTF.setText("");
-        buildingLabel.setText(VISIT_TARGET_LABEL.getContent());
-        affiliationLabel.setText(NON_REGI_TAG2_LABEL.getContent());
+//        buildingLabel.setText(VISIT_TARGET_LABEL.getContent());
+//        affiliHigher.setText(NON_REGI_TAG2_LABEL.getContent());
         buildingTF.setText("");
         unitTF.setText("");
-        affiliationTF.setText("");    
+        affiliHighTF.setText("");    
         visitPurposeTF.setText(""); 
         barOptnTF.setText("");
         try {
@@ -2454,6 +2494,8 @@ public class CarArrivals extends javax.swing.JFrame {
         setComponentSize(searchButton, new Dimension(buttonWidthNorm, bigButtonHeight));
         setComponentSize(saveSheet_Button, new Dimension(CommonData.buttonWidthWide, buttonHeightNorm));
         setComponentSize(closeButton, new Dimension(CommonData.buttonWidthNorm, buttonHeightNorm));
+        
+        setComponentSize(imagePanel, new Dimension(ImgWidth * 145 / ImgHeight, 145));
     }
 
     private void changeLabelText() {

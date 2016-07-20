@@ -80,9 +80,6 @@ public class BlackFlyManager extends Thread implements
     
     private Object disconnected = new Object();
     int currImgSN = 0; // the ID of the most recently processed car entry image
-
-    public static final int ImgWidth = 1280;
-    public static final int ImgHeight = 960;
     
     /**
      * New design plate tag, width is 250 pixels.
