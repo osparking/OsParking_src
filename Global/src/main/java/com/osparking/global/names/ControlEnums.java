@@ -20,6 +20,7 @@ import static com.osparking.global.Globals.language;
 import static com.osparking.global.names.ControlEnums.ButtonTypes.SELECT_BTN;
 import static com.osparking.global.names.ControlEnums.Languages.ENGLISH;
 import static com.osparking.global.names.ControlEnums.Languages.KOREAN;
+import static com.osparking.global.names.ControlEnums.TitleTypes.ARRIVAL_TIME_PANEL_TITLE;
 
 /**
  *
@@ -61,7 +62,7 @@ public class ControlEnums {
         SEARCH_CRITERIA_PANEL_TITLE("검색 기준", "Search Criteria"),
         SEARCH_RESULT_TITLE("검색 결과", "Search Result"),
         ARRIVAL_PROPERTIES_PANEL_TITLE("도착 속성", "Arrival Properties"),
-        ARRIVAL_TIME_PANEL_TITLE("도착 기간", "Arrival Time"),
+        ARRIVAL_TIME_PANEL_TITLE("도착 기간", "Arrival Period"),
         VEHICLE_ARIIVAL_DETAILS_PANEL_TITLE("도착차량 상세정보", "Vehicle Arrival Details"),
         VEHICLE_ARRIVAL_LIST_PANEL_TITLE("도착차량 목록", "Vehicle Arrival List"),
         FULL_SIZE_IMAGE_FRAME_TITLE("입차 사진", "car arrival image"),
@@ -93,6 +94,7 @@ public class ControlEnums {
     public enum LabelContent {
         levelSelectionNotice("허용되는 연산의 범위를 결정하기 위한 선택!", 
                 "Selection that determines allowed operations!"), 
+        NO_IMAGE_MESSAGE("사진이 없습니다.", "No Image Exists"), 
         VISIT_REASON_LABEL("상세 목적", "Detailed Reason"), 
         LOGIN_ID_LABEL("아이디", "User ID"), 
         ID_LABEL("아이디 : ", "User ID : "), 
@@ -146,7 +148,7 @@ public class ControlEnums {
         ARRIVAL_TIME_LABEL("도착",  "Date"),       
         RECOGNIZED_LABEL ("인식",  "Recog'"),
         REGISTERED_LABEL("등록",  "Regi'"),
-        ARR_TM_LEGEND("월.일 시:분",  "Mo.D H:Mi"),
+        ARR_TM_LEGEND("월-일 시:분",  "Mo-D H:Mi"),
         AFFILIATION_LABEL ("소속부서",  "Affiliations"),
         BUILDING_LABEL ("소속건물",  "Building"),
         VISIT_BUILDING ("건물(동)",  "Bldg."),
@@ -212,6 +214,11 @@ public class ControlEnums {
         FOCUS_MOVE_NOTE(
                 "열 이동: 탭, Shift+탭, 마우스", 
                 "Col' move: Tab, Sh+Tab, Mouse"),
+        PERIOD_SETTING_RESULT(
+                ARRIVAL_TIME_PANEL_TITLE.getContent() + " 옵션 선택이" + System.lineSeparator() +
+                        "시스템이 기억되었습니다.", 
+                ARRIVAL_TIME_PANEL_TITLE.getContent() + " option selection" + System.lineSeparator() +
+                        "recorded to OsParking."),
         
         UPDATE_SAVE_HELP("자료 갱신 후 [엔터] 키로 마감(=저장)할 것!",
                 "Press enter after the data modification!");
@@ -839,9 +846,10 @@ public class ControlEnums {
         CELL_PHONE_TF("(휴대전화)", "(Cell Phone)"),
         LANDLINE_TF("(유선전화)", "(LandLine)"),
         LOG_OUT_TF("(로그아웃)", "(Log Out)"),
-        UNKNOWN_TF("(자료없음)", "(unknown)"),
+        UNKNOWN_TF("(자료 없음)", "(unknown)"),
+        UNKNOWN_TF_SHORT("(없음)", "(NA)"),
         UNREGISTERED_TF("(미등록)", "(Non-Registered)"),
-        NOT_APPLICABLE_TF("(해당사항없음)", "(Not Applicable)"),
+        NOT_APPLICABLE_TF("(해당 없음)", "(Not Applicable)"),
         STATUS_TF("<중요 상태 정보>", "<Critical Status Information>"),
         START_MSG("시스템 시작", "System started"),
         STOP_MSG("시스템 종료", "System stopped"),

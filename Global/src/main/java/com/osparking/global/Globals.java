@@ -123,6 +123,8 @@ import com.osparking.global.names.SocketConnStat;
 import java.awt.Container;
 import javax.imageio.ImageIO;
 import javax.swing.JComboBox;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.TableCellRenderer;
 
 /**
  * Defines names and methods used globally in the Parking Lot manager application developed by 
@@ -154,7 +156,7 @@ public class Globals {
     public static SimpleDateFormat timeFormatMMSS = new SimpleDateFormat("mm_ss"); 
     public static SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");    
     public static int SIX_HOURS = 3600 * 1000 * 6;
-
+    
     public static void setTableFocusAt(JTable driverTable, 
             int rowIdx, int colIdx) 
     {
@@ -461,22 +463,22 @@ public class Globals {
         if (language == KOREAN) {
             switch (picNo) {
                 case 1:
-                    tagNumber = "52가8648"; 
+                    tagNumber = "00"; 
                     break;
                 case 2:
-                    tagNumber = "47누8868"; 
+                    tagNumber = "00로1789"; 
                     break;
                 case 3:
-                    tagNumber = "서울31나3416"; 
+                    tagNumber = "00무2311"; 
                     break;
                 case 4:
                     tagNumber = "경기42고6003"; 
                     break;
                 case 5:
-                    tagNumber = "30모8186"; 
+                    tagNumber = "01나0421"; 
                     break;
                 case 6:
-                    tagNumber = "서울32가1234"; 
+                    tagNumber = "01라8338"; 
                     break;
                 default:
                     break;

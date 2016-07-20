@@ -20,6 +20,8 @@ import com.osparking.attendant.AttListForm;
 import com.osparking.attendant.LoginDialog;
 import com.osparking.attendant.LoginEventListener;
 import com.osparking.attendant.LoginWindowEvent;
+import static com.osparking.global.CommonData.ImgHeight;
+import static com.osparking.global.CommonData.ImgWidth;
 import static com.osparking.global.CommonData.metaKeyLabel;
 import com.osparking.global.Globals;
 import static com.osparking.global.Globals.*;
@@ -53,7 +55,6 @@ import static com.osparking.global.names.ControlEnums.MenuITemTypes.LOGOUT_MENU;
 import static com.osparking.global.names.ControlEnums.MenuITemTypes.LOGOUT_MENU_ITEM;
 import static com.osparking.global.names.ControlEnums.MenuITemTypes.MANAGER_MANU;
 import static com.osparking.global.names.ControlEnums.MenuITemTypes.MANAGE_MENU_ITEM;
-import static com.osparking.global.names.ControlEnums.MenuITemTypes.META_KEY_LABEL;
 import static com.osparking.global.names.ControlEnums.MenuITemTypes.QUIT_MENU_ITEM;
 import static com.osparking.global.names.ControlEnums.MenuITemTypes.RECORD_MENU;
 import static com.osparking.global.names.ControlEnums.MenuITemTypes.SETTING_MENU_ITEM;
@@ -127,7 +128,6 @@ import com.osparking.statistics.CarArrivals;
 import com.osparking.vehicle.AffiliationBuildingForm;
 import com.osparking.vehicle.VehiclesForm;
 import com.osparking.vehicle.driver.ManageDrivers;
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
@@ -2046,8 +2046,8 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
     }
 
     private BufferedImage convertRaw2Buffered(FlyCapture2.Image rawImage) {
-        int width = BlackFlyManager.ImgWidth;
-        int height = BlackFlyManager.ImgHeight;
+        int width = ImgWidth;
+        int height = ImgHeight;
         BufferedImage bufferedImage = new BufferedImage(width, height, TYPE_BYTE_GRAY);
         byte[] pxBytes = new byte[width * height];
         int [] pxInts = new int[width * height];

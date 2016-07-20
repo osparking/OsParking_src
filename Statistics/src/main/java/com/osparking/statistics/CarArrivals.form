@@ -114,6 +114,12 @@
             <EmptyBorder bottom="3" left="3" right="3" top="3"/>
           </Border>
         </Property>
+        <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+          <Dimension value="[945, 551]"/>
+        </Property>
+        <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+          <Dimension value="[945, 756]"/>
+        </Property>
       </Properties>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout" value="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout$BorderConstraintsDescription">
@@ -721,18 +727,20 @@
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Group type="102" attributes="0">
                                       <Component id="affiliPanel" pref="151" max="32767" attributes="0"/>
-                                      <EmptySpace min="-2" pref="0" max="-2" attributes="0"/>
-                                      <Component id="filler19" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace min="-2" pref="0" max="-2" attributes="0"/>
+                                      <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
                                       <Component id="buildingPanel" min="-2" pref="129" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
                             </DimensionLayout>
                             <DimensionLayout dim="1">
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="affiliPanel" min="-2" pref="92" max="-2" attributes="0"/>
-                                  <Component id="filler19" min="-2" pref="92" max="-2" attributes="0"/>
-                                  <Component id="buildingPanel" min="-2" pref="92" max="-2" attributes="0"/>
+                                  <Group type="102" attributes="0">
+                                      <Group type="103" groupAlignment="0" attributes="0">
+                                          <Component id="affiliPanel" min="-2" pref="92" max="-2" attributes="0"/>
+                                          <Component id="buildingPanel" min="-2" pref="92" max="-2" attributes="0"/>
+                                      </Group>
+                                      <EmptySpace min="-2" pref="2" max="-2" attributes="0"/>
+                                  </Group>
                               </Group>
                             </DimensionLayout>
                           </Layout>
@@ -741,6 +749,9 @@
                               <Properties>
                                 <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                                   <Color blue="f3" green="f3" red="f3" type="rgb"/>
+                                </Property>
+                                <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                                  <Dimension value="[240, 94]"/>
                                 </Property>
                                 <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                                   <Dimension value="[120, 94]"/>
@@ -754,13 +765,13 @@
                               <Layout>
                                 <DimensionLayout dim="0">
                                   <Group type="103" groupAlignment="0" attributes="0">
-                                      <Component id="affiliationRadioButton" min="-2" pref="134" max="-2" attributes="0"/>
                                       <Group type="102" attributes="0">
                                           <Group type="103" groupAlignment="0" attributes="0">
+                                              <Component id="affiliationRadioButton" min="-2" pref="134" max="-2" attributes="0"/>
                                               <Component id="searchL1ComboBox" alignment="0" max="32767" attributes="0"/>
                                               <Component id="searchL2ComboBox" alignment="0" max="32767" attributes="0"/>
                                           </Group>
-                                          <EmptySpace min="5" pref="5" max="-2" attributes="0"/>
+                                          <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
                                       </Group>
                                   </Group>
                                 </DimensionLayout>
@@ -818,6 +829,9 @@
                                     <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                                       <Connection code="new javax.swing.DefaultComboBoxModel(new String[]{})" type="code"/>
                                     </Property>
+                                    <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                                      <Connection code="new Dimension(CABW_WIDE * 2, CABH_NORM)" type="code"/>
+                                    </Property>
                                     <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                                       <Connection code="new Dimension(CABW_WIDE, CABH_NORM)" type="code"/>
                                     </Property>
@@ -841,6 +855,9 @@
                                     <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                                       <Connection code="    new javax.swing.DefaultComboBoxModel(new String[]{})" type="code"/>
                                     </Property>
+                                    <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                                      <Connection code="new Dimension(CABW_WIDE * 2, CABH_NORM)" type="code"/>
+                                    </Property>
                                     <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                                       <Connection code="new Dimension(CABW_WIDE, CABH_NORM)" type="code"/>
                                     </Property>
@@ -859,22 +876,6 @@
                                 </Component>
                               </SubComponents>
                             </Container>
-                            <Component class="javax.swing.Box$Filler" name="filler19">
-                              <Properties>
-                                <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                                  <Dimension value="[10, 32767]"/>
-                                </Property>
-                                <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                                  <Dimension value="[10, 0]"/>
-                                </Property>
-                                <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                                  <Dimension value="[10, 0]"/>
-                                </Property>
-                              </Properties>
-                              <AuxValues>
-                                <AuxValue name="classDetails" type="java.lang.String" value="Box.Filler.HorizontalStrut"/>
-                              </AuxValues>
-                            </Component>
                             <Container class="javax.swing.JPanel" name="buildingPanel">
                               <Properties>
                                 <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
@@ -1208,13 +1209,13 @@
                         <Component class="javax.swing.Box$Filler" name="filler3">
                           <Properties>
                             <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                              <Dimension value="[32767, 0]"/>
+                              <Dimension value="[15, 0]"/>
                             </Property>
                             <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                              <Dimension value="[5, 0]"/>
+                              <Dimension value="[15, 0]"/>
                             </Property>
                             <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                              <Dimension value="[5, 0]"/>
+                              <Dimension value="[15, 0]"/>
                             </Property>
                           </Properties>
                           <AuxValues>
@@ -1240,13 +1241,13 @@
                         <Component class="javax.swing.Box$Filler" name="filler4">
                           <Properties>
                             <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                              <Dimension value="[32767, 0]"/>
+                              <Dimension value="[15, 0]"/>
                             </Property>
                             <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                              <Dimension value="[10, 0]"/>
+                              <Dimension value="[15, 0]"/>
                             </Property>
                             <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                              <Dimension value="[5, 0]"/>
+                              <Dimension value="[15, 0]"/>
                             </Property>
                           </Properties>
                           <AuxValues>
@@ -1489,7 +1490,7 @@
         <Container class="javax.swing.JPanel" name="bottomPanel">
           <Properties>
             <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-              <Dimension value="[965, 400]"/>
+              <Dimension value="[945, 400]"/>
             </Property>
           </Properties>
 
@@ -1543,6 +1544,7 @@
                   </Properties>
 
                   <Layout class="org.netbeans.modules.form.compat2.layouts.DesignFlowLayout">
+                    <Property name="alignment" type="int" value="0"/>
                     <Property name="horizontalGap" type="int" value="0"/>
                     <Property name="verticalGap" type="int" value="0"/>
                   </Layout>
@@ -1590,6 +1592,9 @@
                         <Component class="javax.swing.JTextField" name="rowNumTF">
                           <Properties>
                             <Property name="editable" type="boolean" value="false"/>
+                            <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                              <Color blue="c0" green="c0" id="lightGray" palette="1" red="c0" type="palette"/>
+                            </Property>
                             <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                               <Connection code="new java.awt.Font(font_Type, font_Style, font_Size)" type="code"/>
                             </Property>
@@ -1637,6 +1642,9 @@
                         <Component class="javax.swing.JTextField" name="gateNameTF">
                           <Properties>
                             <Property name="editable" type="boolean" value="false"/>
+                            <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                              <Color blue="c0" green="c0" id="lightGray" palette="1" red="c0" type="palette"/>
+                            </Property>
                             <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                               <Connection code="new java.awt.Font(font_Type, font_Style, font_Size)" type="code"/>
                             </Property>
@@ -1684,6 +1692,9 @@
                         <Component class="javax.swing.JTextField" name="barOptnTF">
                           <Properties>
                             <Property name="editable" type="boolean" value="false"/>
+                            <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                              <Color blue="c0" green="c0" id="lightGray" palette="1" red="c0" type="palette"/>
+                            </Property>
                             <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                               <Connection code="new java.awt.Font(font_Type, font_Style, font_Size)" type="code"/>
                             </Property>
@@ -1768,6 +1779,9 @@
                         <Component class="javax.swing.JTextField" name="arrivalTmTF">
                           <Properties>
                             <Property name="editable" type="boolean" value="false"/>
+                            <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                              <Color blue="c0" green="c0" id="lightGray" palette="1" red="c0" type="palette"/>
+                            </Property>
                             <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                               <Connection code="new java.awt.Font(font_Type, font_Style, font_Size)" type="code"/>
                             </Property>
@@ -1816,6 +1830,9 @@
                         <Component class="javax.swing.JTextField" name="attendantTF">
                           <Properties>
                             <Property name="editable" type="boolean" value="false"/>
+                            <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                              <Color blue="c0" green="c0" id="lightGray" palette="1" red="c0" type="palette"/>
+                            </Property>
                             <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                               <Connection code="new java.awt.Font(font_Type, font_Style, font_Size)" type="code"/>
                             </Property>
@@ -1840,10 +1857,10 @@
                     <Container class="javax.swing.JPanel" name="tagNoPanel">
                       <Properties>
                         <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                          <Dimension value="[165, 100]"/>
+                          <Dimension value="[175, 100]"/>
                         </Property>
                         <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                          <Dimension value="[165, 100]"/>
+                          <Dimension value="[175, 100]"/>
                         </Property>
                       </Properties>
 
@@ -1900,18 +1917,20 @@
                         <Component class="javax.swing.JTextField" name="recognizedTF">
                           <Properties>
                             <Property name="editable" type="boolean" value="false"/>
+                            <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                              <Color blue="c0" green="c0" id="lightGray" palette="1" red="c0" type="palette"/>
+                            </Property>
                             <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                               <Connection code="new java.awt.Font(font_Type, font_Style, font_Size)" type="code"/>
                             </Property>
-                            <Property name="text" type="java.lang.String" value="&#xc11c;&#xc6b8;32&#xac00;5555"/>
                             <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                               <Dimension value="[130, 35]"/>
                             </Property>
                             <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                              <Dimension value="[100, 28]"/>
+                              <Dimension value="[110, 28]"/>
                             </Property>
                             <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                              <Dimension value="[100, 28]"/>
+                              <Dimension value="[110, 28]"/>
                             </Property>
                           </Properties>
                           <Constraints>
@@ -1948,18 +1967,20 @@
                         <Component class="javax.swing.JTextField" name="registeredTF">
                           <Properties>
                             <Property name="editable" type="boolean" value="false"/>
+                            <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                              <Color blue="c0" green="c0" id="lightGray" palette="1" red="c0" type="palette"/>
+                            </Property>
                             <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                               <Connection code="new java.awt.Font(font_Type, font_Style, font_Size)" type="code"/>
                             </Property>
-                            <Property name="text" type="java.lang.String" value="&#xc11c;&#xc6b8;32&#xac00;5555"/>
                             <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                               <Dimension value="[130, 35]"/>
                             </Property>
                             <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                              <Dimension value="[100, 28]"/>
+                              <Dimension value="[110, 28]"/>
                             </Property>
                             <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                              <Dimension value="[100, 28]"/>
+                              <Dimension value="[110, 28]"/>
                             </Property>
                           </Properties>
                           <Constraints>
@@ -2029,15 +2050,15 @@
                         <Component class="javax.swing.JLabel" name="imageLabel">
                           <Properties>
                             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                              <Color blue="cc" green="0" red="0" type="rgb"/>
+                              <Color blue="cc" green="cc" red="cc" type="rgb"/>
                             </Property>
                             <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                               <Color blue="99" green="0" red="ff" type="rgb"/>
                             </Property>
                             <Property name="horizontalAlignment" type="int" value="0"/>
                             <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
-                              <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
-                                <LineBorder/>
+                              <Border info="org.netbeans.modules.form.compat2.border.BevelBorderInfo">
+                                <BevelBorder bevelType="1"/>
                               </Border>
                             </Property>
                             <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
@@ -2142,6 +2163,9 @@
                             <Component class="javax.swing.JTextField" name="buildingTF">
                               <Properties>
                                 <Property name="editable" type="boolean" value="false"/>
+                                <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                                  <Color blue="c0" green="c0" id="lightGray" palette="1" red="c0" type="palette"/>
+                                </Property>
                                 <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                                   <Connection code="new java.awt.Font(font_Type, font_Style, font_Size)" type="code"/>
                                 </Property>
@@ -2179,6 +2203,9 @@
                             <Component class="javax.swing.JTextField" name="unitTF">
                               <Properties>
                                 <Property name="editable" type="boolean" value="false"/>
+                                <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                                  <Color blue="c0" green="c0" id="lightGray" palette="1" red="c0" type="palette"/>
+                                </Property>
                                 <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                                   <Connection code="new java.awt.Font(font_Type, font_Style, font_Size)" type="code"/>
                                 </Property>
@@ -2233,6 +2260,9 @@
                             <Component class="javax.swing.JTextField" name="affiliHighTF">
                               <Properties>
                                 <Property name="editable" type="boolean" value="false"/>
+                                <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                                  <Color blue="c0" green="c0" id="lightGray" palette="1" red="c0" type="palette"/>
+                                </Property>
                                 <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                                   <Connection code="new java.awt.Font(font_Type, font_Style, font_Size)" type="code"/>
                                 </Property>
@@ -2288,6 +2318,9 @@
                             <Component class="javax.swing.JTextField" name="affiliLowTF">
                               <Properties>
                                 <Property name="editable" type="boolean" value="false"/>
+                                <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                                  <Color blue="c0" green="c0" id="lightGray" palette="1" red="c0" type="palette"/>
+                                </Property>
                                 <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                                   <Connection code="new java.awt.Font(font_Type, font_Style, font_Size)" type="code"/>
                                 </Property>
@@ -2358,6 +2391,9 @@
                             <Component class="javax.swing.JTextField" name="visitPurposeTF">
                               <Properties>
                                 <Property name="editable" type="boolean" value="false"/>
+                                <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                                  <Color blue="c0" green="c0" id="lightGray" palette="1" red="c0" type="palette"/>
+                                </Property>
                                 <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                                   <Connection code="new java.awt.Font(font_Type, font_Style, font_Size)" type="code"/>
                                 </Property>
@@ -2470,7 +2506,7 @@
                             <Property name="rowHeight" type="int" value="22"/>
                           </Properties>
                           <AuxValues>
-                            <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="JTableHeader header = arrivalsList.getTableHeader();&#xa;header.setDefaultRenderer(&#xa;  new HeaderCellRenderer(header.getDefaultRenderer()));"/>
+                            <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="JTableHeader header = arrivalsList.getTableHeader();&#xa;header.setFont(new java.awt.Font(font_Type, font_Style, font_Size));&#xa;header.setDefaultRenderer(&#xa;  new HeaderCellRenderer(header.getDefaultRenderer()));"/>
                           </AuxValues>
                         </Component>
                       </SubComponents>

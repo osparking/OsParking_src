@@ -286,7 +286,7 @@ public class ManageDrivers extends javax.swing.JFrame {
             searchButton.setEnabled(true);
         }
         releaseCount = 0;
-    }    
+    }
 
     private void setSearchEnabled(boolean flag) {
         searchName.setEnabled(flag);
@@ -601,6 +601,7 @@ public class ManageDrivers extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle(DRIVER_LIST_FRAME_TITLE.getContent());
         setMinimumSize(new Dimension(normGUIwidth, normGUIheight));
+        setPreferredSize(new Dimension(normGUIwidth,normGUIheight));
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 formWindowClosing(evt);
@@ -618,6 +619,8 @@ public class ManageDrivers extends javax.swing.JFrame {
         westPanel.setPreferredSize(new java.awt.Dimension(40, 100));
         getContentPane().add(westPanel, java.awt.BorderLayout.WEST);
 
+        wholePanel.setMinimumSize(new Dimension(normGUIwidth - 80,normGUIheight - 80));
+        wholePanel.setPreferredSize(new Dimension(normGUIwidth - 80,normGUIheight - 80));
         wholePanel.setLayout(new javax.swing.BoxLayout(wholePanel, javax.swing.BoxLayout.PAGE_AXIS));
 
         titlePanel.setMaximumSize(new java.awt.Dimension(2147483647, 40));
@@ -666,6 +669,8 @@ public class ManageDrivers extends javax.swing.JFrame {
         wholePanel.add(titlePanel);
 
         topButtonPanel.setMaximumSize(new java.awt.Dimension(33095, 40));
+        topButtonPanel.setMinimumSize(new Dimension(normGUIwidth - 80,40));
+        topButtonPanel.setPreferredSize(new Dimension(normGUIwidth - 80,40));
         topButtonPanel.setLayout(new javax.swing.BoxLayout(topButtonPanel, javax.swing.BoxLayout.LINE_AXIS));
 
         topLTpanel.setMaximumSize(new java.awt.Dimension(160, 40));
@@ -1505,32 +1510,10 @@ public class ManageDrivers extends javax.swing.JFrame {
 
     private void searchL2ComboBoxPopupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_searchL2ComboBoxPopupMenuWillBecomeVisible
         mayRefreshLowerComboBox(searchL1ComboBox, searchL2ComboBox, AffiliationL2);
-        
-//        int L1No = (Integer)((ConvComboBoxItem)searchL1ComboBox.getSelectedItem()).getKeyValue();
-//        
-//        if (searchL2ComboBox.getItemCount() == 1 || 
-//                getPrevListParentKey()[AffiliationL2.getNumVal()] != L1No) 
-//        {
-//            Object selItem = searchL2ComboBox.getSelectedItem();
-//            refreshComboBox(searchL2ComboBox, getPrompter(AffiliationL2, searchL1ComboBox),
-//                    AffiliationL2, L1No, getPrevListParentKey());        
-//            searchL2ComboBox.setSelectedItem(selItem);
-//        }
     }//GEN-LAST:event_searchL2ComboBoxPopupMenuWillBecomeVisible
 
     private void searchUnitComboBoxPopupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_searchUnitComboBoxPopupMenuWillBecomeVisible
         mayRefreshLowerComboBox(searchBuildingComboBox, searchUnitComboBox, UnitNo);
-//        int bldgNo = (Integer)
-//                ((ConvComboBoxItem)searchBuildingComboBox.getSelectedItem()).getKeyValue();
-//        
-//        if (searchUnitComboBox.getItemCount() == 1 || 
-//                getPrevListParentKey()[UnitNo.getNumVal()] != bldgNo) 
-//        {
-//            Object selItem = searchUnitComboBox.getSelectedItem();
-//            refreshComboBox(searchUnitComboBox, getPrompter(UnitNo, searchBuildingComboBox), 
-//                UnitNo, bldgNo, getPrevListParentKey());
-//            searchUnitComboBox.setSelectedItem(selItem); 
-//        }
     }//GEN-LAST:event_searchUnitComboBoxPopupMenuWillBecomeVisible
 
     private void clearButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearButtonActionPerformed

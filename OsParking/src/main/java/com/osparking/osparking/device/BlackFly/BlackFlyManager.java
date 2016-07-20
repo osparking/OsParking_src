@@ -16,6 +16,8 @@
  */
 package com.osparking.osparking.device.BlackFly;
 
+import static com.osparking.global.CommonData.ImgHeight;
+import static com.osparking.global.CommonData.ImgWidth;
 import static com.osparking.global.Globals.DEBUG;
 import static com.osparking.global.Globals.gfinishConnection;
 import static com.osparking.global.Globals.logParkingException;
@@ -33,7 +35,6 @@ import com.sun.jna.Platform;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.UnsupportedEncodingException;
-import java.lang.reflect.Field;
 import java.net.Socket;
 import java.util.Arrays;
 import java.util.logging.Level;
