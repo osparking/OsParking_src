@@ -131,7 +131,7 @@ public class ControlEnums {
         MODIFY_MODE_LABEL("수정",  "Modification"), 
         SEARCH_LABEL("검색키",  "S'Key"), 
         ORDER_LABEL("순번",  "List#"), 
-        CAR_TAG_LABEL("차량번호",  "Tag No."), 
+        CAR_TAG_LABEL("<html>차량번호(<u>N</u>)</html>",  "<html>Tag (<u>N</u>)o.</html>"), 
         MODI_DATE_LABEL("최근변경",  "Modi' Date"),
         NOTIFICATION_LABEL("세대통보",  "Notification"),
         EXACT_COMP_LABEL ("전체비교",  "Exact Comp'"),
