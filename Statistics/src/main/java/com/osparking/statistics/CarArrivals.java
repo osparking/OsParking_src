@@ -423,8 +423,8 @@ public class CarArrivals extends javax.swing.JFrame {
         searchPanel.setBackground(new java.awt.Color(243, 243, 243));
         searchPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, SEARCH_CRITERIA_PANEL_TITLE.getContent(), javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font(font_Type, font_Style, font_Size)));
         searchPanel.setAlignmentX(0.0F);
-        searchPanel.setMinimumSize(new java.awt.Dimension(800, 280));
-        searchPanel.setPreferredSize(new java.awt.Dimension(900, 280));
+        searchPanel.setMinimumSize(new java.awt.Dimension(800, 265));
+        searchPanel.setPreferredSize(new java.awt.Dimension(900, 265));
 
         criteriaPanel.setBackground(new java.awt.Color(243, 243, 243));
         criteriaPanel.setMinimumSize(new java.awt.Dimension(800, 255));
@@ -754,7 +754,7 @@ public class CarArrivals extends javax.swing.JFrame {
         topDriverLayout.setHorizontalGroup(
             topDriverLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(topDriverLayout.createSequentialGroup()
-                .addComponent(affiliPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 161, Short.MAX_VALUE)
+                .addComponent(affiliPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 151, Short.MAX_VALUE)
                 .addGap(0, 0, 0)
                 .addComponent(buildingPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
@@ -796,7 +796,7 @@ public class CarArrivals extends javax.swing.JFrame {
                 .addGap(26, 26, 26)
                 .addComponent(topVehicle, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(5, 5, 5)
-                .addComponent(topDriver, javax.swing.GroupLayout.DEFAULT_SIZE, 290, Short.MAX_VALUE)
+                .addComponent(topDriver, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGap(5, 5, 5)
                 .addComponent(filler18, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGap(5, 5, 5)
@@ -993,14 +993,14 @@ public class CarArrivals extends javax.swing.JFrame {
             .addGroup(criteriaPanelLayout.createSequentialGroup()
                 .addGap(0, 0, 0)
                 .addGroup(criteriaPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(searchTop, javax.swing.GroupLayout.DEFAULT_SIZE, 811, Short.MAX_VALUE)
-                    .addComponent(searchBottom, javax.swing.GroupLayout.DEFAULT_SIZE, 811, Short.MAX_VALUE))
+                    .addComponent(searchTop, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(searchBottom, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(0, 0, 0))
         );
         criteriaPanelLayout.setVerticalGroup(
             criteriaPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(criteriaPanelLayout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(0, 0, 0)
                 .addComponent(searchTop, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(searchBottom, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1034,7 +1034,7 @@ public class CarArrivals extends javax.swing.JFrame {
             searchPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(searchPanelLayout.createSequentialGroup()
                 .addGap(0, 0, 0)
-                .addComponent(criteriaPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 811, Short.MAX_VALUE)
+                .addComponent(criteriaPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(searchButtonPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(2, 2, 2))
@@ -1045,7 +1045,7 @@ public class CarArrivals extends javax.swing.JFrame {
                 .addGroup(searchPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(criteriaPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(searchButtonPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap())
+                .addGap(0, 0, 0))
         );
 
         topPanel.add(searchPanel);
@@ -1058,15 +1058,16 @@ public class CarArrivals extends javax.swing.JFrame {
 
         detailWhole.setBorder(javax.swing.BorderFactory.createTitledBorder(null, VEHICLE_ARIIVAL_DETAILS_PANEL_TITLE.getContent(), javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font(font_Type, font_Style, font_Size)));
         detailWhole.setMaximumSize(new java.awt.Dimension(32767, 163835));
-        detailWhole.setMinimumSize(new java.awt.Dimension(400, 195));
-        detailWhole.setPreferredSize(new java.awt.Dimension(650, 445));
+        detailWhole.setMinimumSize(new java.awt.Dimension(400, 230));
+        detailWhole.setPreferredSize(new java.awt.Dimension(650, 240));
+        detailWhole.setLayout(new java.awt.BorderLayout(0, 5));
 
-        detailTop.setPreferredSize(new java.awt.Dimension(536, 105));
+        detailTop.setPreferredSize(new java.awt.Dimension(495, 90));
         detailTop.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 0, 0));
 
-        gateNoPanel.setMaximumSize(new java.awt.Dimension(196602, 35));
-        gateNoPanel.setMinimumSize(new java.awt.Dimension(165, 100));
-        gateNoPanel.setPreferredSize(new java.awt.Dimension(165, 100));
+        gateNoPanel.setMaximumSize(new java.awt.Dimension(300, 90));
+        gateNoPanel.setMinimumSize(new java.awt.Dimension(165, 90));
+        gateNoPanel.setPreferredSize(new java.awt.Dimension(165, 90));
         gateNoPanel.setLayout(new java.awt.GridBagLayout());
 
         jLabel3.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
@@ -1149,8 +1150,9 @@ public class CarArrivals extends javax.swing.JFrame {
 
         detailTop.add(gateNoPanel);
 
-        dateTmPanel.setMinimumSize(new java.awt.Dimension(165, 100));
-        dateTmPanel.setPreferredSize(new java.awt.Dimension(165, 100));
+        dateTmPanel.setMaximumSize(new java.awt.Dimension(300, 90));
+        dateTmPanel.setMinimumSize(new java.awt.Dimension(165, 90));
+        dateTmPanel.setPreferredSize(new java.awt.Dimension(165, 90));
         dateTmPanel.setLayout(new java.awt.GridBagLayout());
 
         colHead1.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
@@ -1219,8 +1221,9 @@ public class CarArrivals extends javax.swing.JFrame {
 
         detailTop.add(dateTmPanel);
 
-        tagNoPanel.setMinimumSize(new java.awt.Dimension(175, 100));
-        tagNoPanel.setPreferredSize(new java.awt.Dimension(175, 100));
+        tagNoPanel.setMaximumSize(new java.awt.Dimension(300, 90));
+        tagNoPanel.setMinimumSize(new java.awt.Dimension(165, 90));
+        tagNoPanel.setPreferredSize(new java.awt.Dimension(165, 90));
         tagNoPanel.setLayout(new java.awt.GridBagLayout());
 
         colHead2.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
@@ -1288,8 +1291,10 @@ public class CarArrivals extends javax.swing.JFrame {
 
         detailTop.add(tagNoPanel);
 
+        detailWhole.add(detailTop, java.awt.BorderLayout.NORTH);
+
         detailBottom.setMinimumSize(new java.awt.Dimension(525, 140));
-        detailBottom.setPreferredSize(new java.awt.Dimension(536, 150));
+        detailBottom.setPreferredSize(new java.awt.Dimension(536, 140));
 
         imagePanel.setMinimumSize(new java.awt.Dimension(193, 145));
         imagePanel.setPreferredSize(new java.awt.Dimension(193, 145));
@@ -1299,7 +1304,7 @@ public class CarArrivals extends javax.swing.JFrame {
         imageLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         imageLabel.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
         imageLabel.setMaximumSize(new java.awt.Dimension(32767, 32767));
-        imageLabel.setMinimumSize(new java.awt.Dimension(193, 145));
+        imageLabel.setMinimumSize(new java.awt.Dimension(193, 140));
         imageLabel.setPreferredSize(new java.awt.Dimension(193, 145));
         imageLabel.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -1316,13 +1321,13 @@ public class CarArrivals extends javax.swing.JFrame {
         imagePanelLayout.setVerticalGroup(
             imagePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(imagePanelLayout.createSequentialGroup()
-                .addComponent(imageLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(imageLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                 .addGap(2, 2, 2))
         );
 
         targetPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, WHERE_TO_LABEL.getContent(), javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font(font_Type, font_Style, font_Size)));
-        targetPanel.setMinimumSize(new java.awt.Dimension(300, 145));
-        targetPanel.setPreferredSize(new java.awt.Dimension(300, 145));
+        targetPanel.setMinimumSize(new java.awt.Dimension(300, 140));
+        targetPanel.setPreferredSize(new java.awt.Dimension(300, 140));
 
         visitBuildingPanel.setMinimumSize(new java.awt.Dimension(265, 28));
         visitBuildingPanel.setPreferredSize(new java.awt.Dimension(283, 28));
@@ -1451,7 +1456,7 @@ public class CarArrivals extends javax.swing.JFrame {
         targetPanelLayout.setVerticalGroup(
             targetPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(targetPanelLayout.createSequentialGroup()
-                .addGap(2, 2, 2)
+                .addGap(0, 0, 0)
                 .addComponent(visitBuildingPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(2, 2, 2)
                 .addComponent(visitHighAffiliPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1466,31 +1471,17 @@ public class CarArrivals extends javax.swing.JFrame {
         detailBottomLayout.setHorizontalGroup(
             detailBottomLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(detailBottomLayout.createSequentialGroup()
-                .addComponent(imagePanel, javax.swing.GroupLayout.DEFAULT_SIZE, 236, Short.MAX_VALUE)
+                .addComponent(imagePanel, javax.swing.GroupLayout.DEFAULT_SIZE, 228, Short.MAX_VALUE)
                 .addGap(0, 0, 0)
                 .addComponent(targetPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         detailBottomLayout.setVerticalGroup(
             detailBottomLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(imagePanel, javax.swing.GroupLayout.DEFAULT_SIZE, 161, Short.MAX_VALUE)
-            .addComponent(targetPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 161, Short.MAX_VALUE)
+            .addComponent(imagePanel, javax.swing.GroupLayout.DEFAULT_SIZE, 149, Short.MAX_VALUE)
+            .addComponent(targetPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 149, Short.MAX_VALUE)
         );
 
-        javax.swing.GroupLayout detailWholeLayout = new javax.swing.GroupLayout(detailWhole);
-        detailWhole.setLayout(detailWholeLayout);
-        detailWholeLayout.setHorizontalGroup(
-            detailWholeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(detailTop, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-            .addComponent(detailBottom, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
-        detailWholeLayout.setVerticalGroup(
-            detailWholeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(detailWholeLayout.createSequentialGroup()
-                .addComponent(detailTop, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, 0)
-                .addComponent(detailBottom, javax.swing.GroupLayout.DEFAULT_SIZE, 161, Short.MAX_VALUE)
-                .addGap(0, 0, 0))
-        );
+        detailWhole.add(detailBottom, java.awt.BorderLayout.CENTER);
 
         bottomPanel.add(detailWhole);
 
@@ -1644,14 +1635,14 @@ public class CarArrivals extends javax.swing.JFrame {
     bottomRightPanel.setLayout(bottomRightPanelLayout);
     bottomRightPanelLayout.setHorizontalGroup(
         bottomRightPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-        .addComponent(arrivalListPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 373, Short.MAX_VALUE)
+        .addComponent(arrivalListPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 371, Short.MAX_VALUE)
         .addComponent(buttonPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
     );
     bottomRightPanelLayout.setVerticalGroup(
         bottomRightPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
         .addGroup(bottomRightPanelLayout.createSequentialGroup()
             .addGap(0, 0, 0)
-            .addComponent(arrivalListPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 234, Short.MAX_VALUE)
+            .addComponent(arrivalListPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 216, Short.MAX_VALUE)
             .addGap(10, 10, 10)
             .addComponent(buttonPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addGap(0, 0, 0))
