@@ -20,7 +20,6 @@ import static com.osparking.global.Globals.font_Size;
 import static com.osparking.global.Globals.font_Style;
 import static com.osparking.global.Globals.font_Type;
 import static com.osparking.global.names.ControlEnums.MenuITemTypes.META_KEY_LABEL;
-import com.osparking.global.names.OSP_enums;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -39,6 +38,7 @@ public class CommonData { // new Dimension(carTagWidth, 30)
      * Combobox selected item index when not selected.
      */
     public static final String ADMIN_ID = "admin";
+    public static final String CA_ROW_VAR = "T3";
     public static final int NOT_SELECTED = -1; 
     public static final int NOT_LISTED = -1; 
     public static final int PROMPTER_KEY = 0; 

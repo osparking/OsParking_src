@@ -1504,11 +1504,11 @@ public class Globals {
         }            
     }      
 
-    public static void attachConditionCA(StringBuffer cond, String column, String content) {
+    public static void attachConditionT3(StringBuffer cond, String column, String content) {
         if (content.length() > 0) {
             if (cond.length() > 0)
                 cond.append(" and ");
-            cond.append("CA." + column + " like '%" + content + "%' ");
+            cond.append(CommonData.CA_ROW_VAR + "." + column + " like '%" + content + "%' ");
         }            
     }      
     
@@ -1519,12 +1519,38 @@ public class Globals {
             cond.append(column + " = " + value);
         }
     }      
+
+    public static void attachNumberCondition(StringBuffer cond, 
+            String highCol, String lowCol, int highKey, int lowKey)
+    {
+        if (highKey != PROMPTER_KEY) {
+            if (lowKey == PROMPTER_KEY)
+            {
+                if (cond.length() > 0) {
+                    cond.append(" and ");
+                }
+                cond.append(highCol + " = " + highKey); 
+            }
+            else
+            {
+                if (cond.length() > 0) {
+                    cond.append(" and ");
+                }
+                // putting high key value condition is redundant and causes inefficiency
+                cond.append(lowCol + " = " + lowKey); 
+            }
+        } else {
+            if (lowKey != PROMPTER_KEY) {
+                cond.append(lowCol + " = " + lowKey); 
+            }
+        }
+    }    
     
-    public static void attachIntConditionCA(StringBuffer cond, String column, Integer value) {
+    public static void attachIntConditionT3(StringBuffer cond, String column, Integer value) {
         if (value != -1) {
             if (cond.length() > 0)
                 cond.append(" and ");
-            cond.append("CA." + column + " = " + value);
+            cond.append(CommonData.CA_ROW_VAR + "." + column + " = " + value);
         }
     }      
     

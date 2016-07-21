@@ -73,6 +73,7 @@ import static com.osparking.global.Globals.font_Style;
 import static com.osparking.global.Globals.font_Type;
 import static com.osparking.global.Globals.highlightTableRow;
 import static com.osparking.global.Globals.OSPiconList;
+import static com.osparking.global.Globals.attachNumberCondition;
 import static com.osparking.global.Globals.closeDBstuff;
 import static com.osparking.global.Globals.determineLoginID;
 import static com.osparking.global.Globals.getPrompter;
@@ -2467,32 +2468,6 @@ public class ManageDrivers extends javax.swing.JFrame {
             closeDBstuff(conn, stmt, rs, excepMsg);
         }         
         return result;
-    }
-
-    private void attachNumberCondition(StringBuffer cond, 
-            String highCol, String lowCol, int highKey, int lowKey)
-    {
-        if (highKey != PROMPTER_KEY) {
-            if (lowKey == PROMPTER_KEY)
-            {
-                if (cond.length() > 0) {
-                    cond.append(" and ");
-                }
-                cond.append(highCol + " = " + highKey); 
-            }
-            else
-            {
-                if (cond.length() > 0) {
-                    cond.append(" and ");
-                }
-                // putting high key value condition is redundant and causes inefficiency
-                cond.append(lowCol + " = " + lowKey); 
-            }
-        } else {
-            if (lowKey != PROMPTER_KEY) {
-                cond.append(lowCol + " = " + lowKey); 
-            }
-        }
     }
 
     private void closeFrameGracefully() {

@@ -216,7 +216,7 @@ public class ControlEnums {
                 "Col' move: Tab, Sh+Tab, Mouse"),
         PERIOD_SETTING_RESULT(
                 ARRIVAL_TIME_PANEL_TITLE.getContent() + " 옵션 선택이" + System.lineSeparator() +
-                        "시스템이 기억되었습니다.", 
+                        "시스템에 저장되었습니다.", 
                 ARRIVAL_TIME_PANEL_TITLE.getContent() + " option selection" + System.lineSeparator() +
                         "recorded to OsParking."),
         

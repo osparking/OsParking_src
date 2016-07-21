@@ -16,9 +16,11 @@
  */
 package com.osparking.statistics;
 
+import com.osparking.global.ChangedComponents;
 import com.osparking.global.CommonData;
 import static com.osparking.global.CommonData.ImgHeight;
 import static com.osparking.global.CommonData.ImgWidth;
+import static com.osparking.global.CommonData.NOT_SELECTED;
 import static com.osparking.global.CommonData.bigButtonHeight;
 import static com.osparking.global.CommonData.buttonHeightNorm;
 import static com.osparking.global.CommonData.buttonWidthNorm;
@@ -46,12 +48,10 @@ import static com.osparking.global.names.ControlEnums.DialogMessages.DATE_INPUT_
 import static com.osparking.global.names.ControlEnums.DialogMessages.DATE_INPUT_ERROR_DIALOG;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.NOTICE_DIALOGTITLE;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.WARING_DIALOGTITLE;
-import static com.osparking.global.names.ControlEnums.LabelContent.AFFILIATION_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.ARRIVAL_TIME_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.ARR_TM_LEGEND;
 import static com.osparking.global.names.ControlEnums.LabelContent.ATTENDANT_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.BAR_OP_LABEL;
-import static com.osparking.global.names.ControlEnums.LabelContent.BUILDING_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.CAR_TAG_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.COUNT_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.DURATION_SET_LABEL;
@@ -131,6 +131,7 @@ import static javax.swing.JOptionPane.INFORMATION_MESSAGE;
 import static javax.swing.JOptionPane.WARNING_MESSAGE;
 import javax.swing.KeyStroke;
 import javax.swing.MutableComboBoxModel;
+import javax.swing.SwingUtilities;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
@@ -152,11 +153,16 @@ public class CarArrivals extends javax.swing.JFrame {
     private int[] prevParentSKey = new int[OSP_enums.DriverCol.values().length];    
     private Dimension prevSize = null;
     
+    private String prevSearchCondition = "";
+    private String currSearchCondition = "";
+    
+    static private ChangedComponents changedControls; 
     /**
      * Creates new form CarArrivals
      */
     public CarArrivals() {
         initComponents();
+        changedControls = new ChangedComponents(clearSearchPropertiesButton);
         changeTableColumnHoriAlignment();
         BeginDateChooser.setLocale(parkingLotLocale);
         EndDateChooser.setLocale(parkingLotLocale);    
@@ -173,7 +179,6 @@ public class CarArrivals extends javax.swing.JFrame {
         }
             
         detailTuneTableProperties();
-        affiliationRadioButtonActionPerformed(null);
         carTagTF.requestFocus();
         
         imagePanel.addComponentListener(new ComponentAdapter() {
@@ -244,11 +249,9 @@ public class CarArrivals extends javax.swing.JFrame {
         gateBarCB = new javax.swing.JComboBox();
         topDriver = new javax.swing.JPanel();
         affiliPanel = new javax.swing.JPanel();
-        affiliationRadioButton = new javax.swing.JRadioButton();
         searchL1ComboBox = new PComboBox();
         searchL2ComboBox = new PComboBox<InnoComboBoxItem>();
         buildingPanel = new javax.swing.JPanel();
-        buildingRadioButton = new javax.swing.JRadioButton();
         searchBuildingComboBox = new PComboBox();
         searchUnitComboBox = new PComboBox();
         filler18 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
@@ -457,6 +460,14 @@ public class CarArrivals extends javax.swing.JFrame {
         carTagTF.setMaximumSize(new java.awt.Dimension(32767, 32767));
         carTagTF.setMinimumSize(new java.awt.Dimension(110, 28));
         carTagTF.setPreferredSize(new java.awt.Dimension(110, 28));
+        carTagTF.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                carTagTFKeyReleased(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                carTagTFKeyTyped(evt);
+            }
+        });
         carTagPanel.add(carTagTF);
 
         topVehicle.add(carTagPanel);
@@ -484,6 +495,25 @@ public class CarArrivals extends javax.swing.JFrame {
         gateCB.setModel(new javax.swing.DefaultComboBoxModel(new String[] {}));
         gateCB.setMinimumSize(new Dimension(CABW_NORM, CABH_NORM));
         gateCB.setPreferredSize(new Dimension(CABW_NORM, CABH_NORM));
+        gateCB.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                gateCBItemStateChanged(evt);
+            }
+        });
+        gateCB.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
+            public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
+            }
+            public void popupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {
+                gateCBPopupMenuWillBecomeInvisible(evt);
+            }
+            public void popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {
+            }
+        });
+        gateCB.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                gateCBActionPerformed(evt);
+            }
+        });
         gatePanel.add(gateCB, java.awt.BorderLayout.CENTER);
 
         carPlus.add(gatePanel);
@@ -507,13 +537,24 @@ public class CarArrivals extends javax.swing.JFrame {
         }));
         attendantCB.setMinimumSize(new Dimension(CABW_WIDE, CABH_NORM));
         attendantCB.setPreferredSize(new Dimension(CABW_WIDE, CABH_NORM));
+        attendantCB.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                attendantCBItemStateChanged(evt);
+            }
+        });
         attendantCB.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
             public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
             }
             public void popupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {
+                attendantCBPopupMenuWillBecomeInvisible(evt);
             }
             public void popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {
                 attendantCBPopupMenuWillBecomeVisible(evt);
+            }
+        });
+        attendantCB.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                attendantCBActionPerformed(evt);
             }
         });
         attendPanel.add(attendantCB, java.awt.BorderLayout.CENTER);
@@ -537,6 +578,20 @@ public class CarArrivals extends javax.swing.JFrame {
         gateBarCB.setModel(new javax.swing.DefaultComboBoxModel(new String[] {}));
         gateBarCB.setMinimumSize(new Dimension(CABW_NORM, CABH_NORM));
         gateBarCB.setPreferredSize(new Dimension(CABW_NORM, CABH_NORM));
+        gateBarCB.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                gateBarCBItemStateChanged(evt);
+            }
+        });
+        gateBarCB.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
+            public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
+            }
+            public void popupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {
+                gateBarCBPopupMenuWillBecomeInvisible(evt);
+            }
+            public void popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {
+            }
+        });
         barOptnPanel.add(gateBarCB, java.awt.BorderLayout.CENTER);
 
         carPlus.add(barOptnPanel);
@@ -555,22 +610,6 @@ public class CarArrivals extends javax.swing.JFrame {
         affiliPanel.setPreferredSize(new java.awt.Dimension(120, 94));
         affiliPanel.setRequestFocusEnabled(false);
 
-        affiliationRadioButton.setBackground(new java.awt.Color(243, 243, 243));
-        affiliationGroup.add(affiliationRadioButton);
-        affiliationRadioButton.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        affiliationRadioButton.setText(AFFILIATION_LABEL.getContent());
-        affiliationRadioButton.setAlignmentX(0.5F);
-        affiliationRadioButton.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        affiliationRadioButton.setMargin(new java.awt.Insets(2, 20, 2, 2));
-        affiliationRadioButton.setMaximumSize(new java.awt.Dimension(32767, 32767));
-        affiliationRadioButton.setMinimumSize(new java.awt.Dimension(100, 23));
-        affiliationRadioButton.setPreferredSize(new java.awt.Dimension(100, 23));
-        affiliationRadioButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                affiliationRadioButtonActionPerformed(evt);
-            }
-        });
-
         searchL1ComboBox.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         searchL1ComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[]{}));
         searchL1ComboBox.setMaximumSize(new Dimension(CABW_WIDE * 2, CABH_NORM));
@@ -579,6 +618,15 @@ public class CarArrivals extends javax.swing.JFrame {
         searchL1ComboBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 searchL1ComboBoxActionPerformed(evt);
+            }
+        });
+        searchL1ComboBox.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
+            public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
+            }
+            public void popupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {
+                searchL1ComboBoxPopupMenuWillBecomeInvisible(evt);
+            }
+            public void popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {
             }
         });
         searchL1ComboBox.addActionListener(new java.awt.event.ActionListener() {
@@ -592,6 +640,11 @@ public class CarArrivals extends javax.swing.JFrame {
         searchL2ComboBox.setMaximumSize(new Dimension(CABW_WIDE * 2, CABH_NORM));
         searchL2ComboBox.setMinimumSize(new Dimension(CABW_WIDE, CABH_NORM));
         searchL2ComboBox.setPreferredSize(new Dimension(CABW_WIDE, CABH_NORM));
+        searchL2ComboBox.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                searchL2ComboBoxItemStateChanged(evt);
+            }
+        });
         searchL2ComboBox.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
             public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
             }
@@ -614,7 +667,6 @@ public class CarArrivals extends javax.swing.JFrame {
             affiliPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(affiliPanelLayout.createSequentialGroup()
                 .addGroup(affiliPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(affiliationRadioButton, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(searchL1ComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(searchL2ComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(5, 5, 5))
@@ -622,8 +674,7 @@ public class CarArrivals extends javax.swing.JFrame {
         affiliPanelLayout.setVerticalGroup(
             affiliPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(affiliPanelLayout.createSequentialGroup()
-                .addComponent(affiliationRadioButton, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, 0)
+                .addGap(15, 15, 15)
                 .addComponent(searchL1ComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0)
                 .addComponent(searchL2ComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -633,27 +684,20 @@ public class CarArrivals extends javax.swing.JFrame {
         buildingPanel.setMinimumSize(new java.awt.Dimension(120, 94));
         buildingPanel.setPreferredSize(new java.awt.Dimension(120, 94));
 
-        buildingRadioButton.setBackground(new java.awt.Color(243, 243, 243));
-        affiliationGroup.add(buildingRadioButton);
-        buildingRadioButton.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        buildingRadioButton.setText(BUILDING_LABEL.getContent());
-        buildingRadioButton.setAlignmentX(0.5F);
-        buildingRadioButton.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        buildingRadioButton.setMargin(new java.awt.Insets(2, 20, 2, 2));
-        buildingRadioButton.setMaximumSize(new java.awt.Dimension(32767, 32767));
-        buildingRadioButton.setMinimumSize(new java.awt.Dimension(80, 21));
-        buildingRadioButton.setPreferredSize(new java.awt.Dimension(80, 23));
-        buildingRadioButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                buildingRadioButtonActionPerformed(evt);
-            }
-        });
-
         searchBuildingComboBox.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         searchBuildingComboBox.setModel(
             new javax.swing.DefaultComboBoxModel(new String[]{}));
         searchBuildingComboBox.setMinimumSize(new Dimension(CABW_NORM, CABH_NORM));
         searchBuildingComboBox.setPreferredSize(new Dimension(CABW_NORM, CABH_NORM));
+        searchBuildingComboBox.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
+            public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
+            }
+            public void popupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {
+                searchBuildingComboBoxPopupMenuWillBecomeInvisible(evt);
+            }
+            public void popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {
+            }
+        });
         searchBuildingComboBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 searchBuildingComboBoxActionPerformed(evt);
@@ -665,6 +709,11 @@ public class CarArrivals extends javax.swing.JFrame {
             new javax.swing.DefaultComboBoxModel(new String[]{}));
         searchUnitComboBox.setMinimumSize(new Dimension(CABW_NORM, CABH_NORM));
         searchUnitComboBox.setPreferredSize(new Dimension(CABW_NORM, CABH_NORM));
+        searchUnitComboBox.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                searchUnitComboBoxItemStateChanged(evt);
+            }
+        });
         searchUnitComboBox.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
             public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
             }
@@ -685,15 +734,16 @@ public class CarArrivals extends javax.swing.JFrame {
         buildingPanel.setLayout(buildingPanelLayout);
         buildingPanelLayout.setHorizontalGroup(
             buildingPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(buildingRadioButton, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
-            .addComponent(searchBuildingComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
-            .addComponent(searchUnitComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(buildingPanelLayout.createSequentialGroup()
+                .addGroup(buildingPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(searchBuildingComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(searchUnitComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(2, 2, 2))
         );
         buildingPanelLayout.setVerticalGroup(
             buildingPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(buildingPanelLayout.createSequentialGroup()
-                .addComponent(buildingRadioButton, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, 0)
+                .addGap(15, 15, 15)
                 .addComponent(searchBuildingComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0)
                 .addComponent(searchUnitComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -704,8 +754,8 @@ public class CarArrivals extends javax.swing.JFrame {
         topDriverLayout.setHorizontalGroup(
             topDriverLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(topDriverLayout.createSequentialGroup()
-                .addComponent(affiliPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 141, Short.MAX_VALUE)
-                .addGap(10, 10, 10)
+                .addComponent(affiliPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 161, Short.MAX_VALUE)
+                .addGap(0, 0, 0)
                 .addComponent(buildingPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         topDriverLayout.setVerticalGroup(
@@ -727,6 +777,7 @@ public class CarArrivals extends javax.swing.JFrame {
         clearSearchPropertiesButton.setMnemonic('l');
         clearSearchPropertiesButton.setText(CLEAR_BTN.getContent());
         clearSearchPropertiesButton.setToolTipText(CLEAR_BTN_TOOLTIP.getContent());
+        clearSearchPropertiesButton.setEnabled(false);
         clearSearchPropertiesButton.setMaximumSize(new java.awt.Dimension(100, 35));
         clearSearchPropertiesButton.setMinimumSize(new java.awt.Dimension(100, 35));
         clearSearchPropertiesButton.setPreferredSize(new java.awt.Dimension(100, 35));
@@ -745,7 +796,7 @@ public class CarArrivals extends javax.swing.JFrame {
                 .addGap(26, 26, 26)
                 .addComponent(topVehicle, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(5, 5, 5)
-                .addComponent(topDriver, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(topDriver, javax.swing.GroupLayout.DEFAULT_SIZE, 290, Short.MAX_VALUE)
                 .addGap(5, 5, 5)
                 .addComponent(filler18, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGap(5, 5, 5)
@@ -768,7 +819,7 @@ public class CarArrivals extends javax.swing.JFrame {
                     .addGroup(searchTopLayout.createSequentialGroup()
                         .addGap(5, 5, 5)
                         .addComponent(clearPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(5, 5, 5))
+                .addGap(0, 0, 0))
         );
 
         searchBottom.setBackground(new java.awt.Color(244, 244, 244));
@@ -942,8 +993,8 @@ public class CarArrivals extends javax.swing.JFrame {
             .addGroup(criteriaPanelLayout.createSequentialGroup()
                 .addGap(0, 0, 0)
                 .addGroup(criteriaPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(searchTop, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(searchBottom, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(searchTop, javax.swing.GroupLayout.DEFAULT_SIZE, 811, Short.MAX_VALUE)
+                    .addComponent(searchBottom, javax.swing.GroupLayout.DEFAULT_SIZE, 811, Short.MAX_VALUE))
                 .addGap(0, 0, 0))
         );
         criteriaPanelLayout.setVerticalGroup(
@@ -966,6 +1017,7 @@ public class CarArrivals extends javax.swing.JFrame {
         searchButton.setMnemonic('s');
         searchButton.setText(SEARCH_BTN.getContent());
         searchButton.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 5, 10, 5));
+        searchButton.setEnabled(false);
         searchButton.setMaximumSize(new java.awt.Dimension(90, 60));
         searchButton.setMinimumSize(new java.awt.Dimension(90, 60));
         searchButton.setPreferredSize(new java.awt.Dimension(90, 60));
@@ -982,7 +1034,7 @@ public class CarArrivals extends javax.swing.JFrame {
             searchPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(searchPanelLayout.createSequentialGroup()
                 .addGap(0, 0, 0)
-                .addComponent(criteriaPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(criteriaPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 811, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(searchButtonPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(2, 2, 2))
@@ -1420,8 +1472,8 @@ public class CarArrivals extends javax.swing.JFrame {
         );
         detailBottomLayout.setVerticalGroup(
             detailBottomLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(imagePanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(targetPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(imagePanel, javax.swing.GroupLayout.DEFAULT_SIZE, 161, Short.MAX_VALUE)
+            .addComponent(targetPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 161, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout detailWholeLayout = new javax.swing.GroupLayout(detailWhole);
@@ -1436,7 +1488,7 @@ public class CarArrivals extends javax.swing.JFrame {
             .addGroup(detailWholeLayout.createSequentialGroup()
                 .addComponent(detailTop, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0)
-                .addComponent(detailBottom, javax.swing.GroupLayout.DEFAULT_SIZE, 140, Short.MAX_VALUE)
+                .addComponent(detailBottom, javax.swing.GroupLayout.DEFAULT_SIZE, 161, Short.MAX_VALUE)
                 .addGap(0, 0, 0))
         );
 
@@ -1592,14 +1644,14 @@ public class CarArrivals extends javax.swing.JFrame {
     bottomRightPanel.setLayout(bottomRightPanelLayout);
     bottomRightPanelLayout.setHorizontalGroup(
         bottomRightPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-        .addComponent(arrivalListPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 371, Short.MAX_VALUE)
+        .addComponent(arrivalListPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 373, Short.MAX_VALUE)
         .addComponent(buttonPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
     );
     bottomRightPanelLayout.setVerticalGroup(
         bottomRightPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
         .addGroup(bottomRightPanelLayout.createSequentialGroup()
             .addGap(0, 0, 0)
-            .addComponent(arrivalListPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 216, Short.MAX_VALUE)
+            .addComponent(arrivalListPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 234, Short.MAX_VALUE)
             .addGap(10, 10, 10)
             .addComponent(buttonPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addGap(0, 0, 0))
@@ -1618,7 +1670,6 @@ public class CarArrivals extends javax.swing.JFrame {
     moveFocusToCarTagTextField.setMnemonic('N');
     moveFocusToCarTagTextField.setFocusPainted(false);
     moveFocusToCarTagTextField.setFocusable(false);
-    moveFocusToCarTagTextField.setLabel("");
     moveFocusToCarTagTextField.setOpaque(false);
     moveFocusToCarTagTextField.setPreferredSize(new java.awt.Dimension(0, 0));
     moveFocusToCarTagTextField.addActionListener(new java.awt.event.ActionListener() {
@@ -1708,15 +1759,19 @@ public class CarArrivals extends javax.swing.JFrame {
         carTagTF.setText("");
         attendantCB.setSelectedIndex(0);
         searchL1ComboBox.setSelectedIndex(0);
-        searchL2ComboBox.setSelectedIndex(0);
+        searchL2ComboBox.removeAllItems();
+        searchL2ComboBox.addItem(getPrompter(AffiliationL2, searchL1ComboBox));        
         searchBuildingComboBox.setSelectedIndex(0);
-        searchUnitComboBox.setSelectedIndex(0);
+        searchUnitComboBox.removeAllItems();
+        searchUnitComboBox.addItem(getPrompter(UnitNo, searchBuildingComboBox));        
         gateBarCB.setSelectedIndex(0);
-        affiliationRadioButtonActionPerformed(null);        
+        changeSearchButtonEnabled();
+        clearSearchPropertiesButton.setEnabled(false);
     }//GEN-LAST:event_clearSearchPropertiesButtonActionPerformed
 
     private void searchButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchButtonActionPerformed
         loadArrivalsListTable(true);
+        searchButton.setEnabled(false);
     }//GEN-LAST:event_searchButtonActionPerformed
 
     private void setSearchPeriodOptionButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_setSearchPeriodOptionButtonActionPerformed
@@ -1773,7 +1828,6 @@ public class CarArrivals extends javax.swing.JFrame {
     }//GEN-LAST:event_closeButtonActionPerformed
 
     private void searchUnitComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchUnitComboBoxActionPerformed
-        buildingRadioButton.setEnabled(true);
     }//GEN-LAST:event_searchUnitComboBoxActionPerformed
 
     private void searchUnitComboBoxPopupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_searchUnitComboBoxPopupMenuWillBecomeVisible
@@ -1791,28 +1845,15 @@ public class CarArrivals extends javax.swing.JFrame {
     }//GEN-LAST:event_searchUnitComboBoxPopupMenuWillBecomeVisible
 
     private void searchL2ComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchL2ComboBoxActionPerformed
-        affiliationRadioButton.setSelected(true);
     }//GEN-LAST:event_searchL2ComboBoxActionPerformed
     
     private void searchL2ComboBoxPopupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_searchL2ComboBoxPopupMenuWillBecomeVisible
-//        int L1No = (Integer)((ConvComboBoxItem)searchL1ComboBox.getSelectedItem()).getKeyValue();
-//        
-//        if (searchL2ComboBox.getItemCount() == 1 || 
-//                getPrevParentSKey()[AffiliationL2.getNumVal()] != L1No) 
-//        {
-//            Object selItem = searchL2ComboBox.getSelectedItem();
-//            refreshComboBox(searchL2ComboBox, getPrompter(AffiliationL2, searchL1ComboBox),
-//                    AffiliationL2, L1No, getPrevParentSKey());        
-//            searchL2ComboBox.setSelectedItem(selItem);
-//        }       
-        
         mayRefreshLowerCBox(searchL1ComboBox, searchL2ComboBox, AffiliationL2, 
                 getPrevParentSKey());
     }//GEN-LAST:event_searchL2ComboBoxPopupMenuWillBecomeVisible
 
     private void searchBuildingComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchBuildingComboBoxActionPerformed
         if (searchBuildingComboBox.isPopupVisible()) {
-            buildingRadioButton.setEnabled(true);
             MutableComboBoxModel model
             = (MutableComboBoxModel)searchUnitComboBox.getModel();
             model.removeElementAt(0);
@@ -1820,42 +1861,35 @@ public class CarArrivals extends javax.swing.JFrame {
                 searchBuildingComboBox), 0);
             searchUnitComboBox.setSelectedIndex(0);
         }
+        if (searchBuildingComboBox.getSelectedIndex() == CommonData.PROMPTER_KEY) {
+            changedControls.remove(searchBuildingComboBox);
+        } else {
+            changedControls.add(searchBuildingComboBox);
+        }         
     }//GEN-LAST:event_searchBuildingComboBoxActionPerformed
 
     private void searchL1ComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchL1ComboBoxActionPerformed
         if (searchL1ComboBox.isPopupVisible()) {
-            affiliationRadioButton.setSelected(true);
             MutableComboBoxModel model
             = (MutableComboBoxModel)searchL2ComboBox.getModel();
             model.removeElementAt(0);
             model.insertElementAt(getPrompter(AffiliationL2, searchL1ComboBox), 0);
             searchL2ComboBox.setSelectedIndex(0);
         }
+        if (searchL1ComboBox.getSelectedIndex() == CommonData.PROMPTER_KEY) {
+            changedControls.remove(searchL1ComboBox);
+        } else {
+            changedControls.add(searchL1ComboBox);
+        }        
     }//GEN-LAST:event_searchL1ComboBoxActionPerformed
 
-    private void buildingRadioButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buildingRadioButtonActionPerformed
-        if (buildingRadioButton.isSelected()) {
-            searchL1ComboBox.setEnabled(false);
-            searchL2ComboBox.setEnabled(false);
-            searchBuildingComboBox.setEnabled(true);
-            searchUnitComboBox.setEnabled(true);
-        }
-    }//GEN-LAST:event_buildingRadioButtonActionPerformed
-
-    private void affiliationRadioButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_affiliationRadioButtonActionPerformed
-        if (affiliationRadioButton.isSelected()) {
-            searchBuildingComboBox.setEnabled(false);
-            searchUnitComboBox.setEnabled(false);
-            searchL1ComboBox.setEnabled(true);
-            searchL2ComboBox.setEnabled(true);
-        }
-    }//GEN-LAST:event_affiliationRadioButtonActionPerformed
-
     private void searchL2ComboBoxPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_searchL2ComboBoxPopupMenuWillBecomeInvisible
+        changeSearchButtonEnabled();
         mayPropagateBackward(searchL2ComboBox, searchL1ComboBox);
     }//GEN-LAST:event_searchL2ComboBoxPopupMenuWillBecomeInvisible
 
     private void searchUnitComboBoxPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_searchUnitComboBoxPopupMenuWillBecomeInvisible
+        changeSearchButtonEnabled();
         mayPropagateBackward(searchUnitComboBox, searchBuildingComboBox);
     }//GEN-LAST:event_searchUnitComboBoxPopupMenuWillBecomeInvisible
 
@@ -1864,13 +1898,95 @@ public class CarArrivals extends javax.swing.JFrame {
     }//GEN-LAST:event_seeLicenseButtonActionPerformed
 
     private void saveSheet_ButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveSheet_ButtonActionPerformed
-//        saveODSfile(this, driverTable, saveFileChooser, DRIVER_SAVE_ODS_FAIL_DIALOG.getContent());
     }//GEN-LAST:event_saveSheet_ButtonActionPerformed
 
     private void moveFocusToCarTagTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_moveFocusToCarTagTextFieldActionPerformed
         carTagTF.requestFocus();
         System.out.println("Move focus to car tag field");
     }//GEN-LAST:event_moveFocusToCarTagTextFieldActionPerformed
+
+    private void carTagTFKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_carTagTFKeyTyped
+        if (carTagTF.getText().trim().length() == 0) {
+            changedControls.remove(carTagTF);
+        } else {
+            changedControls.add(carTagTF);
+        }
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                changeSearchButtonEnabled();
+            }
+        });
+    }//GEN-LAST:event_carTagTFKeyTyped
+
+    private void gateCBPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_gateCBPopupMenuWillBecomeInvisible
+        changeSearchButtonEnabled();
+    }//GEN-LAST:event_gateCBPopupMenuWillBecomeInvisible
+
+    private void attendantCBPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_attendantCBPopupMenuWillBecomeInvisible
+        changeSearchButtonEnabled();
+    }//GEN-LAST:event_attendantCBPopupMenuWillBecomeInvisible
+
+    private void gateBarCBPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_gateBarCBPopupMenuWillBecomeInvisible
+        changeSearchButtonEnabled();
+    }//GEN-LAST:event_gateBarCBPopupMenuWillBecomeInvisible
+
+    private void searchL1ComboBoxPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_searchL1ComboBoxPopupMenuWillBecomeInvisible
+        changeSearchButtonEnabled();
+    }//GEN-LAST:event_searchL1ComboBoxPopupMenuWillBecomeInvisible
+
+    private void searchBuildingComboBoxPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_searchBuildingComboBoxPopupMenuWillBecomeInvisible
+        changeSearchButtonEnabled();
+    }//GEN-LAST:event_searchBuildingComboBoxPopupMenuWillBecomeInvisible
+
+    private void carTagTFKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_carTagTFKeyReleased
+        if (carTagTF.getText().trim().length() == 0) {
+            changedControls.remove(carTagTF);
+        } else {
+            changedControls.add(carTagTF);
+        }
+    }//GEN-LAST:event_carTagTFKeyReleased
+
+    private void searchL2ComboBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_searchL2ComboBoxItemStateChanged
+        if (searchL2ComboBox.getSelectedIndex() == NOT_SELECTED) {
+            changedControls.remove(searchL2ComboBox);
+        } else {
+            if (searchL2ComboBox.getSelectedIndex() == CommonData.PROMPTER_KEY) {
+                changedControls.remove(searchL2ComboBox);
+            } else {
+                changedControls.add(searchL2ComboBox);
+            }
+        }                
+    }//GEN-LAST:event_searchL2ComboBoxItemStateChanged
+
+    private void searchUnitComboBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_searchUnitComboBoxItemStateChanged
+        if (searchUnitComboBox.getSelectedIndex() == NOT_SELECTED) {
+            changedControls.remove(searchUnitComboBox);
+        } else {
+            if (searchL2ComboBox.getSelectedIndex() == CommonData.PROMPTER_KEY) {
+                changedControls.remove(searchUnitComboBox);
+            } else {
+                changedControls.add(searchUnitComboBox);
+            }
+        }                
+    }//GEN-LAST:event_searchUnitComboBoxItemStateChanged
+
+    private void gateCBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_gateCBActionPerformed
+    }//GEN-LAST:event_gateCBActionPerformed
+
+    private void attendantCBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_attendantCBActionPerformed
+    }//GEN-LAST:event_attendantCBActionPerformed
+
+    private void gateCBItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_gateCBItemStateChanged
+        applyCBoxItemChangeToChangedSet(gateCB);
+    }//GEN-LAST:event_gateCBItemStateChanged
+
+    private void gateBarCBItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_gateBarCBItemStateChanged
+        applyCBoxItemChangeToChangedSet(gateBarCB);
+    }//GEN-LAST:event_gateBarCBItemStateChanged
+
+    private void attendantCBItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_attendantCBItemStateChanged
+        applyCBoxItemChangeToChangedSet(attendantCB);
+    }//GEN-LAST:event_attendantCBItemStateChanged
 
     // <editor-fold defaultstate="collapsed" desc="-- Variables defined via GUI creation">
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -1882,7 +1998,6 @@ public class CarArrivals extends javax.swing.JFrame {
     private javax.swing.JLabel affiliLower;
     private javax.swing.JPanel affiliPanel;
     private javax.swing.ButtonGroup affiliationGroup;
-    private javax.swing.JRadioButton affiliationRadioButton;
     private javax.swing.JPanel arrivalListPanel;
     private javax.swing.JTextField arrivalTmTF;
     private javax.swing.JTable arrivalsList;
@@ -1896,7 +2011,6 @@ public class CarArrivals extends javax.swing.JFrame {
     private javax.swing.JPanel bottomRightPanel;
     private javax.swing.JLabel buildingLabel;
     private javax.swing.JPanel buildingPanel;
-    private javax.swing.JRadioButton buildingRadioButton;
     private javax.swing.JTextField buildingTF;
     private javax.swing.JPanel buttonPanel;
     private javax.swing.JPanel carPlus;
@@ -1997,112 +2111,39 @@ public class CarArrivals extends javax.swing.JFrame {
         // <editor-fold defaultstate="collapsed" desc="-- construct SQL statement">  
         StringBuffer cond = new StringBuffer();
         StringBuffer sb = new StringBuffer(); 
+                
+        sb.append("SELECT ArrivalTime, tagRecognized, arrSeqNo ");
+        sb.append("From ((Select ArrivalTime, tagRecognized, arrSeqNo, ");
+        sb.append(" GateNo, AttendantID, BarOperation, L1_NO, L2_NO, BNO, UNO ");
+        sb.append(" From (Select CA.ArrivalTime, CA.tagRecognized, CA.arrSeqNo, ");
+        sb.append("    CA.GateNo, CA.AttendantID, CA.BarOperation,");
+        sb.append("    L1.L1_NO, L2.L2_No, BT.SEQ_NO BNO, BU.SEQ_NO UNO ");
+        sb.append("  From car_arrival CA ");
+        sb.append("  LEFT JOIN vehicles VH ON CA.TagEnteredAs = VH.PLATE_NUMBER ");
+        sb.append("  LEFT JOIN cardriver CD ON VH.DRIVER_SEQ_NO = CD.SEQ_NO ");
+        sb.append("  LEFT JOIN L2_affiliation L2 ON CD.L2_NO = L2.L2_NO "); 
+        sb.append("  LEFT JOIN L1_affiliation L1 ON L2.L1_NO = L1.L1_NO "); 
+        sb.append("  LEFT JOIN building_unit BU ON CD.UNIT_SEQ_NO = BU.SEQ_NO "); 
+        sb.append("  LEFT JOIN building_table BT ON BU.BLDG_SEQ_NO = BT.SEQ_NO ");
+        sb.append("  WHERE CA.TagEnteredAs <> '' and CA.TagEnteredAs IS NOT NULL) T1) ");
+        sb.append("UNION ");
+        sb.append("(Select ArrivalTime, tagRecognized, arrSeqNo, ");
+        sb.append("  GateNo, AttendantID, BarOperation, L1_NO, L2_NO, BNO, UNO ");
+        sb.append(" From (Select CA.ArrivalTime, CA.tagRecognized, CA.arrSeqNo,"); 
+        sb.append("    CA.GateNo, CA.AttendantID, CA.BarOperation,");
+        sb.append("    L1.L1_NO, CA.L2_No, BT.SEQ_NO BNO, CA.unitSeqNo UNO");
+        sb.append("  From car_arrival CA ");
+        sb.append("  LEFT JOIN L2_affiliation L2 ON CA.L2_No = L2.L2_NO ");
+        sb.append("  LEFT JOIN L1_affiliation L1 ON L2.L1_NO = L1.L1_NO ");
+        sb.append("  LEFT JOIN building_unit BU ON CA.unitSeqNo = BU.SEQ_NO ");
+        sb.append("  LEFT JOIN building_table BT ON BU.BLDG_SEQ_NO = BT.SEQ_NO ");
+        sb.append("  WHERE CA.TagEnteredAs = '' OR CA.TagEnteredAs IS NULL) T2) ");
+        sb.append(") " + CommonData.CA_ROW_VAR);
+        prevSearchCondition = currSearchCondition;
+        sb.append((currSearchCondition.length() > 0 ? " Where " + currSearchCondition : ""));
+        sb.append(" ORDER by " + CommonData.CA_ROW_VAR + ".arrSeqNo desc");
+        //</editor-fold>
         
-        createConditionWithCA(cond);
-        if (affiliationRadioButton.isSelected() && searchL2ComboBox.getSelectedIndex() > 0) {
-            // <editor-fold defaultstate="collapsed" desc="-- specific affiliation is selected">  
-
-            InnoComboBoxItem item = (InnoComboBoxItem)searchL2ComboBox.getSelectedItem();
-            sb.append("(Select ArrivalTime, tagRecognized, arrSeqNo ");
-            sb.append("From car_arrival CA, vehicles VH, cardriver CD ");
-            sb.append("Where " + (cond.length() > 0 ? cond + " and " : ""));
-            sb.append("  CA.TagEnteredAs = VH.PLATE_NUMBER ");
-            sb.append("  and VH.DRIVER_SEQ_NO = CD.SEQ_NO ");
-            sb.append("  and CD.L2_NO = " + item.getKeys()[0] + " ");
-            sb.append(") Union ");
-            sb.append("(Select ArrivalTime, tagRecognized, arrSeqNo  ");
-            sb.append("From car_arrival CA ");
-            sb.append("Where " + (cond.length() > 0 ? cond + " and " : ""));
-            sb.append("  CA.L2_NO = " + item.getKeys()[0] + ") ");
-            sb.append("Order by arrSeqNo desc");
-            //</editor-fold>                   
-        } else if (affiliationRadioButton.isSelected() && searchL1ComboBox.getSelectedIndex() > 0) {
-            // <editor-fold defaultstate="collapsed" desc="-- only higher level affiliation is selected">  
-
-            ConvComboBoxItem item = (ConvComboBoxItem)searchL1ComboBox.getSelectedItem();
-            sb.append("(Select ArrivalTime, tagRecognized, arrSeqNo "); 
-            sb.append("From car_arrival CA, vehicles VH, cardriver CD, l2_affiliation L2 "); 
-            sb.append("Where " + (cond.length() > 0 ? cond + " and " : ""));
-            sb.append("  CA.TagEnteredAs = VH.PLATE_NUMBER "); 
-            sb.append("  and VH.DRIVER_SEQ_NO = CD.SEQ_NO "); 
-            sb.append("  and CD.L2_NO = L2.L2_NO  "); 
-            sb.append("  and L2.L1_NO = " + item.getKeyValue() + ") "); 
-            sb.append("Union "); 
-            sb.append("(Select ArrivalTime, tagRecognized, arrSeqNo  "); 
-            sb.append("From car_arrival CA, l2_affiliation L2 "); 
-            sb.append("Where " + (cond.length() > 0 ? cond + " and " : ""));
-            sb.append("  CA.L2_NO = L2.L2_NO  "); 
-            sb.append("  and L2.L1_NO =  " + item.getKeyValue() + ") "); 
-            sb.append("Order by arrSeqNo desc "); 
-            //</editor-fold>   
-        } else if (buildingRadioButton.isSelected() && searchUnitComboBox.getSelectedIndex() > 0) {
-            // <editor-fold defaultstate="collapsed" desc="-- specific building unit is selected">  
-
-            InnoComboBoxItem item = (InnoComboBoxItem)searchUnitComboBox.getSelectedItem();
-            sb.append("(Select ArrivalTime, tagRecognized, arrSeqNo ");
-            sb.append("From car_arrival CA, vehicles VH, cardriver CD ");
-            sb.append("Where " + (cond.length() > 0 ? cond + " and " : ""));
-            sb.append("  CA.TagEnteredAs = VH.PLATE_NUMBER ");
-            sb.append("  and VH.DRIVER_SEQ_NO = CD.SEQ_NO ");
-            sb.append("  and CD.UNIT_SEQ_NO = " + item.getKeys()[0] + ") ");
-            sb.append("Union ");
-            sb.append("(Select ArrivalTime, tagRecognized, arrSeqNo  ");
-            sb.append("From car_arrival CA ");
-            sb.append("Where " + (cond.length() > 0 ? cond + " and " : ""));
-            sb.append("  CA.unitSeqNo = " + item.getKeys()[0] + ") ");
-            sb.append("Order by arrSeqNo desc");
-            //</editor-fold>                               
-        } else if (buildingRadioButton.isSelected() && searchBuildingComboBox.getSelectedIndex() > 0) {
-            // <editor-fold defaultstate="collapsed" desc="-- only a building is selected">  
-
-            ConvComboBoxItem item = (ConvComboBoxItem)searchBuildingComboBox.getSelectedItem();
-            sb.append("(Select ArrivalTime, tagRecognized, arrSeqNo ");
-            sb.append("From car_arrival CA, vehicles VH, cardriver CD, building_unit UT ");
-            sb.append("Where " + (cond.length() > 0 ? cond + " and " : ""));
-            sb.append("  CA.TagEnteredAs = VH.PLATE_NUMBER ");
-            sb.append("  and VH.DRIVER_SEQ_NO = CD.SEQ_NO ");
-            sb.append("  and CD.unit_seq_no = UT.SEQ_NO ");
-            sb.append("  and UT.BLDG_SEQ_NO = " + item.getKeyValue() + ") ");
-            sb.append("Union ");
-            sb.append("(Select ArrivalTime, tagRecognized, arrSeqNo ");
-            sb.append("From car_arrival CA, building_unit UT ");
-            sb.append("Where " + (cond.length() > 0 ? cond + " and " : ""));
-            sb.append("  CA.unitSeqNo = UT.SEQ_NO ");
-            sb.append("  and UT.BLDG_SEQ_NO = " + item.getKeyValue() + ") ");
-            sb.append("Order by arrSeqNo desc");
-            //</editor-fold>               
-        } else {
-            // <editor-fold defaultstate="collapsed" desc="-- without affiliation or building condition">  
-            attachTimeCondition(null, cond);
-
-            Object keyObj =((ConvComboBoxItem)gateCB.getSelectedItem()).getKeyValue();
-            attachIntCondition(cond, "GateNo", (Integer) keyObj);   
-
-            attachCondition(cond, "tagRecognized", carTagTF.getText().trim());
-
-            Object selValue = ((ConvComboBoxItem)attendantCB.getSelectedItem()).getKeyValue();
-            if (selValue == null) {
-                cond.append("and attendantID is null");
-            } else {
-                attachCondition(cond, "attendantID", (String)selValue);
-            }
-
-            if (gateBarCB.getSelectedIndex() != 0) {
-                ConvComboBoxItem item = (ConvComboBoxItem)gateBarCB.getSelectedItem();
-                attachIntCondition(cond, "BarOperation", ((BarOperation)(item.getKeyValue())).ordinal()) ;
-            }
-
-            sb.append("Select ArrivalTime, tagRecognized, arrSeqNo "); 
-            sb.append("From car_arrival CA ");
-            prevSearchCondition = formSearchCondition();
-            sb.append((cond.length() > 0 ? 
-                    "Where " + cond : ""));
-//            sb.append((prevSearchCondition.length() > 0 ? 
-//                    "Where " + prevSearchCondition : ""));
-            sb.append(" Order by arrSeqNo desc");
-            //</editor-fold>   
-        }
-        //</editor-fold>   
         Connection conn = null;
         Statement selectStmt = null;
         ResultSet rs = null;
@@ -2412,24 +2453,45 @@ public class CarArrivals extends javax.swing.JFrame {
         compo.getActionMap().put("handleEnter", handleEnter);        
     }
 
-    private void createConditionWithCA(StringBuffer cond) {
+    private String formSearchCondition() {
+        StringBuffer cond = new StringBuffer();
         Object keyObj =((ConvComboBoxItem)gateCB.getSelectedItem()).getKeyValue();
-        attachIntConditionCA(cond, "GateNo", (Integer) keyObj);   
-
-        attachConditionCA(cond, "tagRecognized", carTagTF.getText().trim());
+        
+        attachIntConditionT3(cond, "GateNo", (Integer) keyObj);   
+        attachConditionT3(cond, "tagRecognized", carTagTF.getText().trim());
 
         Object selValue = ((ConvComboBoxItem)attendantCB.getSelectedItem()).getKeyValue();
         if (selValue == null) {
             cond.append(" attendantID is null");
         } else {
-            attachConditionCA(cond, "attendantID", (String)selValue);
+            attachConditionT3(cond, "attendantID", (String)selValue);
         }
 
         keyObj =((ConvComboBoxItem)gateBarCB.getSelectedItem()).getKeyValue();
-        attachIntConditionCA(cond, "BarOperation", (Integer) keyObj);           
-    }
+        if (keyObj.getClass() == Integer.class && (Integer)keyObj == NOT_SELECTED) {
+        } else {
+            attachIntConditionT3(cond, "BarOperation", ((BarOperation) keyObj).ordinal());
+        }
 
-    private void attachTimeCondition(String prefix, StringBuffer cond) {
+        /**
+         * Append affiliation condition if applicable.
+         */
+        InnoComboBoxItem lower_Item = (InnoComboBoxItem)searchL2ComboBox.getSelectedItem();
+        int lower_Index = lower_Item.getKeys().length - 1;
+        
+        attachNumberCondition(cond, "L1_NO", "L2_NO", 
+                (Integer)((ConvComboBoxItem)searchL1ComboBox.getSelectedItem()).getKeyValue(),
+                (Integer)(lower_Item.getKeys()[lower_Index]));   
+        
+        /**
+         * Append building-unit condition if applicable.
+         */        
+        lower_Item = (InnoComboBoxItem)searchUnitComboBox.getSelectedItem();
+        lower_Index = lower_Item.getKeys().length - 1;
+        attachNumberCondition(cond, "BNO", "UNO", (Integer)
+                ((ConvComboBoxItem)searchBuildingComboBox.getSelectedItem()).getKeyValue(),
+                (Integer)(lower_Item.getKeys()[lower_Index]));     
+        
         if (cond.length() > 0)
             cond.append(" and ");
         if (oneHourRadioButton.isSelected()) {
@@ -2460,6 +2522,7 @@ public class CarArrivals extends javax.swing.JFrame {
                 }
             }
         }
+        return cond.toString();
     }
 
     private void disablePeriodChooser() {
@@ -2579,37 +2642,22 @@ public class CarArrivals extends javax.swing.JFrame {
     }
     
     private void changeSearchButtonEnabled() {
-//        currSearchCondition = formSearchCondition();
+        currSearchCondition = formSearchCondition();
         if (currSearchCondition.equals(prevSearchCondition)) {
             searchButton.setEnabled(false);
         } else {
             searchButton.setEnabled(true);
         }
-//        releaseCount = 0;
-    }
-    
-    private String prevSearchCondition = null;        
-    private String currSearchCondition = null;        
+    }     
 
-    private String formSearchCondition() {
-        StringBuffer cond = new StringBuffer();        
-        String affiliCond = ""; // Z stands for not applicable-- came from zero.
-        
-        if (affiliationRadioButton.isSelected() && searchL2ComboBox.getSelectedIndex() > 0) {
-            affiliCond = "_A_Z_" + searchL2ComboBox.getSelectedIndex();
-        } else if (affiliationRadioButton.isSelected() && searchL1ComboBox.getSelectedIndex() > 0) {
-            affiliCond = "_A_" + searchL1ComboBox.getSelectedIndex() + "_Z";
-        } else if (buildingRadioButton.isSelected() && searchUnitComboBox.getSelectedIndex() > 0) {
-            affiliCond = "_B_Z_" + searchUnitComboBox.getSelectedIndex();
-        } else if (buildingRadioButton.isSelected() && searchBuildingComboBox.getSelectedIndex() > 0) {
-            affiliCond = "_B_" + searchBuildingComboBox.getSelectedIndex() + "_Z";
-        } else {        
-            affiliCond = "_Z_Z_Z";
-        }
-        return affiliCond;
+    private void applyCBoxItemChangeToChangedSet(JComboBox comboBox) {
+        if (comboBox.getSelectedIndex() == CommonData.PROMPTER_KEY) {
+            changedControls.remove(comboBox);
+        } else {
+            changedControls.add(comboBox);
+        }     
     }
 }
-
 
 class HeaderCellRenderer implements TableCellRenderer {
  
