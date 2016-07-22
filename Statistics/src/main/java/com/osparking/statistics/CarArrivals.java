@@ -229,7 +229,6 @@ public class CarArrivals extends javax.swing.JFrame {
         filler17 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
         myMetaKeyLabel = new javax.swing.JLabel();
         filler_h10_18 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 10), new java.awt.Dimension(0, 10), new java.awt.Dimension(32767, 10));
-        topPanel = new javax.swing.JPanel();
         searchPanel = new javax.swing.JPanel();
         criteriaPanel = new javax.swing.JPanel();
         searchTop = new javax.swing.JPanel();
@@ -275,7 +274,7 @@ public class CarArrivals extends javax.swing.JFrame {
         searchButtonPanel = new javax.swing.JPanel();
         searchButton = new javax.swing.JButton();
         filler_h10_19 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 10), new java.awt.Dimension(0, 10), new java.awt.Dimension(32767, 10));
-        bottomPanel = new javax.swing.JPanel();
+        arrivalsPanel = new javax.swing.JPanel();
         detailWhole = new javax.swing.JPanel();
         detailTop = new javax.swing.JPanel();
         gateNoPanel = new javax.swing.JPanel();
@@ -333,9 +332,9 @@ public class CarArrivals extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle(CAR_ARRIVALS_FRAME_TITLE.getContent());
         setFocusCycleRoot(false);
-        setMinimumSize(new Dimension(normGUIwidth,780));
-        setPreferredSize(new Dimension(normGUIwidth,780));
-        setSize(new Dimension(normGUIwidth, normGUIheight));
+        setMinimumSize(new Dimension(normGUIwidth,normGUIheight+50));
+        setPreferredSize(new Dimension(normGUIwidth,normGUIheight+50));
+        setSize(new java.awt.Dimension(0, 0));
 
         wholeTop.setMaximumSize(new java.awt.Dimension(32767, 40));
         wholeTop.setMinimumSize(new java.awt.Dimension(0, 40));
@@ -415,36 +414,32 @@ public class CarArrivals extends javax.swing.JFrame {
         wholePanel.add(titlePanel);
         wholePanel.add(filler_h10_18);
 
-        topPanel.setMaximumSize(new java.awt.Dimension(2147483647, 270));
-        topPanel.setMinimumSize(new java.awt.Dimension(810, 290));
-        topPanel.setPreferredSize(new java.awt.Dimension(0, 290));
-        topPanel.setLayout(new javax.swing.BoxLayout(topPanel, javax.swing.BoxLayout.LINE_AXIS));
-
         searchPanel.setBackground(new java.awt.Color(243, 243, 243));
         searchPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, SEARCH_CRITERIA_PANEL_TITLE.getContent(), javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font(font_Type, font_Style, font_Size)));
-        searchPanel.setAlignmentX(0.0F);
-        searchPanel.setMinimumSize(new java.awt.Dimension(800, 265));
-        searchPanel.setPreferredSize(new java.awt.Dimension(900, 265));
+        searchPanel.setMaximumSize(new java.awt.Dimension(32767, 285));
+        searchPanel.setMinimumSize(new java.awt.Dimension(800, 285));
+        searchPanel.setPreferredSize(new java.awt.Dimension(900, 285));
 
         criteriaPanel.setBackground(new java.awt.Color(243, 243, 243));
-        criteriaPanel.setMinimumSize(new java.awt.Dimension(800, 255));
-        criteriaPanel.setPreferredSize(new java.awt.Dimension(800, 255));
+        criteriaPanel.setMinimumSize(new java.awt.Dimension(810, 240));
+        criteriaPanel.setPreferredSize(new java.awt.Dimension(810, 240));
 
         searchTop.setBackground(new java.awt.Color(243, 243, 243));
         searchTop.setBorder(javax.swing.BorderFactory.createTitledBorder(null, ARRIVAL_PROPERTIES_PANEL_TITLE.getContent(), javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font(font_Type, font_Style, font_Size)));
         searchTop.setForeground(new java.awt.Color(255, 255, 255));
         searchTop.setAlignmentX(0.0F);
         searchTop.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        searchTop.setMaximumSize(new java.awt.Dimension(32767, 145));
-        searchTop.setMinimumSize(new java.awt.Dimension(800, 145));
-        searchTop.setPreferredSize(new java.awt.Dimension(800, 145));
+        searchTop.setMaximumSize(new java.awt.Dimension(32767, 140));
+        searchTop.setMinimumSize(new java.awt.Dimension(800, 140));
+        searchTop.setPreferredSize(new java.awt.Dimension(800, 140));
 
-        topVehicle.setMinimumSize(new java.awt.Dimension(340, 94));
-        topVehicle.setPreferredSize(new java.awt.Dimension(340, 94));
+        topVehicle.setMinimumSize(new java.awt.Dimension(340, 85));
+        topVehicle.setPreferredSize(new java.awt.Dimension(340, 85));
         topVehicle.setLayout(new javax.swing.BoxLayout(topVehicle, javax.swing.BoxLayout.Y_AXIS));
 
         carTagPanel.setBackground(new java.awt.Color(243, 243, 243));
-        carTagPanel.setPreferredSize(new java.awt.Dimension(122, 39));
+        carTagPanel.setMinimumSize(new java.awt.Dimension(201, 35));
+        carTagPanel.setPreferredSize(new java.awt.Dimension(122, 35));
         carTagPanel.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 5, 0));
 
         jLabel2.setBackground(new java.awt.Color(243, 243, 243));
@@ -474,7 +469,7 @@ public class CarArrivals extends javax.swing.JFrame {
 
         carPlus.setBackground(new java.awt.Color(243, 243, 243));
         carPlus.setMinimumSize(new java.awt.Dimension(340, 50));
-        carPlus.setPreferredSize(new java.awt.Dimension(320, 55));
+        carPlus.setPreferredSize(new java.awt.Dimension(320, 50));
         carPlus.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 10, 0));
 
         gatePanel.setBackground(new java.awt.Color(243, 243, 243));
@@ -601,8 +596,8 @@ public class CarArrivals extends javax.swing.JFrame {
         topDriver.setBackground(new java.awt.Color(243, 243, 243));
         topDriver.setDoubleBuffered(false);
         topDriver.setMaximumSize(new java.awt.Dimension(1000, 120));
-        topDriver.setMinimumSize(new java.awt.Dimension(280, 94));
-        topDriver.setPreferredSize(new java.awt.Dimension(280, 94));
+        topDriver.setMinimumSize(new java.awt.Dimension(280, 85));
+        topDriver.setPreferredSize(new java.awt.Dimension(280, 85));
 
         affiliPanel.setBackground(new java.awt.Color(243, 243, 243));
         affiliPanel.setMaximumSize(new java.awt.Dimension(240, 94));
@@ -754,7 +749,7 @@ public class CarArrivals extends javax.swing.JFrame {
         topDriverLayout.setHorizontalGroup(
             topDriverLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(topDriverLayout.createSequentialGroup()
-                .addComponent(affiliPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 151, Short.MAX_VALUE)
+                .addComponent(affiliPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 162, Short.MAX_VALUE)
                 .addGap(0, 0, 0)
                 .addComponent(buildingPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
@@ -769,8 +764,8 @@ public class CarArrivals extends javax.swing.JFrame {
 
         clearPanel.setBackground(new java.awt.Color(243, 243, 243));
         clearPanel.setMaximumSize(new java.awt.Dimension(111, 120));
-        clearPanel.setMinimumSize(new java.awt.Dimension(100, 94));
-        clearPanel.setPreferredSize(new java.awt.Dimension(100, 94));
+        clearPanel.setMinimumSize(new java.awt.Dimension(100, 85));
+        clearPanel.setPreferredSize(new java.awt.Dimension(100, 85));
         clearPanel.setLayout(new javax.swing.BoxLayout(clearPanel, javax.swing.BoxLayout.LINE_AXIS));
 
         clearSearchPropertiesButton.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
@@ -796,7 +791,7 @@ public class CarArrivals extends javax.swing.JFrame {
                 .addGap(26, 26, 26)
                 .addComponent(topVehicle, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(5, 5, 5)
-                .addComponent(topDriver, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(topDriver, javax.swing.GroupLayout.DEFAULT_SIZE, 291, Short.MAX_VALUE)
                 .addGap(5, 5, 5)
                 .addComponent(filler18, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGap(5, 5, 5)
@@ -806,20 +801,19 @@ public class CarArrivals extends javax.swing.JFrame {
         searchTopLayout.setVerticalGroup(
             searchTopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(searchTopLayout.createSequentialGroup()
-                .addGroup(searchTopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(searchTopLayout.createSequentialGroup()
-                        .addGap(5, 5, 5)
-                        .addComponent(topVehicle, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(searchTopLayout.createSequentialGroup()
-                        .addGap(5, 5, 5)
-                        .addComponent(topDriver, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(searchTopLayout.createSequentialGroup()
-                        .addGap(52, 52, 52)
-                        .addComponent(filler18, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(searchTopLayout.createSequentialGroup()
-                        .addGap(5, 5, 5)
-                        .addComponent(clearPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(0, 0, 0))
+                .addGroup(searchTopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(clearPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(searchTopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(searchTopLayout.createSequentialGroup()
+                            .addGap(5, 5, 5)
+                            .addComponent(topVehicle, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(searchTopLayout.createSequentialGroup()
+                            .addGap(5, 5, 5)
+                            .addComponent(topDriver, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(searchTopLayout.createSequentialGroup()
+                            .addGap(52, 52, 52)
+                            .addComponent(filler18, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(27, Short.MAX_VALUE))
         );
 
         searchBottom.setBackground(new java.awt.Color(244, 244, 244));
@@ -993,9 +987,8 @@ public class CarArrivals extends javax.swing.JFrame {
             .addGroup(criteriaPanelLayout.createSequentialGroup()
                 .addGap(0, 0, 0)
                 .addGroup(criteriaPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(searchTop, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(searchBottom, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(0, 0, 0))
+                    .addComponent(searchTop, javax.swing.GroupLayout.DEFAULT_SIZE, 811, Short.MAX_VALUE)
+                    .addComponent(searchBottom, javax.swing.GroupLayout.DEFAULT_SIZE, 811, Short.MAX_VALUE)))
         );
         criteriaPanelLayout.setVerticalGroup(
             criteriaPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1004,13 +997,13 @@ public class CarArrivals extends javax.swing.JFrame {
                 .addComponent(searchTop, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(searchBottom, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(3, 3, 3))
+                .addGap(0, 0, 0))
         );
 
         searchButtonPanel.setBackground(new java.awt.Color(243, 243, 243));
-        searchButtonPanel.setMaximumSize(new java.awt.Dimension(90, 250));
-        searchButtonPanel.setMinimumSize(new java.awt.Dimension(90, 250));
-        searchButtonPanel.setPreferredSize(new java.awt.Dimension(90, 250));
+        searchButtonPanel.setMaximumSize(new java.awt.Dimension(90, 240));
+        searchButtonPanel.setMinimumSize(new java.awt.Dimension(90, 240));
+        searchButtonPanel.setPreferredSize(new java.awt.Dimension(90, 240));
         searchButtonPanel.setLayout(new javax.swing.BoxLayout(searchButtonPanel, javax.swing.BoxLayout.LINE_AXIS));
 
         searchButton.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
@@ -1034,27 +1027,25 @@ public class CarArrivals extends javax.swing.JFrame {
             searchPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(searchPanelLayout.createSequentialGroup()
                 .addGap(0, 0, 0)
-                .addComponent(criteriaPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(criteriaPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 811, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(searchButtonPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(2, 2, 2))
         );
         searchPanelLayout.setVerticalGroup(
             searchPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(searchPanelLayout.createSequentialGroup()
-                .addGroup(searchPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(criteriaPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(searchButtonPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(0, 0, 0))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, searchPanelLayout.createSequentialGroup()
+                .addGroup(searchPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(searchButtonPanel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(criteriaPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 245, Short.MAX_VALUE))
+                .addGap(17, 17, 17))
         );
 
-        topPanel.add(searchPanel);
-
-        wholePanel.add(topPanel);
+        wholePanel.add(searchPanel);
         wholePanel.add(filler_h10_19);
 
-        bottomPanel.setPreferredSize(new java.awt.Dimension(945, 400));
-        bottomPanel.setLayout(new javax.swing.BoxLayout(bottomPanel, javax.swing.BoxLayout.LINE_AXIS));
+        arrivalsPanel.setPreferredSize(new java.awt.Dimension(945, 350));
+        arrivalsPanel.setLayout(new javax.swing.BoxLayout(arrivalsPanel, javax.swing.BoxLayout.LINE_AXIS));
 
         detailWhole.setBorder(javax.swing.BorderFactory.createTitledBorder(null, VEHICLE_ARIIVAL_DETAILS_PANEL_TITLE.getContent(), javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font(font_Type, font_Style, font_Size)));
         detailWhole.setMaximumSize(new java.awt.Dimension(32767, 163835));
@@ -1471,19 +1462,19 @@ public class CarArrivals extends javax.swing.JFrame {
         detailBottomLayout.setHorizontalGroup(
             detailBottomLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(detailBottomLayout.createSequentialGroup()
-                .addComponent(imagePanel, javax.swing.GroupLayout.DEFAULT_SIZE, 228, Short.MAX_VALUE)
+                .addComponent(imagePanel, javax.swing.GroupLayout.DEFAULT_SIZE, 236, Short.MAX_VALUE)
                 .addGap(0, 0, 0)
                 .addComponent(targetPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         detailBottomLayout.setVerticalGroup(
             detailBottomLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(imagePanel, javax.swing.GroupLayout.DEFAULT_SIZE, 149, Short.MAX_VALUE)
-            .addComponent(targetPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 149, Short.MAX_VALUE)
+            .addComponent(imagePanel, javax.swing.GroupLayout.DEFAULT_SIZE, 176, Short.MAX_VALUE)
+            .addComponent(targetPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         detailWhole.add(detailBottom, java.awt.BorderLayout.CENTER);
 
-        bottomPanel.add(detailWhole);
+        arrivalsPanel.add(detailWhole);
 
         bottomRightPanel.setMaximumSize(new java.awt.Dimension(32779, 33293));
         bottomRightPanel.setPreferredSize(new java.awt.Dimension(400, 300));
@@ -1534,7 +1525,7 @@ public class CarArrivals extends javax.swing.JFrame {
     );
     arrivalListPanelLayout.setVerticalGroup(
         arrivalListPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-        .addGap(0, 211, Short.MAX_VALUE)
+        .addGap(0, 216, Short.MAX_VALUE)
         .addGroup(arrivalListPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(arrivalsScroPan, javax.swing.GroupLayout.DEFAULT_SIZE, 254, Short.MAX_VALUE))
     );
@@ -1635,22 +1626,22 @@ public class CarArrivals extends javax.swing.JFrame {
     bottomRightPanel.setLayout(bottomRightPanelLayout);
     bottomRightPanelLayout.setHorizontalGroup(
         bottomRightPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-        .addComponent(arrivalListPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 371, Short.MAX_VALUE)
+        .addComponent(arrivalListPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 373, Short.MAX_VALUE)
         .addComponent(buttonPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
     );
     bottomRightPanelLayout.setVerticalGroup(
         bottomRightPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
         .addGroup(bottomRightPanelLayout.createSequentialGroup()
             .addGap(0, 0, 0)
-            .addComponent(arrivalListPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 216, Short.MAX_VALUE)
+            .addComponent(arrivalListPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 239, Short.MAX_VALUE)
             .addGap(10, 10, 10)
             .addComponent(buttonPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addGap(0, 0, 0))
     );
 
-    bottomPanel.add(bottomRightPanel);
+    arrivalsPanel.add(bottomRightPanel);
 
-    wholePanel.add(bottomPanel);
+    wholePanel.add(arrivalsPanel);
 
     getContentPane().add(wholePanel, java.awt.BorderLayout.CENTER);
 
@@ -1715,55 +1706,27 @@ public class CarArrivals extends javax.swing.JFrame {
         }        
     }//GEN-LAST:event_imageLabelMouseClicked
 
-    private void attendantCBPopupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_attendantCBPopupMenuWillBecomeVisible
-        if (attendantCB.getItemCount() > 1)
-            return;
-        
-        Connection conn = null;
-        Statement stmt = null; 
-        ResultSet rs = null;         
-        
-        try {
-            //<editor-fold defaultstate="collapsed" desc="-- load affiliation comboBox"> 
-            conn = getConnection();
-            stmt = conn.createStatement();
-            StringBuffer sb = new StringBuffer();
-
-            sb.append("Select id, name From users_osp ");
-            sb.append("Order by name");
-
-            rs = stmt.executeQuery(sb.toString());
-            attendantCB.addItem(new ConvComboBoxItem(null, ATTENDANT_LOGOUT_ITEM.getContent()));
-            while (rs.next()) {
-                attendantCB.addItem(new ConvComboBoxItem(rs.getString("id"), rs.getString("name")));
-            }
-            //</editor-fold>
-        } catch (SQLException ex) {
-            logParkingException(Level.SEVERE, ex, "(CBox Item Loading for : attendants" );
-        } finally {
-            closeDBstuff(conn, stmt, rs, "attendants list pop up menu");
-        }        
-    }//GEN-LAST:event_attendantCBPopupMenuWillBecomeVisible
-
-    private void clearSearchPropertiesButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearSearchPropertiesButtonActionPerformed
-        gateCB.setSelectedIndex(0);
-        carTagTF.setText("");
-        attendantCB.setSelectedIndex(0);
-        searchL1ComboBox.setSelectedIndex(0);
-        searchL2ComboBox.removeAllItems();
-        searchL2ComboBox.addItem(getPrompter(AffiliationL2, searchL1ComboBox));        
-        searchBuildingComboBox.setSelectedIndex(0);
-        searchUnitComboBox.removeAllItems();
-        searchUnitComboBox.addItem(getPrompter(UnitNo, searchBuildingComboBox));        
-        gateBarCB.setSelectedIndex(0);
-        changeSearchButtonEnabled();
-        clearSearchPropertiesButton.setEnabled(false);
-    }//GEN-LAST:event_clearSearchPropertiesButtonActionPerformed
-
     private void searchButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchButtonActionPerformed
         loadArrivalsListTable(true);
         searchButton.setEnabled(false);
     }//GEN-LAST:event_searchButtonActionPerformed
+
+    private void closeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_closeButtonActionPerformed
+        Thread.currentThread().setPriority(Thread.MAX_PRIORITY);
+        this.dispose();
+    }//GEN-LAST:event_closeButtonActionPerformed
+    
+    private void seeLicenseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_seeLicenseButtonActionPerformed
+        showLicensePanel(this, "License Notice on Vehicle Manager");
+    }//GEN-LAST:event_seeLicenseButtonActionPerformed
+
+    private void saveSheet_ButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveSheet_ButtonActionPerformed
+    }//GEN-LAST:event_saveSheet_ButtonActionPerformed
+
+    private void moveFocusToCarTagTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_moveFocusToCarTagTextFieldActionPerformed
+        carTagTF.requestFocus();
+        System.out.println("Move focus to car tag field");
+    }//GEN-LAST:event_moveFocusToCarTagTextFieldActionPerformed
 
     private void setSearchPeriodOptionButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_setSearchPeriodOptionButtonActionPerformed
         Connection conn = null;
@@ -1785,8 +1748,8 @@ public class CarArrivals extends javax.swing.JFrame {
             pStmt.setInt(1, option);
             if (pStmt.executeUpdate() == 1) {
                 JOptionPane.showConfirmDialog(null, PERIOD_SETTING_RESULT.getContent(),
-                        NOTICE_DIALOGTITLE.getContent(),
-                        JOptionPane.PLAIN_MESSAGE, INFORMATION_MESSAGE);                 
+                    NOTICE_DIALOGTITLE.getContent(),
+                    JOptionPane.PLAIN_MESSAGE, INFORMATION_MESSAGE);
             }
         }
         catch(Exception e)
@@ -1813,35 +1776,55 @@ public class CarArrivals extends javax.swing.JFrame {
         disablePeriodChooser();
     }//GEN-LAST:event_oneHourRadioButtonActionPerformed
 
-    private void closeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_closeButtonActionPerformed
-        Thread.currentThread().setPriority(Thread.MAX_PRIORITY);
-        this.dispose();
-    }//GEN-LAST:event_closeButtonActionPerformed
+    private void clearSearchPropertiesButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearSearchPropertiesButtonActionPerformed
+        gateCB.setSelectedIndex(0);
+        carTagTF.setText("");
+        attendantCB.setSelectedIndex(0);
+        searchL1ComboBox.setSelectedIndex(0);
+        searchL2ComboBox.removeAllItems();
+        searchL2ComboBox.addItem(getPrompter(AffiliationL2, searchL1ComboBox));
+        searchBuildingComboBox.setSelectedIndex(0);
+        searchUnitComboBox.removeAllItems();
+        searchUnitComboBox.addItem(getPrompter(UnitNo, searchBuildingComboBox));
+        gateBarCB.setSelectedIndex(0);
+        changeSearchButtonEnabled();
+        clearSearchPropertiesButton.setEnabled(false);
+    }//GEN-LAST:event_clearSearchPropertiesButtonActionPerformed
 
     private void searchUnitComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchUnitComboBoxActionPerformed
+
     }//GEN-LAST:event_searchUnitComboBoxActionPerformed
 
     private void searchUnitComboBoxPopupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_searchUnitComboBoxPopupMenuWillBecomeVisible
         int bldgNo = (Integer)
-                ((ConvComboBoxItem)searchBuildingComboBox.getSelectedItem()).getKeyValue();
-        
-        if (searchUnitComboBox.getItemCount() == 1 || 
-                getPrevParentSKey()[UnitNo.getNumVal()] != bldgNo) 
+        ((ConvComboBoxItem)searchBuildingComboBox.getSelectedItem()).getKeyValue();
+
+        if (searchUnitComboBox.getItemCount() == 1 ||
+            getPrevParentSKey()[UnitNo.getNumVal()] != bldgNo)
         {
             Object selItem = searchUnitComboBox.getSelectedItem();
-            refreshComboBox(searchUnitComboBox, getPrompter(UnitNo, searchBuildingComboBox), 
+            refreshComboBox(searchUnitComboBox, getPrompter(UnitNo, searchBuildingComboBox),
                 UnitNo, bldgNo, getPrevParentSKey());
-            searchUnitComboBox.setSelectedItem(selItem); 
-        }        
+            searchUnitComboBox.setSelectedItem(selItem);
+        }
     }//GEN-LAST:event_searchUnitComboBoxPopupMenuWillBecomeVisible
 
-    private void searchL2ComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchL2ComboBoxActionPerformed
-    }//GEN-LAST:event_searchL2ComboBoxActionPerformed
-    
-    private void searchL2ComboBoxPopupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_searchL2ComboBoxPopupMenuWillBecomeVisible
-        mayRefreshLowerCBox(searchL1ComboBox, searchL2ComboBox, AffiliationL2, 
-                getPrevParentSKey());
-    }//GEN-LAST:event_searchL2ComboBoxPopupMenuWillBecomeVisible
+    private void searchUnitComboBoxPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_searchUnitComboBoxPopupMenuWillBecomeInvisible
+        changeSearchButtonEnabled();
+        mayPropagateBackward(searchUnitComboBox, searchBuildingComboBox);
+    }//GEN-LAST:event_searchUnitComboBoxPopupMenuWillBecomeInvisible
+
+    private void searchUnitComboBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_searchUnitComboBoxItemStateChanged
+        if (searchUnitComboBox.getSelectedIndex() == NOT_SELECTED) {
+            changedControls.remove(searchUnitComboBox);
+        } else {
+            if (searchL2ComboBox.getSelectedIndex() == CommonData.PROMPTER_KEY) {
+                changedControls.remove(searchUnitComboBox);
+            } else {
+                changedControls.add(searchUnitComboBox);
+            }
+        }
+    }//GEN-LAST:event_searchUnitComboBoxItemStateChanged
 
     private void searchBuildingComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchBuildingComboBoxActionPerformed
         if (searchBuildingComboBox.isPopupVisible()) {
@@ -1850,14 +1833,44 @@ public class CarArrivals extends javax.swing.JFrame {
             model.removeElementAt(0);
             model.insertElementAt(getPrompter(UnitNo,
                 searchBuildingComboBox), 0);
-            searchUnitComboBox.setSelectedIndex(0);
+        searchUnitComboBox.setSelectedIndex(0);
         }
         if (searchBuildingComboBox.getSelectedIndex() == CommonData.PROMPTER_KEY) {
             changedControls.remove(searchBuildingComboBox);
         } else {
             changedControls.add(searchBuildingComboBox);
-        }         
+        }
     }//GEN-LAST:event_searchBuildingComboBoxActionPerformed
+
+    private void searchBuildingComboBoxPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_searchBuildingComboBoxPopupMenuWillBecomeInvisible
+        changeSearchButtonEnabled();
+    }//GEN-LAST:event_searchBuildingComboBoxPopupMenuWillBecomeInvisible
+
+    private void searchL2ComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchL2ComboBoxActionPerformed
+
+    }//GEN-LAST:event_searchL2ComboBoxActionPerformed
+
+    private void searchL2ComboBoxPopupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_searchL2ComboBoxPopupMenuWillBecomeVisible
+        mayRefreshLowerCBox(searchL1ComboBox, searchL2ComboBox, AffiliationL2,
+            getPrevParentSKey());
+    }//GEN-LAST:event_searchL2ComboBoxPopupMenuWillBecomeVisible
+
+    private void searchL2ComboBoxPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_searchL2ComboBoxPopupMenuWillBecomeInvisible
+        changeSearchButtonEnabled();
+        mayPropagateBackward(searchL2ComboBox, searchL1ComboBox);
+    }//GEN-LAST:event_searchL2ComboBoxPopupMenuWillBecomeInvisible
+
+    private void searchL2ComboBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_searchL2ComboBoxItemStateChanged
+        if (searchL2ComboBox.getSelectedIndex() == NOT_SELECTED) {
+            changedControls.remove(searchL2ComboBox);
+        } else {
+            if (searchL2ComboBox.getSelectedIndex() == CommonData.PROMPTER_KEY) {
+                changedControls.remove(searchL2ComboBox);
+            } else {
+                changedControls.add(searchL2ComboBox);
+            }
+        }
+    }//GEN-LAST:event_searchL2ComboBoxItemStateChanged
 
     private void searchL1ComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchL1ComboBoxActionPerformed
         if (searchL1ComboBox.isPopupVisible()) {
@@ -1871,30 +1884,74 @@ public class CarArrivals extends javax.swing.JFrame {
             changedControls.remove(searchL1ComboBox);
         } else {
             changedControls.add(searchL1ComboBox);
-        }        
+        }
     }//GEN-LAST:event_searchL1ComboBoxActionPerformed
 
-    private void searchL2ComboBoxPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_searchL2ComboBoxPopupMenuWillBecomeInvisible
+    private void searchL1ComboBoxPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_searchL1ComboBoxPopupMenuWillBecomeInvisible
         changeSearchButtonEnabled();
-        mayPropagateBackward(searchL2ComboBox, searchL1ComboBox);
-    }//GEN-LAST:event_searchL2ComboBoxPopupMenuWillBecomeInvisible
+    }//GEN-LAST:event_searchL1ComboBoxPopupMenuWillBecomeInvisible
 
-    private void searchUnitComboBoxPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_searchUnitComboBoxPopupMenuWillBecomeInvisible
+    private void gateBarCBPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_gateBarCBPopupMenuWillBecomeInvisible
         changeSearchButtonEnabled();
-        mayPropagateBackward(searchUnitComboBox, searchBuildingComboBox);
-    }//GEN-LAST:event_searchUnitComboBoxPopupMenuWillBecomeInvisible
+    }//GEN-LAST:event_gateBarCBPopupMenuWillBecomeInvisible
 
-    private void seeLicenseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_seeLicenseButtonActionPerformed
-        showLicensePanel(this, "License Notice on Vehicle Manager");
-    }//GEN-LAST:event_seeLicenseButtonActionPerformed
+    private void gateBarCBItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_gateBarCBItemStateChanged
+        applyCBoxItemChangeToChangedSet(gateBarCB);
+    }//GEN-LAST:event_gateBarCBItemStateChanged
 
-    private void saveSheet_ButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveSheet_ButtonActionPerformed
-    }//GEN-LAST:event_saveSheet_ButtonActionPerformed
+    private void attendantCBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_attendantCBActionPerformed
 
-    private void moveFocusToCarTagTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_moveFocusToCarTagTextFieldActionPerformed
-        carTagTF.requestFocus();
-        System.out.println("Move focus to car tag field");
-    }//GEN-LAST:event_moveFocusToCarTagTextFieldActionPerformed
+    }//GEN-LAST:event_attendantCBActionPerformed
+
+    private void attendantCBPopupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_attendantCBPopupMenuWillBecomeVisible
+        if (attendantCB.getItemCount() > 1)
+        return;
+
+        Connection conn = null;
+        Statement stmt = null;
+        ResultSet rs = null;
+
+        try {
+            //<editor-fold defaultstate="collapsed" desc="-- load affiliation comboBox">
+            conn = getConnection();
+            stmt = conn.createStatement();
+            StringBuffer sb = new StringBuffer();
+
+            sb.append("Select id, name From users_osp ");
+            sb.append("Order by name");
+
+            rs = stmt.executeQuery(sb.toString());
+            attendantCB.addItem(new ConvComboBoxItem(null, ATTENDANT_LOGOUT_ITEM.getContent()));
+            while (rs.next()) {
+                attendantCB.addItem(new ConvComboBoxItem(rs.getString("id"), rs.getString("name")));
+            }
+            //</editor-fold>
+        } catch (SQLException ex) {
+            logParkingException(Level.SEVERE, ex, "(CBox Item Loading for : attendants" );
+        } finally {
+            closeDBstuff(conn, stmt, rs, "attendants list pop up menu");
+        }
+    }//GEN-LAST:event_attendantCBPopupMenuWillBecomeVisible
+
+    private void attendantCBPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_attendantCBPopupMenuWillBecomeInvisible
+        changeSearchButtonEnabled();
+    }//GEN-LAST:event_attendantCBPopupMenuWillBecomeInvisible
+
+    private void attendantCBItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_attendantCBItemStateChanged
+        applyCBoxItemChangeToChangedSet(attendantCB);
+    }//GEN-LAST:event_attendantCBItemStateChanged
+
+    private void gateCBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_gateCBActionPerformed
+
+    }//GEN-LAST:event_gateCBActionPerformed
+
+    private void gateCBPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_gateCBPopupMenuWillBecomeInvisible
+        changeSearchButtonEnabled();
+    }//GEN-LAST:event_gateCBPopupMenuWillBecomeInvisible
+
+    private void gateCBItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_gateCBItemStateChanged
+        applyCBoxItemChangeToChangedSet(gateCB);
+    }//GEN-LAST:event_gateCBItemStateChanged
 
     private void carTagTFKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_carTagTFKeyTyped
         if (carTagTF.getText().trim().length() == 0) {
@@ -1909,26 +1966,6 @@ public class CarArrivals extends javax.swing.JFrame {
         });
     }//GEN-LAST:event_carTagTFKeyTyped
 
-    private void gateCBPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_gateCBPopupMenuWillBecomeInvisible
-        changeSearchButtonEnabled();
-    }//GEN-LAST:event_gateCBPopupMenuWillBecomeInvisible
-
-    private void attendantCBPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_attendantCBPopupMenuWillBecomeInvisible
-        changeSearchButtonEnabled();
-    }//GEN-LAST:event_attendantCBPopupMenuWillBecomeInvisible
-
-    private void gateBarCBPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_gateBarCBPopupMenuWillBecomeInvisible
-        changeSearchButtonEnabled();
-    }//GEN-LAST:event_gateBarCBPopupMenuWillBecomeInvisible
-
-    private void searchL1ComboBoxPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_searchL1ComboBoxPopupMenuWillBecomeInvisible
-        changeSearchButtonEnabled();
-    }//GEN-LAST:event_searchL1ComboBoxPopupMenuWillBecomeInvisible
-
-    private void searchBuildingComboBoxPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_searchBuildingComboBoxPopupMenuWillBecomeInvisible
-        changeSearchButtonEnabled();
-    }//GEN-LAST:event_searchBuildingComboBoxPopupMenuWillBecomeInvisible
-
     private void carTagTFKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_carTagTFKeyReleased
         if (carTagTF.getText().trim().length() == 0) {
             changedControls.remove(carTagTF);
@@ -1936,48 +1973,6 @@ public class CarArrivals extends javax.swing.JFrame {
             changedControls.add(carTagTF);
         }
     }//GEN-LAST:event_carTagTFKeyReleased
-
-    private void searchL2ComboBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_searchL2ComboBoxItemStateChanged
-        if (searchL2ComboBox.getSelectedIndex() == NOT_SELECTED) {
-            changedControls.remove(searchL2ComboBox);
-        } else {
-            if (searchL2ComboBox.getSelectedIndex() == CommonData.PROMPTER_KEY) {
-                changedControls.remove(searchL2ComboBox);
-            } else {
-                changedControls.add(searchL2ComboBox);
-            }
-        }                
-    }//GEN-LAST:event_searchL2ComboBoxItemStateChanged
-
-    private void searchUnitComboBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_searchUnitComboBoxItemStateChanged
-        if (searchUnitComboBox.getSelectedIndex() == NOT_SELECTED) {
-            changedControls.remove(searchUnitComboBox);
-        } else {
-            if (searchL2ComboBox.getSelectedIndex() == CommonData.PROMPTER_KEY) {
-                changedControls.remove(searchUnitComboBox);
-            } else {
-                changedControls.add(searchUnitComboBox);
-            }
-        }                
-    }//GEN-LAST:event_searchUnitComboBoxItemStateChanged
-
-    private void gateCBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_gateCBActionPerformed
-    }//GEN-LAST:event_gateCBActionPerformed
-
-    private void attendantCBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_attendantCBActionPerformed
-    }//GEN-LAST:event_attendantCBActionPerformed
-
-    private void gateCBItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_gateCBItemStateChanged
-        applyCBoxItemChangeToChangedSet(gateCB);
-    }//GEN-LAST:event_gateCBItemStateChanged
-
-    private void gateBarCBItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_gateBarCBItemStateChanged
-        applyCBoxItemChangeToChangedSet(gateBarCB);
-    }//GEN-LAST:event_gateBarCBItemStateChanged
-
-    private void attendantCBItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_attendantCBItemStateChanged
-        applyCBoxItemChangeToChangedSet(attendantCB);
-    }//GEN-LAST:event_attendantCBItemStateChanged
 
     // <editor-fold defaultstate="collapsed" desc="-- Variables defined via GUI creation">
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -1992,13 +1987,13 @@ public class CarArrivals extends javax.swing.JFrame {
     private javax.swing.JPanel arrivalListPanel;
     private javax.swing.JTextField arrivalTmTF;
     private javax.swing.JTable arrivalsList;
+    private javax.swing.JPanel arrivalsPanel;
     private javax.swing.JScrollPane arrivalsScroPan;
     private javax.swing.JPanel attendPanel;
     private javax.swing.JComboBox attendantCB;
     private javax.swing.JTextField attendantTF;
     private javax.swing.JPanel barOptnPanel;
     private javax.swing.JTextField barOptnTF;
-    private javax.swing.JPanel bottomPanel;
     private javax.swing.JPanel bottomRightPanel;
     private javax.swing.JLabel buildingLabel;
     private javax.swing.JPanel buildingPanel;
@@ -2080,7 +2075,6 @@ public class CarArrivals extends javax.swing.JFrame {
     private javax.swing.JLabel titleLabel;
     private javax.swing.JPanel titlePanel;
     private javax.swing.JPanel topDriver;
-    private javax.swing.JPanel topPanel;
     private javax.swing.JPanel topVehicle;
     private javax.swing.JTextField unitTF;
     private javax.swing.JPanel visitBuildingPanel;
