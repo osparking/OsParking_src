@@ -39,6 +39,11 @@ import com.osparking.global.names.ConvComboBoxItem;
 import static com.osparking.global.names.DB_Access.SEARCH_PERIOD;
 import static com.osparking.global.names.DB_Access.parkingLotLocale;
 import static com.osparking.global.Globals.*;
+import com.osparking.global.names.ControlEnums.BarOperation;
+import static com.osparking.global.names.ControlEnums.BarOperation.AUTO_OPENED;
+import static com.osparking.global.names.ControlEnums.BarOperation.MANUAL;
+import static com.osparking.global.names.ControlEnums.BarOperation.REGISTERED_CAR_OPENED;
+import static com.osparking.global.names.ControlEnums.BarOperation.REMAIN_CLOSED;
 import static com.osparking.global.names.ControlEnums.ButtonTypes.CLEAR_BTN;
 import static com.osparking.global.names.ControlEnums.ButtonTypes.CLOSE_BTN;
 import static com.osparking.global.names.ControlEnums.ButtonTypes.FIX_IT_BTN;
@@ -89,11 +94,6 @@ import com.osparking.global.names.InnoComboBoxItem;
 import com.osparking.global.names.JDBCMySQL;
 import static com.osparking.global.names.JDBCMySQL.getConnection;
 import com.osparking.global.names.OSP_enums;
-import com.osparking.global.names.OSP_enums.BarOperation;
-import static com.osparking.global.names.OSP_enums.BarOperation.REGISTERED_CAR_OPENED;
-import static com.osparking.global.names.OSP_enums.BarOperation.AUTO_OPENED;
-import static com.osparking.global.names.OSP_enums.BarOperation.MANUAL;
-import static com.osparking.global.names.OSP_enums.BarOperation.REMAIN_CLOSED;
 import static com.osparking.global.names.OSP_enums.DriverCol.AffiliationL1;
 import static com.osparking.global.names.OSP_enums.DriverCol.AffiliationL2;
 import static com.osparking.global.names.OSP_enums.DriverCol.BuildingNo;
@@ -2226,18 +2226,7 @@ public class CarArrivals extends javax.swing.JFrame {
 
                 // <editor-fold defaultstate="collapsed" desc="-- form select statement for detailed info'">
                 StringBuffer sb = new StringBuffer(); 
-//                sb.append("Select AV.*, CD.L2_NO as regisL2No, CD.UNIT_SEQ_NO as regisUnitSN "); 
-//                sb.append("from ( "); 
-//                sb.append("  Select gateNo, attendantID, tagEnteredAs, L2_No as visitL2No,  "); 
-//                sb.append("        UnitSeqNo as visitUnitSN, visitReason, DRIVER_SEQ_NO, barOperation, "); 
-//                sb.append("        LENGTH(ImageBlob) imgBytes, ImageBlob "); 
-//                sb.append("  From car_arrival "); 
-//                sb.append("  Left Join vehicles "); 
-//                sb.append("  On car_arrival.TagEnteredAs = vehicles.PLATE_NUMBER "); 
-//                sb.append("  Where arrSeqNo = " + seqNo +" ) AV "); 
-//                sb.append("left join cardriver CD "); 
-//                sb.append("On AV.DRIVER_SEQ_NO = CD.SEQ_NO "); 
-                
+
                 sb.append("Select AV.*, CD.L2_NO as regisL2No, CD.UNIT_SEQ_NO as regisUnitSN "); 
                 sb.append("From (Select gateNo, tagEnteredAs, L2_No as visitL2No,"); 
                 sb.append("  UnitSeqNo as visitUnitSN, visitReason, DRIVER_SEQ_NO,"); 
@@ -2302,7 +2291,8 @@ public class CarArrivals extends javax.swing.JFrame {
                             visitPurposeTF.setText(rs.getString("visitReason")); 
                         
                         int ordinalValue = (Integer)(rs.getInt("barOperation"));
-                        barOptnTF.setText(getBarOperationLabel(BarOperation.values()[ordinalValue])); 
+//                        barOptnTF.setText(getBarOperationLabel(BarOperation.values()[ordinalValue])); 
+                        barOptnTF.setText((BarOperation.values()[ordinalValue]).getContent()); 
                         //</editor-fold>                        
 
                         // <editor-fold defaultstate="collapsed" desc="-- display car arrival image">
@@ -2534,34 +2524,8 @@ public class CarArrivals extends javax.swing.JFrame {
 
         for (BarOperation barOperation : BarOperation.values()) {
             gateBarCB.addItem(new ConvComboBoxItem(barOperation, 
-                    getBarOperationLabel(barOperation)));
+                    barOperation.getContent()));
         }
-    }
-
-    public static String getBarOperationLabel(BarOperation barOperation) {
-        String label;
-        switch (barOperation) {
-            case REGISTERED_CAR_OPENED:
-                label = BAR_ALLOWED_CB_ITEM.getContent();
-                break;
-
-            case AUTO_OPENED:
-                label = BAR_LAZY_ATT_CB_ITEM.getContent();
-                break;
-
-            case MANUAL:
-                label = BAR_MANUAL_CB_ITEM.getContent();
-                break;
-
-            case REMAIN_CLOSED:
-                label = BAR_REMAIN_CLOSED_ATT_CB_ITEM.getContent();
-                break;
-
-            default:
-                label = "(none)";
-                break;
-        }        
-        return label;
     }
 
     private void addSelectionChangeListener(boolean listenerNeeded) {

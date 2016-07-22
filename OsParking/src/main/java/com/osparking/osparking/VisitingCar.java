@@ -20,12 +20,10 @@ import static com.osparking.global.CommonData.bigButtonDim;
 import com.osparking.global.Globals;
 import static com.osparking.global.Globals.CONTENT_INC;
 import static com.osparking.global.Globals.LABEL_INC;
-import com.osparking.vehicle.driver.ManageDrivers;
 import java.awt.Point;
 import java.awt.image.BufferedImage;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import com.osparking.global.names.OSP_enums.BarOperation;
 import com.osparking.global.names.ConvComboBoxItem;
 import static com.osparking.global.names.DB_Access.readSettings;
 import static com.osparking.global.Globals.checkOptions;
@@ -38,6 +36,7 @@ import static com.osparking.global.Globals.getPrompter;
 import static com.osparking.global.Globals.initializeLoggers;
 import static com.osparking.global.Globals.loadComboBoxItems;
 import static com.osparking.global.Globals.refreshComboBox;
+import com.osparking.global.names.ControlEnums.BarOperation;
 import static com.osparking.global.names.ControlEnums.LabelContent.DISALLOW_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.GATE_NAME_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.OPEN_LABEL;
@@ -106,8 +105,6 @@ public class VisitingCar extends javax.swing.JFrame {
         visitTimeTextField.setText("'" + new SimpleDateFormat ("a hh:mm:ss").
                 format(arrivalTime));
         
-//        initSearchComboBox(highLevelComboBox, lowLevelComboBox, 
-//                buildingComboBox, unitComboBox);
         visitL1ComboBox.addItem(getPrompter(AffiliationL1, null));
         visitL2ComboBox.addItem(getPrompter(AffiliationL2, visitL1ComboBox));
         visitBuildingComboBox.addItem(getPrompter(BuildingNo, null));

@@ -169,38 +169,7 @@ public class OSP_enums {
         public int getNumVal() {
             return numVal;
         }
-    }    
-    
-    public enum BarOperation {
-        /**
-         * Gate bar opened as a result of an arrival of a vehicle allowed to 
-         * park legally.
-         *//**
-         * Gate bar opened as a result of an arrival of a vehicle allowed to 
-         * park legally.
-         */
-        REGISTERED_CAR_OPENED, 
-        /**
-         * Attendant in charge isn't able to take care the gate at the moment. 
-         * He/She set the gate on automatic open mode as soon as the tag 
-         * is recognized.
-         */
-        AUTO_OPENED,
-        /**
-         * Attendant opened the gate manually. It could be done for a visitor,
-         * in case of LPR malfunction, or for a disallowed car, etc.
-         */
-        MANUAL, 
-        /**
-         * Gate remained closed since the attendant disallowed a car to enter.
-         */
-        REMAIN_CLOSED,
-        /**
-         * Temporarily stopped for a checkup
-         */
-        STOPPED
-        
-    }    
+    }      
     
     public enum OPType {
         START, STOP        

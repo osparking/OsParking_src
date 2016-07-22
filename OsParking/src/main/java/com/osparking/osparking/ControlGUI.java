@@ -26,6 +26,7 @@ import static com.osparking.global.CommonData.metaKeyLabel;
 import com.osparking.global.Globals;
 import static com.osparking.global.Globals.*;
 import com.osparking.global.names.CarAdmission;
+import com.osparking.global.names.ControlEnums.BarOperation;
 import static com.osparking.global.names.ControlEnums.ButtonTypes.ARRIVALS_BTN;
 import static com.osparking.global.names.ControlEnums.ButtonTypes.CAR_ARRIVAL_BTN;
 import static com.osparking.global.names.ControlEnums.ButtonTypes.STATISTICS_BTN;
@@ -78,7 +79,6 @@ import com.osparking.global.names.ImageDisplay;
 import com.osparking.global.names.JDBCMySQL;
 import com.osparking.global.names.ManagerGUI;
 import com.osparking.global.names.OSP_enums;
-import com.osparking.global.names.OSP_enums.BarOperation;
 import com.osparking.global.names.OSP_enums.DeviceType;
 import static com.osparking.global.names.OSP_enums.DeviceType.Camera;
 import static com.osparking.global.names.OSP_enums.DeviceType.E_Board;
@@ -1695,7 +1695,7 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
                 addMessageLine(getMessageTextArea(), "카메라 #" + gateNo +" 단절 상태임");
             }
         } else {
-            int imageNo = randomInteger.nextInt(6) + 1; // 4 = visiting car
+            int imageNo = randomInteger.nextInt(6) + 1; // = 4;  visiting car
             String tagNumber = dummyMessages[imageNo].getCarNumber();
             BufferedImage carImage = dummyMessages[imageNo].getBufferedImg();
             
@@ -1917,16 +1917,12 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
      */
     private void insertDisplayImage(PermissionType permission, byte cameraID, 
             Date arrivalTime, String tagRecognized, String tagRegistered, 
-            BufferedImage image, boolean isOpen, boolean isStopped) 
+            BufferedImage image, boolean isOpen) 
     {
         BarOperation barOptn;
         long arrSeqNo = -1;
         
-        if (isStopped) {
-            barOptn = BarOperation.STOPPED;
-        } else 
-            if (autoGateOpenCheckBox.isSelected()) 
-        {
+        if (autoGateOpenCheckBox.isSelected()) {
             //<editor-fold desc="-- Automatic Gate Open"">
             if (permission == PermissionType.ALLOWED || permission == PermissionType.DISALLOWED) 
             {
@@ -2029,7 +2025,7 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
                 carImage = convertRaw2Buffered(blackFlyImage);
             }
             insertDisplayImage(permission, gateNo, arrivalTime, tagRecognized,
-                    tagRegistered.toString(), carImage, isOpen, false);
+                    tagRegistered.toString(), carImage, isOpen);
         } else {
             // Handle unregistered or not permitted cars
             getPassingDelayStat()[gateNo].setAccumulatable(false);
@@ -2037,8 +2033,6 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
             if (carImage == null) {
                 carImage = convertRaw2Buffered(blackFlyImage);
             }
-            insertDisplayImage(permission, gateNo, arrivalTime, tagRecognized,
-                    tagRegistered.toString(), carImage, isOpen, true);
             controlStoppedCar(gateNo, imageID, tagRecognized, carImage,
                     arrivalTime, tagRegistered.toString(),
                     remark.toString(), permission, carPassingDelayMs);

@@ -914,10 +914,10 @@ public class ControlEnums {
         ATTENDANT_CB_ITEM("(관리원)", "(Attendant)"),
         BAR_CB_ITEM("(차단기)", "(Unselected)"),
         ATTENDANT_LOGOUT_ITEM("(로그아웃)", "(logged out)"),
-        BAR_ALLOWED_CB_ITEM("자격개방", "Legal Open"),
-        BAR_LAZY_ATT_CB_ITEM("불문개방", "Auto' Open"),
-        BAR_MANUAL_CB_ITEM("수동개방", "Manual Open"),
-        BAR_REMAIN_CLOSED_ATT_CB_ITEM("폐쇄", "Remain Closed"),
+//        BAR_ALLOWED_CB_ITEM("자격개방", "Legal Open"),
+//        BAR_LAZY_ATT_CB_ITEM("불문개방", "Auto' Open"),
+//        BAR_MANUAL_CB_ITEM("수동개방", "Manual Open"),
+//        BAR_REMAIN_CLOSED_ATT_CB_ITEM("폐쇄", "Remain Closed"),
         USER_CB_ITEM("(모든 사용자)", "(everybody)"),
         FOUR_DIGIT_CB_ITEM("네 자리 숫자", "Four digits"),
         SIX_DIGIT_CB_ITEM("6자리 이상 영숫자", "Six-digit or more alpha-numeric"),
@@ -955,6 +955,49 @@ public class ControlEnums {
                 return contents[language.ordinal()];
         }          
     }
+    
+    
+    public enum BarOperation {
+        /**
+         * Gate bar opened as a result of an arrival of a vehicle allowed to 
+         * park legally.
+         *//**
+         * Gate bar opened as a result of an arrival of a vehicle allowed to 
+         * park legally.
+         */
+        REGISTERED_CAR_OPENED("자격개방", "Legal Open"), 
+        /**
+         * Attendant in charge isn't able to take care the gate at the moment. 
+         * He/She set the gate on automatic open mode as soon as the tag 
+         * is recognized.
+         */
+        AUTO_OPENED("불문개방", "Auto' Open"),
+        /**
+         * Attendant opened the gate manually. It could be done for a visitor,
+         * in case of LPR malfunction, or for a disallowed car, etc.
+         */
+        MANUAL("수동개방", "Manual Open"), 
+        /**
+         * Gate remained closed since the attendant disallowed a car to enter.
+         */
+        REMAIN_CLOSED("폐쇄", "Remain Closed"),
+        /**
+         * Temporarily stopped for a checkup
+         */
+        STOPPED("지속개방", "Remain Opened");
+        
+        BarOperation(String korean, String english) {
+            contents[KOREAN.ordinal()] = korean;
+            contents[ENGLISH.ordinal()] = english;
+        }
+        
+        private String[] contents = new String[Languages.values().length];
+        
+        public String getContent() {
+                return contents[language.ordinal()];
+        }          
+        
+    }      
     
     public enum MenuITemTypes{
         RECORD_MENU("<HTML>주차기록(<U>A</U>)</HTML>", "<HTML><U>A</U> Records</HTML>"),

@@ -24,7 +24,6 @@ import java.awt.image.BufferedImage;
 import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
-import com.osparking.global.names.OSP_enums.BarOperation;
 import static com.osparking.global.Globals.getTopLeftPointToPutThisFrameAtScreenCenter;
 import static com.osparking.global.Globals.OSPiconList;
 import static com.osparking.global.names.DB_Access.readSettings;
@@ -33,8 +32,8 @@ import static com.osparking.global.Globals.font_Size;
 import static com.osparking.global.Globals.font_Style;
 import static com.osparking.global.Globals.font_Type;
 import static com.osparking.global.Globals.initializeLoggers;
+import com.osparking.global.names.ControlEnums.BarOperation;
 import static com.osparking.global.names.DB_Access.gateNames;
-import com.osparking.global.names.OSP_enums;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
