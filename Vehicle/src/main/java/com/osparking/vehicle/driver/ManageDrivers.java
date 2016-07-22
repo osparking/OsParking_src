@@ -2522,6 +2522,30 @@ public class ManageDrivers extends javax.swing.JFrame {
             }
         });  
     }
+    
+    /**
+     * Propagate a complex item of a lower level combobox to its parent.
+     * First, it checks if an item were selected and were a complex one.
+     * @param childCBox lower level combobox
+     * @param parentCBox higher level(=parent) combobox
+     */
+    public static void mayResolveComplex(final JComboBox childCBox, final JComboBox parentCBox) 
+    {
+        InnoComboBoxItem innoItem = (InnoComboBoxItem)childCBox.getSelectedItem();
+        ConvComboBoxItem parent = new ConvComboBoxItem(
+                innoItem.getKeys()[1], innoItem.getLabels()[1]);
+        
+        parentCBox.setSelectedItem(parent); // select part of the ocomplex item
+        childCBox.removeAllItems();
+        /**
+         * Assign the child combobox a single item 'child'.
+         */
+        InnoComboBoxItem child = new InnoComboBoxItem(
+                new int[]{(Integer)(innoItem.getKeys()[0])}, 
+                new String[]{innoItem.getLabels()[0]});
+        childCBox.addItem(child);
+        childCBox.setSelectedItem(child);
+    }
 
     private void getDriverProperties(String name, String cell, StringBuffer driverProperties, int row,
             String landLine, String itemL2name, String itemUnitName) 

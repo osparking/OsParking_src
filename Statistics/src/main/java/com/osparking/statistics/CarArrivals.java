@@ -100,7 +100,7 @@ import com.osparking.global.names.OSP_enums.SearchPeriod;
 import static com.osparking.vehicle.CommonData.CABH_NORM;
 import static com.osparking.vehicle.CommonData.CABW_NORM;
 import static com.osparking.vehicle.CommonData.CABW_WIDE;
-import static com.osparking.vehicle.driver.ManageDrivers.mayPropagateBackward;
+import static com.osparking.vehicle.driver.ManageDrivers.mayResolveComplex;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
@@ -198,6 +198,7 @@ public class CarArrivals extends javax.swing.JFrame {
         changeSearchButtonEnabled();        
         loadArrivalsListTable(true);
         searchButton.setEnabled(false);
+        carTagTF.requestFocus();
     }
 
     private void changeImageLabel(ImageIcon image) {
@@ -660,11 +661,6 @@ public class CarArrivals extends javax.swing.JFrame {
             }
             public void popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {
                 searchL2ComboBoxPopupMenuWillBecomeVisible(evt);
-            }
-        });
-        searchL2ComboBox.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                searchL2ComboBoxActionPerformed(evt);
             }
         });
 
@@ -1304,7 +1300,7 @@ public class CarArrivals extends javax.swing.JFrame {
         imagePanel.setPreferredSize(new java.awt.Dimension(193, 145));
 
         imageLabel.setBackground(new java.awt.Color(204, 204, 204));
-        imageLabel.setForeground(new java.awt.Color(255, 0, 153));
+        imageLabel.setForeground(pointColor);
         imageLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         imageLabel.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
         imageLabel.setMaximumSize(new java.awt.Dimension(32767, 32767));
@@ -1770,6 +1766,7 @@ public class CarArrivals extends javax.swing.JFrame {
             logParkingException(Level.SEVERE, e, "(arrival record search option setting change)");
         } finally {
             closeDBstuff(conn, pStmt, null, "(arrival record search option setting change)");
+            setSearchPeriodOptionButton.setEnabled(false);
         }
     }//GEN-LAST:event_setSearchPeriodOptionButtonActionPerformed
 
@@ -1825,8 +1822,20 @@ public class CarArrivals extends javax.swing.JFrame {
     }//GEN-LAST:event_searchUnitComboBoxPopupMenuWillBecomeVisible
 
     private void searchUnitComboBoxPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_searchUnitComboBoxPopupMenuWillBecomeInvisible
-        changeSearchButtonEnabled();
-        mayPropagateBackward(searchUnitComboBox, searchBuildingComboBox);
+        InnoComboBoxItem innoItem = (InnoComboBoxItem)searchUnitComboBox.getSelectedItem();
+        
+        // Check if the selected item of the lower level combobox is not a complex one.
+        if (innoItem == null || innoItem.getKeys().length == 1) {
+            changeSearchButtonEnabled();
+            return; // not selected or atomic item selected, so nothing to propagate.
+        }        
+        
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {        
+                mayResolveComplex(searchUnitComboBox, searchBuildingComboBox);
+                changeSearchButtonEnabled();
+            }
+        });          
     }//GEN-LAST:event_searchUnitComboBoxPopupMenuWillBecomeInvisible
 
     private void searchUnitComboBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_searchUnitComboBoxItemStateChanged
@@ -1861,18 +1870,26 @@ public class CarArrivals extends javax.swing.JFrame {
         changeSearchButtonEnabled();
     }//GEN-LAST:event_searchBuildingComboBoxPopupMenuWillBecomeInvisible
 
-    private void searchL2ComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchL2ComboBoxActionPerformed
-
-    }//GEN-LAST:event_searchL2ComboBoxActionPerformed
-
     private void searchL2ComboBoxPopupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_searchL2ComboBoxPopupMenuWillBecomeVisible
         mayRefreshLowerCBox(searchL1ComboBox, searchL2ComboBox, AffiliationL2,
             getPrevParentSKey());
     }//GEN-LAST:event_searchL2ComboBoxPopupMenuWillBecomeVisible
 
     private void searchL2ComboBoxPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_searchL2ComboBoxPopupMenuWillBecomeInvisible
-        changeSearchButtonEnabled();
-        mayPropagateBackward(searchL2ComboBox, searchL1ComboBox);
+        InnoComboBoxItem innoItem = (InnoComboBoxItem)searchL2ComboBox.getSelectedItem();
+        
+        // Check if the selected item of the lower level combobox is not a complex one.
+        if (innoItem == null || innoItem.getKeys().length == 1) {
+            changeSearchButtonEnabled();
+            return; // not selected or atomic item selected, so nothing to propagate.
+        }        
+        
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {        
+                mayResolveComplex(searchL2ComboBox, searchL1ComboBox);
+                changeSearchButtonEnabled();
+            }
+        });            
     }//GEN-LAST:event_searchL2ComboBoxPopupMenuWillBecomeInvisible
 
     private void searchL2ComboBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_searchL2ComboBoxItemStateChanged
@@ -2216,11 +2233,13 @@ public class CarArrivals extends javax.swing.JFrame {
         countValue.setText(Integer.toString(numRows));
         if (numRows == 0) {
             clearArrivalDetail();
+            saveSheet_Button.setEnabled(false);
         } else {
             if (selectTop) {
                 arrivalsList.setRowSelectionInterval(0, 0);
                 arrivalsList.requestFocus();
             }
+            saveSheet_Button.setEnabled(true);
         }
     }
 
@@ -2335,7 +2354,6 @@ public class CarArrivals extends javax.swing.JFrame {
                             visitPurposeTF.setText(rs.getString("visitReason")); 
                         
                         int ordinalValue = (Integer)(rs.getInt("barOperation"));
-//                        barOptnTF.setText(getBarOperationLabel(BarOperation.values()[ordinalValue])); 
                         barOptnTF.setText((BarOperation.values()[ordinalValue]).getContent()); 
                         //</editor-fold>                        
 
@@ -2411,7 +2429,7 @@ public class CarArrivals extends javax.swing.JFrame {
                     closeDBstuff(conn, selectStmt, rs, "(arrived vehicle detail loading)");
                 }                               
             }
-        };        
+        };
     }
 
     private void clearArrivalDetail() {
@@ -2424,6 +2442,7 @@ public class CarArrivals extends javax.swing.JFrame {
         buildingTF.setText("");
         unitTF.setText("");
         affiliHighTF.setText("");    
+        affiliLowTF.setText("");    
         visitPurposeTF.setText(""); 
         barOptnTF.setText("");
         try {
@@ -2495,6 +2514,9 @@ public class CarArrivals extends javax.swing.JFrame {
 
         Object selValue = ((ConvComboBoxItem)attendantCB.getSelectedItem()).getKeyValue();
         if (selValue == null) {
+            if (cond.length() > 0) {
+                cond.append(" and");
+            }
             cond.append(" attendantID is null");
         } else {
             attachConditionT3(cond, "attendantID", (String)selValue);
