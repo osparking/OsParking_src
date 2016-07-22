@@ -263,10 +263,10 @@
               <Dimension value="[32767, 285]"/>
             </Property>
             <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-              <Dimension value="[800, 285]"/>
+              <Dimension value="[800, 280]"/>
             </Property>
             <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-              <Dimension value="[900, 285]"/>
+              <Dimension value="[900, 280]"/>
             </Property>
           </Properties>
 
@@ -289,7 +289,7 @@
                           <Component id="searchButtonPanel" alignment="0" max="32767" attributes="0"/>
                           <Component id="criteriaPanel" pref="245" max="32767" attributes="0"/>
                       </Group>
-                      <EmptySpace min="17" pref="17" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -1417,7 +1417,7 @@
         <Component class="javax.swing.Box$Filler" name="filler_h10_19">
           <Properties>
             <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-              <Dimension value="[32767, 10]"/>
+              <Dimension value="[32767, 15]"/>
             </Property>
             <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
               <Dimension value="[0, 10]"/>
@@ -1461,7 +1461,7 @@
               </Properties>
 
               <Layout class="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout">
-                <Property name="verticalGap" type="int" value="5"/>
+                <Property name="verticalGap" type="int" value="10"/>
               </Layout>
               <SubComponents>
                 <Container class="javax.swing.JPanel" name="detailTop">
@@ -2381,7 +2381,7 @@
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
-                          <Component id="arrivalListPanel" pref="239" max="32767" attributes="0"/>
+                          <Component id="arrivalListPanel" pref="244" max="32767" attributes="0"/>
                           <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
                           <Component id="buttonPanel" min="-2" max="-2" attributes="0"/>
                           <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
@@ -2419,7 +2419,7 @@
                     </DimensionLayout>
                     <DimensionLayout dim="1">
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <EmptySpace min="0" pref="216" max="32767" attributes="0"/>
+                          <EmptySpace min="0" pref="221" max="32767" attributes="0"/>
                           <Group type="103" rootIndex="1" groupAlignment="0" attributes="0">
                               <Component id="arrivalsScroPan" alignment="0" pref="254" max="32767" attributes="0"/>
                           </Group>

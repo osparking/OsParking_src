@@ -195,7 +195,9 @@ public class CarArrivals extends javax.swing.JFrame {
             }
 
         });
+        changeSearchButtonEnabled();        
         loadArrivalsListTable(true);
+        searchButton.setEnabled(false);
     }
 
     private void changeImageLabel(ImageIcon image) {
@@ -273,7 +275,7 @@ public class CarArrivals extends javax.swing.JFrame {
         setSearchPeriodOptionButton = new javax.swing.JButton();
         searchButtonPanel = new javax.swing.JPanel();
         searchButton = new javax.swing.JButton();
-        filler_h10_19 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 10), new java.awt.Dimension(0, 10), new java.awt.Dimension(32767, 10));
+        filler_h10_19 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 10), new java.awt.Dimension(0, 10), new java.awt.Dimension(32767, 15));
         arrivalsPanel = new javax.swing.JPanel();
         detailWhole = new javax.swing.JPanel();
         detailTop = new javax.swing.JPanel();
@@ -417,8 +419,8 @@ public class CarArrivals extends javax.swing.JFrame {
         searchPanel.setBackground(new java.awt.Color(243, 243, 243));
         searchPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, SEARCH_CRITERIA_PANEL_TITLE.getContent(), javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font(font_Type, font_Style, font_Size)));
         searchPanel.setMaximumSize(new java.awt.Dimension(32767, 285));
-        searchPanel.setMinimumSize(new java.awt.Dimension(800, 285));
-        searchPanel.setPreferredSize(new java.awt.Dimension(900, 285));
+        searchPanel.setMinimumSize(new java.awt.Dimension(800, 280));
+        searchPanel.setPreferredSize(new java.awt.Dimension(900, 280));
 
         criteriaPanel.setBackground(new java.awt.Color(243, 243, 243));
         criteriaPanel.setMinimumSize(new java.awt.Dimension(810, 240));
@@ -1038,7 +1040,7 @@ public class CarArrivals extends javax.swing.JFrame {
                 .addGroup(searchPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(searchButtonPanel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(criteriaPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 245, Short.MAX_VALUE))
-                .addGap(17, 17, 17))
+                .addGap(12, 12, 12))
         );
 
         wholePanel.add(searchPanel);
@@ -1051,7 +1053,7 @@ public class CarArrivals extends javax.swing.JFrame {
         detailWhole.setMaximumSize(new java.awt.Dimension(32767, 163835));
         detailWhole.setMinimumSize(new java.awt.Dimension(400, 230));
         detailWhole.setPreferredSize(new java.awt.Dimension(650, 240));
-        detailWhole.setLayout(new java.awt.BorderLayout(0, 5));
+        detailWhole.setLayout(new java.awt.BorderLayout(0, 10));
 
         detailTop.setPreferredSize(new java.awt.Dimension(495, 90));
         detailTop.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 0, 0));
@@ -1525,7 +1527,7 @@ public class CarArrivals extends javax.swing.JFrame {
     );
     arrivalListPanelLayout.setVerticalGroup(
         arrivalListPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-        .addGap(0, 216, Short.MAX_VALUE)
+        .addGap(0, 221, Short.MAX_VALUE)
         .addGroup(arrivalListPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(arrivalsScroPan, javax.swing.GroupLayout.DEFAULT_SIZE, 254, Short.MAX_VALUE))
     );
@@ -1633,7 +1635,7 @@ public class CarArrivals extends javax.swing.JFrame {
         bottomRightPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
         .addGroup(bottomRightPanelLayout.createSequentialGroup()
             .addGap(0, 0, 0)
-            .addComponent(arrivalListPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 239, Short.MAX_VALUE)
+            .addComponent(arrivalListPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 244, Short.MAX_VALUE)
             .addGap(10, 10, 10)
             .addComponent(buttonPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addGap(0, 0, 0))
@@ -2224,17 +2226,27 @@ public class CarArrivals extends javax.swing.JFrame {
 
                 // <editor-fold defaultstate="collapsed" desc="-- form select statement for detailed info'">
                 StringBuffer sb = new StringBuffer(); 
+//                sb.append("Select AV.*, CD.L2_NO as regisL2No, CD.UNIT_SEQ_NO as regisUnitSN "); 
+//                sb.append("from ( "); 
+//                sb.append("  Select gateNo, attendantID, tagEnteredAs, L2_No as visitL2No,  "); 
+//                sb.append("        UnitSeqNo as visitUnitSN, visitReason, DRIVER_SEQ_NO, barOperation, "); 
+//                sb.append("        LENGTH(ImageBlob) imgBytes, ImageBlob "); 
+//                sb.append("  From car_arrival "); 
+//                sb.append("  Left Join vehicles "); 
+//                sb.append("  On car_arrival.TagEnteredAs = vehicles.PLATE_NUMBER "); 
+//                sb.append("  Where arrSeqNo = " + seqNo +" ) AV "); 
+//                sb.append("left join cardriver CD "); 
+//                sb.append("On AV.DRIVER_SEQ_NO = CD.SEQ_NO "); 
+                
                 sb.append("Select AV.*, CD.L2_NO as regisL2No, CD.UNIT_SEQ_NO as regisUnitSN "); 
-                sb.append("from ( "); 
-                sb.append("  Select gateNo, attendantID, tagEnteredAs, L2_No as visitL2No,  "); 
-                sb.append("        UnitSeqNo as visitUnitSN, visitReason, DRIVER_SEQ_NO, barOperation, "); 
-                sb.append("        LENGTH(ImageBlob) imgBytes, ImageBlob "); 
-                sb.append("  From car_arrival "); 
-                sb.append("  Left Join vehicles "); 
-                sb.append("  On car_arrival.TagEnteredAs = vehicles.PLATE_NUMBER "); 
-                sb.append("  Where arrSeqNo = " + seqNo +" ) AV "); 
-                sb.append("left join cardriver CD "); 
-                sb.append("On AV.DRIVER_SEQ_NO = CD.SEQ_NO "); 
+                sb.append("From (Select gateNo, tagEnteredAs, L2_No as visitL2No,"); 
+                sb.append("  UnitSeqNo as visitUnitSN, visitReason, DRIVER_SEQ_NO,"); 
+                sb.append("  barOperation, LENGTH(ImageBlob) imgBytes, ImageBlob, U.name "); 
+                sb.append("From car_arrival"); 
+                sb.append("  Left Join vehicles V On car_arrival.TagEnteredAs = V.PLATE_NUMBER"); 
+                sb.append("  Left Join users_osp U On AttendantID = U.id "); 
+                sb.append("Where arrSeqNo = " + seqNo +") AV "); 
+                sb.append("Left Join cardriver CD On AV.DRIVER_SEQ_NO = CD.SEQ_NO"); 
                 //</editor-fold>
                 
                 try {
@@ -2245,18 +2257,18 @@ public class CarArrivals extends javax.swing.JFrame {
                         gateNameTF.setText(gateNames[rs.getInt("gateNo")]);
                         
                         //<editor-fold defaultstate="collapsed" desc="-- show attendant ID">
-                        String attID = rs.getString("attendantID");
-                        if (attID == null || attID.length() == 0)
+                        String attName = rs.getString("name");
+                        if (attName == null || attName.length() == 0)
                             attendantTF.setText(LOG_OUT_TF.getContent());
                         else
-                            attendantTF.setText(attID);
+                            attendantTF.setText(attName);
                         //</editor-fold>
                         
                         // <editor-fold defaultstate="collapsed" desc="-- show registered tag number">
                         String regiTag = rs.getString("tagEnteredAs");
                         int l2No = 0, unitSN = 0;
                                                 
-                        if (regiTag == null) {
+                        if (regiTag == null || regiTag.length() == 0) {
                             // handle a visiting vehicle
                             registeredTF.setText(UNREGISTERED_TF.getContent());
                             l2No = rs.getInt("visitL2No");
@@ -2281,7 +2293,7 @@ public class CarArrivals extends javax.swing.JFrame {
                         // <editor-fold defaultstate="collapsed" desc="-- show visit reason">
                         String purpose = rs.getString("visitReason");
                         if (purpose == null || purpose.length() == 0) {
-                            if (regiTag == null)
+                            if (regiTag == null || regiTag.length() == 0)
                                 visitPurposeTF.setText(UNKNOWN_TF.getContent()); 
                             else
                                 visitPurposeTF.setText(NOT_APPLICABLE_TF.getContent()); 

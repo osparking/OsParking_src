@@ -1695,7 +1695,7 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
                 addMessageLine(getMessageTextArea(), "카메라 #" + gateNo +" 단절 상태임");
             }
         } else {
-            int imageNo = randomInteger.nextInt(6) + 1;
+            int imageNo = randomInteger.nextInt(6) + 1; // 4 = visiting car
             String tagNumber = dummyMessages[imageNo].getCarNumber();
             BufferedImage carImage = dummyMessages[imageNo].getBufferedImg();
             
