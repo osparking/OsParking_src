@@ -79,6 +79,8 @@ import static com.osparking.global.names.ControlEnums.TableTypes.CAR_TAG_HEADER;
 import static com.osparking.global.names.ControlEnums.TableTypes.HIGHER_HEADER;
 import static com.osparking.global.names.ControlEnums.TableTypes.LOWER_HEADER;
 import static com.osparking.global.names.ControlEnums.TableTypes.ORDER_HEADER;
+import static com.osparking.global.names.ControlEnums.TextType.CAR_TAG_TF;
+import static com.osparking.global.names.ControlEnums.TextType.DRIVER_TF;
 import static com.osparking.global.names.ControlEnums.TextType.LOG_OUT_TF;
 import static com.osparking.global.names.ControlEnums.TextType.NOT_APPLICABLE_TF;
 import static com.osparking.global.names.ControlEnums.TextType.UNKNOWN_TF;
@@ -104,6 +106,7 @@ import static com.osparking.vehicle.CommonData.CABH_NORM;
 import static com.osparking.vehicle.CommonData.CABW_NORM;
 import static com.osparking.vehicle.CommonData.CABW_WIDE;
 import static com.osparking.vehicle.driver.ManageDrivers.mayPropagateBackward;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ComponentAdapter;
@@ -155,6 +158,8 @@ public class CarArrivals extends javax.swing.JFrame {
     
     private String prevSearchCondition = "";
     private String currSearchCondition = "";
+    
+    private boolean carTagHintShown = true;    
     
     static private ChangedComponents changedControls; 
     /**
@@ -453,10 +458,20 @@ public class CarArrivals extends javax.swing.JFrame {
         carTagPanel.add(jLabel2);
 
         carTagTF.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        carTagTF.setText(CAR_TAG_TF.getContent());
+        carTagTF.setForeground(tipColor);
         carTagTF.setToolTipText(CAR_TAG_TF_TOOLTIP.getContent());
         carTagTF.setMaximumSize(new java.awt.Dimension(32767, 32767));
         carTagTF.setMinimumSize(new java.awt.Dimension(110, 28));
         carTagTF.setPreferredSize(new java.awt.Dimension(110, 28));
+        carTagTF.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                carTagTFFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                carTagTFFocusLost(evt);
+            }
+        });
         carTagTF.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 carTagTFKeyReleased(evt);
@@ -1780,7 +1795,7 @@ public class CarArrivals extends javax.swing.JFrame {
 
     private void clearSearchPropertiesButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearSearchPropertiesButtonActionPerformed
         gateCB.setSelectedIndex(0);
-        carTagTF.setText("");
+        showCarTagTip();
         attendantCB.setSelectedIndex(0);
         searchL1ComboBox.setSelectedIndex(0);
         searchL2ComboBox.removeAllItems();
@@ -1955,8 +1970,20 @@ public class CarArrivals extends javax.swing.JFrame {
         applyCBoxItemChangeToChangedSet(gateCB);
     }//GEN-LAST:event_gateCBItemStateChanged
 
+    private boolean isCarTagEmpty() {
+        String carTagStr = carTagTF.getText().trim();
+        
+        if (carTagStr.length() == 0) {
+            return true;
+        } else if (carTagStr.equals(CAR_TAG_TF.getContent())) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    
     private void carTagTFKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_carTagTFKeyTyped
-        if (carTagTF.getText().trim().length() == 0) {
+        if (isCarTagEmpty()) {
             changedControls.remove(carTagTF);
         } else {
             changedControls.add(carTagTF);
@@ -1968,13 +1995,33 @@ public class CarArrivals extends javax.swing.JFrame {
         });
     }//GEN-LAST:event_carTagTFKeyTyped
 
+    private void showCarTagTip() {
+        carTagTF.setText(CAR_TAG_TF.getContent());
+        carTagHintShown = true;
+        carTagTF.setForeground(tipColor);
+    }    
+    
     private void carTagTFKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_carTagTFKeyReleased
-        if (carTagTF.getText().trim().length() == 0) {
+        if (isCarTagEmpty()) {
             changedControls.remove(carTagTF);
         } else {
             changedControls.add(carTagTF);
         }
     }//GEN-LAST:event_carTagTFKeyReleased
+
+    private void carTagTFFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_carTagTFFocusLost
+        if(carTagTF.getText().trim().equals("")) {
+            showCarTagTip();
+        }
+    }//GEN-LAST:event_carTagTFFocusLost
+
+    private void carTagTFFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_carTagTFFocusGained
+        if (carTagTF.getText().equals(CAR_TAG_TF.getContent())) {
+            carTagTF.setText("");
+            carTagHintShown = false;
+            carTagTF.setForeground(new Color(0, 0, 0));
+        }
+    }//GEN-LAST:event_carTagTFFocusGained
 
     // <editor-fold defaultstate="collapsed" desc="-- Variables defined via GUI creation">
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -2096,7 +2143,6 @@ public class CarArrivals extends javax.swing.JFrame {
         DefaultTableModel model = (DefaultTableModel) arrivalsList.getModel();  
         
         // <editor-fold defaultstate="collapsed" desc="-- construct SQL statement">  
-        StringBuffer cond = new StringBuffer();
         StringBuffer sb = new StringBuffer(); 
                 
         sb.append("SELECT ArrivalTime, tagRecognized, arrSeqNo ");
@@ -2445,7 +2491,9 @@ public class CarArrivals extends javax.swing.JFrame {
         Object keyObj =((ConvComboBoxItem)gateCB.getSelectedItem()).getKeyValue();
         
         attachIntConditionT3(cond, "GateNo", (Integer) keyObj);   
-        attachConditionT3(cond, "tagRecognized", carTagTF.getText().trim());
+        if (!isCarTagEmpty()) {
+            attachConditionT3(cond, "tagRecognized", carTagTF.getText().trim());
+        }
 
         Object selValue = ((ConvComboBoxItem)attendantCB.getSelectedItem()).getKeyValue();
         if (selValue == null) {

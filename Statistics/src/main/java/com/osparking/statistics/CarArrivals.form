@@ -463,6 +463,9 @@
                                 <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                                   <Connection code="new java.awt.Font(font_Type, font_Style, font_Size)" type="code"/>
                                 </Property>
+                                <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor" postCode="carTagTF.setForeground(tipColor);">
+                                  <Connection code="CAR_TAG_TF.getContent()" type="code"/>
+                                </Property>
                                 <Property name="toolTipText" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                                   <Connection code="CAR_TAG_TF_TOOLTIP.getContent()" type="code"/>
                                 </Property>
@@ -477,6 +480,8 @@
                                 </Property>
                               </Properties>
                               <Events>
+                                <EventHandler event="focusGained" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="carTagTFFocusGained"/>
+                                <EventHandler event="focusLost" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="carTagTFFocusLost"/>
                                 <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="carTagTFKeyReleased"/>
                                 <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="carTagTFKeyTyped"/>
                               </Events>
