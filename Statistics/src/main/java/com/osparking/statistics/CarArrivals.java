@@ -40,10 +40,6 @@ import static com.osparking.global.names.DB_Access.SEARCH_PERIOD;
 import static com.osparking.global.names.DB_Access.parkingLotLocale;
 import static com.osparking.global.Globals.*;
 import com.osparking.global.names.ControlEnums.BarOperation;
-import static com.osparking.global.names.ControlEnums.BarOperation.AUTO_OPENED;
-import static com.osparking.global.names.ControlEnums.BarOperation.MANUAL;
-import static com.osparking.global.names.ControlEnums.BarOperation.REGISTERED_CAR_OPENED;
-import static com.osparking.global.names.ControlEnums.BarOperation.REMAIN_CLOSED;
 import static com.osparking.global.names.ControlEnums.ButtonTypes.CLEAR_BTN;
 import static com.osparking.global.names.ControlEnums.ButtonTypes.CLOSE_BTN;
 import static com.osparking.global.names.ControlEnums.ButtonTypes.FIX_IT_BTN;
@@ -80,7 +76,6 @@ import static com.osparking.global.names.ControlEnums.TableTypes.HIGHER_HEADER;
 import static com.osparking.global.names.ControlEnums.TableTypes.LOWER_HEADER;
 import static com.osparking.global.names.ControlEnums.TableTypes.ORDER_HEADER;
 import static com.osparking.global.names.ControlEnums.TextType.CAR_TAG_TF;
-import static com.osparking.global.names.ControlEnums.TextType.DRIVER_TF;
 import static com.osparking.global.names.ControlEnums.TextType.LOG_OUT_TF;
 import static com.osparking.global.names.ControlEnums.TextType.NOT_APPLICABLE_TF;
 import static com.osparking.global.names.ControlEnums.TextType.UNKNOWN_TF;
@@ -901,6 +896,7 @@ public class CarArrivals extends javax.swing.JFrame {
         setSearchPeriodOptionButton.setMnemonic('f');
         setSearchPeriodOptionButton.setText(FIX_IT_BTN.getContent());
         setSearchPeriodOptionButton.setToolTipText(FIX_IT_BTN_TOOLTIP.getContent());
+        setSearchPeriodOptionButton.setEnabled(false);
         setSearchPeriodOptionButton.setMaximumSize(new java.awt.Dimension(100, 35));
         setSearchPeriodOptionButton.setMinimumSize(new java.awt.Dimension(100, 35));
         setSearchPeriodOptionButton.setPreferredSize(new java.awt.Dimension(100, 35));
@@ -1749,18 +1745,20 @@ public class CarArrivals extends javax.swing.JFrame {
         Connection conn = null;
         PreparedStatement pStmt = null;
 
-        try
-        {
+        try {
             int option = -1;
-            if (oneHourRadioButton.isSelected())
-            option = SearchPeriod.OneHour.ordinal();
-            else if (oneDayRadioButton.isSelected())
-            option = SearchPeriod.OneDay.ordinal();
-            else
-            option = SearchPeriod.GivenPeriod.ordinal();
+            
+            if (oneHourRadioButton.isSelected()) {
+                option = SearchPeriod.OneHour.ordinal();
+            } else if (oneDayRadioButton.isSelected()) {
+                option = SearchPeriod.OneDay.ordinal();
+            } else {
+                option = SearchPeriod.GivenPeriod.ordinal();
+            }
 
+            String sql = "Update settingsTable Set SearchPeriod = ?";
+            
             conn = getConnection();
-            String sql = "update settingsTable set SearchPeriod = ?";
             pStmt = conn.prepareStatement(sql);
             pStmt.setInt(1, option);
             if (pStmt.executeUpdate() == 1) {
@@ -1768,12 +1766,9 @@ public class CarArrivals extends javax.swing.JFrame {
                     NOTICE_DIALOGTITLE.getContent(),
                     JOptionPane.PLAIN_MESSAGE, INFORMATION_MESSAGE);
             }
-        }
-        catch(Exception e)
-        {
+        } catch(Exception e) {
             logParkingException(Level.SEVERE, e, "(arrival record search option setting change)");
-        }
-        finally {
+        } finally {
             closeDBstuff(conn, pStmt, null, "(arrival record search option setting change)");
         }
     }//GEN-LAST:event_setSearchPeriodOptionButtonActionPerformed
@@ -1783,14 +1778,17 @@ public class CarArrivals extends javax.swing.JFrame {
             BeginDateChooser.setEnabled(true);
             EndDateChooser.setEnabled(true);
         }
+        changeSetButtonEnabled(SearchPeriod.GivenPeriod);        
     }//GEN-LAST:event_periodRadioButtonActionPerformed
 
     private void oneDayRadioButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_oneDayRadioButtonActionPerformed
         disablePeriodChooser();
+        changeSetButtonEnabled(SearchPeriod.OneDay);
     }//GEN-LAST:event_oneDayRadioButtonActionPerformed
 
     private void oneHourRadioButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_oneHourRadioButtonActionPerformed
         disablePeriodChooser();
+        changeSetButtonEnabled(SearchPeriod.OneHour);
     }//GEN-LAST:event_oneHourRadioButtonActionPerformed
 
     private void clearSearchPropertiesButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearSearchPropertiesButtonActionPerformed
@@ -2665,6 +2663,14 @@ public class CarArrivals extends javax.swing.JFrame {
         } else {
             changedControls.add(comboBox);
         }     
+    }
+
+    private void changeSetButtonEnabled(SearchPeriod newPeriod ) {
+        if (newPeriod.ordinal() == SEARCH_PERIOD ) {
+            setSearchPeriodOptionButton.setEnabled(false);
+        } else {
+            setSearchPeriodOptionButton.setEnabled(true);
+        }
     }
 }
 

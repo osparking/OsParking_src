@@ -257,8 +257,6 @@ public class DB_Access {
         Connection conn = null;
         Statement selectStmt = null;
         ResultSet rs = null;
-        int index = Languages.values().length;
-        String[] inData = new String[index];
 
         try {
             conn = JDBCMySQL.getConnection();
