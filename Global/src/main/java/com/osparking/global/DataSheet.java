@@ -17,15 +17,12 @@
 package com.osparking.global;
 
 import static com.osparking.global.Globals.logParkingException;
-import static com.osparking.global.names.ControlEnums.DialogTitleTypes.NOTICE_DIALOGTITLE;
 import com.osparking.global.names.OdsFileOnly;
 import java.io.File;
 import java.io.IOException;
 import java.util.logging.Level;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-import static javax.swing.JOptionPane.INFORMATION_MESSAGE;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
@@ -37,6 +34,38 @@ import org.jopendocument.dom.spreadsheet.SpreadSheet;
  * @author Open Source Parking Inc.(www.osparking.com)
  */
 public class DataSheet {
+    
+    /**
+     * Verify if the file has extension of 'ods'.
+     * 
+     * @param saveFileChooser
+     * @param file 
+     */
+    public static void verifyOdsExtension(JFileChooser saveFileChooser, File[] file) {
+        String pathname = null;
+        try {
+            pathname = file[0].getAbsolutePath();
+            String extension = saveFileChooser.getFileFilter().getDescription();
+            if (extension.indexOf("*.ods") >= 0) {
+                // Finish making ods file name from the name supplied from the user
+                int start = pathname.length() - 4;
+                // Java doesn't have endsWithIgnoreCase. So, ...
+                if (start < 0 || !pathname.substring(start).equalsIgnoreCase(".ods")) {
+                    //<editor-fold defaultstate="collapsed" desc="// In case pathname doesn't have ".ods" suffix">
+                    // Give it the ".ods" extension, automatically.
+                    // pure file name(except extension name) has no ".ods" suffix
+                    // So, to make it a ods file, append ".ods" extension to the filename.
+                    //</editor-fold>
+                    pathname += ".ods";
+                    file[0] = new File(pathname);
+                } else {
+                    // pathname already has ".ods" as its suffix
+                }
+            }
+        } catch (Exception ex) {
+            logParkingException(Level.SEVERE, ex, "(File: " + pathname + ")");
+        }
+    }    
     
     /**
      * Saves data in a Java Table into an Open Office Calc file. 
@@ -51,45 +80,18 @@ public class DataSheet {
             JFileChooser saveFileChooser, String emptyTableMsg)
     {
         // Check the size of the list and if empty just return saying "noting to save"
-        if (tableToSave.getModel().getRowCount() == 0) {
-            JOptionPane.showMessageDialog(aFrame, emptyTableMsg,
-                    NOTICE_DIALOGTITLE.getContent(), INFORMATION_MESSAGE);
-            return;
-        }
         saveFileChooser.setFileFilter(new OdsFileOnly());
 
         int returnVal = saveFileChooser.showSaveDialog(aFrame);
 
-        if (returnVal == JFileChooser.APPROVE_OPTION) 
-        {                
-            File file = saveFileChooser.getSelectedFile();
-            //<editor-fold desc="Make sure file extension is 'ods'">
-            String pathname = null;
-            try {
-                pathname = file.getAbsolutePath();
-                String extension = saveFileChooser.getFileFilter().getDescription();
-                if (extension.indexOf("*.ods") >= 0) {
-                    // Create a text file from the attendants list
-                    int start = pathname.length() - 4;
-                    // Java doesn't have endsWithIgnoreCase. So, ...
-                    if (start < 0 || !pathname.substring(start).equalsIgnoreCase(".ods")) {
-                        //<editor-fold defaultstate="collapsed" desc="// In case pathname doesn't have ".ods" suffix">
-                        // Give it the ".ods" extension, automatically.
-                        // pure file name(except extension name) has no ".ods" suffix
-                        // So, to make it a ods file, append ".ods" extension to the filename.
-                        //</editor-fold>
-                        pathname += ".ods";
-                        file = new File(pathname);
-                    } else {
-                        // pathname already has ".ods" as its suffix
-                    }
-                }
-            } catch (Exception ex) {
-                logParkingException(Level.SEVERE, ex, "(File: " + pathname + ")");
-            }     
-            //</editor-fold>
+        if (returnVal == JFileChooser.APPROVE_OPTION) {
+            File[] file = new File[1];
             
-            final Object[][] data = new Object[tableToSave.getModel().getRowCount()][tableToSave.getColumnCount()];
+            file[0] = saveFileChooser.getSelectedFile();
+            verifyOdsExtension(saveFileChooser, file);            
+            
+            final Object[][] data =
+                    new Object[tableToSave.getModel().getRowCount()][tableToSave.getColumnCount()];
             
             for (int row = 0; row < tableToSave.getModel().getRowCount(); row ++) {
                 int rowM = tableToSave.convertRowIndexToModel(row);
@@ -106,8 +108,8 @@ public class DataSheet {
             
             TableModel model = new DefaultTableModel(data, columns);
             try {
-                SpreadSheet.createEmpty(model).saveAs(file);
-                OOUtils.open(file);
+                SpreadSheet.createEmpty(model).saveAs(file[0]);
+                OOUtils.open(file[0]);
             } catch (IOException ex) {
                 System.out.println("File save exception: " + ex.getMessage());
             }                

@@ -821,10 +821,10 @@ public class ManageDrivers extends javax.swing.JFrame {
             }
         });
         searchName.addInputMethodListener(new java.awt.event.InputMethodListener() {
+            public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
+            }
             public void inputMethodTextChanged(java.awt.event.InputMethodEvent evt) {
                 searchNameInputMethodTextChanged(evt);
-            }
-            public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
             }
         });
         searchName.addKeyListener(new java.awt.event.KeyAdapter() {

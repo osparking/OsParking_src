@@ -29,6 +29,8 @@ import static com.osparking.global.CommonData.normGUIwidth;
 import static com.osparking.global.CommonData.numberCellRenderer;
 import static com.osparking.global.CommonData.pointColor;
 import static com.osparking.global.CommonData.tipColor;
+import static com.osparking.global.DataSheet.saveODSfile;
+import static com.osparking.global.DataSheet.verifyOdsExtension;
 import java.awt.Component;
 import java.awt.image.BufferedImage;
 import javax.swing.JLabel;
@@ -45,6 +47,7 @@ import static com.osparking.global.names.ControlEnums.ButtonTypes.CLOSE_BTN;
 import static com.osparking.global.names.ControlEnums.ButtonTypes.FIX_IT_BTN;
 import static com.osparking.global.names.ControlEnums.ButtonTypes.SEARCH_BTN;
 import static com.osparking.global.names.ControlEnums.ComboBoxItemTypes.*;
+import static com.osparking.global.names.ControlEnums.DialogMessages.ARRIVAL_SAVE_ODS_FAIL_DIALOG;
 import static com.osparking.global.names.ControlEnums.DialogMessages.DATE_INPUT_CHECK_DIALOG;
 import static com.osparking.global.names.ControlEnums.DialogMessages.DATE_INPUT_ERROR_DIALOG;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.NOTICE_DIALOGTITLE;
@@ -97,6 +100,7 @@ import static com.osparking.global.names.OSP_enums.DriverCol.BuildingNo;
 import static com.osparking.global.names.OSP_enums.DriverCol.UnitNo;
 import com.osparking.global.names.PComboBox;
 import com.osparking.global.names.OSP_enums.SearchPeriod;
+import com.osparking.global.names.OdsFileOnly;
 import static com.osparking.vehicle.CommonData.CABH_NORM;
 import static com.osparking.vehicle.CommonData.CABW_NORM;
 import static com.osparking.vehicle.CommonData.CABW_WIDE;
@@ -106,6 +110,7 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Connection;
@@ -124,6 +129,8 @@ import javax.swing.Action;
 import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import static javax.swing.JOptionPane.INFORMATION_MESSAGE;
 import static javax.swing.JOptionPane.WARNING_MESSAGE;
@@ -135,6 +142,9 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableColumnModel;
+import javax.swing.table.TableModel;
+import org.jopendocument.dom.OOUtils;
+import org.jopendocument.dom.spreadsheet.SpreadSheet;
 
 /**
  *
@@ -222,6 +232,7 @@ public class CarArrivals extends javax.swing.JFrame {
 
         periodOptionGroup = new javax.swing.ButtonGroup();
         affiliationGroup = new javax.swing.ButtonGroup();
+        saveFileChooser = new javax.swing.JFileChooser();
         wholeTop = new javax.swing.JPanel();
         wholeEast = new javax.swing.JPanel();
         wholePanel = new javax.swing.JPanel();
@@ -332,11 +343,13 @@ public class CarArrivals extends javax.swing.JFrame {
         moveFocusToCarTagTextField = new javax.swing.JButton();
         wholeWest = new javax.swing.JPanel();
 
+        saveFileChooser.setDialogType(javax.swing.JFileChooser.SAVE_DIALOG);
+
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle(CAR_ARRIVALS_FRAME_TITLE.getContent());
         setFocusCycleRoot(false);
-        setMinimumSize(new Dimension(normGUIwidth,normGUIheight+50));
-        setPreferredSize(new Dimension(normGUIwidth,normGUIheight+50));
+        setMinimumSize(new Dimension(normGUIwidth,normGUIheight+60));
+        setPreferredSize(new Dimension(normGUIwidth,normGUIheight+60));
         setSize(new java.awt.Dimension(0, 0));
 
         wholeTop.setMaximumSize(new java.awt.Dimension(32767, 40));
@@ -757,7 +770,7 @@ public class CarArrivals extends javax.swing.JFrame {
         topDriverLayout.setHorizontalGroup(
             topDriverLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(topDriverLayout.createSequentialGroup()
-                .addComponent(affiliPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 162, Short.MAX_VALUE)
+                .addComponent(affiliPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 161, Short.MAX_VALUE)
                 .addGap(0, 0, 0)
                 .addComponent(buildingPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
@@ -799,7 +812,7 @@ public class CarArrivals extends javax.swing.JFrame {
                 .addGap(26, 26, 26)
                 .addComponent(topVehicle, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(5, 5, 5)
-                .addComponent(topDriver, javax.swing.GroupLayout.DEFAULT_SIZE, 291, Short.MAX_VALUE)
+                .addComponent(topDriver, javax.swing.GroupLayout.DEFAULT_SIZE, 290, Short.MAX_VALUE)
                 .addGap(5, 5, 5)
                 .addComponent(filler18, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGap(5, 5, 5)
@@ -821,7 +834,7 @@ public class CarArrivals extends javax.swing.JFrame {
                         .addGroup(searchTopLayout.createSequentialGroup()
                             .addGap(52, 52, 52)
                             .addComponent(filler18, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(27, Short.MAX_VALUE))
+                .addContainerGap(23, Short.MAX_VALUE))
         );
 
         searchBottom.setBackground(new java.awt.Color(244, 244, 244));
@@ -996,8 +1009,8 @@ public class CarArrivals extends javax.swing.JFrame {
             .addGroup(criteriaPanelLayout.createSequentialGroup()
                 .addGap(0, 0, 0)
                 .addGroup(criteriaPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(searchTop, javax.swing.GroupLayout.DEFAULT_SIZE, 811, Short.MAX_VALUE)
-                    .addComponent(searchBottom, javax.swing.GroupLayout.DEFAULT_SIZE, 811, Short.MAX_VALUE)))
+                    .addComponent(searchTop, javax.swing.GroupLayout.DEFAULT_SIZE, 810, Short.MAX_VALUE)
+                    .addComponent(searchBottom, javax.swing.GroupLayout.DEFAULT_SIZE, 810, Short.MAX_VALUE)))
         );
         criteriaPanelLayout.setVerticalGroup(
             criteriaPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1036,8 +1049,8 @@ public class CarArrivals extends javax.swing.JFrame {
             searchPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(searchPanelLayout.createSequentialGroup()
                 .addGap(0, 0, 0)
-                .addComponent(criteriaPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 811, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(criteriaPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(0, 0, 0)
                 .addComponent(searchButtonPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(2, 2, 2))
         );
@@ -1046,7 +1059,7 @@ public class CarArrivals extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, searchPanelLayout.createSequentialGroup()
                 .addGroup(searchPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(searchButtonPanel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(criteriaPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 245, Short.MAX_VALUE))
+                    .addComponent(criteriaPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 241, Short.MAX_VALUE))
                 .addGap(12, 12, 12))
         );
 
@@ -1059,7 +1072,7 @@ public class CarArrivals extends javax.swing.JFrame {
         detailWhole.setBorder(javax.swing.BorderFactory.createTitledBorder(null, VEHICLE_ARIIVAL_DETAILS_PANEL_TITLE.getContent(), javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font(font_Type, font_Style, font_Size)));
         detailWhole.setMaximumSize(new java.awt.Dimension(32767, 163835));
         detailWhole.setMinimumSize(new java.awt.Dimension(400, 230));
-        detailWhole.setPreferredSize(new java.awt.Dimension(650, 240));
+        detailWhole.setPreferredSize(new java.awt.Dimension(650, 254));
         detailWhole.setLayout(new java.awt.BorderLayout(0, 10));
 
         detailTop.setPreferredSize(new java.awt.Dimension(495, 90));
@@ -1294,10 +1307,10 @@ public class CarArrivals extends javax.swing.JFrame {
         detailWhole.add(detailTop, java.awt.BorderLayout.NORTH);
 
         detailBottom.setMinimumSize(new java.awt.Dimension(525, 140));
-        detailBottom.setPreferredSize(new java.awt.Dimension(536, 140));
+        detailBottom.setPreferredSize(new java.awt.Dimension(536, 164));
 
-        imagePanel.setMinimumSize(new java.awt.Dimension(193, 145));
-        imagePanel.setPreferredSize(new java.awt.Dimension(193, 145));
+        imagePanel.setMinimumSize(new java.awt.Dimension(193, 154));
+        imagePanel.setPreferredSize(new java.awt.Dimension(193, 164));
 
         imageLabel.setBackground(new java.awt.Color(204, 204, 204));
         imageLabel.setForeground(pointColor);
@@ -1305,7 +1318,7 @@ public class CarArrivals extends javax.swing.JFrame {
         imageLabel.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
         imageLabel.setMaximumSize(new java.awt.Dimension(32767, 32767));
         imageLabel.setMinimumSize(new java.awt.Dimension(193, 140));
-        imageLabel.setPreferredSize(new java.awt.Dimension(193, 145));
+        imageLabel.setPreferredSize(new java.awt.Dimension(193, 140));
         imageLabel.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 imageLabelMouseClicked(evt);
@@ -1321,16 +1334,16 @@ public class CarArrivals extends javax.swing.JFrame {
         imagePanelLayout.setVerticalGroup(
             imagePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(imagePanelLayout.createSequentialGroup()
-                .addComponent(imageLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                .addGap(2, 2, 2))
+                .addComponent(imageLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(0, 0, 0))
         );
 
         targetPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, WHERE_TO_LABEL.getContent(), javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font(font_Type, font_Style, font_Size)));
-        targetPanel.setMinimumSize(new java.awt.Dimension(300, 140));
-        targetPanel.setPreferredSize(new java.awt.Dimension(300, 140));
+        targetPanel.setMinimumSize(new java.awt.Dimension(300, 154));
+        targetPanel.setPreferredSize(new java.awt.Dimension(300, 164));
 
         visitBuildingPanel.setMinimumSize(new java.awt.Dimension(265, 28));
-        visitBuildingPanel.setPreferredSize(new java.awt.Dimension(283, 28));
+        visitBuildingPanel.setPreferredSize(new java.awt.Dimension(270, 28));
         visitBuildingPanel.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 5, 0));
 
         buildingLabel.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
@@ -1366,7 +1379,7 @@ public class CarArrivals extends javax.swing.JFrame {
         visitBuildingPanel.add(unitTF);
 
         visitHighAffiliPanel.setMinimumSize(new java.awt.Dimension(265, 28));
-        visitHighAffiliPanel.setPreferredSize(new java.awt.Dimension(283, 28));
+        visitHighAffiliPanel.setPreferredSize(new java.awt.Dimension(270, 28));
         visitHighAffiliPanel.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 5, 0));
 
         affiliHigher.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
@@ -1387,12 +1400,11 @@ public class CarArrivals extends javax.swing.JFrame {
         visitHighAffiliPanel.add(affiliHighTF);
 
         visitLowAffiliPanel.setMinimumSize(new java.awt.Dimension(265, 28));
-        visitLowAffiliPanel.setPreferredSize(new java.awt.Dimension(283, 28));
+        visitLowAffiliPanel.setPreferredSize(new java.awt.Dimension(270, 28));
         visitLowAffiliPanel.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 5, 0));
 
         affiliLower.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         affiliLower.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        affiliLower.setText(LOWER_HEADER.getContent());
         affiliLower.setMaximumSize(new java.awt.Dimension(130, 28));
         affiliLower.setMinimumSize(new java.awt.Dimension(80, 28));
         affiliLower.setPreferredSize(new java.awt.Dimension(80, 28));
@@ -1408,7 +1420,7 @@ public class CarArrivals extends javax.swing.JFrame {
         visitLowAffiliPanel.add(affiliLowTF);
 
         visitDetailReason.setMinimumSize(new java.awt.Dimension(265, 28));
-        visitDetailReason.setPreferredSize(new java.awt.Dimension(283, 28));
+        visitDetailReason.setPreferredSize(new java.awt.Dimension(270, 28));
 
         purposeLabel.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         purposeLabel.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
@@ -1448,10 +1460,10 @@ public class CarArrivals extends javax.swing.JFrame {
             .addGroup(targetPanelLayout.createSequentialGroup()
                 .addGap(5, 5, 5)
                 .addGroup(targetPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(visitBuildingPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(visitHighAffiliPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(visitLowAffiliPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(visitDetailReason, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addComponent(visitBuildingPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(visitHighAffiliPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(visitLowAffiliPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(visitDetailReason, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
         targetPanelLayout.setVerticalGroup(
             targetPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1471,14 +1483,18 @@ public class CarArrivals extends javax.swing.JFrame {
         detailBottomLayout.setHorizontalGroup(
             detailBottomLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(detailBottomLayout.createSequentialGroup()
-                .addComponent(imagePanel, javax.swing.GroupLayout.DEFAULT_SIZE, 236, Short.MAX_VALUE)
+                .addComponent(imagePanel, javax.swing.GroupLayout.DEFAULT_SIZE, 228, Short.MAX_VALUE)
                 .addGap(0, 0, 0)
-                .addComponent(targetPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(targetPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, 0))
         );
         detailBottomLayout.setVerticalGroup(
             detailBottomLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(imagePanel, javax.swing.GroupLayout.DEFAULT_SIZE, 176, Short.MAX_VALUE)
-            .addComponent(targetPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(detailBottomLayout.createSequentialGroup()
+                .addGroup(detailBottomLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(imagePanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(targetPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(0, 0, 0))
         );
 
         detailWhole.add(detailBottom, java.awt.BorderLayout.CENTER);
@@ -1635,14 +1651,14 @@ public class CarArrivals extends javax.swing.JFrame {
     bottomRightPanel.setLayout(bottomRightPanelLayout);
     bottomRightPanelLayout.setHorizontalGroup(
         bottomRightPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-        .addComponent(arrivalListPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 373, Short.MAX_VALUE)
+        .addComponent(arrivalListPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 371, Short.MAX_VALUE)
         .addComponent(buttonPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
     );
     bottomRightPanelLayout.setVerticalGroup(
         bottomRightPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
         .addGroup(bottomRightPanelLayout.createSequentialGroup()
             .addGap(0, 0, 0)
-            .addComponent(arrivalListPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 244, Short.MAX_VALUE)
+            .addComponent(arrivalListPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 226, Short.MAX_VALUE)
             .addGap(10, 10, 10)
             .addComponent(buttonPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addGap(0, 0, 0))
@@ -1730,6 +1746,39 @@ public class CarArrivals extends javax.swing.JFrame {
     }//GEN-LAST:event_seeLicenseButtonActionPerformed
 
     private void saveSheet_ButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveSheet_ButtonActionPerformed
+        /**
+         * Create wide arrivals list JTable.
+         */
+        int columnCount = arrivalsList.getColumnCount() + CAExtra.values().length;
+        Object[][] data = new Object[arrivalsList.getModel().getRowCount()][columnCount];
+        
+        int col;
+        for (int row = 0; row < arrivalsList.getModel().getRowCount(); row ++) {
+            int rowM = arrivalsList.convertRowIndexToModel(row);
+
+            for (col = 0; col < arrivalsList.getColumnCount(); col++) {
+                data[rowM][col] = arrivalsList.getValueAt(rowM, col);
+            }
+            
+            String seqNo = (String)arrivalsList.getModel().getValueAt(rowM, 3);
+            String[] extraInfo = new String[CAExtra.values().length];
+                        
+            getArrivalDetails(seqNo, extraInfo, false);
+            for (String eInfo : extraInfo) {
+                data[rowM][col++] = eInfo;
+            }
+        }        
+        
+        String[] columns = new String[columnCount];
+        
+        for (col = 0; col < arrivalsList.getColumnCount(); col++) {
+            columns[col] = (String)arrivalsList.getColumnModel().getColumn(col).getHeaderValue();
+        }
+        for (CAExtra extra : CAExtra.values()) {
+            columns[col++] = extra.getContent();
+        }
+
+        saveODSfile(this, data, columns, saveFileChooser);
     }//GEN-LAST:event_saveSheet_ButtonActionPerformed
 
     private void moveFocusToCarTagTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_moveFocusToCarTagTextFieldActionPerformed
@@ -2025,7 +2074,9 @@ public class CarArrivals extends javax.swing.JFrame {
     }//GEN-LAST:event_carTagTFKeyReleased
 
     private void carTagTFFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_carTagTFFocusLost
-        if(carTagTF.getText().trim().equals("")) {
+        String searchTag = carTagTF.getText().trim();
+        if(searchTag.equals("") || searchTag.equals(CAR_TAG_TF.getContent()) ) 
+        {
             showCarTagTip();
         }
     }//GEN-LAST:event_carTagTFFocusLost
@@ -2122,6 +2173,7 @@ public class CarArrivals extends javax.swing.JFrame {
     private javax.swing.JTextField recognizedTF;
     private javax.swing.JTextField registeredTF;
     private javax.swing.JTextField rowNumTF;
+    private javax.swing.JFileChooser saveFileChooser;
     private javax.swing.JButton saveSheet_Button;
     private javax.swing.JPanel searchBottom;
     private javax.swing.JComboBox searchBuildingComboBox;
@@ -2277,159 +2329,192 @@ public class CarArrivals extends javax.swing.JFrame {
                         arrivalTmTF.setText(((String)arrivalsList.getModel().getValueAt(idx, 1)).substring(4,15));
                         recognizedTF.setText((String)arrivalsList.getModel().getValueAt(idx, 2));
                         String seqNo = (String)arrivalsList.getModel().getValueAt(idx, 3);
-                        displayArrivalDetail(seqNo);   
+                        String[] extraInfo = new String[CAExtra.values().length];
+                        
+                        getArrivalDetails(seqNo, extraInfo, true);
+                        gateNameTF .setText( extraInfo[CAExtra.Gate.ordinal()]);
+                        barOptnTF.setText( extraInfo[CAExtra.BarOptn.ordinal()]);
+                        attendantTF.setText( extraInfo[CAExtra.Attendant.ordinal()]);
+                        registeredTF.setText( extraInfo[CAExtra.RegTag.ordinal()]);
+                        visitPurposeTF.setText( extraInfo[CAExtra.VReason.ordinal()]);
+                        affiliHighTF.setText( extraInfo[CAExtra.L1name.ordinal()]);
+                        affiliLowTF.setText( extraInfo[CAExtra.L2name.ordinal()]);
+                        buildingTF.setText( extraInfo[CAExtra.BldgNum.ordinal()]);
+                        unitTF.setText( extraInfo[CAExtra.RoomNum.ordinal()]);
                     }
                 });
             }
-          
-            private void displayArrivalDetail(String seqNo) {
-                Connection conn = null;
-                Statement selectStmt = null;
-                ResultSet rs = null;
-
-                // <editor-fold defaultstate="collapsed" desc="-- form select statement for detailed info'">
-                StringBuffer sb = new StringBuffer(); 
-
-                sb.append("Select AV.*, CD.L2_NO as regisL2No, CD.UNIT_SEQ_NO as regisUnitSN "); 
-                sb.append("From (Select gateNo, tagEnteredAs, L2_No as visitL2No,"); 
-                sb.append("  UnitSeqNo as visitUnitSN, visitReason, DRIVER_SEQ_NO,"); 
-                sb.append("  barOperation, LENGTH(ImageBlob) imgBytes, ImageBlob, U.name "); 
-                sb.append("From car_arrival"); 
-                sb.append("  Left Join vehicles V On car_arrival.TagEnteredAs = V.PLATE_NUMBER"); 
-                sb.append("  Left Join users_osp U On AttendantID = U.id "); 
-                sb.append("Where arrSeqNo = " + seqNo +") AV "); 
-                sb.append("Left Join cardriver CD On AV.DRIVER_SEQ_NO = CD.SEQ_NO"); 
-                //</editor-fold>
-                
-                try {
-                    conn = JDBCMySQL.getConnection();
-                    selectStmt = conn.createStatement();
-                    rs = selectStmt.executeQuery(sb.toString());
-                    if (rs.next()) {
-                        gateNameTF.setText(gateNames[rs.getInt("gateNo")]);
-                        
-                        //<editor-fold defaultstate="collapsed" desc="-- show attendant ID">
-                        String attName = rs.getString("name");
-                        if (attName == null || attName.length() == 0)
-                            attendantTF.setText(LOG_OUT_TF.getContent());
-                        else
-                            attendantTF.setText(attName);
-                        //</editor-fold>
-                        
-                        // <editor-fold defaultstate="collapsed" desc="-- show registered tag number">
-                        String regiTag = rs.getString("tagEnteredAs");
-                        int l2No = 0, unitSN = 0;
-                                                
-                        if (regiTag == null || regiTag.length() == 0) {
-                            // handle a visiting vehicle
-                            registeredTF.setText(UNREGISTERED_TF.getContent());
-                            l2No = rs.getInt("visitL2No");
-                            unitSN = rs.getInt("visitUnitSN");
-                        }
-                        else {
-                            // for registered vehicles
-                            registeredTF.setText(regiTag);
-                            l2No = rs.getInt("regisL2No");
-                            unitSN = rs.getInt("regisUnitSN");
-                        }
-                        
-                        buildingTF.setText(UNKNOWN_TF_SHORT.getContent());
-                        unitTF.setText(UNKNOWN_TF_SHORT.getContent());
-                        affiliHighTF.setText(UNKNOWN_TF.getContent());
-                        //</editor-fold>                        
-                                
-                        if (l2No > 0 || unitSN > 0) {
-                            showPlaceDetail(l2No, unitSN);
-                        }   
-                        
-                        // <editor-fold defaultstate="collapsed" desc="-- show visit reason">
-                        String purpose = rs.getString("visitReason");
-                        if (purpose == null || purpose.length() == 0) {
-                            if (regiTag == null || regiTag.length() == 0)
-                                visitPurposeTF.setText(UNKNOWN_TF.getContent()); 
-                            else
-                                visitPurposeTF.setText(NOT_APPLICABLE_TF.getContent()); 
-                        }
-                        else
-                            visitPurposeTF.setText(rs.getString("visitReason")); 
-                        
-                        int ordinalValue = (Integer)(rs.getInt("barOperation"));
-                        barOptnTF.setText((BarOperation.values()[ordinalValue]).getContent()); 
-                        //</editor-fold>                        
-
-                        // <editor-fold defaultstate="collapsed" desc="-- display car arrival image">
-                        
-                        InputStream imageIS = rs.getBinaryStream("ImageBlob");
-                        try {
-                            if(imageIS == null){
-                                imageIS = this.getClass().getResourceAsStream("/deletedPicture.png");
-                            }
-                            originalImg = ImageIO.read(imageIS);
-                            changeImageLabel(createStretchedIcon(imageLabel.getSize(), 
-                                    originalImg, false));
-                        } catch (IOException ex) {
-                            logParkingException(Level.SEVERE, ex, "(image loading from DB)");
-                        }
-                        //</editor-fold>                        
-                    }
-                } catch (SQLException ex) {
-                    logParkingException(Level.SEVERE, ex, "(arrived vehicle detail loading)");
-                } finally {
-                    closeDBstuff(conn, selectStmt, rs, "(arrived vehicle detail loading)");
-                }
-            }
-
-            private void showPlaceDetail(int l2No, int unitSN) {
-                Connection conn = null;
-                Statement selectStmt = null;
-                ResultSet rs = null;                
-                StringBuffer sb = new StringBuffer(); 
-                
-                sb.append("Select bt.BLDG_NO, ut.UNIT_NO ");
-                sb.append("From building_table bt, building_unit ut ");
-                sb.append("Where ut.SEQ_NO = " + unitSN + " and ut.BLDG_SEQ_NO = bt.SEQ_NO");
-                
-                try {
-                    // <editor-fold defaultstate="collapsed" desc="-- read building and unit info">    
-                    conn = JDBCMySQL.getConnection();
-                    selectStmt = conn.createStatement();
-                    rs = selectStmt.executeQuery(sb.toString());
-                    if (rs.next()) {
-                        buildingTF.setText(rs.getString("BLDG_NO"));
-                        unitTF.setText(rs.getString("UNIT_NO"));
-                    }
-                    //</editor-fold>
-                } catch (SQLException ex) {
-                    logParkingException(Level.SEVERE, ex, "(fetching building and unit)");
-                } finally {
-                    closeDBstuff(conn, selectStmt, rs, "(arrived vehicle detail loading)");
-                }
-                
-                sb = new StringBuffer(); 
-                sb.append("Select L1.Party_name as affiliation1, L2.Party_name as affiliation2 ");
-                sb.append("From l1_affiliation L1, l2_affiliation L2 ");
-                sb.append("Where L2.L2_NO = " + l2No + " and L2.L1_NO = L1.L1_NO");
-                
-                try {
-                    // <editor-fold defaultstate="collapsed" desc="-- read affiliation info">                          
-                    conn = JDBCMySQL.getConnection();
-                    selectStmt = conn.createStatement();
-                    rs = selectStmt.executeQuery(sb.toString());
-                    if (rs.next()) {
-                        affiliHighTF.setText(rs.getString("affiliation1"));
-                        affiliLowTF.setText(rs.getString("affiliation2"));
-                    } else {
-                        affiliHighTF.setText(UNKNOWN_TF.getContent());
-                        affiliLowTF.setText(UNKNOWN_TF.getContent());
-                    }
-                    //</editor-fold>
-                } catch (SQLException ex) {
-                    logParkingException(Level.SEVERE, ex, "(fetching affiliation)");
-                } finally {
-                    closeDBstuff(conn, selectStmt, rs, "(arrived vehicle detail loading)");
-                }                               
-            }
         };
+    }
+    
+    private void getAffiliations(int l2No, String[] affilis) {
+        Connection conn = null;
+        Statement selectStmt = null;
+        ResultSet rs = null;    
+        StringBuffer sb = new StringBuffer(); 
+
+        sb = new StringBuffer(); 
+        sb.append("Select L1.Party_name as affiliation1, L2.Party_name as affiliation2 ");
+        sb.append("From l1_affiliation L1, l2_affiliation L2 ");
+        sb.append("Where L2.L2_NO = " + l2No + " and L2.L1_NO = L1.L1_NO");
+
+        try {
+            // <editor-fold defaultstate="collapsed" desc="-- read affiliation info">                          
+            conn = JDBCMySQL.getConnection();
+            selectStmt = conn.createStatement();
+            rs = selectStmt.executeQuery(sb.toString());
+            if (rs.next()) {
+                affilis[0] = rs.getString("affiliation1");
+                affilis[1] = rs.getString("affiliation2");
+            } else {
+                affilis[0] = UNKNOWN_TF.getContent();
+                affilis[1] = UNKNOWN_TF.getContent();
+            }
+            //</editor-fold>
+        } catch (SQLException ex) {
+            logParkingException(Level.SEVERE, ex, "(fetching affiliation)");
+        } finally {
+            closeDBstuff(conn, selectStmt, rs, "(arrived vehicle detail loading)");
+        }                  
+    }
+            
+    private void getBuildUnit(int unitSN, String[] buildUnit) {
+        Connection conn = null;
+        Statement selectStmt = null;
+        ResultSet rs = null;                
+        StringBuffer sb = new StringBuffer(); 
+
+        sb.append("Select bt.BLDG_NO, ut.UNIT_NO ");
+        sb.append("From building_table bt, building_unit ut ");
+        sb.append("Where ut.SEQ_NO = " + unitSN + " and ut.BLDG_SEQ_NO = bt.SEQ_NO");
+
+        try {
+            // <editor-fold defaultstate="collapsed" desc="-- read building and unit info">    
+            conn = JDBCMySQL.getConnection();
+            selectStmt = conn.createStatement();
+            rs = selectStmt.executeQuery(sb.toString());
+            if (rs.next()) {
+                buildUnit[0] = rs.getString("BLDG_NO");
+                buildUnit[1] = rs.getString("UNIT_NO");
+            }
+            //</editor-fold>
+        } catch (SQLException ex) {
+            logParkingException(Level.SEVERE, ex, "(fetching building and unit)");
+        } finally {
+            closeDBstuff(conn, selectStmt, rs, "(arrived vehicle detail loading)");
+        }
+    }
+
+    private void getArrivalDetails(String seqNo, String[] details, boolean showImage) {
+        Connection conn = null;
+        Statement selectStmt = null;
+        ResultSet rs = null;
+
+        // <editor-fold defaultstate="collapsed" desc="-- form select statement for detailed info'">
+        StringBuffer sb = new StringBuffer(); 
+        String[] names = new String[2];
+
+        sb.append("Select AV.*, CD.L2_NO as regisL2No, CD.UNIT_SEQ_NO as regisUnitSN "); 
+        sb.append("From (Select gateNo, tagEnteredAs, L2_No as visitL2No,"); 
+        sb.append("  UnitSeqNo as visitUnitSN, visitReason, DRIVER_SEQ_NO,"); 
+        sb.append("  barOperation, U.name "); 
+        if (showImage) {
+            sb.append(", ImageBlob "); 
+        }
+        sb.append("From car_arrival"); 
+        sb.append("  Left Join vehicles V On car_arrival.TagEnteredAs = V.PLATE_NUMBER"); 
+        sb.append("  Left Join users_osp U On AttendantID = U.id "); 
+        sb.append("Where arrSeqNo = " + seqNo +") AV "); 
+        sb.append("Left Join cardriver CD On AV.DRIVER_SEQ_NO = CD.SEQ_NO"); 
+        //</editor-fold>
+
+        try {
+            conn = JDBCMySQL.getConnection();
+            selectStmt = conn.createStatement();
+            rs = selectStmt.executeQuery(sb.toString());
+            if (rs.next()) {
+                details[CAExtra.Gate.ordinal()] = gateNames[rs.getInt("gateNo")];
+
+                //<editor-fold defaultstate="collapsed" desc="-- show attendant ID">
+                String attName = rs.getString("name");
+
+                if (attName == null || attName.length() == 0)
+                    details[CAExtra.Attendant.ordinal()] = LOG_OUT_TF.getContent();
+                else
+                    details[CAExtra.Attendant.ordinal()] = attName;
+                //</editor-fold>
+
+                // <editor-fold defaultstate="collapsed" desc="-- show registered tag number">
+                String regiTag = rs.getString("tagEnteredAs");
+                int l2No = 0, unitSN = 0;
+
+                if (regiTag == null || regiTag.length() == 0) {
+                    // handle a visiting vehicle
+                    details[CAExtra.RegTag.ordinal()] = UNREGISTERED_TF.getContent();
+                    l2No = rs.getInt("visitL2No");
+                    unitSN = rs.getInt("visitUnitSN");
+                }
+                else {
+                    // for registered vehicles
+                    details[CAExtra.RegTag.ordinal()] = regiTag;
+                    l2No = rs.getInt("regisL2No");
+                    unitSN = rs.getInt("regisUnitSN");
+                }
+
+                details[CAExtra.BldgNum.ordinal()] = UNKNOWN_TF_SHORT.getContent();
+                details[CAExtra.RoomNum.ordinal()] = UNKNOWN_TF_SHORT.getContent();
+                details[CAExtra.L1name.ordinal()] = UNKNOWN_TF.getContent();
+                //</editor-fold>                        
+
+                if (l2No > 0) {
+                    getAffiliations(l2No, names);
+                    details[CAExtra.L1name.ordinal()] = names[0];
+                    details[CAExtra.L2name.ordinal()] = names[1];
+                }
+
+                if (unitSN > 0) {
+                    getBuildUnit(unitSN, names);
+                    details[CAExtra.BldgNum.ordinal()] = names[0];
+                    details[CAExtra.RoomNum.ordinal()] = names[1];
+                }   
+
+                // <editor-fold defaultstate="collapsed" desc="-- show visit reason">
+                String purpose = rs.getString("visitReason");
+                if (purpose == null || purpose.length() == 0) {
+                    if (regiTag == null || regiTag.length() == 0)
+                        details[CAExtra.VReason.ordinal()] = UNKNOWN_TF.getContent(); 
+                    else
+                        details[CAExtra.VReason.ordinal()] = NOT_APPLICABLE_TF.getContent(); 
+                }
+                else
+                    details[CAExtra.VReason.ordinal()] = rs.getString("visitReason"); 
+
+                int ordinalValue = (Integer)(rs.getInt("barOperation"));
+                details[CAExtra.BarOptn.ordinal()] = (BarOperation.values()[ordinalValue]).getContent();
+                //</editor-fold>                        
+
+                // <editor-fold defaultstate="collapsed" desc="-- display car arrival image">
+
+                if (showImage) {
+                    InputStream imageIS = rs.getBinaryStream("ImageBlob");
+                    try {
+                        if(imageIS == null){
+                            imageIS = this.getClass().getResourceAsStream("/deletedPicture.png");
+                        }
+                        originalImg = ImageIO.read(imageIS);
+                        changeImageLabel(createStretchedIcon(imageLabel.getSize(), 
+                                originalImg, false));
+                    } catch (IOException ex) {
+                        logParkingException(Level.SEVERE, ex, "(image loading from DB)");
+                    }
+                }
+                //</editor-fold>                        
+            }
+        } catch (SQLException ex) {
+            logParkingException(Level.SEVERE, ex, "(arrived vehicle detail loading)");
+        } finally {
+            closeDBstuff(conn, selectStmt, rs, "(arrived vehicle detail loading)");
+        }
     }
 
     private void clearArrivalDetail() {
@@ -2693,6 +2778,35 @@ public class CarArrivals extends javax.swing.JFrame {
         } else {
             setSearchPeriodOptionButton.setEnabled(true);
         }
+    }
+
+    /**
+     * Save data coming from a JFrame into ods (OpenOffice Calc) file.
+     * @param aFrame frame on which the data is currently displayed
+     * @param data data to save into ods file
+     * @param columns column names for the data columns
+     * @param saveFileChooser GUI dialog form where users enter file name and location.
+     */
+    private void saveODSfile(JFrame aFrame, Object[][] data, String[] columns,
+            JFileChooser saveFileChooser) {
+
+        saveFileChooser.setFileFilter(new OdsFileOnly());
+
+        int returnVal = saveFileChooser.showSaveDialog(aFrame);
+
+        if (returnVal == JFileChooser.APPROVE_OPTION) {
+            File[] file = new File[1];
+            
+            file[0] = saveFileChooser.getSelectedFile();
+            verifyOdsExtension(saveFileChooser, file);
+            TableModel model = new DefaultTableModel(data, columns);
+            try {
+                SpreadSheet.createEmpty(model).saveAs(file[0]);
+                OOUtils.open(file[0]);
+            } catch (IOException ex) {
+                System.out.println("File save exception: " + ex.getMessage());
+            }                
+        }        
     }
 }
 

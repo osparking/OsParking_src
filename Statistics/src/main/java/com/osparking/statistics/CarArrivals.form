@@ -6,6 +6,11 @@
     </Component>
     <Component class="javax.swing.ButtonGroup" name="affiliationGroup">
     </Component>
+    <Component class="javax.swing.JFileChooser" name="saveFileChooser">
+      <Properties>
+        <Property name="dialogType" type="int" value="1"/>
+      </Properties>
+    </Component>
   </NonVisualComponents>
   <Properties>
     <Property name="defaultCloseOperation" type="int" value="2"/>
@@ -14,10 +19,10 @@
     </Property>
     <Property name="focusCycleRoot" type="boolean" value="false"/>
     <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-      <Connection code="new Dimension(normGUIwidth,normGUIheight+50)" type="code"/>
+      <Connection code="new Dimension(normGUIwidth,normGUIheight+60)" type="code"/>
     </Property>
     <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-      <Connection code="new Dimension(normGUIwidth,normGUIheight+50)" type="code"/>
+      <Connection code="new Dimension(normGUIwidth,normGUIheight+60)" type="code"/>
     </Property>
     <Property name="size" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
       <Dimension value="[0, 0]"/>
@@ -275,8 +280,8 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
                       <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
-                      <Component id="criteriaPanel" pref="811" max="32767" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="criteriaPanel" max="32767" attributes="0"/>
+                      <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
                       <Component id="searchButtonPanel" min="-2" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="2" max="-2" attributes="0"/>
                   </Group>
@@ -287,7 +292,7 @@
                   <Group type="102" alignment="1" attributes="0">
                       <Group type="103" groupAlignment="1" attributes="0">
                           <Component id="searchButtonPanel" alignment="0" max="32767" attributes="0"/>
-                          <Component id="criteriaPanel" pref="245" max="32767" attributes="0"/>
+                          <Component id="criteriaPanel" pref="241" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
                   </Group>
@@ -314,8 +319,8 @@
                       <Group type="102" attributes="0">
                           <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="searchTop" pref="811" max="32767" attributes="0"/>
-                              <Component id="searchBottom" alignment="0" pref="811" max="32767" attributes="0"/>
+                              <Component id="searchTop" pref="810" max="32767" attributes="0"/>
+                              <Component id="searchBottom" alignment="0" pref="810" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                   </Group>
@@ -371,7 +376,7 @@
                               <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
                               <Component id="topVehicle" min="-2" max="-2" attributes="0"/>
                               <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
-                              <Component id="topDriver" pref="291" max="32767" attributes="0"/>
+                              <Component id="topDriver" pref="290" max="32767" attributes="0"/>
                               <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
                               <Component id="filler18" max="32767" attributes="0"/>
                               <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
@@ -400,7 +405,7 @@
                                       </Group>
                                   </Group>
                               </Group>
-                              <EmptySpace pref="27" max="32767" attributes="0"/>
+                              <EmptySpace pref="23" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                     </DimensionLayout>
@@ -735,7 +740,7 @@
                         <DimensionLayout dim="0">
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Group type="102" attributes="0">
-                                  <Component id="affiliPanel" pref="162" max="32767" attributes="0"/>
+                                  <Component id="affiliPanel" pref="161" max="32767" attributes="0"/>
                                   <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
                                   <Component id="buildingPanel" min="-2" pref="129" max="-2" attributes="0"/>
                               </Group>
@@ -1461,7 +1466,7 @@
                   <Dimension value="[400, 230]"/>
                 </Property>
                 <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                  <Dimension value="[650, 240]"/>
+                  <Dimension value="[650, 254]"/>
                 </Property>
               </Properties>
 
@@ -1943,7 +1948,7 @@
                       <Dimension value="[525, 140]"/>
                     </Property>
                     <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                      <Dimension value="[536, 140]"/>
+                      <Dimension value="[536, 164]"/>
                     </Property>
                   </Properties>
                   <Constraints>
@@ -1955,17 +1960,23 @@
                   <Layout>
                     <DimensionLayout dim="0">
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" attributes="0">
-                              <Component id="imagePanel" pref="236" max="32767" attributes="0"/>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="imagePanel" pref="228" max="32767" attributes="0"/>
                               <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
                               <Component id="targetPanel" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                     </DimensionLayout>
                     <DimensionLayout dim="1">
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="imagePanel" pref="176" max="32767" attributes="0"/>
-                          <Component id="targetPanel" alignment="0" min="-2" pref="171" max="-2" attributes="0"/>
+                          <Group type="102" attributes="0">
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="imagePanel" max="32767" attributes="0"/>
+                                  <Component id="targetPanel" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                              <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
+                          </Group>
                       </Group>
                     </DimensionLayout>
                   </Layout>
@@ -1973,10 +1984,10 @@
                     <Container class="javax.swing.JPanel" name="imagePanel">
                       <Properties>
                         <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                          <Dimension value="[193, 145]"/>
+                          <Dimension value="[193, 154]"/>
                         </Property>
                         <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                          <Dimension value="[193, 145]"/>
+                          <Dimension value="[193, 164]"/>
                         </Property>
                       </Properties>
 
@@ -1989,8 +2000,8 @@
                         <DimensionLayout dim="1">
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Group type="102" alignment="0" attributes="0">
-                                  <Component id="imageLabel" pref="0" max="32767" attributes="0"/>
-                                  <EmptySpace min="-2" pref="2" max="-2" attributes="0"/>
+                                  <Component id="imageLabel" max="32767" attributes="0"/>
+                                  <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
                               </Group>
                           </Group>
                         </DimensionLayout>
@@ -2017,7 +2028,7 @@
                               <Dimension value="[193, 140]"/>
                             </Property>
                             <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                              <Dimension value="[193, 145]"/>
+                              <Dimension value="[193, 140]"/>
                             </Property>
                           </Properties>
                           <Events>
@@ -2037,10 +2048,10 @@
                           </Border>
                         </Property>
                         <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                          <Dimension value="[300, 140]"/>
+                          <Dimension value="[300, 154]"/>
                         </Property>
                         <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                          <Dimension value="[300, 140]"/>
+                          <Dimension value="[300, 164]"/>
                         </Property>
                       </Properties>
 
@@ -2050,10 +2061,10 @@
                               <Group type="102" alignment="0" attributes="0">
                                   <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="0" attributes="0">
-                                      <Component id="visitBuildingPanel" max="32767" attributes="0"/>
-                                      <Component id="visitHighAffiliPanel" alignment="0" max="32767" attributes="0"/>
-                                      <Component id="visitLowAffiliPanel" max="32767" attributes="0"/>
-                                      <Component id="visitDetailReason" alignment="0" max="32767" attributes="0"/>
+                                      <Component id="visitBuildingPanel" min="-2" max="-2" attributes="0"/>
+                                      <Component id="visitHighAffiliPanel" alignment="0" min="-2" max="-2" attributes="0"/>
+                                      <Component id="visitLowAffiliPanel" min="-2" max="-2" attributes="0"/>
+                                      <Component id="visitDetailReason" alignment="0" min="-2" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
                           </Group>
@@ -2080,7 +2091,7 @@
                               <Dimension value="[265, 28]"/>
                             </Property>
                             <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                              <Dimension value="[283, 28]"/>
+                              <Dimension value="[270, 28]"/>
                             </Property>
                           </Properties>
 
@@ -2177,7 +2188,7 @@
                               <Dimension value="[265, 28]"/>
                             </Property>
                             <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                              <Dimension value="[283, 28]"/>
+                              <Dimension value="[270, 28]"/>
                             </Property>
                           </Properties>
 
@@ -2235,7 +2246,7 @@
                               <Dimension value="[265, 28]"/>
                             </Property>
                             <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                              <Dimension value="[283, 28]"/>
+                              <Dimension value="[270, 28]"/>
                             </Property>
                           </Properties>
 
@@ -2250,8 +2261,8 @@
                                   <Connection code="new java.awt.Font(font_Type, font_Style, font_Size)" type="code"/>
                                 </Property>
                                 <Property name="horizontalAlignment" type="int" value="4"/>
-                                <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                                  <Connection code="LOWER_HEADER.getContent()" type="code"/>
+                                <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.editors.StringEditor">
+                                  <SerializedValue value="-84,-19,0,5,115,114,0,78,111,114,103,46,110,101,116,98,101,97,110,115,46,109,111,100,117,108,101,115,46,102,111,114,109,46,82,65,68,67,111,110,110,101,99,116,105,111,110,80,114,111,112,101,114,116,121,69,100,105,116,111,114,36,82,65,68,67,111,110,110,101,99,116,105,111,110,68,101,115,105,103,110,86,97,108,117,101,2,10,-70,90,-35,-97,-57,100,2,0,7,73,0,4,116,121,112,101,76,0,10,109,101,116,104,111,100,78,97,109,101,116,0,18,76,106,97,118,97,47,108,97,110,103,47,83,116,114,105,110,103,59,76,0,12,112,114,111,112,101,114,116,121,78,97,109,101,113,0,126,0,1,76,0,16,114,97,100,67,111,109,112,111,110,101,110,116,78,97,109,101,113,0,126,0,1,76,0,16,114,101,113,117,105,114,101,100,84,121,112,101,78,97,109,101,113,0,126,0,1,76,0,8,117,115,101,114,67,111,100,101,113,0,126,0,1,76,0,5,118,97,108,117,101,113,0,126,0,1,120,112,0,0,0,2,112,112,112,112,116,0,25,76,79,87,69,82,95,72,69,65,68,69,82,46,103,101,116,67,111,110,116,101,110,116,40,41,112"/>
                                 </Property>
                                 <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                                   <Dimension value="[130, 28]"/>
@@ -2293,7 +2304,7 @@
                               <Dimension value="[265, 28]"/>
                             </Property>
                             <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                              <Dimension value="[283, 28]"/>
+                              <Dimension value="[270, 28]"/>
                             </Property>
                           </Properties>
 
@@ -2378,7 +2389,7 @@
               <Layout>
                 <DimensionLayout dim="0">
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="arrivalListPanel" pref="373" max="32767" attributes="0"/>
+                      <Component id="arrivalListPanel" pref="371" max="32767" attributes="0"/>
                       <Component id="buttonPanel" alignment="0" max="32767" attributes="0"/>
                   </Group>
                 </DimensionLayout>
@@ -2386,7 +2397,7 @@
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
-                          <Component id="arrivalListPanel" pref="244" max="32767" attributes="0"/>
+                          <Component id="arrivalListPanel" pref="226" max="32767" attributes="0"/>
                           <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
                           <Component id="buttonPanel" min="-2" max="-2" attributes="0"/>
                           <EmptySpace min="0" pref="0" max="-2" attributes="0"/>

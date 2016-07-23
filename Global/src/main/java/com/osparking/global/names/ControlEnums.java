@@ -510,6 +510,8 @@ public class ControlEnums {
                 "저장할 차량 목록이 없습니다.", "No vehicle list to save!"),
         DRIVER_SAVE_ODS_FAIL_DIALOG(
                 "저장할 운전자 목록이 없습니다.", "Empty driver list can't be saved!"),
+        ARRIVAL_SAVE_ODS_FAIL_DIALOG(
+                "저장할 도착 목록이 없습니다.", "Empty arrival list can't be saved!"),
         USER_SAVE_ODS_FAIL_DIALOG(
                 "저장할 사용자 목록이 없습니다!", "No user list to save!"),
         DRIVER_CREATRION_FAIL_DIALOG("운전자 정보 생성 실패.", "Failed to create a owner/driver record."), 
