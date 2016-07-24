@@ -557,7 +557,7 @@ public class Globals {
     public static String font_Type = "SansSerif";
     public static int font_Size = 14;
     public static int LABEL_INC = 3;
-    public static int CONTENT_INC = 3;
+    public static int CONTENT_INC = 5;
     public static int head_font_Size = 16;
     public static int font_Style = BOLD;        
         
@@ -2047,7 +2047,7 @@ public class Globals {
             childCBox.addItem(new InnoComboBoxItem(
                     new int[]{PROMPTER_KEY}, 
                     new String[]{getPrompter(childCol, parentCBox).toString()}));
-            childCBox.setSelectedIndex(0);            
+            childCBox.setSelectedIndex(0);
         }    
     }    
     

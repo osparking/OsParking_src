@@ -349,7 +349,6 @@ public class CarArrivals extends javax.swing.JFrame {
         setTitle(CAR_ARRIVALS_FRAME_TITLE.getContent());
         setFocusCycleRoot(false);
         setMinimumSize(new Dimension(normGUIwidth,normGUIheight+60));
-        setPreferredSize(new Dimension(normGUIwidth,normGUIheight+60));
         setSize(new java.awt.Dimension(0, 0));
 
         wholeTop.setMaximumSize(new java.awt.Dimension(32767, 40));
@@ -998,7 +997,7 @@ public class CarArrivals extends javax.swing.JFrame {
                 .addGap(25, 25, 25)
                 .addComponent(filler6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
             .addGroup(searchBottomLayout.createSequentialGroup()
-                .addGap(5, 5, 5)
+                .addGap(0, 0, 0)
                 .addComponent(fixPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
