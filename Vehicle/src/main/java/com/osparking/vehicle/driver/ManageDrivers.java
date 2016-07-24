@@ -909,6 +909,7 @@ public class ManageDrivers extends javax.swing.JFrame {
                 searchL1ComboBoxPopupMenuWillBecomeInvisible(evt);
             }
             public void popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {
+                searchL1ComboBoxPopupMenuWillBecomeVisible(evt);
             }
         });
         searchL1ComboBox.addActionListener(new java.awt.event.ActionListener() {
@@ -1890,6 +1891,10 @@ public class ManageDrivers extends javax.swing.JFrame {
         changeSearchButtonEnabled();
         mayPropagateBackward(searchUnitComboBox, searchBuildingComboBox);
     }//GEN-LAST:event_searchUnitComboBoxPopupMenuWillBecomeInvisible
+
+    private void searchL1ComboBoxPopupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_searchL1ComboBoxPopupMenuWillBecomeVisible
+        // TODO add your handling code here:
+    }//GEN-LAST:event_searchL1ComboBoxPopupMenuWillBecomeVisible
 
     /**
      * @param args the command line arguments

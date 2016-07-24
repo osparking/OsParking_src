@@ -16,7 +16,8 @@
  */
 package com.osparking.osparking;
 
-import static com.osparking.global.CommonData.bigButtonDim;
+import static com.osparking.global.CommonData.bigButtonHeight;
+import static com.osparking.global.CommonData.bigButtonWidth;
 import com.osparking.global.Globals;
 import static com.osparking.global.Globals.CONTENT_INC;
 import static com.osparking.global.Globals.LABEL_INC;
@@ -60,6 +61,7 @@ import static com.osparking.global.names.OSP_enums.DriverCol.BuildingNo;
 import static com.osparking.global.names.OSP_enums.DriverCol.UnitNo;
 import com.osparking.global.names.PComboBox;
 import static com.osparking.vehicle.driver.ManageDrivers.mayPropagateBackward;
+import java.awt.Dimension;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -88,6 +90,7 @@ public class VisitingCar extends javax.swing.JFrame {
             byte gateNo, int imageSN, BufferedImage bImg, int delay) 
     {
         initComponents();
+        applyUserCode();
         setIconImages(OSPiconList);
         Point screenCenter = getTopLeftPointToPutThisFrameAtScreenCenter(this);
         setLocation(screenCenter);    
@@ -102,13 +105,15 @@ public class VisitingCar extends javax.swing.JFrame {
         this.delay = delay;
 
         recogTextField.setText(tagRecognized);
-        visitTimeTextField.setText("'" + new SimpleDateFormat ("a hh:mm:ss").
+        visitTimeTextField.setText(new SimpleDateFormat ("a hh:mm:ss").
                 format(arrivalTime));
         
-        visitL1ComboBox.addItem(getPrompter(AffiliationL1, null));
-        visitL2ComboBox.addItem(getPrompter(AffiliationL2, visitL1ComboBox));
-        visitBuildingComboBox.addItem(getPrompter(BuildingNo, null));
-        visitUnitComboBox.addItem(getPrompter(UnitNo, visitBuildingComboBox));           
+        L1CBox.addItem(getPrompter(AffiliationL1, null));
+        refreshComboBox(L1CBox, getPrompter(AffiliationL1, L1CBox),
+                AffiliationL1, -1, getPrevListParentKey());        
+        L2CBox.addItem(getPrompter(AffiliationL2, L1CBox));
+        buildingCBox.addItem(getPrompter(BuildingNo, null));
+        unitCBox.addItem(getPrompter(UnitNo, buildingCBox));           
         
         visitReasonTextField.setText("");
         gateNameTextField.setText(gateNames[gateNo]);
@@ -130,7 +135,7 @@ public class VisitingCar extends javax.swing.JFrame {
 
         wholePanel = new javax.swing.JPanel();
         overviewTitle = new javax.swing.JPanel();
-        jLabel7 = new javax.swing.JLabel();
+        summaryTitle = new javax.swing.JLabel();
         overviewPanel = new javax.swing.JPanel();
         jLabel6 = new javax.swing.JLabel();
         gateNameTextField = new javax.swing.JTextField();
@@ -139,33 +144,32 @@ public class VisitingCar extends javax.swing.JFrame {
         recogTextField = new javax.swing.JTextField();
         jLabel8 = new javax.swing.JLabel();
         visitTimeTextField = new javax.swing.JTextField();
-        purposeTitle = new javax.swing.JPanel();
-        jLabel2 = new javax.swing.JLabel();
-        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
-        purposePanel = new javax.swing.JPanel();
-        jPanel2 = new javax.swing.JPanel();
-        jPanel11 = new javax.swing.JPanel();
+        whereToTitle = new javax.swing.JPanel();
+        whereTo = new javax.swing.JLabel();
+        whereToPanel = new javax.swing.JPanel();
+        affiliationPan = new javax.swing.JPanel();
+        L1Panel = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         filler18 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 32767));
-        visitL1ComboBox = new PComboBox();
-        jPanel12 = new javax.swing.JPanel();
+        L1CBox = new PComboBox();
+        L2Panel = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
         filler19 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 32767));
-        visitL2ComboBox = new PComboBox();
-        jPanel3 = new javax.swing.JPanel();
+        L2CBox = new PComboBox();
+        buildingPanel = new javax.swing.JPanel();
         jPanel13 = new javax.swing.JPanel();
         jLabel9 = new javax.swing.JLabel();
         filler20 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 32767));
-        visitBuildingComboBox = new PComboBox();
+        buildingCBox = new PComboBox();
         jPanel14 = new javax.swing.JPanel();
         jLabel10 = new javax.swing.JLabel();
         filler21 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 32767));
-        visitUnitComboBox = new PComboBox();
-        reasonTitle = new javax.swing.JPanel();
-        jLabel4 = new javax.swing.JLabel();
+        unitCBox = new PComboBox();
+        detailedTitle = new javax.swing.JPanel();
+        detailedReason = new javax.swing.JLabel();
         reasonPanel = new javax.swing.JPanel();
-        filler3 = new javax.swing.Box.Filler(new java.awt.Dimension(80, 0), new java.awt.Dimension(80, 0), new java.awt.Dimension(80, 32767));
         visitReasonTextField = new javax.swing.JTextField();
+        jPanel1 = new javax.swing.JPanel();
         buttonPanel = new javax.swing.JPanel();
         openBarButton = new javax.swing.JButton();
         notAllowButton = new javax.swing.JButton();
@@ -176,10 +180,9 @@ public class VisitingCar extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle(VISITING_CAR_FRAME_TITLE.getContent());
-        setMaximumSize(new java.awt.Dimension(900, 700));
-        setMinimumSize(new java.awt.Dimension(900, 700));
-        setPreferredSize(new java.awt.Dimension(900, 700));
-        setResizable(false);
+        setMaximumSize(new java.awt.Dimension(1100, 700));
+        setMinimumSize(new java.awt.Dimension(760, 600));
+        setPreferredSize(new java.awt.Dimension(760, 600));
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 formWindowClosing(evt);
@@ -187,21 +190,24 @@ public class VisitingCar extends javax.swing.JFrame {
         });
 
         wholePanel.setMaximumSize(new java.awt.Dimension(2147483647, 2147483647));
-        wholePanel.setLayout(new java.awt.GridLayout(0, 1, 0, 10));
+        wholePanel.setMinimumSize(new java.awt.Dimension(680, 467));
+        wholePanel.setPreferredSize(new java.awt.Dimension(680, 467));
 
-        overviewTitle.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 20, 0));
+        overviewTitle.setMaximumSize(new java.awt.Dimension(32767, 40));
+        overviewTitle.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 0, 0));
 
-        jLabel7.setFont(new java.awt.Font(font_Type, font_Style, font_Size + LABEL_INC));
-        jLabel7.setForeground(new java.awt.Color(18, 22, 113));
-        jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        jLabel7.setText(VISIT_OVERVIEW.getContent());
-        jLabel7.setMaximumSize(new java.awt.Dimension(130, 40));
-        jLabel7.setMinimumSize(new java.awt.Dimension(130, 40));
-        jLabel7.setPreferredSize(new java.awt.Dimension(130, 40));
-        overviewTitle.add(jLabel7);
+        summaryTitle.setFont(new java.awt.Font(font_Type, font_Style, font_Size + LABEL_INC));
+        summaryTitle.setForeground(new java.awt.Color(18, 22, 113));
+        summaryTitle.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        summaryTitle.setText("Overview");
+        summaryTitle.setMaximumSize(new java.awt.Dimension(130, 40));
+        summaryTitle.setMinimumSize(new java.awt.Dimension(130, 40));
+        summaryTitle.setPreferredSize(new java.awt.Dimension(130, 40));
+        overviewTitle.add(summaryTitle);
 
-        wholePanel.add(overviewTitle);
-
+        overviewPanel.setMaximumSize(new java.awt.Dimension(32767, 40));
+        overviewPanel.setMinimumSize(new java.awt.Dimension(360, 40));
+        overviewPanel.setPreferredSize(new java.awt.Dimension(360, 40));
         overviewPanel.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 20, 0));
 
         jLabel6.setFont(new java.awt.Font(font_Type, font_Style, font_Size + LABEL_INC));
@@ -215,14 +221,15 @@ public class VisitingCar extends javax.swing.JFrame {
         gateNameTextField.setEditable(false);
         gateNameTextField.setFont(new java.awt.Font(font_Type, font_Style, font_Size + CONTENT_INC));
         gateNameTextField.setText("gateNameTextField");
-        gateNameTextField.setMaximumSize(new java.awt.Dimension(180, 50));
-        gateNameTextField.setMinimumSize(new java.awt.Dimension(180, 50));
-        gateNameTextField.setPreferredSize(new java.awt.Dimension(180, 50));
+        gateNameTextField.setMaximumSize(new java.awt.Dimension(160, 40));
+        gateNameTextField.setMinimumSize(new java.awt.Dimension(160, 40));
+        gateNameTextField.setPreferredSize(new java.awt.Dimension(160, 40));
         gateNameTextField.setRequestFocusEnabled(false);
         overviewPanel.add(gateNameTextField);
 
-        wholePanel.add(overviewPanel);
-
+        overview2Panel.setMaximumSize(new java.awt.Dimension(32767, 40));
+        overview2Panel.setMinimumSize(new java.awt.Dimension(730, 40));
+        overview2Panel.setPreferredSize(new java.awt.Dimension(730, 40));
         overview2Panel.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 20, 0));
 
         jLabel1.setFont(new java.awt.Font(font_Type, font_Style, font_Size + LABEL_INC));
@@ -236,9 +243,9 @@ public class VisitingCar extends javax.swing.JFrame {
         recogTextField.setEditable(false);
         recogTextField.setFont(new java.awt.Font(font_Type, font_Style, font_Size + CONTENT_INC));
         recogTextField.setText("12가3456");
-        recogTextField.setMaximumSize(new java.awt.Dimension(180, 50));
-        recogTextField.setMinimumSize(new java.awt.Dimension(180, 50));
-        recogTextField.setPreferredSize(new java.awt.Dimension(180, 50));
+        recogTextField.setMaximumSize(new java.awt.Dimension(160, 40));
+        recogTextField.setMinimumSize(new java.awt.Dimension(160, 40));
+        recogTextField.setPreferredSize(new java.awt.Dimension(160, 40));
         overview2Panel.add(recogTextField);
 
         jLabel8.setFont(new java.awt.Font(font_Type, font_Style, font_Size + LABEL_INC));
@@ -252,199 +259,286 @@ public class VisitingCar extends javax.swing.JFrame {
         visitTimeTextField.setEditable(false);
         visitTimeTextField.setFont(new java.awt.Font(font_Type, font_Style, font_Size + CONTENT_INC));
         visitTimeTextField.setText("'15.02.05 13:27:04");
-        visitTimeTextField.setMaximumSize(new java.awt.Dimension(210, 50));
-        visitTimeTextField.setMinimumSize(new java.awt.Dimension(210, 50));
-        visitTimeTextField.setPreferredSize(new java.awt.Dimension(210, 50));
+        visitTimeTextField.setMaximumSize(new java.awt.Dimension(150, 40));
+        visitTimeTextField.setMinimumSize(new java.awt.Dimension(150, 40));
+        visitTimeTextField.setPreferredSize(new java.awt.Dimension(150, 40));
         overview2Panel.add(visitTimeTextField);
 
-        wholePanel.add(overview2Panel);
+        whereToTitle.setMaximumSize(new java.awt.Dimension(32767, 40));
+        whereToTitle.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 0, 0));
 
-        purposeTitle.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 20, 0));
+        whereTo.setFont(new java.awt.Font(font_Type, font_Style, font_Size + LABEL_INC));
+        whereTo.setForeground(new java.awt.Color(18, 22, 113));
+        whereTo.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        whereTo.setText("Where to go");
+        whereTo.setMaximumSize(new java.awt.Dimension(180, 40));
+        whereTo.setMinimumSize(new java.awt.Dimension(180, 40));
+        whereTo.setPreferredSize(new java.awt.Dimension(180, 40));
+        whereToTitle.add(whereTo);
 
-        jLabel2.setFont(new java.awt.Font(font_Type, font_Style, font_Size + LABEL_INC));
-        jLabel2.setForeground(new java.awt.Color(18, 22, 113));
-        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        jLabel2.setText(VISIT_TARGET_LABEL.getContent());
-        jLabel2.setMaximumSize(new java.awt.Dimension(180, 50));
-        jLabel2.setMinimumSize(new java.awt.Dimension(180, 50));
-        jLabel2.setPreferredSize(new java.awt.Dimension(180, 50));
-        purposeTitle.add(jLabel2);
-        purposeTitle.add(filler1);
+        whereToPanel.setMaximumSize(new java.awt.Dimension(700, 110));
+        whereToPanel.setMinimumSize(new java.awt.Dimension(620, 99));
+        whereToPanel.setPreferredSize(new java.awt.Dimension(620, 99));
 
-        wholePanel.add(purposeTitle);
+        affiliationPan.setMaximumSize(new java.awt.Dimension(32767, 99));
+        affiliationPan.setMinimumSize(new java.awt.Dimension(300, 99));
+        affiliationPan.setPreferredSize(new java.awt.Dimension(300, 99));
 
-        purposePanel.setMaximumSize(new java.awt.Dimension(65676, 130));
-        purposePanel.setPreferredSize(new java.awt.Dimension(1001, 130));
-        purposePanel.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 20, 0));
-
-        jPanel2.setPreferredSize(new java.awt.Dimension(300, 99));
-
-        jPanel11.setLayout(new javax.swing.BoxLayout(jPanel11, javax.swing.BoxLayout.LINE_AXIS));
+        L1Panel.setMaximumSize(new java.awt.Dimension(380, 40));
+        L1Panel.setMinimumSize(new java.awt.Dimension(380, 40));
+        L1Panel.setPreferredSize(new java.awt.Dimension(380, 40));
 
         jLabel3.setFont(new java.awt.Font(font_Type, font_Style, font_Size + LABEL_INC));
-        jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+        jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel3.setText(HIGHER_HEADER.getContent());
-        jLabel3.setMinimumSize(new java.awt.Dimension(160, 50));
-        jLabel3.setPreferredSize(new java.awt.Dimension(160, 50));
-        jPanel11.add(jLabel3);
-        jPanel11.add(filler18);
+        jLabel3.setMaximumSize(new java.awt.Dimension(120, 40));
+        jLabel3.setMinimumSize(new java.awt.Dimension(120, 40));
+        jLabel3.setPreferredSize(new java.awt.Dimension(120, 40));
 
-        visitL1ComboBox.setFont(new java.awt.Font(font_Type, font_Style, font_Size+6));
-        visitL1ComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] {}));
-        visitL1ComboBox.setMaximumSize(new java.awt.Dimension(210, 50));
-        visitL1ComboBox.setMinimumSize(new java.awt.Dimension(210, 50));
-        visitL1ComboBox.setPreferredSize(new java.awt.Dimension(210, 50));
-        visitL1ComboBox.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
+        L1CBox.setFont(new java.awt.Font(font_Type, font_Style, font_Size+6));
+        L1CBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] {}));
+        L1CBox.setMaximumSize(new java.awt.Dimension(170, 40));
+        L1CBox.setMinimumSize(new java.awt.Dimension(170, 40));
+        L1CBox.setPreferredSize(new java.awt.Dimension(170, 40));
+        L1CBox.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
             public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
             }
             public void popupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {
             }
             public void popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {
-                visitL1ComboBoxPopupMenuWillBecomeVisible(evt);
+                L1CBoxPopupMenuWillBecomeVisible(evt);
             }
         });
-        visitL1ComboBox.addActionListener(new java.awt.event.ActionListener() {
+        L1CBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                visitL1ComboBoxActionPerformed(evt);
+                L1CBoxActionPerformed(evt);
             }
         });
-        jPanel11.add(visitL1ComboBox);
 
-        jPanel2.add(jPanel11);
+        javax.swing.GroupLayout L1PanelLayout = new javax.swing.GroupLayout(L1Panel);
+        L1Panel.setLayout(L1PanelLayout);
+        L1PanelLayout.setHorizontalGroup(
+            L1PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(L1PanelLayout.createSequentialGroup()
+                .addGap(0, 0, 0)
+                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, 0)
+                .addComponent(filler18, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, 0)
+                .addComponent(L1CBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(0, 0, 0))
+        );
+        L1PanelLayout.setVerticalGroup(
+            L1PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(filler18, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(L1CBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+        );
 
-        jPanel12.setLayout(new javax.swing.BoxLayout(jPanel12, javax.swing.BoxLayout.LINE_AXIS));
+        L2Panel.setMaximumSize(new java.awt.Dimension(310, 40));
+        L2Panel.setMinimumSize(new java.awt.Dimension(380, 40));
+        L2Panel.setPreferredSize(new java.awt.Dimension(380, 40));
 
-        jLabel5.setFont(new java.awt.Font(font_Type, font_Style, font_Size+6));
+        jLabel5.setFont(new java.awt.Font(font_Type, font_Style, font_Size + LABEL_INC));
         jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
         jLabel5.setText(LOWER_HEADER.getContent());
-        jLabel5.setMinimumSize(new java.awt.Dimension(160, 50));
-        jLabel5.setPreferredSize(new java.awt.Dimension(160, 50));
-        jPanel12.add(jLabel5);
-        jPanel12.add(filler19);
+        jLabel5.setMaximumSize(new java.awt.Dimension(120, 40));
+        jLabel5.setMinimumSize(new java.awt.Dimension(120, 40));
+        jLabel5.setPreferredSize(new java.awt.Dimension(120, 40));
 
-        visitL2ComboBox.setFont(new java.awt.Font(font_Type, font_Style, font_Size+6));
-        visitL2ComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] {}));
-        visitL2ComboBox.setMaximumSize(new java.awt.Dimension(210, 50));
-        visitL2ComboBox.setMinimumSize(new java.awt.Dimension(210, 50));
-        visitL2ComboBox.setPreferredSize(new java.awt.Dimension(210, 50));
-        visitL2ComboBox.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
+        L2CBox.setFont(new java.awt.Font(font_Type, font_Style, font_Size+6));
+        L2CBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] {}));
+        L2CBox.setMaximumSize(new java.awt.Dimension(170, 40));
+        L2CBox.setMinimumSize(new java.awt.Dimension(170, 40));
+        L2CBox.setPreferredSize(new java.awt.Dimension(170, 40));
+        L2CBox.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
             public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
             }
             public void popupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {
-                visitL2ComboBoxPopupMenuWillBecomeInvisible(evt);
+                L2CBoxPopupMenuWillBecomeInvisible(evt);
             }
             public void popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {
-                visitL2ComboBoxPopupMenuWillBecomeVisible(evt);
+                L2CBoxPopupMenuWillBecomeVisible(evt);
             }
         });
-        jPanel12.add(visitL2ComboBox);
 
-        jPanel2.add(jPanel12);
+        javax.swing.GroupLayout L2PanelLayout = new javax.swing.GroupLayout(L2Panel);
+        L2Panel.setLayout(L2PanelLayout);
+        L2PanelLayout.setHorizontalGroup(
+            L2PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(L2PanelLayout.createSequentialGroup()
+                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, 0)
+                .addComponent(filler19, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, 0)
+                .addComponent(L2CBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(0, 0, 0))
+        );
+        L2PanelLayout.setVerticalGroup(
+            L2PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(filler19, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(L2CBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+        );
 
-        purposePanel.add(jPanel2);
+        javax.swing.GroupLayout affiliationPanLayout = new javax.swing.GroupLayout(affiliationPan);
+        affiliationPan.setLayout(affiliationPanLayout);
+        affiliationPanLayout.setHorizontalGroup(
+            affiliationPanLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(affiliationPanLayout.createSequentialGroup()
+                .addGroup(affiliationPanLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(L1Panel, javax.swing.GroupLayout.PREFERRED_SIZE, 300, Short.MAX_VALUE)
+                    .addComponent(L2Panel, javax.swing.GroupLayout.PREFERRED_SIZE, 300, Short.MAX_VALUE))
+                .addGap(0, 0, 0))
+        );
+        affiliationPanLayout.setVerticalGroup(
+            affiliationPanLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(affiliationPanLayout.createSequentialGroup()
+                .addGap(5, 5, 5)
+                .addComponent(L1Panel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(10, 10, 10)
+                .addComponent(L2Panel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
 
-        jPanel3.setPreferredSize(new java.awt.Dimension(161, 99));
-        jPanel3.setLayout(new javax.swing.BoxLayout(jPanel3, javax.swing.BoxLayout.PAGE_AXIS));
+        buildingPanel.setMinimumSize(new java.awt.Dimension(288, 99));
+        buildingPanel.setPreferredSize(new java.awt.Dimension(288, 99));
+        buildingPanel.setLayout(new javax.swing.BoxLayout(buildingPanel, javax.swing.BoxLayout.PAGE_AXIS));
 
+        jPanel13.setMaximumSize(new java.awt.Dimension(400, 32767));
+        jPanel13.setMinimumSize(new java.awt.Dimension(288, 40));
+        jPanel13.setName(""); // NOI18N
+        jPanel13.setPreferredSize(new java.awt.Dimension(288, 40));
+        jPanel13.setRequestFocusEnabled(false);
         jPanel13.setLayout(new javax.swing.BoxLayout(jPanel13, javax.swing.BoxLayout.LINE_AXIS));
 
         jLabel9.setFont(new java.awt.Font(font_Type, font_Style, font_Size + LABEL_INC));
         jLabel9.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
         jLabel9.setText(BUILDING_HEADER.getContent());
-        jLabel9.setMinimumSize(new java.awt.Dimension(130, 50));
-        jLabel9.setPreferredSize(new java.awt.Dimension(130, 50));
+        jLabel9.setMaximumSize(new java.awt.Dimension(120, 40));
+        jLabel9.setMinimumSize(new java.awt.Dimension(120, 40));
+        jLabel9.setPreferredSize(new java.awt.Dimension(120, 40));
         jPanel13.add(jLabel9);
         jPanel13.add(filler20);
 
-        visitBuildingComboBox.setFont(new java.awt.Font(font_Type, font_Style, font_Size+6));
-        visitBuildingComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] {}));
-        visitBuildingComboBox.setMaximumSize(new java.awt.Dimension(210, 50));
-        visitBuildingComboBox.setMinimumSize(new java.awt.Dimension(210, 50));
-        visitBuildingComboBox.setPreferredSize(new java.awt.Dimension(210, 50));
-        visitBuildingComboBox.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
+        buildingCBox.setFont(new java.awt.Font(font_Type, font_Style, font_Size+6));
+        buildingCBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] {}));
+        buildingCBox.setMaximumSize(new java.awt.Dimension(150, 40));
+        buildingCBox.setMinimumSize(new java.awt.Dimension(150, 40));
+        buildingCBox.setPreferredSize(new java.awt.Dimension(150, 40));
+        buildingCBox.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
             public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
             }
             public void popupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {
             }
             public void popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {
-                visitBuildingComboBoxPopupMenuWillBecomeVisible(evt);
+                buildingCBoxPopupMenuWillBecomeVisible(evt);
             }
         });
-        visitBuildingComboBox.addActionListener(new java.awt.event.ActionListener() {
+        buildingCBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                visitBuildingComboBoxActionPerformed(evt);
+                buildingCBoxActionPerformed(evt);
             }
         });
-        jPanel13.add(visitBuildingComboBox);
+        jPanel13.add(buildingCBox);
 
-        jPanel3.add(jPanel13);
+        buildingPanel.add(jPanel13);
 
+        jPanel14.setMaximumSize(new java.awt.Dimension(400, 32767));
+        jPanel14.setMinimumSize(new java.awt.Dimension(288, 40));
+        jPanel14.setPreferredSize(new java.awt.Dimension(288, 40));
         jPanel14.setLayout(new javax.swing.BoxLayout(jPanel14, javax.swing.BoxLayout.LINE_AXIS));
 
-        jLabel10.setFont(new java.awt.Font(font_Type, font_Style, font_Size+6));
+        jLabel10.setFont(new java.awt.Font(font_Type, font_Style, font_Size + LABEL_INC));
         jLabel10.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
         jLabel10.setText(ROOM_HEADER.getContent());
-        jLabel10.setMinimumSize(new java.awt.Dimension(130, 50));
-        jLabel10.setPreferredSize(new java.awt.Dimension(130, 50));
+        jLabel10.setMaximumSize(new java.awt.Dimension(120, 40));
+        jLabel10.setMinimumSize(new java.awt.Dimension(120, 40));
+        jLabel10.setPreferredSize(new java.awt.Dimension(120, 40));
         jPanel14.add(jLabel10);
         jPanel14.add(filler21);
 
-        visitUnitComboBox.setFont(new java.awt.Font(font_Type, font_Style, font_Size+6));
-        visitUnitComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] {}));
-        visitUnitComboBox.setMaximumSize(new java.awt.Dimension(210, 50));
-        visitUnitComboBox.setMinimumSize(new java.awt.Dimension(210, 50));
-        visitUnitComboBox.setPreferredSize(new java.awt.Dimension(210, 50));
-        visitUnitComboBox.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
+        unitCBox.setFont(new java.awt.Font(font_Type, font_Style, font_Size+6));
+        unitCBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] {}));
+        unitCBox.setMaximumSize(new java.awt.Dimension(150, 40));
+        unitCBox.setMinimumSize(new java.awt.Dimension(150, 40));
+        unitCBox.setPreferredSize(new java.awt.Dimension(150, 40));
+        unitCBox.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
             public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
             }
             public void popupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {
             }
             public void popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {
-                visitUnitComboBoxPopupMenuWillBecomeVisible(evt);
+                unitCBoxPopupMenuWillBecomeVisible(evt);
             }
         });
-        jPanel14.add(visitUnitComboBox);
+        jPanel14.add(unitCBox);
 
-        jPanel3.add(jPanel14);
+        buildingPanel.add(jPanel14);
 
-        purposePanel.add(jPanel3);
+        javax.swing.GroupLayout whereToPanelLayout = new javax.swing.GroupLayout(whereToPanel);
+        whereToPanel.setLayout(whereToPanelLayout);
+        whereToPanelLayout.setHorizontalGroup(
+            whereToPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(whereToPanelLayout.createSequentialGroup()
+                .addGap(20, 20, 20)
+                .addComponent(affiliationPan, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(20, 20, 20)
+                .addComponent(buildingPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 288, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(112, 112, 112))
+        );
+        whereToPanelLayout.setVerticalGroup(
+            whereToPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(affiliationPan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(buildingPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+        );
 
-        wholePanel.add(purposePanel);
+        detailedTitle.setMaximumSize(new java.awt.Dimension(32767, 40));
+        detailedTitle.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 0, 0));
 
-        reasonTitle.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 20, 0));
+        detailedReason.setFont(new java.awt.Font(font_Type, font_Style, font_Size + LABEL_INC));
+        detailedReason.setForeground(new java.awt.Color(18, 22, 113));
+        detailedReason.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        detailedReason.setText("Detailed Reason");
+        detailedReason.setMaximumSize(new java.awt.Dimension(130, 40));
+        detailedReason.setMinimumSize(new java.awt.Dimension(130, 40));
+        detailedReason.setPreferredSize(new java.awt.Dimension(130, 40));
+        detailedTitle.add(detailedReason);
 
-        jLabel4.setFont(new java.awt.Font(font_Type, font_Style, font_Size + LABEL_INC));
-        jLabel4.setForeground(new java.awt.Color(18, 22, 113));
-        jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        jLabel4.setText(VISIT_REASON_LABEL.getContent());
-        jLabel4.setMaximumSize(new java.awt.Dimension(130, 40));
-        jLabel4.setMinimumSize(new java.awt.Dimension(130, 40));
-        jLabel4.setPreferredSize(new java.awt.Dimension(130, 40));
-        reasonTitle.add(jLabel4);
-
-        wholePanel.add(reasonTitle);
-
-        reasonPanel.setMaximumSize(new java.awt.Dimension(2147483647, 50));
+        reasonPanel.setMaximumSize(new java.awt.Dimension(2147483647, 40));
         reasonPanel.setMinimumSize(new java.awt.Dimension(86, 40));
-        reasonPanel.setPreferredSize(new java.awt.Dimension(1001, 40));
-        reasonPanel.setLayout(new javax.swing.BoxLayout(reasonPanel, javax.swing.BoxLayout.LINE_AXIS));
-        reasonPanel.add(filler3);
+        reasonPanel.setPreferredSize(new java.awt.Dimension(0, 40));
 
         visitReasonTextField.setFont(new java.awt.Font(font_Type, font_Style, font_Size + CONTENT_INC));
         visitReasonTextField.setText("Visit coffee shop \"Star Coffee Bean\"");
         visitReasonTextField.setMaximumSize(null);
         visitReasonTextField.setMinimumSize(new java.awt.Dimension(6, 40));
-        visitReasonTextField.setPreferredSize(new java.awt.Dimension(207, 40));
-        reasonPanel.add(visitReasonTextField);
+        visitReasonTextField.setPreferredSize(new java.awt.Dimension(700, 40));
 
-        wholePanel.add(reasonPanel);
+        javax.swing.GroupLayout reasonPanelLayout = new javax.swing.GroupLayout(reasonPanel);
+        reasonPanel.setLayout(reasonPanelLayout);
+        reasonPanelLayout.setHorizontalGroup(
+            reasonPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, reasonPanelLayout.createSequentialGroup()
+                .addGap(40, 40, 40)
+                .addComponent(visitReasonTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 640, Short.MAX_VALUE))
+        );
+        reasonPanelLayout.setVerticalGroup(
+            reasonPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(visitReasonTextField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+        );
+
+        jPanel1.setMaximumSize(new java.awt.Dimension(100, 32767));
+        jPanel1.setMinimumSize(new java.awt.Dimension(100, 10));
+        jPanel1.setPreferredSize(new java.awt.Dimension(100, 10));
+
+        buttonPanel.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 10, 0));
 
         openBarButton.setFont(new java.awt.Font(font_Type, font_Style, font_Size+6));
         openBarButton.setMnemonic('O');
         openBarButton.setText(OPEN_LABEL.getContent());
-        openBarButton.setMaximumSize(bigButtonDim);
-        openBarButton.setMinimumSize(bigButtonDim);
-        openBarButton.setPreferredSize(bigButtonDim);
+        openBarButton.setMaximumSize(new java.awt.Dimension(160, 60));
+        openBarButton.setMinimumSize(new java.awt.Dimension(160, 60));
+        openBarButton.setPreferredSize(new java.awt.Dimension(160, 60));
         openBarButton.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 openBarButtonFocusGained(evt);
@@ -468,9 +562,9 @@ public class VisitingCar extends javax.swing.JFrame {
         notAllowButton.setFont(new java.awt.Font(font_Type, font_Style, font_Size+6));
         notAllowButton.setMnemonic('C');
         notAllowButton.setText(DISALLOW_LABEL.getContent());
-        notAllowButton.setMaximumSize(bigButtonDim);
-        notAllowButton.setMinimumSize(bigButtonDim);
-        notAllowButton.setPreferredSize(bigButtonDim);
+        notAllowButton.setMaximumSize(new java.awt.Dimension(160, 60));
+        notAllowButton.setMinimumSize(new java.awt.Dimension(160, 60));
+        notAllowButton.setPreferredSize(new java.awt.Dimension(160, 60));
         notAllowButton.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 notAllowButtonFocusGained(evt);
@@ -491,7 +585,51 @@ public class VisitingCar extends javax.swing.JFrame {
         });
         buttonPanel.add(notAllowButton);
 
-        wholePanel.add(buttonPanel);
+        javax.swing.GroupLayout wholePanelLayout = new javax.swing.GroupLayout(wholePanel);
+        wholePanel.setLayout(wholePanelLayout);
+        wholePanelLayout.setHorizontalGroup(
+            wholePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(reasonPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 680, Short.MAX_VALUE)
+            .addComponent(overviewTitle, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(overviewPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(overview2Panel, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+            .addComponent(whereToTitle, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(detailedTitle, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(whereToPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 680, Short.MAX_VALUE)
+            .addGroup(wholePanelLayout.createSequentialGroup()
+                .addComponent(buttonPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(0, 0, 0))
+            .addGroup(wholePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, wholePanelLayout.createSequentialGroup()
+                    .addContainerGap(206, Short.MAX_VALUE)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(374, Short.MAX_VALUE)))
+        );
+        wholePanelLayout.setVerticalGroup(
+            wholePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(wholePanelLayout.createSequentialGroup()
+                .addGap(2, 2, 2)
+                .addComponent(overviewTitle, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(10, 10, 10)
+                .addComponent(overviewPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(10, 10, 10)
+                .addComponent(overview2Panel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(10, 10, 10)
+                .addComponent(whereToTitle, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(10, 10, 10)
+                .addComponent(whereToPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(10, 10, 10)
+                .addComponent(detailedTitle, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(10, 10, 10)
+                .addComponent(reasonPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(buttonPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(wholePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, wholePanelLayout.createSequentialGroup()
+                    .addContainerGap(371, Short.MAX_VALUE)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(87, Short.MAX_VALUE)))
+        );
 
         getContentPane().add(wholePanel, java.awt.BorderLayout.CENTER);
         getContentPane().add(filler22, java.awt.BorderLayout.PAGE_START);
@@ -511,8 +649,8 @@ public class VisitingCar extends javax.swing.JFrame {
     }//GEN-LAST:event_notAllowButtonActionPerformed
 
     @SuppressWarnings("unchecked") 
-    private void visitL1ComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_visitL1ComboBoxActionPerformed
-        Globals.mayChangeLowerCBoxPrompt(visitL1ComboBox, visitL2ComboBox, 
+    private void L1CBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_L1CBoxActionPerformed
+        Globals.mayChangeLowerCBoxPrompt(L1CBox, L2CBox, 
                 AffiliationL2, getPrevItemParentKey());
 //        if (visitL1ComboBox.isPopupVisible()) {
 //            MutableComboBoxModel model = (MutableComboBoxModel)visitL2ComboBox.getModel();
@@ -520,35 +658,35 @@ public class VisitingCar extends javax.swing.JFrame {
 //            model.insertElementAt(getPrompter(AffiliationL2, visitL1ComboBox), 0);
 //            visitL2ComboBox.setSelectedIndex(0);            
 //        }        
-    }//GEN-LAST:event_visitL1ComboBoxActionPerformed
+    }//GEN-LAST:event_L1CBoxActionPerformed
 
     @SuppressWarnings("unchecked") 
-    private void visitL1ComboBoxPopupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_visitL1ComboBoxPopupMenuWillBecomeVisible
-        Object selItem = visitL1ComboBox.getSelectedItem();
-
-        visitL1ComboBox.removeAllItems();
-        visitL1ComboBox.addItem(getPrompter(AffiliationL1, visitL1ComboBox));     
-        loadComboBoxItems(visitL1ComboBox, AffiliationL1, -1);
-        visitL1ComboBox.setSelectedItem(selItem);         
-    }//GEN-LAST:event_visitL1ComboBoxPopupMenuWillBecomeVisible
+    private void L1CBoxPopupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_L1CBoxPopupMenuWillBecomeVisible
+//        Object selItem = L1CBox.getSelectedItem();
+//
+//        L1CBox.removeAllItems();
+//        L1CBox.addItem(getPrompter(AffiliationL1, L1CBox));     
+//        loadComboBoxItems(L1CBox, AffiliationL1, -1);
+//        L1CBox.setSelectedItem(selItem);         
+    }//GEN-LAST:event_L1CBoxPopupMenuWillBecomeVisible
 
     @SuppressWarnings("unchecked") 
-    private void visitL2ComboBoxPopupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_visitL2ComboBoxPopupMenuWillBecomeVisible
-        Object selItem = visitL2ComboBox.getSelectedItem();
+    private void L2CBoxPopupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_L2CBoxPopupMenuWillBecomeVisible
+        Object selItem = L2CBox.getSelectedItem();
         
-        ConvComboBoxItem l1Item = (ConvComboBoxItem)visitL1ComboBox.getSelectedItem(); 
+        ConvComboBoxItem l1Item = (ConvComboBoxItem)L1CBox.getSelectedItem(); 
         int L1No = (Integer) l1Item.getKeyValue();        // normalize child combobox item 
         
-        visitL2ComboBox.removeAllItems();
-        visitL2ComboBox.addItem(getPrompter(AffiliationL2, visitL1ComboBox));     
-        loadComboBoxItems(visitL2ComboBox, DriverCol.AffiliationL2, L1No);   
+        L2CBox.removeAllItems();
+        L2CBox.addItem(getPrompter(AffiliationL2, L1CBox));     
+        loadComboBoxItems(L2CBox, DriverCol.AffiliationL2, L1No);   
         
-        visitL2ComboBox.setSelectedItem(selItem);           
-    }//GEN-LAST:event_visitL2ComboBoxPopupMenuWillBecomeVisible
+        L2CBox.setSelectedItem(selItem);           
+    }//GEN-LAST:event_L2CBoxPopupMenuWillBecomeVisible
 
     @SuppressWarnings("unchecked") 
-    private void visitBuildingComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_visitBuildingComboBoxActionPerformed
-        Globals.mayChangeLowerCBoxPrompt(visitBuildingComboBox, visitUnitComboBox, 
+    private void buildingCBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buildingCBoxActionPerformed
+        Globals.mayChangeLowerCBoxPrompt(buildingCBox, unitCBox, 
                 UnitNo, getPrevItemParentKey());
 //        if (visitBuildingComboBox.isPopupVisible()) {
 //            MutableComboBoxModel model 
@@ -557,28 +695,28 @@ public class VisitingCar extends javax.swing.JFrame {
 //            model.insertElementAt(ManageDrivers.getPrompter(UnitNo, visitBuildingComboBox), 0);
 //            visitUnitComboBox.setSelectedIndex(0);            
 //        }
-    }//GEN-LAST:event_visitBuildingComboBoxActionPerformed
+    }//GEN-LAST:event_buildingCBoxActionPerformed
 
     @SuppressWarnings("unchecked") 
-    private void visitBuildingComboBoxPopupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_visitBuildingComboBoxPopupMenuWillBecomeVisible
-        Object selItem = visitBuildingComboBox.getSelectedItem();
+    private void buildingCBoxPopupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_buildingCBoxPopupMenuWillBecomeVisible
+        Object selItem = buildingCBox.getSelectedItem();
         
-        visitBuildingComboBox.removeAllItems();
-        visitBuildingComboBox.addItem(getPrompter(BuildingNo, null));     
-        loadComboBoxItems(visitBuildingComboBox, BuildingNo, -1);
-        visitBuildingComboBox.setSelectedItem(selItem);         
-    }//GEN-LAST:event_visitBuildingComboBoxPopupMenuWillBecomeVisible
+        buildingCBox.removeAllItems();
+        buildingCBox.addItem(getPrompter(BuildingNo, null));     
+        loadComboBoxItems(buildingCBox, BuildingNo, -1);
+        buildingCBox.setSelectedItem(selItem);         
+    }//GEN-LAST:event_buildingCBoxPopupMenuWillBecomeVisible
 
-    private void visitUnitComboBoxPopupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_visitUnitComboBoxPopupMenuWillBecomeVisible
+    private void unitCBoxPopupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_unitCBoxPopupMenuWillBecomeVisible
 //        loadUnitComboBox(visitL1ComboBox, visitBuildingComboBox, visitUnitComboBox);   
-        Object selItem = visitUnitComboBox.getSelectedItem();
-        ConvComboBoxItem bldgItem = (ConvComboBoxItem)visitBuildingComboBox.getSelectedItem(); 
+        Object selItem = unitCBox.getSelectedItem();
+        ConvComboBoxItem bldgItem = (ConvComboBoxItem)buildingCBox.getSelectedItem(); 
         int bldgNo = (Integer) bldgItem.getKeyValue();
         
-        refreshComboBox(visitUnitComboBox, getPrompter(UnitNo, visitBuildingComboBox), 
+        refreshComboBox(unitCBox, getPrompter(UnitNo, buildingCBox), 
                 UnitNo, bldgNo, getPrevItemParentKey());
-        visitUnitComboBox.setSelectedItem(selItem);         
-    }//GEN-LAST:event_visitUnitComboBoxPopupMenuWillBecomeVisible
+        unitCBox.setSelectedItem(selItem);         
+    }//GEN-LAST:event_unitCBoxPopupMenuWillBecomeVisible
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         if(parent != null){
@@ -626,9 +764,9 @@ public class VisitingCar extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_notAllowButtonKeyTyped
 
-    private void visitL2ComboBoxPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_visitL2ComboBoxPopupMenuWillBecomeInvisible
-        mayPropagateBackward(visitL2ComboBox, visitL1ComboBox);
-    }//GEN-LAST:event_visitL2ComboBoxPopupMenuWillBecomeInvisible
+    private void L2CBoxPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_L2CBoxPopupMenuWillBecomeInvisible
+        mayPropagateBackward(L2CBox, L1CBox);
+    }//GEN-LAST:event_L2CBoxPopupMenuWillBecomeInvisible
 
     /**
      * @param args the command line arguments
@@ -672,8 +810,16 @@ public class VisitingCar extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JComboBox L1CBox;
+    private javax.swing.JPanel L1Panel;
+    private javax.swing.JComboBox L2CBox;
+    private javax.swing.JPanel L2Panel;
+    private javax.swing.JPanel affiliationPan;
+    private javax.swing.JComboBox buildingCBox;
+    private javax.swing.JPanel buildingPanel;
     private javax.swing.JPanel buttonPanel;
-    private javax.swing.Box.Filler filler1;
+    private javax.swing.JLabel detailedReason;
+    private javax.swing.JPanel detailedTitle;
     private javax.swing.Box.Filler filler18;
     private javax.swing.Box.Filler filler19;
     private javax.swing.Box.Filler filler20;
@@ -682,40 +828,31 @@ public class VisitingCar extends javax.swing.JFrame {
     private javax.swing.Box.Filler filler23;
     private javax.swing.Box.Filler filler24;
     private javax.swing.Box.Filler filler25;
-    private javax.swing.Box.Filler filler3;
     private javax.swing.JTextField gateNameTextField;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
-    private javax.swing.JPanel jPanel11;
-    private javax.swing.JPanel jPanel12;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel13;
     private javax.swing.JPanel jPanel14;
-    private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
     private javax.swing.JButton notAllowButton;
     private javax.swing.JButton openBarButton;
     private javax.swing.JPanel overview2Panel;
     private javax.swing.JPanel overviewPanel;
     private javax.swing.JPanel overviewTitle;
-    private javax.swing.JPanel purposePanel;
-    private javax.swing.JPanel purposeTitle;
     private javax.swing.JPanel reasonPanel;
-    private javax.swing.JPanel reasonTitle;
     private javax.swing.JTextField recogTextField;
-    private javax.swing.JComboBox visitBuildingComboBox;
-    private javax.swing.JComboBox visitL1ComboBox;
-    private javax.swing.JComboBox visitL2ComboBox;
+    private javax.swing.JLabel summaryTitle;
+    private javax.swing.JComboBox unitCBox;
     private javax.swing.JTextField visitReasonTextField;
     private javax.swing.JTextField visitTimeTextField;
-    private javax.swing.JComboBox visitUnitComboBox;
+    private javax.swing.JLabel whereTo;
+    private javax.swing.JPanel whereToPanel;
+    private javax.swing.JPanel whereToTitle;
     private javax.swing.JPanel wholePanel;
     // End of variables declaration//GEN-END:variables
 
@@ -733,17 +870,17 @@ public class VisitingCar extends javax.swing.JFrame {
                 parent.raiseGateBar(gateNo, imageSN, delay);
             }
 
-            if (visitL2ComboBox.getSelectedIndex() == -1) {
+            if (L2CBox.getSelectedIndex() == -1) {
                 l2No = -1;
             } else {
                 l2No = (Integer)
-                        ((InnoComboBoxItem)visitL2ComboBox.getSelectedItem()).getKeys()[0];
+                        ((InnoComboBoxItem)L2CBox.getSelectedItem()).getKeys()[0];
             }
-            if (visitUnitComboBox.getSelectedIndex() == -1) {
+            if (unitCBox.getSelectedIndex() == -1) {
                 unitSeqNo = -1;
             } else {
                 unitSeqNo = (Integer)
-                        ((InnoComboBoxItem)visitUnitComboBox.getSelectedItem()).getKeys()[0];
+                        ((InnoComboBoxItem)unitCBox.getSelectedItem()).getKeys()[0];
             }
             BarOperation barOperation = BarOperation.MANUAL;
             if (!openGate) {
@@ -763,5 +900,13 @@ public class VisitingCar extends javax.swing.JFrame {
      */
     public int[] getPrevItemParentKey() {
         return prevItemParentKey;
+    }
+
+    private void applyUserCode() {
+        summaryTitle.setText(VISIT_OVERVIEW.getContent());
+        whereTo.setText(VISIT_TARGET_LABEL.getContent());
+        detailedReason.setText(VISIT_REASON_LABEL.getContent());
+        Globals.setComponentSize(openBarButton, new Dimension(bigButtonWidth, bigButtonHeight));
+        Globals.setComponentSize(notAllowButton, new Dimension(bigButtonWidth, bigButtonHeight));
     }
 }
