@@ -1036,6 +1036,7 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
         jPanel2.add(filler17);
 
         carEntryButton.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        carEntryButton.setMnemonic('M');
         carEntryButton.setText(CAR_ARRIVAL_BTN.getContent());
         carEntryButton.setMaximumSize(new java.awt.Dimension(120, 40));
         carEntryButton.setMinimumSize(new java.awt.Dimension(120, 40));

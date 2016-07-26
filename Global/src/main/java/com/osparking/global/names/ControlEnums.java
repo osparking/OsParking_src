@@ -77,7 +77,8 @@ public class ControlEnums {
         VEHICLE_PANEL_TITLE("차량", "Vehicle"),
         TOP_PANEL_TITLE("상단", "TOP"), 
         REBOOT_POPUP("자동 종료 안내", "Reboot System"), 
-        BOTTOM_PANEL_TITLE("하단", "BOTTOM");
+        BOTTOM_PANEL_TITLE("하단", "BOTTOM"),
+        DisallowedTitle("임시 불허 차량", "Temporarily Disallowed Car");
         
         TitleTypes(String korean, String english) {
             contents[KOREAN.ordinal()] = korean;
@@ -95,6 +96,10 @@ public class ControlEnums {
         levelSelectionNotice("허용되는 연산의 범위를 결정하기 위한 선택!", 
                 "Selection that determines allowed operations!"), 
         NO_IMAGE_MESSAGE("사진이 없습니다.", "No Image Exists"), 
+        RecogedTagLabel("식별된 차량번호", "Recognized Tag No."), 
+        RegisteredTagLabel("등록된 차량번호", "Registered Tag No."), 
+        BlinkNotPermitted("주차 한시적 불허 차량", "Parking Temporarily Not Permitted"),
+        DisallowReason("불허 사유", "Why?"), 
         VISIT_REASON_LABEL("상세 목적", "Detailed Reason"), 
         LOGIN_ID_LABEL("아이디", "User ID"), 
         ID_LABEL("아이디 : ", "User ID : "), 
@@ -262,7 +267,7 @@ public class ControlEnums {
         ARRIVALS_BTN("<HTML>입차기록(<U>A</U>)</HTML>", "<HTML><U>A</U>rrivals</HTML>"),
         VEHICLES_BTN("<HTML>등록차목록(<U>V</U>)</HTML>", "<HTML><U>V</U>ehicles</HTML>"),
         USERS_BTN("<HTML>사용자목록(<U>U</U>)</HTML>", "<HTML><U>U</U>sers</HTML>"),
-        CAR_ARRIVAL_BTN("모의입차", "Car Entry"),
+        CAR_ARRIVAL_BTN("모의입차(M)", "Sim' Entry"),
         STATISTICS_BTN("통계", "statistics"),
         GATE_BAR_OPEN_BTN("차단기 열림(O)", "Open Bar"),
         GATE_BAR_CLOSE_BTN("차단기 닫힘(C)", "Close Bar"),

@@ -43,6 +43,7 @@ import static com.osparking.global.Globals.loadComboBoxItems;
 import static com.osparking.global.Globals.refreshComboBox;
 import com.osparking.global.names.ControlEnums.BarOperation;
 import static com.osparking.global.names.ControlEnums.LabelContent.DISALLOW_LABEL;
+import static com.osparking.global.names.ControlEnums.LabelContent.DisallowReason;
 import static com.osparking.global.names.ControlEnums.LabelContent.GATE_NAME_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.OPEN_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.VISIT_OVERVIEW;
@@ -552,7 +553,7 @@ public class VisitingCar extends javax.swing.JFrame {
         detailedReason.setFont(new java.awt.Font(font_Type, font_Style, font_Size + LABEL_INC));
         detailedReason.setForeground(new java.awt.Color(18, 22, 113));
         detailedReason.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        detailedReason.setText("Detailed Reason");
+        detailedReason.setText(DisallowReason.getContent());
         detailedReason.setMaximumSize(new java.awt.Dimension(130, 40));
         detailedReason.setMinimumSize(new java.awt.Dimension(130, 40));
         detailedReason.setPreferredSize(new java.awt.Dimension(130, 40));
