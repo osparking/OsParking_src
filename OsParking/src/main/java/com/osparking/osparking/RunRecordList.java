@@ -16,6 +16,11 @@
  */
 package com.osparking.osparking;
 
+import static com.osparking.global.CommonData.buttonHeightNorm;
+import static com.osparking.global.CommonData.buttonWidthNorm;
+import static com.osparking.global.CommonData.normGUIheight;
+import static com.osparking.global.CommonData.tipColor;
+import static com.osparking.global.DataSheet.saveODSfile;
 import static com.osparking.global.Globals.OSPiconList;
 import static com.osparking.global.Globals.SetAColumnWidth;
 import static com.osparking.global.Globals.buildTableModel;
@@ -25,8 +30,14 @@ import static com.osparking.global.Globals.font_Size;
 import static com.osparking.global.Globals.font_Style;
 import static com.osparking.global.Globals.font_Type;
 import static com.osparking.global.Globals.getDateFromGivenDate;
+import static com.osparking.global.Globals.head_font_Size;
 import static com.osparking.global.Globals.initializeLoggers;
 import static com.osparking.global.Globals.logParkingException;
+import static com.osparking.global.Globals.setComponentSize;
+import static com.osparking.global.names.ControlEnums.ButtonTypes.CLOSE_BTN;
+import static com.osparking.global.names.ControlEnums.ButtonTypes.SEARCH_BTN;
+import static com.osparking.global.names.ControlEnums.LabelContent.SEARCH_PERIOD_LABEL;
+import static com.osparking.global.names.ControlEnums.MenuITemTypes.META_KEY_LABEL;
 import static com.osparking.global.names.ControlEnums.TitleTypes.RUN_RECORD_FRAME_TITLE;
 import static com.osparking.global.names.DB_Access.parkingLotLocale;
 import static com.osparking.global.names.DB_Access.readSettings;
@@ -59,6 +70,7 @@ public class RunRecordList extends javax.swing.JFrame {
         initComponents();
         
         setIconImages(OSPiconList);
+        detailTuneTableProperties();
         
         BeginDateChooser.setLocale(parkingLotLocale);
         EndDateChooser.setLocale(parkingLotLocale);
@@ -79,34 +91,42 @@ public class RunRecordList extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        filler9 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 10), new java.awt.Dimension(0, 10), new java.awt.Dimension(32767, 10));
-        filler8 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 10), new java.awt.Dimension(0, 10), new java.awt.Dimension(32767, 10));
-        filler11 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0));
-        filler10 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0));
+        saveFileChooser = new javax.swing.JFileChooser();
+        filler9 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 40), new java.awt.Dimension(0, 40), new java.awt.Dimension(0, 40));
+        filler8 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 40), new java.awt.Dimension(0, 40), new java.awt.Dimension(0, 40));
+        filler11 = new javax.swing.Box.Filler(new java.awt.Dimension(40, 0), new java.awt.Dimension(40, 0), new java.awt.Dimension(40, 0));
+        filler10 = new javax.swing.Box.Filler(new java.awt.Dimension(40, 0), new java.awt.Dimension(40, 0), new java.awt.Dimension(40, 0));
         wholePanel = new javax.swing.JPanel();
-        closePanel = new javax.swing.JPanel();
-        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
-        CloseFormButton = new javax.swing.JButton();
         LoginRecordListTopPanel = new javax.swing.JPanel();
         titlePanel = new javax.swing.JPanel();
-        jLabel3 = new javax.swing.JLabel();
+        leftSideLabel = new javax.swing.JLabel();
+        titleLabel = new javax.swing.JLabel();
+        myMetaKeyLabel = new javax.swing.JLabel();
+        filler4 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 20), new java.awt.Dimension(0, 20), new java.awt.Dimension(32767, 20));
         datePanel = new javax.swing.JPanel();
-        filler3 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
+        filler3 = new javax.swing.Box.Filler(new java.awt.Dimension(91, 0), new java.awt.Dimension(91, 0), new java.awt.Dimension(91, 0));
+        horiGlueL = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
+        horiGlueR = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
+        periodPanel = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        filler4 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0));
         BeginDateChooser = new com.toedter.calendar.JDateChooser();
-        filler5 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0));
         jLabel2 = new javax.swing.JLabel();
-        filler6 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0));
         EndDateChooser = new com.toedter.calendar.JDateChooser();
-        filler7 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0));
         SearchLoginRecordButton = new javax.swing.JButton();
-        filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
         jScrollPane1 = new javax.swing.JScrollPane();
         RunRecordTable = new javax.swing.JTable();
+        filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 20), new java.awt.Dimension(0, 20), new java.awt.Dimension(32767, 20));
+        closePanel = new javax.swing.JPanel();
+        saveSheet_Button = new javax.swing.JButton();
+        CloseFormButton = new javax.swing.JButton();
+
+        saveFileChooser.setDialogType(javax.swing.JFileChooser.SAVE_DIALOG);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("OSParking Program Run Record");
+        setTitle(RUN_RECORD_FRAME_TITLE.getContent());
+        setMaximumSize(new Dimension(5000, 5000));
+        setMinimumSize(new Dimension(800, normGUIheight));
+        setPreferredSize(new Dimension(800, normGUIheight));
         getContentPane().add(filler9, java.awt.BorderLayout.SOUTH);
         getContentPane().add(filler8, java.awt.BorderLayout.PAGE_START);
         getContentPane().add(filler11, java.awt.BorderLayout.LINE_START);
@@ -114,67 +134,71 @@ public class RunRecordList extends javax.swing.JFrame {
 
         wholePanel.setLayout(new javax.swing.BoxLayout(wholePanel, javax.swing.BoxLayout.PAGE_AXIS));
 
-        closePanel.setLayout(new javax.swing.BoxLayout(closePanel, javax.swing.BoxLayout.LINE_AXIS));
-        closePanel.add(filler1);
-
-        CloseFormButton.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        CloseFormButton.setMnemonic('c');
-        CloseFormButton.setText("Close");
-        CloseFormButton.setMaximumSize(new java.awt.Dimension(90, 40));
-        CloseFormButton.setMinimumSize(new java.awt.Dimension(90, 40));
-        CloseFormButton.setPreferredSize(new java.awt.Dimension(90, 40));
-        CloseFormButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                CloseFormButtonActionPerformed(evt);
-            }
-        });
-        closePanel.add(CloseFormButton);
-
-        wholePanel.add(closePanel);
-
         LoginRecordListTopPanel.setLayout(new javax.swing.BoxLayout(LoginRecordListTopPanel, javax.swing.BoxLayout.Y_AXIS));
 
         titlePanel.setLayout(new javax.swing.BoxLayout(titlePanel, javax.swing.BoxLayout.LINE_AXIS));
 
-        jLabel3.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel3.setText(RUN_RECORD_FRAME_TITLE.getContent());
-        jLabel3.setFocusable(false);
-        jLabel3.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jLabel3.setMaximumSize(new java.awt.Dimension(32767, 28));
-        titlePanel.add(jLabel3);
+        leftSideLabel.setMaximumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
+        leftSideLabel.setMinimumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
+        leftSideLabel.setPreferredSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
+        titlePanel.add(leftSideLabel);
+
+        titleLabel.setFont(new java.awt.Font(font_Type, font_Style, head_font_Size));
+        titleLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        titleLabel.setText(RUN_RECORD_FRAME_TITLE.getContent());
+        titleLabel.setFocusable(false);
+        titleLabel.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        titleLabel.setMaximumSize(new java.awt.Dimension(32767, 40));
+        titleLabel.setMinimumSize(new java.awt.Dimension(76, 40));
+        titleLabel.setPreferredSize(new java.awt.Dimension(76, 40));
+        titlePanel.add(titleLabel);
+
+        myMetaKeyLabel.setText(META_KEY_LABEL.getContent());
+        myMetaKeyLabel.setMaximumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
+        myMetaKeyLabel.setMinimumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
+        myMetaKeyLabel.setPreferredSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
+        myMetaKeyLabel.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        myMetaKeyLabel.setForeground(tipColor);
+        titlePanel.add(myMetaKeyLabel);
 
         LoginRecordListTopPanel.add(titlePanel);
+        LoginRecordListTopPanel.add(filler4);
 
-        datePanel.setLayout(new javax.swing.BoxLayout(datePanel, javax.swing.BoxLayout.LINE_AXIS));
-        datePanel.add(filler3);
+        datePanel.setMaximumSize(new java.awt.Dimension(32767, 40));
+        datePanel.setMinimumSize(new java.awt.Dimension(0, 40));
+        datePanel.setPreferredSize(new java.awt.Dimension(638, 40));
+
+        periodPanel.setMaximumSize(new java.awt.Dimension(420, 40));
+        periodPanel.setMinimumSize(new java.awt.Dimension(420, 40));
+        periodPanel.setPreferredSize(new java.awt.Dimension(420, 40));
+        periodPanel.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 10, 0));
 
         jLabel1.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        jLabel1.setText("Search Period");
-        datePanel.add(jLabel1);
-        datePanel.add(filler4);
+        jLabel1.setText(SEARCH_PERIOD_LABEL.getContent());
+        periodPanel.add(jLabel1);
 
         BeginDateChooser.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         BeginDateChooser.setMaximumSize(new java.awt.Dimension(32767, 28));
-        datePanel.add(BeginDateChooser);
-        datePanel.add(filler5);
+        BeginDateChooser.setMinimumSize(new java.awt.Dimension(130, 33));
+        BeginDateChooser.setPreferredSize(new java.awt.Dimension(130, 33));
+        periodPanel.add(BeginDateChooser);
 
         jLabel2.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel2.setText("~");
         jLabel2.setFocusable(false);
         jLabel2.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        datePanel.add(jLabel2);
-        datePanel.add(filler6);
+        periodPanel.add(jLabel2);
 
         EndDateChooser.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         EndDateChooser.setMaximumSize(new java.awt.Dimension(32767, 28));
-        datePanel.add(EndDateChooser);
-        datePanel.add(filler7);
+        EndDateChooser.setMinimumSize(new java.awt.Dimension(130, 33));
+        EndDateChooser.setPreferredSize(new java.awt.Dimension(130, 33));
+        periodPanel.add(EndDateChooser);
 
         SearchLoginRecordButton.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         SearchLoginRecordButton.setMnemonic('s');
-        SearchLoginRecordButton.setText("Search");
+        SearchLoginRecordButton.setText(SEARCH_BTN.getContent());
         SearchLoginRecordButton.setMaximumSize(new java.awt.Dimension(90, 40));
         SearchLoginRecordButton.setMinimumSize(new java.awt.Dimension(90, 40));
         SearchLoginRecordButton.setPreferredSize(new java.awt.Dimension(90, 40));
@@ -183,8 +207,44 @@ public class RunRecordList extends javax.swing.JFrame {
                 SearchLoginRecordButtonActionPerformed(evt);
             }
         });
-        datePanel.add(SearchLoginRecordButton);
-        datePanel.add(filler2);
+
+        javax.swing.GroupLayout datePanelLayout = new javax.swing.GroupLayout(datePanel);
+        datePanel.setLayout(datePanelLayout);
+        datePanelLayout.setHorizontalGroup(
+            datePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(datePanelLayout.createSequentialGroup()
+                .addComponent(filler3, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 31, Short.MAX_VALUE)
+                .addComponent(periodPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 30, Short.MAX_VALUE)
+                .addComponent(horiGlueR, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(SearchLoginRecordButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(datePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, datePanelLayout.createSequentialGroup()
+                    .addContainerGap(540, Short.MAX_VALUE)
+                    .addComponent(horiGlueL, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(88, 88, 88)))
+        );
+        datePanelLayout.setVerticalGroup(
+            datePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(datePanelLayout.createSequentialGroup()
+                .addGroup(datePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(datePanelLayout.createSequentialGroup()
+                        .addGap(20, 20, 20)
+                        .addComponent(filler3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(datePanelLayout.createSequentialGroup()
+                        .addGap(26, 26, 26)
+                        .addComponent(horiGlueR, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(14, 14, 14))
+            .addComponent(SearchLoginRecordButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(periodPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(datePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, datePanelLayout.createSequentialGroup()
+                    .addContainerGap(36, Short.MAX_VALUE)
+                    .addComponent(horiGlueL, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(4, 4, 4)))
+        );
 
         LoginRecordListTopPanel.add(datePanel);
 
@@ -208,6 +268,40 @@ public class RunRecordList extends javax.swing.JFrame {
         jScrollPane1.setViewportView(RunRecordTable);
 
         wholePanel.add(jScrollPane1);
+        wholePanel.add(filler2);
+
+        closePanel.setMaximumSize(new java.awt.Dimension(32767, 40));
+        closePanel.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT, 10, 0));
+
+        saveSheet_Button.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        saveSheet_Button.setMnemonic('A');
+        saveSheet_Button.setText("ods저장(A)");
+        saveSheet_Button.setEnabled(false);
+        saveSheet_Button.setMargin(new java.awt.Insets(0, 0, 0, 0));
+        saveSheet_Button.setMaximumSize(new java.awt.Dimension(110, 40));
+        saveSheet_Button.setMinimumSize(new java.awt.Dimension(110, 40));
+        saveSheet_Button.setPreferredSize(new java.awt.Dimension(110, 40));
+        saveSheet_Button.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                saveSheet_ButtonActionPerformed(evt);
+            }
+        });
+        closePanel.add(saveSheet_Button);
+
+        CloseFormButton.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        CloseFormButton.setMnemonic('c');
+        CloseFormButton.setText(CLOSE_BTN.getContent());
+        CloseFormButton.setMaximumSize(new java.awt.Dimension(90, 40));
+        CloseFormButton.setMinimumSize(new java.awt.Dimension(90, 40));
+        CloseFormButton.setPreferredSize(new java.awt.Dimension(90, 40));
+        CloseFormButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                CloseFormButtonActionPerformed(evt);
+            }
+        });
+        closePanel.add(CloseFormButton);
+
+        wholePanel.add(closePanel);
 
         getContentPane().add(wholePanel, java.awt.BorderLayout.CENTER);
 
@@ -238,6 +332,10 @@ public class RunRecordList extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_SearchLoginRecordButtonActionPerformed
+
+    private void saveSheet_ButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveSheet_ButtonActionPerformed
+        saveODSfile(this, RunRecordTable, saveFileChooser, "");
+    }//GEN-LAST:event_saveSheet_ButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -291,21 +389,24 @@ public class RunRecordList extends javax.swing.JFrame {
     private javax.swing.JButton SearchLoginRecordButton;
     private javax.swing.JPanel closePanel;
     private javax.swing.JPanel datePanel;
-    private javax.swing.Box.Filler filler1;
     private javax.swing.Box.Filler filler10;
     private javax.swing.Box.Filler filler11;
     private javax.swing.Box.Filler filler2;
     private javax.swing.Box.Filler filler3;
     private javax.swing.Box.Filler filler4;
-    private javax.swing.Box.Filler filler5;
-    private javax.swing.Box.Filler filler6;
-    private javax.swing.Box.Filler filler7;
     private javax.swing.Box.Filler filler8;
     private javax.swing.Box.Filler filler9;
+    private javax.swing.Box.Filler horiGlueL;
+    private javax.swing.Box.Filler horiGlueR;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel leftSideLabel;
+    private javax.swing.JLabel myMetaKeyLabel;
+    private javax.swing.JPanel periodPanel;
+    private javax.swing.JFileChooser saveFileChooser;
+    private javax.swing.JButton saveSheet_Button;
+    private javax.swing.JLabel titleLabel;
     private javax.swing.JPanel titlePanel;
     private javax.swing.JPanel wholePanel;
     // End of variables declaration//GEN-END:variables
@@ -387,6 +488,12 @@ public class RunRecordList extends javax.swing.JFrame {
         
         // Adjust column width one by one
         SetAColumnWidth(tcm.getColumn(0), 90, 90, 90); // line number
-//        SetAColumnWidth(tcm.getColumn(3), 120, 120, 120); // line number
     }    
+
+    private void detailTuneTableProperties() {
+        setComponentSize(SearchLoginRecordButton, 
+                new Dimension(buttonWidthNorm, buttonHeightNorm));
+        setComponentSize(CloseFormButton, 
+                new Dimension(buttonWidthNorm, buttonHeightNorm));
+    }
 }

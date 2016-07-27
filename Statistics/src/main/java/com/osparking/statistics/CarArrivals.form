@@ -277,7 +277,7 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
                       <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
-                      <Component id="criteriaPanel" max="32767" attributes="0"/>
+                      <Component id="criteriaPanel" pref="818" max="32767" attributes="0"/>
                       <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
                       <Component id="searchButtonPanel" min="-2" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="2" max="-2" attributes="0"/>
@@ -289,7 +289,7 @@
                   <Group type="102" alignment="1" attributes="0">
                       <Group type="103" groupAlignment="1" attributes="0">
                           <Component id="searchButtonPanel" alignment="0" max="32767" attributes="0"/>
-                          <Component id="criteriaPanel" pref="241" max="32767" attributes="0"/>
+                          <Component id="criteriaPanel" pref="245" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
                   </Group>
@@ -316,8 +316,8 @@
                       <Group type="102" attributes="0">
                           <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="searchTop" pref="810" max="32767" attributes="0"/>
-                              <Component id="searchBottom" alignment="0" pref="810" max="32767" attributes="0"/>
+                              <Component id="searchTop" pref="818" max="32767" attributes="0"/>
+                              <Component id="searchBottom" alignment="0" pref="818" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                   </Group>
@@ -373,7 +373,7 @@
                               <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
                               <Component id="topVehicle" min="-2" max="-2" attributes="0"/>
                               <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
-                              <Component id="topDriver" pref="290" max="32767" attributes="0"/>
+                              <Component id="topDriver" pref="294" max="32767" attributes="0"/>
                               <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
                               <Component id="filler18" max="32767" attributes="0"/>
                               <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
@@ -402,7 +402,7 @@
                                       </Group>
                                   </Group>
                               </Group>
-                              <EmptySpace pref="23" max="32767" attributes="0"/>
+                              <EmptySpace pref="27" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                     </DimensionLayout>
@@ -737,7 +737,7 @@
                         <DimensionLayout dim="0">
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Group type="102" attributes="0">
-                                  <Component id="affiliPanel" pref="161" max="32767" attributes="0"/>
+                                  <Component id="affiliPanel" pref="165" max="32767" attributes="0"/>
                                   <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
                                   <Component id="buildingPanel" min="-2" pref="129" max="-2" attributes="0"/>
                               </Group>
@@ -1115,10 +1115,7 @@
                               <EmptySpace min="25" pref="25" max="-2" attributes="0"/>
                               <Component id="filler6" min="-2" max="-2" attributes="0"/>
                           </Group>
-                          <Group type="102" attributes="0">
-                              <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
-                              <Component id="fixPanel" min="-2" max="-2" attributes="0"/>
-                          </Group>
+                          <Component id="fixPanel" min="-2" max="-2" attributes="0"/>
                       </Group>
                     </DimensionLayout>
                   </Layout>
@@ -1958,7 +1955,7 @@
                     <DimensionLayout dim="0">
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" alignment="0" attributes="0">
-                              <Component id="imagePanel" pref="228" max="32767" attributes="0"/>
+                              <Component id="imagePanel" pref="236" max="32767" attributes="0"/>
                               <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
                               <Component id="targetPanel" min="-2" max="-2" attributes="0"/>
                               <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
@@ -1969,7 +1966,7 @@
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" attributes="0">
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="imagePanel" max="32767" attributes="0"/>
+                                  <Component id="imagePanel" pref="176" max="32767" attributes="0"/>
                                   <Component id="targetPanel" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
@@ -2386,7 +2383,7 @@
               <Layout>
                 <DimensionLayout dim="0">
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="arrivalListPanel" pref="371" max="32767" attributes="0"/>
+                      <Component id="arrivalListPanel" pref="373" max="32767" attributes="0"/>
                       <Component id="buttonPanel" alignment="0" max="32767" attributes="0"/>
                   </Group>
                 </DimensionLayout>
@@ -2394,7 +2391,7 @@
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
-                          <Component id="arrivalListPanel" pref="226" max="32767" attributes="0"/>
+                          <Component id="arrivalListPanel" pref="244" max="32767" attributes="0"/>
                           <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
                           <Component id="buttonPanel" min="-2" max="-2" attributes="0"/>
                           <EmptySpace min="0" pref="0" max="-2" attributes="0"/>

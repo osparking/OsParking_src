@@ -69,7 +69,7 @@ public class ControlEnums {
         DISALLOWED_CAR_FRAME_TITLE("허가되지 않은 차량", "DisAllowed Car"),
         VISITING_CAR_FRAME_TITLE("방문자 환영", "Welcome Visiter"),
         LOGIN_RECORD_FRAME_TITLE("사용자 로그인 기록", "User Login Record"),
-        RUN_RECORD_FRAME_TITLE("OsParking 실행 기록", "OsParking Program Run Record"),
+        RUN_RECORD_FRAME_TITLE("OsParking 실행 기록", "OsParking Run Record"),
         GATE_PANEL_TITLE("최근 도착 차량", "Recent car Arrivals"),
         SYSTEM_SETTINGS_FRAME_TITLE("시스템 설정", "System Settings"),
         E_BOARD_SETTINGS_FRAME_TITLE("전광판 설정", "Electronic Display Settings"),

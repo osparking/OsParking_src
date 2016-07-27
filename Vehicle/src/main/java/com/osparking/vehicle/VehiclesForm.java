@@ -143,6 +143,8 @@ public class VehiclesForm extends javax.swing.JFrame {
         
         setIconImages(OSPiconList);
         
+        fixControlDimensions();
+        
         attachEnterHandler(searchCarTag);
         attachEnterHandler(searchDriver);
         attachEnterHandler(searchAffiliCBox);
@@ -227,6 +229,7 @@ public class VehiclesForm extends javax.swing.JFrame {
         wholePanel = new javax.swing.JPanel();
         topPanel = new javax.swing.JPanel();
         topMarginPanel = new javax.swing.JPanel();
+        dummyButton1 = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         leftPanel = new javax.swing.JPanel();
         aboutjPanel = new javax.swing.JPanel();
@@ -269,7 +272,7 @@ public class VehiclesForm extends javax.swing.JFrame {
         otherInfoTextField = new javax.swing.JTextField();
         creationLabel = new javax.swing.JLabel();
         creationTextField = new javax.swing.JTextField();
-        isIDreqLabel = new javax.swing.JLabel();
+        isTagReqLabel = new javax.swing.JLabel();
         isIDreqLabel1 = new javax.swing.JLabel();
         centerPanel = new javax.swing.JPanel();
         titlePanelReal = new javax.swing.JPanel();
@@ -341,6 +344,19 @@ public class VehiclesForm extends javax.swing.JFrame {
         topMarginPanel.setMinimumSize(new java.awt.Dimension(100, 40));
         topMarginPanel.setPreferredSize(new java.awt.Dimension(1190, 40));
         topMarginPanel.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 5, 15));
+
+        dummyButton1.setMnemonic('N');
+        dummyButton1.setToolTipText("");
+        dummyButton1.setMaximumSize(new java.awt.Dimension(0, 0));
+        dummyButton1.setMinimumSize(new java.awt.Dimension(0, 0));
+        dummyButton1.setPreferredSize(new java.awt.Dimension(0, 0));
+        dummyButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                dummyButton1ActionPerformed(evt);
+            }
+        });
+        topMarginPanel.add(dummyButton1);
+
         topPanel.add(topMarginPanel);
 
         jPanel2.setLayout(new java.awt.BorderLayout());
@@ -481,10 +497,10 @@ public class VehiclesForm extends javax.swing.JFrame {
         rowNumTextField.setEnabled(false);
         rowNumTextField.setFocusable(false);
         rowNumTextField.setMargin(new java.awt.Insets(0, 2, 0, 2));
-        rowNumTextField.setMaximumSize(new Dimension(carTagWidth, 30));
-        rowNumTextField.setMinimumSize(new Dimension(carTagWidth, 30));
+        rowNumTextField.setMaximumSize(new java.awt.Dimension(125, 30));
+        rowNumTextField.setMinimumSize(new java.awt.Dimension(125, 30));
         rowNumTextField.setName(""); // NOI18N
-        rowNumTextField.setPreferredSize(new Dimension(carTagWidth, 30));
+        rowNumTextField.setPreferredSize(new java.awt.Dimension(125, 30));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 0;
@@ -504,11 +520,12 @@ public class VehiclesForm extends javax.swing.JFrame {
 
         carTagTextField.setEditable(false);
         carTagTextField.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        carTagTextField.setEnabled(false);
         carTagTextField.setMargin(new java.awt.Insets(0, 2, 0, 2));
-        carTagTextField.setMaximumSize(new Dimension(carTagWidth, 30));
-        carTagTextField.setMinimumSize(new Dimension(carTagWidth, 30));
+        carTagTextField.setMaximumSize(new java.awt.Dimension(125, 30));
+        carTagTextField.setMinimumSize(new java.awt.Dimension(125, 30));
         carTagTextField.setName(""); // NOI18N
-        carTagTextField.setPreferredSize(new Dimension(carTagWidth, 30));
+        carTagTextField.setPreferredSize(new java.awt.Dimension(125, 30));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 2;
@@ -778,17 +795,17 @@ public class VehiclesForm extends javax.swing.JFrame {
         gridBagConstraints.gridy = 22;
         detailPanel.add(creationTextField, gridBagConstraints);
 
-        isIDreqLabel.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        isIDreqLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        isIDreqLabel.setText("\u25CF");
-        isIDreqLabel.setToolTipText("");
-        isIDreqLabel.setMaximumSize(new java.awt.Dimension(24, 26));
-        isIDreqLabel.setMinimumSize(new java.awt.Dimension(24, 21));
-        isIDreqLabel.setPreferredSize(new java.awt.Dimension(15, 26));
+        isTagReqLabel.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        isTagReqLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        isTagReqLabel.setText("\u25CF");
+        isTagReqLabel.setToolTipText("");
+        isTagReqLabel.setMaximumSize(new java.awt.Dimension(24, 26));
+        isTagReqLabel.setMinimumSize(new java.awt.Dimension(24, 21));
+        isTagReqLabel.setPreferredSize(new java.awt.Dimension(15, 26));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 2;
-        detailPanel.add(isIDreqLabel, gridBagConstraints);
+        detailPanel.add(isTagReqLabel, gridBagConstraints);
 
         isIDreqLabel1.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         isIDreqLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -1612,6 +1629,10 @@ public class VehiclesForm extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_cancel_ButtonActionPerformed
 
+    private void dummyButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dummyButton1ActionPerformed
+        carTagTextField.requestFocus();
+    }//GEN-LAST:event_dummyButton1ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -1682,6 +1703,7 @@ public class VehiclesForm extends javax.swing.JFrame {
     private javax.swing.JPanel detailPanel;
     private javax.swing.JTextField disallowReason;
     private javax.swing.JTextField driverTextField;
+    private javax.swing.JButton dummyButton1;
     private javax.swing.Box.Filler filler1;
     private javax.swing.Box.Filler filler2;
     private javax.swing.Box.Filler filler3;
@@ -1700,8 +1722,8 @@ public class VehiclesForm extends javax.swing.JFrame {
     private javax.swing.JLabel formModeLabel;
     private javax.swing.JLabel formTitleLabel;
     public javax.swing.JButton insertSave_Button;
-    private javax.swing.JLabel isIDreqLabel;
     private javax.swing.JLabel isIDreqLabel1;
+    private javax.swing.JLabel isTagReqLabel;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JPanel jPanel2;
@@ -2047,8 +2069,15 @@ public class VehiclesForm extends javax.swing.JFrame {
         // As car tag number is the primary key of the vehicle table
         // it shouldn't be modified. It needs to be editable for insertion though.
         // and be put back to non-editable after the new vehicle inserted.
-        if (getFormMode() != FormMode.UpdateMode)
-            carTagTextField.setEditable(b);
+        if (getFormMode() == FormMode.CreateMode && b) {
+            carTagTextField.setEditable(true);
+            carTagTextField.setEnabled(true);
+            isTagReqLabel.setEnabled(true);
+        } else {
+            carTagTextField.setEditable(false);
+            carTagTextField.setEnabled(false);
+            isTagReqLabel.setEnabled(false);
+        }
         notiCheckBox.setEnabled(b);
         wholeCheckBox.setEnabled(b);
         permitCheckBox.setEnabled(b);
@@ -2430,4 +2459,9 @@ public class VehiclesForm extends javax.swing.JFrame {
         
         
     }  
+
+    private void fixControlDimensions() {
+        setComponentSize(rowNumTextField, new Dimension(carTagWidth, 30));
+        setComponentSize(carTagTextField, new Dimension(carTagWidth, 30));
+    }
 }
