@@ -36,6 +36,9 @@ import javax.swing.table.TableRowSorter;
 import static com.osparking.global.names.DB_Access.parkingLotLocale;
 import static com.osparking.global.names.DB_Access.readSettings;
 import static com.osparking.global.Globals.*;
+import static com.osparking.global.names.ControlEnums.DialogMessages.PERIOD_ERROR_DIALOG1;
+import static com.osparking.global.names.ControlEnums.DialogMessages.PERIOD_ERROR_DIALOG2;
+import static com.osparking.global.names.ControlEnums.DialogTitleTypes.PERIOD_ERROR_TITLE;
 
 /**
  *
@@ -418,10 +421,10 @@ public class LoginRecordList extends javax.swing.JFrame {
         } else {
             // Check if dates are chronologically wrong.
             if (beginDate.after(endDate)) {
-                JOptionPane.showConfirmDialog(this, "Ending date can't precede starting date!" +
-                        System.lineSeparator() +
-                        "Please, change search range(dates).", "Wrong Search Range", 
-                        JOptionPane.PLAIN_MESSAGE, WARNING_MESSAGE);             
+                JOptionPane.showConfirmDialog(this, PERIOD_ERROR_DIALOG1.getContent() +
+                        System.lineSeparator() + PERIOD_ERROR_DIALOG2.getContent(), 
+                PERIOD_ERROR_TITLE.getContent(), JOptionPane.PLAIN_MESSAGE, 
+                WARNING_MESSAGE);             
             } else {
                 RefreshTableContents(beginDate, endDate);
             }

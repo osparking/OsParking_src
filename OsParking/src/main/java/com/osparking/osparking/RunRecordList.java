@@ -19,6 +19,8 @@ package com.osparking.osparking;
 import static com.osparking.global.CommonData.buttonHeightNorm;
 import static com.osparking.global.CommonData.buttonWidthNorm;
 import static com.osparking.global.CommonData.normGUIheight;
+import static com.osparking.global.CommonData.numberCellRenderer;
+import static com.osparking.global.CommonData.pointColor;
 import static com.osparking.global.CommonData.tipColor;
 import static com.osparking.global.DataSheet.saveODSfile;
 import static com.osparking.global.Globals.OSPiconList;
@@ -36,6 +38,14 @@ import static com.osparking.global.Globals.logParkingException;
 import static com.osparking.global.Globals.setComponentSize;
 import static com.osparking.global.names.ControlEnums.ButtonTypes.CLOSE_BTN;
 import static com.osparking.global.names.ControlEnums.ButtonTypes.SEARCH_BTN;
+import static com.osparking.global.names.ControlEnums.ColumnHeader.OPTN_START;
+import static com.osparking.global.names.ControlEnums.ColumnHeader.OPTN_STOP;
+import static com.osparking.global.names.ControlEnums.ColumnHeader.STOP_DURATION;
+import static com.osparking.global.names.ControlEnums.DialogMessages.PERIOD_ERROR_DIALOG1;
+import static com.osparking.global.names.ControlEnums.DialogMessages.PERIOD_ERROR_DIALOG2;
+import static com.osparking.global.names.ControlEnums.DialogTitleTypes.PERIOD_ERROR_TITLE;
+import static com.osparking.global.names.ControlEnums.LabelContent.COUNT_LABEL;
+import static com.osparking.global.names.ControlEnums.LabelContent.ORDER_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.SEARCH_PERIOD_LABEL;
 import static com.osparking.global.names.ControlEnums.MenuITemTypes.META_KEY_LABEL;
 import static com.osparking.global.names.ControlEnums.TitleTypes.RUN_RECORD_FRAME_TITLE;
@@ -53,6 +63,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import static javax.swing.JOptionPane.WARNING_MESSAGE;
 import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
@@ -79,7 +90,7 @@ public class RunRecordList extends javax.swing.JFrame {
         EndDateChooser.setDate(today);
         
         RunRecordTable.setAutoCreateRowSorter(true);
-        RefreshTableContents(BeginDateChooser.getDate(), EndDateChooser.getDate());  
+        loadRunRecordTable(BeginDateChooser.getDate(), EndDateChooser.getDate());  
     }
 
     /**
@@ -117,6 +128,10 @@ public class RunRecordList extends javax.swing.JFrame {
         RunRecordTable = new javax.swing.JTable();
         filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 20), new java.awt.Dimension(0, 20), new java.awt.Dimension(32767, 20));
         closePanel = new javax.swing.JPanel();
+        countPanel = new javax.swing.JPanel();
+        countLbl = new javax.swing.JLabel();
+        countValue = new javax.swing.JLabel();
+        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
         saveSheet_Button = new javax.swing.JButton();
         CloseFormButton = new javax.swing.JButton();
 
@@ -124,9 +139,10 @@ public class RunRecordList extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle(RUN_RECORD_FRAME_TITLE.getContent());
-        setMaximumSize(new Dimension(5000, 5000));
+        setMaximumSize(new Dimension(800, normGUIheight));
         setMinimumSize(new Dimension(800, normGUIheight));
         setPreferredSize(new Dimension(800, normGUIheight));
+        setResizable(false);
         getContentPane().add(filler9, java.awt.BorderLayout.SOUTH);
         getContentPane().add(filler8, java.awt.BorderLayout.PAGE_START);
         getContentPane().add(filler11, java.awt.BorderLayout.LINE_START);
@@ -214,15 +230,15 @@ public class RunRecordList extends javax.swing.JFrame {
             datePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(datePanelLayout.createSequentialGroup()
                 .addComponent(filler3, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 31, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 36, Short.MAX_VALUE)
                 .addComponent(periodPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 30, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 35, Short.MAX_VALUE)
                 .addComponent(horiGlueR, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(SearchLoginRecordButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
             .addGroup(datePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, datePanelLayout.createSequentialGroup()
-                    .addContainerGap(540, Short.MAX_VALUE)
+                    .addContainerGap(550, Short.MAX_VALUE)
                     .addComponent(horiGlueL, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGap(88, 88, 88)))
         );
@@ -271,7 +287,42 @@ public class RunRecordList extends javax.swing.JFrame {
         wholePanel.add(filler2);
 
         closePanel.setMaximumSize(new java.awt.Dimension(32767, 40));
-        closePanel.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT, 10, 0));
+
+        countPanel.setMinimumSize(new java.awt.Dimension(100, 25));
+
+        countLbl.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        countLbl.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        countLbl.setText(COUNT_LABEL.getContent());
+        JLabel tempLabel = new JLabel(COUNT_LABEL.getContent());
+        tempLabel.setFont(countLbl.getFont());
+        Dimension dim = tempLabel.getPreferredSize();
+        countLbl.setMaximumSize(new java.awt.Dimension(110, 27));
+        countLbl.setMinimumSize(new java.awt.Dimension(90, 27));
+        countLbl.setPreferredSize(new Dimension(dim.width + 1, dim.height));
+
+        countValue.setForeground(pointColor);
+        countValue.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        countValue.setText("count");
+
+        javax.swing.GroupLayout countPanelLayout = new javax.swing.GroupLayout(countPanel);
+        countPanel.setLayout(countPanelLayout);
+        countPanelLayout.setHorizontalGroup(
+            countPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(countPanelLayout.createSequentialGroup()
+                .addGap(0, 0, 0)
+                .addComponent(countLbl, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(5, 5, 5)
+                .addComponent(countValue)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        countPanelLayout.setVerticalGroup(
+            countPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(countPanelLayout.createSequentialGroup()
+                .addGroup(countPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(countValue)
+                    .addComponent(countLbl, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
+        );
 
         saveSheet_Button.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         saveSheet_Button.setMnemonic('A');
@@ -286,7 +337,6 @@ public class RunRecordList extends javax.swing.JFrame {
                 saveSheet_ButtonActionPerformed(evt);
             }
         });
-        closePanel.add(saveSheet_Button);
 
         CloseFormButton.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         CloseFormButton.setMnemonic('c');
@@ -299,7 +349,34 @@ public class RunRecordList extends javax.swing.JFrame {
                 CloseFormButtonActionPerformed(evt);
             }
         });
-        closePanel.add(CloseFormButton);
+
+        javax.swing.GroupLayout closePanelLayout = new javax.swing.GroupLayout(closePanel);
+        closePanel.setLayout(closePanelLayout);
+        closePanelLayout.setHorizontalGroup(
+            closePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(closePanelLayout.createSequentialGroup()
+                .addGap(10, 10, 10)
+                .addComponent(countPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(10, 10, 10)
+                .addComponent(filler1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 274, Short.MAX_VALUE)
+                .addComponent(saveSheet_Button, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(10, 10, 10)
+                .addComponent(CloseFormButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(10, 10, 10))
+        );
+        closePanelLayout.setVerticalGroup(
+            closePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(closePanelLayout.createSequentialGroup()
+                .addGap(7, 7, 7)
+                .addComponent(countPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(closePanelLayout.createSequentialGroup()
+                .addGap(20, 20, 20)
+                .addComponent(filler1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(closePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addComponent(saveSheet_Button, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(CloseFormButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
 
         wholePanel.add(closePanel);
 
@@ -323,12 +400,12 @@ public class RunRecordList extends javax.swing.JFrame {
         } else {
             // Check if dates are chronologically wrong.
             if (beginDate.after(endDate)) {
-                JOptionPane.showConfirmDialog(this, "Ending date can't precede starting date!" + 
-                        System.lineSeparator() +
-                        "Please, change search range(dates).", "Wrong Search Range", 
-                        JOptionPane.PLAIN_MESSAGE, WARNING_MESSAGE);             
+                JOptionPane.showConfirmDialog(this, PERIOD_ERROR_DIALOG1.getContent() +
+                        System.lineSeparator() + PERIOD_ERROR_DIALOG2.getContent(), 
+                PERIOD_ERROR_TITLE.getContent(), JOptionPane.PLAIN_MESSAGE, 
+                WARNING_MESSAGE);                
             } else {
-                RefreshTableContents(beginDate, endDate);
+                loadRunRecordTable(beginDate, endDate);
             }
         }
     }//GEN-LAST:event_SearchLoginRecordButtonActionPerformed
@@ -363,9 +440,6 @@ public class RunRecordList extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(RunRecordList.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
 
         initializeLoggers();
         checkOptions(args);
@@ -388,7 +462,11 @@ public class RunRecordList extends javax.swing.JFrame {
     private javax.swing.JTable RunRecordTable;
     private javax.swing.JButton SearchLoginRecordButton;
     private javax.swing.JPanel closePanel;
+    private javax.swing.JLabel countLbl;
+    private javax.swing.JPanel countPanel;
+    private javax.swing.JLabel countValue;
     private javax.swing.JPanel datePanel;
+    private javax.swing.Box.Filler filler1;
     private javax.swing.Box.Filler filler10;
     private javax.swing.Box.Filler filler11;
     private javax.swing.Box.Filler filler2;
@@ -410,23 +488,24 @@ public class RunRecordList extends javax.swing.JFrame {
     private javax.swing.JPanel titlePanel;
     private javax.swing.JPanel wholePanel;
     // End of variables declaration//GEN-END:variables
-    private void RefreshTableContents(Date beginDate, Date endDate) {
+    private void loadRunRecordTable(Date dateFrom, Date dateTo) {
         
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        String startDate = dateFormat.format(beginDate);
+        String dateFromStr = dateFormat.format(dateFrom);
+        String dateToStr = dateFormat.format(dateTo);
      
         Connection conn = null;
         Statement stmt = null;
         ResultSet rs = null; 
         StringBuffer sb = new StringBuffer();
-        sb.append("Select recNo as 'Order', ");
+        sb.append("Select recNo as '" + ORDER_LABEL.getContent() + "', ");
         
         sb.append(" concat(date_format(stopTm, '%Y-%m-%d '), ");
         sb.append(" if(date_format(stopTm, '%p') ='AM', 'AM', 'PM'),");
-        sb.append(" date_format(stopTm, ' %h:%i:%s')) as 'Shutdown', ");
+        sb.append(" date_format(stopTm, ' %h:%i:%s')) as '" + OPTN_STOP.getContent() + "', ");
         sb.append(" concat(date_format(startTm, '%Y-%m-%d '), ");
         sb.append(" if(date_format(startTm, '%p') ='AM', 'AM', 'PM'),");
-        sb.append(" date_format(startTm, ' %h:%i:%s')) as 'Start Up', ");
+        sb.append(" date_format(startTm, ' %h:%i:%s')) as '" + OPTN_START.getContent() + "', ");
         
         sb.append(" concat( ");
         sb.append("   lpad(timestampdiff(HOUR, stopTm, startTm),");
@@ -434,19 +513,20 @@ public class RunRecordList extends javax.swing.JFrame {
         sb.append(    " if (timestampdiff(HOUR, stopTm, startTm) > 999, 4,");
         sb.append(    " if (timestampdiff(HOUR, stopTm, startTm) > 99, 3, 2))), '0'), ':',");        
         sb.append("   lpad(mod(timestampdiff(MINUTE, stopTm, startTm), 60), 2, '0'), '.', ");
-        sb.append("   lpad(mod(timestampdiff(SECOND, stopTm, startTm), 60), 2, '0')) as 'Stopped For(hh:mm:ss)' ");
-        sb.append("FROM SystemRun Where ('");
-        sb.append(startDate);
-        sb.append("' <= date(stopTm) or date(stopTm) is null) and ('");
-        sb.append(startDate);
-        sb.append("' <= date(startTm) or date(startTm) is null)");
+        sb.append("   lpad(mod(timestampdiff(SECOND, stopTm, startTm), 60), 2, '0')) as '" +
+                STOP_DURATION.getContent() + "' ");
+        sb.append("FROM SystemRun Where (('");
+        sb.append(dateFromStr);
+        sb.append("' <= date(stopTm) and date(stopTm) <= '" + dateToStr + "') or ('");
+        sb.append(dateFromStr);
+        sb.append("' <= date(startTm) and date(startTm) <= '" + dateToStr + "'))");
         sb.append(" order by recNo desc");
         
         try {
             conn = JDBCMySQL.getConnection();
             stmt = conn.createStatement();
             rs = stmt.executeQuery(sb.toString());
-            RunRecordTable.setModel(buildTableModel(rs)); // DbUtils.resultSetToTableModel(rs));
+            RunRecordTable.setModel(buildTableModel(rs)); 
             int dimX = RunRecordTable.getPreferredSize().width;
             int rowHeight = RunRecordTable.getRowHeight();
             RunRecordTable.setPreferredSize(new Dimension(dimX, 
@@ -466,7 +546,18 @@ public class RunRecordList extends javax.swing.JFrame {
          */
         TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(RunRecordTable.getModel());
         sorter.setComparator(0, com.osparking.global.Globals.comparator);
-        RunRecordTable.setRowSorter(sorter);          
+        RunRecordTable.setRowSorter(sorter);   
+        
+        DefaultTableModel model = (DefaultTableModel) RunRecordTable.getModel();  
+        
+        int numRows = model.getRowCount();
+        
+        countValue.setText(Integer.toString(numRows));
+        if (numRows == 0) {
+            saveSheet_Button.setEnabled(false);
+        } else {
+            saveSheet_Button.setEnabled(true);
+        }        
     }
 
     
@@ -476,9 +567,7 @@ public class RunRecordList extends javax.swing.JFrame {
         ((DefaultTableCellRenderer)RunRecordTable.getTableHeader().getDefaultRenderer())
                 .setHorizontalAlignment(JLabel.CENTER);        
         
-        DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
-        rightRenderer.setHorizontalAlignment(JLabel.RIGHT);
-        tcm.getColumn(0).setCellRenderer(rightRenderer);  // order : right alignment 
+        tcm.getColumn(0).setCellRenderer(numberCellRenderer);  // order : right alignment 
  
         DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
         centerRenderer.setHorizontalAlignment(JLabel.CENTER);

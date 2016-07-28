@@ -69,7 +69,7 @@ public class ControlEnums {
         DISALLOWED_CAR_FRAME_TITLE("허가되지 않은 차량", "DisAllowed Car"),
         VISITING_CAR_FRAME_TITLE("방문자 환영", "Welcome Visiter"),
         LOGIN_RECORD_FRAME_TITLE("사용자 로그인 기록", "User Login Record"),
-        RUN_RECORD_FRAME_TITLE("OsParking 실행 기록", "OsParking Run Record"),
+        RUN_RECORD_FRAME_TITLE("오즈파킹 실행 기록", "OsParking Run Record"),
         GATE_PANEL_TITLE("최근 도착 차량", "Recent car Arrivals"),
         SYSTEM_SETTINGS_FRAME_TITLE("시스템 설정", "System Settings"),
         E_BOARD_SETTINGS_FRAME_TITLE("전광판 설정", "Electronic Display Settings"),
@@ -135,7 +135,7 @@ public class ControlEnums {
         CREATE_MODE_LABEL("생성",  "Creation"), 
         MODIFY_MODE_LABEL("수정",  "Modification"), 
         SEARCH_LABEL("검색키",  "S'Key"), 
-        ORDER_LABEL("순번",  "List#"), 
+        ORDER_LABEL("순번",  "Seq No"), 
         CAR_TAG_LABEL("<html>차량번호(<u>N</u>)</html>",  "<html>Tag (<u>N</u>)o.</html>"), 
         MODI_DATE_LABEL("최근변경",  "Modi' Date"),
         NOTIFICATION_LABEL("세대통보",  "Notification"),
@@ -338,7 +338,7 @@ public class ControlEnums {
                 "admin is not in the ParkingLot DB"),
         RECENT_WORD("최근 ", "Recent "),
         SYSTEM_START("오즈파킹 가동 시작", "OsParking started"),
-        SYSTEM_STOP("오즈파킹 가동 중지", "OsParking started");
+        SYSTEM_STOP("오즈파킹 가동 중지", "OsParking stopped");
         
         MsgContent(String korean, String english) {
             contents[KOREAN.ordinal()] = korean;
@@ -407,6 +407,23 @@ public class ControlEnums {
         }
     }
     
+    public enum ColumnHeader {
+        OPTN_START("가동 시작", "Starting"),
+        OPTN_STOP("가동 중지", "Shutdown"),
+        STOP_DURATION("중지 기간(시:분.초)", "Stop Period(H:M.S)");
+        
+        ColumnHeader(String korean, String english) {
+            contents[KOREAN.ordinal()] = korean;
+            contents[ENGLISH.ordinal()] = english;
+        }
+        
+        private String[] contents = new String[Languages.values().length];
+        
+        public String getContent() {
+                return contents[language.ordinal()];
+        }        
+    }
+    
     public enum TableTypes {
         REQUIRED("필수", "Req'"),
         USER_ID_HEADER("아이디", "User ID"),
@@ -457,6 +474,8 @@ public class ControlEnums {
 
     public enum DialogMessages {
          
+        PERIOD_ERROR_DIALOG1("시작일이 종료일보다 늦을 수 없습니다. ", "End date can't precede start date!"),
+        PERIOD_ERROR_DIALOG2("검색 기간을 수정하십시오!", "Please correct search range!"),
         DRIVER_ODS_READ_RESULT1("운전자 읽어들인 결과", "Driver Upload Result"),
         DRIVER_ODS_READ_RESULT2(" - 성공적으로 읽힌 운전자: ", " - Uploaded drivers: "),
         DRIVER_ODS_READ_RESULT3(" - 중복으로 제외된 운전자: ", " - Rejected duplicates: "),
@@ -800,6 +819,7 @@ public class ControlEnums {
         ODS_CHECK_RESULT_TITLE("ods 분석 결과", "ods check result"),                
         ODS_READ_RESULT_TITLE("ods 읽은 결과", "ods read result"),                
         READ_ODS_FAIL_DIALOGTITLE("차트 형식 오류", "Sheet Cell Data Format Error"),       
+        PERIOD_ERROR_TITLE("기간 지정 오류", "PERIOD ERROR"), 
         AFFILIATION_MODIFY_DIALOGTITLE("상위 소속 변경", "Higher Affiliation Change"),  
         BUILDING_MODIFY_DIALOGTITLE("건물 변경 확인", "Building Change Confirm'"),
         LOWER_MODIFY_DIALOGTITLE("하위 변경 확인", "Low Affili' Change"),

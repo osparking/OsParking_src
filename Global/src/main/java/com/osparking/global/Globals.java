@@ -1271,11 +1271,11 @@ public class Globals {
 
         ResultSetMetaData metaData = rs.getMetaData();
 
-        // names of columns
+        // Get suggested column heading label of each column
         Vector<String> columnNames = new Vector<String>();
         int columnCount = metaData.getColumnCount();
         for (int column = 1; column <= columnCount; column++) {
-            columnNames.add(metaData.getColumnName(column));
+            columnNames.add(metaData.getColumnLabel(column));
         }
 
         // data of the table

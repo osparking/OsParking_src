@@ -373,7 +373,7 @@
                               <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
                               <Component id="topVehicle" min="-2" max="-2" attributes="0"/>
                               <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
-                              <Component id="topDriver" pref="294" max="32767" attributes="0"/>
+                              <Component id="topDriver" pref="297" max="32767" attributes="0"/>
                               <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
                               <Component id="filler18" max="32767" attributes="0"/>
                               <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
@@ -737,7 +737,7 @@
                         <DimensionLayout dim="0">
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Group type="102" attributes="0">
-                                  <Component id="affiliPanel" pref="165" max="32767" attributes="0"/>
+                                  <Component id="affiliPanel" pref="168" max="32767" attributes="0"/>
                                   <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
                                   <Component id="buildingPanel" min="-2" pref="129" max="-2" attributes="0"/>
                               </Group>
@@ -2457,7 +2457,13 @@
                             <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                               <Connection code="new javax.swing.table.DefaultTableModel(&#xa;    new Object [][] {&#xa;        {null, null, null, null},&#xa;        {null, null, null, null},&#xa;        {null, null, null, null},&#xa;        {null, null, null, null}&#xa;    },&#xa;    new String[] {&#xa;        ORDER_HEADER.getContent(),&#xa;        ARRIVAL_TIME_HEADER.getContent(),&#xa;        CAR_TAG_HEADER.getContent(),&#xa;        &quot;arrSeqNo&quot;&#xa;    }&#xa;&#xa;)&#xa;{&#xa;    public boolean isCellEditable(int row, int column)&#xa;    {&#xa;        return false;&#xa;    }&#xa;}&#xa;" type="code"/>
                             </Property>
+                            <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
+                              <TableColumnModel selectionModel="0"/>
+                            </Property>
                             <Property name="rowHeight" type="int" value="22"/>
+                            <Property name="tableHeader" type="javax.swing.table.JTableHeader" editor="org.netbeans.modules.form.editors2.JTableHeaderEditor">
+                              <TableHeader reorderingAllowed="true" resizingAllowed="true"/>
+                            </Property>
                           </Properties>
                           <AuxValues>
                             <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="JTableHeader header = arrivalsList.getTableHeader();&#xa;header.setFont(new java.awt.Font(font_Type, font_Style, font_Size));&#xa;header.setDefaultRenderer(&#xa;  new HeaderCellRenderer(header.getDefaultRenderer()));"/>
