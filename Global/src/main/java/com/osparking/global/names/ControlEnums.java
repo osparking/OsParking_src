@@ -453,6 +453,7 @@ public class ControlEnums {
         LOGIN_TIME_HEADER( "로그인 시간",  "Login Time"),
         LOGOUT_TIME_HEADER( "로그아웃 시간",  "Logout Time"),
         DURATION_HEADER( "경과시간(시:분:초)",  "Duration(hh:mm:ss)"),
+        WORK_PERIOD( "근무시간(시:분:초)",  "Work Time(hh:mm:ss)"),
         SHUTDOWN_HEADER( "시스템 종료",  "Shutdown"),
         START_HEADER("시스템 시작",  "Start Up");
         
@@ -945,11 +946,7 @@ public class ControlEnums {
         ATTENDANT_CB_ITEM("(관리원)", "(Attendant)"),
         BAR_CB_ITEM("(차단기)", "(Unselected)"),
         ATTENDANT_LOGOUT_ITEM("(로그아웃)", "(logged out)"),
-//        BAR_ALLOWED_CB_ITEM("자격개방", "Legal Open"),
-//        BAR_LAZY_ATT_CB_ITEM("불문개방", "Auto' Open"),
-//        BAR_MANUAL_CB_ITEM("수동개방", "Manual Open"),
-//        BAR_REMAIN_CLOSED_ATT_CB_ITEM("폐쇄", "Remain Closed"),
-        USER_CB_ITEM("(모든 사용자)", "(everybody)"),
+        USER_CB_ITEM("(모두)", "(ALL)"),
         FOUR_DIGIT_CB_ITEM("네 자리 숫자", "Four digits"),
         SIX_DIGIT_CB_ITEM("6자리 이상 영숫자", "Six-digit or more alpha-numeric"),
         COMPLEX_CB_ITEM("8자리 이상 복합구성", "8 digit or more complex configuration"),

@@ -1267,7 +1267,8 @@ public class Globals {
     };
     
     public static DefaultTableModel buildTableModel(ResultSet rs)
-        throws SQLException {
+        throws SQLException 
+    {
 
         ResultSetMetaData metaData = rs.getMetaData();
 

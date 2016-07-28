@@ -21,11 +21,11 @@ import static com.osparking.global.CommonData.buttonWidthNorm;
 import static com.osparking.global.CommonData.normGUIheight;
 import static com.osparking.global.CommonData.numberCellRenderer;
 import static com.osparking.global.CommonData.pointColor;
+import static com.osparking.global.CommonData.showCount;
 import static com.osparking.global.CommonData.tipColor;
 import static com.osparking.global.DataSheet.saveODSfile;
 import static com.osparking.global.Globals.OSPiconList;
 import static com.osparking.global.Globals.SetAColumnWidth;
-import static com.osparking.global.Globals.buildTableModel;
 import static com.osparking.global.Globals.checkOptions;
 import static com.osparking.global.Globals.closeDBstuff;
 import static com.osparking.global.Globals.font_Size;
@@ -53,6 +53,8 @@ import static com.osparking.global.names.DB_Access.parkingLotLocale;
 import static com.osparking.global.names.DB_Access.readSettings;
 import com.osparking.global.names.JDBCMySQL;
 import java.awt.Dimension;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
@@ -73,7 +75,9 @@ import javax.swing.table.TableRowSorter;
  * @author YongSeok
  */
 public class RunRecordList extends javax.swing.JFrame {
-
+    private String prevSearchCondition = null;    
+    private String currSearchCondition = ""; 
+    
     /**
      * Creates new form RunRecordList2
      */
@@ -89,9 +93,31 @@ public class RunRecordList extends javax.swing.JFrame {
         BeginDateChooser.setDate(getDateFromGivenDate(today, -7));
         EndDateChooser.setDate(today);
         
+        changeSearchButtonEnabled();
         RunRecordTable.setAutoCreateRowSorter(true);
-        loadRunRecordTable(BeginDateChooser.getDate(), EndDateChooser.getDate());  
+        
+        PropertyChangeListener dateChangeListener = new PropertyChangeListener() {
+            @Override
+            public void propertyChange(PropertyChangeEvent evt) {
+                if (evt.getPropertyName().equals("date")) {
+                    changeSearchButtonEnabled();
+                }
+            }
+        };
+        
+        BeginDateChooser.getDateEditor().addPropertyChangeListener(dateChangeListener);
+        EndDateChooser.getDateEditor().addPropertyChangeListener(dateChangeListener);        
+        loadRunRecordTable();  
     }
+    
+    private void changeSearchButtonEnabled() {
+        currSearchCondition = formSearchCondition();
+        if (currSearchCondition.equals(prevSearchCondition)) {
+            searchButton.setEnabled(false);
+        } else {
+            searchButton.setEnabled(true);
+        }
+    }    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -123,7 +149,7 @@ public class RunRecordList extends javax.swing.JFrame {
         BeginDateChooser = new com.toedter.calendar.JDateChooser();
         jLabel2 = new javax.swing.JLabel();
         EndDateChooser = new com.toedter.calendar.JDateChooser();
-        SearchLoginRecordButton = new javax.swing.JButton();
+        searchButton = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         RunRecordTable = new javax.swing.JTable();
         filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 20), new java.awt.Dimension(0, 20), new java.awt.Dimension(32767, 20));
@@ -212,15 +238,15 @@ public class RunRecordList extends javax.swing.JFrame {
         EndDateChooser.setPreferredSize(new java.awt.Dimension(130, 33));
         periodPanel.add(EndDateChooser);
 
-        SearchLoginRecordButton.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        SearchLoginRecordButton.setMnemonic('s');
-        SearchLoginRecordButton.setText(SEARCH_BTN.getContent());
-        SearchLoginRecordButton.setMaximumSize(new java.awt.Dimension(90, 40));
-        SearchLoginRecordButton.setMinimumSize(new java.awt.Dimension(90, 40));
-        SearchLoginRecordButton.setPreferredSize(new java.awt.Dimension(90, 40));
-        SearchLoginRecordButton.addActionListener(new java.awt.event.ActionListener() {
+        searchButton.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        searchButton.setMnemonic('s');
+        searchButton.setText(SEARCH_BTN.getContent());
+        searchButton.setMaximumSize(new java.awt.Dimension(90, 40));
+        searchButton.setMinimumSize(new java.awt.Dimension(90, 40));
+        searchButton.setPreferredSize(new java.awt.Dimension(90, 40));
+        searchButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                SearchLoginRecordButtonActionPerformed(evt);
+                searchButtonActionPerformed(evt);
             }
         });
 
@@ -235,7 +261,7 @@ public class RunRecordList extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 35, Short.MAX_VALUE)
                 .addComponent(horiGlueR, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(SearchLoginRecordButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(searchButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
             .addGroup(datePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, datePanelLayout.createSequentialGroup()
                     .addContainerGap(550, Short.MAX_VALUE)
@@ -253,7 +279,7 @@ public class RunRecordList extends javax.swing.JFrame {
                         .addGap(26, 26, 26)
                         .addComponent(horiGlueR, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(14, 14, 14))
-            .addComponent(SearchLoginRecordButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(searchButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addComponent(periodPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addGroup(datePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, datePanelLayout.createSequentialGroup()
@@ -276,9 +302,11 @@ public class RunRecordList extends javax.swing.JFrame {
                 {null, null, null, null}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                ORDER_LABEL.getContent(), OPTN_STOP.getContent(),
+                OPTN_START.getContent(), STOP_DURATION.getContent()
             }
         ));
+        RunRecordTable.setEnabled(false);
         RunRecordTable.setRowHeight(28);
         RunRecordTable.getTableHeader().setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         jScrollPane1.setViewportView(RunRecordTable);
@@ -389,7 +417,7 @@ public class RunRecordList extends javax.swing.JFrame {
         dispose();
     }//GEN-LAST:event_CloseFormButtonActionPerformed
 
-    private void SearchLoginRecordButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SearchLoginRecordButtonActionPerformed
+    private void searchButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchButtonActionPerformed
         Date beginDate = BeginDateChooser.getDate();
         Date endDate = EndDateChooser.getDate();
         
@@ -405,10 +433,10 @@ public class RunRecordList extends javax.swing.JFrame {
                 PERIOD_ERROR_TITLE.getContent(), JOptionPane.PLAIN_MESSAGE, 
                 WARNING_MESSAGE);                
             } else {
-                loadRunRecordTable(beginDate, endDate);
+                loadRunRecordTable();
             }
         }
-    }//GEN-LAST:event_SearchLoginRecordButtonActionPerformed
+    }//GEN-LAST:event_searchButtonActionPerformed
 
     private void saveSheet_ButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveSheet_ButtonActionPerformed
         saveODSfile(this, RunRecordTable, saveFileChooser, "");
@@ -460,7 +488,6 @@ public class RunRecordList extends javax.swing.JFrame {
     private com.toedter.calendar.JDateChooser EndDateChooser;
     private javax.swing.JPanel LoginRecordListTopPanel;
     private javax.swing.JTable RunRecordTable;
-    private javax.swing.JButton SearchLoginRecordButton;
     private javax.swing.JPanel closePanel;
     private javax.swing.JLabel countLbl;
     private javax.swing.JPanel countPanel;
@@ -484,22 +511,18 @@ public class RunRecordList extends javax.swing.JFrame {
     private javax.swing.JPanel periodPanel;
     private javax.swing.JFileChooser saveFileChooser;
     private javax.swing.JButton saveSheet_Button;
+    private javax.swing.JButton searchButton;
     private javax.swing.JLabel titleLabel;
     private javax.swing.JPanel titlePanel;
     private javax.swing.JPanel wholePanel;
     // End of variables declaration//GEN-END:variables
-    private void loadRunRecordTable(Date dateFrom, Date dateTo) {
-        
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        String dateFromStr = dateFormat.format(dateFrom);
-        String dateToStr = dateFormat.format(dateTo);
-     
+    private void loadRunRecordTable() {
         Connection conn = null;
         Statement stmt = null;
         ResultSet rs = null; 
         StringBuffer sb = new StringBuffer();
-        sb.append("Select recNo as '" + ORDER_LABEL.getContent() + "', ");
         
+        sb.append("Select recNo as '" + ORDER_LABEL.getContent() + "', ");        
         sb.append(" concat(date_format(stopTm, '%Y-%m-%d '), ");
         sb.append(" if(date_format(stopTm, '%p') ='AM', 'AM', 'PM'),");
         sb.append(" date_format(stopTm, ' %h:%i:%s')) as '" + OPTN_STOP.getContent() + "', ");
@@ -515,27 +538,33 @@ public class RunRecordList extends javax.swing.JFrame {
         sb.append("   lpad(mod(timestampdiff(MINUTE, stopTm, startTm), 60), 2, '0'), '.', ");
         sb.append("   lpad(mod(timestampdiff(SECOND, stopTm, startTm), 60), 2, '0')) as '" +
                 STOP_DURATION.getContent() + "' ");
-        sb.append("FROM SystemRun Where (('");
-        sb.append(dateFromStr);
-        sb.append("' <= date(stopTm) and date(stopTm) <= '" + dateToStr + "') or ('");
-        sb.append(dateFromStr);
-        sb.append("' <= date(startTm) and date(startTm) <= '" + dateToStr + "'))");
+        sb.append("FROM SystemRun Where " + currSearchCondition);
         sb.append(" order by recNo desc");
+        
+        DefaultTableModel model = (DefaultTableModel) RunRecordTable.getModel();  
         
         try {
             conn = JDBCMySQL.getConnection();
             stmt = conn.createStatement();
             rs = stmt.executeQuery(sb.toString());
-            RunRecordTable.setModel(buildTableModel(rs)); 
-            int dimX = RunRecordTable.getPreferredSize().width;
-            int rowHeight = RunRecordTable.getRowHeight();
-            RunRecordTable.setPreferredSize(new Dimension(dimX, 
-                    rowHeight * RunRecordTable.getRowCount()));
-            SetTableColumnWidth();           
+            model.setRowCount(0);
+            while (rs.next()) {
+                model.addRow(new Object[] {
+                    rs.getObject(1), rs.getObject(2), 
+                    rs.getObject(3), rs.getObject(4)
+                });
+            }   
+            prevSearchCondition = currSearchCondition;
+            searchButton.setEnabled(false);            
         } catch (Exception ex) {
-            logParkingException(Level.SEVERE, ex, "(System Operation Record List: Content Refresh Module)");
+            logParkingException(Level.SEVERE, ex, 
+                    "(System Operation Record List: Content Refresh Module)");
         } finally {
-            closeDBstuff(conn, stmt, rs, "(System Operation Record List: Content Refresh Module)");
+            closeDBstuff(conn, stmt, rs, 
+                    "(System Operation Record List: Content Refresh Module)");
+            RunRecordTable.setPreferredSize(
+                    new Dimension(RunRecordTable.getPreferredSize().width, 
+                            RunRecordTable.getRowHeight() * RunRecordTable.getRowCount()));            
         }
         
         /**
@@ -548,41 +577,48 @@ public class RunRecordList extends javax.swing.JFrame {
         sorter.setComparator(0, com.osparking.global.Globals.comparator);
         RunRecordTable.setRowSorter(sorter);   
         
-        DefaultTableModel model = (DefaultTableModel) RunRecordTable.getModel();  
-        
-        int numRows = model.getRowCount();
-        
-        countValue.setText(Integer.toString(numRows));
-        if (numRows == 0) {
-            saveSheet_Button.setEnabled(false);
-        } else {
-            saveSheet_Button.setEnabled(true);
-        }        
+        showCount(RunRecordTable, saveSheet_Button, countValue);     
     }
 
-    
-     private void SetTableColumnWidth() {
+    private void detailTuneTableProperties() {
+        setComponentSize(searchButton, 
+                new Dimension(buttonWidthNorm, buttonHeightNorm));
+        setComponentSize(CloseFormButton, 
+                new Dimension(buttonWidthNorm, buttonHeightNorm));
+        
         TableColumnModel tcm = RunRecordTable.getColumnModel();
         
         ((DefaultTableCellRenderer)RunRecordTable.getTableHeader().getDefaultRenderer())
                 .setHorizontalAlignment(JLabel.CENTER);        
         
-        tcm.getColumn(0).setCellRenderer(numberCellRenderer);  // order : right alignment 
+        tcm.getColumn(0).setCellRenderer(numberCellRenderer); // order : right alignment 
  
         DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
         centerRenderer.setHorizontalAlignment(JLabel.CENTER);
-        tcm.getColumn(1).setCellRenderer(centerRenderer);  // dates
+        tcm.getColumn(1).setCellRenderer(centerRenderer); // dates
         tcm.getColumn(2).setCellRenderer(centerRenderer);  
         tcm.getColumn(3).setCellRenderer(centerRenderer);  
         
         // Adjust column width one by one
-        SetAColumnWidth(tcm.getColumn(0), 90, 90, 90); // line number
-    }    
+        SetAColumnWidth(tcm.getColumn(0), 90, 90, 90); // line number        
+    }
 
-    private void detailTuneTableProperties() {
-        setComponentSize(SearchLoginRecordButton, 
-                new Dimension(buttonWidthNorm, buttonHeightNorm));
-        setComponentSize(CloseFormButton, 
-                new Dimension(buttonWidthNorm, buttonHeightNorm));
+    private String formSearchCondition() {
+        if (BeginDateChooser.getDate() == null) {
+            return "";
+        } else {        
+            StringBuffer sb = new StringBuffer();
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");        
+            String dateFromStr = dateFormat.format(BeginDateChooser.getDate());
+            String dateToStr = dateFormat.format(EndDateChooser.getDate());
+
+            sb.append("(('");
+            sb.append(dateFromStr);
+            sb.append("' <= date(stopTm) and date(stopTm) <= '" + dateToStr + "') or ('");
+            sb.append(dateFromStr);
+            sb.append("' <= date(startTm) and date(startTm) <= '" + dateToStr + "'))");
+            
+            return sb.toString();
+        }
     }
 }

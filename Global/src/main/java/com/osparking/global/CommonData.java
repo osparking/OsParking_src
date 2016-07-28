@@ -24,10 +24,12 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import javax.swing.BorderFactory;
+import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.border.Border;
 import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
 
 /** new Dimension(CommonData.bigButtonWidth, bigButtonHeight)
  *
@@ -86,5 +88,20 @@ public class CommonData { // new Dimension(carTagWidth, 30)
             setHorizontalAlignment(JLabel.RIGHT);
             return this;            
         }
-    };    
+    };  
+    
+    public static void showCount(JTable RunRecordTable, JButton saveSheet_Button, 
+            JLabel countValue) 
+    {
+        DefaultTableModel model = (DefaultTableModel) RunRecordTable.getModel();  
+        
+        int numRows = model.getRowCount();
+        
+        countValue.setText(Integer.toString(numRows));
+        if (numRows == 0) {
+            saveSheet_Button.setEnabled(false);
+        } else {
+            saveSheet_Button.setEnabled(true);
+        }       
+    }    
 }
