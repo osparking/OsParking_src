@@ -53,8 +53,12 @@ public class CommonData { // new Dimension(carTagWidth, 30)
     public static final int buttonWidthWide = 110; // Wide Width
     public static final int buttonHeightNorm = 40;
     public static final int buttonHeightShort = 30; 
+    public static final int TEXT_FIELD_HEIGHT = 30; 
+    public static final int CBOX_HEIGHT = 28; 
     public static final int normGUIwidth = 1027; 
     public static final int normGUIheight = 720; 
+    public static final int SETTINGS_WIDTH = 800; 
+    public static final int SETTINGS_HEIGHT = 840; 
     public static final int tableRowHeight = 25; 
     public static final int bigButtonWidth = 160;
     public static final int bigButtonHeight = 60;

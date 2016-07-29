@@ -274,7 +274,7 @@ public class AttListForm extends javax.swing.JFrame {
         saveFileChooser = new javax.swing.JFileChooser();
         requiredNotice = new javax.swing.JLabel();
         filler40 = new javax.swing.Box.Filler(new java.awt.Dimension(40, 0), new java.awt.Dimension(40, 0), new java.awt.Dimension(40, 32767));
-        northPanel = new javax.swing.JPanel();
+        topPanel = new javax.swing.JPanel();
         wholePanel = new javax.swing.JPanel();
         westPanel = new javax.swing.JPanel();
         metaKeyPanel = new javax.swing.JPanel();
@@ -356,7 +356,7 @@ public class AttListForm extends javax.swing.JFrame {
         saveOdsButton = new javax.swing.JButton();
         filler82 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 10), new java.awt.Dimension(10, 10), new java.awt.Dimension(10, 32767));
         closeFormButton = new javax.swing.JButton();
-        spacePanel2 = new javax.swing.JPanel();
+        bottomPanel = new javax.swing.JPanel();
         filler3 = new javax.swing.Box.Filler(new java.awt.Dimension(40, 0), new java.awt.Dimension(40, 0), new java.awt.Dimension(40, 32767));
 
         saveFileChooser.setDialogType(javax.swing.JFileChooser.SAVE_DIALOG);
@@ -377,7 +377,6 @@ public class AttListForm extends javax.swing.JFrame {
         setTitle(ATTLIST_FRAME_TITLE.getContent()
         );
         setMinimumSize(new Dimension(normGUIwidth, normGUIheight));
-        setPreferredSize(new Dimension(normGUIwidth, normGUIheight));
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 formWindowClosing(evt);
@@ -385,10 +384,21 @@ public class AttListForm extends javax.swing.JFrame {
         });
         getContentPane().add(filler40, java.awt.BorderLayout.WEST);
 
-        northPanel.setMinimumSize(new java.awt.Dimension(267, 40));
-        northPanel.setPreferredSize(new java.awt.Dimension(267, 40));
-        northPanel.setLayout(new javax.swing.BoxLayout(northPanel, javax.swing.BoxLayout.PAGE_AXIS));
-        getContentPane().add(northPanel, java.awt.BorderLayout.NORTH);
+        topPanel.setMinimumSize(new java.awt.Dimension(267, 40));
+        topPanel.setPreferredSize(new java.awt.Dimension(267, 40));
+
+        javax.swing.GroupLayout topPanelLayout = new javax.swing.GroupLayout(topPanel);
+        topPanel.setLayout(topPanelLayout);
+        topPanelLayout.setHorizontalGroup(
+            topPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 1022, Short.MAX_VALUE)
+        );
+        topPanelLayout.setVerticalGroup(
+            topPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 40, Short.MAX_VALUE)
+        );
+
+        getContentPane().add(topPanel, java.awt.BorderLayout.NORTH);
 
         wholePanel.setMinimumSize(new java.awt.Dimension(400, 670));
         wholePanel.setPreferredSize(new java.awt.Dimension(400, 670));
@@ -978,7 +988,11 @@ public class AttListForm extends javax.swing.JFrame {
         topInPanel2.setMinimumSize(new java.awt.Dimension(267, 26));
         topInPanel2.setPreferredSize(new java.awt.Dimension(267, 26));
 
+        myMetaKeyLabel.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         myMetaKeyLabel.setText(META_KEY_LABEL.getContent());
+        myMetaKeyLabel.setMaximumSize(new Dimension(buttonWidthNorm, buttonHeightShort));
+        myMetaKeyLabel.setMinimumSize(new Dimension(buttonWidthNorm, buttonHeightShort));
+        myMetaKeyLabel.setPreferredSize(new Dimension(buttonWidthNorm, buttonHeightShort));
         myMetaKeyLabel.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         myMetaKeyLabel.setForeground(tipColor);
 
@@ -994,7 +1008,7 @@ public class AttListForm extends javax.swing.JFrame {
         topInPanel2Layout.setHorizontalGroup(
             topInPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, topInPanel2Layout.createSequentialGroup()
-                .addComponent(myMetaKeyLabel)
+                .addComponent(myMetaKeyLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 415, Short.MAX_VALUE)
                 .addComponent(adminAuth2CheckBox))
         );
@@ -1004,7 +1018,7 @@ public class AttListForm extends javax.swing.JFrame {
                 .addGap(0, 0, 0)
                 .addGroup(topInPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(adminAuth2CheckBox)
-                    .addComponent(myMetaKeyLabel)))
+                    .addComponent(myMetaKeyLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
 
         centerPanel.add(topInPanel2);
@@ -1275,21 +1289,21 @@ public class AttListForm extends javax.swing.JFrame {
 
         getContentPane().add(wholePanel, java.awt.BorderLayout.CENTER);
 
-        spacePanel2.setMinimumSize(new java.awt.Dimension(0, 40));
-        spacePanel2.setPreferredSize(new java.awt.Dimension(980, 40));
+        bottomPanel.setMinimumSize(new java.awt.Dimension(0, 40));
+        bottomPanel.setPreferredSize(new java.awt.Dimension(980, 40));
 
-        javax.swing.GroupLayout spacePanel2Layout = new javax.swing.GroupLayout(spacePanel2);
-        spacePanel2.setLayout(spacePanel2Layout);
-        spacePanel2Layout.setHorizontalGroup(
-            spacePanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        javax.swing.GroupLayout bottomPanelLayout = new javax.swing.GroupLayout(bottomPanel);
+        bottomPanel.setLayout(bottomPanelLayout);
+        bottomPanelLayout.setHorizontalGroup(
+            bottomPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 1022, Short.MAX_VALUE)
         );
-        spacePanel2Layout.setVerticalGroup(
-            spacePanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        bottomPanelLayout.setVerticalGroup(
+            bottomPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 40, Short.MAX_VALUE)
         );
 
-        getContentPane().add(spacePanel2, java.awt.BorderLayout.SOUTH);
+        getContentPane().add(bottomPanel, java.awt.BorderLayout.SOUTH);
         getContentPane().add(filler3, java.awt.BorderLayout.EAST);
 
         setSize(new java.awt.Dimension(1030, 719));
@@ -2691,6 +2705,7 @@ public class AttListForm extends javax.swing.JFrame {
     private javax.swing.JCheckBox adminAuth2CheckBox;
     private javax.swing.JLabel adminAuthLabel;
     private javax.swing.JLabel attendantGUI_title;
+    private javax.swing.JPanel bottomPanel;
     private javax.swing.JPanel btnPanel;
     private javax.swing.JButton cancelButton;
     private javax.swing.JTextField cellPhoneText;
@@ -2743,7 +2758,6 @@ public class AttListForm extends javax.swing.JFrame {
     private javax.swing.JLabel newPW1ReqLabel;
     private javax.swing.JLabel newPW2Label;
     private javax.swing.JLabel newPW2ReqLabel;
-    private javax.swing.JPanel northPanel;
     private javax.swing.JLabel phoneReqLabel;
     private javax.swing.JTextField phoneText;
     private javax.swing.JLabel requiredNotice;
@@ -2755,9 +2769,9 @@ public class AttListForm extends javax.swing.JFrame {
     private javax.swing.JTextField searchText;
     private javax.swing.JPanel southPanel;
     private javax.swing.JPanel spacePanel1;
-    private javax.swing.JPanel spacePanel2;
     private javax.swing.JPanel titlePanel;
     private javax.swing.JPanel topInPanel2;
+    private javax.swing.JPanel topPanel;
     private javax.swing.JLabel topUserIdLabel;
     private javax.swing.JPanel userDetailsPanel;
     private javax.swing.JLabel userIDLabel;

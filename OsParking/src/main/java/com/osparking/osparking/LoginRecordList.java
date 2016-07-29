@@ -59,6 +59,7 @@ import static com.osparking.global.names.ControlEnums.TableTypes.LOGOUT_TIME_HEA
 import static com.osparking.global.names.ControlEnums.TableTypes.USER_ID_HEADER;
 import static com.osparking.global.names.ControlEnums.TableTypes.WORK_PERIOD;
 import static com.osparking.global.names.ControlEnums.TitleTypes.LOGIN_RECORD_FRAME_TITLE;
+import static com.osparking.global.names.ControlEnums.ToolTipContent.ENABLING_CONDITION;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import javax.swing.table.DefaultTableModel;
@@ -250,6 +251,7 @@ public class LoginRecordList extends javax.swing.JFrame {
         searchButton.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         searchButton.setMnemonic('s');
         searchButton.setText(SEARCH_BTN.getContent());
+        searchButton.setToolTipText(ENABLING_CONDITION.getContent());
         searchButton.setMaximumSize(new java.awt.Dimension(90, 40));
         searchButton.setMinimumSize(new java.awt.Dimension(90, 40));
         searchButton.setPreferredSize(new java.awt.Dimension(90, 40));

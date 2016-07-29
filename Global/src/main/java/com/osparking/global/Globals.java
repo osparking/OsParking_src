@@ -123,6 +123,7 @@ import com.osparking.global.names.SocketConnStat;
 import java.awt.Container;
 import javax.imageio.ImageIO;
 import javax.swing.JComboBox;
+import javax.swing.JTabbedPane;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellRenderer;
 
@@ -226,7 +227,7 @@ public class Globals {
                 if (name != null && name.length() > 0) {
                     componentMap.put(name, (JPanel)component);
                 }
-            }
+            } 
             
             for (Component innerComponent : ((Container)component).getComponents()) {
                 augmentComponentMap(innerComponent, componentMap);

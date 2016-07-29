@@ -49,6 +49,7 @@ import static com.osparking.global.names.ControlEnums.LabelContent.ORDER_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.SEARCH_PERIOD_LABEL;
 import static com.osparking.global.names.ControlEnums.MenuITemTypes.META_KEY_LABEL;
 import static com.osparking.global.names.ControlEnums.TitleTypes.RUN_RECORD_FRAME_TITLE;
+import static com.osparking.global.names.ControlEnums.ToolTipContent.ENABLING_CONDITION;
 import static com.osparking.global.names.DB_Access.parkingLotLocale;
 import static com.osparking.global.names.DB_Access.readSettings;
 import com.osparking.global.names.JDBCMySQL;
@@ -241,6 +242,7 @@ public class RunRecordList extends javax.swing.JFrame {
         searchButton.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         searchButton.setMnemonic('s');
         searchButton.setText(SEARCH_BTN.getContent());
+        searchButton.setToolTipText(ENABLING_CONDITION.getContent());
         searchButton.setMaximumSize(new java.awt.Dimension(90, 40));
         searchButton.setMinimumSize(new java.awt.Dimension(90, 40));
         searchButton.setPreferredSize(new java.awt.Dimension(90, 40));

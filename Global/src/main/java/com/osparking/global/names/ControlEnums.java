@@ -51,6 +51,7 @@ public class ControlEnums {
     
     
     public enum TitleTypes {
+        SETTINGS_TITLE("시스템 설정", "System Settings"),
         LOGIN_DIALOG_TITLE("오즈파킹 로그인", "OsParking Login"),
         LOGIN_FRAME_TITLE("주차관리 로그인", "Attendant Login"),
         ATTLIST_FRAME_TITLE("사용자 정보관리", "Login ID Management"),
@@ -195,7 +196,7 @@ public class ControlEnums {
         GATE_BAR_IP_ADDRESS_LABEL("차단기 IP 주소",  "GateBar IP Address"),
         E_BOARD_IP_ADDRESS_LABEL("전광판 IP 주소",  "E-Board IP Address"),
         PORT_LABEL("포트",  "Port No"),
-        ELECTRONIC_DISPLAY_LABEL("전광판 설정",  "Electronic Display Board"),
+        ELECTRONIC_DISPLAY_LABEL("실 전광판",  "Real E-board"),
         CYCLE_LABEL("주기",  "Cycle"),
         BLINGKING_LABEL("깜빡임",  "Blinking"),
         FLOWING_LABEL("흐름",  "Flowing"),
@@ -264,6 +265,7 @@ public class ControlEnums {
         SELECT_BTN("선택(T)", "Select"),
         MANAGE_BTN("운전자 관리(M)", "Manage Drivers"),
         FIX_IT_BTN("설정(F)", "Fix It"),
+        SET_BUTTON("설정(T)", "Settings"),
         ARRIVALS_BTN("<HTML>입차기록(<U>A</U>)</HTML>", "<HTML><U>A</U>rrivals</HTML>"),
         VEHICLES_BTN("<HTML>등록차목록(<U>V</U>)</HTML>", "<HTML><U>V</U>ehicles</HTML>"),
         USERS_BTN("<HTML>사용자목록(<U>U</U>)</HTML>", "<HTML><U>U</U>sers</HTML>"),
@@ -353,6 +355,7 @@ public class ControlEnums {
     }
     
     public enum ToolTipContent {
+        ENABLING_CONDITION("활성화하려면 기간을 변경하십시오.", "To enable, change period!"),
         CTRL_F_TOOLTIP("(Ctrl+F)", "(Ctrl+F)"),
         INSERT_TOOLTIP("(입력 후 엔터 키)", "(Type and Enter)"),
         SEARCH_TOOLTIP("포커스 이동: Control+F", "To focus Click Ctrl+F"),
@@ -677,8 +680,7 @@ public class ControlEnums {
                     + "So, you need to start OSParking again."),
         
         FAIL_SAVE_SETTINGS_DIALOG("시스템 설정 저장에 실패하였습니다.", "The storage system settings failed."),
-        SAVE_SETTINGS_DIALOG(
-                "시스템 설정 저장에 성공하였습니다.", "The system settings have been saved successfully."),
+        SAVE_SETTINGS_DIALOG("설정 값이 저장 되었습니다.", "Settings saved successfully."),
         INPUT_ERROR_DAILOG("1 이상의 값을 입력하세요.", "Enter a value of 1 or more .."),
         IP_FORMAT_ERROR_DAILOG("의 IP 주소 형식이 올바르지 않습니다.", "in IP address format error"),
         
@@ -807,6 +809,7 @@ public class ControlEnums {
     }
     
     public static enum DialogTitleTypes {
+        SETTINGS_SAVE_RESULT("설정 저장 결과", "Settings Save Result"),
         UserLevelSelectionGUItitle("로그인 사용자 수준 결정 폼", "Login User Level Selection GUI"),
         ATT_SAVE_AS_FAIL_DIALOGTITLE("파일명 변경 필요성 알림", "Choose Different File Name"), 
         ATT_EMAIL_DUP_DIALOGTITLE("이메일 중복 검사 결과", "Duplicate Check Result"), 
@@ -934,6 +937,7 @@ public class ControlEnums {
     }
     
     public enum ComboBoxItemTypes {
+        DAY_SUFFIX("일", "days"),
         LOWER_HIGHER_CB_ITEM("(하위-상위)", "(Lower-Higher)"),
         HIGHER_LOWER_CB_ITEM("(상위-하위)", "(Higher-Lower)"),
         ROOM_BUILDING_CB_ITEM("(호실-건물)", "(Room-Bldg)"),
@@ -947,12 +951,12 @@ public class ControlEnums {
         BAR_CB_ITEM("(차단기)", "(Unselected)"),
         ATTENDANT_LOGOUT_ITEM("(로그아웃)", "(logged out)"),
         USER_CB_ITEM("(모두)", "(ALL)"),
-        FOUR_DIGIT_CB_ITEM("네 자리 숫자", "Four digits"),
-        SIX_DIGIT_CB_ITEM("6자리 이상 영숫자", "Six-digit or more alpha-numeric"),
-        COMPLEX_CB_ITEM("8자리 이상 복합구성", "8 digit or more complex configuration"),
-        NO_LOGGING_CB_ITEM("로깅하지 않음", "no logging"),
-        SETTING_CHANGE_CB_ITEM("시스템 설정 변경", "System settings change"),
-        LOG_E_BOARD_CHANGE_CB_ITEM("시스템, 사용자, 차량", "Log E-Board change too"),
+        FOUR_DIGIT_CB_ITEM("4 자리 수", "Four digits"),
+        SIX_DIGIT_CB_ITEM("6+ 자리 영숫자", "Six+ alpha-num"),
+        COMPLEX_CB_ITEM("8+ 자리 복합구성", "8+ complex config'"),
+        NO_LOGGING_CB_ITEM("(로깅 안함)", "(No Logging)"),
+        SETTING_CHANGE_CB_ITEM("시스템 설정 변경", "Settings Change"),
+        EBD_CHANGE_CB_ITEM("사용자 및 차량 변경 추가", "E-board Change Added"),
         DAY_CB_ITEM("일", "day"),
         DAYS_CB_ITEM("일", "days"),
         VERBATIM_CB_ITEM("문구 자체", "Exact Words"),
