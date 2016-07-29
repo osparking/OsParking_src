@@ -80,6 +80,12 @@ import static com.osparking.global.names.ControlEnums.ComboBoxItemTypes.FOUR_DIG
 import static com.osparking.global.names.ControlEnums.ComboBoxItemTypes.NO_LOGGING_CB_ITEM;
 import static com.osparking.global.names.ControlEnums.ComboBoxItemTypes.SETTING_CHANGE_CB_ITEM;
 import static com.osparking.global.names.ControlEnums.ComboBoxItemTypes.SIX_DIGIT_CB_ITEM;
+import static com.osparking.global.names.ControlEnums.DialogMessages.PopSizeHelp1;
+import static com.osparking.global.names.ControlEnums.DialogMessages.PopSizeHelp2;
+import static com.osparking.global.names.ControlEnums.DialogMessages.PopSizeHelp3;
+import static com.osparking.global.names.ControlEnums.DialogMessages.PopSizeHelp4;
+import static com.osparking.global.names.ControlEnums.DialogMessages.PopSizeHelp5;
+import static com.osparking.global.names.ControlEnums.DialogMessages.PopSizeHelp6;
 import static com.osparking.global.names.ControlEnums.DialogMessages.REBOOT_MESSAGE;
 import static com.osparking.global.names.ControlEnums.DialogMessages.SAVE_SETTINGS_DIALOG;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.SETTINGS_SAVE_RESULT;
@@ -131,8 +137,10 @@ import com.osparking.osparking.device.LEDnotice.Settings_LEDnotice;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.KeyboardFocusManager;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Set;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
@@ -174,6 +182,8 @@ public class Settings_System extends javax.swing.JFrame {
         addMaxArrivalItems();
         maxArrivalCBoxIndex = findCBoxIndex(ImageDurationCBox, maxMaintainDate);
         addOperationLoggingLevelOptions();
+        addPopSizeOptions();
+        
         loadComponentValues();
         makeEnterActAsTab();
     }
@@ -193,32 +203,33 @@ public class Settings_System extends javax.swing.JFrame {
         attendantGUI_title = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
         parkinglotOptionPanel = new javax.swing.JPanel();
-        PWStrengthChoiceComboBox = new javax.swing.JComboBox<ConvComboBoxItem>();
+        jLabel42 = new javax.swing.JLabel();
+        lotNameTextField = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
+        PWHelpButton = new javax.swing.JButton();
+        PWStrengthChoiceComboBox = new javax.swing.JComboBox<ConvComboBoxItem>();
         jLabel2 = new javax.swing.JLabel();
+        LoggingLevelHelpButton = new javax.swing.JButton();
         OptnLoggingLevelComboBox = new javax.swing.JComboBox();
         jLabel3 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         MessageMaxLineComboBox = new javax.swing.JComboBox();
-        LoggingLevelHelpButton = new javax.swing.JButton();
-        PWHelpButton = new javax.swing.JButton();
         ImageDurationCBox = new javax.swing.JComboBox<ConvComboBoxItem>();
         ImageDurationLabel = new javax.swing.JLabel();
         GateCountComboBox = new javax.swing.JComboBox();
         jLabel6 = new javax.swing.JLabel();
         jLabel19 = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
-        jLabel13 = new javax.swing.JLabel();
+        pxLabel1 = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
-        jLabel14 = new javax.swing.JLabel();
         TextFieldPicWidth = new javax.swing.JTextField();
         TextFieldPicHeight = new javax.swing.JTextField();
+        LanguageHelpButton = new javax.swing.JButton();
         DateChooserLangCBox = new com.toedter.components.JLocaleChooser(parkingLotLocale);
-        LanguageSelectionlHelpButton = new javax.swing.JButton();
-        jLabel42 = new javax.swing.JLabel();
-        lotNameTextField = new javax.swing.JTextField();
-        StatPopSizeTextField = new javax.swing.JTextField();
+        pxLabel2 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
+        PopSizeHelpButton = new javax.swing.JButton();
+        PopSizeCBox = new javax.swing.JComboBox();
         RecordPassingDelayCBox = new javax.swing.JCheckBox();
         gateSettingPanel = new javax.swing.JPanel();
         GatesTabbedPane = new javax.swing.JTabbedPane();
@@ -451,6 +462,68 @@ public class Settings_System extends javax.swing.JFrame {
         parkinglotOptionPanel.setPreferredSize(new java.awt.Dimension(0, 330));
         parkinglotOptionPanel.setLayout(new java.awt.GridBagLayout());
 
+        jLabel42.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        jLabel42.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jLabel42.setText(LOT_NAME_LABEL.getContent());
+        jLabel42.setMaximumSize(new java.awt.Dimension(76, 27));
+        jLabel42.setMinimumSize(new java.awt.Dimension(76, 27));
+        jLabel42.setPreferredSize(new java.awt.Dimension(76, 27));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
+        gridBagConstraints.insets = new java.awt.Insets(10, 0, 0, 10);
+        parkinglotOptionPanel.add(jLabel42, gridBagConstraints);
+
+        lotNameTextField.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        lotNameTextField.setToolTipText("");
+        lotNameTextField.setMinimumSize(new java.awt.Dimension(250, 25));
+        lotNameTextField.setName("lotNameTextField"); // NOI18N
+        lotNameTextField.setPreferredSize(new java.awt.Dimension(250, 28));
+        lotNameTextField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                lotNameTextFieldKeyReleased(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 0, 10);
+        parkinglotOptionPanel.add(lotNameTextField, gridBagConstraints);
+
+        jLabel1.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jLabel1.setText(PASSWORD_LEVEL_LABEL.getContent());
+        jLabel1.setToolTipText("");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
+        gridBagConstraints.insets = new java.awt.Insets(10, 0, 0, 10);
+        parkinglotOptionPanel.add(jLabel1, gridBagConstraints);
+
+        PWHelpButton.setBackground(new java.awt.Color(153, 255, 153));
+        PWHelpButton.setFont(new java.awt.Font("Dotum", 1, 14)); // NOI18N
+        PWHelpButton.setIcon(getQuest20_Icon());
+        PWHelpButton.setMargin(new java.awt.Insets(2, 4, 2, 4));
+        PWHelpButton.setMaximumSize(new java.awt.Dimension(20, 20));
+        PWHelpButton.setMinimumSize(new java.awt.Dimension(20, 20));
+        PWHelpButton.setOpaque(false);
+        PWHelpButton.setPreferredSize(new java.awt.Dimension(20, 20));
+        PWHelpButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                PWHelpButtonActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
+        gridBagConstraints.insets = new java.awt.Insets(10, 0, 0, 0);
+        parkinglotOptionPanel.add(PWHelpButton, gridBagConstraints);
+
         PWStrengthChoiceComboBox.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         PWStrengthChoiceComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         PWStrengthChoiceComboBox.setMaximumSize(new java.awt.Dimension(32767, 30));
@@ -475,17 +548,6 @@ public class Settings_System extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 0, 0);
         parkinglotOptionPanel.add(PWStrengthChoiceComboBox, gridBagConstraints);
 
-        jLabel1.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        jLabel1.setText(PASSWORD_LEVEL_LABEL.getContent());
-        jLabel1.setToolTipText("");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
-        gridBagConstraints.insets = new java.awt.Insets(10, 0, 0, 10);
-        parkinglotOptionPanel.add(jLabel1, gridBagConstraints);
-
         jLabel2.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel2.setText(LOGGING_LEVEL_LABEL.getContent());
@@ -496,6 +558,25 @@ public class Settings_System extends javax.swing.JFrame {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
         gridBagConstraints.insets = new java.awt.Insets(10, 0, 0, 10);
         parkinglotOptionPanel.add(jLabel2, gridBagConstraints);
+
+        LoggingLevelHelpButton.setBackground(new java.awt.Color(153, 255, 153));
+        LoggingLevelHelpButton.setFont(new java.awt.Font("Dotum", 1, 14)); // NOI18N
+        LoggingLevelHelpButton.setIcon(getQuest20_Icon());
+        LoggingLevelHelpButton.setMargin(new java.awt.Insets(2, 4, 2, 4));
+        LoggingLevelHelpButton.setMinimumSize(new java.awt.Dimension(20, 20));
+        LoggingLevelHelpButton.setOpaque(false);
+        LoggingLevelHelpButton.setPreferredSize(new java.awt.Dimension(20, 20));
+        LoggingLevelHelpButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                LoggingLevelHelpButtonActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
+        gridBagConstraints.insets = new java.awt.Insets(10, 0, 0, 0);
+        parkinglotOptionPanel.add(LoggingLevelHelpButton, gridBagConstraints);
 
         OptnLoggingLevelComboBox.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         OptnLoggingLevelComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
@@ -563,45 +644,6 @@ public class Settings_System extends javax.swing.JFrame {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 0, 0);
         parkinglotOptionPanel.add(MessageMaxLineComboBox, gridBagConstraints);
-
-        LoggingLevelHelpButton.setBackground(new java.awt.Color(153, 255, 153));
-        LoggingLevelHelpButton.setFont(new java.awt.Font("Dotum", 1, 14)); // NOI18N
-        LoggingLevelHelpButton.setIcon(getQuest20_Icon());
-        LoggingLevelHelpButton.setMargin(new java.awt.Insets(2, 4, 2, 4));
-        LoggingLevelHelpButton.setMinimumSize(new java.awt.Dimension(20, 20));
-        LoggingLevelHelpButton.setOpaque(false);
-        LoggingLevelHelpButton.setPreferredSize(new java.awt.Dimension(20, 20));
-        LoggingLevelHelpButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                LoggingLevelHelpButtonActionPerformed(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
-        gridBagConstraints.insets = new java.awt.Insets(10, 0, 0, 0);
-        parkinglotOptionPanel.add(LoggingLevelHelpButton, gridBagConstraints);
-
-        PWHelpButton.setBackground(new java.awt.Color(153, 255, 153));
-        PWHelpButton.setFont(new java.awt.Font("Dotum", 1, 14)); // NOI18N
-        PWHelpButton.setIcon(getQuest20_Icon());
-        PWHelpButton.setMargin(new java.awt.Insets(2, 4, 2, 4));
-        PWHelpButton.setMaximumSize(new java.awt.Dimension(20, 20));
-        PWHelpButton.setMinimumSize(new java.awt.Dimension(20, 20));
-        PWHelpButton.setOpaque(false);
-        PWHelpButton.setPreferredSize(new java.awt.Dimension(20, 20));
-        PWHelpButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                PWHelpButtonActionPerformed(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
-        gridBagConstraints.insets = new java.awt.Insets(10, 0, 0, 0);
-        parkinglotOptionPanel.add(PWHelpButton, gridBagConstraints);
 
         ImageDurationCBox.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         ImageDurationCBox.setToolTipText("");
@@ -690,16 +732,16 @@ public class Settings_System extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(10, 30, 0, 0);
         parkinglotOptionPanel.add(jLabel11, gridBagConstraints);
 
-        jLabel13.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        jLabel13.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        jLabel13.setText("px");
-        jLabel13.setToolTipText("");
+        pxLabel1.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        pxLabel1.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        pxLabel1.setText("px");
+        pxLabel1.setToolTipText("");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 5;
         gridBagConstraints.gridy = 5;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
         gridBagConstraints.insets = new java.awt.Insets(10, 0, 0, 0);
-        parkinglotOptionPanel.add(jLabel13, gridBagConstraints);
+        parkinglotOptionPanel.add(pxLabel1, gridBagConstraints);
 
         jLabel12.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         jLabel12.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -710,17 +752,6 @@ public class Settings_System extends javax.swing.JFrame {
         gridBagConstraints.gridy = 6;
         gridBagConstraints.insets = new java.awt.Insets(10, 30, 0, 0);
         parkinglotOptionPanel.add(jLabel12, gridBagConstraints);
-
-        jLabel14.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        jLabel14.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        jLabel14.setText("px");
-        jLabel14.setToolTipText("");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 5;
-        gridBagConstraints.gridy = 6;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(13, 0, 10, 0);
-        parkinglotOptionPanel.add(jLabel14, gridBagConstraints);
 
         TextFieldPicWidth.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         TextFieldPicWidth.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
@@ -762,6 +793,24 @@ public class Settings_System extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(10, 0, 0, 20);
         parkinglotOptionPanel.add(TextFieldPicHeight, gridBagConstraints);
 
+        LanguageHelpButton.setBackground(new java.awt.Color(153, 255, 153));
+        LanguageHelpButton.setFont(new java.awt.Font("Dotum", 1, 14)); // NOI18N
+        LanguageHelpButton.setIcon(getQuest20_Icon());
+        LanguageHelpButton.setMargin(new java.awt.Insets(2, 4, 2, 4));
+        LanguageHelpButton.setMinimumSize(new java.awt.Dimension(20, 20));
+        LanguageHelpButton.setOpaque(false);
+        LanguageHelpButton.setPreferredSize(new java.awt.Dimension(20, 20));
+        LanguageHelpButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                LanguageHelpButtonActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.insets = new java.awt.Insets(10, 0, 0, 0);
+        parkinglotOptionPanel.add(LanguageHelpButton, gridBagConstraints);
+
         DateChooserLangCBox.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         DateChooserLangCBox.setMaximumSize(new java.awt.Dimension(32767, 28));
         DateChooserLangCBox.setMinimumSize(new java.awt.Dimension(294, 23));
@@ -785,89 +834,66 @@ public class Settings_System extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 0, 0);
         parkinglotOptionPanel.add(DateChooserLangCBox, gridBagConstraints);
 
-        LanguageSelectionlHelpButton.setBackground(new java.awt.Color(153, 255, 153));
-        LanguageSelectionlHelpButton.setFont(new java.awt.Font("Dotum", 1, 14)); // NOI18N
-        LanguageSelectionlHelpButton.setIcon(getQuest20_Icon());
-        LanguageSelectionlHelpButton.setMargin(new java.awt.Insets(2, 4, 2, 4));
-        LanguageSelectionlHelpButton.setMinimumSize(new java.awt.Dimension(20, 20));
-        LanguageSelectionlHelpButton.setOpaque(false);
-        LanguageSelectionlHelpButton.setPreferredSize(new java.awt.Dimension(20, 20));
-        LanguageSelectionlHelpButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                LanguageSelectionlHelpButtonActionPerformed(evt);
-            }
-        });
+        pxLabel2.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        pxLabel2.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        pxLabel2.setText("px");
+        pxLabel2.setToolTipText("");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 3;
-        gridBagConstraints.insets = new java.awt.Insets(10, 0, 0, 0);
-        parkinglotOptionPanel.add(LanguageSelectionlHelpButton, gridBagConstraints);
-
-        jLabel42.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        jLabel42.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        jLabel42.setText(LOT_NAME_LABEL.getContent());
-        jLabel42.setMaximumSize(new java.awt.Dimension(76, 27));
-        jLabel42.setMinimumSize(new java.awt.Dimension(76, 27));
-        jLabel42.setPreferredSize(new java.awt.Dimension(76, 27));
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
-        gridBagConstraints.insets = new java.awt.Insets(10, 0, 0, 10);
-        parkinglotOptionPanel.add(jLabel42, gridBagConstraints);
-
-        lotNameTextField.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        lotNameTextField.setToolTipText("");
-        lotNameTextField.setMinimumSize(new java.awt.Dimension(250, 25));
-        lotNameTextField.setName("lotNameTextField"); // NOI18N
-        lotNameTextField.setPreferredSize(new java.awt.Dimension(250, 28));
-        lotNameTextField.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                lotNameTextFieldKeyReleased(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 0, 10);
-        parkinglotOptionPanel.add(lotNameTextField, gridBagConstraints);
-
-        StatPopSizeTextField.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        StatPopSizeTextField.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
-        StatPopSizeTextField.setText("100");
-        StatPopSizeTextField.setToolTipText("");
-        StatPopSizeTextField.setMinimumSize(new java.awt.Dimension(6, 25));
-        StatPopSizeTextField.setName("StatPopSizeTextField"); // NOI18N
-        StatPopSizeTextField.setPreferredSize(new java.awt.Dimension(70, 25));
-        StatPopSizeTextField.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                StatPopSizeTextFieldKeyReleased(evt);
-            }
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                StatPopSizeTextFieldKeyTyped(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 7;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 0, 10);
-        parkinglotOptionPanel.add(StatPopSizeTextField, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(13, 0, 10, 0);
+        parkinglotOptionPanel.add(pxLabel2, gridBagConstraints);
 
         jLabel4.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel4.setText(STATISTICS_SIZE_LABEL.getContent());
         jLabel4.setMaximumSize(new java.awt.Dimension(176, 27));
         jLabel4.setMinimumSize(new java.awt.Dimension(76, 27));
-        jLabel4.setPreferredSize(new java.awt.Dimension(110, 27));
+        jLabel4.setPreferredSize(new java.awt.Dimension(170, 27));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 7;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
         gridBagConstraints.insets = new java.awt.Insets(10, 0, 0, 10);
         parkinglotOptionPanel.add(jLabel4, gridBagConstraints);
+
+        PopSizeHelpButton.setBackground(new java.awt.Color(153, 255, 153));
+        PopSizeHelpButton.setFont(new java.awt.Font("Dotum", 1, 14)); // NOI18N
+        PopSizeHelpButton.setIcon(getQuest20_Icon());
+        PopSizeHelpButton.setMargin(new java.awt.Insets(2, 4, 2, 4));
+        PopSizeHelpButton.setMinimumSize(new java.awt.Dimension(20, 20));
+        PopSizeHelpButton.setOpaque(false);
+        PopSizeHelpButton.setPreferredSize(new java.awt.Dimension(20, 20));
+        PopSizeHelpButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                PopSizeHelpButtonActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 7;
+        gridBagConstraints.insets = new java.awt.Insets(10, 0, 0, 0);
+        parkinglotOptionPanel.add(PopSizeHelpButton, gridBagConstraints);
+
+        PopSizeCBox.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        PopSizeCBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "100", "200", "300", "500", "1000" }));
+        PopSizeCBox.setMinimumSize(new java.awt.Dimension(70, 23));
+        PopSizeCBox.setName("MessageMaxLineComboBox"); // NOI18N
+        PopSizeCBox.setPreferredSize(new java.awt.Dimension(70, 23));
+        PopSizeCBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                PopSizeCBoxActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 7;
+        gridBagConstraints.ipadx = 19;
+        gridBagConstraints.ipady = 5;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 0, 0);
+        parkinglotOptionPanel.add(PopSizeCBox, gridBagConstraints);
 
         RecordPassingDelayCBox.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         RecordPassingDelayCBox.setText(RECORD_PASSING_LABEL.getContent());
@@ -2625,18 +2651,14 @@ public class Settings_System extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void StatPopSizeTextFieldKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_StatPopSizeTextFieldKeyTyped
-        rejectNonNumericKeys(evt);
-    }//GEN-LAST:event_StatPopSizeTextFieldKeyTyped
-
-    private void LanguageSelectionlHelpButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LanguageSelectionlHelpButtonActionPerformed
+    private void LanguageHelpButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LanguageHelpButtonActionPerformed
         // TODO add your handling code here:
         String helpText = "Date Input Panel GUI language selection .";
 
         JDialog helpDialog = new PWHelpJDialog(this, false,
             "Language Usage", helpText, false);
         locateAndShowHelpDialog(this, helpDialog, LoggingLevelHelpButton);
-    }//GEN-LAST:event_LanguageSelectionlHelpButtonActionPerformed
+    }//GEN-LAST:event_LanguageHelpButtonActionPerformed
 
     private void LoggingLevelHelpButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LoggingLevelHelpButtonActionPerformed
 
@@ -2699,12 +2721,6 @@ public class Settings_System extends javax.swing.JFrame {
         boolean newStorePassingDelay = RecordPassingDelayCBox.isSelected();
 
         //<editor-fold desc="--check setting input errors">
-        if (newStorePassingDelay) {
-            if (!TextFieldNumericValueOK(StatPopSizeTextField, "Statistics Cycle Input Error")) {
-                return;
-            }
-        }
-        
         if (!TextFieldNumericValueOK(TextFieldPicWidth, "Photo Extent Typing Errors")) {
             return;
         }
@@ -2736,7 +2752,7 @@ public class Settings_System extends javax.swing.JFrame {
         }
         //</editor-fold>
 
-        String statCountStr = "";
+        int newSCountIdx = 0;
         short pwLevel = -1;
         short optnLogLevel = -1;
         String maxLineStr = "";
@@ -2745,6 +2761,7 @@ public class Settings_System extends javax.swing.JFrame {
         int picHeight = Integer.parseInt(((String) TextFieldPicHeight.getText()).replace(",", ""));
         int flowCycle = Integer.parseInt(((String) FlowingComboBox.getSelectedItem()).replace(",", ""));
         int blinkCycle = Integer.parseInt(((String) BlinkingComboBox.getSelectedItem()).replace(",", ""));
+        
         try {
             StringBuffer sb = new StringBuffer("Update SettingsTable SET ");
             //<editor-fold desc="--create update statement">
@@ -2757,10 +2774,10 @@ public class Settings_System extends javax.swing.JFrame {
             sb.append("max_maintain_date = ? ");
             //</editor-fold>
 
-            statCountStr = (StatPopSizeTextField.getText().trim());
+            newSCountIdx = PopSizeCBox.getSelectedIndex();
             if (newStorePassingDelay) {
                 for (int gateID = 1; gateID <= gateCount; gateID++) {
-                    initPassingDelayStatIfNeeded(Integer.parseInt(statCountStr), gateID);
+                    initPassingDelayStatIfNeeded(newSCountIdx, gateID);
                 }
             }
             conn = JDBCMySQL.getConnection();
@@ -2789,12 +2806,7 @@ public class Settings_System extends javax.swing.JFrame {
             updateSettings.setString(pIndex++, DateChooserLangCBox.getLocale().getLanguage());
             updateSettings.setString(pIndex++, DateChooserLangCBox.getLocale().getCountry());
             updateSettings.setShort(pIndex++, (short)DateChooserLangCBox.getSelectedIndex());
-
-            if (statCountStr.length() == 0) {
-                // Handle the case of wrong value (zero) input.
-                statCountStr = "100";
-            }
-            updateSettings.setInt(pIndex++, Integer.parseInt(statCountStr));
+            updateSettings.setInt(pIndex++, newSCountIdx);
             
             maxLineStr = (String)MessageMaxLineComboBox.getSelectedItem();
             updateSettings.setShort(pIndex++, new Short(maxLineStr));
@@ -2823,10 +2835,10 @@ public class Settings_System extends javax.swing.JFrame {
 
             if (result == 1) {
                 //<editor-fold desc="-- Log system settings change if set to do so">
-                if (statCount != Integer.parseInt(statCountStr)) 
+                if (statCount != newSCountIdx) 
                 {
                     logParkingOperation(OpLogLevel.SettingsChange, "Settings Change, Statistics Population Size: " 
-                            + statCount + " => " + Integer.parseInt(statCountStr));
+                            + statCount + " => " + newSCountIdx);
                 }
                
                 if (storePassingDelay != newStorePassingDelay)
@@ -2932,6 +2944,16 @@ public class Settings_System extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_SettingsSaveButtonActionPerformed
 
+    private void addPopSizeOptions() {
+        PopSizeCBox.removeAllItems();
+        
+        int options[] = {1, 10, 100, 1000, 10000, 100000};
+        for (int option : options) {
+            PopSizeCBox.addItem(new ConvComboBoxItem(new Integer(option), 
+                    NumberFormat.getNumberInstance(Locale.US).format(option)));
+        }
+    }    
+    
     private void SettingsCancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SettingsCancelButtonActionPerformed
         loadComponentValues();
     }//GEN-LAST:event_SettingsCancelButtonActionPerformed
@@ -2959,8 +2981,7 @@ public class Settings_System extends javax.swing.JFrame {
 
     private void ImageDurationCBoxPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_ImageDurationCBoxPopupMenuWillBecomeInvisible
         ChangeSettings.changeStatus_Manager(SettingsSaveButton, SettingsCancelButton, SettingsCloseButton, 
-                changedControls, (Component) evt.getSource(), ImageDurationCBox.getSelectedIndex(), maxArrivalCBoxIndex);
-        
+                changedControls, (Component) evt.getSource(), ImageDurationCBox.getSelectedIndex(), maxArrivalCBoxIndex);        
     }//GEN-LAST:event_ImageDurationCBoxPopupMenuWillBecomeInvisible
 
     private void PWStrengthChoiceComboBoxPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_PWStrengthChoiceComboBoxPopupMenuWillBecomeInvisible
@@ -2990,15 +3011,6 @@ public class Settings_System extends javax.swing.JFrame {
         ChangeSettings.changeStatus_Manager(SettingsSaveButton, SettingsCancelButton, SettingsCloseButton, 
                 changedControls, (Component) evt.getSource(), Integer.parseInt(gateCountStr), gateCount);        
     }//GEN-LAST:event_GateCountComboBoxPopupMenuWillBecomeInvisible
-
-    private void StatPopSizeTextFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_StatPopSizeTextFieldKeyReleased
-        String newStatPopStr = StatPopSizeTextField.getText().trim();
-        if(newStatPopStr.length() == 0){
-            newStatPopStr = "0";
-         }
-        ChangeSettings.changeStatus_Manager(SettingsSaveButton, SettingsCancelButton, SettingsCloseButton, 
-                changedControls, (Component) evt.getSource(), Integer.parseInt(newStatPopStr), statCount);
-    }//GEN-LAST:event_StatPopSizeTextFieldKeyReleased
 
     private void TextFieldPicWidthKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TextFieldPicWidthKeyReleased
         String newPicWidthStr = ((String) TextFieldPicWidth.getText()).replace(",", "");
@@ -3404,6 +3416,29 @@ public class Settings_System extends javax.swing.JFrame {
     private void GateBar1_Port_TextFieldKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_GateBar1_Port_TextFieldKeyTyped
         // TODO add your handling code here:
     }//GEN-LAST:event_GateBar1_Port_TextFieldKeyTyped
+
+    private void PopSizeCBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PopSizeCBoxActionPerformed
+        /**
+         * Check selected item and record into the changed control set if needed.
+         */
+        ChangeSettings.changeStatus_Manager(SettingsSaveButton, SettingsCancelButton, SettingsCloseButton, 
+                changedControls, (Component) evt.getSource(), PopSizeCBox.getSelectedIndex(), 
+                statCount);        
+    }//GEN-LAST:event_PopSizeCBoxActionPerformed
+
+    private void PopSizeHelpButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PopSizeHelpButtonActionPerformed
+        String helpText = PopSizeHelp1.getContent() + System.lineSeparator() +
+                PopSizeHelp2.getContent() + System.lineSeparator() +
+                PopSizeHelp3.getContent() + System.lineSeparator() +
+                System.lineSeparator() +
+                PopSizeHelp4.getContent() + System.lineSeparator() +
+                PopSizeHelp5.getContent() + System.lineSeparator() +
+                PopSizeHelp6.getContent() + System.lineSeparator();
+
+        JDialog helpDialog = new PWHelpJDialog(this, false,
+            STATISTICS_SIZE_LABEL.getContent(), helpText, false);
+        locateAndShowHelpDialog(this, helpDialog, LoggingLevelHelpButton);
+    }//GEN-LAST:event_PopSizeHelpButtonActionPerformed
                                               
     void closeSettingsForm() {
         if(mainForm != null)
@@ -3530,7 +3565,7 @@ public class Settings_System extends javax.swing.JFrame {
     public javax.swing.JTabbedPane GatesTabbedPane;
     private javax.swing.JComboBox ImageDurationCBox;
     private javax.swing.JLabel ImageDurationLabel;
-    private javax.swing.JButton LanguageSelectionlHelpButton;
+    private javax.swing.JButton LanguageHelpButton;
     private javax.swing.JButton LoggingLevelHelpButton;
     private javax.swing.JComboBox MessageMaxLineComboBox;
     private javax.swing.JComboBox OptnLoggingLevelComboBox;
@@ -3539,11 +3574,12 @@ public class Settings_System extends javax.swing.JFrame {
     private javax.swing.JComboBox PWStrengthChoiceComboBox;
     */
     private javax.swing.JComboBox<ConvComboBoxItem> PWStrengthChoiceComboBox;
+    private javax.swing.JComboBox PopSizeCBox;
+    private javax.swing.JButton PopSizeHelpButton;
     private javax.swing.JCheckBox RecordPassingDelayCBox;
     private javax.swing.JButton SettingsCancelButton;
     private javax.swing.JButton SettingsCloseButton;
     private javax.swing.JButton SettingsSaveButton;
-    private javax.swing.JTextField StatPopSizeTextField;
     private javax.swing.JTextField TextFieldGateName1;
     private javax.swing.JTextField TextFieldGateName2;
     private javax.swing.JTextField TextFieldGateName3;
@@ -3625,8 +3661,6 @@ public class Settings_System extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
-    private javax.swing.JLabel jLabel13;
-    private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel20;
@@ -3669,6 +3703,8 @@ public class Settings_System extends javax.swing.JFrame {
     private javax.swing.JTextField lotNameTextField;
     private javax.swing.JLabel myMetaKeyLabel;
     private javax.swing.JPanel parkinglotOptionPanel;
+    private javax.swing.JLabel pxLabel1;
+    private javax.swing.JLabel pxLabel2;
     private javax.swing.JPanel real2Pan;
     private javax.swing.JPanel titlePanel;
     private javax.swing.JPanel topLabelsPanel;
@@ -3691,7 +3727,7 @@ public class Settings_System extends javax.swing.JFrame {
         DateChooserLangCBox.setSelectedItem(parkingLotLocale.getDisplayName());
         localeIndex = (short) DateChooserLangCBox.getSelectedIndex();
         
-        StatPopSizeTextField.setText(Integer.toString(statCount));
+        PopSizeCBox.setSelectedIndex(statCount);
         MessageMaxLineComboBox.setSelectedItem(String.valueOf(maxMessageLines));
         GateCountComboBox.setSelectedIndex(gateCount - 1);
         ImageDurationCBox.setSelectedIndex(maxArrivalCBoxIndex);
@@ -3852,12 +3888,12 @@ public class Settings_System extends javax.swing.JFrame {
         }      
     }
 
-    private void initPassingDelayStatIfNeeded(int newStatCount, int gateID) {
+    private void initPassingDelayStatIfNeeded(int newIndex, int gateID) {
         if (storePassingDelay) {
             /**
              * Passing Delay Statistics Population Size Changed while Statistics Are Gathered.
              */
-            if (newStatCount !=statCount) { 
+            if (newIndex != statCount) { 
                 if (passingCountCurrent[gateID] != 0) {
                     String secs = String.format("%.3f " + SECONDS_LABEL.getContent(), 
                             (float)passingDelayCurrentTotalMs[gateID]/passingCountCurrent[gateID]/1000f);
@@ -4092,11 +4128,15 @@ public class Settings_System extends javax.swing.JFrame {
                 changedControls, comp, deviceIpField.getText().trim(), deviceIP[device.ordinal()][gateNo]);
     }
 
-    private void checkDevicePortChangeAndChangeButtonEnabledProperty(DeviceType device, int gateNo, Component comp) {
-        JTextField devicePortField = (JTextField)componentMap.get(device.toString() + gateNo + "_Port_TextField");
+    private void checkDevicePortChangeAndChangeButtonEnabledProperty(DeviceType device, 
+            int gateNo, Component comp) 
+    {
+        JTextField devicePortField 
+                = (JTextField)componentMap.get(device.toString() + gateNo + "_Port_TextField");
         
-        ChangeSettings.changeStatus_Manager(SettingsSaveButton, SettingsCancelButton, SettingsCloseButton, 
-                changedControls, comp, devicePortField.getText().trim(), devicePort[device.ordinal()][gateNo]);
+        ChangeSettings.changeStatus_Manager(SettingsSaveButton, SettingsCancelButton, 
+                SettingsCloseButton, changedControls, comp, devicePortField.getText().trim(), 
+                devicePort[device.ordinal()][gateNo]);
     }
 
     private void makeEnterActAsTab() {
@@ -4308,9 +4348,6 @@ public class Settings_System extends javax.swing.JFrame {
         /**
          * Standardize TextField heights
          */
-        changeComponentHeight(StatPopSizeTextField, TEXT_FIELD_HEIGHT);
-        changeComponentHeight(StatPopSizeTextField, TEXT_FIELD_HEIGHT);
-
         changeComponentHeight(lotNameTextField, TEXT_FIELD_HEIGHT);
         changeComponentHeight(TextFieldPicWidth, TEXT_FIELD_HEIGHT);
         changeComponentHeight(TextFieldPicHeight, TEXT_FIELD_HEIGHT);
@@ -4337,6 +4374,7 @@ public class Settings_System extends javax.swing.JFrame {
         changeComponentHeight(DateChooserLangCBox, CBOX_HEIGHT);
         changeComponentHeight(MessageMaxLineComboBox, CBOX_HEIGHT);
         changeComponentHeight(GateCountComboBox, CBOX_HEIGHT);
+        changeComponentHeight(PopSizeCBox, CBOX_HEIGHT);
         changeComponentHeight(ImageDurationCBox, CBOX_HEIGHT);
         
         changeComponentHeight(FlowingComboBox, CBOX_HEIGHT + 4);

@@ -179,8 +179,8 @@ public class ControlEnums {
         E_BOARD_LABEL ("전광판",  "E-Board"),
         GATE_BAR_LABEL ("차단기",  "G-Bar"),
         DISALLOWED_LABEL("일시적으로 허용되지 않은 차량입니다.", "Car Temporarily Not Permitted"),
-        STATISTICS_SIZE_LABEL("통계 모집단 크기",  "Statistics Population Size"),
-        RECORD_PASSING_LABEL("통과 시간 기록",  "Record Passing Delay"),
+        STATISTICS_SIZE_LABEL("성능 통계 모집단 크기",  "Statistics Population Size"),
+        RECORD_PASSING_LABEL("통과 성능 기록",  "Record Passing Delay"),
         PASSWORD_LEVEL_LABEL("비밀번호 난이도",  "Password Complexity Level"),
         HOWTO_CHANGE_PW_STRENGTH("\u203B 비밀번호 난이도 설정 단계:",
                 "\u203B Setting Password Complexity Level:"),
@@ -477,7 +477,13 @@ public class ControlEnums {
     }
 
     public enum DialogMessages {
-         
+        PopSizeHelp1("차량 통과 지연 시간 계산을", "Determines the population"),
+        PopSizeHelp2("위한 통계처리에 있어서", "size to calculate average"),
+        PopSizeHelp3("모집단의 크기를 정한다", "vehicle passing delay."),
+        PopSizeHelp4("즉, 최근 통과시킨 몇 대의", "In other words, the number of"),
+        PopSizeHelp5("차량에 대한 평균 처리 시간을", "cars passed recently and"),
+        PopSizeHelp6("계산할지 결정한다.", "added for the average delay."),
+        
         PERIOD_ERROR_DIALOG1("시작일이 종료일보다 늦을 수 없습니다. ", "End date can't precede start date!"),
         PERIOD_ERROR_DIALOG2("검색 기간을 수정하십시오!", "Please correct search range!"),
         DRIVER_ODS_READ_RESULT1("운전자 읽어들인 결과", "Driver Upload Result"),
