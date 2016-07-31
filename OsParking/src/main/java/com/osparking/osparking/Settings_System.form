@@ -1137,6 +1137,7 @@
                                 <StringItem index="1" value="RS-232"/>
                               </StringArray>
                             </Property>
+                            <Property name="enabled" type="boolean" value="false"/>
                             <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                               <Dimension value="[80, 23]"/>
                             </Property>
@@ -1145,10 +1146,6 @@
                               <Dimension value="[90, 27]"/>
                             </Property>
                           </Properties>
-                          <Events>
-                            <EventHandler event="popupMenuWillBecomeInvisible" listener="javax.swing.event.PopupMenuListener" parameters="javax.swing.event.PopupMenuEvent" handler="Camera1_connTypeCBoxPopupMenuWillBecomeInvisible"/>
-                            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="Camera1_connTypeCBoxActionPerformed"/>
-                          </Events>
                         </Component>
                         <Component class="javax.swing.JTextField" name="Camera1_IP_TextField">
                           <Properties>
@@ -4262,6 +4259,7 @@
                     </Property>
                   </Properties>
                   <Events>
+                    <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="SettingsCloseButtonStateChanged"/>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="SettingsCloseButtonActionPerformed"/>
                   </Events>
                 </Component>

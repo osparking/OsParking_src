@@ -16,6 +16,7 @@
  */
 package com.osparking.global.names;
 
+import static com.osparking.global.CommonData.statCountArr;
 import com.osparking.global.Globals;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -27,7 +28,6 @@ import java.util.logging.Level;
 import static com.osparking.global.Globals.*;
 import static com.osparking.global.Globals.sdf;
 import static com.osparking.global.names.ControlEnums.LabelContent.GATE_LABEL;
-import com.osparking.global.names.ControlEnums.Languages;
 import static com.osparking.global.names.ControlEnums.Languages.ENGLISH;
 import static com.osparking.global.names.ControlEnums.Languages.KOREAN;
 import static com.osparking.global.names.ControlEnums.TextType.LETEST_MSG;
@@ -99,6 +99,7 @@ public class DB_Access {
      * (e.g., 20 : 20 execution times are to be added to get the average of it.)
      */
     public static int statCount = 0;
+    public static int statCountIndex = 0;
     
     public static int[] passingCountCurrent;
     
@@ -283,7 +284,8 @@ public class DB_Access {
                         break;
                 }
                 localeIndex = rs.getShort("localeIndex");
-                statCount = rs.getInt("statCount");     // Statistics Population Size
+                statCountIndex = rs.getInt("statCount");     // Statistics Population Size
+                statCount = statCountArr[statCountIndex];     // Statistics Population Size
                 maxMessageLines = rs.getInt("maxMessageLines");
                 maxMaintainDate = rs.getInt("max_maintain_date");   // image keeping duration
                 gateCount = rs.getShort("GateCount");  // number of gates

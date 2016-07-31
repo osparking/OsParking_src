@@ -60,6 +60,7 @@ import static com.osparking.global.names.OSP_enums.OpLogLevel.EBDsettingsChange;
 import com.osparking.global.names.PasswordValidator;
 import org.apache.commons.validator.routines.InetAddressValidator;
 import com.osparking.attendant.PWHelpJDialog;
+import com.osparking.global.CommonData;
 import static com.osparking.global.CommonData.CBOX_HEIGHT;
 import static com.osparking.global.CommonData.SETTINGS_HEIGHT;
 import static com.osparking.global.CommonData.SETTINGS_WIDTH;
@@ -67,6 +68,7 @@ import static com.osparking.global.CommonData.TEXT_FIELD_HEIGHT;
 import static com.osparking.global.CommonData.buttonHeightNorm;
 import static com.osparking.global.CommonData.buttonHeightShort;
 import static com.osparking.global.CommonData.buttonWidthNorm;
+import static com.osparking.global.CommonData.statCountArr;
 import static com.osparking.global.CommonData.tipColor;
 import com.osparking.global.names.ChangeSettings;
 import static com.osparking.global.names.ControlEnums.ButtonTypes.CANCEL_BTN;
@@ -124,6 +126,7 @@ import static com.osparking.global.names.DB_Access.devicePort;
 import static com.osparking.global.names.DB_Access.deviceType;
 import static com.osparking.global.names.DB_Access.parkingLotLocale;
 import static com.osparking.global.names.DB_Access.parkingLotName;
+import static com.osparking.global.names.DB_Access.statCountIndex;
 import com.osparking.global.names.OSP_enums.CameraType;
 import com.osparking.global.names.OSP_enums.ConnectionType;
 import static com.osparking.global.names.OSP_enums.ConnectionType.RS_232;
@@ -183,6 +186,50 @@ public class Settings_System extends javax.swing.JFrame {
         maxArrivalCBoxIndex = findCBoxIndex(ImageDurationCBox, maxMaintainDate);
         addOperationLoggingLevelOptions();
         addPopSizeOptions();
+
+        /**
+         * Initialize device combobox items.
+         */
+        for (int gate = 1; gate <= gateCount; gate++) { 
+            //<editor-fold desc="-- Combo Box item init for device and connection type of each gate">
+            JComboBox comboBx = ((JComboBox)getComponentByName("Camera" +gate + "_TypeCBox"));
+            if (comboBx != null) {
+                comboBx.removeAllItems();
+                for (CameraType type: CameraType.values()) {
+                    comboBx.addItem(type.getLabel());
+                }
+            }
+            
+            comboBx = ((JComboBox)getComponentByName("E_Board" +gate + "_TypeCBox"));
+            if (comboBx != null) {
+                comboBx.removeAllItems();
+                for (E_BoardType type: E_BoardType.values()) {
+                    comboBx.addItem(type.getLabel());
+                }
+            }
+            
+            comboBx = ((JComboBox)getComponentByName("GateBar" +gate + "_TypeCBox"));
+            if (comboBx != null) {
+                comboBx.removeAllItems();
+                for (GateBarType type: GateBarType.values()) {
+                    comboBx.addItem(type.getLabel());
+                }
+            }
+            
+            for (DeviceType devType: DeviceType.values()) {
+                comboBx = ((JComboBox)getComponentByName(devType.name() +gate + "_connTypeCBox"));
+                if (comboBx != null) {
+                    comboBx.removeAllItems();
+                    for (ConnectionType connType : ConnectionType.values()) {
+                        if (devType != Camera || connType == ConnectionType.TCP_IP) 
+                        {
+                            comboBx.addItem(connType.getLabel());
+                        }
+                    }
+                }
+            }
+            //</editor-fold>
+        }        
         
         loadComponentValues();
         makeEnterActAsTab();
@@ -1028,23 +1075,10 @@ public class Settings_System extends javax.swing.JFrame {
 
         Camera1_connTypeCBox.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         Camera1_connTypeCBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "TCP/IP", "RS-232" }));
+        Camera1_connTypeCBox.setEnabled(false);
         Camera1_connTypeCBox.setMinimumSize(new java.awt.Dimension(80, 23));
         Camera1_connTypeCBox.setName("Camera1_connTypeCBox"); // NOI18N
         Camera1_connTypeCBox.setPreferredSize(new java.awt.Dimension(90, 27));
-        Camera1_connTypeCBox.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
-            public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
-            }
-            public void popupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {
-                Camera1_connTypeCBoxPopupMenuWillBecomeInvisible(evt);
-            }
-            public void popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {
-            }
-        });
-        Camera1_connTypeCBox.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                Camera1_connTypeCBoxActionPerformed(evt);
-            }
-        });
         cameraPan.add(Camera1_connTypeCBox);
 
         Camera1_IP_TextField.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
@@ -2630,6 +2664,11 @@ public class Settings_System extends javax.swing.JFrame {
         SettingsCloseButton.setText(CLOSE_BTN.getContent());
         SettingsCloseButton.setToolTipText(CLOSE_BTN_TOOLTIP.getContent());
         SettingsCloseButton.setPreferredSize(new java.awt.Dimension(90, 40));
+        SettingsCloseButton.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                SettingsCloseButtonStateChanged(evt);
+            }
+        });
         SettingsCloseButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 SettingsCloseButtonActionPerformed(evt);
@@ -2752,7 +2791,7 @@ public class Settings_System extends javax.swing.JFrame {
         }
         //</editor-fold>
 
-        int newSCountIdx = 0;
+        int newStatCount = 0;
         short pwLevel = -1;
         short optnLogLevel = -1;
         String maxLineStr = "";
@@ -2774,10 +2813,11 @@ public class Settings_System extends javax.swing.JFrame {
             sb.append("max_maintain_date = ? ");
             //</editor-fold>
 
-            newSCountIdx = PopSizeCBox.getSelectedIndex();
+            ConvComboBoxItem selectedItem = (ConvComboBoxItem)PopSizeCBox.getSelectedItem();
+            newStatCount = (Integer)selectedItem.getKeyValue();
             if (newStorePassingDelay) {
                 for (int gateID = 1; gateID <= gateCount; gateID++) {
-                    initPassingDelayStatIfNeeded(newSCountIdx, gateID);
+                    initPassingDelayStatIfNeeded(newStatCount, gateID);
                 }
             }
             conn = JDBCMySQL.getConnection();
@@ -2806,7 +2846,7 @@ public class Settings_System extends javax.swing.JFrame {
             updateSettings.setString(pIndex++, DateChooserLangCBox.getLocale().getLanguage());
             updateSettings.setString(pIndex++, DateChooserLangCBox.getLocale().getCountry());
             updateSettings.setShort(pIndex++, (short)DateChooserLangCBox.getSelectedIndex());
-            updateSettings.setInt(pIndex++, newSCountIdx);
+            updateSettings.setInt(pIndex++, PopSizeCBox.getSelectedIndex());
             
             maxLineStr = (String)MessageMaxLineComboBox.getSelectedItem();
             updateSettings.setShort(pIndex++, new Short(maxLineStr));
@@ -2835,10 +2875,10 @@ public class Settings_System extends javax.swing.JFrame {
 
             if (result == 1) {
                 //<editor-fold desc="-- Log system settings change if set to do so">
-                if (statCount != newSCountIdx) 
+                if (statCount != newStatCount) 
                 {
                     logParkingOperation(OpLogLevel.SettingsChange, "Settings Change, Statistics Population Size: " 
-                            + statCount + " => " + newSCountIdx);
+                            + statCount + " => " + newStatCount);
                 }
                
                 if (storePassingDelay != newStorePassingDelay)
@@ -2934,8 +2974,7 @@ public class Settings_System extends javax.swing.JFrame {
             Globals.getOperationLog().setLevel(index2Level(opLoggingIndex));
             JOptionPane.showMessageDialog(this, SAVE_SETTINGS_DIALOG.getContent(),
                 SETTINGS_SAVE_RESULT.getContent(), JOptionPane.PLAIN_MESSAGE);
-            changedControls.clear();
-            changeEnabled_of_SaveCancelButtons(false);
+            enableSaveCancelButtons(false);
             ChangeSettings.changeEnabled_of_SaveCancelButtons(SettingsSaveButton, SettingsCancelButton, 
                     SettingsCloseButton, changedControls.size());            
         } else {
@@ -2947,8 +2986,7 @@ public class Settings_System extends javax.swing.JFrame {
     private void addPopSizeOptions() {
         PopSizeCBox.removeAllItems();
         
-        int options[] = {1, 10, 100, 1000, 10000, 100000};
-        for (int option : options) {
+        for (int option : statCountArr) {
             PopSizeCBox.addItem(new ConvComboBoxItem(new Integer(option), 
                     NumberFormat.getNumberInstance(Locale.US).format(option)));
         }
@@ -3092,22 +3130,12 @@ public class Settings_System extends javax.swing.JFrame {
         checkGateNameChangeAndChangeEnabled(1, (Component) evt.getSource());
     }//GEN-LAST:event_TextFieldGateName1KeyReleased
 
-    private void Camera1_connTypeCBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Camera1_connTypeCBoxActionPerformed
-        changeSaveEnabledForConnTypeChange(Camera, 1);
-    }//GEN-LAST:event_Camera1_connTypeCBoxActionPerformed
-
     private void Camera1_TypeCBoxPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_Camera1_TypeCBoxPopupMenuWillBecomeInvisible
         ChangeSettings.changeStatus_Manager(
                 SettingsSaveButton, SettingsCancelButton, SettingsCloseButton, 
                 changedControls, ((Component) evt.getSource()), Camera1_TypeCBox.getSelectedIndex(), 
                 deviceType[Camera.ordinal()][1]);
     }//GEN-LAST:event_Camera1_TypeCBoxPopupMenuWillBecomeInvisible
-
-    private void Camera1_connTypeCBoxPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_Camera1_connTypeCBoxPopupMenuWillBecomeInvisible
-        ChangeSettings.changeStatus_Manager(SettingsSaveButton, SettingsCancelButton, SettingsCloseButton, 
-                changedControls, ((Component) evt.getSource()), Camera1_connTypeCBox.getSelectedIndex(), 
-                connectionType[Camera.ordinal()][1]);
-    }//GEN-LAST:event_Camera1_connTypeCBoxPopupMenuWillBecomeInvisible
 
     private void TextFieldGateName3KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TextFieldGateName3KeyReleased
         // TODO add your handling code here:
@@ -3423,7 +3451,7 @@ public class Settings_System extends javax.swing.JFrame {
          */
         ChangeSettings.changeStatus_Manager(SettingsSaveButton, SettingsCancelButton, SettingsCloseButton, 
                 changedControls, (Component) evt.getSource(), PopSizeCBox.getSelectedIndex(), 
-                statCount);        
+                statCountIndex);        
     }//GEN-LAST:event_PopSizeCBoxActionPerformed
 
     private void PopSizeHelpButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PopSizeHelpButtonActionPerformed
@@ -3439,6 +3467,10 @@ public class Settings_System extends javax.swing.JFrame {
             STATISTICS_SIZE_LABEL.getContent(), helpText, false);
         locateAndShowHelpDialog(this, helpDialog, LoggingLevelHelpButton);
     }//GEN-LAST:event_PopSizeHelpButtonActionPerformed
+
+    private void SettingsCloseButtonStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_SettingsCloseButtonStateChanged
+        EBoardSettingsButton.setEnabled(SettingsCloseButton.isEnabled());
+    }//GEN-LAST:event_SettingsCloseButtonStateChanged
                                               
     void closeSettingsForm() {
         if(mainForm != null)
@@ -3727,7 +3759,7 @@ public class Settings_System extends javax.swing.JFrame {
         DateChooserLangCBox.setSelectedItem(parkingLotLocale.getDisplayName());
         localeIndex = (short) DateChooserLangCBox.getSelectedIndex();
         
-        PopSizeCBox.setSelectedIndex(statCount);
+        PopSizeCBox.setSelectedIndex(statCountIndex);
         MessageMaxLineComboBox.setSelectedItem(String.valueOf(maxMessageLines));
         GateCountComboBox.setSelectedIndex(gateCount - 1);
         ImageDurationCBox.setSelectedIndex(maxArrivalCBoxIndex);
@@ -3769,52 +3801,34 @@ public class Settings_System extends javax.swing.JFrame {
                     .setText(devicePort[E_Board.ordinal() ][i+1]);
             //</editor-fold>
         }
-        changeEnabled_of_SaveCancelButtons(false);
         
         for (int gate = 1; gate <= gateCount; gate++) { 
             //<editor-fold desc="-- Combo Box item init for device and connection type of each gate">
             JComboBox comboBx = ((JComboBox)getComponentByName("Camera" +gate + "_TypeCBox"));
             if (comboBx != null) {
-                comboBx.removeAllItems();
-                for (CameraType type: CameraType.values()) {
-                    comboBx.addItem(type.getLabel());
-                }
                 comboBx.setSelectedIndex(DB_Access.deviceType[Camera.ordinal()][gate]);
             }
             
             comboBx = ((JComboBox)getComponentByName("E_Board" +gate + "_TypeCBox"));
             if (comboBx != null) {
-                comboBx.removeAllItems();
-                for (E_BoardType type: E_BoardType.values()) {
-                    comboBx.addItem(type.getLabel());
-                }
                 comboBx.setSelectedIndex(DB_Access.deviceType[E_Board.ordinal()][gate]);
             }
             
             comboBx = ((JComboBox)getComponentByName("GateBar" +gate + "_TypeCBox"));
             if (comboBx != null) {
-                comboBx.removeAllItems();
-                for (GateBarType type: GateBarType.values()) {
-                    comboBx.addItem(type.getLabel());
-                }
                 comboBx.setSelectedIndex(DB_Access.deviceType[GateBar.ordinal()][gate]);
             }
             
             for (DeviceType devType: DeviceType.values()) {
                 comboBx = ((JComboBox)getComponentByName(devType.name() +gate + "_connTypeCBox"));
                 if (comboBx != null) {
-                    comboBx.removeAllItems();
-                    for (ConnectionType connType : ConnectionType.values()) {
-                        if (devType != Camera || connType == ConnectionType.TCP_IP) 
-                        {
-                            comboBx.addItem(connType.getLabel());
-                        }
-                    }
                     comboBx.setSelectedIndex(DB_Access.connectionType[devType.ordinal()][gate]);
                 }
             }
             //</editor-fold>
         }
+        
+        enableSaveCancelButtons(false);
     }
     
     /**
@@ -3888,12 +3902,12 @@ public class Settings_System extends javax.swing.JFrame {
         }      
     }
 
-    private void initPassingDelayStatIfNeeded(int newIndex, int gateID) {
+    private void initPassingDelayStatIfNeeded(int newStatCount, int gateID) {
         if (storePassingDelay) {
             /**
              * Passing Delay Statistics Population Size Changed while Statistics Are Gathered.
              */
-            if (newIndex != statCount) { 
+            if (newStatCount != statCount) { 
                 if (passingCountCurrent[gateID] != 0) {
                     String secs = String.format("%.3f " + SECONDS_LABEL.getContent(), 
                             (float)passingDelayCurrentTotalMs[gateID]/passingCountCurrent[gateID]/1000f);
@@ -4097,10 +4111,14 @@ public class Settings_System extends javax.swing.JFrame {
         }  
     }
     
-    private void changeEnabled_of_SaveCancelButtons(boolean onOff) {
-        SettingsSaveButton.setEnabled(onOff);
-        SettingsCancelButton.setEnabled(onOff);        
-        SettingsCloseButton.setEnabled(!onOff);
+    private void enableSaveCancelButtons(boolean enable) {
+        SettingsSaveButton.setEnabled(enable);
+        SettingsCancelButton.setEnabled(enable);        
+        SettingsCloseButton.setEnabled(!enable);
+        EBoardSettingsButton.setEnabled(!enable);
+        if (!enable) {
+            changedControls.clear();
+        }
     } 
 
     private void tryToCloseSettingsForm() {
@@ -4165,23 +4183,15 @@ public class Settings_System extends javax.swing.JFrame {
         }    
     }
 
-    private void changeSaveEnabledForDeviceType(DeviceType currDevType, int gateNo) {
-        JComboBox cBox = (JComboBox)componentMap.get("" + currDevType + gateNo + "_TypeCBox");
-        
-        if (cBox.getSelectedIndex() == deviceType[currDevType.ordinal()][gateNo]) {
-            changeEnabled_of_SaveCancelButtons(false);
-        } else {
-            changeEnabled_of_SaveCancelButtons(true);
-        }    
-    }
-
     private void changeSaveEnabledForConnTypeChange(DeviceType currDevType, int gateNo) {
         JComboBox cBox = (JComboBox)componentMap.get("" + currDevType + gateNo + "_connTypeCBox");
         
-        if (cBox.getSelectedIndex() == connectionType[currDevType.ordinal()][gateNo]) {
-            changeEnabled_of_SaveCancelButtons(false);
+        if (cBox.getSelectedIndex() == CommonData.NOT_SELECTED 
+                || cBox.getSelectedIndex() == connectionType[currDevType.ordinal()][gateNo])
+        {
+            enableSaveCancelButtons(false);
         } else {
-            changeEnabled_of_SaveCancelButtons(true);
+            enableSaveCancelButtons(true);
         }   
         
         JTextField txtField;
@@ -4195,20 +4205,6 @@ public class Settings_System extends javax.swing.JFrame {
             txtField.setEnabled(true);
             txtField = (JTextField)componentMap.get(currDevType.toString() + gateNo + "_Port_TextField");
             txtField.setEnabled(true);
-        }
-    }
-
-    private void changeConnDetailPanComponents(DeviceType deviceType, int gateNo) {
-        JComboBox connTypeCBox 
-                = (JComboBox)componentMap.get (deviceType.toString() + gateNo + "_connTypeCBox");
-        
-        if (connTypeCBox.getSelectedIndex() == -1 )
-            return;
-        
-        if (connTypeCBox.getSelectedItem().toString().equals("RS-232")) {
-            showSerialConnectionDetail(deviceType, gateNo);
-        } else {
-            showSocketConnectionDetail(deviceType, gateNo);
         }
     }
 

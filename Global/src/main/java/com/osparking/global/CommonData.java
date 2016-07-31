@@ -78,6 +78,8 @@ public class CommonData { // new Dimension(carTagWidth, 30)
     static {
         putCellCenter.setHorizontalAlignment(JLabel.CENTER);    
     }
+    
+    public static final int[] statCountArr = {1, 10, 100, 1000, 10000, 100000};
 
     public static DefaultTableCellRenderer numberCellRenderer = new DefaultTableCellRenderer() {
         Border padding = BorderFactory.createEmptyBorder(0, 15, 0, 15);
