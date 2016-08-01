@@ -16,6 +16,7 @@
  */
 package com.osparking.osparking;
 
+import static com.osparking.global.CommonData.TEXT_FIELD_HEIGHT;
 import java.awt.Component;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -32,7 +33,24 @@ import javax.swing.event.ChangeListener;
 import static com.osparking.global.names.DB_Access.readEBoardSettings;
 import com.osparking.global.Globals;
 import static com.osparking.global.Globals.*;
+import static com.osparking.global.names.ControlEnums.ButtonTypes.CANCEL_BTN;
+import static com.osparking.global.names.ControlEnums.ButtonTypes.CLOSE_BTN;
+import static com.osparking.global.names.ControlEnums.ButtonTypes.SAVE_BTN;
+import static com.osparking.global.names.ControlEnums.ComboBoxItemTypes.MS_NEO_GOTHIC;
+import static com.osparking.global.names.ControlEnums.ComboBoxItemTypes.SANS_SERIF;
+import static com.osparking.global.names.ControlEnums.DialogMessages.SAVE_SETTINGS_DIALOG;
+import static com.osparking.global.names.ControlEnums.DialogTitleTypes.BOTTOM_TAB_TITLE;
+import static com.osparking.global.names.ControlEnums.DialogTitleTypes.DEFAULT_TAB_TITLE;
+import static com.osparking.global.names.ControlEnums.DialogTitleTypes.SETTINGS_SAVE_RESULT;
+import static com.osparking.global.names.ControlEnums.DialogTitleTypes.TOP_TAB_TITLE;
+import static com.osparking.global.names.ControlEnums.DialogTitleTypes.VEHICLE_TAB_TITLE;
 import com.osparking.global.names.ControlEnums.FormMode;
+import static com.osparking.global.names.ControlEnums.LabelContent.COLOR_LABEL;
+import static com.osparking.global.names.ControlEnums.LabelContent.DISPLAY_TYPE_LABEL;
+import static com.osparking.global.names.ControlEnums.LabelContent.EFFECT_LABEL;
+import static com.osparking.global.names.ControlEnums.LabelContent.FONT_LABEL;
+import static com.osparking.global.names.ControlEnums.LabelContent.MESSAGE_LABEL;
+import static com.osparking.global.names.ControlEnums.ToolTipContent.CLOSE_BTN_TOOLTIP;
 import com.osparking.global.names.ConvComboBoxItem;
 import com.osparking.global.names.JDBCMySQL;
 import com.osparking.global.names.OSP_enums;
@@ -47,11 +65,14 @@ import static com.osparking.osparking.device.EBoardManager.sendEBoardDefaultSett
 import static com.osparking.global.names.DB_Access.gateCount;
 import com.osparking.global.names.OSP_enums.OpLogLevel;
 import com.osparking.global.names.IDevice;
+import java.awt.Dimension;
+import javax.swing.JComponent;
 
 /**
  *
  * @author YongSeok
  */
+//public class Settings_EBoard extends javax.swing.JFrame {
 public class Settings_EBoard extends javax.swing.JFrame {
     public static ControlGUI mainForm = null;
     private HashMap<String,Component> componentMap = new HashMap<String,Component>();
@@ -68,6 +89,7 @@ public class Settings_EBoard extends javax.swing.JFrame {
         setResizable(false);
         
         augmentComponentMap(this, componentMap);
+        tuneComponentSize();
         
         addContentTypeItems();
         addDisplayEffectItems();
@@ -107,8 +129,10 @@ public class Settings_EBoard extends javax.swing.JFrame {
         java.awt.GridBagConstraints gridBagConstraints;
 
         wholePanel = new javax.swing.JPanel();
-        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 10), new java.awt.Dimension(0, 10), new java.awt.Dimension(32767, 10));
-        filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 10), new java.awt.Dimension(0, 10), new java.awt.Dimension(32767, 10));
+        topFiller = new javax.swing.Box.Filler(new java.awt.Dimension(0, 40), new java.awt.Dimension(0, 40), new java.awt.Dimension(32767, 40));
+        rightFiller = new javax.swing.Box.Filler(new java.awt.Dimension(40, 0), new java.awt.Dimension(40, 0), new java.awt.Dimension(40, 32767));
+        leftFiller = new javax.swing.Box.Filler(new java.awt.Dimension(40, 0), new java.awt.Dimension(40, 0), new java.awt.Dimension(40, 32767));
+        centerPanel = new javax.swing.JPanel();
         eboardTabbedPanel = new javax.swing.JTabbedPane();
         eBoardTabPane1 = new javax.swing.JTabbedPane();
         eBoardPanel0 = new javax.swing.JPanel();
@@ -117,169 +141,169 @@ public class Settings_EBoard extends javax.swing.JFrame {
         label_Effect0 = new javax.swing.JLabel();
         label_Color0 = new javax.swing.JLabel();
         label_Font0 = new javax.swing.JLabel();
-        combo_DisplayEffect0 = new javax.swing.JComboBox();
         combo_TextColor0 = new javax.swing.JComboBox();
         combo_TextFont0 = new javax.swing.JComboBox();
         label_ContentType0 = new javax.swing.JLabel();
         combo_ContentType0 = new javax.swing.JComboBox();
-        btn_Save0 = new javax.swing.JButton();
-        btn_Cancel0 = new javax.swing.JButton();
+        filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 32767));
+        jPanel1 = new javax.swing.JPanel();
+        combo_DisplayEffect0 = new javax.swing.JComboBox();
         eBoardPanel1 = new javax.swing.JPanel();
-        label_MSG1 = new javax.swing.JLabel();
+        label_MSG4 = new javax.swing.JLabel();
         tf_VerbatimContent1 = new javax.swing.JTextField();
+        label_Effect4 = new javax.swing.JLabel();
+        label_Color4 = new javax.swing.JLabel();
+        label_Font4 = new javax.swing.JLabel();
+        combo_TextColor1 = new javax.swing.JComboBox();
+        combo_TextFont1 = new javax.swing.JComboBox();
+        label_ContentType4 = new javax.swing.JLabel();
+        combo_ContentType1 = new javax.swing.JComboBox();
+        filler3 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 32767));
+        jPanel2 = new javax.swing.JPanel();
+        combo_DisplayEffect1 = new javax.swing.JComboBox();
+        eBoardTabPane2 = new javax.swing.JTabbedPane();
+        eBoardPanel2 = new javax.swing.JPanel();
+        label_MSG1 = new javax.swing.JLabel();
+        tf_VerbatimContent2 = new javax.swing.JTextField();
         label_Effect1 = new javax.swing.JLabel();
         label_Color1 = new javax.swing.JLabel();
         label_Font1 = new javax.swing.JLabel();
-        combo_DisplayEffect1 = new javax.swing.JComboBox();
-        combo_TextColor1 = new javax.swing.JComboBox();
-        combo_TextFont1 = new javax.swing.JComboBox();
+        combo_TextColor2 = new javax.swing.JComboBox();
+        combo_TextFont2 = new javax.swing.JComboBox();
         label_ContentType1 = new javax.swing.JLabel();
-        combo_ContentType1 = new javax.swing.JComboBox();
-        btn_Save1 = new javax.swing.JButton();
-        btn_Cancel1 = new javax.swing.JButton();
-        eBoardTabPane2 = new javax.swing.JTabbedPane();
-        eBoardPanel2 = new javax.swing.JPanel();
+        combo_ContentType2 = new javax.swing.JComboBox();
+        filler4 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 32767));
+        jPanel3 = new javax.swing.JPanel();
+        combo_DisplayEffect2 = new javax.swing.JComboBox();
+        eBoardPanel3 = new javax.swing.JPanel();
         label_MSG2 = new javax.swing.JLabel();
-        tf_VerbatimContent2 = new javax.swing.JTextField();
+        tf_VerbatimContent3 = new javax.swing.JTextField();
         label_Effect2 = new javax.swing.JLabel();
         label_Color2 = new javax.swing.JLabel();
         label_Font2 = new javax.swing.JLabel();
-        combo_DisplayEffect2 = new javax.swing.JComboBox();
-        combo_TextColor2 = new javax.swing.JComboBox();
-        combo_TextFont2 = new javax.swing.JComboBox();
-        label_ContentType2 = new javax.swing.JLabel();
-        combo_ContentType2 = new javax.swing.JComboBox();
-        btn_Save2 = new javax.swing.JButton();
-        btn_Cancel2 = new javax.swing.JButton();
-        eBoardPanel3 = new javax.swing.JPanel();
-        label_MSG3 = new javax.swing.JLabel();
-        tf_VerbatimContent3 = new javax.swing.JTextField();
-        label_Effect3 = new javax.swing.JLabel();
-        label_Color3 = new javax.swing.JLabel();
-        label_Font3 = new javax.swing.JLabel();
-        combo_DisplayEffect3 = new javax.swing.JComboBox();
         combo_TextColor3 = new javax.swing.JComboBox();
         combo_TextFont3 = new javax.swing.JComboBox();
-        label_ContentType3 = new javax.swing.JLabel();
+        label_ContentType2 = new javax.swing.JLabel();
         combo_ContentType3 = new javax.swing.JComboBox();
-        btn_Save3 = new javax.swing.JButton();
-        btn_Cancel3 = new javax.swing.JButton();
+        filler5 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 32767));
+        jPanel4 = new javax.swing.JPanel();
+        combo_DisplayEffect3 = new javax.swing.JComboBox();
+        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 20), new java.awt.Dimension(0, 20), new java.awt.Dimension(32767, 20));
         buttonPanel = new javax.swing.JPanel();
         btn_Exit = new javax.swing.JButton();
+        btn_Save0 = new javax.swing.JButton();
+        btn_Cancel0 = new javax.swing.JButton();
+        southPanel = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Electronic Display Settings");
         setAlwaysOnTop(true);
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        setPreferredSize(new java.awt.Dimension(600, 350));
+        setResizable(false);
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 formClosing(evt);
             }
         });
 
-        wholePanel.setLayout(new javax.swing.BoxLayout(wholePanel, javax.swing.BoxLayout.PAGE_AXIS));
-        wholePanel.add(filler1);
-        wholePanel.add(filler2);
+        wholePanel.setMinimumSize(new java.awt.Dimension(550, 314));
+        wholePanel.setPreferredSize(new java.awt.Dimension(600, 350));
+        wholePanel.setLayout(new java.awt.BorderLayout());
+        wholePanel.add(topFiller, java.awt.BorderLayout.NORTH);
+        wholePanel.add(rightFiller, java.awt.BorderLayout.EAST);
+        wholePanel.add(leftFiller, java.awt.BorderLayout.WEST);
+
+        centerPanel.setMinimumSize(new java.awt.Dimension(0, 234));
+        centerPanel.setPreferredSize(new java.awt.Dimension(0, 0));
+        centerPanel.setLayout(new javax.swing.BoxLayout(centerPanel, javax.swing.BoxLayout.Y_AXIS));
 
         eboardTabbedPanel.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        eboardTabbedPanel.setMinimumSize(new java.awt.Dimension(0, 0));
         eboardTabbedPanel.setName("eboardTabbedPanel"); // NOI18N
+        eboardTabbedPanel.setPreferredSize(new java.awt.Dimension(0, 231));
 
         eBoardTabPane1.setBorder(javax.swing.BorderFactory.createEtchedBorder(java.awt.Color.black, null));
         eBoardTabPane1.setTabPlacement(javax.swing.JTabbedPane.LEFT);
         eBoardTabPane1.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         eBoardTabPane1.setMinimumSize(new java.awt.Dimension(300, 198));
         eBoardTabPane1.setName("Default_Panel"); // NOI18N
+        eBoardTabPane1.setPreferredSize(new java.awt.Dimension(0, 0));
 
         eBoardPanel0.setName("eBoard" + EBD_DisplayUsage.DEFAULT_TOP_ROW.getVal());
-        eBoardPanel0.setLayout(new java.awt.GridBagLayout());
+        java.awt.GridBagLayout eBoardPanel0Layout = new java.awt.GridBagLayout();
+        eBoardPanel0Layout.columnWidths = new int[] {0, 2, 0, 2, 0, 2, 0};
+        eBoardPanel0Layout.rowHeights = new int[] {0, 2, 0, 2, 0, 2, 0};
+        eBoardPanel0.setLayout(eBoardPanel0Layout);
 
         label_MSG0.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         label_MSG0.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        label_MSG0.setText("Message");
+        label_MSG0.setText(MESSAGE_LABEL.getContent());
         label_MSG0.setPreferredSize(new java.awt.Dimension(76, 15));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(5, 10, 0, 0);
         eBoardPanel0.add(label_MSG0, gridBagConstraints);
 
         tf_VerbatimContent0.setColumns(23);
         tf_VerbatimContent0.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        tf_VerbatimContent0.setMinimumSize(new java.awt.Dimension(250, 18));
+        tf_VerbatimContent0.setMaximumSize(new Dimension(250, TEXT_FIELD_HEIGHT));
+        tf_VerbatimContent0.setMinimumSize(new Dimension(250, TEXT_FIELD_HEIGHT));
         tf_VerbatimContent0.setName("tf_VerbatimContent" + EBD_DisplayUsage.DEFAULT_TOP_ROW.ordinal());
-        tf_VerbatimContent0.setPreferredSize(new java.awt.Dimension(250, 25));
+        tf_VerbatimContent0.setPreferredSize(new Dimension(250, TEXT_FIELD_HEIGHT));
         tf_VerbatimContent0.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 tf_VerbatimContent0KeyReleased(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 2;
-        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.gridwidth = 5;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 5;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 10, 0, 10);
+        gridBagConstraints.insets = new java.awt.Insets(5, 10, 0, 50);
         eBoardPanel0.add(tf_VerbatimContent0, gridBagConstraints);
 
         label_Effect0.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         label_Effect0.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        label_Effect0.setText("Effect");
+        label_Effect0.setText(EFFECT_LABEL.getContent());
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
-        gridBagConstraints.insets = new java.awt.Insets(10, 0, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(5, 20, 0, 0);
         eBoardPanel0.add(label_Effect0, gridBagConstraints);
 
         label_Color0.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         label_Color0.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        label_Color0.setText("Color");
+        label_Color0.setText(COLOR_LABEL.getContent());
         label_Color0.setPreferredSize(new java.awt.Dimension(76, 15));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(5, 10, 0, 0);
         eBoardPanel0.add(label_Color0, gridBagConstraints);
 
         label_Font0.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         label_Font0.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        label_Font0.setText("Font");
+        label_Font0.setText(FONT_LABEL.getContent());
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(5, 10, 0, 0);
         eBoardPanel0.add(label_Font0, gridBagConstraints);
 
-        combo_DisplayEffect0.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        combo_DisplayEffect0.setMinimumSize(new java.awt.Dimension(100, 25));
-        combo_DisplayEffect0.setName("combo_DisplayEffect" + EBD_DisplayUsage.DEFAULT_TOP_ROW.ordinal());
-        combo_DisplayEffect0.setPreferredSize(new java.awt.Dimension(100, 25));
-        combo_DisplayEffect0.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
-            public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
-            }
-            public void popupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {
-                combo_DisplayEffect0PopupMenuWillBecomeInvisible(evt);
-            }
-            public void popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 4;
-        gridBagConstraints.ipadx = 20;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 10, 0, 0);
-        eBoardPanel0.add(combo_DisplayEffect0, gridBagConstraints);
-
         combo_TextColor0.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        combo_TextColor0.setMinimumSize(new java.awt.Dimension(100, 25));
+        combo_TextColor0.setMaximumSize(new java.awt.Dimension(70, 30));
+        combo_TextColor0.setMinimumSize(new java.awt.Dimension(70, 30));
         combo_TextColor0.setName("combo_TextColor" + EBD_DisplayUsage.DEFAULT_TOP_ROW.ordinal());
-        combo_TextColor0.setPreferredSize(new java.awt.Dimension(100, 25));
+        combo_TextColor0.setPreferredSize(new java.awt.Dimension(100, 30));
         combo_TextColor0.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
             public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
             }
@@ -290,17 +314,18 @@ public class Settings_EBoard extends javax.swing.JFrame {
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.ipadx = 20;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 10, 0, 0);
         eBoardPanel0.add(combo_TextColor0, gridBagConstraints);
 
         combo_TextFont0.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        combo_TextFont0.setMinimumSize(new java.awt.Dimension(158, 21));
+        combo_TextFont0.setMaximumSize(new java.awt.Dimension(150, 30));
+        combo_TextFont0.setMinimumSize(new java.awt.Dimension(150, 30));
         combo_TextFont0.setName("combo_TextFont" + EBD_DisplayUsage.DEFAULT_TOP_ROW.ordinal());
-        combo_TextFont0.setPreferredSize(new java.awt.Dimension(143, 25));
+        combo_TextFont0.setPreferredSize(new java.awt.Dimension(150, 30));
         combo_TextFont0.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
             public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
             }
@@ -312,25 +337,27 @@ public class Settings_EBoard extends javax.swing.JFrame {
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridwidth = 3;
         gridBagConstraints.ipadx = 20;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 10, 0, 10);
         eBoardPanel0.add(combo_TextFont0, gridBagConstraints);
 
         label_ContentType0.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        label_ContentType0.setText("Content Type");
+        label_ContentType0.setText(DISPLAY_TYPE_LABEL.getContent());
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridheight = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(5, 10, 0, 0);
         eBoardPanel0.add(label_ContentType0, gridBagConstraints);
 
         combo_ContentType0.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        combo_ContentType0.setMaximumSize(new java.awt.Dimension(150, 30));
+        combo_ContentType0.setMinimumSize(new java.awt.Dimension(150, 30));
         combo_ContentType0.setName("combo_ContentType" + EBD_DisplayUsage.DEFAULT_TOP_ROW.ordinal());
-        combo_ContentType0.setPreferredSize(new java.awt.Dimension(154, 25));
+        combo_ContentType0.setPreferredSize(new java.awt.Dimension(150, 30));
         combo_ContentType0.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
             public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
             }
@@ -346,149 +373,120 @@ public class Settings_EBoard extends javax.swing.JFrame {
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.ipadx = 20;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 10, 0, 0);
-        eBoardPanel0.add(combo_ContentType0, gridBagConstraints);
-
-        btn_Save0.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        btn_Save0.setMnemonic('s');
-        btn_Save0.setText("Save");
-        btn_Save0.setEnabled(false);
-        btn_Save0.setInheritsPopupMenu(true);
-        btn_Save0.setMaximumSize(new java.awt.Dimension(85, 35));
-        btn_Save0.setMinimumSize(new java.awt.Dimension(85, 35));
-        btn_Save0.setName("btn_Save" + EBD_DisplayUsage.DEFAULT_TOP_ROW.ordinal());
-        btn_Save0.setPreferredSize(new java.awt.Dimension(85, 35));
-        btn_Save0.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btn_Save0ActionPerformed(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 5;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(10, 170, 0, 0);
-        eBoardPanel0.add(btn_Save0, gridBagConstraints);
-
-        btn_Cancel0.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        btn_Cancel0.setMnemonic('c');
-        btn_Cancel0.setText("Cancel");
-        btn_Cancel0.setEnabled(false);
-        btn_Cancel0.setMaximumSize(new java.awt.Dimension(85, 35));
-        btn_Cancel0.setMinimumSize(new java.awt.Dimension(85, 35));
-        btn_Cancel0.setName("btn_Cancel" + EBD_DisplayUsage.DEFAULT_TOP_ROW.ordinal());
-        btn_Cancel0.setPreferredSize(new java.awt.Dimension(85, 35));
-        btn_Cancel0.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btn_Cancel0ActionPerformed(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 5;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 0, 10);
-        eBoardPanel0.add(btn_Cancel0, gridBagConstraints);
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.ipadx = 20;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(5, 10, 0, 10);
+        eBoardPanel0.add(combo_ContentType0, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridy = 0;
+        eBoardPanel0.add(filler2, gridBagConstraints);
 
-        eBoardTabPane1.addTab("TOP", eBoardPanel0);
+        jPanel1.setLayout(new java.awt.GridBagLayout());
+
+        combo_DisplayEffect0.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        combo_DisplayEffect0.setMaximumSize(new java.awt.Dimension(70, 30));
+        combo_DisplayEffect0.setMinimumSize(new java.awt.Dimension(70, 30));
+        combo_DisplayEffect0.setName("combo_DisplayEffect" + EBD_DisplayUsage.DEFAULT_TOP_ROW.ordinal());
+        combo_DisplayEffect0.setPreferredSize(new java.awt.Dimension(100, 30));
+        combo_DisplayEffect0.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
+            public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
+            }
+            public void popupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {
+                combo_DisplayEffect0PopupMenuWillBecomeInvisible(evt);
+            }
+            public void popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = java.awt.GridBagConstraints.RELATIVE;
+        gridBagConstraints.ipadx = 20;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(5, 10, 0, 0);
+        jPanel1.add(combo_DisplayEffect0, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        eBoardPanel0.add(jPanel1, gridBagConstraints);
+
+        eBoardTabPane1.addTab(TOP_TAB_TITLE.getContent(), eBoardPanel0);
 
         eBoardPanel1.setName("eBoard" + EBD_DisplayUsage.DEFAULT_BOTTOM_ROW.getVal());
         eBoardPanel1.setLayout(new java.awt.GridBagLayout());
 
-        label_MSG1.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        label_MSG1.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        label_MSG1.setText("Message");
-        label_MSG1.setPreferredSize(new java.awt.Dimension(76, 15));
+        label_MSG4.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        label_MSG4.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        label_MSG4.setText(MESSAGE_LABEL.getContent());
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 0, 0);
-        eBoardPanel1.add(label_MSG1, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(5, 10, 0, 0);
+        eBoardPanel1.add(label_MSG4, gridBagConstraints);
 
         tf_VerbatimContent1.setColumns(23);
         tf_VerbatimContent1.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        tf_VerbatimContent1.setMinimumSize(new java.awt.Dimension(250, 18));
-        tf_VerbatimContent1.setName("tf_VerbatimContent" + EBD_DisplayUsage.DEFAULT_BOTTOM_ROW.ordinal());
-        tf_VerbatimContent1.setPreferredSize(new java.awt.Dimension(250, 25));
+        tf_VerbatimContent1.setMaximumSize(new Dimension(250, TEXT_FIELD_HEIGHT));
+        tf_VerbatimContent1.setMinimumSize(new Dimension(250, TEXT_FIELD_HEIGHT));
+        tf_VerbatimContent1.setName("tf_VerbatimContent" + EBD_DisplayUsage.DEFAULT_TOP_ROW.ordinal());
+        tf_VerbatimContent1.setPreferredSize(new Dimension(250, TEXT_FIELD_HEIGHT));
         tf_VerbatimContent1.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 tf_VerbatimContent1KeyReleased(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 2;
-        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.gridwidth = 5;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 5;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 10, 0, 10);
+        gridBagConstraints.insets = new java.awt.Insets(5, 10, 0, 50);
         eBoardPanel1.add(tf_VerbatimContent1, gridBagConstraints);
 
-        label_Effect1.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        label_Effect1.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        label_Effect1.setText("Effect");
+        label_Effect4.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        label_Effect4.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        label_Effect4.setText(EFFECT_LABEL.getContent());
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
+        gridBagConstraints.insets = new java.awt.Insets(5, 20, 0, 0);
+        eBoardPanel1.add(label_Effect4, gridBagConstraints);
+
+        label_Color4.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        label_Color4.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        label_Color4.setText(COLOR_LABEL.getContent());
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
-        gridBagConstraints.insets = new java.awt.Insets(10, 0, 0, 0);
-        eBoardPanel1.add(label_Effect1, gridBagConstraints);
-
-        label_Color1.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        label_Color1.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        label_Color1.setText("Color");
-        label_Color1.setPreferredSize(new java.awt.Dimension(76, 15));
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 0, 0);
-        eBoardPanel1.add(label_Color1, gridBagConstraints);
-
-        label_Font1.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        label_Font1.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        label_Font1.setText("Font");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 3;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 0, 0);
-        eBoardPanel1.add(label_Font1, gridBagConstraints);
-
-        combo_DisplayEffect1.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        combo_DisplayEffect1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "L to R Flow", "R to L Flow", "Still Frame", "Blinking" }));
-        combo_DisplayEffect1.setMinimumSize(new java.awt.Dimension(100, 25));
-        combo_DisplayEffect1.setName("combo_DisplayEffect" + EBD_DisplayUsage.DEFAULT_BOTTOM_ROW.ordinal());
-        combo_DisplayEffect1.setPreferredSize(new java.awt.Dimension(100, 25));
-        combo_DisplayEffect1.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
-            public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
-            }
-            public void popupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {
-                combo_DisplayEffect1PopupMenuWillBecomeInvisible(evt);
-            }
-            public void popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 4;
-        gridBagConstraints.ipadx = 20;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 10, 0, 0);
-        eBoardPanel1.add(combo_DisplayEffect1, gridBagConstraints);
+        eBoardPanel1.add(label_Color4, gridBagConstraints);
+
+        label_Font4.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        label_Font4.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        label_Font4.setText(FONT_LABEL.getContent());
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
+        gridBagConstraints.insets = new java.awt.Insets(5, 10, 0, 0);
+        eBoardPanel1.add(label_Font4, gridBagConstraints);
 
         combo_TextColor1.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        combo_TextColor1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "RED", "ORANGE", "GREEN", "BLACK", "BLUE" }));
-        combo_TextColor1.setMinimumSize(new java.awt.Dimension(100, 25));
-        combo_TextColor1.setName("combo_TextColor" + EBD_DisplayUsage.DEFAULT_BOTTOM_ROW.ordinal());
-        combo_TextColor1.setPreferredSize(new java.awt.Dimension(100, 25));
+        combo_TextColor1.setMaximumSize(new java.awt.Dimension(70, 30));
+        combo_TextColor1.setMinimumSize(new java.awt.Dimension(70, 30));
+        combo_TextColor1.setName("combo_TextColor" + EBD_DisplayUsage.DEFAULT_TOP_ROW.ordinal());
+        combo_TextColor1.setPreferredSize(new java.awt.Dimension(100, 30));
         combo_TextColor1.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
             public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
             }
@@ -499,18 +497,18 @@ public class Settings_EBoard extends javax.swing.JFrame {
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.ipadx = 20;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 10, 0, 0);
         eBoardPanel1.add(combo_TextColor1, gridBagConstraints);
 
         combo_TextFont1.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        combo_TextFont1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Dialog", "DialogInput", "Microsoft_NeoGothic", "Monospaced", "Sans_Serif" }));
-        combo_TextFont1.setMinimumSize(new java.awt.Dimension(158, 21));
-        combo_TextFont1.setName("combo_TextFont" + EBD_DisplayUsage.DEFAULT_BOTTOM_ROW.ordinal());
-        combo_TextFont1.setPreferredSize(new java.awt.Dimension(143, 25));
+        combo_TextFont1.setMaximumSize(new java.awt.Dimension(150, 30));
+        combo_TextFont1.setMinimumSize(new java.awt.Dimension(150, 30));
+        combo_TextFont1.setName("combo_TextFont" + EBD_DisplayUsage.DEFAULT_TOP_ROW.ordinal());
+        combo_TextFont1.setPreferredSize(new java.awt.Dimension(150, 30));
         combo_TextFont1.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
             public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
             }
@@ -522,26 +520,27 @@ public class Settings_EBoard extends javax.swing.JFrame {
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridwidth = 3;
         gridBagConstraints.ipadx = 20;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 10, 0, 10);
         eBoardPanel1.add(combo_TextFont1, gridBagConstraints);
 
-        label_ContentType1.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        label_ContentType1.setText("Content Type");
+        label_ContentType4.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        label_ContentType4.setText(DISPLAY_TYPE_LABEL.getContent());
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridheight = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 0, 0);
-        eBoardPanel1.add(label_ContentType1, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(5, 10, 0, 0);
+        eBoardPanel1.add(label_ContentType4, gridBagConstraints);
 
         combo_ContentType1.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        combo_ContentType1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "VERBATIM", "VEHICLE TAG", "REGISTRATION STAT", "GATE NAME", "CURRENT DATE", "CURRENT TIME", "CURRENT DATE TIME" }));
-        combo_ContentType1.setName("combo_ContentType" + EBD_DisplayUsage.DEFAULT_BOTTOM_ROW.ordinal());
-        combo_ContentType1.setPreferredSize(new java.awt.Dimension(154, 25));
+        combo_ContentType1.setMaximumSize(new java.awt.Dimension(150, 30));
+        combo_ContentType1.setMinimumSize(new java.awt.Dimension(150, 30));
+        combo_ContentType1.setName("combo_ContentType" + EBD_DisplayUsage.DEFAULT_TOP_ROW.ordinal());
+        combo_ContentType1.setPreferredSize(new java.awt.Dimension(150, 30));
         combo_ContentType1.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
             public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
             }
@@ -557,58 +556,52 @@ public class Settings_EBoard extends javax.swing.JFrame {
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.ipadx = 20;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 10, 0, 0);
-        eBoardPanel1.add(combo_ContentType1, gridBagConstraints);
-
-        btn_Save1.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        btn_Save1.setMnemonic('s');
-        btn_Save1.setText("Save");
-        btn_Save1.setEnabled(false);
-        btn_Save1.setInheritsPopupMenu(true);
-        btn_Save1.setMaximumSize(new java.awt.Dimension(73, 35));
-        btn_Save1.setMinimumSize(new java.awt.Dimension(73, 35));
-        btn_Save1.setName("btn_Save" + EBD_DisplayUsage.DEFAULT_BOTTOM_ROW.ordinal());
-        btn_Save1.setPreferredSize(new java.awt.Dimension(73, 30));
-        btn_Save1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btn_Save1ActionPerformed(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 5;
-        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 3;
         gridBagConstraints.ipadx = 20;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(10, 170, 0, 0);
-        eBoardPanel1.add(btn_Save1, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(5, 10, 0, 10);
+        eBoardPanel1.add(combo_ContentType1, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridy = 0;
+        eBoardPanel1.add(filler3, gridBagConstraints);
 
-        btn_Cancel1.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        btn_Cancel1.setText("Cancel");
-        btn_Cancel1.setMaximumSize(new java.awt.Dimension(73, 35));
-        btn_Cancel1.setMinimumSize(new java.awt.Dimension(73, 35));
-        btn_Cancel1.setName("btn_Cancel" + EBD_DisplayUsage.DEFAULT_BOTTOM_ROW.ordinal());
-        btn_Cancel1.setPreferredSize(new java.awt.Dimension(73, 30));
-        btn_Cancel1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btn_Cancel1ActionPerformed(evt);
+        jPanel2.setLayout(new java.awt.GridBagLayout());
+
+        combo_DisplayEffect1.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        combo_DisplayEffect1.setMaximumSize(new java.awt.Dimension(70, 30));
+        combo_DisplayEffect1.setMinimumSize(new java.awt.Dimension(70, 30));
+        combo_DisplayEffect1.setName("combo_DisplayEffect" + EBD_DisplayUsage.DEFAULT_TOP_ROW.ordinal());
+        combo_DisplayEffect1.setPreferredSize(new java.awt.Dimension(100, 30));
+        combo_DisplayEffect1.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
+            public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
+            }
+            public void popupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {
+                combo_DisplayEffect1PopupMenuWillBecomeInvisible(evt);
+            }
+            public void popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = java.awt.GridBagConstraints.RELATIVE;
         gridBagConstraints.ipadx = 20;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 0, 10);
-        eBoardPanel1.add(btn_Cancel1, gridBagConstraints);
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(5, 10, 0, 0);
+        jPanel2.add(combo_DisplayEffect1, gridBagConstraints);
 
-        eBoardTabPane1.addTab("BOTTOM", eBoardPanel1);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        eBoardPanel1.add(jPanel2, gridBagConstraints);
 
-        eboardTabbedPanel.addTab("Default", eBoardTabPane1);
+        eBoardTabPane1.addTab(BOTTOM_TAB_TITLE.getContent(), eBoardPanel1);
+
+        eboardTabbedPanel.addTab(DEFAULT_TAB_TITLE.getContent(), eBoardTabPane1);
 
         eBoardTabPane2.setBorder(javax.swing.BorderFactory.createEtchedBorder(java.awt.Color.black, null));
         eBoardTabPane2.setTabPlacement(javax.swing.JTabbedPane.LEFT);
@@ -618,95 +611,72 @@ public class Settings_EBoard extends javax.swing.JFrame {
         eBoardPanel2.setName("eBoard" + EBD_DisplayUsage.CAR_ENTRY_TOP_ROW.getVal());
         eBoardPanel2.setLayout(new java.awt.GridBagLayout());
 
-        label_MSG2.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        label_MSG2.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        label_MSG2.setText("Message");
-        label_MSG2.setPreferredSize(new java.awt.Dimension(76, 15));
+        label_MSG1.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        label_MSG1.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        label_MSG1.setText(MESSAGE_LABEL.getContent());
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 0, 0);
-        eBoardPanel2.add(label_MSG2, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(5, 10, 0, 0);
+        eBoardPanel2.add(label_MSG1, gridBagConstraints);
 
         tf_VerbatimContent2.setColumns(23);
         tf_VerbatimContent2.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        tf_VerbatimContent2.setMinimumSize(new java.awt.Dimension(250, 18));
-        tf_VerbatimContent2.setName("tf_VerbatimContent" + EBD_DisplayUsage.CAR_ENTRY_TOP_ROW.ordinal());
-        tf_VerbatimContent2.setPreferredSize(new java.awt.Dimension(250, 25));
+        tf_VerbatimContent2.setMaximumSize(new Dimension(250, TEXT_FIELD_HEIGHT));
+        tf_VerbatimContent2.setMinimumSize(new Dimension(250, TEXT_FIELD_HEIGHT));
+        tf_VerbatimContent2.setName("tf_VerbatimContent" + EBD_DisplayUsage.DEFAULT_TOP_ROW.ordinal());
+        tf_VerbatimContent2.setPreferredSize(new Dimension(250, TEXT_FIELD_HEIGHT));
         tf_VerbatimContent2.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 tf_VerbatimContent2KeyReleased(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 2;
-        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.gridwidth = 5;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 5;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 10, 0, 10);
+        gridBagConstraints.insets = new java.awt.Insets(5, 10, 0, 50);
         eBoardPanel2.add(tf_VerbatimContent2, gridBagConstraints);
 
-        label_Effect2.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        label_Effect2.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        label_Effect2.setText("Effect");
+        label_Effect1.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        label_Effect1.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        label_Effect1.setText(EFFECT_LABEL.getContent());
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
+        gridBagConstraints.insets = new java.awt.Insets(5, 20, 0, 0);
+        eBoardPanel2.add(label_Effect1, gridBagConstraints);
+
+        label_Color1.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        label_Color1.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        label_Color1.setText(COLOR_LABEL.getContent());
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
-        gridBagConstraints.insets = new java.awt.Insets(10, 0, 0, 0);
-        eBoardPanel2.add(label_Effect2, gridBagConstraints);
-
-        label_Color2.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        label_Color2.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        label_Color2.setText("Color");
-        label_Color2.setPreferredSize(new java.awt.Dimension(76, 15));
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 0, 0);
-        eBoardPanel2.add(label_Color2, gridBagConstraints);
-
-        label_Font2.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        label_Font2.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        label_Font2.setText("Font");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 3;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 0, 0);
-        eBoardPanel2.add(label_Font2, gridBagConstraints);
-
-        combo_DisplayEffect2.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        combo_DisplayEffect2.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "L to R Flow", "R to L Flow", "Still Frame", "Blinking" }));
-        combo_DisplayEffect2.setMinimumSize(new java.awt.Dimension(100, 25));
-        combo_DisplayEffect2.setName("combo_DisplayEffect" + EBD_DisplayUsage.CAR_ENTRY_TOP_ROW.ordinal());
-        combo_DisplayEffect2.setPreferredSize(new java.awt.Dimension(100, 25));
-        combo_DisplayEffect2.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
-            public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
-            }
-            public void popupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {
-                combo_DisplayEffect2PopupMenuWillBecomeInvisible(evt);
-            }
-            public void popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 4;
-        gridBagConstraints.ipadx = 20;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 10, 0, 0);
-        eBoardPanel2.add(combo_DisplayEffect2, gridBagConstraints);
+        eBoardPanel2.add(label_Color1, gridBagConstraints);
+
+        label_Font1.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        label_Font1.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        label_Font1.setText(FONT_LABEL.getContent());
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
+        gridBagConstraints.insets = new java.awt.Insets(5, 10, 0, 0);
+        eBoardPanel2.add(label_Font1, gridBagConstraints);
 
         combo_TextColor2.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        combo_TextColor2.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "RED", "ORANGE", "GREEN", "BLACK", "BLUE" }));
-        combo_TextColor2.setMinimumSize(new java.awt.Dimension(100, 25));
-        combo_TextColor2.setName("combo_TextColor" + EBD_DisplayUsage.CAR_ENTRY_TOP_ROW.ordinal());
-        combo_TextColor2.setPreferredSize(new java.awt.Dimension(100, 25));
+        combo_TextColor2.setMaximumSize(new java.awt.Dimension(70, 30));
+        combo_TextColor2.setMinimumSize(new java.awt.Dimension(70, 30));
+        combo_TextColor2.setName("combo_TextColor" + EBD_DisplayUsage.DEFAULT_TOP_ROW.ordinal());
+        combo_TextColor2.setPreferredSize(new java.awt.Dimension(100, 30));
         combo_TextColor2.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
             public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
             }
@@ -717,18 +687,18 @@ public class Settings_EBoard extends javax.swing.JFrame {
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.ipadx = 20;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 10, 0, 0);
         eBoardPanel2.add(combo_TextColor2, gridBagConstraints);
 
         combo_TextFont2.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        combo_TextFont2.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Dialog", "DialogInput", "Microsoft_NeoGothic", "Monospaced", "Sans_Serif" }));
-        combo_TextFont2.setMinimumSize(new java.awt.Dimension(158, 21));
-        combo_TextFont2.setName("combo_TextFont" + EBD_DisplayUsage.CAR_ENTRY_TOP_ROW.ordinal());
-        combo_TextFont2.setPreferredSize(new java.awt.Dimension(143, 25));
+        combo_TextFont2.setMaximumSize(new java.awt.Dimension(150, 30));
+        combo_TextFont2.setMinimumSize(new java.awt.Dimension(150, 30));
+        combo_TextFont2.setName("combo_TextFont" + EBD_DisplayUsage.DEFAULT_TOP_ROW.ordinal());
+        combo_TextFont2.setPreferredSize(new java.awt.Dimension(150, 30));
         combo_TextFont2.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
             public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
             }
@@ -740,26 +710,27 @@ public class Settings_EBoard extends javax.swing.JFrame {
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridwidth = 3;
         gridBagConstraints.ipadx = 20;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 10, 0, 10);
         eBoardPanel2.add(combo_TextFont2, gridBagConstraints);
 
-        label_ContentType2.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        label_ContentType2.setText("Content Type");
+        label_ContentType1.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        label_ContentType1.setText(DISPLAY_TYPE_LABEL.getContent());
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridheight = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 0, 0);
-        eBoardPanel2.add(label_ContentType2, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(5, 10, 0, 0);
+        eBoardPanel2.add(label_ContentType1, gridBagConstraints);
 
         combo_ContentType2.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        combo_ContentType2.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "VERBATIM", "VEHICLE TAG", "REGISTRATION STAT", "GATE NAME", "CURRENT DATE", "CURRENT TIME", "CURRENT DATE TIME" }));
-        combo_ContentType2.setName("combo_ContentType" + EBD_DisplayUsage.CAR_ENTRY_TOP_ROW.ordinal());
-        combo_ContentType2.setPreferredSize(new java.awt.Dimension(154, 25));
+        combo_ContentType2.setMaximumSize(new java.awt.Dimension(150, 30));
+        combo_ContentType2.setMinimumSize(new java.awt.Dimension(150, 30));
+        combo_ContentType2.setName("combo_ContentType" + EBD_DisplayUsage.DEFAULT_TOP_ROW.ordinal());
+        combo_ContentType2.setPreferredSize(new java.awt.Dimension(150, 30));
         combo_ContentType2.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
             public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
             }
@@ -775,149 +746,120 @@ public class Settings_EBoard extends javax.swing.JFrame {
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.ipadx = 20;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 10, 0, 0);
-        eBoardPanel2.add(combo_ContentType2, gridBagConstraints);
-
-        btn_Save2.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        btn_Save2.setMnemonic('s');
-        btn_Save2.setText("Save");
-        btn_Save2.setEnabled(false);
-        btn_Save2.setInheritsPopupMenu(true);
-        btn_Save2.setMaximumSize(new java.awt.Dimension(73, 35));
-        btn_Save2.setMinimumSize(new java.awt.Dimension(73, 35));
-        btn_Save2.setName("btn_Save" + EBD_DisplayUsage.CAR_ENTRY_TOP_ROW.ordinal());
-        btn_Save2.setPreferredSize(new java.awt.Dimension(73, 30));
-        btn_Save2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btn_Save2ActionPerformed(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 5;
-        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 3;
         gridBagConstraints.ipadx = 20;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(10, 170, 0, 0);
-        eBoardPanel2.add(btn_Save2, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(5, 10, 0, 10);
+        eBoardPanel2.add(combo_ContentType2, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridy = 0;
+        eBoardPanel2.add(filler4, gridBagConstraints);
 
-        btn_Cancel2.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        btn_Cancel2.setText("Cancel");
-        btn_Cancel2.setMaximumSize(new java.awt.Dimension(73, 35));
-        btn_Cancel2.setMinimumSize(new java.awt.Dimension(73, 35));
-        btn_Cancel2.setName("btn_Cancel" + EBD_DisplayUsage.CAR_ENTRY_TOP_ROW.ordinal());
-        btn_Cancel2.setPreferredSize(new java.awt.Dimension(73, 30));
-        btn_Cancel2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btn_Cancel2ActionPerformed(evt);
+        jPanel3.setLayout(new java.awt.GridBagLayout());
+
+        combo_DisplayEffect2.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        combo_DisplayEffect2.setMaximumSize(new java.awt.Dimension(70, 30));
+        combo_DisplayEffect2.setMinimumSize(new java.awt.Dimension(70, 30));
+        combo_DisplayEffect2.setName("combo_DisplayEffect" + EBD_DisplayUsage.DEFAULT_TOP_ROW.ordinal());
+        combo_DisplayEffect2.setPreferredSize(new java.awt.Dimension(100, 30));
+        combo_DisplayEffect2.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
+            public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
+            }
+            public void popupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {
+                combo_DisplayEffect2PopupMenuWillBecomeInvisible(evt);
+            }
+            public void popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = java.awt.GridBagConstraints.RELATIVE;
         gridBagConstraints.ipadx = 20;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 0, 10);
-        eBoardPanel2.add(btn_Cancel2, gridBagConstraints);
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(5, 10, 0, 0);
+        jPanel3.add(combo_DisplayEffect2, gridBagConstraints);
 
-        eBoardTabPane2.addTab("TOP", eBoardPanel2);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        eBoardPanel2.add(jPanel3, gridBagConstraints);
+
+        eBoardTabPane2.addTab(TOP_TAB_TITLE.getContent(), eBoardPanel2);
 
         eBoardPanel3.setName("eBoard" + EBD_DisplayUsage.CAR_ENTRY_BOTTOM_ROW.getVal());
         eBoardPanel3.setLayout(new java.awt.GridBagLayout());
 
-        label_MSG3.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        label_MSG3.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        label_MSG3.setText("Message");
-        label_MSG3.setPreferredSize(new java.awt.Dimension(76, 15));
+        label_MSG2.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        label_MSG2.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        label_MSG2.setText(MESSAGE_LABEL.getContent());
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 0, 0);
-        eBoardPanel3.add(label_MSG3, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(5, 10, 0, 0);
+        eBoardPanel3.add(label_MSG2, gridBagConstraints);
 
         tf_VerbatimContent3.setColumns(23);
         tf_VerbatimContent3.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        tf_VerbatimContent3.setMinimumSize(new java.awt.Dimension(250, 18));
-        tf_VerbatimContent3.setName("tf_VerbatimContent" + EBD_DisplayUsage.CAR_ENTRY_BOTTOM_ROW.ordinal());
-        tf_VerbatimContent3.setPreferredSize(new java.awt.Dimension(250, 25));
+        tf_VerbatimContent3.setMaximumSize(new Dimension(250, TEXT_FIELD_HEIGHT));
+        tf_VerbatimContent3.setMinimumSize(new Dimension(250, TEXT_FIELD_HEIGHT));
+        tf_VerbatimContent3.setName("tf_VerbatimContent" + EBD_DisplayUsage.DEFAULT_BOTTOM_ROW.ordinal());
+        tf_VerbatimContent3.setPreferredSize(new Dimension(250, TEXT_FIELD_HEIGHT));
         tf_VerbatimContent3.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 tf_VerbatimContent3KeyReleased(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 2;
-        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.gridwidth = 5;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 5;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 10, 0, 10);
+        gridBagConstraints.insets = new java.awt.Insets(5, 10, 0, 50);
         eBoardPanel3.add(tf_VerbatimContent3, gridBagConstraints);
 
-        label_Effect3.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        label_Effect3.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        label_Effect3.setText("Effect");
+        label_Effect2.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        label_Effect2.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        label_Effect2.setText(EFFECT_LABEL.getContent());
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
+        gridBagConstraints.insets = new java.awt.Insets(5, 20, 0, 0);
+        eBoardPanel3.add(label_Effect2, gridBagConstraints);
+
+        label_Color2.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        label_Color2.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        label_Color2.setText(COLOR_LABEL.getContent());
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
-        gridBagConstraints.insets = new java.awt.Insets(10, 0, 0, 0);
-        eBoardPanel3.add(label_Effect3, gridBagConstraints);
-
-        label_Color3.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        label_Color3.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        label_Color3.setText("Color");
-        label_Color3.setPreferredSize(new java.awt.Dimension(76, 15));
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 0, 0);
-        eBoardPanel3.add(label_Color3, gridBagConstraints);
-
-        label_Font3.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        label_Font3.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        label_Font3.setText("Font");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 3;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 0, 0);
-        eBoardPanel3.add(label_Font3, gridBagConstraints);
-
-        combo_DisplayEffect3.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        combo_DisplayEffect3.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "L to R Flow", "R to L Flow", "Still Frame", "Blinking" }));
-        combo_DisplayEffect3.setMinimumSize(new java.awt.Dimension(100, 25));
-        combo_DisplayEffect3.setName("combo_DisplayEffect" + EBD_DisplayUsage.CAR_ENTRY_BOTTOM_ROW.ordinal());
-        combo_DisplayEffect3.setPreferredSize(new java.awt.Dimension(100, 25));
-        combo_DisplayEffect3.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
-            public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
-            }
-            public void popupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {
-                combo_DisplayEffect3PopupMenuWillBecomeInvisible(evt);
-            }
-            public void popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 4;
-        gridBagConstraints.ipadx = 20;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 10, 0, 0);
-        eBoardPanel3.add(combo_DisplayEffect3, gridBagConstraints);
+        eBoardPanel3.add(label_Color2, gridBagConstraints);
+
+        label_Font2.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        label_Font2.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        label_Font2.setText(FONT_LABEL.getContent());
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
+        gridBagConstraints.insets = new java.awt.Insets(5, 10, 0, 0);
+        eBoardPanel3.add(label_Font2, gridBagConstraints);
 
         combo_TextColor3.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        combo_TextColor3.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "RED", "ORANGE", "GREEN", "BLACK", "BLUE" }));
-        combo_TextColor3.setMinimumSize(new java.awt.Dimension(100, 25));
-        combo_TextColor3.setName("combo_TextColor" + EBD_DisplayUsage.CAR_ENTRY_BOTTOM_ROW.ordinal());
-        combo_TextColor3.setPreferredSize(new java.awt.Dimension(100, 25));
+        combo_TextColor3.setMaximumSize(new java.awt.Dimension(70, 30));
+        combo_TextColor3.setMinimumSize(new java.awt.Dimension(70, 30));
+        combo_TextColor3.setName("combo_TextColor" + EBD_DisplayUsage.DEFAULT_BOTTOM_ROW.ordinal());
+        combo_TextColor3.setPreferredSize(new java.awt.Dimension(100, 30));
         combo_TextColor3.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
             public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
             }
@@ -928,18 +870,18 @@ public class Settings_EBoard extends javax.swing.JFrame {
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.ipadx = 20;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 10, 0, 0);
         eBoardPanel3.add(combo_TextColor3, gridBagConstraints);
 
         combo_TextFont3.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        combo_TextFont3.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Dialog", "DialogInput", "Microsoft_NeoGothic", "Monospaced", "Sans_Serif" }));
-        combo_TextFont3.setMinimumSize(new java.awt.Dimension(158, 21));
-        combo_TextFont3.setName("combo_TextFont" + EBD_DisplayUsage.CAR_ENTRY_BOTTOM_ROW.ordinal());
-        combo_TextFont3.setPreferredSize(new java.awt.Dimension(143, 25));
+        combo_TextFont3.setMaximumSize(new java.awt.Dimension(150, 30));
+        combo_TextFont3.setMinimumSize(new java.awt.Dimension(150, 30));
+        combo_TextFont3.setName("combo_TextFont" + EBD_DisplayUsage.DEFAULT_BOTTOM_ROW.ordinal());
+        combo_TextFont3.setPreferredSize(new java.awt.Dimension(150, 30));
         combo_TextFont3.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
             public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
             }
@@ -951,26 +893,27 @@ public class Settings_EBoard extends javax.swing.JFrame {
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridwidth = 3;
         gridBagConstraints.ipadx = 20;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 10, 0, 10);
         eBoardPanel3.add(combo_TextFont3, gridBagConstraints);
 
-        label_ContentType3.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        label_ContentType3.setText("Content Type");
+        label_ContentType2.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        label_ContentType2.setText(DISPLAY_TYPE_LABEL.getContent());
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridheight = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 0, 0);
-        eBoardPanel3.add(label_ContentType3, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(5, 10, 0, 0);
+        eBoardPanel3.add(label_ContentType2, gridBagConstraints);
 
         combo_ContentType3.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        combo_ContentType3.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "VERBATIM", "VEHICLE TAG", "REGISTRATION STAT", "GATE NAME", "CURRENT DATE", "CURRENT TIME", "CURRENT DATE TIME" }));
-        combo_ContentType3.setName("combo_ContentType" + EBD_DisplayUsage.CAR_ENTRY_BOTTOM_ROW.ordinal());
-        combo_ContentType3.setPreferredSize(new java.awt.Dimension(154, 25));
+        combo_ContentType3.setMaximumSize(new java.awt.Dimension(150, 30));
+        combo_ContentType3.setMinimumSize(new java.awt.Dimension(150, 30));
+        combo_ContentType3.setName("combo_ContentType" + EBD_DisplayUsage.DEFAULT_BOTTOM_ROW.ordinal());
+        combo_ContentType3.setPreferredSize(new java.awt.Dimension(150, 30));
         combo_ContentType3.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
             public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
             }
@@ -986,68 +929,98 @@ public class Settings_EBoard extends javax.swing.JFrame {
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.ipadx = 20;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 10, 0, 0);
-        eBoardPanel3.add(combo_ContentType3, gridBagConstraints);
-
-        btn_Save3.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        btn_Save3.setMnemonic('s');
-        btn_Save3.setText("Save");
-        btn_Save3.setEnabled(false);
-        btn_Save3.setInheritsPopupMenu(true);
-        btn_Save3.setMaximumSize(new java.awt.Dimension(73, 35));
-        btn_Save3.setMinimumSize(new java.awt.Dimension(73, 35));
-        btn_Save3.setName("btn_Save" + EBD_DisplayUsage.CAR_ENTRY_BOTTOM_ROW.ordinal());
-        btn_Save3.setPreferredSize(new java.awt.Dimension(73, 30));
-        btn_Save3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btn_Save3ActionPerformed(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 5;
-        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 3;
         gridBagConstraints.ipadx = 20;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(10, 170, 0, 0);
-        eBoardPanel3.add(btn_Save3, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(5, 10, 0, 10);
+        eBoardPanel3.add(combo_ContentType3, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridy = 0;
+        eBoardPanel3.add(filler5, gridBagConstraints);
 
-        btn_Cancel3.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        btn_Cancel3.setText("Cancel");
-        btn_Cancel3.setMaximumSize(new java.awt.Dimension(73, 35));
-        btn_Cancel3.setMinimumSize(new java.awt.Dimension(73, 35));
-        btn_Cancel3.setName("btn_Cancel" + EBD_DisplayUsage.CAR_ENTRY_BOTTOM_ROW.ordinal());
-        btn_Cancel3.setPreferredSize(new java.awt.Dimension(73, 30));
-        btn_Cancel3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btn_Cancel3ActionPerformed(evt);
+        jPanel4.setLayout(new java.awt.GridBagLayout());
+
+        combo_DisplayEffect3.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        combo_DisplayEffect3.setMaximumSize(new java.awt.Dimension(70, 30));
+        combo_DisplayEffect3.setMinimumSize(new java.awt.Dimension(70, 30));
+        combo_DisplayEffect3.setName("combo_DisplayEffect" + EBD_DisplayUsage.DEFAULT_BOTTOM_ROW.ordinal());
+        combo_DisplayEffect3.setPreferredSize(new java.awt.Dimension(100, 30));
+        combo_DisplayEffect3.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
+            public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
+            }
+            public void popupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {
+                combo_DisplayEffect3PopupMenuWillBecomeInvisible(evt);
+            }
+            public void popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = java.awt.GridBagConstraints.RELATIVE;
         gridBagConstraints.ipadx = 20;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 0, 10);
-        eBoardPanel3.add(btn_Cancel3, gridBagConstraints);
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(5, 10, 0, 0);
+        jPanel4.add(combo_DisplayEffect3, gridBagConstraints);
 
-        eBoardTabPane2.addTab("BOTTOM", eBoardPanel3);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        eBoardPanel3.add(jPanel4, gridBagConstraints);
 
-        eboardTabbedPanel.addTab("Vehicle", eBoardTabPane2);
+        eBoardTabPane2.addTab(BOTTOM_TAB_TITLE.getContent(), eBoardPanel3);
+
+        eboardTabbedPanel.addTab(VEHICLE_TAB_TITLE.getContent(), eBoardTabPane2);
+
+        centerPanel.add(eboardTabbedPanel);
+        centerPanel.add(filler1);
+
+        buttonPanel.setMinimumSize(new java.awt.Dimension(0, 40));
+        buttonPanel.setPreferredSize(new java.awt.Dimension(0, 40));
 
         btn_Exit.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         btn_Exit.setMnemonic('c');
-        btn_Exit.setText("Close");
-        btn_Exit.setMaximumSize(new java.awt.Dimension(85, 35));
-        btn_Exit.setMinimumSize(new java.awt.Dimension(85, 35));
-        btn_Exit.setPreferredSize(new java.awt.Dimension(85, 35));
+        btn_Exit.setText(CLOSE_BTN.getContent());
+        btn_Exit.setToolTipText(CLOSE_BTN_TOOLTIP.getContent());
+        btn_Exit.setMaximumSize(new java.awt.Dimension(90, 40));
+        btn_Exit.setMinimumSize(new java.awt.Dimension(90, 40));
+        btn_Exit.setPreferredSize(new java.awt.Dimension(90, 40));
         btn_Exit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_ExitActionPerformed(evt);
+            }
+        });
+
+        btn_Save0.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        btn_Save0.setMnemonic('s');
+        btn_Save0.setText(SAVE_BTN.getContent());
+        btn_Save0.setEnabled(false);
+        btn_Save0.setInheritsPopupMenu(true);
+        btn_Save0.setMaximumSize(new java.awt.Dimension(90, 40));
+        btn_Save0.setMinimumSize(new java.awt.Dimension(90, 40));
+        btn_Save0.setName("btn_Save" + EBD_DisplayUsage.DEFAULT_TOP_ROW.ordinal());
+        btn_Save0.setPreferredSize(new java.awt.Dimension(90, 40));
+        btn_Save0.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_Save0ActionPerformed(evt);
+            }
+        });
+
+        btn_Cancel0.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        btn_Cancel0.setMnemonic('c');
+        btn_Cancel0.setText(CANCEL_BTN.getContent());
+        btn_Cancel0.setEnabled(false);
+        btn_Cancel0.setMaximumSize(new java.awt.Dimension(90, 40));
+        btn_Cancel0.setMinimumSize(new java.awt.Dimension(90, 40));
+        btn_Cancel0.setName("btn_Cancel" + EBD_DisplayUsage.DEFAULT_TOP_ROW.ordinal());
+        btn_Cancel0.setPreferredSize(new java.awt.Dimension(90, 40));
+        btn_Cancel0.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_Cancel0ActionPerformed(evt);
             }
         });
 
@@ -1055,39 +1028,58 @@ public class Settings_EBoard extends javax.swing.JFrame {
         buttonPanel.setLayout(buttonPanelLayout);
         buttonPanelLayout.setHorizontalGroup(
             buttonPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, buttonPanelLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(buttonPanelLayout.createSequentialGroup()
+                .addContainerGap(105, Short.MAX_VALUE)
+                .addComponent(btn_Save0, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(10, 10, 10)
+                .addComponent(btn_Cancel0, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(10, 10, 10)
                 .addComponent(btn_Exit, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(24, 24, 24))
+                .addContainerGap(105, Short.MAX_VALUE))
         );
         buttonPanelLayout.setVerticalGroup(
             buttonPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(btn_Exit, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(buttonPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addComponent(btn_Exit, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btn_Save0, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btn_Cancel0, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
+
+        centerPanel.add(buttonPanel);
+
+        wholePanel.add(centerPanel, java.awt.BorderLayout.CENTER);
+
+        southPanel.setMaximumSize(new java.awt.Dimension(32767, 40));
+        southPanel.setMinimumSize(new java.awt.Dimension(100, 40));
+        southPanel.setPreferredSize(new java.awt.Dimension(545, 40));
+
+        javax.swing.GroupLayout southPanelLayout = new javax.swing.GroupLayout(southPanel);
+        southPanel.setLayout(southPanelLayout);
+        southPanelLayout.setHorizontalGroup(
+            southPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 580, Short.MAX_VALUE)
+        );
+        southPanelLayout.setVerticalGroup(
+            southPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 40, Short.MAX_VALUE)
+        );
+
+        wholePanel.add(southPanel, java.awt.BorderLayout.PAGE_END);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(buttonPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(eboardTabbedPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 545, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(wholePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(0, 0, 0)
+                .addComponent(wholePanel, javax.swing.GroupLayout.DEFAULT_SIZE, 580, Short.MAX_VALUE)
+                .addGap(0, 0, 0))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addComponent(eboardTabbedPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 221, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(wholePanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(10, 10, 10)
-                        .addComponent(buttonPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap())))
+                .addGap(0, 0, 0)
+                .addComponent(wholePanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -1105,7 +1097,32 @@ public class Settings_EBoard extends javax.swing.JFrame {
     }    
     
     private void btn_Save0ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_Save0ActionPerformed
-        showDialog(currentTab);
+        int result = 0;
+        for (EBD_DisplayUsage usage : EBD_DisplayUsage.values()) {
+            result += saveDataBase(usage);
+        }
+        
+        if (result == 4) {
+//            Globals.getOperationLog().setLevel(index2Level(opLoggingIndex));
+            JOptionPane.showMessageDialog(this, SAVE_SETTINGS_DIALOG.getContent(),
+                SETTINGS_SAVE_RESULT.getContent(), JOptionPane.PLAIN_MESSAGE);
+//            enableSaveCancelButtons(false);
+            changeEnabled_of_SaveCancelButtons(false);
+//            ChangeSettings.changeEnabled_of_SaveCancelButtons(SettingsSaveButton, SettingsCancelButton, 
+//                    SettingsCloseButton, changedControls.size());            
+        } else {
+            JOptionPane.showMessageDialog(this, "E-board settings saving failed.",
+                SETTINGS_SAVE_RESULT.getContent(), JOptionPane.ERROR_MESSAGE);
+        }            
+//        JOptionPane.showOptionDialog(
+//            rootPane, 
+//            "Saved", 
+//            "Confirm", 
+//            JOptionPane.DEFAULT_OPTION,
+//            JOptionPane.PLAIN_MESSAGE,
+//            null,
+//            save_Options,
+//            save_Options[0]);
     }//GEN-LAST:event_btn_Save0ActionPerformed
 
     private void btn_Cancel0ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_Cancel0ActionPerformed
@@ -1116,142 +1133,113 @@ public class Settings_EBoard extends javax.swing.JFrame {
         tryToCloseEBDSettingsForm();
     }//GEN-LAST:event_btn_ExitActionPerformed
 
-    private void btn_Cancel2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_Cancel2ActionPerformed
-        cancelBtnClick();
-    }//GEN-LAST:event_btn_Cancel2ActionPerformed
-
-    private void btn_Save2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_Save2ActionPerformed
-        showDialog(currentTab);
-    }//GEN-LAST:event_btn_Save2ActionPerformed
-
-    private void btn_Cancel1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_Cancel1ActionPerformed
-        cancelBtnClick();
-    }//GEN-LAST:event_btn_Cancel1ActionPerformed
-
-    private void btn_Save1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_Save1ActionPerformed
-        showDialog(currentTab);
-    }//GEN-LAST:event_btn_Save1ActionPerformed
-
-    private void btn_Save3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_Save3ActionPerformed
-        showDialog(currentTab);
-    }//GEN-LAST:event_btn_Save3ActionPerformed
-
-    private void btn_Cancel3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_Cancel3ActionPerformed
-        cancelBtnClick();
-    }//GEN-LAST:event_btn_Cancel3ActionPerformed
-
     private void formClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formClosing
         tryToCloseEBDSettingsForm();        
     }//GEN-LAST:event_formClosing
-
-    private void combo_ContentType3PopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_combo_ContentType3PopupMenuWillBecomeInvisible
-        setButtonEnabledIfContentTypeChanged(EBD_DisplayUsage.values()[3]);
-    }//GEN-LAST:event_combo_ContentType3PopupMenuWillBecomeInvisible
 
     private void combo_ContentType0PopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_combo_ContentType0PopupMenuWillBecomeInvisible
         setButtonEnabledIfContentTypeChanged(EBD_DisplayUsage.values()[0]);
     }//GEN-LAST:event_combo_ContentType0PopupMenuWillBecomeInvisible
 
-    private void combo_ContentType1PopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_combo_ContentType1PopupMenuWillBecomeInvisible
-        setButtonEnabledIfContentTypeChanged(EBD_DisplayUsage.values()[1]);
-    }//GEN-LAST:event_combo_ContentType1PopupMenuWillBecomeInvisible
-
-    private void combo_ContentType2PopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_combo_ContentType2PopupMenuWillBecomeInvisible
-        setButtonEnabledIfContentTypeChanged(EBD_DisplayUsage.values()[2]);
-    }//GEN-LAST:event_combo_ContentType2PopupMenuWillBecomeInvisible
-
     private void combo_TextColor0PopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_combo_TextColor0PopupMenuWillBecomeInvisible
         setButtonEnabledIfColorChanged(EBD_DisplayUsage.values()[0]);
     }//GEN-LAST:event_combo_TextColor0PopupMenuWillBecomeInvisible
-
-    private void combo_TextColor1PopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_combo_TextColor1PopupMenuWillBecomeInvisible
-        setButtonEnabledIfColorChanged(EBD_DisplayUsage.values()[1]);
-    }//GEN-LAST:event_combo_TextColor1PopupMenuWillBecomeInvisible
-
-    private void combo_TextColor2PopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_combo_TextColor2PopupMenuWillBecomeInvisible
-        setButtonEnabledIfColorChanged(EBD_DisplayUsage.values()[2]);
-    }//GEN-LAST:event_combo_TextColor2PopupMenuWillBecomeInvisible
-
-    private void combo_TextColor3PopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_combo_TextColor3PopupMenuWillBecomeInvisible
-        setButtonEnabledIfColorChanged(EBD_DisplayUsage.values()[3]);
-    }//GEN-LAST:event_combo_TextColor3PopupMenuWillBecomeInvisible
 
     private void combo_DisplayEffect0PopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_combo_DisplayEffect0PopupMenuWillBecomeInvisible
         setButtonEnabledIfEffectChanged(EBD_DisplayUsage.values()[0]);
     }//GEN-LAST:event_combo_DisplayEffect0PopupMenuWillBecomeInvisible
 
-    private void combo_DisplayEffect1PopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_combo_DisplayEffect1PopupMenuWillBecomeInvisible
-        setButtonEnabledIfEffectChanged(EBD_DisplayUsage.values()[1]);
-    }//GEN-LAST:event_combo_DisplayEffect1PopupMenuWillBecomeInvisible
-
-    private void combo_DisplayEffect2PopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_combo_DisplayEffect2PopupMenuWillBecomeInvisible
-        setButtonEnabledIfEffectChanged(EBD_DisplayUsage.values()[2]);
-    }//GEN-LAST:event_combo_DisplayEffect2PopupMenuWillBecomeInvisible
-
-    private void combo_DisplayEffect3PopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_combo_DisplayEffect3PopupMenuWillBecomeInvisible
-        setButtonEnabledIfEffectChanged(EBD_DisplayUsage.values()[3]);
-    }//GEN-LAST:event_combo_DisplayEffect3PopupMenuWillBecomeInvisible
-
     private void combo_TextFont0PopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_combo_TextFont0PopupMenuWillBecomeInvisible
         setButtonEnabledIfFontChanged(EBD_DisplayUsage.values()[0]);
     }//GEN-LAST:event_combo_TextFont0PopupMenuWillBecomeInvisible
-
-    private void combo_TextFont1PopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_combo_TextFont1PopupMenuWillBecomeInvisible
-        setButtonEnabledIfFontChanged(EBD_DisplayUsage.values()[1]);
-    }//GEN-LAST:event_combo_TextFont1PopupMenuWillBecomeInvisible
-
-    private void combo_TextFont2PopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_combo_TextFont2PopupMenuWillBecomeInvisible
-        setButtonEnabledIfFontChanged(EBD_DisplayUsage.values()[2]);
-    }//GEN-LAST:event_combo_TextFont2PopupMenuWillBecomeInvisible
-
-    private void combo_TextFont3PopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_combo_TextFont3PopupMenuWillBecomeInvisible
-        setButtonEnabledIfFontChanged(EBD_DisplayUsage.values()[3]);
-    }//GEN-LAST:event_combo_TextFont3PopupMenuWillBecomeInvisible
 
     private void tf_VerbatimContent0KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tf_VerbatimContent0KeyReleased
         changeButtonEnabled_IfVebarimChanged(0);
     }//GEN-LAST:event_tf_VerbatimContent0KeyReleased
 
-    private void tf_VerbatimContent1KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tf_VerbatimContent1KeyReleased
-        changeButtonEnabled_IfVebarimChanged(1);
-    }//GEN-LAST:event_tf_VerbatimContent1KeyReleased
-
-    private void tf_VerbatimContent2KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tf_VerbatimContent2KeyReleased
-        changeButtonEnabled_IfVebarimChanged(2);
-    }//GEN-LAST:event_tf_VerbatimContent2KeyReleased
-
-    private void tf_VerbatimContent3KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tf_VerbatimContent3KeyReleased
-        changeButtonEnabled_IfVebarimChanged(3);
-    }//GEN-LAST:event_tf_VerbatimContent3KeyReleased
-
-    private void combo_ContentType1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_combo_ContentType1ActionPerformed
-        checkContentType(1);
-    }//GEN-LAST:event_combo_ContentType1ActionPerformed
-
     private void combo_ContentType0ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_combo_ContentType0ActionPerformed
         checkContentType(0);
     }//GEN-LAST:event_combo_ContentType0ActionPerformed
 
-    private void combo_ContentType3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_combo_ContentType3ActionPerformed
-        checkContentType(3);
-    }//GEN-LAST:event_combo_ContentType3ActionPerformed
+    private void tf_VerbatimContent1KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tf_VerbatimContent1KeyReleased
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tf_VerbatimContent1KeyReleased
+
+    private void combo_TextColor1PopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_combo_TextColor1PopupMenuWillBecomeInvisible
+        // TODO add your handling code here:
+    }//GEN-LAST:event_combo_TextColor1PopupMenuWillBecomeInvisible
+
+    private void combo_TextFont1PopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_combo_TextFont1PopupMenuWillBecomeInvisible
+        // TODO add your handling code here:
+    }//GEN-LAST:event_combo_TextFont1PopupMenuWillBecomeInvisible
+
+    private void combo_ContentType1PopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_combo_ContentType1PopupMenuWillBecomeInvisible
+        // TODO add your handling code here:
+    }//GEN-LAST:event_combo_ContentType1PopupMenuWillBecomeInvisible
+
+    private void combo_ContentType1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_combo_ContentType1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_combo_ContentType1ActionPerformed
+
+    private void combo_DisplayEffect1PopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_combo_DisplayEffect1PopupMenuWillBecomeInvisible
+        // TODO add your handling code here:
+    }//GEN-LAST:event_combo_DisplayEffect1PopupMenuWillBecomeInvisible
+
+    private void tf_VerbatimContent2KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tf_VerbatimContent2KeyReleased
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tf_VerbatimContent2KeyReleased
+
+    private void combo_TextColor2PopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_combo_TextColor2PopupMenuWillBecomeInvisible
+        // TODO add your handling code here:
+    }//GEN-LAST:event_combo_TextColor2PopupMenuWillBecomeInvisible
+
+    private void combo_TextFont2PopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_combo_TextFont2PopupMenuWillBecomeInvisible
+        // TODO add your handling code here:
+    }//GEN-LAST:event_combo_TextFont2PopupMenuWillBecomeInvisible
+
+    private void combo_ContentType2PopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_combo_ContentType2PopupMenuWillBecomeInvisible
+        // TODO add your handling code here:
+    }//GEN-LAST:event_combo_ContentType2PopupMenuWillBecomeInvisible
 
     private void combo_ContentType2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_combo_ContentType2ActionPerformed
-        checkContentType(2);
+        // TODO add your handling code here:
     }//GEN-LAST:event_combo_ContentType2ActionPerformed
+
+    private void combo_DisplayEffect2PopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_combo_DisplayEffect2PopupMenuWillBecomeInvisible
+        // TODO add your handling code here:
+    }//GEN-LAST:event_combo_DisplayEffect2PopupMenuWillBecomeInvisible
+
+    private void tf_VerbatimContent3KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tf_VerbatimContent3KeyReleased
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tf_VerbatimContent3KeyReleased
+
+    private void combo_TextColor3PopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_combo_TextColor3PopupMenuWillBecomeInvisible
+        // TODO add your handling code here:
+    }//GEN-LAST:event_combo_TextColor3PopupMenuWillBecomeInvisible
+
+    private void combo_TextFont3PopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_combo_TextFont3PopupMenuWillBecomeInvisible
+        // TODO add your handling code here:
+    }//GEN-LAST:event_combo_TextFont3PopupMenuWillBecomeInvisible
+
+    private void combo_ContentType3PopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_combo_ContentType3PopupMenuWillBecomeInvisible
+        // TODO add your handling code here:
+    }//GEN-LAST:event_combo_ContentType3PopupMenuWillBecomeInvisible
+
+    private void combo_ContentType3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_combo_ContentType3ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_combo_ContentType3ActionPerformed
+
+    private void combo_DisplayEffect3PopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_combo_DisplayEffect3PopupMenuWillBecomeInvisible
+        // TODO add your handling code here:
+    }//GEN-LAST:event_combo_DisplayEffect3PopupMenuWillBecomeInvisible
 
      // <editor-fold defaultstate="collapsed" desc="Generated Code">  
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btn_Cancel0;
-    private javax.swing.JButton btn_Cancel1;
-    private javax.swing.JButton btn_Cancel2;
-    private javax.swing.JButton btn_Cancel3;
     private javax.swing.JButton btn_Exit;
     private javax.swing.JButton btn_Save0;
-    private javax.swing.JButton btn_Save1;
-    private javax.swing.JButton btn_Save2;
-    private javax.swing.JButton btn_Save3;
     private javax.swing.JPanel buttonPanel;
+    private javax.swing.JPanel centerPanel;
     private javax.swing.JComboBox combo_ContentType0;
     private javax.swing.JComboBox combo_ContentType1;
     private javax.swing.JComboBox combo_ContentType2;
@@ -1277,30 +1265,41 @@ public class Settings_EBoard extends javax.swing.JFrame {
     private javax.swing.JTabbedPane eboardTabbedPanel;
     private javax.swing.Box.Filler filler1;
     private javax.swing.Box.Filler filler2;
+    private javax.swing.Box.Filler filler3;
+    private javax.swing.Box.Filler filler4;
+    private javax.swing.Box.Filler filler5;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
     private javax.swing.JLabel label_Color0;
     private javax.swing.JLabel label_Color1;
     private javax.swing.JLabel label_Color2;
-    private javax.swing.JLabel label_Color3;
+    private javax.swing.JLabel label_Color4;
     private javax.swing.JLabel label_ContentType0;
     private javax.swing.JLabel label_ContentType1;
     private javax.swing.JLabel label_ContentType2;
-    private javax.swing.JLabel label_ContentType3;
+    private javax.swing.JLabel label_ContentType4;
     private javax.swing.JLabel label_Effect0;
     private javax.swing.JLabel label_Effect1;
     private javax.swing.JLabel label_Effect2;
-    private javax.swing.JLabel label_Effect3;
+    private javax.swing.JLabel label_Effect4;
     private javax.swing.JLabel label_Font0;
     private javax.swing.JLabel label_Font1;
     private javax.swing.JLabel label_Font2;
-    private javax.swing.JLabel label_Font3;
+    private javax.swing.JLabel label_Font4;
     private javax.swing.JLabel label_MSG0;
     private javax.swing.JLabel label_MSG1;
     private javax.swing.JLabel label_MSG2;
-    private javax.swing.JLabel label_MSG3;
+    private javax.swing.JLabel label_MSG4;
+    private javax.swing.Box.Filler leftFiller;
+    private javax.swing.Box.Filler rightFiller;
+    private javax.swing.JPanel southPanel;
     private javax.swing.JTextField tf_VerbatimContent0;
     private javax.swing.JTextField tf_VerbatimContent1;
     private javax.swing.JTextField tf_VerbatimContent2;
     private javax.swing.JTextField tf_VerbatimContent3;
+    private javax.swing.Box.Filler topFiller;
     private javax.swing.JPanel wholePanel;
     // End of variables declaration//GEN-END:variables
    // </editor-fold>
@@ -1434,7 +1433,7 @@ public class Settings_EBoard extends javax.swing.JFrame {
      * 
      * @param usage_row Panel that is currently selected
      */
-    public void saveDataBase(EBD_DisplayUsage usage_row){
+    public int saveDataBase(EBD_DisplayUsage usage_row){
         JComboBox comboBox = null;
         Connection conn = null;
         PreparedStatement updateSettings = null;
@@ -1495,7 +1494,6 @@ public class Settings_EBoard extends javax.swing.JFrame {
                 ControlGUI.EBD_DisplaySettings[usage_row.ordinal()].displayPattern = patternItem;
                 ControlGUI.EBD_DisplaySettings[usage_row.ordinal()].textColor = colorItem;
                 ControlGUI.EBD_DisplaySettings[usage_row.ordinal()].textFont = fontItem;
-                
             } else {
                 JOptionPane.showMessageDialog(this, "This e-board settings update saving DB operation failed.",
                     "DB Update Operation Failure", JOptionPane.ERROR_MESSAGE);
@@ -1521,6 +1519,7 @@ public class Settings_EBoard extends javax.swing.JFrame {
                 }
             }
         }
+        return result;
     }
     
     /**
@@ -1748,7 +1747,7 @@ public class Settings_EBoard extends javax.swing.JFrame {
             
             comboBox.removeAllItems();
             for (EBD_Colors aColor : EBD_Colors.values()) {                                
-                comboBox.addItem(new ConvComboBoxItem(aColor, aColor.name()));
+                comboBox.addItem(new ConvComboBoxItem(aColor, aColor.getLabel()));
             }
         }
     }
@@ -1760,34 +1759,7 @@ public class Settings_EBoard extends javax.swing.JFrame {
             
             comboBox.removeAllItems();
             for (EBD_Effects anEffect : EBD_Effects.values()) {
-
-                //<editor-fold desc="-- determine label for each item value">
-                String label;
-                
-                switch (anEffect) {
-                    case BLINKING:
-                        label = "Blinking";
-                        break;
-                        
-                    case LTOR_FLOW:
-                        label = "L to R Flow";
-                        break;
-                        
-                    case RTOL_FLOW:
-                        label = "R to L Flow";
-                        break;
-                        
-                    case STILL_FRAME:
-                        label = "Still Frame";
-                        break;
-                        
-                    default:
-                        label = "";
-                        break;
-                }
-                //</editor-fold>
-                            
-                comboBox.addItem(new ConvComboBoxItem(anEffect, label));
+                comboBox.addItem(new ConvComboBoxItem(anEffect, anEffect.getLabel()));
             }
         }
     }
@@ -1813,7 +1785,7 @@ public class Settings_EBoard extends javax.swing.JFrame {
                         break;
                         
                     case Microsoft_NeoGothic:
-                        label = "Microsoft Neo Gothic";
+                        label = MS_NEO_GOTHIC.getContent();
                         break;
                         
                     case Monospaced:
@@ -1821,7 +1793,7 @@ public class Settings_EBoard extends javax.swing.JFrame {
                         break;
                         
                     case Sans_Serif:
-                        label = "Sans Serif";
+                        label = SANS_SERIF.getContent() ;
                         break;
                         
                     default:
@@ -1898,8 +1870,25 @@ public class Settings_EBoard extends javax.swing.JFrame {
                     "E-Board settings is being modified," + System.lineSeparator()
                             + "Either [Save] or [Cancel] current changes!"); 
         } else {
-            parent.setEBDsettings(null);    
-            this.dispose();    
+            parent.setEBDsettings(null); 
+            this.dispose();
+        }
+    }
+
+    private void tuneComponentSize() {
+        /**
+         * Fix combobox sizes.
+         */
+        for (EBD_DisplayUsage usage : EBD_DisplayUsage.values()) {
+            if (usage != DEFAULT_TOP_ROW && usage != DEFAULT_BOTTOM_ROW)
+                continue;
+            String compoName = "combo_TextColor" + usage.ordinal();
+            JComponent compo = (JComponent)getComponentByName(compoName);
+            setComponentSize(compo, new Dimension(100, 30));
+
+            compoName = "combo_DisplayEffect" + usage.ordinal();
+            compo = (JComponent)getComponentByName(compoName);
+            setComponentSize(compo, new Dimension(100, 30));             
         }
     }
 }

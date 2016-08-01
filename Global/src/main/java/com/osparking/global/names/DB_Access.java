@@ -265,7 +265,7 @@ public class DB_Access {
             rs = selectStmt.executeQuery("SELECT * FROM SettingsTable");
             if (rs.next()) {
                 parkingLotName = rs.getString("Lot_Name");
-                if (Globals.DEBUG || rs.getInt("perfEvalNeeded") == 1)
+                if (rs.getInt("perfEvalNeeded") == 1)
                     storePassingDelay = true;
                 else 
                     storePassingDelay = false;

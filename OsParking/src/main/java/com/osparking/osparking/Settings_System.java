@@ -89,12 +89,12 @@ import static com.osparking.global.names.ControlEnums.DialogMessages.PopSizeHelp
 import static com.osparking.global.names.ControlEnums.DialogMessages.PopSizeHelp5;
 import static com.osparking.global.names.ControlEnums.DialogMessages.PopSizeHelp6;
 import static com.osparking.global.names.ControlEnums.DialogMessages.REBOOT_MESSAGE;
+import static com.osparking.global.names.ControlEnums.DialogMessages.RECORD_DELAY_DEBUG;
 import static com.osparking.global.names.ControlEnums.DialogMessages.SAVE_SETTINGS_DIALOG;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.SETTINGS_SAVE_RESULT;
 import static com.osparking.global.names.ControlEnums.LabelContent.BLINGKING_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.CAMERA_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.CYCLE_LABEL;
-import static com.osparking.global.names.ControlEnums.LabelContent.ELECTRONIC_DISPLAY_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.E_BOARD_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.FLOWING_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.GATE_BAR_LABEL;
@@ -116,6 +116,7 @@ import static com.osparking.global.names.ControlEnums.LabelContent.VEHICLE_IMG_W
 import static com.osparking.global.names.ControlEnums.MenuITemTypes.META_KEY_LABEL;
 import static com.osparking.global.names.ControlEnums.MsgContent.AVERAGE_WORDS;
 import static com.osparking.global.names.ControlEnums.MsgContent.RECENT_WORD;
+import static com.osparking.global.names.ControlEnums.TitleTypes.E_BOARD_SETTINGS_FRAME_TITLE;
 import static com.osparking.global.names.ControlEnums.TitleTypes.REBOOT_POPUP;
 import static com.osparking.global.names.ControlEnums.TitleTypes.SETTINGS_TITLE;
 import static com.osparking.global.names.ControlEnums.ToolTipContent.*;
@@ -140,13 +141,13 @@ import com.osparking.osparking.device.LEDnotice.Settings_LEDnotice;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.KeyboardFocusManager;
+import java.awt.Toolkit;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
 import javax.swing.JComponent;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import static javax.swing.JOptionPane.ERROR_MESSAGE;
 import static javax.swing.JOptionPane.YES_NO_OPTION;
@@ -233,6 +234,7 @@ public class Settings_System extends javax.swing.JFrame {
         
         loadComponentValues();
         makeEnterActAsTab();
+        setLocation(0, 0);        
     }
 
     /**
@@ -277,7 +279,7 @@ public class Settings_System extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         PopSizeHelpButton = new javax.swing.JButton();
         PopSizeCBox = new javax.swing.JComboBox();
-        RecordPassingDelayCBox = new javax.swing.JCheckBox();
+        RecordPassingDelayChkBox = new javax.swing.JCheckBox();
         gateSettingPanel = new javax.swing.JPanel();
         GatesTabbedPane = new javax.swing.JTabbedPane();
         gate1Panel = new javax.swing.JPanel();
@@ -461,6 +463,7 @@ public class Settings_System extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle(SETTINGS_TITLE.getContent());
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        setLocation(new java.awt.Point(0, 0));
         setMaximumSize(new Dimension(SETTINGS_WIDTH, SETTINGS_HEIGHT));
         setMinimumSize(new Dimension(SETTINGS_WIDTH, SETTINGS_HEIGHT));
         setPreferredSize(new Dimension(SETTINGS_WIDTH, SETTINGS_HEIGHT));
@@ -942,13 +945,13 @@ public class Settings_System extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 0, 0);
         parkinglotOptionPanel.add(PopSizeCBox, gridBagConstraints);
 
-        RecordPassingDelayCBox.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        RecordPassingDelayCBox.setText(RECORD_PASSING_LABEL.getContent());
-        RecordPassingDelayCBox.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
-        RecordPassingDelayCBox.setName("RecordPassingDelayCBox"); // NOI18N
-        RecordPassingDelayCBox.addActionListener(new java.awt.event.ActionListener() {
+        RecordPassingDelayChkBox.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        RecordPassingDelayChkBox.setText(RECORD_PASSING_LABEL.getContent());
+        RecordPassingDelayChkBox.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+        RecordPassingDelayChkBox.setName("RecordPassingDelayChkBox"); // NOI18N
+        RecordPassingDelayChkBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                RecordPassingDelayCBoxActionPerformed(evt);
+                RecordPassingDelayChkBoxActionPerformed(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -956,7 +959,7 @@ public class Settings_System extends javax.swing.JFrame {
         gridBagConstraints.gridy = 7;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.insets = new java.awt.Insets(10, 0, 0, 0);
-        parkinglotOptionPanel.add(RecordPassingDelayCBox, gridBagConstraints);
+        parkinglotOptionPanel.add(RecordPassingDelayChkBox, gridBagConstraints);
 
         wholePanel.add(parkinglotOptionPanel);
 
@@ -1409,18 +1412,10 @@ public class Settings_System extends javax.swing.JFrame {
 
         Camera2_connTypeCBox.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         Camera2_connTypeCBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "TCP/IP", "RS-232" }));
+        Camera2_connTypeCBox.setEnabled(false);
         Camera2_connTypeCBox.setMinimumSize(new java.awt.Dimension(80, 23));
         Camera2_connTypeCBox.setName("Camera2_connTypeCBox"); // NOI18N
         Camera2_connTypeCBox.setPreferredSize(new java.awt.Dimension(90, 27));
-        Camera2_connTypeCBox.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
-            public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
-            }
-            public void popupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {
-                Camera2_connTypeCBoxPopupMenuWillBecomeInvisible(evt);
-            }
-            public void popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {
-            }
-        });
         Camera2_connTypeCBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 Camera2_connTypeCBoxActionPerformed(evt);
@@ -1756,18 +1751,10 @@ public class Settings_System extends javax.swing.JFrame {
 
         Camera3_connTypeCBox.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         Camera3_connTypeCBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "TCP/IP", "RS-232" }));
+        Camera3_connTypeCBox.setEnabled(false);
         Camera3_connTypeCBox.setMinimumSize(new java.awt.Dimension(80, 23));
         Camera3_connTypeCBox.setName("Camera3_connTypeCBox"); // NOI18N
         Camera3_connTypeCBox.setPreferredSize(new java.awt.Dimension(90, 27));
-        Camera3_connTypeCBox.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
-            public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
-            }
-            public void popupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {
-                Camera3_connTypeCBoxPopupMenuWillBecomeInvisible(evt);
-            }
-            public void popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {
-            }
-        });
         Camera3_connTypeCBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 Camera3_connTypeCBoxActionPerformed(evt);
@@ -2103,18 +2090,10 @@ public class Settings_System extends javax.swing.JFrame {
 
         Camera4_connTypeCBox.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         Camera4_connTypeCBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "TCP/IP", "RS-232" }));
+        Camera4_connTypeCBox.setEnabled(false);
         Camera4_connTypeCBox.setMinimumSize(new java.awt.Dimension(80, 23));
         Camera4_connTypeCBox.setName("Camera4_connTypeCBox"); // NOI18N
         Camera4_connTypeCBox.setPreferredSize(new java.awt.Dimension(90, 27));
-        Camera4_connTypeCBox.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
-            public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
-            }
-            public void popupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {
-                Camera4_connTypeCBoxPopupMenuWillBecomeInvisible(evt);
-            }
-            public void popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {
-            }
-        });
         Camera4_connTypeCBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 Camera4_connTypeCBoxActionPerformed(evt);
@@ -2358,7 +2337,7 @@ public class Settings_System extends javax.swing.JFrame {
 
         jLabel20.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         jLabel20.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        jLabel20.setText(ELECTRONIC_DISPLAY_LABEL.getContent());
+        jLabel20.setText(E_BOARD_LABEL.getContent());
         jLabel20.setToolTipText("");
         jLabel20.setMaximumSize(new java.awt.Dimension(300, 27));
         jLabel20.setPreferredSize(new java.awt.Dimension(150, 27));
@@ -2366,11 +2345,14 @@ public class Settings_System extends javax.swing.JFrame {
 
         E_BoardSettingsButtonPanel.add(EBD_settings_label);
 
-        EBD_settings.setMinimumSize(new java.awt.Dimension(90, 35));
-        EBD_settings.setPreferredSize(new java.awt.Dimension(90, 35));
+        EBD_settings.setMaximumSize(new java.awt.Dimension(110, 37));
+        EBD_settings.setMinimumSize(new java.awt.Dimension(90, 37));
+        EBD_settings.setPreferredSize(new java.awt.Dimension(90, 37));
 
         EBoardSettingsButton.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        EBoardSettingsButton.setMnemonic('S');
         EBoardSettingsButton.setText(SET_BUTTON.getContent());
+        EBoardSettingsButton.setToolTipText("");
         EBoardSettingsButton.setMaximumSize(new java.awt.Dimension(79, 30));
         EBoardSettingsButton.setMinimumSize(new java.awt.Dimension(79, 30));
         EBoardSettingsButton.setPreferredSize(new java.awt.Dimension(79, 30));
@@ -2391,8 +2373,9 @@ public class Settings_System extends javax.swing.JFrame {
         EBD_settingsLayout.setVerticalGroup(
             EBD_settingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(EBD_settingsLayout.createSequentialGroup()
-                .addGap(0, 0, 0)
-                .addComponent(EBoardSettingsButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(3, 3, 3)
+                .addComponent(EBoardSettingsButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         E_BoardSettingsButtonPanel.add(EBD_settings);
@@ -2691,7 +2674,6 @@ public class Settings_System extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void LanguageHelpButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LanguageHelpButtonActionPerformed
-        // TODO add your handling code here:
         String helpText = "Date Input Panel GUI language selection .";
 
         JDialog helpDialog = new PWHelpJDialog(this, false,
@@ -2751,13 +2733,13 @@ public class Settings_System extends javax.swing.JFrame {
         helpDialog.setVisible(true);
     }//GEN-LAST:event_PWHelpButtonActionPerformed
 
-    private JFrame eBDsettings = null;
+    private JDialog eBoardDialog = null;
     
     private void SettingsSaveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SettingsSaveButtonActionPerformed
         Connection conn = null;
         PreparedStatement updateSettings = null;
         int result = -1;
-        boolean newStorePassingDelay = RecordPassingDelayCBox.isSelected();
+        boolean newStorePassingDelay = RecordPassingDelayChkBox.isSelected();
 
         //<editor-fold desc="--check setting input errors">
         if (!TextFieldNumericValueOK(TextFieldPicWidth, "Photo Extent Typing Errors")) {
@@ -2833,7 +2815,7 @@ public class Settings_System extends javax.swing.JFrame {
                 updateSettings.setInt(pIndex++, 0);
                 if (DEBUG) {
                     // Give warning that in debug mode PassingDelay is always recorded.
-                    JOptionPane.showMessageDialog(null, "In debug mode, Passing Delay is alway recorded");
+                    JOptionPane.showMessageDialog(null, RECORD_DELAY_DEBUG.getContent());
                 }
             }
 
@@ -3012,10 +2994,10 @@ public class Settings_System extends javax.swing.JFrame {
         tryToCloseSettingsForm();
     }//GEN-LAST:event_finishSettingsForm
 
-    private void RecordPassingDelayCBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RecordPassingDelayCBoxActionPerformed
+    private void RecordPassingDelayChkBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RecordPassingDelayChkBoxActionPerformed
         ChangeSettings.changeStatus_Manager(SettingsSaveButton, SettingsCancelButton, SettingsCloseButton, 
-                changedControls, (Component) evt.getSource(), RecordPassingDelayCBox.isSelected(), storePassingDelay);
-    }//GEN-LAST:event_RecordPassingDelayCBoxActionPerformed
+                changedControls, (Component) evt.getSource(), RecordPassingDelayChkBox.isSelected(), storePassingDelay);
+    }//GEN-LAST:event_RecordPassingDelayChkBoxActionPerformed
 
     private void ImageDurationCBoxPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_ImageDurationCBoxPopupMenuWillBecomeInvisible
         ChangeSettings.changeStatus_Manager(SettingsSaveButton, SettingsCancelButton, SettingsCloseButton, 
@@ -3092,26 +3074,37 @@ public class Settings_System extends javax.swing.JFrame {
         int tabIndex = GatesTabbedPane.getSelectedIndex();
         JComboBox typeCBox = (JComboBox)componentMap.get("E_Board" + (tabIndex + 1) + "_TypeCBox");
 
-        if (eBDsettings == null) {
+        if (eBoardDialog == null) {
+            final JDialog dialog = new JDialog(this, E_BOARD_SETTINGS_FRAME_TITLE.getContent(), true);
             if (typeCBox.getSelectedIndex() == E_BoardType.Simulator.ordinal()) {
-                setEBDsettings(new Settings_EBoard(mainForm, this));
+                dialog.getContentPane().add(
+                        (new Settings_EBoard(mainForm, this)).getContentPane());
             } else if (typeCBox.getSelectedIndex() == E_BoardType.LEDnotice.ordinal()) {
-                setEBDsettings(new Settings_LEDnotice(mainForm, this, null, tabIndex + 1));
+                dialog.getContentPane().add(
+                        (new Settings_LEDnotice(mainForm, this, null, tabIndex + 1)).getContentPane());
             }
+            dialog.pack();
+            dialog.setResizable(false);
+            setEBDsettings(dialog);
         }
 
-        Point panelPoint = new Point();
-        EBoardSettingsButton.getLocation(panelPoint);
-
-        Point buttonPoint = new Point();
-        eBoardSettingPanel.getLocation(buttonPoint);
-
-        Point framePoint = new Point();
-        this.getLocation(framePoint);
-        Point topLeft = new Point(framePoint.x + buttonPoint.x  + panelPoint.x+ EBoardSettingsButton.getSize().width + 130,
-            framePoint.y + buttonPoint.y + eBDsettings.getSize().height + 120);
-        eBDsettings.setLocation(topLeft);
-        eBDsettings.setVisible(true);
+        /**
+         * Place E-board settings frame around invoking button and inside monitor.
+         */
+        Point buttonPoint = EBoardSettingsButton.getLocationOnScreen();
+        int idealX = buttonPoint.x + EBoardSettingsButton.getSize().width + 10;
+        int moniWidth = (int)Toolkit.getDefaultToolkit().getScreenSize().getWidth();
+        int maxX = moniWidth - (int)eBoardDialog.getSize().getWidth();
+        int finalX = idealX;
+        int finalY = buttonPoint.y - (int)eBoardDialog.getSize().getHeight() / 2;
+        
+        if (idealX > maxX) {
+            finalX = maxX;
+            finalY = buttonPoint.y - (int)eBoardDialog.getSize().getHeight()- 10;
+        } 
+        eBoardDialog.setLocation(finalX, finalY);
+        
+        eBoardDialog.setVisible(true);
     }//GEN-LAST:event_EBoardSettingsButtonActionPerformed
 
     private void Camera1_Port_TextFieldKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_Camera1_Port_TextFieldKeyTyped
@@ -3119,11 +3112,11 @@ public class Settings_System extends javax.swing.JFrame {
     }//GEN-LAST:event_Camera1_Port_TextFieldKeyTyped
 
     private void Camera1_Port_TextFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_Camera1_Port_TextFieldKeyReleased
-        checkDevicePortChangeAndChangeButtonEnabledProperty(Camera, 1, (Component) evt.getSource());
+        changeButtonEnabledForPortChange(Camera, 1, (Component) evt.getSource());
     }//GEN-LAST:event_Camera1_Port_TextFieldKeyReleased
 
     private void Camera1_IP_TextFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_Camera1_IP_TextFieldKeyReleased
-        changeSaveEnabledForDeviceIpChange(Camera, 1, (Component) evt.getSource());
+        changeButtonEnabledForIPchange(Camera, 1, (Component) evt.getSource());
     }//GEN-LAST:event_Camera1_IP_TextFieldKeyReleased
 
     private void TextFieldGateName1KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TextFieldGateName1KeyReleased
@@ -3139,34 +3132,37 @@ public class Settings_System extends javax.swing.JFrame {
 
     private void TextFieldGateName3KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TextFieldGateName3KeyReleased
         // TODO add your handling code here:
+        checkGateNameChangeAndChangeEnabled(3, (Component) evt.getSource());        
     }//GEN-LAST:event_TextFieldGateName3KeyReleased
 
     private void Camera3_TypeCBoxPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_Camera3_TypeCBoxPopupMenuWillBecomeInvisible
-        // TODO add your handling code here:
+        ChangeSettings.changeStatus_Manager(
+                SettingsSaveButton, SettingsCancelButton, SettingsCloseButton, 
+                changedControls, ((Component) evt.getSource()), Camera3_TypeCBox.getSelectedIndex(), 
+                deviceType[Camera.ordinal()][1]);
     }//GEN-LAST:event_Camera3_TypeCBoxPopupMenuWillBecomeInvisible
-
-    private void Camera3_connTypeCBoxPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_Camera3_connTypeCBoxPopupMenuWillBecomeInvisible
-        // TODO add your handling code here:
-    }//GEN-LAST:event_Camera3_connTypeCBoxPopupMenuWillBecomeInvisible
 
     private void Camera3_connTypeCBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Camera3_connTypeCBoxActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_Camera3_connTypeCBoxActionPerformed
 
     private void Camera3_IP_TextFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_Camera3_IP_TextFieldKeyReleased
-        // TODO add your handling code here:
+        changeButtonEnabledForIPchange(Camera, 3, (Component) evt.getSource());        
     }//GEN-LAST:event_Camera3_IP_TextFieldKeyReleased
 
     private void Camera3_Port_TextFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_Camera3_Port_TextFieldKeyReleased
-        // TODO add your handling code here:
+        changeButtonEnabledForPortChange(Camera, 3, (Component) evt.getSource());
     }//GEN-LAST:event_Camera3_Port_TextFieldKeyReleased
 
     private void Camera3_Port_TextFieldKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_Camera3_Port_TextFieldKeyTyped
-        // TODO add your handling code here:
+        rejectNonNumericKeys(evt);
     }//GEN-LAST:event_Camera3_Port_TextFieldKeyTyped
 
     private void E_Board3_TypeCBoxPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_E_Board3_TypeCBoxPopupMenuWillBecomeInvisible
-        // TODO add your handling code here:
+        ChangeSettings.changeStatus_Manager(
+                SettingsSaveButton, SettingsCancelButton, SettingsCloseButton, 
+                changedControls, ((Component) evt.getSource()), E_Board3_TypeCBox.getSelectedIndex(), 
+                deviceType[E_Board.ordinal()][1]);
     }//GEN-LAST:event_E_Board3_TypeCBoxPopupMenuWillBecomeInvisible
 
     private void E_Board3_TypeCBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_E_Board3_TypeCBoxActionPerformed
@@ -3174,7 +3170,10 @@ public class Settings_System extends javax.swing.JFrame {
     }//GEN-LAST:event_E_Board3_TypeCBoxActionPerformed
 
     private void E_Board3_connTypeCBoxPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_E_Board3_connTypeCBoxPopupMenuWillBecomeInvisible
-        // TODO add your handling code here:
+        ChangeSettings.changeStatus_Manager(
+                SettingsSaveButton, SettingsCancelButton, SettingsCloseButton, 
+                changedControls, ((Component) evt.getSource()), E_Board3_connTypeCBox.getSelectedIndex(), 
+                deviceType[E_Board.ordinal()][1]);        
     }//GEN-LAST:event_E_Board3_connTypeCBoxPopupMenuWillBecomeInvisible
 
     private void E_Board3_connTypeCBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_E_Board3_connTypeCBoxActionPerformed
@@ -3182,19 +3181,22 @@ public class Settings_System extends javax.swing.JFrame {
     }//GEN-LAST:event_E_Board3_connTypeCBoxActionPerformed
 
     private void E_Board3_IP_TextFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_E_Board3_IP_TextFieldKeyReleased
-        // TODO add your handling code here:
+        changeButtonEnabledForIPchange(E_Board, 3, (Component) evt.getSource());
     }//GEN-LAST:event_E_Board3_IP_TextFieldKeyReleased
 
     private void E_Board3_Port_TextFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_E_Board3_Port_TextFieldKeyReleased
-        // TODO add your handling code here:
+        changeButtonEnabledForPortChange(E_Board, 3, (Component) evt.getSource());
     }//GEN-LAST:event_E_Board3_Port_TextFieldKeyReleased
 
     private void E_Board3_Port_TextFieldKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_E_Board3_Port_TextFieldKeyTyped
-        // TODO add your handling code here:
+        rejectNonNumericKeys(evt);
     }//GEN-LAST:event_E_Board3_Port_TextFieldKeyTyped
 
     private void GateBar3_TypeCBoxPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_GateBar3_TypeCBoxPopupMenuWillBecomeInvisible
-        // TODO add your handling code here:
+        ChangeSettings.changeStatus_Manager(
+                SettingsSaveButton, SettingsCancelButton, SettingsCloseButton, 
+                changedControls, ((Component) evt.getSource()), GateBar3_TypeCBox.getSelectedIndex(), 
+                deviceType[GateBar.ordinal()][1]);
     }//GEN-LAST:event_GateBar3_TypeCBoxPopupMenuWillBecomeInvisible
 
     private void GateBar3_TypeCBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GateBar3_TypeCBoxActionPerformed
@@ -3202,7 +3204,10 @@ public class Settings_System extends javax.swing.JFrame {
     }//GEN-LAST:event_GateBar3_TypeCBoxActionPerformed
 
     private void GateBar3_connTypeCBoxPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_GateBar3_connTypeCBoxPopupMenuWillBecomeInvisible
-        // TODO add your handling code here:
+        ChangeSettings.changeStatus_Manager(
+                SettingsSaveButton, SettingsCancelButton, SettingsCloseButton, 
+                changedControls, ((Component) evt.getSource()), GateBar3_connTypeCBox.getSelectedIndex(), 
+                deviceType[GateBar.ordinal()][1]);        
     }//GEN-LAST:event_GateBar3_connTypeCBoxPopupMenuWillBecomeInvisible
 
     private void GateBar3_connTypeCBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GateBar3_connTypeCBoxActionPerformed
@@ -3210,47 +3215,49 @@ public class Settings_System extends javax.swing.JFrame {
     }//GEN-LAST:event_GateBar3_connTypeCBoxActionPerformed
 
     private void GateBar3_IP_TextFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_GateBar3_IP_TextFieldKeyReleased
-        // TODO add your handling code here:
+        changeButtonEnabledForIPchange(GateBar, 3, (Component) evt.getSource());        
     }//GEN-LAST:event_GateBar3_IP_TextFieldKeyReleased
 
     private void GateBar3_Port_TextFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_GateBar3_Port_TextFieldKeyReleased
-        // TODO add your handling code here:
+        changeButtonEnabledForPortChange(GateBar, 3, (Component) evt.getSource());
     }//GEN-LAST:event_GateBar3_Port_TextFieldKeyReleased
 
     private void GateBar3_Port_TextFieldKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_GateBar3_Port_TextFieldKeyTyped
-        // TODO add your handling code here:
+        rejectNonNumericKeys(evt);
     }//GEN-LAST:event_GateBar3_Port_TextFieldKeyTyped
 
     private void TextFieldGateName4KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TextFieldGateName4KeyReleased
-        // TODO add your handling code here:
+        checkGateNameChangeAndChangeEnabled(4, (Component) evt.getSource());
     }//GEN-LAST:event_TextFieldGateName4KeyReleased
 
     private void Camera4_TypeCBoxPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_Camera4_TypeCBoxPopupMenuWillBecomeInvisible
-        // TODO add your handling code here:
+        ChangeSettings.changeStatus_Manager(
+                SettingsSaveButton, SettingsCancelButton, SettingsCloseButton, 
+                changedControls, ((Component) evt.getSource()), Camera4_TypeCBox.getSelectedIndex(), 
+                deviceType[Camera.ordinal()][1]);
     }//GEN-LAST:event_Camera4_TypeCBoxPopupMenuWillBecomeInvisible
-
-    private void Camera4_connTypeCBoxPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_Camera4_connTypeCBoxPopupMenuWillBecomeInvisible
-        // TODO add your handling code here:
-    }//GEN-LAST:event_Camera4_connTypeCBoxPopupMenuWillBecomeInvisible
 
     private void Camera4_connTypeCBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Camera4_connTypeCBoxActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_Camera4_connTypeCBoxActionPerformed
 
     private void Camera4_IP_TextFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_Camera4_IP_TextFieldKeyReleased
-        // TODO add your handling code here:
+        changeButtonEnabledForIPchange(Camera, 4, (Component) evt.getSource());
     }//GEN-LAST:event_Camera4_IP_TextFieldKeyReleased
 
     private void Camera4_Port_TextFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_Camera4_Port_TextFieldKeyReleased
-        // TODO add your handling code here:
+        changeButtonEnabledForPortChange(Camera, 4, (Component) evt.getSource());
     }//GEN-LAST:event_Camera4_Port_TextFieldKeyReleased
 
     private void Camera4_Port_TextFieldKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_Camera4_Port_TextFieldKeyTyped
-        // TODO add your handling code here:
+        rejectNonNumericKeys(evt);
     }//GEN-LAST:event_Camera4_Port_TextFieldKeyTyped
 
     private void E_Board4_TypeCBoxPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_E_Board4_TypeCBoxPopupMenuWillBecomeInvisible
-        // TODO add your handling code here:
+        ChangeSettings.changeStatus_Manager(
+                SettingsSaveButton, SettingsCancelButton, SettingsCloseButton, 
+                changedControls, ((Component) evt.getSource()), E_Board4_TypeCBox.getSelectedIndex(), 
+                deviceType[E_Board.ordinal()][1]);
     }//GEN-LAST:event_E_Board4_TypeCBoxPopupMenuWillBecomeInvisible
 
     private void E_Board4_TypeCBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_E_Board4_TypeCBoxActionPerformed
@@ -3258,7 +3265,10 @@ public class Settings_System extends javax.swing.JFrame {
     }//GEN-LAST:event_E_Board4_TypeCBoxActionPerformed
 
     private void E_Board4_connTypeCBoxPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_E_Board4_connTypeCBoxPopupMenuWillBecomeInvisible
-        // TODO add your handling code here:
+        ChangeSettings.changeStatus_Manager(
+                SettingsSaveButton, SettingsCancelButton, SettingsCloseButton, 
+                changedControls, ((Component) evt.getSource()), E_Board4_connTypeCBox.getSelectedIndex(), 
+                deviceType[E_Board.ordinal()][1]);        
     }//GEN-LAST:event_E_Board4_connTypeCBoxPopupMenuWillBecomeInvisible
 
     private void E_Board4_connTypeCBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_E_Board4_connTypeCBoxActionPerformed
@@ -3266,19 +3276,22 @@ public class Settings_System extends javax.swing.JFrame {
     }//GEN-LAST:event_E_Board4_connTypeCBoxActionPerformed
 
     private void E_Board4_IP_TextFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_E_Board4_IP_TextFieldKeyReleased
-        // TODO add your handling code here:
+        changeButtonEnabledForIPchange(E_Board, 4, (Component) evt.getSource());
     }//GEN-LAST:event_E_Board4_IP_TextFieldKeyReleased
 
     private void E_Board4_Port_TextFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_E_Board4_Port_TextFieldKeyReleased
-        // TODO add your handling code here:
+        changeButtonEnabledForPortChange(E_Board, 4, (Component) evt.getSource());
     }//GEN-LAST:event_E_Board4_Port_TextFieldKeyReleased
 
     private void E_Board4_Port_TextFieldKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_E_Board4_Port_TextFieldKeyTyped
-        // TODO add your handling code here:
+        rejectNonNumericKeys(evt);
     }//GEN-LAST:event_E_Board4_Port_TextFieldKeyTyped
 
     private void GateBar4_TypeCBoxPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_GateBar4_TypeCBoxPopupMenuWillBecomeInvisible
-        // TODO add your handling code here:
+        ChangeSettings.changeStatus_Manager(
+                SettingsSaveButton, SettingsCancelButton, SettingsCloseButton, 
+                changedControls, ((Component) evt.getSource()), GateBar4_TypeCBox.getSelectedIndex(), 
+                deviceType[GateBar.ordinal()][1]);
     }//GEN-LAST:event_GateBar4_TypeCBoxPopupMenuWillBecomeInvisible
 
     private void GateBar4_TypeCBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GateBar4_TypeCBoxActionPerformed
@@ -3286,7 +3299,10 @@ public class Settings_System extends javax.swing.JFrame {
     }//GEN-LAST:event_GateBar4_TypeCBoxActionPerformed
 
     private void GateBar4_connTypeCBoxPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_GateBar4_connTypeCBoxPopupMenuWillBecomeInvisible
-        // TODO add your handling code here:
+        ChangeSettings.changeStatus_Manager(
+                SettingsSaveButton, SettingsCancelButton, SettingsCloseButton, 
+                changedControls, ((Component) evt.getSource()), GateBar4_connTypeCBox.getSelectedIndex(), 
+                deviceType[GateBar.ordinal()][1]);        
     }//GEN-LAST:event_GateBar4_connTypeCBoxPopupMenuWillBecomeInvisible
 
     private void GateBar4_connTypeCBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GateBar4_connTypeCBoxActionPerformed
@@ -3294,47 +3310,49 @@ public class Settings_System extends javax.swing.JFrame {
     }//GEN-LAST:event_GateBar4_connTypeCBoxActionPerformed
 
     private void GateBar4_IP_TextFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_GateBar4_IP_TextFieldKeyReleased
-        // TODO add your handling code here:
+        changeButtonEnabledForIPchange(GateBar, 4, (Component) evt.getSource());
     }//GEN-LAST:event_GateBar4_IP_TextFieldKeyReleased
 
     private void GateBar4_Port_TextFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_GateBar4_Port_TextFieldKeyReleased
-        // TODO add your handling code here:
+        changeButtonEnabledForPortChange(GateBar, 4, (Component) evt.getSource());
     }//GEN-LAST:event_GateBar4_Port_TextFieldKeyReleased
 
     private void GateBar4_Port_TextFieldKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_GateBar4_Port_TextFieldKeyTyped
-        // TODO add your handling code here:
+        rejectNonNumericKeys(evt);
     }//GEN-LAST:event_GateBar4_Port_TextFieldKeyTyped
 
     private void TextFieldGateName2KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TextFieldGateName2KeyReleased
-        // TODO add your handling code here:
+        checkGateNameChangeAndChangeEnabled(2, (Component) evt.getSource());
     }//GEN-LAST:event_TextFieldGateName2KeyReleased
 
     private void Camera2_TypeCBoxPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_Camera2_TypeCBoxPopupMenuWillBecomeInvisible
-        // TODO add your handling code here:
+        ChangeSettings.changeStatus_Manager(
+                SettingsSaveButton, SettingsCancelButton, SettingsCloseButton, 
+                changedControls, ((Component) evt.getSource()), Camera2_TypeCBox.getSelectedIndex(), 
+                deviceType[Camera.ordinal()][1]);
     }//GEN-LAST:event_Camera2_TypeCBoxPopupMenuWillBecomeInvisible
-
-    private void Camera2_connTypeCBoxPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_Camera2_connTypeCBoxPopupMenuWillBecomeInvisible
-        // TODO add your handling code here:
-    }//GEN-LAST:event_Camera2_connTypeCBoxPopupMenuWillBecomeInvisible
 
     private void Camera2_connTypeCBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Camera2_connTypeCBoxActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_Camera2_connTypeCBoxActionPerformed
 
     private void Camera2_IP_TextFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_Camera2_IP_TextFieldKeyReleased
-        // TODO add your handling code here:
+        changeButtonEnabledForIPchange(Camera, 2, (Component) evt.getSource());
     }//GEN-LAST:event_Camera2_IP_TextFieldKeyReleased
 
     private void Camera2_Port_TextFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_Camera2_Port_TextFieldKeyReleased
-        // TODO add your handling code here:
+        changeButtonEnabledForPortChange(Camera, 2, (Component) evt.getSource());
     }//GEN-LAST:event_Camera2_Port_TextFieldKeyReleased
 
     private void Camera2_Port_TextFieldKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_Camera2_Port_TextFieldKeyTyped
-        // TODO add your handling code here:
+        rejectNonNumericKeys(evt);
     }//GEN-LAST:event_Camera2_Port_TextFieldKeyTyped
 
     private void E_Board2_TypeCBoxPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_E_Board2_TypeCBoxPopupMenuWillBecomeInvisible
-        // TODO add your handling code here:
+        ChangeSettings.changeStatus_Manager(
+                SettingsSaveButton, SettingsCancelButton, SettingsCloseButton, 
+                changedControls, ((Component) evt.getSource()), E_Board2_TypeCBox.getSelectedIndex(), 
+                deviceType[E_Board.ordinal()][1]);
     }//GEN-LAST:event_E_Board2_TypeCBoxPopupMenuWillBecomeInvisible
 
     private void E_Board2_TypeCBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_E_Board2_TypeCBoxActionPerformed
@@ -3342,7 +3360,10 @@ public class Settings_System extends javax.swing.JFrame {
     }//GEN-LAST:event_E_Board2_TypeCBoxActionPerformed
 
     private void E_Board2_connTypeCBoxPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_E_Board2_connTypeCBoxPopupMenuWillBecomeInvisible
-        // TODO add your handling code here:
+        ChangeSettings.changeStatus_Manager(
+                SettingsSaveButton, SettingsCancelButton, SettingsCloseButton, 
+                changedControls, ((Component) evt.getSource()), E_Board2_connTypeCBox.getSelectedIndex(), 
+                deviceType[E_Board.ordinal()][1]);        
     }//GEN-LAST:event_E_Board2_connTypeCBoxPopupMenuWillBecomeInvisible
 
     private void E_Board2_connTypeCBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_E_Board2_connTypeCBoxActionPerformed
@@ -3350,19 +3371,22 @@ public class Settings_System extends javax.swing.JFrame {
     }//GEN-LAST:event_E_Board2_connTypeCBoxActionPerformed
 
     private void E_Board2_IP_TextFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_E_Board2_IP_TextFieldKeyReleased
-        // TODO add your handling code here:
+        changeButtonEnabledForIPchange(E_Board, 2, (Component) evt.getSource());
     }//GEN-LAST:event_E_Board2_IP_TextFieldKeyReleased
 
     private void E_Board2_Port_TextFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_E_Board2_Port_TextFieldKeyReleased
-        // TODO add your handling code here:
+        changeButtonEnabledForPortChange(E_Board, 2, (Component) evt.getSource());
     }//GEN-LAST:event_E_Board2_Port_TextFieldKeyReleased
 
     private void E_Board2_Port_TextFieldKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_E_Board2_Port_TextFieldKeyTyped
-        // TODO add your handling code here:
+        rejectNonNumericKeys(evt);
     }//GEN-LAST:event_E_Board2_Port_TextFieldKeyTyped
 
     private void GateBar2_TypeCBoxPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_GateBar2_TypeCBoxPopupMenuWillBecomeInvisible
-        // TODO add your handling code here:
+        ChangeSettings.changeStatus_Manager(
+                SettingsSaveButton, SettingsCancelButton, SettingsCloseButton, 
+                changedControls, ((Component) evt.getSource()), GateBar2_TypeCBox.getSelectedIndex(), 
+                deviceType[GateBar.ordinal()][1]);
     }//GEN-LAST:event_GateBar2_TypeCBoxPopupMenuWillBecomeInvisible
 
     private void GateBar2_TypeCBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GateBar2_TypeCBoxActionPerformed
@@ -3370,7 +3394,10 @@ public class Settings_System extends javax.swing.JFrame {
     }//GEN-LAST:event_GateBar2_TypeCBoxActionPerformed
 
     private void GateBar2_connTypeCBoxPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_GateBar2_connTypeCBoxPopupMenuWillBecomeInvisible
-        // TODO add your handling code here:
+        ChangeSettings.changeStatus_Manager(
+                SettingsSaveButton, SettingsCancelButton, SettingsCloseButton, 
+                changedControls, ((Component) evt.getSource()), GateBar2_connTypeCBox.getSelectedIndex(), 
+                deviceType[GateBar.ordinal()][1]);        
     }//GEN-LAST:event_GateBar2_connTypeCBoxPopupMenuWillBecomeInvisible
 
     private void GateBar2_connTypeCBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GateBar2_connTypeCBoxActionPerformed
@@ -3378,19 +3405,22 @@ public class Settings_System extends javax.swing.JFrame {
     }//GEN-LAST:event_GateBar2_connTypeCBoxActionPerformed
 
     private void GateBar2_IP_TextFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_GateBar2_IP_TextFieldKeyReleased
-        // TODO add your handling code here:
+        changeButtonEnabledForIPchange(GateBar, 2, (Component) evt.getSource());
     }//GEN-LAST:event_GateBar2_IP_TextFieldKeyReleased
 
     private void GateBar2_Port_TextFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_GateBar2_Port_TextFieldKeyReleased
-        // TODO add your handling code here:
+        changeButtonEnabledForPortChange(GateBar, 2, (Component) evt.getSource());
     }//GEN-LAST:event_GateBar2_Port_TextFieldKeyReleased
 
     private void GateBar2_Port_TextFieldKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_GateBar2_Port_TextFieldKeyTyped
-        // TODO add your handling code here:
+        rejectNonNumericKeys(evt);
     }//GEN-LAST:event_GateBar2_Port_TextFieldKeyTyped
 
     private void E_Board1_TypeCBoxPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_E_Board1_TypeCBoxPopupMenuWillBecomeInvisible
-        // TODO add your handling code here:
+        ChangeSettings.changeStatus_Manager(
+                SettingsSaveButton, SettingsCancelButton, SettingsCloseButton, 
+                changedControls, ((Component) evt.getSource()), E_Board1_TypeCBox.getSelectedIndex(), 
+                deviceType[E_Board.ordinal()][1]);
     }//GEN-LAST:event_E_Board1_TypeCBoxPopupMenuWillBecomeInvisible
 
     private void E_Board1_TypeCBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_E_Board1_TypeCBoxActionPerformed
@@ -3398,27 +3428,32 @@ public class Settings_System extends javax.swing.JFrame {
     }//GEN-LAST:event_E_Board1_TypeCBoxActionPerformed
 
     private void E_Board1_connTypeCBoxPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_E_Board1_connTypeCBoxPopupMenuWillBecomeInvisible
-        // TODO add your handling code here:
+        ChangeSettings.changeStatus_Manager(
+                SettingsSaveButton, SettingsCancelButton, SettingsCloseButton, 
+                changedControls, ((Component) evt.getSource()), E_Board1_connTypeCBox.getSelectedIndex(), 
+                deviceType[E_Board.ordinal()][1]);
     }//GEN-LAST:event_E_Board1_connTypeCBoxPopupMenuWillBecomeInvisible
 
     private void E_Board1_connTypeCBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_E_Board1_connTypeCBoxActionPerformed
-        // TODO add your handling code here:
     }//GEN-LAST:event_E_Board1_connTypeCBoxActionPerformed
 
     private void E_Board1_IP_TextFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_E_Board1_IP_TextFieldKeyReleased
-        // TODO add your handling code here:
+        changeButtonEnabledForIPchange(E_Board, 1, (Component) evt.getSource());
     }//GEN-LAST:event_E_Board1_IP_TextFieldKeyReleased
 
     private void E_Board1_Port_TextFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_E_Board1_Port_TextFieldKeyReleased
-        // TODO add your handling code here:
+        changeButtonEnabledForPortChange(E_Board, 1, (Component) evt.getSource());
     }//GEN-LAST:event_E_Board1_Port_TextFieldKeyReleased
 
     private void E_Board1_Port_TextFieldKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_E_Board1_Port_TextFieldKeyTyped
-        // TODO add your handling code here:
+        rejectNonNumericKeys(evt);
     }//GEN-LAST:event_E_Board1_Port_TextFieldKeyTyped
 
     private void GateBar1_TypeCBoxPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_GateBar1_TypeCBoxPopupMenuWillBecomeInvisible
-        // TODO add your handling code here:
+        ChangeSettings.changeStatus_Manager(
+                SettingsSaveButton, SettingsCancelButton, SettingsCloseButton, 
+                changedControls, ((Component) evt.getSource()), GateBar1_TypeCBox.getSelectedIndex(), 
+                deviceType[GateBar.ordinal()][1]);
     }//GEN-LAST:event_GateBar1_TypeCBoxPopupMenuWillBecomeInvisible
 
     private void GateBar1_TypeCBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GateBar1_TypeCBoxActionPerformed
@@ -3426,7 +3461,10 @@ public class Settings_System extends javax.swing.JFrame {
     }//GEN-LAST:event_GateBar1_TypeCBoxActionPerformed
 
     private void GateBar1_connTypeCBoxPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_GateBar1_connTypeCBoxPopupMenuWillBecomeInvisible
-        // TODO add your handling code here:
+        ChangeSettings.changeStatus_Manager(
+                SettingsSaveButton, SettingsCancelButton, SettingsCloseButton, 
+                changedControls, ((Component) evt.getSource()), GateBar1_connTypeCBox.getSelectedIndex(), 
+                deviceType[GateBar.ordinal()][1]);
     }//GEN-LAST:event_GateBar1_connTypeCBoxPopupMenuWillBecomeInvisible
 
     private void GateBar1_connTypeCBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GateBar1_connTypeCBoxActionPerformed
@@ -3434,15 +3472,15 @@ public class Settings_System extends javax.swing.JFrame {
     }//GEN-LAST:event_GateBar1_connTypeCBoxActionPerformed
 
     private void GateBar1_IP_TextFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_GateBar1_IP_TextFieldKeyReleased
-        // TODO add your handling code here:
+        changeButtonEnabledForIPchange(GateBar, 1, (Component) evt.getSource());
     }//GEN-LAST:event_GateBar1_IP_TextFieldKeyReleased
 
     private void GateBar1_Port_TextFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_GateBar1_Port_TextFieldKeyReleased
-        // TODO add your handling code here:
+        changeButtonEnabledForPortChange(GateBar, 1, (Component) evt.getSource());
     }//GEN-LAST:event_GateBar1_Port_TextFieldKeyReleased
 
     private void GateBar1_Port_TextFieldKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_GateBar1_Port_TextFieldKeyTyped
-        // TODO add your handling code here:
+        rejectNonNumericKeys(evt);
     }//GEN-LAST:event_GateBar1_Port_TextFieldKeyTyped
 
     private void PopSizeCBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PopSizeCBoxActionPerformed
@@ -3475,8 +3513,8 @@ public class Settings_System extends javax.swing.JFrame {
     void closeSettingsForm() {
         if(mainForm != null)
             mainForm.setConfigureSettingsForm(null);
-        if (eBDsettings != null) 
-            eBDsettings.dispose();
+        if (eBoardDialog != null) 
+            eBoardDialog.dispose();
         
         if (isStand_Alone) {
             this.setVisible(false);
@@ -3608,7 +3646,7 @@ public class Settings_System extends javax.swing.JFrame {
     private javax.swing.JComboBox<ConvComboBoxItem> PWStrengthChoiceComboBox;
     private javax.swing.JComboBox PopSizeCBox;
     private javax.swing.JButton PopSizeHelpButton;
-    private javax.swing.JCheckBox RecordPassingDelayCBox;
+    private javax.swing.JCheckBox RecordPassingDelayChkBox;
     private javax.swing.JButton SettingsCancelButton;
     private javax.swing.JButton SettingsCloseButton;
     private javax.swing.JButton SettingsSaveButton;
@@ -3753,7 +3791,7 @@ public class Settings_System extends javax.swing.JFrame {
      */
     private void loadComponentValues() {
         lotNameTextField.setText(parkingLotName);
-        RecordPassingDelayCBox.setSelected(storePassingDelay);
+        RecordPassingDelayChkBox.setSelected(storePassingDelay);
         PWStrengthChoiceComboBox.setSelectedIndex(pwStrengthLevel);
         OptnLoggingLevelComboBox.setSelectedIndex(opLoggingIndex);
         DateChooserLangCBox.setSelectedItem(parkingLotLocale.getDisplayName());
@@ -3997,11 +4035,11 @@ public class Settings_System extends javax.swing.JFrame {
         return index;
     }        
 
-    /**
-     * @param eBDsettings the eBDsettings to set
-     */
-    public void setEBDsettings(JFrame eBDsettings) {
-        this.eBDsettings = eBDsettings;
+    public void setEBDsettings(JDialog dialog) {
+        if (dialog == null) {
+            eBoardDialog.dispose();
+        }
+        this.eBoardDialog = dialog;
     }
 
     private int saveGateDevices() {
@@ -4139,14 +4177,14 @@ public class Settings_System extends javax.swing.JFrame {
                 changedControls, comp, gateNameField.getText().trim(), gateNames[gateNo]);
     }
 
-    private void changeSaveEnabledForDeviceIpChange(DeviceType device, int gateNo, Component comp) {
+    private void changeButtonEnabledForIPchange(DeviceType device, int gateNo, Component comp) {
         JTextField deviceIpField = (JTextField)componentMap.get(device.toString() + gateNo + "_IP_TextField");
         
         ChangeSettings.changeStatus_Manager(SettingsSaveButton, SettingsCancelButton, SettingsCloseButton, 
                 changedControls, comp, deviceIpField.getText().trim(), deviceIP[device.ordinal()][gateNo]);
     }
-
-    private void checkDevicePortChangeAndChangeButtonEnabledProperty(DeviceType device, 
+// changeButtonEnabledForIPchange
+    private void changeButtonEnabledForPortChange(DeviceType device, 
             int gateNo, Component comp) 
     {
         JTextField devicePortField 

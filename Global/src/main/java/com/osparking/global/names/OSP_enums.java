@@ -286,25 +286,44 @@ public class OSP_enums {
     }
 
     public enum EBD_Effects {
-        RTOL_FLOW,            // flow to the left
-        LTOR_FLOW,           // flow to the right
-        BLINKING,                 // blink    
-        STILL_FRAME           // stationary
+        BLINKING(BLINKING_CB_ITEM.getContent()),
+        LTOR_FLOW(LTOR_CB_ITEM.getContent()),
+        RTOL_FLOW(RTOL_CB_ITEM.getContent()),
+        STILL_FRAME(STILL_FRAME_CB_ITEM.getContent());
+        private String label;
+        
+        EBD_Effects(String label) {
+            this.label = label;
+        }
+
+        public String getLabel() {
+            return label;
+        }        
     }
     
     public enum EBD_Fonts {
-        Dialog,
-        DialogInput,
-        Microsoft_NeoGothic,
-        Monospaced,
-        Sans_Serif
+        Sans_Serif(SANS_SERIF.getContent()),
+        Microsoft_NeoGothic(MS_NEO_GOTHIC.getContent()),
+        Dialog("Dialog"),
+        DialogInput("Dialog Input"),
+        Monospaced("Monospaced");
+        
+        private String label;
+        
+        EBD_Fonts(String label) {
+            this.label = label;
+        }
+
+        public String getLabel() {
+            return label;
+        }            
     }   
     
     public enum EBD_Colors {
+        BLACK(BLACK_COLOR_CB_ITEM.getContent()),
         RED(RED_COLOR_CB_ITEM.getContent()),
         ORANGE(ORANGE_COLOR_CB_ITEM.getContent()),
         GREEN(GREEN_COLOR_CB_ITEM.getContent()),
-        BLACK(BLACK_COLOR_CB_ITEM.getContent()),
         BLUE(BLUE_COLOR_CB_ITEM.getContent());
         
         private String label;

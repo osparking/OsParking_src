@@ -9,6 +9,9 @@
     <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
       <Color id="&#xae30;&#xbcf8; &#xcee4;&#xc11c;"/>
     </Property>
+    <Property name="location" type="java.awt.Point" editor="org.netbeans.beaninfo.editors.PointEditor">
+      <Point value="[0, 0]"/>
+    </Property>
     <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
       <Connection code="new Dimension(SETTINGS_WIDTH, SETTINGS_HEIGHT)" type="code"/>
     </Property>
@@ -773,7 +776,7 @@
                 </Constraint>
               </Constraints>
             </Component>
-            <Component class="javax.swing.JCheckBox" name="RecordPassingDelayCBox">
+            <Component class="javax.swing.JCheckBox" name="RecordPassingDelayChkBox">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                   <Connection code="new java.awt.Font(font_Type, font_Style, font_Size)" type="code"/>
@@ -782,10 +785,10 @@
                   <Connection code="RECORD_PASSING_LABEL.getContent()" type="code"/>
                 </Property>
                 <Property name="horizontalTextPosition" type="int" value="4"/>
-                <Property name="name" type="java.lang.String" value="RecordPassingDelayCBox" noResource="true"/>
+                <Property name="name" type="java.lang.String" value="RecordPassingDelayChkBox" noResource="true"/>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="RecordPassingDelayCBoxActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="RecordPassingDelayChkBoxActionPerformed"/>
               </Events>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -1803,6 +1806,7 @@
                                 <StringItem index="1" value="RS-232"/>
                               </StringArray>
                             </Property>
+                            <Property name="enabled" type="boolean" value="false"/>
                             <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                               <Dimension value="[80, 23]"/>
                             </Property>
@@ -1812,7 +1816,6 @@
                             </Property>
                           </Properties>
                           <Events>
-                            <EventHandler event="popupMenuWillBecomeInvisible" listener="javax.swing.event.PopupMenuListener" parameters="javax.swing.event.PopupMenuEvent" handler="Camera2_connTypeCBoxPopupMenuWillBecomeInvisible"/>
                             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="Camera2_connTypeCBoxActionPerformed"/>
                           </Events>
                         </Component>
@@ -2472,6 +2475,7 @@
                                 <StringItem index="1" value="RS-232"/>
                               </StringArray>
                             </Property>
+                            <Property name="enabled" type="boolean" value="false"/>
                             <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                               <Dimension value="[80, 23]"/>
                             </Property>
@@ -2481,7 +2485,6 @@
                             </Property>
                           </Properties>
                           <Events>
-                            <EventHandler event="popupMenuWillBecomeInvisible" listener="javax.swing.event.PopupMenuListener" parameters="javax.swing.event.PopupMenuEvent" handler="Camera3_connTypeCBoxPopupMenuWillBecomeInvisible"/>
                             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="Camera3_connTypeCBoxActionPerformed"/>
                           </Events>
                         </Component>
@@ -3141,6 +3144,7 @@
                                 <StringItem index="1" value="RS-232"/>
                               </StringArray>
                             </Property>
+                            <Property name="enabled" type="boolean" value="false"/>
                             <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                               <Dimension value="[80, 23]"/>
                             </Property>
@@ -3150,7 +3154,6 @@
                             </Property>
                           </Properties>
                           <Events>
-                            <EventHandler event="popupMenuWillBecomeInvisible" listener="javax.swing.event.PopupMenuListener" parameters="javax.swing.event.PopupMenuEvent" handler="Camera4_connTypeCBoxPopupMenuWillBecomeInvisible"/>
                             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="Camera4_connTypeCBoxActionPerformed"/>
                           </Events>
                         </Component>
@@ -3608,7 +3611,7 @@
                             </Property>
                             <Property name="horizontalAlignment" type="int" value="2"/>
                             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                              <Connection code="ELECTRONIC_DISPLAY_LABEL.getContent()" type="code"/>
+                              <Connection code="E_BOARD_LABEL.getContent()" type="code"/>
                             </Property>
                             <Property name="toolTipText" type="java.lang.String" value=""/>
                             <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
@@ -3623,11 +3626,14 @@
                     </Container>
                     <Container class="javax.swing.JPanel" name="EBD_settings">
                       <Properties>
+                        <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                          <Dimension value="[110, 37]"/>
+                        </Property>
                         <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                          <Dimension value="[90, 35]"/>
+                          <Dimension value="[90, 37]"/>
                         </Property>
                         <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                          <Dimension value="[90, 35]"/>
+                          <Dimension value="[90, 37]"/>
                         </Property>
                       </Properties>
 
@@ -3642,9 +3648,10 @@
                         </DimensionLayout>
                         <DimensionLayout dim="1">
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Group type="102" attributes="0">
-                                  <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
+                              <Group type="102" alignment="0" attributes="0">
+                                  <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
                                   <Component id="EBoardSettingsButton" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace max="32767" attributes="0"/>
                               </Group>
                           </Group>
                         </DimensionLayout>
@@ -3655,9 +3662,11 @@
                             <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                               <Connection code="new java.awt.Font(font_Type, font_Style, font_Size)" type="code"/>
                             </Property>
+                            <Property name="mnemonic" type="int" value="83"/>
                             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                               <Connection code="SET_BUTTON.getContent()" type="code"/>
                             </Property>
+                            <Property name="toolTipText" type="java.lang.String" value=""/>
                             <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                               <Dimension value="[79, 30]"/>
                             </Property>

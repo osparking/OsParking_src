@@ -196,12 +196,11 @@ public class ControlEnums {
         GATE_BAR_IP_ADDRESS_LABEL("차단기 IP 주소",  "GateBar IP Address"),
         E_BOARD_IP_ADDRESS_LABEL("전광판 IP 주소",  "E-Board IP Address"),
         PORT_LABEL("포트",  "Port No"),
-        ELECTRONIC_DISPLAY_LABEL("실 전광판",  "Real E-board"),
-        CYCLE_LABEL("주기",  "Cycle"),
+        CYCLE_LABEL("전광판 표시 주기",  "E-board Display Cycle"),
         BLINGKING_LABEL("깜빡임",  "Blinking"),
         FLOWING_LABEL("흐름",  "Flowing"),
-        CONTENT_TYPE_LABEL ("표시 유형",  "Content Type"),
-        MSG_LABEL ("문자열",  "Message"),
+        DISPLAY_TYPE_LABEL("표시 유형", "Display Type"), 
+        MESSAGE_LABEL ("문자열",  "Message"),
         COLOR_LABEL ("색상",  "Color"),
         FONT_LABEL ("폰트",  "Font"),
         EFFECT_LABEL ("효과",  "Effect"),
@@ -265,7 +264,7 @@ public class ControlEnums {
         SELECT_BTN("선택(T)", "Select"),
         MANAGE_BTN("운전자 관리(M)", "Manage Drivers"),
         FIX_IT_BTN("설정(F)", "Fix It"),
-        SET_BUTTON("설정(T)", "Settings"),
+        SET_BUTTON("설정(S)", "Settings"),
         ARRIVALS_BTN("<HTML>입차기록(<U>A</U>)</HTML>", "<HTML><U>A</U>rrivals</HTML>"),
         VEHICLES_BTN("<HTML>등록차목록(<U>V</U>)</HTML>", "<HTML><U>V</U>ehicles</HTML>"),
         USERS_BTN("<HTML>사용자목록(<U>U</U>)</HTML>", "<HTML><U>U</U>sers</HTML>"),
@@ -800,7 +799,9 @@ public class ControlEnums {
                 "As Gate count changed," + System.getProperty("line.separator") +
                 "OsParking shuts down by itself." + System.getProperty("line.separator") +
                 "If you need, restart OsParking!"
-        );
+        ),
+        RECORD_DELAY_DEBUG("디버깅 모드에서는 통과 지연 시간이 항상 기록됩니다.", 
+                "In debug mode, Passing Delay is alway recorded");
         
         DialogMessages(String korean, String english) {
             contents[KOREAN.ordinal()] = korean;
@@ -815,6 +816,10 @@ public class ControlEnums {
     }
     
     public static enum DialogTitleTypes {
+        DEFAULT_TAB_TITLE("평소", "Default"),
+        VEHICLE_TAB_TITLE("입차", "Vehicle"),
+        TOP_TAB_TITLE("제 1행", "1st Row"),
+        BOTTOM_TAB_TITLE("제 2행", "2nd Row"),
         SETTINGS_SAVE_RESULT("설정 저장 결과", "Settings Save Result"),
         UserLevelSelectionGUItitle("로그인 사용자 수준 결정 폼", "Login User Level Selection GUI"),
         ATT_SAVE_AS_FAIL_DIALOGTITLE("파일명 변경 필요성 알림", "Choose Different File Name"), 
@@ -943,6 +948,8 @@ public class ControlEnums {
     }
     
     public enum ComboBoxItemTypes {
+        SANS_SERIF("고딕체", "Sans Serif"),
+        MS_NEO_GOTHIC("네오고딕", "Microsoft Neo Gothic"),
         DAY_SUFFIX("일", "days"),
         LOWER_HIGHER_CB_ITEM("(하위-상위)", "(Lower-Higher)"),
         HIGHER_LOWER_CB_ITEM("(상위-하위)", "(Higher-Lower)"),
@@ -1068,7 +1075,7 @@ public class ControlEnums {
         private String[] contents = new String[Languages.values().length];
         
         public String getContent() {
-                return contents[language.ordinal()];
+            return contents[language.ordinal()];
         }            
     }
     
