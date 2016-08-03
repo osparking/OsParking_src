@@ -2984,7 +2984,8 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
                 manager.interrupt();
                 mainForm.dispose();                
             } else {
-                parent.setEBDsettings(null);
+//                parent.setEBDsettings(null);
+                parent.disposeEBoardDialog();
             }
             this.dispose();    
         }    

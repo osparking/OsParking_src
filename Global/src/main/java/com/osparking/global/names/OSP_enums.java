@@ -18,6 +18,11 @@ package com.osparking.global.names;
 
 import static com.osparking.global.Globals.language;
 import static com.osparking.global.names.ControlEnums.ComboBoxItemTypes.*;
+import static com.osparking.global.names.ControlEnums.DialogTitleTypes.BOTTOM_TAB_TITLE;
+import static com.osparking.global.names.ControlEnums.DialogTitleTypes.DEFAULT_TAB_TITLE;
+import static com.osparking.global.names.ControlEnums.DialogTitleTypes.TOP_TAB_TITLE;
+import static com.osparking.global.names.ControlEnums.DialogTitleTypes.VEHICLE_TAB_TITLE;
+import static com.osparking.global.names.ControlEnums.LabelContent.TAB_LABEL;
 import com.osparking.global.names.ControlEnums.Languages;
 import static com.osparking.global.names.ControlEnums.Languages.ENGLISH;
 import static com.osparking.global.names.ControlEnums.Languages.KOREAN;
@@ -250,12 +255,24 @@ public class OSP_enums {
     }
 
     public enum EBD_DisplayUsage {        
-        DEFAULT_TOP_ROW(1),            // used for the top row when no vehicle arrives
-        DEFAULT_BOTTOM_ROW(2),      // used for the bottom row when no vehicle arrives 
-        CAR_ENTRY_TOP_ROW(3),         // used for the top row when vehicle arrived at the gate entry
-        CAR_ENTRY_BOTTOM_ROW(4);   // used for the bottom row when vehicle arrived at the gate entry
+        DEFAULT_TOP_ROW(1, 
+                DEFAULT_TAB_TITLE.getContent() + " " + TAB_LABEL.getContent() +
+                        ", " + TOP_TAB_TITLE.getContent()),      // used for the top row when no vehicle arrives
+        DEFAULT_BOTTOM_ROW(2,
+                DEFAULT_TAB_TITLE.getContent() + " " + TAB_LABEL.getContent() +
+                        ", " + BOTTOM_TAB_TITLE.getContent()),   // used for the bottom row when no vehicle arrives 
+        CAR_ENTRY_TOP_ROW(3,
+                VEHICLE_TAB_TITLE.getContent() + " " + TAB_LABEL.getContent() +
+                        ", " + TOP_TAB_TITLE.getContent()),      // used for the top row when vehicle arrived at the gate entry
+        CAR_ENTRY_BOTTOM_ROW(4,
+                VEHICLE_TAB_TITLE.getContent() + " " + TAB_LABEL.getContent() +
+                        ", " + BOTTOM_TAB_TITLE.getContent());   // used for the bottom row when vehicle arrived at the gate entry
         private final int val;
-        private EBD_DisplayUsage(int v) { val = v; }
+        private final String panelName;
+        private EBD_DisplayUsage(int v, String name) { 
+            val = v; 
+            panelName = name;
+        }
         
         /**
          * A unique integer number assigned for each usage row.
@@ -263,6 +280,7 @@ public class OSP_enums {
          * @return integer value starting 1
          */
         public int getVal() { return val; }        
+        public String getPanelName() { return panelName; }        
     }
 
     public enum EBD_ContentType {

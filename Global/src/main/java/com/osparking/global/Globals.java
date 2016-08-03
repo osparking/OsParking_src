@@ -1242,7 +1242,7 @@ public class Globals {
         Point framePoint = new Point();
         thisFrame.getLocation(framePoint);
         
-        Point topLeft = new Point(framePoint.x + buttonPoint.x + 60, framePoint.y + buttonPoint.y - 60);
+        Point topLeft = new Point(framePoint.x + buttonPoint.x + 70, framePoint.y + buttonPoint.y - 60);
         helpDialog.setLocation(topLeft);
         helpDialog.setVisible(true);        
     }

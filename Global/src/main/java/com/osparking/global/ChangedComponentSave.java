@@ -24,24 +24,35 @@ import javax.swing.JButton;
  *
  * @author Open Source Parking, Inc.(www.osparking.com)
  */
-public class ChangedComponents {
+public class ChangedComponentSave {
     private HashSet<Component> changedControls = new HashSet<Component>();    
     
-    JButton theButton;
+    JButton saveButton;
+    JButton cancelButton;
+    JButton closeButton;
     
-    public ChangedComponents(JButton theButton) {
-        this.theButton = theButton;
+    public ChangedComponentSave(JButton saveButton, JButton cancelButton, 
+            JButton closeButton ) {
+        this.saveButton = saveButton;
+        this.cancelButton = cancelButton;
+        this.closeButton = closeButton;
     }
     
-    public boolean remove(Component compo) {
+    public void remove(Component compo) {
+        changedControls.remove(compo);
         if (changedControls.size() == 0) {
-            theButton.setEnabled(false);
+            enableSaveEtc(false);
         }
-        return changedControls.remove(compo);
     }
     
-    public boolean add(Component compo) {
-        theButton.setEnabled(true);
-        return changedControls.add(compo);
+    private void enableSaveEtc(boolean flag) {
+        saveButton.setEnabled(flag);
+        cancelButton.setEnabled(flag);
+        closeButton.setEnabled(!flag);
     }
+    
+    public void add(Component compo) {
+        changedControls.add(compo);
+        enableSaveEtc(true);
+    }    
 }

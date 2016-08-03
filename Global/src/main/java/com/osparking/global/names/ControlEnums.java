@@ -17,10 +17,11 @@
 package com.osparking.global.names;
 
 import static com.osparking.global.Globals.language;
-import static com.osparking.global.names.ControlEnums.ButtonTypes.SELECT_BTN;
+import static com.osparking.global.names.ControlEnums.LabelContent.LANGUAGE_LABEL;
 import static com.osparking.global.names.ControlEnums.Languages.ENGLISH;
 import static com.osparking.global.names.ControlEnums.Languages.KOREAN;
 import static com.osparking.global.names.ControlEnums.TitleTypes.ARRIVAL_TIME_PANEL_TITLE;
+import static com.osparking.global.names.ControlEnums.TitleTypes.SELECT_BTN;
 
 /**
  *
@@ -48,7 +49,6 @@ public class ControlEnums {
                 return contents[language.ordinal()];
         }
     }    
-    
     
     public enum TitleTypes {
         SETTINGS_TITLE("시스템 설정", "System Settings"),
@@ -78,6 +78,7 @@ public class ControlEnums {
         VEHICLE_PANEL_TITLE("차량", "Vehicle"),
         TOP_PANEL_TITLE("상단", "TOP"), 
         REBOOT_POPUP("자동 종료 안내", "Reboot System"), 
+        SELECT_BTN("선택(T)", "Select"),        
         BOTTOM_PANEL_TITLE("하단", "BOTTOM"),
         DisallowedTitle("임시 불허 차량", "Temporarily Disallowed Car");
         
@@ -94,6 +95,12 @@ public class ControlEnums {
     }
     
     public enum LabelContent {
+        LEVEL_LABEL("레벨 : ", "Level : "), 
+        DEVICE_LABEL("장치", "Device"), 
+        TYPE_LABEL("유형", "Type"), 
+        CONN_LABEL("연결 방식", "Connection"), 
+        IP_ADDR_LABEL("IP 주소", "IP address"), 
+        PORT_LABEL("포트", "Port"), 
         levelSelectionNotice("허용되는 연산의 범위를 결정하기 위한 선택!", 
                 "Selection that determines allowed operations!"), 
         NO_IMAGE_MESSAGE("사진이 없습니다.", "No Image Exists"), 
@@ -103,6 +110,9 @@ public class ControlEnums {
         DisallowReason("불허 사유", "Why?"), 
         VISIT_REASON_LABEL("상세 목적", "Detailed Reason"), 
         LOGIN_ID_LABEL("아이디", "User ID"), 
+        PANEL_LABEL("패널", "Panel"), 
+        FIELD_LABEL("요소", "Field"), 
+        TAB_LABEL("탭", "Tab"), 
         ID_LABEL("아이디 : ", "User ID : "), 
         PW_LABEL("비밀번호",  "Password"), 
         MODE_LABEL("작업 상태 : ", "Form Mode : "), 
@@ -195,7 +205,6 @@ public class ControlEnums {
         CAMERA_IP_ADDRESS_LABEL("카메라 IP 주소",  "Camera IP Address"),
         GATE_BAR_IP_ADDRESS_LABEL("차단기 IP 주소",  "GateBar IP Address"),
         E_BOARD_IP_ADDRESS_LABEL("전광판 IP 주소",  "E-Board IP Address"),
-        PORT_LABEL("포트",  "Port No"),
         CYCLE_LABEL("전광판 표시 주기",  "E-board Display Cycle"),
         BLINGKING_LABEL("깜빡임",  "Blinking"),
         FLOWING_LABEL("흐름",  "Flowing"),
@@ -209,10 +218,12 @@ public class ControlEnums {
         VEHICLES_LABEL (" 대",  " vehicles"),
         LOT_NAME_LABEL("주차장 이름",  "Parking Lot Name"),
         LOWER_LABEL(" 부서 목록", "Lower affiliations of"),
+        LANGUAGE_HELP_1(" - 오즈파킹 각종 GUI 언어", " - OsParking GUI Language"),
+        LANGUAGE_HELP_2(" - 날짜 입력 GUI 언어", " - Date Input Panel GUI Language"),
         CHOOSE_PANEL_DIALOG("사용할 패널(제목, 목록, 분홍 버튼)을 선택하세요!", 
                 "Click the panel(title, table, pink button) to use!"),
-        SELECT_DRIVER_HELP("운전자 행 클릭 후 [" + SELECT_BTN.getContent() + "] 버튼 사용",
-                "Click a driver row, then use [" + SELECT_BTN.getContent() + "Select] button!"), 
+        SELECT_DRIVER_HELP("운전자 행 클릭 후 [선택(T)] 버튼 사용",
+                "Click a driver row, then use [Select] button!"), 
         CREATE_SAVE_HELP("자료 생성 후 [엔터] 키로 마감(=저장)할 것!",
                 "Press enter after the data creation!"),
         REQUIRE_FIELD_NOTE("필수 입력 항목임!", "It's a Required field!"),
@@ -226,7 +237,20 @@ public class ControlEnums {
                         "recorded to OsParking."),
         
         UPDATE_SAVE_HELP("자료 갱신 후 [엔터] 키로 마감(=저장)할 것!",
-                "Press enter after the data modification!");
+                "Press enter after the data modification!"),
+        LOGGIND_DIALOG_1("다음 '필수 항목'만 기록됨 :", "Following 'Mandatory Items' are logged :"),
+        LOGGIND_DIALOG_2(" - 오즈파킹 가동 및 정지 시각", " - System start and stop time"),
+        LOGGIND_DIALOG_3(" - 오래되어 삭제된 레코드 수", " - Number of deleted old records"),
+        LOGGIND_DIALOG_4(" - 오래되어 삭제된 영상 수", " - Number of deleted old images"),
+        LOGGIND_DIALOG_5(" - 삭제된 로그 폴더 및 파일 수", " - Number of deleted log folders and text files"),
+        LOGGIND_DIALOG_6(" - 삭제된 로그 폴더 및 파일 경로", " - File path of deleted log folders and text files"),
+        LOGGIND_DIALOG_A("추가적으로 기록되는 항목 : ", "Additionally logged items : "),
+        LOGGIND_DIALOG_B(" - 시스템 설정 변경", " - System Settings Change"),
+        LOGGIND_DIALOG_C(" - 사용자 정보 변경", " - Attendant/User Info Change"),
+        LOGGIND_DIALOG_D(" - 운전자 정보 변경", " - Drivers Info Change"),
+        LOGGIND_DIALOG_E(" - 등록차량 정보 변경", " - Vehicles Info Change"),
+        LOGGIND_DIALOG_F(" - 전광판 설정 변경", " - E-Board Settings Change"),
+        ;
         
         LabelContent(String korean, String english) {
             contents[KOREAN.ordinal()] = korean;
@@ -261,7 +285,6 @@ public class ControlEnums {
         SAVE_NO_SHORT_BTN("저장", "Save"),
         CANCEL_NO_SHORT_BTN("취소", "Cancel"),
         OWNER_BTN("운전자(D)", "Driver"),
-        SELECT_BTN("선택(T)", "Select"),
         MANAGE_BTN("운전자 관리(M)", "Manage Drivers"),
         FIX_IT_BTN("설정(F)", "Fix It"),
         SET_BUTTON("설정(S)", "Settings"),
@@ -476,9 +499,11 @@ public class ControlEnums {
     }
 
     public enum DialogMessages {
+        VerbatimDialog("다음 패널의 요소가 누락되었습니다.", 
+                "Panel Field is missing as follows."),
         PopSizeHelp1("차량 통과 지연 시간 계산을", "Determines the population"),
         PopSizeHelp2("위한 통계처리에 있어서", "size to calculate average"),
-        PopSizeHelp3("모집단의 크기를 정한다", "vehicle passing delay."),
+        PopSizeHelp3("모집단의 크기를 정한다.", "vehicle passing delay."),
         PopSizeHelp4("즉, 최근 통과시킨 몇 대의", "In other words, the number of"),
         PopSizeHelp5("차량에 대한 평균 처리 시간을", "cars passed recently and"),
         PopSizeHelp6("계산할지 결정한다.", "added for the average delay."),
@@ -746,6 +771,7 @@ public class ControlEnums {
         LEVEL1_NAME_DIALOG("상위 소속", "Higher Affiliation"),
         LEVEL2_NAME_DIALOG("하위 소속", "Lower Affiliation"),
         VEHICLE_MODIFY_FAIL_DAILOG("정보 갱신 실패 차량: ", "modification failed vehicle: "),
+        UPDATE_E_BOARD_DIALOG("전광판 변경 설정을 저장합니까?", "Want to save E-board update?"),
         READ_ODS_FAIL_DIALOG("잘못된 형식의 자료가 포함되어 있습니다.", "Cells that include wrong formatted data"),
         
         CREATION_SUCCESS_DIALOG(
@@ -862,9 +888,10 @@ public class ControlEnums {
         CANCEL_DIALOGTITLE("취소 확인", "Cancel Confirmation"),
         SAVE_DIALOGTITLE("저장 확인", "Save Confirmation"),
         CONFIRM_DIALOGTITLE("확인", "Confirm"),
-        LOGGING_DIALOGTITLE("어떤 것들이 로깅되는가 ?", "What is being LOGGED?"),
+        LOGGING_DIALOGTITLE("어떤 것들이 로깅되는가?", "What is being LOGGED?"),
         PASSWORD_REQUIR_DIALOGTITLE("비밀번호 요구사항", "Password Requirements"),
-        LANGUAGE_SELECT_DIALOGTITLE("언어 사용", "Language Usage"),
+        LANGUAGE_SELECT_DIALOGTITLE(LANGUAGE_LABEL.getContent() + " 용도", 
+                LANGUAGE_LABEL.getContent() + " Usage"),
         STATISTICS_INPUT_ERROR_DIALOGTITLE("통계 주기 입력 오류", "Statistics Cycle Input Error"),
         PHOTO_SIZE_INPUT_ERROR_DIALOGTITLE("사진 크기 입력 오류", "Picture Size Input Error"),
         IP_FORMAT_ERROR_DAILOGTITLE("IP주소 형식 오류", "IP address format error"),

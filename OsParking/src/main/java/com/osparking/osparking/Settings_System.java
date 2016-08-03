@@ -91,10 +91,15 @@ import static com.osparking.global.names.ControlEnums.DialogMessages.PopSizeHelp
 import static com.osparking.global.names.ControlEnums.DialogMessages.REBOOT_MESSAGE;
 import static com.osparking.global.names.ControlEnums.DialogMessages.RECORD_DELAY_DEBUG;
 import static com.osparking.global.names.ControlEnums.DialogMessages.SAVE_SETTINGS_DIALOG;
+import static com.osparking.global.names.ControlEnums.DialogTitleTypes.ATT_HELP_DIALOGTITLE;
+import static com.osparking.global.names.ControlEnums.DialogTitleTypes.LANGUAGE_SELECT_DIALOGTITLE;
+import static com.osparking.global.names.ControlEnums.DialogTitleTypes.LOGGING_DIALOGTITLE;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.SETTINGS_SAVE_RESULT;
 import static com.osparking.global.names.ControlEnums.LabelContent.BLINGKING_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.CAMERA_LABEL;
+import static com.osparking.global.names.ControlEnums.LabelContent.CONN_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.CYCLE_LABEL;
+import static com.osparking.global.names.ControlEnums.LabelContent.DEVICE_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.E_BOARD_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.FLOWING_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.GATE_BAR_LABEL;
@@ -102,14 +107,32 @@ import static com.osparking.global.names.ControlEnums.LabelContent.GATE_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.GATE_NAME_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.GATE_NUM_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.IMG_KEEP_LABEL;
+import static com.osparking.global.names.ControlEnums.LabelContent.IP_ADDR_LABEL;
+import static com.osparking.global.names.ControlEnums.LabelContent.LANGUAGE_HELP_1;
+import static com.osparking.global.names.ControlEnums.LabelContent.LANGUAGE_HELP_2;
 import static com.osparking.global.names.ControlEnums.LabelContent.LANGUAGE_LABEL;
+import static com.osparking.global.names.ControlEnums.LabelContent.LEVEL_LABEL;
+import static com.osparking.global.names.ControlEnums.LabelContent.LOGGIND_DIALOG_1;
+import static com.osparking.global.names.ControlEnums.LabelContent.LOGGIND_DIALOG_2;
+import static com.osparking.global.names.ControlEnums.LabelContent.LOGGIND_DIALOG_3;
+import static com.osparking.global.names.ControlEnums.LabelContent.LOGGIND_DIALOG_4;
+import static com.osparking.global.names.ControlEnums.LabelContent.LOGGIND_DIALOG_5;
+import static com.osparking.global.names.ControlEnums.LabelContent.LOGGIND_DIALOG_6;
+import static com.osparking.global.names.ControlEnums.LabelContent.LOGGIND_DIALOG_A;
+import static com.osparking.global.names.ControlEnums.LabelContent.LOGGIND_DIALOG_B;
+import static com.osparking.global.names.ControlEnums.LabelContent.LOGGIND_DIALOG_C;
+import static com.osparking.global.names.ControlEnums.LabelContent.LOGGIND_DIALOG_D;
+import static com.osparking.global.names.ControlEnums.LabelContent.LOGGIND_DIALOG_E;
+import static com.osparking.global.names.ControlEnums.LabelContent.LOGGIND_DIALOG_F;
 import static com.osparking.global.names.ControlEnums.LabelContent.LOGGING_LEVEL_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.LOT_NAME_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.MAX_LINE_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.PASSWORD_LEVEL_LABEL;
+import static com.osparking.global.names.ControlEnums.LabelContent.PORT_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.RECORD_PASSING_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.SECONDS_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.STATISTICS_SIZE_LABEL;
+import static com.osparking.global.names.ControlEnums.LabelContent.TYPE_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.VEHICLE_IMG_HEIGHT_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.VEHICLE_IMG_SIZE_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.VEHICLE_IMG_WIDTH_LABEL;
@@ -169,6 +192,7 @@ public class Settings_System extends javax.swing.JFrame {
     private HashMap<String, Component> componentMap = new HashMap<String,Component>();
     public short maxArrivalCBoxIndex = 0;
     private HashSet<Component> changedControls = new HashSet<Component>();    
+    JDialog eBoardDialog = null;
     
     /**
      * Initialize some controls on the system settings change GUI. 
@@ -1014,31 +1038,31 @@ public class Settings_System extends javax.swing.JFrame {
 
         device1_Label.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         device1_Label.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
-        device1_Label.setText("Device");
+        device1_Label.setText(DEVICE_LABEL.getContent());
         device1_Label.setPreferredSize(new java.awt.Dimension(60, 15));
         topLabelsPanel.add(device1_Label);
 
         jLabel26.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         jLabel26.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel26.setText("Type");
+        jLabel26.setText(TYPE_LABEL.getContent());
         jLabel26.setPreferredSize(new java.awt.Dimension(125, 15));
         topLabelsPanel.add(jLabel26);
 
         jLabel27.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         jLabel27.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel27.setText("Connection");
+        jLabel27.setText(CONN_LABEL.getContent());
         jLabel27.setPreferredSize(new java.awt.Dimension(90, 15));
         topLabelsPanel.add(jLabel27);
 
         jLabel28.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         jLabel28.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel28.setText("IP address");
+        jLabel28.setText(IP_ADDR_LABEL.getContent());
         jLabel28.setPreferredSize(new java.awt.Dimension(125, 15));
         topLabelsPanel.add(jLabel28);
 
         jLabel29.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         jLabel29.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel29.setText("Port");
+        jLabel29.setText(PORT_LABEL.getContent());
         jLabel29.setPreferredSize(new java.awt.Dimension(45, 15));
         topLabelsPanel.add(jLabel29);
         jLabel29.getAccessibleContext().setAccessibleName("PortLbl");
@@ -1349,31 +1373,31 @@ public class Settings_System extends javax.swing.JFrame {
 
         device1_Label4.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         device1_Label4.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
-        device1_Label4.setText("Device");
+        device1_Label4.setText(DEVICE_LABEL.getContent());
         device1_Label4.setPreferredSize(new java.awt.Dimension(60, 15));
         topLabelsPanel4.add(device1_Label4);
 
         jLabel57.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         jLabel57.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel57.setText("Type");
+        jLabel57.setText(TYPE_LABEL.getContent());
         jLabel57.setPreferredSize(new java.awt.Dimension(125, 15));
         topLabelsPanel4.add(jLabel57);
 
         jLabel58.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         jLabel58.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel58.setText("Connection");
+        jLabel58.setText(CONN_LABEL.getContent());
         jLabel58.setPreferredSize(new java.awt.Dimension(90, 15));
         topLabelsPanel4.add(jLabel58);
 
         jLabel59.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         jLabel59.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel59.setText("IP address");
+        jLabel59.setText(IP_ADDR_LABEL.getContent());
         jLabel59.setPreferredSize(new java.awt.Dimension(125, 15));
         topLabelsPanel4.add(jLabel59);
 
         jLabel60.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         jLabel60.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel60.setText("Port");
+        jLabel60.setText(PORT_LABEL.getContent());
         jLabel60.setPreferredSize(new java.awt.Dimension(45, 15));
         topLabelsPanel4.add(jLabel60);
 
@@ -1688,31 +1712,31 @@ public class Settings_System extends javax.swing.JFrame {
 
         device1_Label2.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         device1_Label2.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
-        device1_Label2.setText("Device");
+        device1_Label2.setText(DEVICE_LABEL.getContent());
         device1_Label2.setPreferredSize(new java.awt.Dimension(60, 15));
         topLabelsPanel2.add(device1_Label2);
 
         jLabel36.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         jLabel36.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel36.setText("Type");
+        jLabel36.setText(TYPE_LABEL.getContent());
         jLabel36.setPreferredSize(new java.awt.Dimension(125, 15));
         topLabelsPanel2.add(jLabel36);
 
         jLabel46.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         jLabel46.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel46.setText("Connection");
+        jLabel46.setText(CONN_LABEL.getContent());
         jLabel46.setPreferredSize(new java.awt.Dimension(90, 15));
         topLabelsPanel2.add(jLabel46);
 
         jLabel47.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         jLabel47.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel47.setText("IP address");
+        jLabel47.setText(IP_ADDR_LABEL.getContent());
         jLabel47.setPreferredSize(new java.awt.Dimension(125, 15));
         topLabelsPanel2.add(jLabel47);
 
         jLabel48.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         jLabel48.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel48.setText("Port");
+        jLabel48.setText(PORT_LABEL.getContent());
         jLabel48.setPreferredSize(new java.awt.Dimension(45, 15));
         topLabelsPanel2.add(jLabel48);
 
@@ -2027,31 +2051,31 @@ public class Settings_System extends javax.swing.JFrame {
 
         device1_Label3.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         device1_Label3.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
-        device1_Label3.setText("Device");
+        device1_Label3.setText(DEVICE_LABEL.getContent());
         device1_Label3.setPreferredSize(new java.awt.Dimension(60, 15));
         topLabelsPanel3.add(device1_Label3);
 
         jLabel51.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         jLabel51.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel51.setText("Type");
+        jLabel51.setText(TYPE_LABEL.getContent());
         jLabel51.setPreferredSize(new java.awt.Dimension(125, 15));
         topLabelsPanel3.add(jLabel51);
 
         jLabel52.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         jLabel52.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel52.setText("Connection");
+        jLabel52.setText(CONN_LABEL.getContent());
         jLabel52.setPreferredSize(new java.awt.Dimension(90, 15));
         topLabelsPanel3.add(jLabel52);
 
         jLabel53.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         jLabel53.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel53.setText("IP address");
+        jLabel53.setText(IP_ADDR_LABEL.getContent());
         jLabel53.setPreferredSize(new java.awt.Dimension(125, 15));
         topLabelsPanel3.add(jLabel53);
 
         jLabel54.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         jLabel54.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel54.setText("Port");
+        jLabel54.setText(PORT_LABEL.getContent());
         jLabel54.setPreferredSize(new java.awt.Dimension(45, 15));
         topLabelsPanel3.add(jLabel54);
 
@@ -2674,46 +2698,44 @@ public class Settings_System extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void LanguageHelpButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LanguageHelpButtonActionPerformed
-        String helpText = "Date Input Panel GUI language selection .";
+        String helpText = LANGUAGE_HELP_1.getContent() + System.lineSeparator() +
+                LANGUAGE_HELP_2.getContent();
 
         JDialog helpDialog = new PWHelpJDialog(this, false,
-            "Language Usage", helpText, false);
-        locateAndShowHelpDialog(this, helpDialog, LoggingLevelHelpButton);
+            LANGUAGE_SELECT_DIALOGTITLE.getContent(), helpText, false);
+        locateAndShowHelpDialog(this, helpDialog, LanguageHelpButton);
     }//GEN-LAST:event_LanguageHelpButtonActionPerformed
 
     private void LoggingLevelHelpButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LoggingLevelHelpButtonActionPerformed
 
-        String helpText = null;
+        String helpText = LEVEL_LABEL.getContent() + "[" +
+                OptnLoggingLevelComboBox.getSelectedItem().toString() 
+                + "]" + System.lineSeparator() + System.lineSeparator() + "* ";
         if (OptnLoggingLevelComboBox.getSelectedIndex() == OpLogLevel.LogAlways.ordinal()) {
-            helpText = "At this level (No Logging)," + System.lineSeparator() 
-                    + " Following 'Mandatory' items are logged :" + System.lineSeparator() 
+            helpText += LOGGIND_DIALOG_1.getContent() + System.lineSeparator() 
                     + System.lineSeparator() 
-                    + " - System start and stop time" + System.lineSeparator() 
-                    + " - Number of deleted old records"+ System.lineSeparator() 
-                    + " - Number of deleted old images"+ System.lineSeparator() 
-                    + " - Number of deleted log folders and text files"+ System.lineSeparator() 
-                    + " - File path of deleted log folders and text files"+ System.lineSeparator();
+                    + LOGGIND_DIALOG_2.getContent() + System.lineSeparator() 
+                    + LOGGIND_DIALOG_3.getContent() + System.lineSeparator() 
+                    + LOGGIND_DIALOG_4.getContent() + System.lineSeparator() 
+                    + LOGGIND_DIALOG_5.getContent() + System.lineSeparator() 
+                    + LOGGIND_DIALOG_6.getContent() + System.lineSeparator();
         } else
         if (OptnLoggingLevelComboBox.getSelectedIndex() == OpLogLevel.SettingsChange.ordinal()) {
-            helpText = "'System Settings' Level Logged Items:" + System.lineSeparator() 
+            helpText += LOGGIND_DIALOG_A.getContent() + System.lineSeparator() 
                     + System.lineSeparator() 
-                    + " - Mandatory Items" + System.lineSeparator() 
-                    + "   plus" + System.lineSeparator()
-                    + " - System Settings Change" + System.lineSeparator() 
-                    + " - Attendant/User Info Change" + System.lineSeparator() 
-                    + " - Drivers Info Change" + System.lineSeparator() 
-                    + " - Vehicles Info Change" + System.lineSeparator();
+                    + LOGGIND_DIALOG_B.getContent() + System.lineSeparator() 
+                    + LOGGIND_DIALOG_C.getContent() + System.lineSeparator()
+                    + LOGGIND_DIALOG_D.getContent() + System.lineSeparator() 
+                    + LOGGIND_DIALOG_E.getContent() + System.lineSeparator();
         } else
         if (OptnLoggingLevelComboBox.getSelectedIndex() == OpLogLevel.EBDsettingsChange.ordinal()) {
-            helpText = "'E-Board Settings' Level Logged Items: " + System.lineSeparator() 
+            helpText += LOGGIND_DIALOG_A.getContent() + System.lineSeparator() 
                     + System.lineSeparator() 
-                    + " - System Settings Logged Items" + System.lineSeparator() 
-                    + "   plus" + System.lineSeparator()
-                    + " - E-Board Settings Change" + System.lineSeparator();
+                    + LOGGIND_DIALOG_F.getContent() + System.lineSeparator();
         }
 
         JDialog helpDialog = new PWHelpJDialog(this, false,
-            "What is being LOGGED?", helpText, false);
+            LOGGING_DIALOGTITLE.getContent(), helpText, false);
         locateAndShowHelpDialog(this, helpDialog, LoggingLevelHelpButton);
     }//GEN-LAST:event_LoggingLevelHelpButtonActionPerformed
 
@@ -2722,18 +2744,10 @@ public class Settings_System extends javax.swing.JFrame {
         short pwPowerLevel = (short)PWStrengthChoiceComboBox.getSelectedIndex();
         String helpText = pwValidator.getWrongPWFormatMsg(pwPowerLevel);
 
-        JDialog helpDialog = new PWHelpJDialog(this, false, "Password Requirements", helpText, true);
-        Point buttonPoint = new Point();
-        PWHelpButton.getLocation(buttonPoint);
-
-        Point framePoint = new Point();
-        this.getLocation(framePoint);
-        Point topLeft = new Point(framePoint.x + buttonPoint.x + 60, framePoint.y + buttonPoint.y - 60);
-        helpDialog.setLocation(topLeft);
-        helpDialog.setVisible(true);
+        JDialog helpDialog = new PWHelpJDialog(this, false, ATT_HELP_DIALOGTITLE.getContent(),
+                helpText, true);
+        locateAndShowHelpDialog(this, helpDialog, PWHelpButton);
     }//GEN-LAST:event_PWHelpButtonActionPerformed
-
-    private JDialog eBoardDialog = null;
     
     private void SettingsSaveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SettingsSaveButtonActionPerformed
         Connection conn = null;
@@ -3074,19 +3088,21 @@ public class Settings_System extends javax.swing.JFrame {
         int tabIndex = GatesTabbedPane.getSelectedIndex();
         JComboBox typeCBox = (JComboBox)componentMap.get("E_Board" + (tabIndex + 1) + "_TypeCBox");
 
-        if (eBoardDialog == null) {
-            final JDialog dialog = new JDialog(this, E_BOARD_SETTINGS_FRAME_TITLE.getContent(), true);
+//        if (eBoardDialog == null) 
+//        {
+            eBoardDialog = new JDialog(this, E_BOARD_SETTINGS_FRAME_TITLE.getContent(), true);
             if (typeCBox.getSelectedIndex() == E_BoardType.Simulator.ordinal()) {
-                dialog.getContentPane().add(
+                eBoardDialog.getContentPane().add(
                         (new Settings_EBoard(mainForm, this)).getContentPane());
             } else if (typeCBox.getSelectedIndex() == E_BoardType.LEDnotice.ordinal()) {
-                dialog.getContentPane().add(
+                eBoardDialog.getContentPane().add(
                         (new Settings_LEDnotice(mainForm, this, null, tabIndex + 1)).getContentPane());
             }
-            dialog.pack();
-            dialog.setResizable(false);
-            setEBDsettings(dialog);
-        }
+            eBoardDialog.pack();
+            eBoardDialog.setResizable(false);
+//            eBoardDialog = 
+//            setEBDsettings(dialog);
+//        }
 
         /**
          * Place E-board settings frame around invoking button and inside monitor.
@@ -3503,7 +3519,7 @@ public class Settings_System extends javax.swing.JFrame {
 
         JDialog helpDialog = new PWHelpJDialog(this, false,
             STATISTICS_SIZE_LABEL.getContent(), helpText, false);
-        locateAndShowHelpDialog(this, helpDialog, LoggingLevelHelpButton);
+        locateAndShowHelpDialog(this, helpDialog, PopSizeHelpButton);
     }//GEN-LAST:event_PopSizeHelpButtonActionPerformed
 
     private void SettingsCloseButtonStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_SettingsCloseButtonStateChanged
@@ -3513,8 +3529,6 @@ public class Settings_System extends javax.swing.JFrame {
     void closeSettingsForm() {
         if(mainForm != null)
             mainForm.setConfigureSettingsForm(null);
-        if (eBoardDialog != null) 
-            eBoardDialog.dispose();
         
         if (isStand_Alone) {
             this.setVisible(false);
@@ -4035,11 +4049,8 @@ public class Settings_System extends javax.swing.JFrame {
         return index;
     }        
 
-    public void setEBDsettings(JDialog dialog) {
-        if (dialog == null) {
-            eBoardDialog.dispose();
-        }
-        this.eBoardDialog = dialog;
+    public void disposeEBoardDialog() {
+        eBoardDialog.dispose();
     }
 
     private int saveGateDevices() {

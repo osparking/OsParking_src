@@ -16,7 +16,7 @@
  */
 package com.osparking.statistics;
 
-import com.osparking.global.ChangedComponents;
+import com.osparking.global.ChangedComponentClear;
 import com.osparking.global.CommonData;
 import static com.osparking.global.CommonData.ImgHeight;
 import static com.osparking.global.CommonData.ImgWidth;
@@ -160,19 +160,16 @@ public class CarArrivals extends javax.swing.JFrame {
      */
     private int[] prevParentSKey = new int[OSP_enums.DriverCol.values().length];    
     private Dimension prevSize = null;
-    
     private String prevSearchCondition = "";
     private String currSearchCondition = "";
+    static private ChangedComponentClear changedControls; 
     
-    private boolean carTagHintShown = true;    
-    
-    static private ChangedComponents changedControls; 
     /**
      * Creates new form CarArrivals
      */
     public CarArrivals() {
         initComponents();
-        changedControls = new ChangedComponents(clearSearchPropertiesButton);
+        changedControls = new ChangedComponentClear(clearSearchPropertiesButton);
         changeTableColumnHoriAlignment();
         BeginDateChooser.setLocale(parkingLotLocale);
         EndDateChooser.setLocale(parkingLotLocale);    
@@ -2058,7 +2055,6 @@ public class CarArrivals extends javax.swing.JFrame {
 
     private void showCarTagTip() {
         carTagTF.setText(CAR_TAG_TF.getContent());
-        carTagHintShown = true;
         carTagTF.setForeground(tipColor);
     }    
     
@@ -2081,7 +2077,6 @@ public class CarArrivals extends javax.swing.JFrame {
     private void carTagTFFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_carTagTFFocusGained
         if (carTagTF.getText().equals(CAR_TAG_TF.getContent())) {
             carTagTF.setText("");
-            carTagHintShown = false;
             carTagTF.setForeground(new Color(0, 0, 0));
         }
     }//GEN-LAST:event_carTagTFFocusGained
