@@ -1217,7 +1217,7 @@ public class Settings_EBoard extends javax.swing.JFrame {
         {
             ((JTextField) getComponentByName("tf_VerbatimContent" + index)).setEnabled(true);
             ((JTextField) getComponentByName("tf_VerbatimContent" + index)).setText(
-                ControlGUI.EBD_DisplaySettings[index].verbatimContent);
+                parent.EBD_DisplaySettings[index].verbatimContent);
         }
         else
         {
@@ -1251,17 +1251,16 @@ public class Settings_EBoard extends javax.swing.JFrame {
         
         byte textColor = (byte) ((JComboBox)  getComponentByName(
                 "combo_TextColor" + usage_row.ordinal())).getSelectedIndex();
-
         
-        if(contentType != ControlGUI.EBD_DisplaySettings[usage_row.ordinal()].contentType.ordinal())
+        if(contentType != parent.EBD_DisplaySettings[usage_row.ordinal()].contentType.ordinal())
             result = true;
-        if(!verbatimContent.equals(ControlGUI.EBD_DisplaySettings[usage_row.ordinal()].verbatimContent))
+        if(!verbatimContent.equals(parent.EBD_DisplaySettings[usage_row.ordinal()].verbatimContent))
             result = true;
-        if(displayPattern != ControlGUI.EBD_DisplaySettings[usage_row.ordinal()].displayPattern.ordinal())
+        if(displayPattern != parent.EBD_DisplaySettings[usage_row.ordinal()].displayPattern.ordinal())
             result = true;
-        if(textFont != ControlGUI.EBD_DisplaySettings[usage_row.ordinal()].textFont.ordinal())
+        if(textFont != parent.EBD_DisplaySettings[usage_row.ordinal()].textFont.ordinal())
             result = true;
-        if(textColor != ControlGUI.EBD_DisplaySettings[usage_row.ordinal()].textColor.ordinal()) 
+        if(textColor != parent.EBD_DisplaySettings[usage_row.ordinal()].textColor.ordinal()) 
             result = true;
 
         return result;
@@ -1275,9 +1274,9 @@ public class Settings_EBoard extends javax.swing.JFrame {
     public void selectSpecificTab(EBD_DisplayUsage usage_row){
         
         ((JComboBox) getComponentByName("combo_ContentType"+ usage_row.ordinal()))
-                .setSelectedIndex(ControlGUI.EBD_DisplaySettings[usage_row.ordinal()].contentType.ordinal());
+                .setSelectedIndex(parent.EBD_DisplaySettings[usage_row.ordinal()].contentType.ordinal());
         
-        if(ControlGUI.EBD_DisplaySettings[usage_row.ordinal()].contentType.ordinal() 
+        if(parent.EBD_DisplaySettings[usage_row.ordinal()].contentType.ordinal() 
                 == OSP_enums.EBD_ContentType.VERBATIM.ordinal())
             ((JTextField) getComponentByName("tf_VerbatimContent"+ usage_row.ordinal())).setEnabled(true);
         else
@@ -1285,16 +1284,16 @@ public class Settings_EBoard extends javax.swing.JFrame {
         
         
         ((JTextField) getComponentByName("tf_VerbatimContent"+ usage_row.ordinal()))
-                .setText(ControlGUI.EBD_DisplaySettings[usage_row.ordinal()].verbatimContent);
+                .setText(parent.EBD_DisplaySettings[usage_row.ordinal()].verbatimContent);
         
         ((JComboBox)  getComponentByName("combo_DisplayEffect"+ usage_row.ordinal()))
-                .setSelectedIndex(ControlGUI.EBD_DisplaySettings[usage_row.ordinal()].displayPattern.ordinal());
+                .setSelectedIndex(parent.EBD_DisplaySettings[usage_row.ordinal()].displayPattern.ordinal());
         
         ((JComboBox)  getComponentByName("combo_TextColor"+ usage_row.ordinal()))
-                .setSelectedIndex(ControlGUI.EBD_DisplaySettings[usage_row.ordinal()].textColor.ordinal());
+                .setSelectedIndex(parent.EBD_DisplaySettings[usage_row.ordinal()].textColor.ordinal());
         
         ((JComboBox)  getComponentByName("combo_TextFont"+ usage_row.ordinal()))
-                .setSelectedIndex(ControlGUI.EBD_DisplaySettings[usage_row.ordinal()].textFont.ordinal());
+                .setSelectedIndex(parent.EBD_DisplaySettings[usage_row.ordinal()].textFont.ordinal());
         
         changeEnabled_of_SaveCancelButtons(false);
     }
@@ -1367,17 +1366,17 @@ public class Settings_EBoard extends javax.swing.JFrame {
             closeDBstuff(conn, updateSettings, null, "e-board settings modification");
             if (result == 1) {
                 //<editor-fold desc="-- Log system settings change if set to do so">
-                String currVerbatimStr = ControlGUI.EBD_DisplaySettings[usage_row.ordinal()].verbatimContent;
+                String currVerbatimStr = parent.EBD_DisplaySettings[usage_row.ordinal()].verbatimContent;
                 if (typeItem == EBD_ContentType.VERBATIM && !currVerbatimStr.equals(verbatimStr)) {
                     logParkingOperation(OpLogLevel.EBDsettingsChange,
                             "E-Board Settings Change, Verbatim Message: " + currVerbatimStr + " => " + verbatimStr);
                 }
                 //</editor-fold>
-                ControlGUI.EBD_DisplaySettings[usage_row.ordinal()].verbatimContent = verbatimStr;
-                ControlGUI.EBD_DisplaySettings[usage_row.ordinal()].contentType = typeItem;
-                ControlGUI.EBD_DisplaySettings[usage_row.ordinal()].displayPattern = patternItem;
-                ControlGUI.EBD_DisplaySettings[usage_row.ordinal()].textColor = colorItem;
-                ControlGUI.EBD_DisplaySettings[usage_row.ordinal()].textFont = fontItem;
+                parent.EBD_DisplaySettings[usage_row.ordinal()].verbatimContent = verbatimStr;
+                parent.EBD_DisplaySettings[usage_row.ordinal()].contentType = typeItem;
+                parent.EBD_DisplaySettings[usage_row.ordinal()].displayPattern = patternItem;
+                parent.EBD_DisplaySettings[usage_row.ordinal()].textColor = colorItem;
+                parent.EBD_DisplaySettings[usage_row.ordinal()].textFont = fontItem;
             } else {
                 JOptionPane.showMessageDialog(this, "This e-board settings update saving DB operation failed.",
                     "DB Update Operation Failure", JOptionPane.ERROR_MESSAGE);
@@ -1538,7 +1537,7 @@ public class Settings_EBoard extends javax.swing.JFrame {
             EBD_ContentType selectedType 
                     = (EBD_ContentType) ((ConvComboBoxItem)typeCBox.getSelectedItem()).getKeyValue();
 
-            if (selectedType == ControlGUI.EBD_DisplaySettings[index].contentType) {
+            if (selectedType == parent.EBD_DisplaySettings[index].contentType) {
                 changedControls.remove(typeCBox);            
             }
             else {
@@ -1559,7 +1558,7 @@ public class Settings_EBoard extends javax.swing.JFrame {
             JComboBox colorCBox = (JComboBox) getComponentByName("combo_TextColor" + index);
             EBD_Colors selectedColor = (EBD_Colors) ((ConvComboBoxItem)colorCBox.getSelectedItem()).getKeyValue();
 
-            if (selectedColor == ControlGUI.EBD_DisplaySettings[index].textColor) {
+            if (selectedColor == parent.EBD_DisplaySettings[index].textColor) {
                 changedControls.remove(colorCBox);            
             }
             else {
@@ -1573,7 +1572,7 @@ public class Settings_EBoard extends javax.swing.JFrame {
             JComboBox effectCBox = (JComboBox) getComponentByName("combo_DisplayEffect" + index);
             EBD_Effects selectedEffect = (EBD_Effects) ((ConvComboBoxItem)effectCBox.getSelectedItem()).getKeyValue();
 
-            if (selectedEffect == ControlGUI.EBD_DisplaySettings[index].displayPattern) {
+            if (selectedEffect == parent.EBD_DisplaySettings[index].displayPattern) {
                 changedControls.remove(effectCBox);            
             } else {
                 changedControls.add(effectCBox);            
@@ -1586,7 +1585,7 @@ public class Settings_EBoard extends javax.swing.JFrame {
             JComboBox fontCBox = (JComboBox) getComponentByName("combo_TextFont" + index);
             EBD_Fonts selectedFont = (EBD_Fonts) ((ConvComboBoxItem)fontCBox.getSelectedItem()).getKeyValue();
 
-            if (selectedFont == ControlGUI.EBD_DisplaySettings[index].textFont) {
+            if (selectedFont == parent.EBD_DisplaySettings[index].textFont) {
                 changedControls.remove(fontCBox);
             }
             else {
@@ -1599,7 +1598,7 @@ public class Settings_EBoard extends javax.swing.JFrame {
         JTextField verbatimContent = (JTextField) getComponentByName("tf_VerbatimContent" + index);
         String content = verbatimContent.getText().trim();
         
-        if (content.equals(ControlGUI.EBD_DisplaySettings[index].verbatimContent)) {
+        if (content.equals(parent.EBD_DisplaySettings[index].verbatimContent)) {
             changedControls.remove(verbatimContent);
         } else {
             changedControls.add(verbatimContent);
@@ -1673,15 +1672,15 @@ public class Settings_EBoard extends javax.swing.JFrame {
     private void reloadE_BoardSettings() {
         for (EBD_DisplayUsage usage : EBD_DisplayUsage.values()) {
             ((JComboBox) getComponentByName("combo_ContentType" + usage.ordinal()))
-                    .setSelectedIndex(ControlGUI.EBD_DisplaySettings[usage.ordinal()].contentType.ordinal());
+                    .setSelectedIndex(parent.EBD_DisplaySettings[usage.ordinal()].contentType.ordinal());
             ((JTextField) getComponentByName("tf_VerbatimContent" + usage.ordinal()))
-                    .setText(ControlGUI.EBD_DisplaySettings[usage.ordinal()].verbatimContent);
+                    .setText(parent.EBD_DisplaySettings[usage.ordinal()].verbatimContent);
             ((JComboBox) getComponentByName("combo_TextColor" + usage.ordinal()))
-                    .setSelectedIndex(ControlGUI.EBD_DisplaySettings[usage.ordinal()].textColor.ordinal());
+                    .setSelectedIndex(parent.EBD_DisplaySettings[usage.ordinal()].textColor.ordinal());
             ((JComboBox) getComponentByName("combo_DisplayEffect" + usage.ordinal()))
-                    .setSelectedIndex(ControlGUI.EBD_DisplaySettings[usage.ordinal()].displayPattern.ordinal());
+                    .setSelectedIndex(parent.EBD_DisplaySettings[usage.ordinal()].displayPattern.ordinal());
             ((JComboBox) getComponentByName("combo_TextFont" + usage.ordinal()))
-                    .setSelectedIndex(ControlGUI.EBD_DisplaySettings[usage.ordinal()].textFont.ordinal());
+                    .setSelectedIndex(parent.EBD_DisplaySettings[usage.ordinal()].textFont.ordinal());
         }         
     }
 }

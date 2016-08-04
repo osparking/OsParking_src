@@ -21,7 +21,6 @@ import static com.osparking.global.names.ControlEnums.LabelContent.LANGUAGE_LABE
 import static com.osparking.global.names.ControlEnums.Languages.ENGLISH;
 import static com.osparking.global.names.ControlEnums.Languages.KOREAN;
 import static com.osparking.global.names.ControlEnums.TitleTypes.ARRIVAL_TIME_PANEL_TITLE;
-import static com.osparking.global.names.ControlEnums.TitleTypes.SELECT_BTN;
 
 /**
  *
@@ -218,6 +217,9 @@ public class ControlEnums {
         VEHICLES_LABEL (" 대",  " vehicles"),
         LOT_NAME_LABEL("주차장 이름",  "Parking Lot Name"),
         LOWER_LABEL(" 부서 목록", "Lower affiliations of"),
+        IP_ADDR_ERROR_1("[" + IP_ADDR_LABEL.getContent() + "] 값 오류",
+                "[" + IP_ADDR_LABEL.getContent() + "] format error"),
+        IP_ADDR_ERROR_2("바른 형식 : ", "Right format : "),
         LANGUAGE_HELP_1(" - 오즈파킹 각종 GUI 언어", " - OsParking GUI Language"),
         LANGUAGE_HELP_2(" - 날짜 입력 GUI 언어", " - Date Input Panel GUI Language"),
         CHOOSE_PANEL_DIALOG("사용할 패널(제목, 목록, 분홍 버튼)을 선택하세요!", 
@@ -712,7 +714,7 @@ public class ControlEnums {
         FAIL_SAVE_SETTINGS_DIALOG("시스템 설정 저장에 실패하였습니다.", "The storage system settings failed."),
         SAVE_SETTINGS_DIALOG("설정 값이 저장 되었습니다.", "Settings saved successfully."),
         INPUT_ERROR_DAILOG("1 이상의 값을 입력하세요.", "Enter a value of 1 or more .."),
-        IP_FORMAT_ERROR_DAILOG("의 IP 주소 형식이 올바르지 않습니다.", "in IP address format error"),
+//        IP_FORMAT_ERROR_DAILOG("의 IP 주소 형식이 올바르지 않습니다.", "in IP address format error"),
         
         SAVE_OR_CANEL_DIALOG("설정이 변경되었습니다..\n \n"
                     + "[저장] 또는 [취소]버튼을 선택해 주세요.", 
@@ -842,6 +844,7 @@ public class ControlEnums {
     }
     
     public static enum DialogTitleTypes {
+        IP_ERROR_TITLE("IP 주소 오류", "IP Address Error"),
         DEFAULT_TAB_TITLE("평소", "Default"),
         VEHICLE_TAB_TITLE("입차", "Vehicle"),
         TOP_TAB_TITLE("제 1행", "1st Row"),
@@ -894,7 +897,6 @@ public class ControlEnums {
                 LANGUAGE_LABEL.getContent() + " Usage"),
         STATISTICS_INPUT_ERROR_DIALOGTITLE("통계 주기 입력 오류", "Statistics Cycle Input Error"),
         PHOTO_SIZE_INPUT_ERROR_DIALOGTITLE("사진 크기 입력 오류", "Picture Size Input Error"),
-        IP_FORMAT_ERROR_DAILOGTITLE("IP주소 형식 오류", "IP address format error"),
         SYSTEM_SHUTDOWN_CONFIRM("종료 의사 확인", "Shutdown Confirmation"),
         MAIN_GUI_TITLE("㈜오픈소스파킹", "Open Source Parking Inc.");
 

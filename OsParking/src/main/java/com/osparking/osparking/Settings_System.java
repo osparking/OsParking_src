@@ -60,6 +60,7 @@ import static com.osparking.global.names.OSP_enums.OpLogLevel.EBDsettingsChange;
 import com.osparking.global.names.PasswordValidator;
 import org.apache.commons.validator.routines.InetAddressValidator;
 import com.osparking.attendant.PWHelpJDialog;
+import com.osparking.global.ChangedComponentSave;
 import com.osparking.global.CommonData;
 import static com.osparking.global.CommonData.CBOX_HEIGHT;
 import static com.osparking.global.CommonData.SETTINGS_HEIGHT;
@@ -92,6 +93,7 @@ import static com.osparking.global.names.ControlEnums.DialogMessages.REBOOT_MESS
 import static com.osparking.global.names.ControlEnums.DialogMessages.RECORD_DELAY_DEBUG;
 import static com.osparking.global.names.ControlEnums.DialogMessages.SAVE_SETTINGS_DIALOG;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.ATT_HELP_DIALOGTITLE;
+import static com.osparking.global.names.ControlEnums.DialogTitleTypes.IP_ERROR_TITLE;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.LANGUAGE_SELECT_DIALOGTITLE;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.LOGGING_DIALOGTITLE;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.SETTINGS_SAVE_RESULT;
@@ -107,6 +109,8 @@ import static com.osparking.global.names.ControlEnums.LabelContent.GATE_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.GATE_NAME_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.GATE_NUM_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.IMG_KEEP_LABEL;
+import static com.osparking.global.names.ControlEnums.LabelContent.IP_ADDR_ERROR_1;
+import static com.osparking.global.names.ControlEnums.LabelContent.IP_ADDR_ERROR_2;
 import static com.osparking.global.names.ControlEnums.LabelContent.IP_ADDR_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.LANGUAGE_HELP_1;
 import static com.osparking.global.names.ControlEnums.LabelContent.LANGUAGE_HELP_2;
@@ -151,6 +155,7 @@ import static com.osparking.global.names.DB_Access.deviceType;
 import static com.osparking.global.names.DB_Access.parkingLotLocale;
 import static com.osparking.global.names.DB_Access.parkingLotName;
 import static com.osparking.global.names.DB_Access.statCountIndex;
+import com.osparking.global.names.EBD_DisplaySetting;
 import com.osparking.global.names.OSP_enums.CameraType;
 import com.osparking.global.names.OSP_enums.ConnectionType;
 import static com.osparking.global.names.OSP_enums.ConnectionType.RS_232;
@@ -158,13 +163,13 @@ import com.osparking.global.names.OSP_enums.DeviceType;
 import com.osparking.global.names.OSP_enums.E_BoardType;
 import com.osparking.global.names.OSP_enums.GateBarType;
 import com.osparking.global.names.OSP_enums.PWStrengthLevel;
-import static com.osparking.osparking.ControlGUI.EBD_DisplaySettings;
 import com.osparking.osparking.device.LEDnotice.LEDnoticeManager;
 import com.osparking.osparking.device.LEDnotice.Settings_LEDnotice;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.KeyboardFocusManager;
 import java.awt.Toolkit;
+import java.awt.event.ItemEvent;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -193,12 +198,18 @@ public class Settings_System extends javax.swing.JFrame {
     public short maxArrivalCBoxIndex = 0;
     private HashSet<Component> changedControls = new HashSet<Component>();    
     JDialog eBoardDialog = null;
+    static EBD_DisplaySetting[] EBD_DisplaySettings = null;
+    static private ChangedComponentSave changedControls2; 
+    
     
     /**
      * Initialize some controls on the system settings change GUI. 
      */
     public Settings_System(ControlGUI mainForm) {
         initComponents();
+        changedControls2 = new ChangedComponentSave(SettingsSaveButton, 
+                SettingsCancelButton, SettingsCloseButton);
+        
         setIconImages(OSPiconList);                
         augmentComponentMap(this, componentMap);
         tuneComponentSize();
@@ -206,6 +217,9 @@ public class Settings_System extends javax.swing.JFrame {
         this.mainForm = mainForm;
         if (mainForm == null)
             isStand_Alone = true;
+        else {
+            EBD_DisplaySettings = mainForm.EBD_DisplaySettings;
+        }
         addPWStrengthItems();
         addMaxArrivalItems();
         maxArrivalCBoxIndex = findCBoxIndex(ImageDurationCBox, maxMaintainDate);
@@ -319,26 +333,24 @@ public class Settings_System extends javax.swing.JFrame {
         jLabel28 = new javax.swing.JLabel();
         jLabel29 = new javax.swing.JLabel();
         cameraPan = new javax.swing.JPanel();
-        filler10 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(15, 0), new java.awt.Dimension(50, 32767));
+        filler10 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(50, 32767));
         jLabel30 = new javax.swing.JLabel();
         Camera1_TypeCBox = new javax.swing.JComboBox();
         Camera1_connTypeCBox = new javax.swing.JComboBox();
         Camera1_IP_TextField = new javax.swing.JTextField();
         Camera1_Port_TextField = new javax.swing.JTextField();
         eBoardPan5 = new javax.swing.JPanel();
-        filler35 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(15, 0), new java.awt.Dimension(50, 32767));
+        filler35 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(50, 32767));
         jLabel63 = new javax.swing.JLabel();
         E_Board1_TypeCBox = new javax.swing.JComboBox();
         E_Board1_connTypeCBox = new javax.swing.JComboBox();
-        E_Board1_conn_detail_Pan4 = new javax.swing.JPanel();
         E_Board1_IP_TextField = new javax.swing.JTextField();
         E_Board1_Port_TextField = new javax.swing.JTextField();
         gateBarPan5 = new javax.swing.JPanel();
-        filler36 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(15, 0), new java.awt.Dimension(50, 32767));
+        filler36 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(50, 32767));
         ebdLbl5 = new javax.swing.JLabel();
         GateBar1_TypeCBox = new javax.swing.JComboBox();
         GateBar1_connTypeCBox = new javax.swing.JComboBox();
-        GateBar1_conn_detail_Pan = new javax.swing.JPanel();
         GateBar1_IP_TextField = new javax.swing.JTextField();
         GateBar1_Port_TextField = new javax.swing.JTextField();
         gate2Panel = new javax.swing.JPanel();
@@ -354,26 +366,24 @@ public class Settings_System extends javax.swing.JFrame {
         jLabel59 = new javax.swing.JLabel();
         jLabel60 = new javax.swing.JLabel();
         cameraPan4 = new javax.swing.JPanel();
-        filler32 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(15, 0), new java.awt.Dimension(50, 32767));
+        filler32 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(50, 32767));
         jLabel61 = new javax.swing.JLabel();
         Camera2_TypeCBox = new javax.swing.JComboBox();
         Camera2_connTypeCBox = new javax.swing.JComboBox();
         Camera2_IP_TextField = new javax.swing.JTextField();
         Camera2_Port_TextField = new javax.swing.JTextField();
         eBoardPan4 = new javax.swing.JPanel();
-        filler33 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(15, 0), new java.awt.Dimension(50, 32767));
+        filler33 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(50, 32767));
         jLabel62 = new javax.swing.JLabel();
         E_Board2_TypeCBox = new javax.swing.JComboBox();
         E_Board2_connTypeCBox = new javax.swing.JComboBox();
-        E_Board1_conn_detail_Pan3 = new javax.swing.JPanel();
         E_Board2_IP_TextField = new javax.swing.JTextField();
         E_Board2_Port_TextField = new javax.swing.JTextField();
         gateBarPan4 = new javax.swing.JPanel();
-        filler34 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(15, 0), new java.awt.Dimension(50, 32767));
+        filler34 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(50, 32767));
         ebdLbl4 = new javax.swing.JLabel();
         GateBar2_TypeCBox = new javax.swing.JComboBox();
         GateBar2_connTypeCBox = new javax.swing.JComboBox();
-        GateBar1_conn_detail_Pan3 = new javax.swing.JPanel();
         GateBar2_IP_TextField = new javax.swing.JTextField();
         GateBar2_Port_TextField = new javax.swing.JTextField();
         gate3Panel = new javax.swing.JPanel();
@@ -389,26 +399,24 @@ public class Settings_System extends javax.swing.JFrame {
         jLabel47 = new javax.swing.JLabel();
         jLabel48 = new javax.swing.JLabel();
         cameraPan2 = new javax.swing.JPanel();
-        filler15 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(15, 0), new java.awt.Dimension(50, 32767));
+        filler15 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(50, 32767));
         jLabel49 = new javax.swing.JLabel();
         Camera3_TypeCBox = new javax.swing.JComboBox();
         Camera3_connTypeCBox = new javax.swing.JComboBox();
         Camera3_IP_TextField = new javax.swing.JTextField();
         Camera3_Port_TextField = new javax.swing.JTextField();
         eBoardPan2 = new javax.swing.JPanel();
-        filler23 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(15, 0), new java.awt.Dimension(50, 32767));
+        filler23 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(50, 32767));
         jLabel50 = new javax.swing.JLabel();
         E_Board3_TypeCBox = new javax.swing.JComboBox();
         E_Board3_connTypeCBox = new javax.swing.JComboBox();
-        E_Board1_conn_detail_Pan1 = new javax.swing.JPanel();
         E_Board3_IP_TextField = new javax.swing.JTextField();
         E_Board3_Port_TextField = new javax.swing.JTextField();
         gateBarPan2 = new javax.swing.JPanel();
-        filler24 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(15, 0), new java.awt.Dimension(50, 32767));
+        filler24 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(50, 32767));
         ebdLbl2 = new javax.swing.JLabel();
         GateBar3_TypeCBox = new javax.swing.JComboBox();
         GateBar3_connTypeCBox = new javax.swing.JComboBox();
-        GateBar1_conn_detail_Pan1 = new javax.swing.JPanel();
         GateBar3_IP_TextField = new javax.swing.JTextField();
         GateBar3_Port_TextField = new javax.swing.JTextField();
         gate4Panel = new javax.swing.JPanel();
@@ -424,26 +432,24 @@ public class Settings_System extends javax.swing.JFrame {
         jLabel53 = new javax.swing.JLabel();
         jLabel54 = new javax.swing.JLabel();
         cameraPan3 = new javax.swing.JPanel();
-        filler27 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(15, 0), new java.awt.Dimension(50, 32767));
+        filler27 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(50, 32767));
         jLabel55 = new javax.swing.JLabel();
         Camera4_TypeCBox = new javax.swing.JComboBox();
         Camera4_connTypeCBox = new javax.swing.JComboBox();
         Camera4_IP_TextField = new javax.swing.JTextField();
         Camera4_Port_TextField = new javax.swing.JTextField();
         eBoardPan3 = new javax.swing.JPanel();
-        filler28 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(15, 0), new java.awt.Dimension(50, 32767));
+        filler28 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(50, 32767));
         jLabel56 = new javax.swing.JLabel();
         E_Board4_TypeCBox = new javax.swing.JComboBox();
         E_Board4_connTypeCBox = new javax.swing.JComboBox();
-        E_Board1_conn_detail_Pan2 = new javax.swing.JPanel();
         E_Board4_IP_TextField = new javax.swing.JTextField();
         E_Board4_Port_TextField = new javax.swing.JTextField();
         gateBarPan3 = new javax.swing.JPanel();
-        filler29 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(15, 0), new java.awt.Dimension(50, 32767));
+        filler29 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(50, 32767));
         ebdLbl3 = new javax.swing.JLabel();
         GateBar4_TypeCBox = new javax.swing.JComboBox();
         GateBar4_connTypeCBox = new javax.swing.JComboBox();
-        GateBar1_conn_detail_Pan2 = new javax.swing.JPanel();
         GateBar4_IP_TextField = new javax.swing.JTextField();
         GateBar4_Port_TextField = new javax.swing.JTextField();
         eBoardSettingPanel = new javax.swing.JPanel();
@@ -1089,13 +1095,9 @@ public class Settings_System extends javax.swing.JFrame {
         Camera1_TypeCBox.setMinimumSize(new java.awt.Dimension(115, 25));
         Camera1_TypeCBox.setName("Camera1_TypeCBox"); // NOI18N
         Camera1_TypeCBox.setPreferredSize(new java.awt.Dimension(115, 27));
-        Camera1_TypeCBox.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
-            public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
-            }
-            public void popupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {
-                Camera1_TypeCBoxPopupMenuWillBecomeInvisible(evt);
-            }
-            public void popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {
+        Camera1_TypeCBox.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                Camera1_TypeCBoxItemStateChanged(evt);
             }
         });
         cameraPan.add(Camera1_TypeCBox);
@@ -1130,7 +1132,7 @@ public class Settings_System extends javax.swing.JFrame {
         Camera1_Port_TextField.setMaximumSize(new java.awt.Dimension(32767, 32767));
         Camera1_Port_TextField.setMinimumSize(new java.awt.Dimension(40, 25));
         Camera1_Port_TextField.setName("Camera1_Port_TextField"); // NOI18N
-        Camera1_Port_TextField.setPreferredSize(new java.awt.Dimension(45, 27));
+        Camera1_Port_TextField.setPreferredSize(new java.awt.Dimension(57, 27));
         Camera1_Port_TextField.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 Camera1_Port_TextFieldKeyReleased(evt);
@@ -1162,13 +1164,9 @@ public class Settings_System extends javax.swing.JFrame {
         E_Board1_TypeCBox.setMinimumSize(new java.awt.Dimension(115, 25));
         E_Board1_TypeCBox.setName("E_Board1_TypeCBox"); // NOI18N
         E_Board1_TypeCBox.setPreferredSize(new java.awt.Dimension(115, 27));
-        E_Board1_TypeCBox.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
-            public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
-            }
-            public void popupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {
-                E_Board1_TypeCBoxPopupMenuWillBecomeInvisible(evt);
-            }
-            public void popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {
+        E_Board1_TypeCBox.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                E_Board1_TypeCBoxItemStateChanged(evt);
             }
         });
         E_Board1_TypeCBox.addActionListener(new java.awt.event.ActionListener() {
@@ -1183,6 +1181,11 @@ public class Settings_System extends javax.swing.JFrame {
         E_Board1_connTypeCBox.setMinimumSize(new java.awt.Dimension(80, 23));
         E_Board1_connTypeCBox.setName("E_Board1_connTypeCBox"); // NOI18N
         E_Board1_connTypeCBox.setPreferredSize(new java.awt.Dimension(90, 27));
+        E_Board1_connTypeCBox.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                E_Board1_connTypeCBoxItemStateChanged(evt);
+            }
+        });
         E_Board1_connTypeCBox.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
             public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
             }
@@ -1199,11 +1202,6 @@ public class Settings_System extends javax.swing.JFrame {
         });
         eBoardPan5.add(E_Board1_connTypeCBox);
 
-        E_Board1_conn_detail_Pan4.setMinimumSize(new java.awt.Dimension(170, 25));
-        E_Board1_conn_detail_Pan4.setName("E_Board1_conn_detail_Pan"); // NOI18N
-        E_Board1_conn_detail_Pan4.setPreferredSize(new java.awt.Dimension(175, 29));
-        E_Board1_conn_detail_Pan4.setLayout(new java.awt.BorderLayout());
-
         E_Board1_IP_TextField.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         E_Board1_IP_TextField.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         E_Board1_IP_TextField.setText("127.0.0.1");
@@ -1215,13 +1213,13 @@ public class Settings_System extends javax.swing.JFrame {
                 E_Board1_IP_TextFieldKeyReleased(evt);
             }
         });
-        E_Board1_conn_detail_Pan4.add(E_Board1_IP_TextField, java.awt.BorderLayout.WEST);
+        eBoardPan5.add(E_Board1_IP_TextField);
 
         E_Board1_Port_TextField.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         E_Board1_Port_TextField.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         E_Board1_Port_TextField.setMinimumSize(new java.awt.Dimension(40, 25));
         E_Board1_Port_TextField.setName("E_Board1_Port_TextField"); // NOI18N
-        E_Board1_Port_TextField.setPreferredSize(new java.awt.Dimension(45, 27));
+        E_Board1_Port_TextField.setPreferredSize(new java.awt.Dimension(57, 27));
         E_Board1_Port_TextField.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 E_Board1_Port_TextFieldKeyReleased(evt);
@@ -1230,9 +1228,7 @@ public class Settings_System extends javax.swing.JFrame {
                 E_Board1_Port_TextFieldKeyTyped(evt);
             }
         });
-        E_Board1_conn_detail_Pan4.add(E_Board1_Port_TextField, java.awt.BorderLayout.EAST);
-
-        eBoardPan5.add(E_Board1_conn_detail_Pan4);
+        eBoardPan5.add(E_Board1_Port_TextField);
 
         gate1Panel.add(eBoardPan5);
 
@@ -1255,13 +1251,9 @@ public class Settings_System extends javax.swing.JFrame {
         GateBar1_TypeCBox.setMinimumSize(new java.awt.Dimension(115, 25));
         GateBar1_TypeCBox.setName("GateBar1_TypeCBox"); // NOI18N
         GateBar1_TypeCBox.setPreferredSize(new java.awt.Dimension(115, 27));
-        GateBar1_TypeCBox.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
-            public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
-            }
-            public void popupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {
-                GateBar1_TypeCBoxPopupMenuWillBecomeInvisible(evt);
-            }
-            public void popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {
+        GateBar1_TypeCBox.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                GateBar1_TypeCBoxItemStateChanged(evt);
             }
         });
         GateBar1_TypeCBox.addActionListener(new java.awt.event.ActionListener() {
@@ -1292,11 +1284,6 @@ public class Settings_System extends javax.swing.JFrame {
         });
         gateBarPan5.add(GateBar1_connTypeCBox);
 
-        GateBar1_conn_detail_Pan.setMinimumSize(new java.awt.Dimension(170, 25));
-        GateBar1_conn_detail_Pan.setName("GateBar1_conn_detail_Pan"); // NOI18N
-        GateBar1_conn_detail_Pan.setPreferredSize(new java.awt.Dimension(175, 29));
-        GateBar1_conn_detail_Pan.setLayout(new java.awt.BorderLayout());
-
         GateBar1_IP_TextField.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         GateBar1_IP_TextField.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         GateBar1_IP_TextField.setText("127.0.0.1");
@@ -1308,13 +1295,13 @@ public class Settings_System extends javax.swing.JFrame {
                 GateBar1_IP_TextFieldKeyReleased(evt);
             }
         });
-        GateBar1_conn_detail_Pan.add(GateBar1_IP_TextField, java.awt.BorderLayout.WEST);
+        gateBarPan5.add(GateBar1_IP_TextField);
 
         GateBar1_Port_TextField.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         GateBar1_Port_TextField.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         GateBar1_Port_TextField.setMinimumSize(new java.awt.Dimension(40, 25));
         GateBar1_Port_TextField.setName("GateBar1_Port_TextField"); // NOI18N
-        GateBar1_Port_TextField.setPreferredSize(new java.awt.Dimension(45, 27));
+        GateBar1_Port_TextField.setPreferredSize(new java.awt.Dimension(57, 27));
         GateBar1_Port_TextField.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 GateBar1_Port_TextFieldKeyReleased(evt);
@@ -1323,9 +1310,7 @@ public class Settings_System extends javax.swing.JFrame {
                 GateBar1_Port_TextFieldKeyTyped(evt);
             }
         });
-        GateBar1_conn_detail_Pan.add(GateBar1_Port_TextField, java.awt.BorderLayout.EAST);
-
-        gateBarPan5.add(GateBar1_conn_detail_Pan);
+        gateBarPan5.add(GateBar1_Port_TextField);
 
         gate1Panel.add(gateBarPan5);
 
@@ -1423,13 +1408,9 @@ public class Settings_System extends javax.swing.JFrame {
         Camera2_TypeCBox.setMinimumSize(new java.awt.Dimension(115, 25));
         Camera2_TypeCBox.setName("Camera2_TypeCBox"); // NOI18N
         Camera2_TypeCBox.setPreferredSize(new java.awt.Dimension(115, 27));
-        Camera2_TypeCBox.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
-            public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
-            }
-            public void popupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {
-                Camera2_TypeCBoxPopupMenuWillBecomeInvisible(evt);
-            }
-            public void popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {
+        Camera2_TypeCBox.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                Camera2_TypeCBoxItemStateChanged(evt);
             }
         });
         cameraPan4.add(Camera2_TypeCBox);
@@ -1469,7 +1450,7 @@ public class Settings_System extends javax.swing.JFrame {
         Camera2_Port_TextField.setMaximumSize(new java.awt.Dimension(32767, 32767));
         Camera2_Port_TextField.setMinimumSize(new java.awt.Dimension(40, 25));
         Camera2_Port_TextField.setName("Camera2_Port_TextField"); // NOI18N
-        Camera2_Port_TextField.setPreferredSize(new java.awt.Dimension(45, 27));
+        Camera2_Port_TextField.setPreferredSize(new java.awt.Dimension(57, 27));
         Camera2_Port_TextField.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 Camera2_Port_TextFieldKeyReleased(evt);
@@ -1501,13 +1482,9 @@ public class Settings_System extends javax.swing.JFrame {
         E_Board2_TypeCBox.setMinimumSize(new java.awt.Dimension(115, 25));
         E_Board2_TypeCBox.setName("E_Board2_TypeCBox"); // NOI18N
         E_Board2_TypeCBox.setPreferredSize(new java.awt.Dimension(115, 27));
-        E_Board2_TypeCBox.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
-            public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
-            }
-            public void popupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {
-                E_Board2_TypeCBoxPopupMenuWillBecomeInvisible(evt);
-            }
-            public void popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {
+        E_Board2_TypeCBox.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                E_Board2_TypeCBoxItemStateChanged(evt);
             }
         });
         E_Board2_TypeCBox.addActionListener(new java.awt.event.ActionListener() {
@@ -1522,6 +1499,11 @@ public class Settings_System extends javax.swing.JFrame {
         E_Board2_connTypeCBox.setMinimumSize(new java.awt.Dimension(80, 23));
         E_Board2_connTypeCBox.setName("E_Board2_connTypeCBox"); // NOI18N
         E_Board2_connTypeCBox.setPreferredSize(new java.awt.Dimension(90, 27));
+        E_Board2_connTypeCBox.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                E_Board2_connTypeCBoxItemStateChanged(evt);
+            }
+        });
         E_Board2_connTypeCBox.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
             public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
             }
@@ -1538,11 +1520,6 @@ public class Settings_System extends javax.swing.JFrame {
         });
         eBoardPan4.add(E_Board2_connTypeCBox);
 
-        E_Board1_conn_detail_Pan3.setMinimumSize(new java.awt.Dimension(170, 25));
-        E_Board1_conn_detail_Pan3.setName("E_Board1_conn_detail_Pan"); // NOI18N
-        E_Board1_conn_detail_Pan3.setPreferredSize(new java.awt.Dimension(175, 29));
-        E_Board1_conn_detail_Pan3.setLayout(new java.awt.BorderLayout());
-
         E_Board2_IP_TextField.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         E_Board2_IP_TextField.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         E_Board2_IP_TextField.setText("127.0.0.1");
@@ -1554,13 +1531,13 @@ public class Settings_System extends javax.swing.JFrame {
                 E_Board2_IP_TextFieldKeyReleased(evt);
             }
         });
-        E_Board1_conn_detail_Pan3.add(E_Board2_IP_TextField, java.awt.BorderLayout.WEST);
+        eBoardPan4.add(E_Board2_IP_TextField);
 
         E_Board2_Port_TextField.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         E_Board2_Port_TextField.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         E_Board2_Port_TextField.setMinimumSize(new java.awt.Dimension(40, 25));
         E_Board2_Port_TextField.setName("E_Board2_Port_TextField"); // NOI18N
-        E_Board2_Port_TextField.setPreferredSize(new java.awt.Dimension(45, 27));
+        E_Board2_Port_TextField.setPreferredSize(new java.awt.Dimension(57, 27));
         E_Board2_Port_TextField.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 E_Board2_Port_TextFieldKeyReleased(evt);
@@ -1569,9 +1546,7 @@ public class Settings_System extends javax.swing.JFrame {
                 E_Board2_Port_TextFieldKeyTyped(evt);
             }
         });
-        E_Board1_conn_detail_Pan3.add(E_Board2_Port_TextField, java.awt.BorderLayout.EAST);
-
-        eBoardPan4.add(E_Board1_conn_detail_Pan3);
+        eBoardPan4.add(E_Board2_Port_TextField);
 
         gate2Panel.add(eBoardPan4);
 
@@ -1594,13 +1569,9 @@ public class Settings_System extends javax.swing.JFrame {
         GateBar2_TypeCBox.setMinimumSize(new java.awt.Dimension(115, 25));
         GateBar2_TypeCBox.setName("GateBar2_TypeCBox"); // NOI18N
         GateBar2_TypeCBox.setPreferredSize(new java.awt.Dimension(115, 27));
-        GateBar2_TypeCBox.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
-            public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
-            }
-            public void popupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {
-                GateBar2_TypeCBoxPopupMenuWillBecomeInvisible(evt);
-            }
-            public void popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {
+        GateBar2_TypeCBox.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                GateBar2_TypeCBoxItemStateChanged(evt);
             }
         });
         GateBar2_TypeCBox.addActionListener(new java.awt.event.ActionListener() {
@@ -1631,11 +1602,6 @@ public class Settings_System extends javax.swing.JFrame {
         });
         gateBarPan4.add(GateBar2_connTypeCBox);
 
-        GateBar1_conn_detail_Pan3.setMinimumSize(new java.awt.Dimension(170, 25));
-        GateBar1_conn_detail_Pan3.setName("GateBar1_conn_detail_Pan"); // NOI18N
-        GateBar1_conn_detail_Pan3.setPreferredSize(new java.awt.Dimension(175, 29));
-        GateBar1_conn_detail_Pan3.setLayout(new java.awt.BorderLayout());
-
         GateBar2_IP_TextField.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         GateBar2_IP_TextField.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         GateBar2_IP_TextField.setText("127.0.0.1");
@@ -1647,13 +1613,13 @@ public class Settings_System extends javax.swing.JFrame {
                 GateBar2_IP_TextFieldKeyReleased(evt);
             }
         });
-        GateBar1_conn_detail_Pan3.add(GateBar2_IP_TextField, java.awt.BorderLayout.WEST);
+        gateBarPan4.add(GateBar2_IP_TextField);
 
         GateBar2_Port_TextField.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         GateBar2_Port_TextField.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         GateBar2_Port_TextField.setMinimumSize(new java.awt.Dimension(40, 25));
         GateBar2_Port_TextField.setName("GateBar2_Port_TextField"); // NOI18N
-        GateBar2_Port_TextField.setPreferredSize(new java.awt.Dimension(45, 27));
+        GateBar2_Port_TextField.setPreferredSize(new java.awt.Dimension(57, 27));
         GateBar2_Port_TextField.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 GateBar2_Port_TextFieldKeyReleased(evt);
@@ -1662,9 +1628,7 @@ public class Settings_System extends javax.swing.JFrame {
                 GateBar2_Port_TextFieldKeyTyped(evt);
             }
         });
-        GateBar1_conn_detail_Pan3.add(GateBar2_Port_TextField, java.awt.BorderLayout.EAST);
-
-        gateBarPan4.add(GateBar1_conn_detail_Pan3);
+        gateBarPan4.add(GateBar2_Port_TextField);
 
         gate2Panel.add(gateBarPan4);
 
@@ -1762,13 +1726,9 @@ public class Settings_System extends javax.swing.JFrame {
         Camera3_TypeCBox.setMinimumSize(new java.awt.Dimension(115, 25));
         Camera3_TypeCBox.setName("Camera3_TypeCBox"); // NOI18N
         Camera3_TypeCBox.setPreferredSize(new java.awt.Dimension(115, 27));
-        Camera3_TypeCBox.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
-            public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
-            }
-            public void popupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {
-                Camera3_TypeCBoxPopupMenuWillBecomeInvisible(evt);
-            }
-            public void popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {
+        Camera3_TypeCBox.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                Camera3_TypeCBoxItemStateChanged(evt);
             }
         });
         cameraPan2.add(Camera3_TypeCBox);
@@ -1808,7 +1768,7 @@ public class Settings_System extends javax.swing.JFrame {
         Camera3_Port_TextField.setMaximumSize(new java.awt.Dimension(32767, 32767));
         Camera3_Port_TextField.setMinimumSize(new java.awt.Dimension(40, 25));
         Camera3_Port_TextField.setName("Camera3_Port_TextField"); // NOI18N
-        Camera3_Port_TextField.setPreferredSize(new java.awt.Dimension(45, 27));
+        Camera3_Port_TextField.setPreferredSize(new java.awt.Dimension(57, 27));
         Camera3_Port_TextField.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 Camera3_Port_TextFieldKeyReleased(evt);
@@ -1840,13 +1800,9 @@ public class Settings_System extends javax.swing.JFrame {
         E_Board3_TypeCBox.setMinimumSize(new java.awt.Dimension(115, 25));
         E_Board3_TypeCBox.setName("E_Board3_TypeCBox"); // NOI18N
         E_Board3_TypeCBox.setPreferredSize(new java.awt.Dimension(115, 27));
-        E_Board3_TypeCBox.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
-            public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
-            }
-            public void popupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {
-                E_Board3_TypeCBoxPopupMenuWillBecomeInvisible(evt);
-            }
-            public void popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {
+        E_Board3_TypeCBox.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                E_Board3_TypeCBoxItemStateChanged(evt);
             }
         });
         E_Board3_TypeCBox.addActionListener(new java.awt.event.ActionListener() {
@@ -1861,6 +1817,11 @@ public class Settings_System extends javax.swing.JFrame {
         E_Board3_connTypeCBox.setMinimumSize(new java.awt.Dimension(80, 23));
         E_Board3_connTypeCBox.setName("E_Board3_connTypeCBox"); // NOI18N
         E_Board3_connTypeCBox.setPreferredSize(new java.awt.Dimension(90, 27));
+        E_Board3_connTypeCBox.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                E_Board3_connTypeCBoxItemStateChanged(evt);
+            }
+        });
         E_Board3_connTypeCBox.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
             public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
             }
@@ -1877,11 +1838,6 @@ public class Settings_System extends javax.swing.JFrame {
         });
         eBoardPan2.add(E_Board3_connTypeCBox);
 
-        E_Board1_conn_detail_Pan1.setMinimumSize(new java.awt.Dimension(170, 25));
-        E_Board1_conn_detail_Pan1.setName("E_Board1_conn_detail_Pan"); // NOI18N
-        E_Board1_conn_detail_Pan1.setPreferredSize(new java.awt.Dimension(175, 29));
-        E_Board1_conn_detail_Pan1.setLayout(new java.awt.BorderLayout());
-
         E_Board3_IP_TextField.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         E_Board3_IP_TextField.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         E_Board3_IP_TextField.setText("127.0.0.1");
@@ -1893,13 +1849,13 @@ public class Settings_System extends javax.swing.JFrame {
                 E_Board3_IP_TextFieldKeyReleased(evt);
             }
         });
-        E_Board1_conn_detail_Pan1.add(E_Board3_IP_TextField, java.awt.BorderLayout.WEST);
+        eBoardPan2.add(E_Board3_IP_TextField);
 
         E_Board3_Port_TextField.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         E_Board3_Port_TextField.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         E_Board3_Port_TextField.setMinimumSize(new java.awt.Dimension(40, 25));
         E_Board3_Port_TextField.setName("E_Board3_Port_TextField"); // NOI18N
-        E_Board3_Port_TextField.setPreferredSize(new java.awt.Dimension(45, 27));
+        E_Board3_Port_TextField.setPreferredSize(new java.awt.Dimension(57, 27));
         E_Board3_Port_TextField.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 E_Board3_Port_TextFieldKeyReleased(evt);
@@ -1908,9 +1864,7 @@ public class Settings_System extends javax.swing.JFrame {
                 E_Board3_Port_TextFieldKeyTyped(evt);
             }
         });
-        E_Board1_conn_detail_Pan1.add(E_Board3_Port_TextField, java.awt.BorderLayout.EAST);
-
-        eBoardPan2.add(E_Board1_conn_detail_Pan1);
+        eBoardPan2.add(E_Board3_Port_TextField);
 
         gate3Panel.add(eBoardPan2);
 
@@ -1933,13 +1887,9 @@ public class Settings_System extends javax.swing.JFrame {
         GateBar3_TypeCBox.setMinimumSize(new java.awt.Dimension(115, 25));
         GateBar3_TypeCBox.setName("GateBar3_TypeCBox"); // NOI18N
         GateBar3_TypeCBox.setPreferredSize(new java.awt.Dimension(115, 27));
-        GateBar3_TypeCBox.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
-            public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
-            }
-            public void popupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {
-                GateBar3_TypeCBoxPopupMenuWillBecomeInvisible(evt);
-            }
-            public void popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {
+        GateBar3_TypeCBox.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                GateBar3_TypeCBoxItemStateChanged(evt);
             }
         });
         GateBar3_TypeCBox.addActionListener(new java.awt.event.ActionListener() {
@@ -1970,11 +1920,6 @@ public class Settings_System extends javax.swing.JFrame {
         });
         gateBarPan2.add(GateBar3_connTypeCBox);
 
-        GateBar1_conn_detail_Pan1.setMinimumSize(new java.awt.Dimension(170, 25));
-        GateBar1_conn_detail_Pan1.setName("GateBar1_conn_detail_Pan"); // NOI18N
-        GateBar1_conn_detail_Pan1.setPreferredSize(new java.awt.Dimension(175, 29));
-        GateBar1_conn_detail_Pan1.setLayout(new java.awt.BorderLayout());
-
         GateBar3_IP_TextField.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         GateBar3_IP_TextField.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         GateBar3_IP_TextField.setText("127.0.0.1");
@@ -1986,13 +1931,13 @@ public class Settings_System extends javax.swing.JFrame {
                 GateBar3_IP_TextFieldKeyReleased(evt);
             }
         });
-        GateBar1_conn_detail_Pan1.add(GateBar3_IP_TextField, java.awt.BorderLayout.WEST);
+        gateBarPan2.add(GateBar3_IP_TextField);
 
         GateBar3_Port_TextField.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         GateBar3_Port_TextField.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         GateBar3_Port_TextField.setMinimumSize(new java.awt.Dimension(40, 25));
         GateBar3_Port_TextField.setName("GateBar3_Port_TextField"); // NOI18N
-        GateBar3_Port_TextField.setPreferredSize(new java.awt.Dimension(45, 27));
+        GateBar3_Port_TextField.setPreferredSize(new java.awt.Dimension(57, 27));
         GateBar3_Port_TextField.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 GateBar3_Port_TextFieldKeyReleased(evt);
@@ -2001,9 +1946,7 @@ public class Settings_System extends javax.swing.JFrame {
                 GateBar3_Port_TextFieldKeyTyped(evt);
             }
         });
-        GateBar1_conn_detail_Pan1.add(GateBar3_Port_TextField, java.awt.BorderLayout.EAST);
-
-        gateBarPan2.add(GateBar1_conn_detail_Pan1);
+        gateBarPan2.add(GateBar3_Port_TextField);
 
         gate3Panel.add(gateBarPan2);
 
@@ -2101,13 +2044,9 @@ public class Settings_System extends javax.swing.JFrame {
         Camera4_TypeCBox.setMinimumSize(new java.awt.Dimension(115, 25));
         Camera4_TypeCBox.setName("Camera4_TypeCBox"); // NOI18N
         Camera4_TypeCBox.setPreferredSize(new java.awt.Dimension(115, 27));
-        Camera4_TypeCBox.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
-            public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
-            }
-            public void popupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {
-                Camera4_TypeCBoxPopupMenuWillBecomeInvisible(evt);
-            }
-            public void popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {
+        Camera4_TypeCBox.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                Camera4_TypeCBoxItemStateChanged(evt);
             }
         });
         cameraPan3.add(Camera4_TypeCBox);
@@ -2147,7 +2086,7 @@ public class Settings_System extends javax.swing.JFrame {
         Camera4_Port_TextField.setMaximumSize(new java.awt.Dimension(32767, 32767));
         Camera4_Port_TextField.setMinimumSize(new java.awt.Dimension(40, 25));
         Camera4_Port_TextField.setName("Camera4_Port_TextField"); // NOI18N
-        Camera4_Port_TextField.setPreferredSize(new java.awt.Dimension(45, 27));
+        Camera4_Port_TextField.setPreferredSize(new java.awt.Dimension(57, 27));
         Camera4_Port_TextField.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 Camera4_Port_TextFieldKeyReleased(evt);
@@ -2179,13 +2118,9 @@ public class Settings_System extends javax.swing.JFrame {
         E_Board4_TypeCBox.setMinimumSize(new java.awt.Dimension(115, 25));
         E_Board4_TypeCBox.setName("E_Board4_TypeCBox"); // NOI18N
         E_Board4_TypeCBox.setPreferredSize(new java.awt.Dimension(115, 27));
-        E_Board4_TypeCBox.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
-            public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
-            }
-            public void popupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {
-                E_Board4_TypeCBoxPopupMenuWillBecomeInvisible(evt);
-            }
-            public void popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {
+        E_Board4_TypeCBox.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                E_Board4_TypeCBoxItemStateChanged(evt);
             }
         });
         E_Board4_TypeCBox.addActionListener(new java.awt.event.ActionListener() {
@@ -2200,6 +2135,11 @@ public class Settings_System extends javax.swing.JFrame {
         E_Board4_connTypeCBox.setMinimumSize(new java.awt.Dimension(80, 23));
         E_Board4_connTypeCBox.setName("E_Board4_connTypeCBox"); // NOI18N
         E_Board4_connTypeCBox.setPreferredSize(new java.awt.Dimension(90, 27));
+        E_Board4_connTypeCBox.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                E_Board4_connTypeCBoxItemStateChanged(evt);
+            }
+        });
         E_Board4_connTypeCBox.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
             public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
             }
@@ -2216,11 +2156,6 @@ public class Settings_System extends javax.swing.JFrame {
         });
         eBoardPan3.add(E_Board4_connTypeCBox);
 
-        E_Board1_conn_detail_Pan2.setMinimumSize(new java.awt.Dimension(170, 25));
-        E_Board1_conn_detail_Pan2.setName("E_Board1_conn_detail_Pan"); // NOI18N
-        E_Board1_conn_detail_Pan2.setPreferredSize(new java.awt.Dimension(175, 29));
-        E_Board1_conn_detail_Pan2.setLayout(new java.awt.BorderLayout());
-
         E_Board4_IP_TextField.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         E_Board4_IP_TextField.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         E_Board4_IP_TextField.setText("127.0.0.1");
@@ -2232,13 +2167,13 @@ public class Settings_System extends javax.swing.JFrame {
                 E_Board4_IP_TextFieldKeyReleased(evt);
             }
         });
-        E_Board1_conn_detail_Pan2.add(E_Board4_IP_TextField, java.awt.BorderLayout.WEST);
+        eBoardPan3.add(E_Board4_IP_TextField);
 
         E_Board4_Port_TextField.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         E_Board4_Port_TextField.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         E_Board4_Port_TextField.setMinimumSize(new java.awt.Dimension(40, 25));
         E_Board4_Port_TextField.setName("E_Board4_Port_TextField"); // NOI18N
-        E_Board4_Port_TextField.setPreferredSize(new java.awt.Dimension(45, 27));
+        E_Board4_Port_TextField.setPreferredSize(new java.awt.Dimension(57, 27));
         E_Board4_Port_TextField.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 E_Board4_Port_TextFieldKeyReleased(evt);
@@ -2247,9 +2182,7 @@ public class Settings_System extends javax.swing.JFrame {
                 E_Board4_Port_TextFieldKeyTyped(evt);
             }
         });
-        E_Board1_conn_detail_Pan2.add(E_Board4_Port_TextField, java.awt.BorderLayout.EAST);
-
-        eBoardPan3.add(E_Board1_conn_detail_Pan2);
+        eBoardPan3.add(E_Board4_Port_TextField);
 
         gate4Panel.add(eBoardPan3);
 
@@ -2272,13 +2205,9 @@ public class Settings_System extends javax.swing.JFrame {
         GateBar4_TypeCBox.setMinimumSize(new java.awt.Dimension(115, 25));
         GateBar4_TypeCBox.setName("GateBar4_TypeCBox"); // NOI18N
         GateBar4_TypeCBox.setPreferredSize(new java.awt.Dimension(115, 27));
-        GateBar4_TypeCBox.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
-            public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
-            }
-            public void popupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {
-                GateBar4_TypeCBoxPopupMenuWillBecomeInvisible(evt);
-            }
-            public void popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {
+        GateBar4_TypeCBox.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                GateBar4_TypeCBoxItemStateChanged(evt);
             }
         });
         GateBar4_TypeCBox.addActionListener(new java.awt.event.ActionListener() {
@@ -2309,11 +2238,6 @@ public class Settings_System extends javax.swing.JFrame {
         });
         gateBarPan3.add(GateBar4_connTypeCBox);
 
-        GateBar1_conn_detail_Pan2.setMinimumSize(new java.awt.Dimension(170, 25));
-        GateBar1_conn_detail_Pan2.setName("GateBar1_conn_detail_Pan"); // NOI18N
-        GateBar1_conn_detail_Pan2.setPreferredSize(new java.awt.Dimension(175, 29));
-        GateBar1_conn_detail_Pan2.setLayout(new java.awt.BorderLayout());
-
         GateBar4_IP_TextField.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         GateBar4_IP_TextField.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         GateBar4_IP_TextField.setText("127.0.0.1");
@@ -2325,13 +2249,13 @@ public class Settings_System extends javax.swing.JFrame {
                 GateBar4_IP_TextFieldKeyReleased(evt);
             }
         });
-        GateBar1_conn_detail_Pan2.add(GateBar4_IP_TextField, java.awt.BorderLayout.WEST);
+        gateBarPan3.add(GateBar4_IP_TextField);
 
         GateBar4_Port_TextField.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         GateBar4_Port_TextField.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         GateBar4_Port_TextField.setMinimumSize(new java.awt.Dimension(40, 25));
         GateBar4_Port_TextField.setName("GateBar4_Port_TextField"); // NOI18N
-        GateBar4_Port_TextField.setPreferredSize(new java.awt.Dimension(45, 27));
+        GateBar4_Port_TextField.setPreferredSize(new java.awt.Dimension(57, 27));
         GateBar4_Port_TextField.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 GateBar4_Port_TextFieldKeyReleased(evt);
@@ -2340,9 +2264,7 @@ public class Settings_System extends javax.swing.JFrame {
                 GateBar4_Port_TextFieldKeyTyped(evt);
             }
         });
-        GateBar1_conn_detail_Pan2.add(GateBar4_Port_TextField, java.awt.BorderLayout.EAST);
-
-        gateBarPan3.add(GateBar1_conn_detail_Pan2);
+        gateBarPan3.add(GateBar4_Port_TextField);
 
         gate4Panel.add(gateBarPan3);
 
@@ -3084,25 +3006,19 @@ public class Settings_System extends javax.swing.JFrame {
     }//GEN-LAST:event_FlowingComboBoxPopupMenuWillBecomeInvisible
 
     private void EBoardSettingsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EBoardSettingsButtonActionPerformed
-
         int tabIndex = GatesTabbedPane.getSelectedIndex();
         JComboBox typeCBox = (JComboBox)componentMap.get("E_Board" + (tabIndex + 1) + "_TypeCBox");
 
-//        if (eBoardDialog == null) 
-//        {
-            eBoardDialog = new JDialog(this, E_BOARD_SETTINGS_FRAME_TITLE.getContent(), true);
-            if (typeCBox.getSelectedIndex() == E_BoardType.Simulator.ordinal()) {
-                eBoardDialog.getContentPane().add(
-                        (new Settings_EBoard(mainForm, this)).getContentPane());
-            } else if (typeCBox.getSelectedIndex() == E_BoardType.LEDnotice.ordinal()) {
-                eBoardDialog.getContentPane().add(
-                        (new Settings_LEDnotice(mainForm, this, null, tabIndex + 1)).getContentPane());
-            }
-            eBoardDialog.pack();
-            eBoardDialog.setResizable(false);
-//            eBoardDialog = 
-//            setEBDsettings(dialog);
-//        }
+        eBoardDialog = new JDialog(this, E_BOARD_SETTINGS_FRAME_TITLE.getContent(), true);
+        if (typeCBox.getSelectedIndex() == E_BoardType.Simulator.ordinal()) {
+            eBoardDialog.getContentPane().add(
+                    (new Settings_EBoard(mainForm, this)).getContentPane());
+        } else if (typeCBox.getSelectedIndex() == E_BoardType.LEDnotice.ordinal()) {
+            eBoardDialog.getContentPane().add(
+                    (new Settings_LEDnotice(mainForm, this, null, tabIndex + 1)).getContentPane());
+        }
+        eBoardDialog.pack();
+        eBoardDialog.setResizable(false);
 
         /**
          * Place E-board settings frame around invoking button and inside monitor.
@@ -3139,24 +3055,10 @@ public class Settings_System extends javax.swing.JFrame {
         checkGateNameChangeAndChangeEnabled(1, (Component) evt.getSource());
     }//GEN-LAST:event_TextFieldGateName1KeyReleased
 
-    private void Camera1_TypeCBoxPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_Camera1_TypeCBoxPopupMenuWillBecomeInvisible
-        ChangeSettings.changeStatus_Manager(
-                SettingsSaveButton, SettingsCancelButton, SettingsCloseButton, 
-                changedControls, ((Component) evt.getSource()), Camera1_TypeCBox.getSelectedIndex(), 
-                deviceType[Camera.ordinal()][1]);
-    }//GEN-LAST:event_Camera1_TypeCBoxPopupMenuWillBecomeInvisible
-
     private void TextFieldGateName3KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TextFieldGateName3KeyReleased
         // TODO add your handling code here:
         checkGateNameChangeAndChangeEnabled(3, (Component) evt.getSource());        
     }//GEN-LAST:event_TextFieldGateName3KeyReleased
-
-    private void Camera3_TypeCBoxPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_Camera3_TypeCBoxPopupMenuWillBecomeInvisible
-        ChangeSettings.changeStatus_Manager(
-                SettingsSaveButton, SettingsCancelButton, SettingsCloseButton, 
-                changedControls, ((Component) evt.getSource()), Camera3_TypeCBox.getSelectedIndex(), 
-                deviceType[Camera.ordinal()][1]);
-    }//GEN-LAST:event_Camera3_TypeCBoxPopupMenuWillBecomeInvisible
 
     private void Camera3_connTypeCBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Camera3_connTypeCBoxActionPerformed
         // TODO add your handling code here:
@@ -3174,13 +3076,6 @@ public class Settings_System extends javax.swing.JFrame {
         rejectNonNumericKeys(evt);
     }//GEN-LAST:event_Camera3_Port_TextFieldKeyTyped
 
-    private void E_Board3_TypeCBoxPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_E_Board3_TypeCBoxPopupMenuWillBecomeInvisible
-        ChangeSettings.changeStatus_Manager(
-                SettingsSaveButton, SettingsCancelButton, SettingsCloseButton, 
-                changedControls, ((Component) evt.getSource()), E_Board3_TypeCBox.getSelectedIndex(), 
-                deviceType[E_Board.ordinal()][1]);
-    }//GEN-LAST:event_E_Board3_TypeCBoxPopupMenuWillBecomeInvisible
-
     private void E_Board3_TypeCBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_E_Board3_TypeCBoxActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_E_Board3_TypeCBoxActionPerformed
@@ -3189,7 +3084,7 @@ public class Settings_System extends javax.swing.JFrame {
         ChangeSettings.changeStatus_Manager(
                 SettingsSaveButton, SettingsCancelButton, SettingsCloseButton, 
                 changedControls, ((Component) evt.getSource()), E_Board3_connTypeCBox.getSelectedIndex(), 
-                deviceType[E_Board.ordinal()][1]);        
+                connectionType[E_Board.ordinal()][1]);        
     }//GEN-LAST:event_E_Board3_connTypeCBoxPopupMenuWillBecomeInvisible
 
     private void E_Board3_connTypeCBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_E_Board3_connTypeCBoxActionPerformed
@@ -3208,13 +3103,6 @@ public class Settings_System extends javax.swing.JFrame {
         rejectNonNumericKeys(evt);
     }//GEN-LAST:event_E_Board3_Port_TextFieldKeyTyped
 
-    private void GateBar3_TypeCBoxPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_GateBar3_TypeCBoxPopupMenuWillBecomeInvisible
-        ChangeSettings.changeStatus_Manager(
-                SettingsSaveButton, SettingsCancelButton, SettingsCloseButton, 
-                changedControls, ((Component) evt.getSource()), GateBar3_TypeCBox.getSelectedIndex(), 
-                deviceType[GateBar.ordinal()][1]);
-    }//GEN-LAST:event_GateBar3_TypeCBoxPopupMenuWillBecomeInvisible
-
     private void GateBar3_TypeCBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GateBar3_TypeCBoxActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_GateBar3_TypeCBoxActionPerformed
@@ -3223,7 +3111,7 @@ public class Settings_System extends javax.swing.JFrame {
         ChangeSettings.changeStatus_Manager(
                 SettingsSaveButton, SettingsCancelButton, SettingsCloseButton, 
                 changedControls, ((Component) evt.getSource()), GateBar3_connTypeCBox.getSelectedIndex(), 
-                deviceType[GateBar.ordinal()][1]);        
+                connectionType[GateBar.ordinal()][1]);        
     }//GEN-LAST:event_GateBar3_connTypeCBoxPopupMenuWillBecomeInvisible
 
     private void GateBar3_connTypeCBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GateBar3_connTypeCBoxActionPerformed
@@ -3246,13 +3134,6 @@ public class Settings_System extends javax.swing.JFrame {
         checkGateNameChangeAndChangeEnabled(4, (Component) evt.getSource());
     }//GEN-LAST:event_TextFieldGateName4KeyReleased
 
-    private void Camera4_TypeCBoxPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_Camera4_TypeCBoxPopupMenuWillBecomeInvisible
-        ChangeSettings.changeStatus_Manager(
-                SettingsSaveButton, SettingsCancelButton, SettingsCloseButton, 
-                changedControls, ((Component) evt.getSource()), Camera4_TypeCBox.getSelectedIndex(), 
-                deviceType[Camera.ordinal()][1]);
-    }//GEN-LAST:event_Camera4_TypeCBoxPopupMenuWillBecomeInvisible
-
     private void Camera4_connTypeCBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Camera4_connTypeCBoxActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_Camera4_connTypeCBoxActionPerformed
@@ -3269,13 +3150,6 @@ public class Settings_System extends javax.swing.JFrame {
         rejectNonNumericKeys(evt);
     }//GEN-LAST:event_Camera4_Port_TextFieldKeyTyped
 
-    private void E_Board4_TypeCBoxPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_E_Board4_TypeCBoxPopupMenuWillBecomeInvisible
-        ChangeSettings.changeStatus_Manager(
-                SettingsSaveButton, SettingsCancelButton, SettingsCloseButton, 
-                changedControls, ((Component) evt.getSource()), E_Board4_TypeCBox.getSelectedIndex(), 
-                deviceType[E_Board.ordinal()][1]);
-    }//GEN-LAST:event_E_Board4_TypeCBoxPopupMenuWillBecomeInvisible
-
     private void E_Board4_TypeCBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_E_Board4_TypeCBoxActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_E_Board4_TypeCBoxActionPerformed
@@ -3284,7 +3158,7 @@ public class Settings_System extends javax.swing.JFrame {
         ChangeSettings.changeStatus_Manager(
                 SettingsSaveButton, SettingsCancelButton, SettingsCloseButton, 
                 changedControls, ((Component) evt.getSource()), E_Board4_connTypeCBox.getSelectedIndex(), 
-                deviceType[E_Board.ordinal()][1]);        
+                connectionType[E_Board.ordinal()][1]);        
     }//GEN-LAST:event_E_Board4_connTypeCBoxPopupMenuWillBecomeInvisible
 
     private void E_Board4_connTypeCBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_E_Board4_connTypeCBoxActionPerformed
@@ -3303,13 +3177,6 @@ public class Settings_System extends javax.swing.JFrame {
         rejectNonNumericKeys(evt);
     }//GEN-LAST:event_E_Board4_Port_TextFieldKeyTyped
 
-    private void GateBar4_TypeCBoxPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_GateBar4_TypeCBoxPopupMenuWillBecomeInvisible
-        ChangeSettings.changeStatus_Manager(
-                SettingsSaveButton, SettingsCancelButton, SettingsCloseButton, 
-                changedControls, ((Component) evt.getSource()), GateBar4_TypeCBox.getSelectedIndex(), 
-                deviceType[GateBar.ordinal()][1]);
-    }//GEN-LAST:event_GateBar4_TypeCBoxPopupMenuWillBecomeInvisible
-
     private void GateBar4_TypeCBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GateBar4_TypeCBoxActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_GateBar4_TypeCBoxActionPerformed
@@ -3318,7 +3185,7 @@ public class Settings_System extends javax.swing.JFrame {
         ChangeSettings.changeStatus_Manager(
                 SettingsSaveButton, SettingsCancelButton, SettingsCloseButton, 
                 changedControls, ((Component) evt.getSource()), GateBar4_connTypeCBox.getSelectedIndex(), 
-                deviceType[GateBar.ordinal()][1]);        
+                connectionType[GateBar.ordinal()][1]);        
     }//GEN-LAST:event_GateBar4_connTypeCBoxPopupMenuWillBecomeInvisible
 
     private void GateBar4_connTypeCBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GateBar4_connTypeCBoxActionPerformed
@@ -3341,13 +3208,6 @@ public class Settings_System extends javax.swing.JFrame {
         checkGateNameChangeAndChangeEnabled(2, (Component) evt.getSource());
     }//GEN-LAST:event_TextFieldGateName2KeyReleased
 
-    private void Camera2_TypeCBoxPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_Camera2_TypeCBoxPopupMenuWillBecomeInvisible
-        ChangeSettings.changeStatus_Manager(
-                SettingsSaveButton, SettingsCancelButton, SettingsCloseButton, 
-                changedControls, ((Component) evt.getSource()), Camera2_TypeCBox.getSelectedIndex(), 
-                deviceType[Camera.ordinal()][1]);
-    }//GEN-LAST:event_Camera2_TypeCBoxPopupMenuWillBecomeInvisible
-
     private void Camera2_connTypeCBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Camera2_connTypeCBoxActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_Camera2_connTypeCBoxActionPerformed
@@ -3364,13 +3224,6 @@ public class Settings_System extends javax.swing.JFrame {
         rejectNonNumericKeys(evt);
     }//GEN-LAST:event_Camera2_Port_TextFieldKeyTyped
 
-    private void E_Board2_TypeCBoxPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_E_Board2_TypeCBoxPopupMenuWillBecomeInvisible
-        ChangeSettings.changeStatus_Manager(
-                SettingsSaveButton, SettingsCancelButton, SettingsCloseButton, 
-                changedControls, ((Component) evt.getSource()), E_Board2_TypeCBox.getSelectedIndex(), 
-                deviceType[E_Board.ordinal()][1]);
-    }//GEN-LAST:event_E_Board2_TypeCBoxPopupMenuWillBecomeInvisible
-
     private void E_Board2_TypeCBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_E_Board2_TypeCBoxActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_E_Board2_TypeCBoxActionPerformed
@@ -3379,7 +3232,7 @@ public class Settings_System extends javax.swing.JFrame {
         ChangeSettings.changeStatus_Manager(
                 SettingsSaveButton, SettingsCancelButton, SettingsCloseButton, 
                 changedControls, ((Component) evt.getSource()), E_Board2_connTypeCBox.getSelectedIndex(), 
-                deviceType[E_Board.ordinal()][1]);        
+                connectionType[E_Board.ordinal()][1]);        
     }//GEN-LAST:event_E_Board2_connTypeCBoxPopupMenuWillBecomeInvisible
 
     private void E_Board2_connTypeCBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_E_Board2_connTypeCBoxActionPerformed
@@ -3398,13 +3251,6 @@ public class Settings_System extends javax.swing.JFrame {
         rejectNonNumericKeys(evt);
     }//GEN-LAST:event_E_Board2_Port_TextFieldKeyTyped
 
-    private void GateBar2_TypeCBoxPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_GateBar2_TypeCBoxPopupMenuWillBecomeInvisible
-        ChangeSettings.changeStatus_Manager(
-                SettingsSaveButton, SettingsCancelButton, SettingsCloseButton, 
-                changedControls, ((Component) evt.getSource()), GateBar2_TypeCBox.getSelectedIndex(), 
-                deviceType[GateBar.ordinal()][1]);
-    }//GEN-LAST:event_GateBar2_TypeCBoxPopupMenuWillBecomeInvisible
-
     private void GateBar2_TypeCBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GateBar2_TypeCBoxActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_GateBar2_TypeCBoxActionPerformed
@@ -3413,7 +3259,7 @@ public class Settings_System extends javax.swing.JFrame {
         ChangeSettings.changeStatus_Manager(
                 SettingsSaveButton, SettingsCancelButton, SettingsCloseButton, 
                 changedControls, ((Component) evt.getSource()), GateBar2_connTypeCBox.getSelectedIndex(), 
-                deviceType[GateBar.ordinal()][1]);        
+                connectionType[GateBar.ordinal()][1]);        
     }//GEN-LAST:event_GateBar2_connTypeCBoxPopupMenuWillBecomeInvisible
 
     private void GateBar2_connTypeCBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GateBar2_connTypeCBoxActionPerformed
@@ -3432,13 +3278,6 @@ public class Settings_System extends javax.swing.JFrame {
         rejectNonNumericKeys(evt);
     }//GEN-LAST:event_GateBar2_Port_TextFieldKeyTyped
 
-    private void E_Board1_TypeCBoxPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_E_Board1_TypeCBoxPopupMenuWillBecomeInvisible
-        ChangeSettings.changeStatus_Manager(
-                SettingsSaveButton, SettingsCancelButton, SettingsCloseButton, 
-                changedControls, ((Component) evt.getSource()), E_Board1_TypeCBox.getSelectedIndex(), 
-                deviceType[E_Board.ordinal()][1]);
-    }//GEN-LAST:event_E_Board1_TypeCBoxPopupMenuWillBecomeInvisible
-
     private void E_Board1_TypeCBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_E_Board1_TypeCBoxActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_E_Board1_TypeCBoxActionPerformed
@@ -3447,7 +3286,7 @@ public class Settings_System extends javax.swing.JFrame {
         ChangeSettings.changeStatus_Manager(
                 SettingsSaveButton, SettingsCancelButton, SettingsCloseButton, 
                 changedControls, ((Component) evt.getSource()), E_Board1_connTypeCBox.getSelectedIndex(), 
-                deviceType[E_Board.ordinal()][1]);
+                connectionType[E_Board.ordinal()][1]);
     }//GEN-LAST:event_E_Board1_connTypeCBoxPopupMenuWillBecomeInvisible
 
     private void E_Board1_connTypeCBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_E_Board1_connTypeCBoxActionPerformed
@@ -3465,13 +3304,6 @@ public class Settings_System extends javax.swing.JFrame {
         rejectNonNumericKeys(evt);
     }//GEN-LAST:event_E_Board1_Port_TextFieldKeyTyped
 
-    private void GateBar1_TypeCBoxPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_GateBar1_TypeCBoxPopupMenuWillBecomeInvisible
-        ChangeSettings.changeStatus_Manager(
-                SettingsSaveButton, SettingsCancelButton, SettingsCloseButton, 
-                changedControls, ((Component) evt.getSource()), GateBar1_TypeCBox.getSelectedIndex(), 
-                deviceType[GateBar.ordinal()][1]);
-    }//GEN-LAST:event_GateBar1_TypeCBoxPopupMenuWillBecomeInvisible
-
     private void GateBar1_TypeCBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GateBar1_TypeCBoxActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_GateBar1_TypeCBoxActionPerformed
@@ -3480,7 +3312,7 @@ public class Settings_System extends javax.swing.JFrame {
         ChangeSettings.changeStatus_Manager(
                 SettingsSaveButton, SettingsCancelButton, SettingsCloseButton, 
                 changedControls, ((Component) evt.getSource()), GateBar1_connTypeCBox.getSelectedIndex(), 
-                deviceType[GateBar.ordinal()][1]);
+                connectionType[GateBar.ordinal()][1]);
     }//GEN-LAST:event_GateBar1_connTypeCBoxPopupMenuWillBecomeInvisible
 
     private void GateBar1_connTypeCBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GateBar1_connTypeCBoxActionPerformed
@@ -3525,6 +3357,96 @@ public class Settings_System extends javax.swing.JFrame {
     private void SettingsCloseButtonStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_SettingsCloseButtonStateChanged
         EBoardSettingsButton.setEnabled(SettingsCloseButton.isEnabled());
     }//GEN-LAST:event_SettingsCloseButtonStateChanged
+
+    private void Camera1_TypeCBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_Camera1_TypeCBoxItemStateChanged
+        if (evt.getStateChange() == ItemEvent.SELECTED) {
+            setButtonEnabled_If_DeviceTypeChanged(1, Camera);
+        }
+    }//GEN-LAST:event_Camera1_TypeCBoxItemStateChanged
+
+    private void Camera2_TypeCBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_Camera2_TypeCBoxItemStateChanged
+        if (evt.getStateChange() == ItemEvent.SELECTED) {
+            setButtonEnabled_If_DeviceTypeChanged(2, Camera);
+        }
+    }//GEN-LAST:event_Camera2_TypeCBoxItemStateChanged
+
+    private void Camera3_TypeCBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_Camera3_TypeCBoxItemStateChanged
+        if (evt.getStateChange() == ItemEvent.SELECTED) {
+            setButtonEnabled_If_DeviceTypeChanged(3, Camera);
+        }
+    }//GEN-LAST:event_Camera3_TypeCBoxItemStateChanged
+
+    private void Camera4_TypeCBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_Camera4_TypeCBoxItemStateChanged
+        if (evt.getStateChange() == ItemEvent.SELECTED) {
+            setButtonEnabled_If_DeviceTypeChanged(4, Camera);
+        }
+    }//GEN-LAST:event_Camera4_TypeCBoxItemStateChanged
+
+    private void E_Board2_TypeCBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_E_Board2_TypeCBoxItemStateChanged
+        if (evt.getStateChange() == ItemEvent.SELECTED) {
+            setButtonEnabled_If_DeviceTypeChanged(2, E_Board);
+        }
+    }//GEN-LAST:event_E_Board2_TypeCBoxItemStateChanged
+
+    private void E_Board1_TypeCBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_E_Board1_TypeCBoxItemStateChanged
+        if (evt.getStateChange() == ItemEvent.SELECTED) {
+            setButtonEnabled_If_DeviceTypeChanged(1, E_Board);
+        }
+    }//GEN-LAST:event_E_Board1_TypeCBoxItemStateChanged
+
+    private void E_Board3_TypeCBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_E_Board3_TypeCBoxItemStateChanged
+        if (evt.getStateChange() == ItemEvent.SELECTED) {
+            setButtonEnabled_If_DeviceTypeChanged(3, E_Board);
+        }
+    }//GEN-LAST:event_E_Board3_TypeCBoxItemStateChanged
+
+    private void E_Board4_TypeCBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_E_Board4_TypeCBoxItemStateChanged
+        if (evt.getStateChange() == ItemEvent.SELECTED) {
+            setButtonEnabled_If_DeviceTypeChanged(4, E_Board);
+        }
+    }//GEN-LAST:event_E_Board4_TypeCBoxItemStateChanged
+
+    private void GateBar1_TypeCBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_GateBar1_TypeCBoxItemStateChanged
+        if (evt.getStateChange() == ItemEvent.SELECTED) {
+            setButtonEnabled_If_DeviceTypeChanged(1, GateBar);
+        }
+    }//GEN-LAST:event_GateBar1_TypeCBoxItemStateChanged
+
+    private void GateBar2_TypeCBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_GateBar2_TypeCBoxItemStateChanged
+        if (evt.getStateChange() == ItemEvent.SELECTED) {
+            setButtonEnabled_If_DeviceTypeChanged(2, GateBar);
+        }
+    }//GEN-LAST:event_GateBar2_TypeCBoxItemStateChanged
+
+    private void GateBar3_TypeCBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_GateBar3_TypeCBoxItemStateChanged
+        if (evt.getStateChange() == ItemEvent.SELECTED) {
+            setButtonEnabled_If_DeviceTypeChanged(3, GateBar);
+        }
+    }//GEN-LAST:event_GateBar3_TypeCBoxItemStateChanged
+
+    private void GateBar4_TypeCBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_GateBar4_TypeCBoxItemStateChanged
+        if (evt.getStateChange() == ItemEvent.SELECTED) {
+            setButtonEnabled_If_DeviceTypeChanged(4, GateBar);
+        }
+    }//GEN-LAST:event_GateBar4_TypeCBoxItemStateChanged
+
+    private void E_Board4_connTypeCBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_E_Board4_connTypeCBoxItemStateChanged
+        if (evt.getStateChange() == ItemEvent.SELECTED) {
+            setButtonEnabled_If_ConnTypeChanged(4, GateBar);
+        }
+    }//GEN-LAST:event_E_Board4_connTypeCBoxItemStateChanged
+
+    private void E_Board1_connTypeCBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_E_Board1_connTypeCBoxItemStateChanged
+        // TODO add your handling code here:
+    }//GEN-LAST:event_E_Board1_connTypeCBoxItemStateChanged
+
+    private void E_Board2_connTypeCBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_E_Board2_connTypeCBoxItemStateChanged
+        // TODO add your handling code here:
+    }//GEN-LAST:event_E_Board2_connTypeCBoxItemStateChanged
+
+    private void E_Board3_connTypeCBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_E_Board3_connTypeCBoxItemStateChanged
+        // TODO add your handling code here:
+    }//GEN-LAST:event_E_Board3_connTypeCBoxItemStateChanged
                                               
     void closeSettingsForm() {
         if(mainForm != null)
@@ -3569,7 +3491,7 @@ public class Settings_System extends javax.swing.JFrame {
         initializeLoggers();
         checkOptions(args);
         readSettings();
-        DB_Access.readEBoardSettings(EBD_DisplaySettings);
+        EBD_DisplaySettings = DB_Access.readEBoardSettings();
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
@@ -3607,10 +3529,6 @@ public class Settings_System extends javax.swing.JFrame {
     private javax.swing.JTextField E_Board1_Port_TextField;
     private javax.swing.JComboBox E_Board1_TypeCBox;
     private javax.swing.JComboBox E_Board1_connTypeCBox;
-    private javax.swing.JPanel E_Board1_conn_detail_Pan1;
-    private javax.swing.JPanel E_Board1_conn_detail_Pan2;
-    private javax.swing.JPanel E_Board1_conn_detail_Pan3;
-    private javax.swing.JPanel E_Board1_conn_detail_Pan4;
     private javax.swing.JTextField E_Board2_IP_TextField;
     private javax.swing.JTextField E_Board2_Port_TextField;
     private javax.swing.JComboBox E_Board2_TypeCBox;
@@ -3629,10 +3547,6 @@ public class Settings_System extends javax.swing.JFrame {
     private javax.swing.JTextField GateBar1_Port_TextField;
     private javax.swing.JComboBox GateBar1_TypeCBox;
     private javax.swing.JComboBox GateBar1_connTypeCBox;
-    private javax.swing.JPanel GateBar1_conn_detail_Pan;
-    private javax.swing.JPanel GateBar1_conn_detail_Pan1;
-    private javax.swing.JPanel GateBar1_conn_detail_Pan2;
-    private javax.swing.JPanel GateBar1_conn_detail_Pan3;
     private javax.swing.JTextField GateBar2_IP_TextField;
     private javax.swing.JTextField GateBar2_Port_TextField;
     private javax.swing.JComboBox GateBar2_TypeCBox;
@@ -3984,35 +3898,23 @@ public class Settings_System extends javax.swing.JFrame {
         InetAddressValidator validator = InetAddressValidator.getInstance();
 
         for (int i = 0; i < gateCount; i++) {
-            JTextField txtField = (JTextField)getComponentByName("Camera" +(i+1) + "_IP_TextField");
-            if (!validator.isValidInet4Address( txtField.getText())) {
-                GatesTabbedPane.setSelectedIndex(i);
-                txtField.requestFocusInWindow();
-                JOptionPane.showConfirmDialog(this, "Camera #" + (i+1) + "in IP address format error.",
-                        "IP address format error", JOptionPane.PLAIN_MESSAGE, WARNING_MESSAGE);
-                return true;
-            }   
+            JTextField txtField;
             
-            txtField = (JTextField)getComponentByName("GateBar" +(i+1) + "_IP_TextField");
-            if (!validator.isValidInet4Address( txtField.getText())) {
-                GatesTabbedPane.setSelectedIndex(i);
-                txtField.requestFocusInWindow();
-                JOptionPane.showConfirmDialog(this, "GateBar #" + (i+1) + "in IP address format error.",
-                        "IP address format error", JOptionPane.PLAIN_MESSAGE, WARNING_MESSAGE);
-                return true;
-            }    
-            
-            txtField = (JTextField)getComponentByName("E_Board" +(i+1) + "_IP_TextField");
-            if (!validator.isValidInet4Address( txtField.getText())) {
-                GatesTabbedPane.setSelectedIndex(i);
-                txtField.requestFocusInWindow();
-                JOptionPane.showConfirmDialog(this, "E_Board #" + (i+1) + "in IP address format error.",
-                        "IP address format error", JOptionPane.PLAIN_MESSAGE, WARNING_MESSAGE);
-                
-                return true;
-            }            
+            for (DeviceType devType : DeviceType.values()) {
+                String devName = devType.toString();
+                txtField = (JTextField)getComponentByName(devName + (i+1) + "_IP_TextField");
+                if (!validator.isValidInet4Address( txtField.getText())) {
+                    GatesTabbedPane.setSelectedIndex(i);
+                    txtField.requestFocusInWindow();
+                    JOptionPane.showConfirmDialog(this,
+                            devType.getContent() + " #" + (i+1) + " " + IP_ADDR_ERROR_1.getContent() 
+                                    + System.lineSeparator() +
+                                    IP_ADDR_ERROR_2.getContent() + "127.0.0.1",
+                            IP_ERROR_TITLE.getContent(), JOptionPane.PLAIN_MESSAGE, WARNING_MESSAGE);
+                    return true;
+                }
+            }
         }        
-        
         return false;
     }
     
@@ -4446,6 +4348,22 @@ public class Settings_System extends javax.swing.JFrame {
 
     private void changeComponentHeight(JComponent compo, int height) {
         setComponentSize(compo, new Dimension(compo.getPreferredSize().width, height));
+    }
+
+    private void setButtonEnabled_If_DeviceTypeChanged(int gate, DeviceType devType) {
+        JComboBox comboBx = ((JComboBox)getComponentByName(devType.toString() +gate + "_TypeCBox"));
+        int selectedType = comboBx.getSelectedIndex();
+
+        if (selectedType == deviceType[devType.ordinal()][gate]) {
+            changedControls2.remove(comboBx);            
+        }
+        else {
+            changedControls2.add(comboBx);            
+        }
+    }
+
+    private void setButtonEnabled_If_ConnTypeChanged(int i, DeviceType deviceType) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     private static class COM_ID_Usage {

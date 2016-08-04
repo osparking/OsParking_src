@@ -311,7 +311,9 @@ public class DB_Access {
      * Read Electrical Display Board Settings from the database
      * @param EBD_DisplaySettings global variable which needs to be filled -- Call by reference.
      */
-    public static void readEBoardSettings(EBD_DisplaySetting[] EBD_DisplaySettings) {
+    public static EBD_DisplaySetting[] readEBoardSettings() {
+        EBD_DisplaySetting[] EBD_DisplaySettings =
+                new EBD_DisplaySetting[OSP_enums.EBD_DisplayUsage.values().length];           
         Connection conn = null;
         Statement selectStmt = null;
         ResultSet rs = null;
@@ -352,6 +354,7 @@ public class DB_Access {
             Globals.logParkingException(Level.SEVERE, ex, "while reading e-board settings");  
         } finally {
             closeDBstuff(conn, selectStmt, rs, "Resource return used in eboard setting loading for ROW: ");
+            return EBD_DisplaySettings;
         }
     }    
     

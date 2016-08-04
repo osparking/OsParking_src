@@ -26,7 +26,6 @@ import java.util.logging.Level;
 import static com.osparking.global.Globals.*;
 import static com.osparking.global.names.OSP_enums.DeviceType.*;
 import com.osparking.global.names.ParkingTimer;
-import static com.osparking.global.names.DB_Access.gateCount;
 import static com.osparking.global.names.DB_Access.gateNames;
 import com.osparking.global.names.EBD_DisplaySetting;
 import static com.osparking.global.names.OSP_enums.EBD_ContentType.GATE_NAME;

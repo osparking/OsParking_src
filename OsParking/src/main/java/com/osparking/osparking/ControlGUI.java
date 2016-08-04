@@ -223,8 +223,7 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
 
     private ParkingTimer[] openGateCmdTimer = null;
     
-    public static EBD_DisplaySetting[] EBD_DisplaySettings 
-            = new EBD_DisplaySetting[OSP_enums.EBD_DisplayUsage.values().length];   
+    public static EBD_DisplaySetting[] EBD_DisplaySettings = null;
        
     public int[] prevImgSN = null; // the ID of the most recently processed car entry image    
     
@@ -3271,7 +3270,7 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
         initializeLoggers();
         checkOptions(args);
         readSettings();
-        readEBoardSettings(EBD_DisplaySettings);
+        EBD_DisplaySettings = readEBoardSettings();
         Thread.currentThread().setPriority((Thread.MAX_PRIORITY));
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
