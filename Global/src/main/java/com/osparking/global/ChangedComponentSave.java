@@ -54,5 +54,9 @@ public class ChangedComponentSave {
     public void add(Component compo) {
         changedControls.add(compo);
         enableSaveEtc(true);
-    }    
+    }  
+    
+    public void clear() {
+        changedControls.clear();
+    }
 }
