@@ -151,6 +151,7 @@ public class Globals {
     public static int E_BOARD_HEIGHT = 300;
     public static int BLDG_TAB_WIDTH = 250;
     public static int PARKING_LOT_NAME_LENGTH_MAX = 30;
+    public static int VERBATIM_CONTENT_LENGTH_MAX = 100;
     public static int PORT_NUMBER_LENGTH_MAX = 5;
 
     public static DefaultListModel<?>[] admissionListModel = new DefaultListModel<?> [5];

@@ -74,6 +74,7 @@ import com.osparking.global.names.OSP_enums.OpLogLevel;
 import com.osparking.global.names.IDevice;
 import java.awt.Dimension;
 import java.awt.event.ItemEvent;
+import java.awt.event.KeyEvent;
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 import static javax.swing.JOptionPane.WARNING_MESSAGE;
@@ -454,6 +455,9 @@ public class Settings_EBoard extends javax.swing.JFrame {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 tf_VerbatimContent1KeyReleased(evt);
             }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                tf_VerbatimContent1KeyTyped(evt);
+            }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
@@ -628,6 +632,9 @@ public class Settings_EBoard extends javax.swing.JFrame {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 tf_VerbatimContent2KeyReleased(evt);
             }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                tf_VerbatimContent2KeyTyped(evt);
+            }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
@@ -794,6 +801,9 @@ public class Settings_EBoard extends javax.swing.JFrame {
         tf_VerbatimContent3.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 tf_VerbatimContent3KeyReleased(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                tf_VerbatimContent3KeyTyped(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -1195,15 +1205,20 @@ public class Settings_EBoard extends javax.swing.JFrame {
     }//GEN-LAST:event_combo_DisplayEffect3ItemStateChanged
 
     private void tf_VerbatimContent0KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tf_VerbatimContent0KeyTyped
-//        if (lotNameTextField.getText().trim().length() >= PARKING_LOT_NAME_LENGTH_MAX) 
-//        {
-//            getToolkit().beep();
-//            JOptionPane.showConfirmDialog(this, LOT_NAME_LABEL.getContent() + " " +
-//                    LIMIT_DESCRIPTION.getContent() + " : " + PARKING_LOT_NAME_LENGTH_MAX,
-//                    ERROR_DIALOGTITLE.getContent(), JOptionPane.PLAIN_MESSAGE, WARNING_MESSAGE);            
-//            evt.consume();
-//        }
+        checkVerbatimContentLength(0, evt);
     }//GEN-LAST:event_tf_VerbatimContent0KeyTyped
+
+    private void tf_VerbatimContent1KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tf_VerbatimContent1KeyTyped
+        checkVerbatimContentLength(1, evt);
+    }//GEN-LAST:event_tf_VerbatimContent1KeyTyped
+
+    private void tf_VerbatimContent2KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tf_VerbatimContent2KeyTyped
+        checkVerbatimContentLength(2, evt);
+    }//GEN-LAST:event_tf_VerbatimContent2KeyTyped
+
+    private void tf_VerbatimContent3KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tf_VerbatimContent3KeyTyped
+        checkVerbatimContentLength(3, evt);
+    }//GEN-LAST:event_tf_VerbatimContent3KeyTyped
 
      // <editor-fold defaultstate="collapsed" desc="Generated Code">  
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -1754,5 +1769,18 @@ public class Settings_EBoard extends javax.swing.JFrame {
             ((JComboBox) getComponentByName("combo_TextFont" + usage.ordinal()))
                     .setSelectedIndex(parent.EBD_DisplaySettings[usage.ordinal()].textFont.ordinal());
         }         
+    }
+
+    private void checkVerbatimContentLength(int index, KeyEvent evt) {
+        JTextField verbatimContent = (JTextField) getComponentByName("tf_VerbatimContent" + index);
+        
+        if (verbatimContent.getText().trim().length() >= VERBATIM_CONTENT_LENGTH_MAX) 
+        {
+            getToolkit().beep();
+            JOptionPane.showConfirmDialog(this, MESSAGE_LABEL.getContent() + " " +
+                    LIMIT_DESCRIPTION.getContent() + " : " + VERBATIM_CONTENT_LENGTH_MAX,
+                    ERROR_DIALOGTITLE.getContent(), JOptionPane.PLAIN_MESSAGE, WARNING_MESSAGE);            
+            evt.consume();
+        }
     }
 }
