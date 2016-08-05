@@ -175,6 +175,7 @@
               </Properties>
               <Events>
                 <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="lotNameTextFieldKeyReleased"/>
+                <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="lotNameTextFieldKeyTyped"/>
               </Events>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -1209,7 +1210,7 @@
                         </Component>
                       </SubComponents>
                     </Container>
-                    <Container class="javax.swing.JPanel" name="eBoardPan5">
+                    <Container class="javax.swing.JPanel" name="E_Board1Panel">
                       <Properties>
                         <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                           <Dimension value="[32767, 40]"/>
@@ -1217,6 +1218,7 @@
                         <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                           <Dimension value="[426, 32]"/>
                         </Property>
+                        <Property name="name" type="java.lang.String" value="E_Board1Panel" noResource="true"/>
                         <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                           <Dimension value="[518, 32]"/>
                         </Property>
@@ -1348,7 +1350,7 @@
                         </Component>
                       </SubComponents>
                     </Container>
-                    <Container class="javax.swing.JPanel" name="gateBarPan5">
+                    <Container class="javax.swing.JPanel" name="GateBar1Panel">
                       <Properties>
                         <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                           <Dimension value="[32767, 40]"/>
@@ -1356,6 +1358,7 @@
                         <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                           <Dimension value="[426, 32]"/>
                         </Property>
+                        <Property name="name" type="java.lang.String" value="GateBar1Panel" noResource="true"/>
                         <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                           <Dimension value="[518, 32]"/>
                         </Property>
@@ -1838,7 +1841,7 @@
                         </Component>
                       </SubComponents>
                     </Container>
-                    <Container class="javax.swing.JPanel" name="eBoardPan4">
+                    <Container class="javax.swing.JPanel" name="E_Board2Panel">
                       <Properties>
                         <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                           <Dimension value="[32767, 40]"/>
@@ -1846,6 +1849,7 @@
                         <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                           <Dimension value="[426, 32]"/>
                         </Property>
+                        <Property name="name" type="java.lang.String" value="E_Board2Panel" noResource="true"/>
                         <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                           <Dimension value="[518, 32]"/>
                         </Property>
@@ -1977,7 +1981,7 @@
                         </Component>
                       </SubComponents>
                     </Container>
-                    <Container class="javax.swing.JPanel" name="gateBarPan4">
+                    <Container class="javax.swing.JPanel" name="GateBar2Panel">
                       <Properties>
                         <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                           <Dimension value="[32767, 40]"/>
@@ -1985,6 +1989,7 @@
                         <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                           <Dimension value="[426, 32]"/>
                         </Property>
+                        <Property name="name" type="java.lang.String" value="GateBar2Panel" noResource="true"/>
                         <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                           <Dimension value="[518, 32]"/>
                         </Property>
@@ -2467,7 +2472,7 @@
                         </Component>
                       </SubComponents>
                     </Container>
-                    <Container class="javax.swing.JPanel" name="eBoardPan2">
+                    <Container class="javax.swing.JPanel" name="E_Board3Panel">
                       <Properties>
                         <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                           <Dimension value="[32767, 40]"/>
@@ -2475,6 +2480,7 @@
                         <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                           <Dimension value="[426, 32]"/>
                         </Property>
+                        <Property name="name" type="java.lang.String" value="E_Board3Panel" noResource="true"/>
                         <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                           <Dimension value="[518, 32]"/>
                         </Property>
@@ -2606,7 +2612,7 @@
                         </Component>
                       </SubComponents>
                     </Container>
-                    <Container class="javax.swing.JPanel" name="gateBarPan2">
+                    <Container class="javax.swing.JPanel" name="GateBar3Panel">
                       <Properties>
                         <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                           <Dimension value="[32767, 40]"/>
@@ -2614,6 +2620,7 @@
                         <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                           <Dimension value="[426, 32]"/>
                         </Property>
+                        <Property name="name" type="java.lang.String" value="GateBar3Panel" noResource="true"/>
                         <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                           <Dimension value="[518, 32]"/>
                         </Property>
@@ -3096,7 +3103,7 @@
                         </Component>
                       </SubComponents>
                     </Container>
-                    <Container class="javax.swing.JPanel" name="eBoardPan3">
+                    <Container class="javax.swing.JPanel" name="E_Board4Panel">
                       <Properties>
                         <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                           <Dimension value="[32767, 40]"/>
@@ -3104,6 +3111,7 @@
                         <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                           <Dimension value="[426, 32]"/>
                         </Property>
+                        <Property name="name" type="java.lang.String" value="E_Board4Panel" noResource="true"/>
                         <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                           <Dimension value="[518, 32]"/>
                         </Property>
@@ -3235,7 +3243,7 @@
                         </Component>
                       </SubComponents>
                     </Container>
-                    <Container class="javax.swing.JPanel" name="gateBarPan3">
+                    <Container class="javax.swing.JPanel" name="GateBar4Panel">
                       <Properties>
                         <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                           <Dimension value="[32767, 40]"/>
@@ -3243,6 +3251,7 @@
                         <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                           <Dimension value="[426, 32]"/>
                         </Property>
+                        <Property name="name" type="java.lang.String" value="GateBar4Panel" noResource="true"/>
                         <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                           <Dimension value="[518, 32]"/>
                         </Property>

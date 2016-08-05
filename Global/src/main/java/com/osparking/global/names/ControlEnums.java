@@ -50,6 +50,7 @@ public class ControlEnums {
     }    
     
     public enum TitleTypes {
+//        LENGTH_ERROR_TITLE("길이 초과 오류", "System Settings"),
         SETTINGS_TITLE("시스템 설정", "System Settings"),
         LOGIN_DIALOG_TITLE("오즈파킹 로그인", "OsParking Login"),
         LOGIN_FRAME_TITLE("주차관리 로그인", "Attendant Login"),
@@ -94,6 +95,7 @@ public class ControlEnums {
     }
     
     public enum LabelContent {
+        COM_PORT_ID_LABEL("COM 포트 ID : ", "COM Port ID : "), 
         LEVEL_LABEL("레벨 : ", "Level : "), 
         DEVICE_LABEL("장치", "Device"), 
         TYPE_LABEL("유형", "Type"), 
@@ -240,6 +242,11 @@ public class ControlEnums {
         
         UPDATE_SAVE_HELP("자료 갱신 후 [엔터] 키로 마감(=저장)할 것!",
                 "Press enter after the data modification!"),
+        OVERLAPPED_PORT_DIALOG_1("아래 두 장치가 같은 포트를", "Two devices are set to use the same "),
+        OVERLAPPED_PORT_DIALOG_2("사용하게 잘못 설정되었습니다.", "COM port. It is an error."),
+        OVERLAPPED_PORT_DIALOG_3("그래도 설정을 저장하겠습니까?", "Do you still want to save the settings?"),
+        OVERLAPPED_PORT_DIALOG_4("사용 포트 : ", "Used Port : "),
+        
         LOGGIND_DIALOG_1("다음 '필수 항목'만 기록됨 :", "Following 'Mandatory Items' are logged :"),
         LOGGIND_DIALOG_2(" - 오즈파킹 가동 및 정지 시각", " - System start and stop time"),
         LOGGIND_DIALOG_3(" - 오래되어 삭제된 레코드 수", " - Number of deleted old records"),
@@ -252,6 +259,8 @@ public class ControlEnums {
         LOGGIND_DIALOG_D(" - 운전자 정보 변경", " - Drivers Info Change"),
         LOGGIND_DIALOG_E(" - 등록차량 정보 변경", " - Vehicles Info Change"),
         LOGGIND_DIALOG_F(" - 전광판 설정 변경", " - E-Board Settings Change"),
+        LIMIT_DESCRIPTION("길이 한계", "Length Limit"),
+        NUMBER_LIMIT_DESCRIPTION("번호 길이 한계", "Number Length Limit")
         ;
         
         LabelContent(String korean, String english) {
@@ -844,6 +853,8 @@ public class ControlEnums {
     }
     
     public static enum DialogTitleTypes {
+        E_BOARD_SIM_TITLE("모의 전광판 설정", "E-Board Simulator"),
+        OVERLAPPED_PORT_TITLE("COM 포트 중복 사용", "PORT USAGE ERROR"),
         IP_ERROR_TITLE("IP 주소 오류", "IP Address Error"),
         DEFAULT_TAB_TITLE("평소", "Default"),
         VEHICLE_TAB_TITLE("입차", "Vehicle"),

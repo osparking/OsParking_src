@@ -18,6 +18,7 @@ package com.osparking.osparking;
 
 import com.osparking.global.ChangedComponentSave;
 import static com.osparking.global.CommonData.TEXT_FIELD_HEIGHT;
+import static com.osparking.global.CommonData.tipColor;
 import java.awt.Component;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -39,6 +40,8 @@ import static com.osparking.global.names.ControlEnums.DialogMessages.UPDATE_E_BO
 import static com.osparking.global.names.ControlEnums.DialogMessages.VerbatimDialog;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.BOTTOM_TAB_TITLE;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.DEFAULT_TAB_TITLE;
+import static com.osparking.global.names.ControlEnums.DialogTitleTypes.ERROR_DIALOGTITLE;
+import static com.osparking.global.names.ControlEnums.DialogTitleTypes.E_BOARD_SIM_TITLE;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.SAVE_DIALOGTITLE;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.SETTINGS_SAVE_RESULT;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.TOP_TAB_TITLE;
@@ -49,8 +52,11 @@ import static com.osparking.global.names.ControlEnums.LabelContent.DISPLAY_TYPE_
 import static com.osparking.global.names.ControlEnums.LabelContent.EFFECT_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.FIELD_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.FONT_LABEL;
+import static com.osparking.global.names.ControlEnums.LabelContent.LIMIT_DESCRIPTION;
+import static com.osparking.global.names.ControlEnums.LabelContent.LOT_NAME_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.MESSAGE_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.PANEL_LABEL;
+import static com.osparking.global.names.ControlEnums.MenuITemTypes.META_KEY_LABEL;
 import static com.osparking.global.names.ControlEnums.ToolTipContent.CLOSE_BTN_TOOLTIP;
 import com.osparking.global.names.ConvComboBoxItem;
 import com.osparking.global.names.JDBCMySQL;
@@ -70,6 +76,7 @@ import java.awt.Dimension;
 import java.awt.event.ItemEvent;
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
+import static javax.swing.JOptionPane.WARNING_MESSAGE;
 
 /**
  *
@@ -126,6 +133,8 @@ public class Settings_EBoard extends javax.swing.JFrame {
         rightFiller = new javax.swing.Box.Filler(new java.awt.Dimension(40, 0), new java.awt.Dimension(40, 0), new java.awt.Dimension(40, 32767));
         leftFiller = new javax.swing.Box.Filler(new java.awt.Dimension(40, 0), new java.awt.Dimension(40, 0), new java.awt.Dimension(40, 32767));
         centerPanel = new javax.swing.JPanel();
+        buttonPanel1 = new javax.swing.JPanel();
+        attendantGUI_title = new javax.swing.JLabel();
         eboardTabbedPanel = new javax.swing.JTabbedPane();
         eBoardTabPane1 = new javax.swing.JTabbedPane();
         eBoardPanel0 = new javax.swing.JPanel();
@@ -186,10 +195,12 @@ public class Settings_EBoard extends javax.swing.JFrame {
         btn_Exit = new javax.swing.JButton();
         btn_Save = new javax.swing.JButton();
         btn_Cancel = new javax.swing.JButton();
+        myMetaKeyLabel = new javax.swing.JLabel();
+        filler8 = new javax.swing.Box.Filler(new java.awt.Dimension(80, 25), new java.awt.Dimension(80, 25), new java.awt.Dimension(80, 25));
         southPanel = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
-        setTitle("Electronic Display Settings");
+        setTitle(E_BOARD_SIM_TITLE.getContent());
         setAlwaysOnTop(true);
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         setResizable(false);
@@ -199,8 +210,8 @@ public class Settings_EBoard extends javax.swing.JFrame {
             }
         });
 
-        wholePanel.setMinimumSize(new java.awt.Dimension(550, 314));
-        wholePanel.setPreferredSize(new java.awt.Dimension(600, 350));
+        wholePanel.setMinimumSize(new java.awt.Dimension(550, 380));
+        wholePanel.setPreferredSize(new java.awt.Dimension(600, 380));
         wholePanel.setLayout(new java.awt.BorderLayout());
         wholePanel.add(topFiller, java.awt.BorderLayout.NORTH);
         wholePanel.add(rightFiller, java.awt.BorderLayout.EAST);
@@ -209,6 +220,34 @@ public class Settings_EBoard extends javax.swing.JFrame {
         centerPanel.setMinimumSize(new java.awt.Dimension(0, 234));
         centerPanel.setPreferredSize(new java.awt.Dimension(0, 0));
         centerPanel.setLayout(new javax.swing.BoxLayout(centerPanel, javax.swing.BoxLayout.Y_AXIS));
+
+        buttonPanel1.setMinimumSize(new java.awt.Dimension(0, 30));
+        buttonPanel1.setPreferredSize(new java.awt.Dimension(470, 30));
+
+        attendantGUI_title.setFont(new java.awt.Font(font_Type, font_Style, head_font_Size));
+        attendantGUI_title.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        attendantGUI_title.setText(E_BOARD_SIM_TITLE.getContent());
+        attendantGUI_title.setMaximumSize(new java.awt.Dimension(120, 30));
+        attendantGUI_title.setMinimumSize(new java.awt.Dimension(76, 30));
+        attendantGUI_title.setPreferredSize(new java.awt.Dimension(120, 30));
+
+        javax.swing.GroupLayout buttonPanel1Layout = new javax.swing.GroupLayout(buttonPanel1);
+        buttonPanel1.setLayout(buttonPanel1Layout);
+        buttonPanel1Layout.setHorizontalGroup(
+            buttonPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, buttonPanel1Layout.createSequentialGroup()
+                .addContainerGap(159, Short.MAX_VALUE)
+                .addComponent(attendantGUI_title, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(157, Short.MAX_VALUE))
+        );
+        buttonPanel1Layout.setVerticalGroup(
+            buttonPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(buttonPanel1Layout.createSequentialGroup()
+                .addComponent(attendantGUI_title, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        centerPanel.add(buttonPanel1);
 
         eboardTabbedPanel.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         eboardTabbedPanel.setMinimumSize(new java.awt.Dimension(0, 0));
@@ -244,6 +283,9 @@ public class Settings_EBoard extends javax.swing.JFrame {
         tf_VerbatimContent0.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 tf_VerbatimContent0KeyReleased(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                tf_VerbatimContent0KeyTyped(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -946,18 +988,32 @@ public class Settings_EBoard extends javax.swing.JFrame {
             }
         });
 
+        myMetaKeyLabel.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        myMetaKeyLabel.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        myMetaKeyLabel.setText(META_KEY_LABEL.getContent());
+        myMetaKeyLabel.setVerticalAlignment(javax.swing.SwingConstants.TOP);
+        myMetaKeyLabel.setMaximumSize(new java.awt.Dimension(80, 25));
+        myMetaKeyLabel.setMinimumSize(new java.awt.Dimension(80, 25));
+        myMetaKeyLabel.setName(""); // NOI18N
+        myMetaKeyLabel.setPreferredSize(new java.awt.Dimension(80, 25));
+        myMetaKeyLabel.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        myMetaKeyLabel.setForeground(tipColor);
+
         javax.swing.GroupLayout buttonPanelLayout = new javax.swing.GroupLayout(buttonPanel);
         buttonPanel.setLayout(buttonPanelLayout);
         buttonPanelLayout.setHorizontalGroup(
             buttonPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(buttonPanelLayout.createSequentialGroup()
-                .addContainerGap(115, Short.MAX_VALUE)
+                .addComponent(filler8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btn_Save, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(10, 10, 10)
                 .addComponent(btn_Cancel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(10, 10, 10)
                 .addComponent(btn_Exit, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(115, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(myMetaKeyLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         buttonPanelLayout.setVerticalGroup(
             buttonPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -965,6 +1021,8 @@ public class Settings_EBoard extends javax.swing.JFrame {
                 .addComponent(btn_Exit, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addComponent(btn_Save, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addComponent(btn_Cancel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addComponent(myMetaKeyLabel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(filler8, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         centerPanel.add(buttonPanel);
@@ -979,7 +1037,7 @@ public class Settings_EBoard extends javax.swing.JFrame {
         southPanel.setLayout(southPanelLayout);
         southPanelLayout.setHorizontalGroup(
             southPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 600, Short.MAX_VALUE)
+            .addGap(0, 550, Short.MAX_VALUE)
         );
         southPanelLayout.setVerticalGroup(
             southPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -994,8 +1052,7 @@ public class Settings_EBoard extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(0, 0, 0)
-                .addComponent(wholePanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(0, 0, 0))
+                .addComponent(wholePanel, javax.swing.GroupLayout.DEFAULT_SIZE, 550, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1137,12 +1194,25 @@ public class Settings_EBoard extends javax.swing.JFrame {
         setButtonEnabledIfEffectChanged(3, evt);
     }//GEN-LAST:event_combo_DisplayEffect3ItemStateChanged
 
+    private void tf_VerbatimContent0KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tf_VerbatimContent0KeyTyped
+//        if (lotNameTextField.getText().trim().length() >= PARKING_LOT_NAME_LENGTH_MAX) 
+//        {
+//            getToolkit().beep();
+//            JOptionPane.showConfirmDialog(this, LOT_NAME_LABEL.getContent() + " " +
+//                    LIMIT_DESCRIPTION.getContent() + " : " + PARKING_LOT_NAME_LENGTH_MAX,
+//                    ERROR_DIALOGTITLE.getContent(), JOptionPane.PLAIN_MESSAGE, WARNING_MESSAGE);            
+//            evt.consume();
+//        }
+    }//GEN-LAST:event_tf_VerbatimContent0KeyTyped
+
      // <editor-fold defaultstate="collapsed" desc="Generated Code">  
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel attendantGUI_title;
     private javax.swing.JButton btn_Cancel;
     private javax.swing.JButton btn_Exit;
     private javax.swing.JButton btn_Save;
     private javax.swing.JPanel buttonPanel;
+    private javax.swing.JPanel buttonPanel1;
     private javax.swing.JPanel centerPanel;
     private javax.swing.JComboBox combo_ContentType0;
     private javax.swing.JComboBox combo_ContentType1;
@@ -1172,6 +1242,7 @@ public class Settings_EBoard extends javax.swing.JFrame {
     private javax.swing.Box.Filler filler3;
     private javax.swing.Box.Filler filler4;
     private javax.swing.Box.Filler filler5;
+    private javax.swing.Box.Filler filler8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
@@ -1197,6 +1268,7 @@ public class Settings_EBoard extends javax.swing.JFrame {
     private javax.swing.JLabel label_MSG2;
     private javax.swing.JLabel label_MSG4;
     private javax.swing.Box.Filler leftFiller;
+    private javax.swing.JLabel myMetaKeyLabel;
     private javax.swing.Box.Filler rightFiller;
     private javax.swing.JPanel southPanel;
     private javax.swing.JTextField tf_VerbatimContent0;
