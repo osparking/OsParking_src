@@ -4570,7 +4570,11 @@ public class Settings_System extends javax.swing.JFrame {
             devicePanel.add(comIDcbBox); 
             
             String IDstr = deviceComID[devType.ordinal()][gateNo];
-            ((JComboBox)comIDcbBox).setSelectedIndex(Integer.parseInt(IDstr) - 1);
+            if (IDstr.length() == 0) {
+                ((JComboBox)comIDcbBox).setSelectedIndex(0);
+            } else {
+                ((JComboBox)comIDcbBox).setSelectedIndex(Integer.parseInt(IDstr) - 1);
+            }
         }
         devicePanel.repaint();
     }
