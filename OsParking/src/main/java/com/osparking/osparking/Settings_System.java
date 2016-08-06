@@ -152,6 +152,7 @@ import static com.osparking.global.names.ControlEnums.LabelContent.VEHICLE_IMG_W
 import static com.osparking.global.names.ControlEnums.MenuITemTypes.META_KEY_LABEL;
 import static com.osparking.global.names.ControlEnums.MsgContent.AVERAGE_WORDS;
 import static com.osparking.global.names.ControlEnums.MsgContent.RECENT_WORD;
+import static com.osparking.global.names.ControlEnums.TitleTypes.E_BOARD_SETTINGS_FRAME_TITLE;
 import static com.osparking.global.names.ControlEnums.TitleTypes.REBOOT_POPUP;
 import static com.osparking.global.names.ControlEnums.TitleTypes.SETTINGS_TITLE;
 import static com.osparking.global.names.ControlEnums.ToolTipContent.*;
@@ -203,7 +204,7 @@ public class Settings_System extends javax.swing.JFrame {
     public static ControlGUI mainForm = null;
     private HashMap<String, Component> componentMap = new HashMap<String,Component>();
     public short maxArrivalCBoxIndex = 0;
-    JDialog eBoardDialog = null;
+    private JDialog eBoardDialog = null;
     static EBD_DisplaySetting[] EBD_DisplaySettings = null;
     static private ChangedComponentSave changedControls; 
     
@@ -250,7 +251,7 @@ public class Settings_System extends javax.swing.JFrame {
             if (comboBx != null) {
                 comboBx.removeAllItems();
                 for (E_BoardType type: E_BoardType.values()) {
-                    comboBx.addItem(type.getLabel());
+                    comboBx.addItem(type);
                 }
             }
             
@@ -2902,17 +2903,22 @@ public class Settings_System extends javax.swing.JFrame {
     private void EBoardSettingsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EBoardSettingsButtonActionPerformed
         int tabIndex = GatesTabbedPane.getSelectedIndex();
         JComboBox typeCBox = (JComboBox)componentMap.get("E_Board" + (tabIndex + 1) + "_TypeCBox");
-
-        eBoardDialog = new JDialog(this, E_BOARD_SIM_TITLE.getContent(), true);
-        if (typeCBox.getSelectedIndex() == E_BoardType.Simulator.ordinal()) {
-            eBoardDialog.getContentPane().add(
+        E_BoardType eBoardType = (E_BoardType)typeCBox.getSelectedItem();
+        
+        eBoardDialog = new JDialog(this, 
+                eBoardType.getLabel() + " " + E_BOARD_SETTINGS_FRAME_TITLE.getContent(), 
+                true);
+        if (eBoardType == E_BoardType.Simulator) {
+            getE_BoardDialog().getContentPane().add(
                     (new Settings_EBoard(mainForm, this)).getContentPane());
-        } else if (typeCBox.getSelectedIndex() == E_BoardType.LEDnotice.ordinal()) {
-            eBoardDialog.getContentPane().add(
-                    (new Settings_LEDnotice(mainForm, this, null, tabIndex + 1)).getContentPane());
+            getE_BoardDialog().setResizable(false);
+        } else if (eBoardType == E_BoardType.LEDnotice) {
+            Settings_LEDnotice ledNotice = new Settings_LEDnotice(mainForm, this, null, tabIndex + 1);
+            getE_BoardDialog().getContentPane().add(ledNotice.getContentPane());
+            getE_BoardDialog().setPreferredSize(ledNotice.getPreferredSize());
+            getE_BoardDialog().setResizable(false);
         }
-        eBoardDialog.pack();
-        eBoardDialog.setResizable(false);
+        getE_BoardDialog().pack();
 
         /**
          * Place E-board settings frame around invoking button and inside monitor.
@@ -2920,17 +2926,17 @@ public class Settings_System extends javax.swing.JFrame {
         Point buttonPoint = EBoardSettingsButton.getLocationOnScreen();
         int idealX = buttonPoint.x + EBoardSettingsButton.getSize().width + 10;
         int moniWidth = (int)Toolkit.getDefaultToolkit().getScreenSize().getWidth();
-        int maxX = moniWidth - (int)eBoardDialog.getSize().getWidth();
+        int maxX = moniWidth - (int)getE_BoardDialog().getSize().getWidth();
         int finalX = idealX;
-        int finalY = buttonPoint.y - (int)eBoardDialog.getSize().getHeight() / 2;
+        int finalY = buttonPoint.y - (int)getE_BoardDialog().getSize().getHeight() / 2;
         
         if (idealX > maxX) {
             finalX = maxX;
-            finalY = buttonPoint.y - (int)eBoardDialog.getSize().getHeight()- 10;
+            finalY = buttonPoint.y - (int)getE_BoardDialog().getSize().getHeight()- 10;
         } 
-        eBoardDialog.setLocation(finalX, finalY);
+        getE_BoardDialog().setLocation(finalX, finalY);
         
-        eBoardDialog.setVisible(true);
+        getE_BoardDialog().setVisible(true);
     }//GEN-LAST:event_EBoardSettingsButtonActionPerformed
 
     private void Camera3_connTypeCBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Camera3_connTypeCBoxActionPerformed
@@ -3968,7 +3974,7 @@ public class Settings_System extends javax.swing.JFrame {
     }        
 
     public void disposeEBoardDialog() {
-        eBoardDialog.dispose();
+        getE_BoardDialog().dispose();
     }
 
     private int saveGateDevices() {
@@ -4589,6 +4595,13 @@ public class Settings_System extends javax.swing.JFrame {
         comPortIDLabel.setMinimumSize(new java.awt.Dimension(labelWidth, 25));
         comPortIDLabel.setPreferredSize(new java.awt.Dimension(labelWidth, 25));
         comPortIDLabel.setFont(new java.awt.Font(font_Type, font_Style, font_Size));    
+    }
+
+    /**
+     * @return the eBoardDialog
+     */
+    public JDialog getE_BoardDialog() {
+        return eBoardDialog;
     }
 
     private static class COM_ID_Usage {

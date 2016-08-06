@@ -134,7 +134,7 @@ public class Settings_EBoard extends javax.swing.JFrame {
         rightFiller = new javax.swing.Box.Filler(new java.awt.Dimension(40, 0), new java.awt.Dimension(40, 0), new java.awt.Dimension(40, 32767));
         leftFiller = new javax.swing.Box.Filler(new java.awt.Dimension(40, 0), new java.awt.Dimension(40, 0), new java.awt.Dimension(40, 32767));
         centerPanel = new javax.swing.JPanel();
-        buttonPanel1 = new javax.swing.JPanel();
+        titlePanel = new javax.swing.JPanel();
         attendantGUI_title = new javax.swing.JLabel();
         eboardTabbedPanel = new javax.swing.JTabbedPane();
         eBoardTabPane1 = new javax.swing.JTabbedPane();
@@ -193,11 +193,13 @@ public class Settings_EBoard extends javax.swing.JFrame {
         combo_DisplayEffect3 = new javax.swing.JComboBox();
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 20), new java.awt.Dimension(0, 20), new java.awt.Dimension(32767, 20));
         buttonPanel = new javax.swing.JPanel();
-        btn_Exit = new javax.swing.JButton();
+        filler8 = new javax.swing.Box.Filler(new java.awt.Dimension(80, 25), new java.awt.Dimension(80, 25), new java.awt.Dimension(80, 25));
+        filler6 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
         btn_Save = new javax.swing.JButton();
         btn_Cancel = new javax.swing.JButton();
+        btn_Exit = new javax.swing.JButton();
+        filler7 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
         myMetaKeyLabel = new javax.swing.JLabel();
-        filler8 = new javax.swing.Box.Filler(new java.awt.Dimension(80, 25), new java.awt.Dimension(80, 25), new java.awt.Dimension(80, 25));
         southPanel = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
@@ -222,8 +224,8 @@ public class Settings_EBoard extends javax.swing.JFrame {
         centerPanel.setPreferredSize(new java.awt.Dimension(0, 0));
         centerPanel.setLayout(new javax.swing.BoxLayout(centerPanel, javax.swing.BoxLayout.Y_AXIS));
 
-        buttonPanel1.setMinimumSize(new java.awt.Dimension(0, 30));
-        buttonPanel1.setPreferredSize(new java.awt.Dimension(470, 30));
+        titlePanel.setMinimumSize(new java.awt.Dimension(0, 30));
+        titlePanel.setPreferredSize(new java.awt.Dimension(470, 30));
 
         attendantGUI_title.setFont(new java.awt.Font(font_Type, font_Style, head_font_Size));
         attendantGUI_title.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -232,23 +234,23 @@ public class Settings_EBoard extends javax.swing.JFrame {
         attendantGUI_title.setMinimumSize(new java.awt.Dimension(76, 30));
         attendantGUI_title.setPreferredSize(new java.awt.Dimension(120, 30));
 
-        javax.swing.GroupLayout buttonPanel1Layout = new javax.swing.GroupLayout(buttonPanel1);
-        buttonPanel1.setLayout(buttonPanel1Layout);
-        buttonPanel1Layout.setHorizontalGroup(
-            buttonPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, buttonPanel1Layout.createSequentialGroup()
+        javax.swing.GroupLayout titlePanelLayout = new javax.swing.GroupLayout(titlePanel);
+        titlePanel.setLayout(titlePanelLayout);
+        titlePanelLayout.setHorizontalGroup(
+            titlePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, titlePanelLayout.createSequentialGroup()
                 .addContainerGap(159, Short.MAX_VALUE)
                 .addComponent(attendantGUI_title, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(157, Short.MAX_VALUE))
         );
-        buttonPanel1Layout.setVerticalGroup(
-            buttonPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(buttonPanel1Layout.createSequentialGroup()
+        titlePanelLayout.setVerticalGroup(
+            titlePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(titlePanelLayout.createSequentialGroup()
                 .addComponent(attendantGUI_title, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        centerPanel.add(buttonPanel1);
+        centerPanel.add(titlePanel);
 
         eboardTabbedPanel.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         eboardTabbedPanel.setMinimumSize(new java.awt.Dimension(0, 0));
@@ -957,19 +959,6 @@ public class Settings_EBoard extends javax.swing.JFrame {
         buttonPanel.setMinimumSize(new java.awt.Dimension(0, 40));
         buttonPanel.setPreferredSize(new java.awt.Dimension(0, 40));
 
-        btn_Exit.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        btn_Exit.setMnemonic('c');
-        btn_Exit.setText(CLOSE_BTN.getContent());
-        btn_Exit.setToolTipText(CLOSE_BTN_TOOLTIP.getContent());
-        btn_Exit.setMaximumSize(new java.awt.Dimension(90, 40));
-        btn_Exit.setMinimumSize(new java.awt.Dimension(90, 40));
-        btn_Exit.setPreferredSize(new java.awt.Dimension(90, 40));
-        btn_Exit.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btn_ExitActionPerformed(evt);
-            }
-        });
-
         btn_Save.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         btn_Save.setMnemonic('s');
         btn_Save.setText(SAVE_BTN.getContent());
@@ -998,6 +987,19 @@ public class Settings_EBoard extends javax.swing.JFrame {
             }
         });
 
+        btn_Exit.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        btn_Exit.setMnemonic('c');
+        btn_Exit.setText(CLOSE_BTN.getContent());
+        btn_Exit.setToolTipText(CLOSE_BTN_TOOLTIP.getContent());
+        btn_Exit.setMaximumSize(new java.awt.Dimension(90, 40));
+        btn_Exit.setMinimumSize(new java.awt.Dimension(90, 40));
+        btn_Exit.setPreferredSize(new java.awt.Dimension(90, 40));
+        btn_Exit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_ExitActionPerformed(evt);
+            }
+        });
+
         myMetaKeyLabel.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         myMetaKeyLabel.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         myMetaKeyLabel.setText(META_KEY_LABEL.getContent());
@@ -1015,12 +1017,16 @@ public class Settings_EBoard extends javax.swing.JFrame {
             buttonPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(buttonPanelLayout.createSequentialGroup()
                 .addComponent(filler8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(filler6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btn_Save, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(10, 10, 10)
                 .addComponent(btn_Cancel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(10, 10, 10)
                 .addComponent(btn_Exit, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(filler7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(myMetaKeyLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -1033,6 +1039,11 @@ public class Settings_EBoard extends javax.swing.JFrame {
                 .addComponent(btn_Cancel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
             .addComponent(myMetaKeyLabel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addComponent(filler8, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, buttonPanelLayout.createSequentialGroup()
+                .addGroup(buttonPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(filler6, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(filler7, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(19, 19, 19))
         );
 
         centerPanel.add(buttonPanel);
@@ -1227,7 +1238,6 @@ public class Settings_EBoard extends javax.swing.JFrame {
     private javax.swing.JButton btn_Exit;
     private javax.swing.JButton btn_Save;
     private javax.swing.JPanel buttonPanel;
-    private javax.swing.JPanel buttonPanel1;
     private javax.swing.JPanel centerPanel;
     private javax.swing.JComboBox combo_ContentType0;
     private javax.swing.JComboBox combo_ContentType1;
@@ -1257,6 +1267,8 @@ public class Settings_EBoard extends javax.swing.JFrame {
     private javax.swing.Box.Filler filler3;
     private javax.swing.Box.Filler filler4;
     private javax.swing.Box.Filler filler5;
+    private javax.swing.Box.Filler filler6;
+    private javax.swing.Box.Filler filler7;
     private javax.swing.Box.Filler filler8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
@@ -1290,6 +1302,7 @@ public class Settings_EBoard extends javax.swing.JFrame {
     private javax.swing.JTextField tf_VerbatimContent1;
     private javax.swing.JTextField tf_VerbatimContent2;
     private javax.swing.JTextField tf_VerbatimContent3;
+    private javax.swing.JPanel titlePanel;
     private javax.swing.Box.Filler topFiller;
     private javax.swing.JPanel wholePanel;
     // End of variables declaration//GEN-END:variables

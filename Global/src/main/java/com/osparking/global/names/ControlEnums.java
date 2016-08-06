@@ -73,7 +73,7 @@ public class ControlEnums {
         RUN_RECORD_FRAME_TITLE("오즈파킹 실행 기록", "OsParking Run Record"),
         GATE_PANEL_TITLE("최근 도착 차량", "Recent car Arrivals"),
         SYSTEM_SETTINGS_FRAME_TITLE("시스템 설정", "System Settings"),
-        E_BOARD_SETTINGS_FRAME_TITLE("전광판 설정", "Electronic Display Settings"),
+        E_BOARD_SETTINGS_FRAME_TITLE("전광판 설정", "E-board Settings"),
         DEFAULT_PANEL_TITLE("평시", "Default"),
         VEHICLE_PANEL_TITLE("차량", "Vehicle"),
         TOP_PANEL_TITLE("상단", "TOP"), 

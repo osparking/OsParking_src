@@ -671,6 +671,7 @@ public class LEDnoticeManager extends Thread implements
     public void finishShowingDemoEffect(int index) {
         if (demoThread != null) {
             demoThread.interrupt();
+            demoThread = null;
         } else {
             getLedNoticeMessages().add(new MsgItem(DEL_GROUP, ledNoticeProtocol.delGroup(TEXT_GROUP)));
             showDefaultMessage();
