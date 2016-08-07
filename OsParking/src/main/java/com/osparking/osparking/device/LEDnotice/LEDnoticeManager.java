@@ -217,12 +217,14 @@ public class LEDnoticeManager extends Thread implements
                                 if (connectionType[E_Board.ordinal()][deviceNo] == RS_232.ordinal()) {
                                     if (serialPort != null) {
                                         serialPort.getOutputStream().write(currItem.getMessage());
-                                        System.out.println(currItem.getType().toString() + "~> "); // + currItem.getHexStr());
+                                        if (DEBUG)
+                                            System.out.println(currItem.getType().toString() + "~> ");
                                     }
                                 } else {
                                     if (socket != null) {
                                         socket.getOutputStream().write(currItem.getMessage());
-                                        System.out.println(currItem.getType().toString() + "~> "); // + currItem.getHexStr());
+                                        if (DEBUG)
+                                            System.out.println(currItem.getType().toString() + "~> "); 
                                     }
                                 }
                                 getLedNoticeMessages().peek().incSendCount();

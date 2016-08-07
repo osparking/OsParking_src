@@ -16,6 +16,7 @@
  */
 package com.osparking.osparking.device.LEDnotice;
 
+import static com.osparking.global.Globals.DEBUG;
 import com.osparking.osparking.device.LEDnotice.LEDnotice_enums.LED_MsgType;
 import static com.osparking.osparking.device.LEDnotice.LEDnotice_enums.LED_MsgType.Broken;
 import static com.osparking.osparking.device.LEDnotice.LedProtocol.SUCCESS;
@@ -153,7 +154,9 @@ public class RS_232_Manager implements SerialPortEventListener {
         }
         
         if (msgLength != -1 && byteIndex > 0 && validMessage(preMsg, MsgPost[byteIndex - 1])) {
-            System.out.println("msg code uint: " + preMsg[2]);
+            if (DEBUG) {
+                System.out.println("msg code uint: " + preMsg[2]);
+            }
             msgFromLED = getLED_MsgType(LedProtocol.byteToUint(preMsg[2]));
         }
         return msgFromLED;

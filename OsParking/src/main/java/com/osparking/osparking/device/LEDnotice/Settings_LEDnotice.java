@@ -56,7 +56,6 @@ import com.osparking.osparking.device.LEDnotice.LEDnotice_enums.LEDnoticeVehicle
 import static com.osparking.osparking.device.LEDnotice.LedProtocol.getViewWidth;
 import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.event.ActionEvent;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -118,18 +117,19 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
         ledNoticeSettingsGUI_title.setText(parentDialogTitle);
         augmentComponentMap(this, componentMap);
         
-        initEffectComboBoxes();
         initTypeComboBox();
+        initEffectComboBoxes();
         initColorComboBox();
         initFontComboBox();    
         initE_BoardTypeCBox();      
         
         // init selected items using ledNoticeSettings
-        selectItemsForSelectedTab(0, 0);
         
         for (EBD_DisplayUsage usage : EBD_DisplayUsage.values()) {
+            selectItemsForSelectedTab(usage);
             inDemoMode[usage.ordinal()] = false;
         }
+        changedControls.clear();
     }
 
     private void initE_BoardTypeCBox() {
@@ -139,7 +139,7 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
             if (ebdTypeBox != null) {
                 ebdTypeBox.removeAllItems();
                 for (OSP_enums.E_BoardType type : OSP_enums.E_BoardType.values()) {
-                    ebdTypeBox.addItem(type.getLabel());
+                    ebdTypeBox.addItem(type);
                 }
             }
         }
@@ -170,9 +170,11 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
     private void finishAllEffectDemo(int index) {
         int gateNo = findGateNoUsingLEDnotice();
         
-        LEDnoticeManager manager = (LEDnoticeManager)mainForm
-                .getDeviceManagers()[E_Board.ordinal()][gateNo];
-        manager.finishShowingDemoEffect(index);
+        if (mainForm != null) {
+            LEDnoticeManager manager = (LEDnoticeManager)mainForm
+                    .getDeviceManagers()[E_Board.ordinal()][gateNo];
+            manager.finishShowingDemoEffect(index);
+        }
     }
 
     private void demoAllEffects(int tabIndex) {
@@ -304,13 +306,13 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
         contentTypeBox0 = new javax.swing.JComboBox();
         tf_VerbatimContent0 = new javax.swing.JTextField();
         charColor0 = new javax.swing.JComboBox();
-        charFont0 = new javax.swing.JComboBox();
+        charFont0 = new javax.swing.JComboBox(LEDnotice_enums.FontBox.values());
         combo_StartEffect0 = new javax.swing.JComboBox();
         combo_FinishEffect0 = new javax.swing.JComboBox();
         label_Color4 = new javax.swing.JLabel();
         label_Color5 = new javax.swing.JLabel();
         label_Color6 = new javax.swing.JLabel();
-        midStopPanel = new javax.swing.JPanel();
+        midStopPanel0 = new javax.swing.JPanel();
         combo_PauseTime0 = new javax.swing.JComboBox();
         label_Color7 = new javax.swing.JLabel();
         useLEDnoticeCkBox0 = new javax.swing.JCheckBox();
@@ -325,25 +327,26 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
         pauseTimeHelpButton0 = new javax.swing.JButton();
         useCkBoxHelpButton0 = new javax.swing.JButton();
         ledNoticePanel1 = new javax.swing.JPanel();
-        label_MSG1 = new javax.swing.JLabel();
-        label_Color1 = new javax.swing.JLabel();
-        label_Font1 = new javax.swing.JLabel();
-        label_ContentType1 = new javax.swing.JLabel();
+        label_MSG2 = new javax.swing.JLabel();
+        label_Color2 = new javax.swing.JLabel();
+        label_Font2 = new javax.swing.JLabel();
+        label_ContentType2 = new javax.swing.JLabel();
         contentTypeBox1 = new javax.swing.JComboBox();
         tf_VerbatimContent1 = new javax.swing.JTextField();
         charColor1 = new javax.swing.JComboBox();
-        charFont1 = new javax.swing.JComboBox();
+        charFont1 = new javax.swing.JComboBox(LEDnotice_enums.FontBox.values());
         combo_StartEffect1 = new javax.swing.JComboBox();
         combo_FinishEffect1 = new javax.swing.JComboBox();
-        label_Color8 = new javax.swing.JLabel();
-        label_Color9 = new javax.swing.JLabel();
-        label_Color10 = new javax.swing.JLabel();
-        label_Color11 = new javax.swing.JLabel();
+        label_Color22 = new javax.swing.JLabel();
+        label_Color23 = new javax.swing.JLabel();
+        label_Color24 = new javax.swing.JLabel();
+        midStopPanel1 = new javax.swing.JPanel();
         combo_PauseTime1 = new javax.swing.JComboBox();
+        label_Color25 = new javax.swing.JLabel();
         useLEDnoticeCkBox1 = new javax.swing.JCheckBox();
         demoButton1 = new javax.swing.JButton();
         demoFinishButton1 = new javax.swing.JButton();
-        jLabel42 = new javax.swing.JLabel();
+        jLabel45 = new javax.swing.JLabel();
         startEffectHelpButton1 = new javax.swing.JButton();
         demoCurrHelpButton1 = new javax.swing.JButton();
         demoAllHelpButton1 = new javax.swing.JButton();
@@ -480,6 +483,16 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
         ledNoticePanel0.setMinimumSize(new java.awt.Dimension(433, 260));
         ledNoticePanel0.setName("eBoard" + EBD_DisplayUsage.DEFAULT_TOP_ROW.getVal());
         ledNoticePanel0.setPreferredSize(new java.awt.Dimension(469, 280));
+        ledNoticePanel0.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                ledNoticePanel0FocusGained(evt);
+            }
+        });
+        ledNoticePanel0.addComponentListener(new java.awt.event.ComponentAdapter() {
+            public void componentShown(java.awt.event.ComponentEvent evt) {
+                ledNoticePanel0ComponentShown(evt);
+            }
+        });
         ledNoticePanel0.setLayout(new java.awt.GridBagLayout());
 
         label_MSG0.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
@@ -526,7 +539,6 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
         ledNoticePanel0.add(label_ContentType0, gridBagConstraints);
 
         contentTypeBox0.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        contentTypeBox0.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "문구 자체", "주차장 이름" }));
         contentTypeBox0.setMinimumSize(new java.awt.Dimension(123, 30));
         contentTypeBox0.setName("contentTypeBox0"); // NOI18N
         contentTypeBox0.setPreferredSize(new java.awt.Dimension(123, 30));
@@ -565,13 +577,9 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
         charColor0.setMinimumSize(new java.awt.Dimension(70, 30));
         charColor0.setName("charColor0"); // NOI18N
         charColor0.setPreferredSize(new java.awt.Dimension(70, 30));
-        charColor0.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
-            public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
-            }
-            public void popupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {
-                charColor0PopupMenuWillBecomeInvisible(evt);
-            }
-            public void popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {
+        charColor0.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                charColor0ActionPerformed(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -582,17 +590,12 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
         ledNoticePanel0.add(charColor0, gridBagConstraints);
 
         charFont0.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        charFont0.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "굴림체", "궁서체" }));
         charFont0.setMinimumSize(new java.awt.Dimension(70, 30));
         charFont0.setName("charFont0"); // NOI18N
         charFont0.setPreferredSize(new java.awt.Dimension(70, 30));
-        charFont0.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
-            public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
-            }
-            public void popupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {
-                charFont0PopupMenuWillBecomeInvisible(evt);
-            }
-            public void popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {
+        charFont0.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                charFont0ActionPerformed(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -607,15 +610,6 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
         combo_StartEffect0.setMinimumSize(new java.awt.Dimension(123, 30));
         combo_StartEffect0.setName("combo_StartEffect0"); // NOI18N
         combo_StartEffect0.setPreferredSize(new java.awt.Dimension(123, 30));
-        combo_StartEffect0.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
-            public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
-            }
-            public void popupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {
-                combo_StartEffect0PopupMenuWillBecomeInvisible(evt);
-            }
-            public void popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {
-            }
-        });
         combo_StartEffect0.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 combo_StartEffect0ActionPerformed(evt);
@@ -633,13 +627,9 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
         combo_FinishEffect0.setMinimumSize(new java.awt.Dimension(123, 30));
         combo_FinishEffect0.setName("combo_FinishEffect0"); // NOI18N
         combo_FinishEffect0.setPreferredSize(new java.awt.Dimension(123, 30));
-        combo_FinishEffect0.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
-            public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
-            }
-            public void popupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {
-                combo_FinishEffect0PopupMenuWillBecomeInvisible(evt);
-            }
-            public void popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {
+        combo_FinishEffect0.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                combo_FinishEffect0ActionPerformed(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -683,10 +673,10 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(0, 15, 5, 5);
         ledNoticePanel0.add(label_Color6, gridBagConstraints);
 
-        midStopPanel.setMaximumSize(new java.awt.Dimension(95, 30));
-        midStopPanel.setMinimumSize(new java.awt.Dimension(95, 30));
-        midStopPanel.setPreferredSize(new java.awt.Dimension(100, 30));
-        midStopPanel.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 0, 0));
+        midStopPanel0.setMaximumSize(new java.awt.Dimension(95, 30));
+        midStopPanel0.setMinimumSize(new java.awt.Dimension(95, 30));
+        midStopPanel0.setPreferredSize(new java.awt.Dimension(100, 30));
+        midStopPanel0.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 0, 0));
 
         combo_PauseTime0.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         combo_PauseTime0.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10" }));
@@ -694,16 +684,12 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
         combo_PauseTime0.setMinimumSize(new java.awt.Dimension(70, 30));
         combo_PauseTime0.setName("combo_PauseTime0"); // NOI18N
         combo_PauseTime0.setPreferredSize(new java.awt.Dimension(70, 30));
-        combo_PauseTime0.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
-            public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
-            }
-            public void popupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {
-                combo_PauseTime0PopupMenuWillBecomeInvisible(evt);
-            }
-            public void popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {
+        combo_PauseTime0.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                combo_PauseTime0ActionPerformed(evt);
             }
         });
-        midStopPanel.add(combo_PauseTime0);
+        midStopPanel0.add(combo_PauseTime0);
 
         label_Color7.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         label_Color7.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -711,20 +697,25 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
         label_Color7.setMaximumSize(new java.awt.Dimension(25, 15));
         label_Color7.setMinimumSize(new java.awt.Dimension(25, 15));
         label_Color7.setPreferredSize(new java.awt.Dimension(25, 15));
-        midStopPanel.add(label_Color7);
+        midStopPanel0.add(label_Color7);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 4;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(0, 5, 5, 0);
-        ledNoticePanel0.add(midStopPanel, gridBagConstraints);
+        ledNoticePanel0.add(midStopPanel0, gridBagConstraints);
 
         useLEDnoticeCkBox0.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         useLEDnoticeCkBox0.setSelected(true);
         useLEDnoticeCkBox0.setText("사용");
         useLEDnoticeCkBox0.setHorizontalTextPosition(javax.swing.SwingConstants.LEADING);
         useLEDnoticeCkBox0.setName("useLEDnoticeCkBox0"); // NOI18N
+        useLEDnoticeCkBox0.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                useLEDnoticeCkBox0ItemStateChanged(evt);
+            }
+        });
         useLEDnoticeCkBox0.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 useLEDnoticeCkBox0ActionPerformed(evt);
@@ -739,6 +730,7 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
 
         demoButton0.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         demoButton0.setText("현재");
+        demoButton0.setEnabled(false);
         demoButton0.setMaximumSize(new java.awt.Dimension(59, 30));
         demoButton0.setMinimumSize(new java.awt.Dimension(59, 30));
         demoButton0.setName("demoButton0"); // NOI18N
@@ -756,6 +748,7 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
 
         demoFinishButton0.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         demoFinishButton0.setText("그만");
+        demoFinishButton0.setEnabled(false);
         demoFinishButton0.setMaximumSize(new java.awt.Dimension(59, 30));
         demoFinishButton0.setMinimumSize(new java.awt.Dimension(59, 30));
         demoFinishButton0.setName("demoFinishButton0"); // NOI18N
@@ -855,6 +848,7 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
         demoAllButton0.setText("전체");
         demoAllButton0.setMaximumSize(new java.awt.Dimension(59, 30));
         demoAllButton0.setMinimumSize(new java.awt.Dimension(59, 30));
+        demoAllButton0.setName("demoAllButton0"); // NOI18N
         demoAllButton0.setPreferredSize(new java.awt.Dimension(59, 30));
         demoAllButton0.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -908,60 +902,53 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
         ledNoticePanel1.setName("eBoard" + EBD_DisplayUsage.DEFAULT_TOP_ROW.getVal());
         ledNoticePanel1.setLayout(new java.awt.GridBagLayout());
 
-        label_MSG1.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        label_MSG1.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        label_MSG1.setText("문자열");
-        label_MSG1.setPreferredSize(new java.awt.Dimension(76, 15));
+        label_MSG2.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        label_MSG2.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        label_MSG2.setText("문자열");
+        label_MSG2.setPreferredSize(new java.awt.Dimension(76, 15));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
-        ledNoticePanel1.add(label_MSG1, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(0, 15, 0, 5);
+        ledNoticePanel1.add(label_MSG2, gridBagConstraints);
 
-        label_Color1.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        label_Color1.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        label_Color1.setText("중간멈춤");
-        label_Color1.setPreferredSize(new java.awt.Dimension(76, 15));
+        label_Color2.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        label_Color2.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        label_Color2.setText("중간멈춤");
+        label_Color2.setPreferredSize(new java.awt.Dimension(76, 15));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 4;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
-        ledNoticePanel1.add(label_Color1, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(0, 15, 0, 5);
+        ledNoticePanel1.add(label_Color2, gridBagConstraints);
 
-        label_Font1.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        label_Font1.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        label_Font1.setText("폰트");
-        label_Font1.setMaximumSize(new java.awt.Dimension(100, 15));
-        label_Font1.setPreferredSize(new java.awt.Dimension(38, 15));
+        label_Font2.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        label_Font2.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        label_Font2.setText("폰트");
+        label_Font2.setMaximumSize(new java.awt.Dimension(100, 15));
+        label_Font2.setPreferredSize(new java.awt.Dimension(38, 15));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 4;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
-        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 0);
-        ledNoticePanel1.add(label_Font1, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(0, 30, 5, 5);
+        ledNoticePanel1.add(label_Font2, gridBagConstraints);
 
-        label_ContentType1.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        label_ContentType1.setText("표시유형");
+        label_ContentType2.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        label_ContentType2.setText("표시유형");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
-        ledNoticePanel1.add(label_ContentType1, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(0, 15, 0, 5);
+        ledNoticePanel1.add(label_ContentType2, gridBagConstraints);
 
         contentTypeBox1.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        contentTypeBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "문구 자체", "주차장 이름" }));
-        contentTypeBox1.setMinimumSize(new java.awt.Dimension(123, 25));
+        contentTypeBox1.setMinimumSize(new java.awt.Dimension(123, 30));
         contentTypeBox1.setName("contentTypeBox1"); // NOI18N
-        contentTypeBox1.setPreferredSize(new java.awt.Dimension(123, 25));
-        contentTypeBox1.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
-            public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
-            }
-            public void popupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {
-                contentTypeBox1PopupMenuWillBecomeInvisible(evt);
-            }
-            public void popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {
-            }
-        });
+        contentTypeBox1.setPreferredSize(new java.awt.Dimension(123, 30));
         contentTypeBox1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 contentTypeBox1ActionPerformed(evt);
@@ -970,13 +957,14 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 1;
+        gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 0);
         ledNoticePanel1.add(contentTypeBox1, gridBagConstraints);
 
         tf_VerbatimContent1.setColumns(23);
         tf_VerbatimContent1.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        tf_VerbatimContent1.setMinimumSize(new java.awt.Dimension(250, 23));
+        tf_VerbatimContent1.setMinimumSize(new Dimension(250, TEXT_FIELD_HEIGHT));
         tf_VerbatimContent1.setName("tf_VerbatimContent1"); // NOI18N
-        tf_VerbatimContent1.setPreferredSize(new java.awt.Dimension(250, 23));
+        tf_VerbatimContent1.setPreferredSize(new Dimension(250, TEXT_FIELD_HEIGHT));
         tf_VerbatimContent1.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 tf_VerbatimContent1KeyReleased(evt);
@@ -989,161 +977,149 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 5;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 0, 5, 10);
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 10);
         ledNoticePanel1.add(tf_VerbatimContent1, gridBagConstraints);
 
         charColor1.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        charColor1.setMinimumSize(new java.awt.Dimension(70, 25));
+        charColor1.setMinimumSize(new java.awt.Dimension(70, 30));
         charColor1.setName("charColor1"); // NOI18N
-        charColor1.setPreferredSize(new java.awt.Dimension(70, 25));
-        charColor1.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
-            public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
-            }
-            public void popupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {
-                charColor1PopupMenuWillBecomeInvisible(evt);
-            }
-            public void popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {
+        charColor1.setPreferredSize(new java.awt.Dimension(70, 30));
+        charColor1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                charColor1ActionPerformed(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 3;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
         ledNoticePanel1.add(charColor1, gridBagConstraints);
 
         charFont1.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        charFont1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "굴림체", "궁서체" }));
-        charFont1.setMinimumSize(new java.awt.Dimension(70, 25));
+        charFont1.setMinimumSize(new java.awt.Dimension(70, 30));
         charFont1.setName("charFont1"); // NOI18N
-        charFont1.setPreferredSize(new java.awt.Dimension(70, 25));
-        charFont1.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
-            public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
-            }
-            public void popupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {
-                charFont1PopupMenuWillBecomeInvisible(evt);
-            }
-            public void popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {
+        charFont1.setPreferredSize(new java.awt.Dimension(70, 30));
+        charFont1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                charFont1ActionPerformed(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 4;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
         ledNoticePanel1.add(charFont1, gridBagConstraints);
 
         combo_StartEffect1.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         combo_StartEffect1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "왼쪽흐름", "오른쪽흐름", "위로흐름", "아래로흐름", "정지", "깜빡임", "반전", "플레싱", "블라인드", "레이저", "중앙이동", "펼침", "좌흐름적색깜빡임", "우흐름적색깜빡임", "좌흐름녹색깜빡임", "우흐름녹색깜빡임", "회전", "좌우열기", "좌우닫기", "상하열기", "상하닫기", "모듈별이동", "모듈별회전", "상하색분리", "좌우색분리", "테두리이동", "확대", "세로확대", "가로확대", "줄깜빡임", "가로쌓기", "흩뿌리기" }));
-        combo_StartEffect1.setMinimumSize(new java.awt.Dimension(123, 25));
+        combo_StartEffect1.setMinimumSize(new java.awt.Dimension(123, 30));
         combo_StartEffect1.setName("combo_StartEffect1"); // NOI18N
-        combo_StartEffect1.setPreferredSize(new java.awt.Dimension(123, 25));
-        combo_StartEffect1.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
-            public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
-            }
-            public void popupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {
-                combo_StartEffect1PopupMenuWillBecomeInvisible(evt);
-            }
-            public void popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {
+        combo_StartEffect1.setPreferredSize(new java.awt.Dimension(123, 30));
+        combo_StartEffect1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                combo_StartEffect1ActionPerformed(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 3;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(0, 5, 5, 0);
         ledNoticePanel1.add(combo_StartEffect1, gridBagConstraints);
 
         combo_FinishEffect1.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         combo_FinishEffect1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "효과없음", "왼쪽흐름", "오른쪽흐름", "위로흐름", "아래로흐름", "정지", "깜빡임", "반전", "플레싱", "블라인드", "레이저", "중앙이동", "펼침", "좌흐름적색깜빡임", "우흐름적색깜빡임", "좌흐름녹색깜빡임", "우흐름녹색깜빡임", "회전", "좌우열기", "좌우닫기", "상하열기", "상하닫기", "모듈별이동", "모듈별회전", "상하색분리", "좌우색분리", "테두리이동", "확대", "세로확대", "가로확대", "줄깜빡임", "가로쌓기", "흩뿌리기" }));
-        combo_FinishEffect1.setMinimumSize(new java.awt.Dimension(123, 25));
+        combo_FinishEffect1.setMinimumSize(new java.awt.Dimension(123, 30));
         combo_FinishEffect1.setName("combo_FinishEffect1"); // NOI18N
-        combo_FinishEffect1.setPreferredSize(new java.awt.Dimension(123, 25));
-        combo_FinishEffect1.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
-            public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
-            }
-            public void popupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {
-                combo_FinishEffect1PopupMenuWillBecomeInvisible(evt);
-            }
-            public void popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {
+        combo_FinishEffect1.setPreferredSize(new java.awt.Dimension(123, 30));
+        combo_FinishEffect1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                combo_FinishEffect1ActionPerformed(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 5;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 20, 0);
+        gridBagConstraints.insets = new java.awt.Insets(0, 5, 10, 0);
         ledNoticePanel1.add(combo_FinishEffect1, gridBagConstraints);
 
-        label_Color8.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        label_Color8.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        label_Color8.setText("색상");
-        label_Color8.setMaximumSize(new java.awt.Dimension(100, 15));
-        label_Color8.setPreferredSize(new java.awt.Dimension(38, 15));
+        label_Color22.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        label_Color22.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        label_Color22.setText("색상");
+        label_Color22.setMaximumSize(new java.awt.Dimension(100, 15));
+        label_Color22.setPreferredSize(new java.awt.Dimension(38, 15));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 3;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
-        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 0);
-        ledNoticePanel1.add(label_Color8, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(0, 30, 5, 5);
+        ledNoticePanel1.add(label_Color22, gridBagConstraints);
 
-        label_Color9.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        label_Color9.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        label_Color9.setText("마침효과");
-        label_Color9.setPreferredSize(new java.awt.Dimension(76, 15));
+        label_Color23.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        label_Color23.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        label_Color23.setText("마침효과");
+        label_Color23.setPreferredSize(new java.awt.Dimension(76, 15));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 5;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 20, 0);
-        ledNoticePanel1.add(label_Color9, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(0, 15, 10, 5);
+        ledNoticePanel1.add(label_Color23, gridBagConstraints);
 
-        label_Color10.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        label_Color10.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        label_Color10.setText("시작효과");
-        label_Color10.setPreferredSize(new java.awt.Dimension(76, 15));
+        label_Color24.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        label_Color24.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        label_Color24.setText("시작효과");
+        label_Color24.setPreferredSize(new java.awt.Dimension(76, 15));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 3;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
-        ledNoticePanel1.add(label_Color10, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(0, 15, 5, 5);
+        ledNoticePanel1.add(label_Color24, gridBagConstraints);
 
-        label_Color11.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        label_Color11.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        label_Color11.setText("초");
-        label_Color11.setPreferredSize(new java.awt.Dimension(25, 15));
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 4;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 20);
-        ledNoticePanel1.add(label_Color11, gridBagConstraints);
+        midStopPanel1.setMaximumSize(new java.awt.Dimension(95, 30));
+        midStopPanel1.setPreferredSize(new java.awt.Dimension(100, 30));
+        midStopPanel1.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 0, 0));
 
         combo_PauseTime1.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         combo_PauseTime1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10" }));
-        combo_PauseTime1.setMinimumSize(new java.awt.Dimension(70, 25));
+        combo_PauseTime1.setMaximumSize(new java.awt.Dimension(70, 30));
+        combo_PauseTime1.setMinimumSize(new java.awt.Dimension(70, 30));
         combo_PauseTime1.setName("combo_PauseTime1"); // NOI18N
-        combo_PauseTime1.setPreferredSize(new java.awt.Dimension(70, 25));
-        combo_PauseTime1.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
-            public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
-            }
-            public void popupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {
-                combo_PauseTime1PopupMenuWillBecomeInvisible(evt);
-            }
-            public void popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {
+        combo_PauseTime1.setPreferredSize(new java.awt.Dimension(70, 30));
+        combo_PauseTime1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                combo_PauseTime1ActionPerformed(evt);
             }
         });
+        midStopPanel1.add(combo_PauseTime1);
+
+        label_Color25.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        label_Color25.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        label_Color25.setText("초");
+        label_Color25.setMaximumSize(new java.awt.Dimension(25, 15));
+        label_Color25.setMinimumSize(new java.awt.Dimension(25, 15));
+        label_Color25.setPreferredSize(new java.awt.Dimension(25, 15));
+        midStopPanel1.add(label_Color25);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 4;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        ledNoticePanel1.add(combo_PauseTime1, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(0, 5, 5, 0);
+        ledNoticePanel1.add(midStopPanel1, gridBagConstraints);
 
         useLEDnoticeCkBox1.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         useLEDnoticeCkBox1.setSelected(true);
         useLEDnoticeCkBox1.setText("사용");
         useLEDnoticeCkBox1.setHorizontalTextPosition(javax.swing.SwingConstants.LEADING);
         useLEDnoticeCkBox1.setName("useLEDnoticeCkBox1"); // NOI18N
-        useLEDnoticeCkBox1.addChangeListener(new javax.swing.event.ChangeListener() {
-            public void stateChanged(javax.swing.event.ChangeEvent evt) {
-                useLEDnoticeCkBox1StateChanged(evt);
+        useLEDnoticeCkBox1.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                useLEDnoticeCkBox1ItemStateChanged(evt);
             }
         });
         useLEDnoticeCkBox1.addActionListener(new java.awt.event.ActionListener() {
@@ -1151,10 +1127,20 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
                 useLEDnoticeCkBox1ActionPerformed(evt);
             }
         });
-        ledNoticePanel1.add(useLEDnoticeCkBox1, new java.awt.GridBagConstraints());
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
+        gridBagConstraints.insets = new java.awt.Insets(10, 15, 10, 5);
+        ledNoticePanel1.add(useLEDnoticeCkBox1, gridBagConstraints);
 
         demoButton1.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         demoButton1.setText("현재");
+        demoButton1.setEnabled(false);
+        demoButton1.setMaximumSize(new java.awt.Dimension(59, 30));
+        demoButton1.setMinimumSize(new java.awt.Dimension(59, 30));
+        demoButton1.setName("demoButton1"); // NOI18N
+        demoButton1.setPreferredSize(new java.awt.Dimension(59, 30));
         demoButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 demoButton1ActionPerformed(evt);
@@ -1163,11 +1149,16 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 5;
         gridBagConstraints.gridy = 3;
-        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(0, 15, 5, 0);
         ledNoticePanel1.add(demoButton1, gridBagConstraints);
 
         demoFinishButton1.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         demoFinishButton1.setText("그만");
+        demoFinishButton1.setEnabled(false);
+        demoFinishButton1.setMaximumSize(new java.awt.Dimension(59, 30));
+        demoFinishButton1.setMinimumSize(new java.awt.Dimension(59, 30));
+        demoFinishButton1.setName("demoFinishButton1"); // NOI18N
+        demoFinishButton1.setPreferredSize(new java.awt.Dimension(59, 30));
         demoFinishButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 demoFinishButton1ActionPerformed(evt);
@@ -1176,16 +1167,16 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 5;
         gridBagConstraints.gridy = 5;
-        gridBagConstraints.insets = new java.awt.Insets(0, 10, 20, 0);
+        gridBagConstraints.insets = new java.awt.Insets(0, 15, 10, 0);
         ledNoticePanel1.add(demoFinishButton1, gridBagConstraints);
 
-        jLabel42.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        jLabel42.setText("시연보기");
+        jLabel45.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        jLabel45.setText("시연보기");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 5;
         gridBagConstraints.gridy = 2;
-        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 0);
-        ledNoticePanel1.add(jLabel42, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(0, 15, 0, 0);
+        ledNoticePanel1.add(jLabel45, gridBagConstraints);
 
         startEffectHelpButton1.setBackground(new java.awt.Color(153, 255, 153));
         startEffectHelpButton1.setFont(new java.awt.Font("Dotum", 1, 14)); // NOI18N
@@ -1202,6 +1193,7 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 3;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
         ledNoticePanel1.add(startEffectHelpButton1, gridBagConstraints);
 
         demoCurrHelpButton1.setBackground(new java.awt.Color(153, 255, 153));
@@ -1219,7 +1211,7 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 6;
         gridBagConstraints.gridy = 3;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 15);
+        gridBagConstraints.insets = new java.awt.Insets(0, 5, 5, 15);
         ledNoticePanel1.add(demoCurrHelpButton1, gridBagConstraints);
 
         demoAllHelpButton1.setBackground(new java.awt.Color(153, 255, 153));
@@ -1237,11 +1229,15 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 6;
         gridBagConstraints.gridy = 4;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 15);
+        gridBagConstraints.insets = new java.awt.Insets(0, 5, 5, 15);
         ledNoticePanel1.add(demoAllHelpButton1, gridBagConstraints);
 
         demoAllButton1.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         demoAllButton1.setText("전체");
+        demoAllButton1.setMaximumSize(new java.awt.Dimension(59, 30));
+        demoAllButton1.setMinimumSize(new java.awt.Dimension(59, 30));
+        demoAllButton1.setName("demoAllButton1"); // NOI18N
+        demoAllButton1.setPreferredSize(new java.awt.Dimension(59, 30));
         demoAllButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 demoAllButton1ActionPerformed(evt);
@@ -1250,7 +1246,7 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 5;
         gridBagConstraints.gridy = 4;
-        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(0, 15, 5, 0);
         ledNoticePanel1.add(demoAllButton1, gridBagConstraints);
 
         useCkBoxHelpButton1.setBackground(new java.awt.Color(153, 255, 153));
@@ -1268,7 +1264,7 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.insets = new java.awt.Insets(10, 0, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(10, 0, 10, 0);
         ledNoticePanel1.add(useCkBoxHelpButton1, gridBagConstraints);
 
         ledNoticePanelDefault.addTab("하단", ledNoticePanel1);
@@ -2205,14 +2201,7 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void combo_StartEffect0PopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_combo_StartEffect0PopupMenuWillBecomeInvisible
-//        checkStartEffectComboBoxValueChange(0);
-    }//GEN-LAST:event_combo_StartEffect0PopupMenuWillBecomeInvisible
-
     private void useLEDnoticeCkBox0ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_useLEDnoticeCkBox0ActionPerformed
-        setButtonEnabledIf_UseCkBoxChanged(0);
-        changeOtherComponentEnabled(DEFAULT_TOP_ROW, useLEDnoticeCkBox0.isSelected());
-        
         if (!useLEDnoticeCkBox0.isSelected()) {
             useLEDnoticeCkBox1.setSelected(false);
         }
@@ -2220,10 +2209,12 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
 
     private void demoButton0ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_demoButton0ActionPerformed
         demoCurrentSetting(DEFAULT_TOP_ROW);
+        enableFinishButton(0, true);
     }//GEN-LAST:event_demoButton0ActionPerformed
 
     private void demoFinishButton0ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_demoFinishButton0ActionPerformed
         finishAllEffectDemo(0);
+        enableFinishButton(0, false);                
     }//GEN-LAST:event_demoFinishButton0ActionPerformed
 
     private void startEffectHelpButton0ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startEffectHelpButton0ActionPerformed
@@ -2246,6 +2237,7 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
 
     private void demoAllButton0ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_demoAllButton0ActionPerformed
         demoAllEffects(0);
+        enableFinishButton(0, true);        
     }//GEN-LAST:event_demoAllButton0ActionPerformed
 
     private void btn_ExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_ExitActionPerformed
@@ -2253,11 +2245,16 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
     }//GEN-LAST:event_btn_ExitActionPerformed
 
     private void btn_SaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_SaveActionPerformed
-        saveLEDnoticeSettingsTab(0);
+        for (EBD_DisplayUsage usage : EBD_DisplayUsage.values()) {
+            saveLEDnoticeSettingsTab(usage);
+        }
     }//GEN-LAST:event_btn_SaveActionPerformed
 
     private void btn_CancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_CancelActionPerformed
-        cancelModification(0);
+
+        for (EBD_DisplayUsage usage : EBD_DisplayUsage.values()) {
+            cancelModification(usage);
+        }
     }//GEN-LAST:event_btn_CancelActionPerformed
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
@@ -2269,77 +2266,10 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
         reflectSelectionToVerbatimContent(0);
     }//GEN-LAST:event_contentTypeBox0ActionPerformed
 
-    private void contentTypeBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_contentTypeBox1ActionPerformed
-        reflectSelectionToVerbatimContent(1);
-    }//GEN-LAST:event_contentTypeBox1ActionPerformed
-
-    private void combo_StartEffect1PopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_combo_StartEffect1PopupMenuWillBecomeInvisible
-        checkStartEffectComboBoxValueChange(1);
-    }//GEN-LAST:event_combo_StartEffect1PopupMenuWillBecomeInvisible
-
-    private void useLEDnoticeCkBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_useLEDnoticeCkBox1ActionPerformed
-        // 저장 버튼 활성화 설정 변경
-        checkLEDnoticeRowUsageChangeAndChangeButtonEnabled(DEFAULT_BOTTOM_ROW);
-        changeOtherComponentEnabled(DEFAULT_BOTTOM_ROW, useLEDnoticeCkBox1.isSelected());
-        
-        // 사용되는 경우, 
-        //      - 상단 사용 박스 참 설정
-        //      - 상단 설정 '중간 멈춤' 1초 설정
-        //      - 상단 설정 '마침 효과'를 '효과 없음'으로 강제 변환
-        if (useLEDnoticeCkBox1.isSelected()) {
-            useLEDnoticeCkBox0.setSelected(true); // 상단 사용
-            combo_PauseTime0.setSelectedIndex(0); // 1초 설정
-            combo_FinishEffect0.setSelectedItem(EffectType.NONE.getLabel());
-            combo_PauseTime0.setEnabled(false);
-            combo_FinishEffect0.setEnabled(false);
-        } else {
-            combo_PauseTime0.setEnabled(true);
-            combo_FinishEffect0.setEnabled(true);
-        }
-    }//GEN-LAST:event_useLEDnoticeCkBox1ActionPerformed
-
-    private void demoButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_demoButton1ActionPerformed
-        if (useLEDnoticeCkBox1.isSelected()) {
-            demoCurrentSetting(DEFAULT_TOP_ROW);
-            demoCurrentSetting(DEFAULT_BOTTOM_ROW);
-        } else {
-            JOptionPane.showMessageDialog(this, "먼저 '사용' 첵크 상자를 선택할 것!");
-        }
-    }//GEN-LAST:event_demoButton1ActionPerformed
-
-    private void demoFinishButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_demoFinishButton1ActionPerformed
-        finishAllEffectDemo(1);
-    }//GEN-LAST:event_demoFinishButton1ActionPerformed
-
-    private void startEffectHelpButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startEffectHelpButton1ActionPerformed
-        giveStartEffectAutoAdjustmentPossibility();
-    }//GEN-LAST:event_startEffectHelpButton1ActionPerformed
-
-    private void demoCurrHelpButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_demoCurrHelpButton1ActionPerformed
-        JOptionPane.showMessageDialog(this, "상, 하단 연계된 설정을 시연함" + System.lineSeparator()
-            + "[그만] 버튼 사용으로 시연 종료!");
-    }//GEN-LAST:event_demoCurrHelpButton1ActionPerformed
-
-    private void demoAllHelpButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_demoAllHelpButton1ActionPerformed
-        showPopUpForDemoAllHelpButton();
-    }//GEN-LAST:event_demoAllHelpButton1ActionPerformed
-
-    private void demoAllButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_demoAllButton1ActionPerformed
-        demoAllEffects(1);
-    }//GEN-LAST:event_demoAllButton1ActionPerformed
-
     private void pauseTimeHelpButton0ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pauseTimeHelpButton0ActionPerformed
         JOptionPane.showMessageDialog(this,
             "하단 사용[V]의 경우," + System.lineSeparator() + "자동설정 값 '1' (초) 임!");
     }//GEN-LAST:event_pauseTimeHelpButton0ActionPerformed
-
-    private void useCkBoxHelpButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_useCkBoxHelpButton1ActionPerformed
-        JOptionPane.showMessageDialog(this,
-            "사용[V]의 경우, 자동 변경되는 상단 행 설정" + System.lineSeparator() + 
-                "      - 상단 행 사용[V] 설정하며," + System.lineSeparator() + 
-                "      - 상단 행 '중간 멈춤' 1초로 변경하며," + System.lineSeparator() + 
-                "      - 상단 행 '마침 효과'를 '효과 없음'으로 변환함.");
-    }//GEN-LAST:event_useCkBoxHelpButton1ActionPerformed
 
     private void useCkBoxHelpButton0ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_useCkBoxHelpButton0ActionPerformed
         JOptionPane.showMessageDialog(this,
@@ -2349,21 +2279,9 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
                 "      - 두 행 모두 사용하지 아니함.");
     }//GEN-LAST:event_useCkBoxHelpButton0ActionPerformed
 
-    private void contentTypeBox1PopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_contentTypeBox1PopupMenuWillBecomeInvisible
-        checkContentTypeBoxAndEnableButtons(1);
-    }//GEN-LAST:event_contentTypeBox1PopupMenuWillBecomeInvisible
-
     private void tf_VerbatimContent0KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tf_VerbatimContent0KeyReleased
-        checkVerbatimContentChangeButtonEnabled(0);
+        changeButtonEnabled_IfVerbatimChanged(0);
     }//GEN-LAST:event_tf_VerbatimContent0KeyReleased
-
-    private void tf_VerbatimContent1KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tf_VerbatimContent1KeyReleased
-        checkVerbatimContentChangeButtonEnabled(1);
-    }//GEN-LAST:event_tf_VerbatimContent1KeyReleased
-
-    private void useLEDnoticeCkBox1StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_useLEDnoticeCkBox1StateChanged
-        changeOtherComponentEnabled(DEFAULT_BOTTOM_ROW, useLEDnoticeCkBox1.isSelected());
-    }//GEN-LAST:event_useLEDnoticeCkBox1StateChanged
 
     private void ledNoticePanelDefaultStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_ledNoticePanelDefaultStateChanged
         if (componentMap == null)
@@ -2375,51 +2293,19 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
         int prevTabIdx = (row == 0 ? 1 : 0);
         JButton saveButton = (JButton)componentMap.get("btn_Save" + prevTabIdx);
         
-        if (saveButton != null && saveButton.isEnabled()) {
-            JOptionPane.showMessageDialog(this, 
-                    "LEDnotice 설정이 변경 중입니다.," + System.lineSeparator()
-                            + "[저장] 혹은 [취소] 중 하나를 선택하십시오!");
-            ledNoticePanelDefault.setSelectedIndex(prevTabIdx);
-        }
+//        if (saveButton != null && saveButton.isEnabled()) {
+//            JOptionPane.showMessageDialog(this, 
+//                    "LEDnotice 설정이 변경 중입니다.," + System.lineSeparator()
+//                            + "[저장] 혹은 [취소] 중 하나를 선택하십시오!");
+//            ledNoticePanelDefault.setSelectedIndex(prevTabIdx);
+//        }
         java.awt.EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
-                selectItemsForSelectedTab(row, 0); // 0 : default column
+//                selectItemsForSelectedTab(row, 0); // 0 : default column
             }
         });
     }//GEN-LAST:event_ledNoticePanelDefaultStateChanged
-
-    private void combo_PauseTime0PopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_combo_PauseTime0PopupMenuWillBecomeInvisible
-        changeButtonEnabled_IfPauseTimeChanged(0);
-    }//GEN-LAST:event_combo_PauseTime0PopupMenuWillBecomeInvisible
-
-    private void combo_FinishEffect0PopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_combo_FinishEffect0PopupMenuWillBecomeInvisible
-        changeButtonEnabled_IfFinishEffectChanged(0);
-    }//GEN-LAST:event_combo_FinishEffect0PopupMenuWillBecomeInvisible
-
-    private void charColor0PopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_charColor0PopupMenuWillBecomeInvisible
-        changeButtonEnabled_IfColorChanged(0);
-    }//GEN-LAST:event_charColor0PopupMenuWillBecomeInvisible
-
-    private void charFont0PopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_charFont0PopupMenuWillBecomeInvisible
-        changeButtonEnabled_IfFontChanged(0);
-    }//GEN-LAST:event_charFont0PopupMenuWillBecomeInvisible
-
-    private void combo_PauseTime1PopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_combo_PauseTime1PopupMenuWillBecomeInvisible
-        changeButtonEnabled_IfPauseTimeChanged(1);
-    }//GEN-LAST:event_combo_PauseTime1PopupMenuWillBecomeInvisible
-
-    private void combo_FinishEffect1PopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_combo_FinishEffect1PopupMenuWillBecomeInvisible
-        changeButtonEnabled_IfFinishEffectChanged(1);
-    }//GEN-LAST:event_combo_FinishEffect1PopupMenuWillBecomeInvisible
-
-    private void charColor1PopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_charColor1PopupMenuWillBecomeInvisible
-        changeButtonEnabled_IfColorChanged(1);
-    }//GEN-LAST:event_charColor1PopupMenuWillBecomeInvisible
-
-    private void charFont1PopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_charFont1PopupMenuWillBecomeInvisible
-        changeButtonEnabled_IfFontChanged(1);
-    }//GEN-LAST:event_charFont1PopupMenuWillBecomeInvisible
 
     private void contentTypeBox2PopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_contentTypeBox2PopupMenuWillBecomeInvisible
         checkContentTypeBoxAndEnableButtons(2);
@@ -2430,7 +2316,7 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
     }//GEN-LAST:event_contentTypeBox2ActionPerformed
 
     private void tf_VerbatimContent2KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tf_VerbatimContent2KeyReleased
-        checkVerbatimContentChangeButtonEnabled(2);
+        changeButtonEnabled_IfVerbatimChanged(2);
     }//GEN-LAST:event_tf_VerbatimContent2KeyReleased
 
     private void charColor2PopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_charColor2PopupMenuWillBecomeInvisible
@@ -2442,7 +2328,7 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
     }//GEN-LAST:event_charFont2PopupMenuWillBecomeInvisible
 
     private void combo_StartEffect2PopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_combo_StartEffect2PopupMenuWillBecomeInvisible
-        checkStartEffectComboBoxValueChange(2);
+        changeButtonEnabled_IfStartEffectChanged(2);
     }//GEN-LAST:event_combo_StartEffect2PopupMenuWillBecomeInvisible
 
     private void combo_FinishEffect2PopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_combo_FinishEffect2PopupMenuWillBecomeInvisible
@@ -2517,7 +2403,7 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
     }//GEN-LAST:event_contentTypeBox3ActionPerformed
 
     private void tf_VerbatimContent3KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tf_VerbatimContent3KeyReleased
-        checkVerbatimContentChangeButtonEnabled(3);
+        changeButtonEnabled_IfVerbatimChanged(3);
     }//GEN-LAST:event_tf_VerbatimContent3KeyReleased
 
     private void charColor3PopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_charColor3PopupMenuWillBecomeInvisible
@@ -2596,19 +2482,19 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
         JButton saveButtonTop = (JButton)componentMap.get("btn_Save" + (prevTabIdx * 2));
         JButton saveButtonBottom = (JButton)componentMap.get("btn_Save" + (prevTabIdx * 2 + 1));
         
-        if ((saveButtonTop != null && saveButtonTop.isEnabled()) || 
-                (saveButtonBottom != null && saveButtonBottom.isEnabled())) {
-            JOptionPane.showMessageDialog(this, 
-                    "LEDnotice 설정이 변경 중입니다.," + System.lineSeparator()
-                            + "[저장] 혹은 [취소] 중 하나를 선택하십시오!");
-            ledNoticeTabbedPane.setSelectedIndex(prevTabIdx);
-        }
+//        if ((saveButtonTop != null && saveButtonTop.isEnabled()) || 
+//                (saveButtonBottom != null && saveButtonBottom.isEnabled())) {
+//            JOptionPane.showMessageDialog(this, 
+//                    "LEDnotice 설정이 변경 중입니다.," + System.lineSeparator()
+//                            + "[저장] 혹은 [취소] 중 하나를 선택하십시오!");
+//            ledNoticeTabbedPane.setSelectedIndex(prevTabIdx);
+//        }
         final int row = ((JTabbedPane)ledNoticeTabbedPane.getSelectedComponent()).getSelectedIndex();
         
         java.awt.EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
-                selectItemsForSelectedTab(row, column);
+//                selectItemsForSelectedTab(row, column);
             }
         });
     }//GEN-LAST:event_ledNoticeTabbedPaneStateChanged
@@ -2632,14 +2518,122 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
-                selectItemsForSelectedTab(row, 1); // 1 : vehicle column
+//                selectItemsForSelectedTab(row, 1); // 1 : vehicle column
             }
         });        
     }//GEN-LAST:event_ledNoticePanelVehicleStateChanged
 
     private void combo_StartEffect0ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_combo_StartEffect0ActionPerformed
-        checkStartEffectComboBoxValueChange(0);
+        changeButtonEnabled_IfStartEffectChanged(0);
     }//GEN-LAST:event_combo_StartEffect0ActionPerformed
+
+    private void charColor0ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_charColor0ActionPerformed
+        changeButtonEnabled_IfColorChanged(0);        
+    }//GEN-LAST:event_charColor0ActionPerformed
+
+    private void combo_PauseTime0ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_combo_PauseTime0ActionPerformed
+        changeButtonEnabled_IfPauseTimeChanged(0);
+    }//GEN-LAST:event_combo_PauseTime0ActionPerformed
+
+    private void charFont0ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_charFont0ActionPerformed
+        changeButtonEnabled_IfFontChanged(0);
+    }//GEN-LAST:event_charFont0ActionPerformed
+
+    private void combo_FinishEffect0ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_combo_FinishEffect0ActionPerformed
+        changeButtonEnabled_IfFinishEffectChanged(0);
+    }//GEN-LAST:event_combo_FinishEffect0ActionPerformed
+
+    private void contentTypeBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_contentTypeBox1ActionPerformed
+        setButtonEnabledIf_ContentTypeChanged(1);    
+        reflectSelectionToVerbatimContent(1);
+
+    }//GEN-LAST:event_contentTypeBox1ActionPerformed
+
+    private void tf_VerbatimContent1KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tf_VerbatimContent1KeyReleased
+        changeButtonEnabled_IfVerbatimChanged(1);
+    }//GEN-LAST:event_tf_VerbatimContent1KeyReleased
+
+    private void charColor1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_charColor1ActionPerformed
+        changeButtonEnabled_IfColorChanged(1);
+    }//GEN-LAST:event_charColor1ActionPerformed
+
+    private void charFont1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_charFont1ActionPerformed
+        changeButtonEnabled_IfFontChanged(1);
+    }//GEN-LAST:event_charFont1ActionPerformed
+
+    private void combo_StartEffect1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_combo_StartEffect1ActionPerformed
+        changeButtonEnabled_IfStartEffectChanged(1);
+    }//GEN-LAST:event_combo_StartEffect1ActionPerformed
+
+    private void combo_FinishEffect1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_combo_FinishEffect1ActionPerformed
+        changeButtonEnabled_IfFinishEffectChanged(1);
+    }//GEN-LAST:event_combo_FinishEffect1ActionPerformed
+
+    private void combo_PauseTime1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_combo_PauseTime1ActionPerformed
+        changeButtonEnabled_IfPauseTimeChanged(1);
+    }//GEN-LAST:event_combo_PauseTime1ActionPerformed
+
+    private void useLEDnoticeCkBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_useLEDnoticeCkBox1ActionPerformed
+        if (useLEDnoticeCkBox1.isSelected()) {
+            useLEDnoticeCkBox0.setSelected(true);
+        }      
+    }//GEN-LAST:event_useLEDnoticeCkBox1ActionPerformed
+
+    private void demoButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_demoButton1ActionPerformed
+        demoCurrentSetting(DEFAULT_BOTTOM_ROW);
+        enableFinishButton(1, true);
+    }//GEN-LAST:event_demoButton1ActionPerformed
+
+    private void demoFinishButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_demoFinishButton1ActionPerformed
+        finishAllEffectDemo(1);
+        enableFinishButton(1, false);
+    }//GEN-LAST:event_demoFinishButton1ActionPerformed
+
+    private void startEffectHelpButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startEffectHelpButton1ActionPerformed
+        giveStartEffectAutoAdjustmentPossibility();
+    }//GEN-LAST:event_startEffectHelpButton1ActionPerformed
+
+    private void demoCurrHelpButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_demoCurrHelpButton1ActionPerformed
+        JOptionPane.showMessageDialog(this, "상, 하단 연계된 설정을 시연함" + System.lineSeparator()
+            + "[그만] 버튼 사용으로 시연 종료!");
+    }//GEN-LAST:event_demoCurrHelpButton1ActionPerformed
+
+    private void demoAllHelpButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_demoAllHelpButton1ActionPerformed
+        showPopUpForDemoAllHelpButton();
+    }//GEN-LAST:event_demoAllHelpButton1ActionPerformed
+
+    private void demoAllButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_demoAllButton1ActionPerformed
+        demoAllEffects(1);
+        enableFinishButton(1, true);
+    }//GEN-LAST:event_demoAllButton1ActionPerformed
+
+    private void useCkBoxHelpButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_useCkBoxHelpButton1ActionPerformed
+        JOptionPane.showMessageDialog(this,
+            "사용[V]되는 경우, 아래같이 상단 행 설정 자동 변경됨!" + System.lineSeparator() + 
+                "      - 상단 행 사용[V] 설정하며," + System.lineSeparator() + 
+                "      - 상단 행 '중간 멈춤' 1초로 변경하며," + System.lineSeparator() + 
+                "      - 상단 행 '마침 효과'를 '효과 없음'으로 변환함.");
+    }//GEN-LAST:event_useCkBoxHelpButton1ActionPerformed
+
+    private void useLEDnoticeCkBox0ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_useLEDnoticeCkBox0ItemStateChanged
+        setButtonEnabledIf_UseCkBoxChanged(0);
+        changeOtherComponentEnabled(DEFAULT_TOP_ROW, useLEDnoticeCkBox0.isSelected());
+    }//GEN-LAST:event_useLEDnoticeCkBox0ItemStateChanged
+
+    private void useLEDnoticeCkBox1ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_useLEDnoticeCkBox1ItemStateChanged
+        setButtonEnabledIf_UseCkBoxChanged(1);
+        changeOtherComponentEnabled(DEFAULT_BOTTOM_ROW, useLEDnoticeCkBox1.isSelected());
+    }//GEN-LAST:event_useLEDnoticeCkBox1ItemStateChanged
+
+    private void ledNoticePanel0FocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_ledNoticePanel0FocusGained
+        System.out.println("0 gained");
+    }//GEN-LAST:event_ledNoticePanel0FocusGained
+
+    private void ledNoticePanel0ComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_ledNoticePanel0ComponentShown
+        // TODO add your handling code here:
+        System.out.println("0 shown");
+        changeDependantPropEnabled();
+    }//GEN-LAST:event_ledNoticePanel0ComponentShown
 
     /**
      *  Decide whether to use the verbatim text field after checking the content type.
@@ -2729,14 +2723,11 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
     private javax.swing.Box.Filler filler1;
     private javax.swing.Box.Filler filler8;
     private javax.swing.JLabel jLabel41;
-    private javax.swing.JLabel jLabel42;
     private javax.swing.JLabel jLabel43;
     private javax.swing.JLabel jLabel44;
+    private javax.swing.JLabel jLabel45;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JLabel label_Color0;
-    private javax.swing.JLabel label_Color1;
-    private javax.swing.JLabel label_Color10;
-    private javax.swing.JLabel label_Color11;
     private javax.swing.JLabel label_Color12;
     private javax.swing.JLabel label_Color13;
     private javax.swing.JLabel label_Color14;
@@ -2745,24 +2736,27 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
     private javax.swing.JLabel label_Color17;
     private javax.swing.JLabel label_Color18;
     private javax.swing.JLabel label_Color19;
+    private javax.swing.JLabel label_Color2;
     private javax.swing.JLabel label_Color20;
     private javax.swing.JLabel label_Color21;
+    private javax.swing.JLabel label_Color22;
+    private javax.swing.JLabel label_Color23;
+    private javax.swing.JLabel label_Color24;
+    private javax.swing.JLabel label_Color25;
     private javax.swing.JLabel label_Color4;
     private javax.swing.JLabel label_Color5;
     private javax.swing.JLabel label_Color6;
     private javax.swing.JLabel label_Color7;
-    private javax.swing.JLabel label_Color8;
-    private javax.swing.JLabel label_Color9;
     private javax.swing.JLabel label_ContentType0;
-    private javax.swing.JLabel label_ContentType1;
+    private javax.swing.JLabel label_ContentType2;
     private javax.swing.JLabel label_ContentType4;
     private javax.swing.JLabel label_ContentType5;
     private javax.swing.JLabel label_Font0;
-    private javax.swing.JLabel label_Font1;
+    private javax.swing.JLabel label_Font2;
     private javax.swing.JLabel label_Font4;
     private javax.swing.JLabel label_Font5;
     private javax.swing.JLabel label_MSG0;
-    private javax.swing.JLabel label_MSG1;
+    private javax.swing.JLabel label_MSG2;
     private javax.swing.JLabel label_MSG4;
     private javax.swing.JLabel label_MSG5;
     private javax.swing.JPanel ledNoticePanel0;
@@ -2774,7 +2768,8 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
     private javax.swing.JLabel ledNoticeSettingsGUI_title;
     private javax.swing.JTabbedPane ledNoticeTabbedPane;
     private javax.swing.Box.Filler leftFiller;
-    private javax.swing.JPanel midStopPanel;
+    private javax.swing.JPanel midStopPanel0;
+    private javax.swing.JPanel midStopPanel1;
     private javax.swing.JLabel myMetaKeyLabel;
     private javax.swing.JButton pauseTimeHelpButton0;
     private javax.swing.JButton pauseTimeHelpButton1;
@@ -2902,18 +2897,13 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
         ((JComboBox)componentMap.get("combo_StartEffect" + usage.ordinal())).setEnabled(selected);
         ((JComboBox)componentMap.get("combo_PauseTime" + usage.ordinal())).setEnabled(selected);
         
-        if (usage == EBD_DisplayUsage.DEFAULT_TOP_ROW) {
-            if (ledNoticeSettings[DEFAULT_BOTTOM_ROW.ordinal()].isUsed) {
-                combo_PauseTime0.setEnabled(false);
-                combo_FinishEffect0.setEnabled(false);
-            } else {
-                combo_PauseTime0.setEnabled(true);
-                combo_FinishEffect0.setEnabled(true);
-            }
+        if (usage == DEFAULT_TOP_ROW) {
+            changeDependantPropEnabled();
         } else {
             ((JComboBox)componentMap.get("combo_FinishEffect" + usage.ordinal())).setEnabled(selected);
         }
-        System.out.println("name: " + ("demoButton" + usage.ordinal()));
+//        System.out.println("name: " + ("demoButton" + usage.ordinal()));
+//        if ()
         ((JButton)componentMap.get("demoButton" + usage.ordinal())).setEnabled(selected);
     }
 
@@ -2945,7 +2935,7 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
         btn_Exit.setEnabled(!onOff);
     }
 
-    private void checkVerbatimContentChangeButtonEnabled(int usage) {
+    private void changeButtonEnabled_IfVerbatimChanged(int usage) {
         JTextField verbatimContent = (JTextField) getComponentByName("tf_VerbatimContent" + usage);
         String content = verbatimContent.getText().trim();
         
@@ -2956,15 +2946,16 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
         }        
     }
 
-    private void selectItemsForSelectedTab(int row, int column) {
-        int ordinal = row + column * 2;
+    private void selectItemsForSelectedTab(EBD_DisplayUsage usage) {
+        int ordinal = usage.ordinal();
         
-        JButton saveButton = (JButton)componentMap.get("btn_Save" + ordinal);
-        if (saveButton != null && !saveButton.isEnabled()) {            
+//        JButton saveButton = (JButton)componentMap.get("btn_Save" + ordinal);
+//        if (saveButton != null && !saveButton.isEnabled()) 
+        {            
             JCheckBox usChkBox = (JCheckBox)componentMap.get("useLEDnoticeCkBox" + ordinal);
             usChkBox.setSelected(ledNoticeSettings[ordinal].isUsed);
 
-            EBD_DisplayUsage usage = EBD_DisplayUsage.values()[ordinal];
+//            EBD_DisplayUsage usage = EBD_DisplayUsage.values()[ordinal];
             changeOtherComponentEnabled(usage, ledNoticeSettings[ordinal].isUsed);
             
             JComboBox cmboBox = (JComboBox)componentMap.get("contentTypeBox" + ordinal);
@@ -2990,17 +2981,22 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
         }
     }
 
-    private void saveLEDnoticeSettingsTab(int usage) {
+    private void saveLEDnoticeSettingsTab(EBD_DisplayUsage usage) {
+        
+        if (usage == CAR_ENTRY_BOTTOM_ROW || usage == CAR_ENTRY_TOP_ROW)
+            return;
+        
+        int index = usage.ordinal();
         JComboBox comboBox = null;
         Connection conn = null;
         PreparedStatement updateSettings = null;
         
         // 유형이 [문구 자체]인데, 문자열이 빈 문자열이면 경고 팝업창 띄움
-        JTextField txtField = (JTextField) componentMap.get("tf_VerbatimContent" + usage);
+        JTextField txtField = (JTextField) componentMap.get("tf_VerbatimContent" + index);
         if (txtField.getText().trim().length() == 0) {
-            JComboBox cmbBox = (JComboBox) componentMap.get("contentTypeBox" + usage);
+            JComboBox cmbBox = (JComboBox) componentMap.get("contentTypeBox" + index);
 
-            if (cmbBox.getSelectedIndex() == getVerbatimIndex(usage)) {
+            if (cmbBox.getSelectedIndex() == getVerbatimIndex(index)) {
                 JOptionPane.showMessageDialog(this, "[유형]이 '문구 자체'인 경우," + System.lineSeparator() +
                         "빈 [문자열]은 허용되지 않음!" );
                 txtField.requestFocus();
@@ -3008,7 +3004,7 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
             }
         }
         
-        forcedChangeOfStartEffectIfNeeded(usage);
+        forcedChangeOfStartEffectIfNeeded(index);
         
         int result = 0;
         try {
@@ -3023,32 +3019,32 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
 
             int pIndex = 1;
             
-            JCheckBox useCkBox = (JCheckBox)getComponentByName("useLEDnoticeCkBox" + usage);
+            JCheckBox useCkBox = (JCheckBox)getComponentByName("useLEDnoticeCkBox" + index);
             int isUsed = (useCkBox.isSelected() ? 1 : 0);
             updateSettings.setInt(pIndex++, isUsed);
             
-            comboBox = (JComboBox)getComponentByName("contentTypeBox" + usage);
+            comboBox = (JComboBox)getComponentByName("contentTypeBox" + index);
             updateSettings.setInt(pIndex++, comboBox.getSelectedIndex());
             
             String verbatimStr 
-                    = ((JTextField) getComponentByName("tf_VerbatimContent" + usage)).getText().trim();
+                    = ((JTextField) getComponentByName("tf_VerbatimContent" + index)).getText().trim();
             updateSettings.setString(pIndex++, verbatimStr);
             
-            comboBox = (JComboBox)getComponentByName("combo_StartEffect" + usage);
+            comboBox = (JComboBox)getComponentByName("combo_StartEffect" + index);
             updateSettings.setInt(pIndex++, comboBox.getSelectedIndex());
             
-            comboBox = (JComboBox)getComponentByName("combo_PauseTime" + usage);
+            comboBox = (JComboBox)getComponentByName("combo_PauseTime" + index);
             updateSettings.setInt(pIndex++, comboBox.getSelectedIndex());
             
-            comboBox = (JComboBox)getComponentByName("combo_FinishEffect" + usage);
+            comboBox = (JComboBox)getComponentByName("combo_FinishEffect" + index);
             updateSettings.setInt(pIndex++, comboBox.getSelectedIndex());
             
-            comboBox = (JComboBox)getComponentByName("charColor" + usage);
+            comboBox = (JComboBox)getComponentByName("charColor" + index);
             updateSettings.setInt(pIndex++, comboBox.getSelectedIndex());
             
-            comboBox = (JComboBox)getComponentByName("charFont" + usage);
+            comboBox = (JComboBox)getComponentByName("charFont" + index);
             updateSettings.setInt(pIndex++, comboBox.getSelectedIndex());
-            updateSettings.setInt(pIndex++, usage);
+            updateSettings.setInt(pIndex++, index);
             
             result = updateSettings.executeUpdate();
              
@@ -3059,7 +3055,7 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
             if (result == 1) {
                 // reload global ledNotice settings variable
                 readLEDnoticeSettings(ledNoticeSettings);
-                changeEnabled_of_SaveCancelButtons(usage, false);
+                changeEnabled_of_SaveCancelButtons(index, false);
             } else {
                 JOptionPane.showMessageDialog(this, "This LEDnotice settings update saving DB operation failed.",
                     "DB Update Operation Failure", JOptionPane.ERROR_MESSAGE);
@@ -3067,7 +3063,7 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
         }
 
         if (mainForm != null) { // when settings frame invoked alone, main form is null
-            if (usage == DEFAULT_TOP_ROW.ordinal() || usage == DEFAULT_BOTTOM_ROW.ordinal()) 
+            if (index == DEFAULT_TOP_ROW.ordinal() || index == DEFAULT_BOTTOM_ROW.ordinal()) 
             {
                 for (byte gateNo = 1; gateNo <= gateCount; gateNo++) {
                     //if (isConnected(mainForm.getDeviceManagers()[E_Board.ordinal()][gateNo].getSocket())) {
@@ -3079,18 +3075,30 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
         }
     }
 
-    private void cancelModification(int usage) {
-        changeEnabled_of_SaveCancelButtons(usage, false);
-        selectItemsForSelectedTab(usage % 2, usage / 2);
+    private void cancelModification(EBD_DisplayUsage usage) {
+        if (usage == CAR_ENTRY_BOTTOM_ROW || usage == CAR_ENTRY_TOP_ROW)
+            return;
+        
+        int index = usage.ordinal();
+        
+        changeEnabled_of_SaveCancelButtons(index, false);
+        selectItemsForSelectedTab(usage);
+//        selectItemsForSelectedTab(index % 2, index / 2);
     }
 
-    private void changeButtonEnabled_IfStartEffectChanged(int index) {
+    private void changeButtonEnabled_IfStartEffectChanged(final int index) {
         JComboBox comboBx = (JComboBox) getComponentByName("combo_StartEffect" + index);
         if (comboBx.getSelectedIndex() == ledNoticeSettings[index].startEffectIdx) {
             changedControls.remove(comboBx);            
         } else {
             changedControls.add(comboBx);            
-        }        
+        }  
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                forcedChangeOfStartEffectIfNeeded(index);
+            }
+        });  
     }
 
     private void changeButtonEnabled_IfPauseTimeChanged(int index) {
@@ -3130,15 +3138,15 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
         }
     }
 
-    private void checkStartEffectComboBoxValueChange(final int usage) {
-        changeButtonEnabled_IfStartEffectChanged(usage);
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                forcedChangeOfStartEffectIfNeeded(usage);
-            }
-        });     
-    }
+//    private void changeButtonEnabled_IfStartEffectChanged(final int usage) {
+//        changeButtonEnabled_IfStartEffectChanged(usage);
+//        java.awt.EventQueue.invokeLater(new Runnable() {
+//            @Override
+//            public void run() {
+//                forcedChangeOfStartEffectIfNeeded(usage);
+//            }
+//        });     
+//    }
 
     private void checkNonsenseEmptyContent(final int usage) {
         // 유형이 [문구 자체]인데, 문자열이 빈 문자열이면 경고 팝업창 띄움
@@ -3216,6 +3224,31 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
             changedControls.remove(cBox);            
         } else {
             changedControls.add(cBox);            
+        }
+    }
+
+    private void enableFinishButton(int index, boolean flag) {
+        JButton button = (JButton)componentMap.get("demoFinishButton" + index);
+        button.setEnabled(flag);
+        
+        button = (JButton)componentMap.get("demoButton" + index);
+        button.setEnabled(!flag);
+        button = (JButton)componentMap.get("demoAllButton" + index);
+        button.setEnabled(!flag);
+    }
+
+    private void changeDependantPropEnabled() {
+        JCheckBox usBotChkBox = (JCheckBox)componentMap.get("useLEDnoticeCkBox" + DEFAULT_BOTTOM_ROW.ordinal());
+
+        if (usBotChkBox.isSelected()) {
+            useLEDnoticeCkBox0.setSelected(true); // 상단 사용
+            combo_PauseTime0.setSelectedIndex(0); // 1초 설정
+            combo_FinishEffect0.setSelectedItem(EffectType.NONE.getLabel());            
+            combo_PauseTime0.setEnabled(false);
+            combo_FinishEffect0.setEnabled(false);
+        } else {
+            combo_PauseTime0.setEnabled(true);
+            combo_FinishEffect0.setEnabled(true);
         }
     }
 }

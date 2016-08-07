@@ -58,5 +58,6 @@ public class ChangedComponentSave {
     
     public void clear() {
         changedControls.clear();
+        enableSaveEtc(false);
     }
 }

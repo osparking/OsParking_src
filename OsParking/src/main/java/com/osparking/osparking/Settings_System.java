@@ -77,10 +77,10 @@ import static com.osparking.global.names.ControlEnums.ButtonTypes.SAVE_BTN;
 import static com.osparking.global.names.ControlEnums.ButtonTypes.SET_BUTTON;
 import static com.osparking.global.names.ControlEnums.ComboBoxItemTypes.COMPLEX_CB_ITEM;
 import static com.osparking.global.names.ControlEnums.ComboBoxItemTypes.DAY_SUFFIX;
-import static com.osparking.global.names.ControlEnums.ComboBoxItemTypes.EBD_CHANGE_CB_ITEM;
+import static com.osparking.global.names.ControlEnums.ComboBoxItemTypes.E_BOARD_LOGGING_CB_ITEM;
 import static com.osparking.global.names.ControlEnums.ComboBoxItemTypes.FOUR_DIGIT_CB_ITEM;
 import static com.osparking.global.names.ControlEnums.ComboBoxItemTypes.NO_LOGGING_CB_ITEM;
-import static com.osparking.global.names.ControlEnums.ComboBoxItemTypes.SETTING_CHANGE_CB_ITEM;
+import static com.osparking.global.names.ControlEnums.ComboBoxItemTypes.SETTINGS_LOGGING_CB_ITEM;
 import static com.osparking.global.names.ControlEnums.ComboBoxItemTypes.SIX_DIGIT_CB_ITEM;
 import static com.osparking.global.names.ControlEnums.DialogMessages.PopSizeHelp1;
 import static com.osparking.global.names.ControlEnums.DialogMessages.PopSizeHelp2;
@@ -93,7 +93,6 @@ import static com.osparking.global.names.ControlEnums.DialogMessages.RECORD_DELA
 import static com.osparking.global.names.ControlEnums.DialogMessages.SAVE_SETTINGS_DIALOG;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.ATT_HELP_DIALOGTITLE;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.ERROR_DIALOGTITLE;
-import static com.osparking.global.names.ControlEnums.DialogTitleTypes.E_BOARD_SIM_TITLE;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.IP_ERROR_TITLE;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.LANGUAGE_SELECT_DIALOGTITLE;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.LOGGING_DIALOGTITLE;
@@ -243,7 +242,8 @@ public class Settings_System extends javax.swing.JFrame {
             if (comboBx != null) {
                 comboBx.removeAllItems();
                 for (CameraType type: CameraType.values()) {
-                    comboBx.addItem(type.getLabel());
+                    comboBx.addItem(type);
+//                    comboBx.addItem(type.getLabel());
                 }
             }
             
@@ -252,6 +252,7 @@ public class Settings_System extends javax.swing.JFrame {
                 comboBx.removeAllItems();
                 for (E_BoardType type: E_BoardType.values()) {
                     comboBx.addItem(type);
+//                    comboBx.addItem(type.getLabel());
                 }
             }
             
@@ -259,7 +260,8 @@ public class Settings_System extends javax.swing.JFrame {
             if (comboBx != null) {
                 comboBx.removeAllItems();
                 for (GateBarType type: GateBarType.values()) {
-                    comboBx.addItem(type.getLabel());
+//                    comboBx.addItem(type.getLabel());
+                    comboBx.addItem(type);
                 }
             }
             
@@ -753,7 +755,7 @@ public class Settings_System extends javax.swing.JFrame {
         parkinglotOptionPanel.add(ImageDurationLabel, gridBagConstraints);
 
         GateCountComboBox.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        GateCountComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "1", "2", "3", "4" }));
+        GateCountComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "1", "2" }));
         GateCountComboBox.setMinimumSize(new java.awt.Dimension(70, 23));
         GateCountComboBox.setName("GateCountComboBox"); // NOI18N
         GateCountComboBox.setPreferredSize(new java.awt.Dimension(70, 23));
@@ -2652,7 +2654,8 @@ public class Settings_System extends javax.swing.JFrame {
         int picHeight = Integer.parseInt(((String) TextFieldPicHeight.getText()).replace(",", ""));
         int flowCycle = Integer.parseInt(((String) FlowingComboBox.getSelectedItem()).replace(",", ""));
         int blinkCycle = Integer.parseInt(((String) BlinkingComboBox.getSelectedItem()).replace(",", ""));
-        
+        boolean gateCountChanged = false;
+
         try {
             StringBuffer sb = new StringBuffer("Update SettingsTable SET ");
             //<editor-fold desc="--create update statement">
@@ -2724,7 +2727,7 @@ public class Settings_System extends javax.swing.JFrame {
         } finally {
             // <editor-fold defaultstate="collapsed" desc="--Return resources and display the save result">
             closeDBstuff(conn, updateSettings, null, "(Save settings: " + (newStorePassingDelay ? "Y" : "N") + ")");
-
+            
             if (result == 1) {
                 //<editor-fold desc="-- Log system settings change if set to do so">
                 if (statCount != newStatCount) 
@@ -2768,7 +2771,7 @@ public class Settings_System extends javax.swing.JFrame {
                 
                 short newGateCount = new Short((String)GateCountComboBox.getSelectedItem());
                 
-                boolean gateCountChanged = gateCount != newGateCount;
+                gateCountChanged = gateCount != newGateCount;
                 if (gateCountChanged)
                 {
                     logParkingOperation(OpLogLevel.SettingsChange, "Settings Change, Number of Gates: " 
@@ -2818,8 +2821,17 @@ public class Settings_System extends javax.swing.JFrame {
             }
             // </editor-fold>
         }
+        boolean majorChange[] = new boolean[] {false};
         
-        result += saveGateDevices();
+        result += saveGateDevices(majorChange);
+        
+        if (mainForm != null && (gateCountChanged || majorChange[0]))
+        {
+            JOptionPane.showMessageDialog(mainForm, REBOOT_MESSAGE.getContent(), 
+                    REBOOT_POPUP.getContent(), WARNING_MESSAGE, 
+                    new javax.swing.ImageIcon(mainForm.getClass().getResource("/restart.png")));
+            mainForm.askUserIntentionOnProgramStop(true);
+        }                
         
         if (result == gateCount + 1) {
             readSettings();
@@ -2905,8 +2917,8 @@ public class Settings_System extends javax.swing.JFrame {
         JComboBox typeCBox = (JComboBox)componentMap.get("E_Board" + (tabIndex + 1) + "_TypeCBox");
         E_BoardType eBoardType = (E_BoardType)typeCBox.getSelectedItem();
         
-        eBoardDialog = new JDialog(this, 
-                eBoardType.getLabel() + " " + E_BOARD_SETTINGS_FRAME_TITLE.getContent(), 
+        eBoardDialog = new JDialog(this, eBoardType + " " + E_BOARD_SETTINGS_FRAME_TITLE.getContent(), 
+//                eBoardType.getLabel() + " " + E_BOARD_SETTINGS_FRAME_TITLE.getContent(), 
                 true);
         if (eBoardType == E_BoardType.Simulator) {
             getE_BoardDialog().getContentPane().add(
@@ -3733,9 +3745,6 @@ public class Settings_System extends javax.swing.JFrame {
     private javax.swing.JComboBox GateBar3_comID_CBox;
     private javax.swing.JComboBox GateBar4_comID_CBox;
     
-    private javax.swing.Box.Filler fillerCom1;
-    private javax.swing.Box.Filler fillerCom2;    
-
     /**
      * Read settings values from the DB table and implant form component values using them.
      */
@@ -3857,10 +3866,10 @@ public class Settings_System extends javax.swing.JFrame {
                     OptnLoggingLevelComboBox.addItem(NO_LOGGING_CB_ITEM.getContent());
                     break;
                 case SettingsChange:
-                    OptnLoggingLevelComboBox.addItem(SETTING_CHANGE_CB_ITEM.getContent());
+                    OptnLoggingLevelComboBox.addItem(SETTINGS_LOGGING_CB_ITEM.getContent());
                     break;
                 case EBDsettingsChange:
-                    OptnLoggingLevelComboBox.addItem(EBD_CHANGE_CB_ITEM.getContent());
+                    OptnLoggingLevelComboBox.addItem(E_BOARD_LOGGING_CB_ITEM.getContent());
                     break;
             }
         }        
@@ -3977,7 +3986,7 @@ public class Settings_System extends javax.swing.JFrame {
         getE_BoardDialog().dispose();
     }
 
-    private int saveGateDevices() {
+    private int saveGateDevices(boolean[] majorChange) {
         Connection conn = null;
         PreparedStatement updateSettings = null;
         int result = 0;
@@ -4023,9 +4032,16 @@ public class Settings_System extends javax.swing.JFrame {
                 
                 for (DeviceType type : DeviceType.values()) {
                     cBox = (JComboBox)componentMap.get(type.toString() + gateID + "_TypeCBox");
-                    updateSettings.setInt(pIndex++, cBox == null ? 0 : cBox.getSelectedIndex());
+                    int newType = cBox.getSelectedIndex();
+                    
+                    if (newType != deviceType[type.ordinal()][gateID]) {
+                        majorChange[0] = true;
+                    }
+                    
+                    updateSettings.setInt(pIndex++, cBox == null ? 0 : newType);
                     if (type != Camera) {
                         cBox = (JComboBox)componentMap.get(type.toString() + gateID + "_connTypeCBox");
+                        
                         updateSettings.setInt(pIndex++, cBox == null ? 0 : cBox.getSelectedIndex());
                         
                         cBox = (JComboBox)componentMap.get(type.toString() + gateID + "_comID_CBox");
@@ -4538,7 +4554,6 @@ public class Settings_System extends javax.swing.JFrame {
                         public void itemStateChanged(java.awt.event.ItemEvent evt) {
                             if (evt.getStateChange() == ItemEvent.SELECTED) {
                                 String COM_ID = (String)comIDcBox.getSelectedItem();
-                                System.out.println("gateNo : " + gateNo);
                                 if (COM_ID.equals(deviceComID[devType.ordinal()][gateNo])) {
                                     changedControls.remove(comIDcBox);            
                                 } else {

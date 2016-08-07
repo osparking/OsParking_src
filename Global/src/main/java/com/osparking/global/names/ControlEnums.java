@@ -829,9 +829,9 @@ public class ControlEnums {
         DUPLICATE_UNIT("중복되는 호실 번호 : ", "Duplicate unit number : "),
          
         OSPARKING_STOPS("오즈파킹 가동이 종료됨.", "OsParking operation finishes."),
-        REBOOT_MESSAGE("입구 수 변화로 인하여," + System.getProperty("line.separator") +
+        REBOOT_MESSAGE("중요 설정이 변경되어," + System.getProperty("line.separator") +
                 "오즈파킹이 자동 종료됨."  + System.getProperty("line.separator") +
-                "따라서 (필요하면),"  + System.getProperty("line.separator") +
+                "따라서, (필요하면)"  + System.getProperty("line.separator") +
                 "오즈파킹을 재가동 할 것!", 
                 "As Gate count changed," + System.getProperty("line.separator") +
                 "OsParking shuts down by itself." + System.getProperty("line.separator") +
@@ -1008,8 +1008,8 @@ public class ControlEnums {
         SIX_DIGIT_CB_ITEM("6+ 자리 영숫자", "Six+ alpha-num"),
         COMPLEX_CB_ITEM("8+ 자리 복합구성", "8+ complex config'"),
         NO_LOGGING_CB_ITEM("(로깅 안함)", "(No Logging)"),
-        SETTING_CHANGE_CB_ITEM("시스템 설정 변경", "Settings Change"),
-        EBD_CHANGE_CB_ITEM("사용자 및 차량 변경 추가", "E-board Change Added"),
+        SETTINGS_LOGGING_CB_ITEM("시스템 설정 변경", "Settings Change"),
+        E_BOARD_LOGGING_CB_ITEM("사용자 및 차량 변경 추가", "E-board Change Added"),
         DAY_CB_ITEM("일", "day"),
         DAYS_CB_ITEM("일", "days"),
         VERBATIM_CB_ITEM("문구 자체", "Exact Words"),
@@ -1030,6 +1030,24 @@ public class ControlEnums {
         STILL_FRAME_CB_ITEM("정지", "Still Frame");
         
         ComboBoxItemTypes(String korean, String english) {
+            contents[KOREAN.ordinal()] = korean;
+            contents[ENGLISH.ordinal()] = english;
+        }
+        
+        private String[] contents = new String[Languages.values().length];
+        
+        public String getContent() {
+                return contents[language.ordinal()];
+        }          
+    }
+    
+    
+    public enum OPTN_LOGGING {
+        NO_LOGGING_CB_ITEM("(로깅 안함)", "(No Logging)"),
+        SETTINGS_LOGGING_CB_ITEM("시스템 설정 변경", "Settings Change"),
+        E_BOARD_LOGGING_CB_ITEM("사용자 및 차량 변경 추가", "E-board Change Added");
+        
+        OPTN_LOGGING(String korean, String english) {
             contents[KOREAN.ordinal()] = korean;
             contents[ENGLISH.ordinal()] = english;
         }

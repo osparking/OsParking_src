@@ -151,7 +151,8 @@ public class NaraBarMan extends Thread implements IDevice.IManager, IDevice.ISer
                                                     barState == BarStatus.OPENED || barState == BarStatus.OPENING) {
                                                 oStream.write(getBarCommand(currItem.getType()));
                                                 getNaraBarMessages().peek().incSendCount();
-                                                System.out.println(currItem.getType().toString() + "~>");
+                                                if (DEBUG) 
+                                                    System.out.println(currItem.getType().toString() + "~>");
                                             } else {
                                                 currItem = getNaraBarMessages().remove();
                                             }
@@ -163,14 +164,16 @@ public class NaraBarMan extends Thread implements IDevice.IManager, IDevice.ISer
                                             } else {
                                                 oStream.write(getBarCommand(currItem.getType()));
                                                 getNaraBarMessages().peek().incSendCount();
-                                                System.out.println(currItem.getType().toString() + "~>");
+                                                if (DEBUG) 
+                                                    System.out.println(currItem.getType().toString() + "~>");
                                             }
                                             break;
 
                                         default:
                                             oStream.write(getBarCommand(currItem.getType()));
                                             getNaraBarMessages().peek().incSendCount();
-                                            System.out.println(currItem.getType().toString() + "~>");
+                                            if (DEBUG) 
+                                                System.out.println(currItem.getType().toString() + "~>");
                                             if (currItem.getType() == Nara_MsgType.Status) 
                                                 currItem = getNaraBarMessages().remove();
                                             break;

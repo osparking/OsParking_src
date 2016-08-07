@@ -16,6 +16,7 @@
  */
 package com.osparking.osparking.device.LEDnotice;
 
+import static com.osparking.global.Globals.DEBUG;
 import static com.osparking.global.Globals.isConnected;
 import com.osparking.global.names.OSP_enums.DeviceType;
 import com.osparking.osparking.ControlGUI;
@@ -60,7 +61,9 @@ public class SocketReader  extends Thread {
             LED_MsgType messageArrived = null;
             try {
                 messageArrived= readDeliveredMessage(ledNoticeManager.getSocket().getInputStream());
-                System.out.println("LED message type came: " + messageArrived);
+                if (DEBUG) {
+                    System.out.println("LED message type came: " + messageArrived);
+                }
                 
                 if (messageArrived != Broken) {
                     synchronized(ledNoticeManager.getMsgArrived()) {
@@ -69,7 +72,9 @@ public class SocketReader  extends Thread {
                     }
                 }              
             } catch (SocketTimeoutException ex) {
-                System.out.println("time out");
+                if (DEBUG) {
+                    System.out.println("time out");
+                }
             } catch (IOException ex) {
                 System.out.println("IO excep");
                 ledNoticeManager.finishConnection(null, "IO excep", gateID);
