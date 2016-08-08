@@ -2917,15 +2917,14 @@ public class Settings_System extends javax.swing.JFrame {
         JComboBox typeCBox = (JComboBox)componentMap.get("E_Board" + (tabIndex + 1) + "_TypeCBox");
         E_BoardType eBoardType = (E_BoardType)typeCBox.getSelectedItem();
         
-        eBoardDialog = new JDialog(this, eBoardType + " " + E_BOARD_SETTINGS_FRAME_TITLE.getContent(), 
-//                eBoardType.getLabel() + " " + E_BOARD_SETTINGS_FRAME_TITLE.getContent(), 
-                true);
+        eBoardDialog = new JDialog(this, 
+                eBoardType + " " + E_BOARD_SETTINGS_FRAME_TITLE.getContent(), true);
         if (eBoardType == E_BoardType.Simulator) {
             getE_BoardDialog().getContentPane().add(
                     (new Settings_EBoard(mainForm, this)).getContentPane());
             getE_BoardDialog().setResizable(false);
         } else if (eBoardType == E_BoardType.LEDnotice) {
-            Settings_LEDnotice ledNotice = new Settings_LEDnotice(mainForm, this, null, tabIndex + 1);
+            Settings_LEDnotice ledNotice = new Settings_LEDnotice(mainForm, this, tabIndex + 1);
             getE_BoardDialog().getContentPane().add(ledNotice.getContentPane());
             getE_BoardDialog().setPreferredSize(ledNotice.getPreferredSize());
             getE_BoardDialog().setResizable(false);

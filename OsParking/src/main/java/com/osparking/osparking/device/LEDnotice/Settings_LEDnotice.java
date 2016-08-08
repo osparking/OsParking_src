@@ -102,8 +102,7 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
     /**
      * Creates new form NewJFrame
      */
-    public Settings_LEDnotice(
-            ControlGUI mainForm, Settings_System parent, LEDnoticeManager manager, int gateNo)
+    public Settings_LEDnotice(ControlGUI mainForm, Settings_System parent, int gateNo)
     {
         initComponents();
         changedControls = new ChangedComponentSave(btn_Save, btn_Cancel, btn_Exit);
@@ -111,10 +110,10 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
         this.mainForm = mainForm;
         this.parent = parent; 
         if (mainForm == null) {
-            this.manager = manager;
-        } else {
-            this.manager = (LEDnoticeManager)mainForm.getDeviceManagers()[E_Board.ordinal()][gateNo];
+            mainForm = new ControlGUI(true);
         }
+        manager = (LEDnoticeManager)mainForm.getDeviceManagers()[E_Board.ordinal()][gateNo];
+        
         this.gateNo = gateNo;
         setIconImages(OSPiconList);
         String parentDialogTitle = parent.getE_BoardDialog().getTitle();
@@ -161,22 +160,12 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
             return;
         } else {
             LEDnoticeSettings aSetting = getLEDnoticeSetting(usage);
-            LEDnoticeManager manager;
             
+            inDemoMode[usage.ordinal()] = true;
             if (mainForm == null) {
-//                JOptionPane.showMessageDialog(this, "먼저 오즈파킹을 가동하십시오.");
-                inDemoMode[usage.ordinal()] = true;
-                if (dummyMainForm == null) {
-                    dummyMainForm = new ControlGUI(true);
-                }
-                manager = (LEDnoticeManager)dummyMainForm
-                        .getDeviceManagers()[E_Board.ordinal()][gateNo];
                 manager.showCurrentEffect(usage, aSetting); 
                 enableFinishButton(usage.ordinal(), true);
             } else {
-                inDemoMode[usage.ordinal()] = true;
-                manager = (LEDnoticeManager)mainForm
-                        .getDeviceManagers()[E_Board.ordinal()][gateNo];           
                 manager.showCurrentEffect(usage, aSetting); 
                 enableFinishButton(usage.ordinal(), true);
             }
@@ -184,17 +173,7 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
     }
 
     private void finishAllEffectDemo(int index) {
-        int gateNo = findGateNoUsingLEDnotice();
-        
-        if (mainForm == null) {
-            LEDnoticeManager manager = (LEDnoticeManager)dummyMainForm
-                    .getDeviceManagers()[E_Board.ordinal()][gateNo];
-            manager.finishShowingDemoEffect(index);
-        } else {
-            LEDnoticeManager manager = (LEDnoticeManager)mainForm
-                    .getDeviceManagers()[E_Board.ordinal()][gateNo];
-            manager.finishShowingDemoEffect(index);
-        }
+        manager.finishShowingDemoEffect(index);
     }
 
     private void demoAllEffects(int tabIndex) {
@@ -2530,7 +2509,7 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
     }//GEN-LAST:event_useLEDnoticeCkBox2ActionPerformed
 
     private void demoButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_demoButton2ActionPerformed
-        demoCurrentSetting(CAR_ENTRY_TOP_ROW);
+        demoCurrentInterruptSettings();
     }//GEN-LAST:event_demoButton2ActionPerformed
 
     private void demoFinishButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_demoFinishButton2ActionPerformed
@@ -2601,7 +2580,7 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
     }//GEN-LAST:event_useLEDnoticeCkBox3ActionPerformed
 
     private void demoButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_demoButton3ActionPerformed
-        // TODO add your handling code here:
+        demoCurrentInterruptSettings();
     }//GEN-LAST:event_demoButton3ActionPerformed
 
     private void demoFinishButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_demoFinishButton3ActionPerformed
