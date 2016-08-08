@@ -66,7 +66,7 @@ public class FinishLEDnoticeIntrTask extends TimerTask {
 
             manager.getLedNoticeMessages().add(new MsgItem(DEL_GROUP, 
                     manager.ledNoticeProtocol.delGroup(INTR_GROUP)));
-            
+            System.out.println("Interrupt stop message queued");
         } catch (InterruptedException ex) {
             logParkingException(Level.SEVERE, ex, "LEDnotice Board #" + deviceNo + " sender wait socket conn'");
         }          

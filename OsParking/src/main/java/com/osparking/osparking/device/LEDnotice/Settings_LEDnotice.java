@@ -162,13 +162,8 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
             LEDnoticeSettings aSetting = getLEDnoticeSetting(usage);
             
             inDemoMode[usage.ordinal()] = true;
-            if (mainForm == null) {
-                manager.showCurrentEffect(usage, aSetting); 
-                enableFinishButton(usage.ordinal(), true);
-            } else {
-                manager.showCurrentEffect(usage, aSetting); 
-                enableFinishButton(usage.ordinal(), true);
-            }
+            manager.showCurrentEffect(usage, aSetting); 
+            enableFinishButton(usage.ordinal(), true);
         }
     }
 
@@ -2418,12 +2413,10 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
 
     private void demoButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_demoButton1ActionPerformed
         demoCurrentSetting(DEFAULT_BOTTOM_ROW);
-//        enableFinishButton(1, true);
     }//GEN-LAST:event_demoButton1ActionPerformed
 
     private void demoFinishButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_demoFinishButton1ActionPerformed
         finishAllEffectDemo(1);
-        enableFinishButton(1, false);
     }//GEN-LAST:event_demoFinishButton1ActionPerformed
 
     private void startEffectHelpButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startEffectHelpButton1ActionPerformed
@@ -2509,7 +2502,7 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
     }//GEN-LAST:event_useLEDnoticeCkBox2ActionPerformed
 
     private void demoButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_demoButton2ActionPerformed
-        demoCurrentInterruptSettings();
+        demoCurrentInterruptSettings(2);
     }//GEN-LAST:event_demoButton2ActionPerformed
 
     private void demoFinishButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_demoFinishButton2ActionPerformed
@@ -2580,7 +2573,7 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
     }//GEN-LAST:event_useLEDnoticeCkBox3ActionPerformed
 
     private void demoButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_demoButton3ActionPerformed
-        demoCurrentInterruptSettings();
+        demoCurrentInterruptSettings(3);
     }//GEN-LAST:event_demoButton3ActionPerformed
 
     private void demoFinishButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_demoFinishButton3ActionPerformed
@@ -3187,7 +3180,7 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
         );
     }
 
-    private void demoCurrentInterruptSettings() {
+    private void demoCurrentInterruptSettings(int index) {
         LEDnoticeSettings topSetting = getLEDnoticeSetting(CAR_ENTRY_TOP_ROW);
         LEDnoticeSettings bottomSetting = getLEDnoticeSetting(CAR_ENTRY_BOTTOM_ROW);
         
@@ -3196,6 +3189,8 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
         
         manager.sendCarArrival_interruptMessage(topSetting, bottomSetting, (byte)gateNo, "서울32가1234", 
                 PermissionType.DISALLOWED, "노상주차경고", 3000);
+        enableFinishButton(index, true);
+
     }
 
     private void setButtonEnabledIf_UseCkBoxChanged(int index) {
@@ -3262,7 +3257,7 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
     private void current1stRowDemoHelp() {
         JOptionPane.showMessageDialog(this, 
                 "현재 설정 상태를 시연함" + System.lineSeparator()
-                        + "입차 표시 3초 후, 기본 표시로 복귀함" + System.lineSeparator()
-                        + "[그만] 버튼 사용으로 시연 종료!");
+                        + "입차 표시 3초 후, 기본 표시로 복귀하나" + System.lineSeparator()
+                        + "중간에 [그만] 버튼 사용으로 시연 종료 가능함.");
     }
 }
