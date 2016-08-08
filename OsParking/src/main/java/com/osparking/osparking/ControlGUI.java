@@ -294,7 +294,7 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
     /**
      * Creates new form MainForm
      */
-    public ControlGUI() {
+    public ControlGUI(boolean eBoardTest) {
         Thread.currentThread().setPriority(Thread.MAX_PRIORITY);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
@@ -530,9 +530,8 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
         LED_Timer = new Timer("ospLEDtimer", true);
         LED_Timer.schedule(new LED_Task(this, getDeviceManagers()), 0, LED_PERIOD);
         
-//        if (!DEBUG) 
-        {
-            processLogIn(null); // shortcut
+        if (!eBoardTest) {
+            processLogIn(null);
         }
     }
     
@@ -3279,7 +3278,7 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
                 if (!DEBUG) {
                     Globals.shortLicenseDialog(null);
                 }
-                ControlGUI mainForm = new ControlGUI();
+                ControlGUI mainForm = new ControlGUI(false);
                 if (!DEBUG) {
                     mainForm.removeDebugPanel();
                 }

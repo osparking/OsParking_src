@@ -28,6 +28,10 @@ import static com.osparking.global.Globals.font_Style;
 import static com.osparking.global.Globals.font_Type;
 import static com.osparking.global.Globals.getQuest20_Icon;
 import static com.osparking.global.Globals.head_font_Size;
+import static com.osparking.global.names.ControlEnums.DialogTitleTypes.BOTTOM_TAB_TITLE;
+import static com.osparking.global.names.ControlEnums.DialogTitleTypes.DEFAULT_TAB_TITLE;
+import static com.osparking.global.names.ControlEnums.DialogTitleTypes.TOP_TAB_TITLE;
+import static com.osparking.global.names.ControlEnums.DialogTitleTypes.VEHICLE_TAB_TITLE;
 import com.osparking.global.names.ControlEnums.FormMode;
 import static com.osparking.global.names.ControlEnums.MenuITemTypes.META_KEY_LABEL;
 import static com.osparking.global.names.DB_Access.connectionType;
@@ -84,6 +88,7 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
     private HashMap<String, Component> componentMap = new HashMap<String,Component>();
     
     boolean[] inDemoMode = new boolean[EBD_DisplayUsage.values().length];
+    ControlGUI dummyMainForm = null;
     
     void cancelDemoIfRunning() {
         for (EBD_DisplayUsage usage : EBD_DisplayUsage.values()) {
@@ -150,19 +155,30 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
         int gateNo = findGateNoUsingLEDnotice();
         
         cancelDemoIfRunning();
-        inDemoMode[usage.ordinal()] = true;
         
         if (gateNo == -1) {
             JOptionPane.showMessageDialog(this, "설정된 LEDnotice 장치가 없습니다.");
             return;
         } else {
+            LEDnoticeSettings aSetting = getLEDnoticeSetting(usage);
+            LEDnoticeManager manager;
+            
             if (mainForm == null) {
-                JOptionPane.showMessageDialog(this, "메인 창이 열려있지 않습니다.");
-            } else {
-                LEDnoticeManager manager = (LEDnoticeManager)mainForm
-                        .getDeviceManagers()[E_Board.ordinal()][gateNo];           
-                LEDnoticeSettings aSetting = getLEDnoticeSetting(usage);
+//                JOptionPane.showMessageDialog(this, "먼저 오즈파킹을 가동하십시오.");
+                inDemoMode[usage.ordinal()] = true;
+                if (dummyMainForm == null) {
+                    dummyMainForm = new ControlGUI(true);
+                }
+                manager = (LEDnoticeManager)dummyMainForm
+                        .getDeviceManagers()[E_Board.ordinal()][gateNo];
                 manager.showCurrentEffect(usage, aSetting); 
+                enableFinishButton(usage.ordinal(), true);
+            } else {
+                inDemoMode[usage.ordinal()] = true;
+                manager = (LEDnoticeManager)mainForm
+                        .getDeviceManagers()[E_Board.ordinal()][gateNo];           
+                manager.showCurrentEffect(usage, aSetting); 
+                enableFinishButton(usage.ordinal(), true);
             }
         }
     }
@@ -170,7 +186,11 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
     private void finishAllEffectDemo(int index) {
         int gateNo = findGateNoUsingLEDnotice();
         
-        if (mainForm != null) {
+        if (mainForm == null) {
+            LEDnoticeManager manager = (LEDnoticeManager)dummyMainForm
+                    .getDeviceManagers()[E_Board.ordinal()][gateNo];
+            manager.finishShowingDemoEffect(index);
+        } else {
             LEDnoticeManager manager = (LEDnoticeManager)mainForm
                     .getDeviceManagers()[E_Board.ordinal()][gateNo];
             manager.finishShowingDemoEffect(index);
@@ -178,25 +198,26 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
     }
 
     private void demoAllEffects(int tabIndex) {
-        int stopIndex = ((JComboBox)componentMap.get("combo_PauseTime" + tabIndex)).getSelectedIndex();
-        int colorIdx = ((JComboBox)componentMap.get("charColor" + tabIndex)).getSelectedIndex();
-        int fontIdx = ((JComboBox)componentMap.get("charFont" + tabIndex)).getSelectedIndex();
         int gateNo = findGateNoUsingLEDnotice();
     
         cancelDemoIfRunning();
-        inDemoMode[tabIndex] = true;
         
         if (gateNo == -1) {
             JOptionPane.showMessageDialog(this, "설정된 LEDnotice 장치가 없습니다.");
             return;
         } else {
             if (mainForm == null) {
-                JOptionPane.showMessageDialog(this, "메인 창이 열려있지 않습니다.");
+                JOptionPane.showMessageDialog(this, "먼저 오즈파킹을 가동하십시오.");
             } else {
+                int stopIndex = ((JComboBox)componentMap.get("combo_PauseTime" + tabIndex)).getSelectedIndex();
+                int colorIdx = ((JComboBox)componentMap.get("charColor" + tabIndex)).getSelectedIndex();
+                int fontIdx = ((JComboBox)componentMap.get("charFont" + tabIndex)).getSelectedIndex();
+                inDemoMode[tabIndex] = true;
                 LEDnoticeManager manager = (LEDnoticeManager)mainForm.getDeviceManagers()[
                         E_Board.ordinal()][gateNo];
 
                 manager.showAllEffects(tabIndex, stopIndex, colorIdx, fontIdx);
+                enableFinishButton(tabIndex, true);    
             }
         }    
     }
@@ -232,17 +253,17 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
             JComboBox typeBox = (JComboBox)componentMap.get("contentTypeBox" + usage.ordinal());
             
             if (usage == CAR_ENTRY_TOP_ROW || usage == CAR_ENTRY_BOTTOM_ROW) {
-                for (LEDnotice_enums.LEDnoticeVehicleContentType aFont : 
+                for (LEDnotice_enums.LEDnoticeVehicleContentType aType : 
                         LEDnotice_enums.LEDnoticeVehicleContentType.values()) 
                 {
-                    typeBox.addItem(aFont.getLabel());
+                    typeBox.addItem(aType.getLabel());
                 }
             }
             
-            for (LEDnotice_enums.LEDnoticeDefaultContentType aFont : 
+            for (LEDnotice_enums.LEDnoticeDefaultContentType aType : 
                     LEDnotice_enums.LEDnoticeDefaultContentType.values()) 
             {
-                typeBox.addItem(aFont.getLabel());
+                typeBox.addItem(aType.getLabel());
             }  
         }
     }    
@@ -354,58 +375,60 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
         useCkBoxHelpButton1 = new javax.swing.JButton();
         ledNoticePanelVehicle = new javax.swing.JTabbedPane();
         ledNoticePanel2 = new javax.swing.JPanel();
-        label_MSG4 = new javax.swing.JLabel();
-        label_Color12 = new javax.swing.JLabel();
-        label_Font4 = new javax.swing.JLabel();
-        label_ContentType4 = new javax.swing.JLabel();
+        label_MSG1 = new javax.swing.JLabel();
+        label_Color1 = new javax.swing.JLabel();
+        label_Font1 = new javax.swing.JLabel();
+        label_ContentType1 = new javax.swing.JLabel();
         contentTypeBox2 = new javax.swing.JComboBox();
         tf_VerbatimContent2 = new javax.swing.JTextField();
         charColor2 = new javax.swing.JComboBox();
-        charFont2 = new javax.swing.JComboBox();
+        charFont2 = new javax.swing.JComboBox(LEDnotice_enums.FontBox.values());
         combo_StartEffect2 = new javax.swing.JComboBox();
         combo_FinishEffect2 = new javax.swing.JComboBox();
-        label_Color13 = new javax.swing.JLabel();
-        label_Color14 = new javax.swing.JLabel();
-        label_Color15 = new javax.swing.JLabel();
-        label_Color16 = new javax.swing.JLabel();
+        label_Color8 = new javax.swing.JLabel();
+        label_Color9 = new javax.swing.JLabel();
+        label_Color10 = new javax.swing.JLabel();
+        midStopPanel2 = new javax.swing.JPanel();
         combo_PauseTime2 = new javax.swing.JComboBox();
+        label_Color11 = new javax.swing.JLabel();
         useLEDnoticeCkBox2 = new javax.swing.JCheckBox();
         demoButton2 = new javax.swing.JButton();
         demoFinishButton2 = new javax.swing.JButton();
-        jLabel43 = new javax.swing.JLabel();
+        jLabel42 = new javax.swing.JLabel();
         startEffectHelpButton2 = new javax.swing.JButton();
         demoCurrHelpButton2 = new javax.swing.JButton();
         demoAllHelpButton2 = new javax.swing.JButton();
-        endEffectHelpButton1 = new javax.swing.JButton();
+        endEffectHelpButton2 = new javax.swing.JButton();
         demoAllButton2 = new javax.swing.JButton();
-        pauseTimeHelpButton1 = new javax.swing.JButton();
+        pauseTimeHelpButton2 = new javax.swing.JButton();
         useCkBoxHelpButton2 = new javax.swing.JButton();
         ledNoticePanel3 = new javax.swing.JPanel();
-        label_MSG5 = new javax.swing.JLabel();
-        label_Color17 = new javax.swing.JLabel();
-        label_Font5 = new javax.swing.JLabel();
-        label_ContentType5 = new javax.swing.JLabel();
+        label_MSG3 = new javax.swing.JLabel();
+        label_Color3 = new javax.swing.JLabel();
+        label_Font3 = new javax.swing.JLabel();
+        label_ContentType3 = new javax.swing.JLabel();
         contentTypeBox3 = new javax.swing.JComboBox();
         tf_VerbatimContent3 = new javax.swing.JTextField();
         charColor3 = new javax.swing.JComboBox();
-        charFont3 = new javax.swing.JComboBox();
+        charFont3 = new javax.swing.JComboBox(LEDnotice_enums.FontBox.values());
         combo_StartEffect3 = new javax.swing.JComboBox();
         combo_FinishEffect3 = new javax.swing.JComboBox();
-        label_Color18 = new javax.swing.JLabel();
-        label_Color19 = new javax.swing.JLabel();
-        label_Color20 = new javax.swing.JLabel();
-        label_Color21 = new javax.swing.JLabel();
-        combo_PauseTime3 = new javax.swing.JComboBox();
+        label_Color26 = new javax.swing.JLabel();
+        label_Color27 = new javax.swing.JLabel();
+        label_Color28 = new javax.swing.JLabel();
+        midStopPanel3 = new javax.swing.JPanel();
+        combo_PauseTime5 = new javax.swing.JComboBox();
+        label_Color29 = new javax.swing.JLabel();
         useLEDnoticeCkBox3 = new javax.swing.JCheckBox();
         demoButton3 = new javax.swing.JButton();
         demoFinishButton3 = new javax.swing.JButton();
-        jLabel44 = new javax.swing.JLabel();
+        jLabel46 = new javax.swing.JLabel();
         startEffectHelpButton3 = new javax.swing.JButton();
         demoCurrHelpButton3 = new javax.swing.JButton();
         demoAllHelpButton3 = new javax.swing.JButton();
-        endEffectHelpButton2 = new javax.swing.JButton();
+        endEffectHelpButton3 = new javax.swing.JButton();
         demoAllButton3 = new javax.swing.JButton();
-        pauseTimeHelpButton2 = new javax.swing.JButton();
+        pauseTimeHelpButton3 = new javax.swing.JButton();
         useCkBoxHelpButton3 = new javax.swing.JButton();
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 20), new java.awt.Dimension(0, 20), new java.awt.Dimension(32767, 20));
         buttonPanel = new javax.swing.JPanel();
@@ -542,6 +565,11 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
         contentTypeBox0.setMinimumSize(new java.awt.Dimension(123, 30));
         contentTypeBox0.setName("contentTypeBox0"); // NOI18N
         contentTypeBox0.setPreferredSize(new java.awt.Dimension(123, 30));
+        contentTypeBox0.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                contentTypeBox0ItemStateChanged(evt);
+            }
+        });
         contentTypeBox0.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 contentTypeBox0ActionPerformed(evt);
@@ -707,7 +735,6 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
         ledNoticePanel0.add(midStopPanel0, gridBagConstraints);
 
         useLEDnoticeCkBox0.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        useLEDnoticeCkBox0.setSelected(true);
         useLEDnoticeCkBox0.setText("사용");
         useLEDnoticeCkBox0.setHorizontalTextPosition(javax.swing.SwingConstants.LEADING);
         useLEDnoticeCkBox0.setName("useLEDnoticeCkBox0"); // NOI18N
@@ -897,7 +924,7 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(10, 0, 10, 0);
         ledNoticePanel0.add(useCkBoxHelpButton0, gridBagConstraints);
 
-        ledNoticePanelDefault.addTab("상단", ledNoticePanel0);
+        ledNoticePanelDefault.addTab(TOP_TAB_TITLE.getContent(), ledNoticePanel0);
 
         ledNoticePanel1.setName("eBoard" + EBD_DisplayUsage.DEFAULT_TOP_ROW.getVal());
         ledNoticePanel1.setLayout(new java.awt.GridBagLayout());
@@ -1113,7 +1140,6 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
         ledNoticePanel1.add(midStopPanel1, gridBagConstraints);
 
         useLEDnoticeCkBox1.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        useLEDnoticeCkBox1.setSelected(true);
         useLEDnoticeCkBox1.setText("사용");
         useLEDnoticeCkBox1.setHorizontalTextPosition(javax.swing.SwingConstants.LEADING);
         useLEDnoticeCkBox1.setName("useLEDnoticeCkBox1"); // NOI18N
@@ -1267,9 +1293,9 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(10, 0, 10, 0);
         ledNoticePanel1.add(useCkBoxHelpButton1, gridBagConstraints);
 
-        ledNoticePanelDefault.addTab("하단", ledNoticePanel1);
+        ledNoticePanelDefault.addTab(BOTTOM_TAB_TITLE.getContent(), ledNoticePanel1);
 
-        ledNoticeTabbedPane.addTab("기본", ledNoticePanelDefault);
+        ledNoticeTabbedPane.addTab(DEFAULT_TAB_TITLE.getContent(), ledNoticePanelDefault);
 
         ledNoticePanelVehicle.setBorder(javax.swing.BorderFactory.createEtchedBorder(java.awt.Color.black, null));
         ledNoticePanelVehicle.setTabPlacement(javax.swing.JTabbedPane.LEFT);
@@ -1284,60 +1310,53 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
         ledNoticePanel2.setName("eBoard" + EBD_DisplayUsage.CAR_ENTRY_TOP_ROW.getVal());
         ledNoticePanel2.setLayout(new java.awt.GridBagLayout());
 
-        label_MSG4.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        label_MSG4.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        label_MSG4.setText("문자열");
-        label_MSG4.setPreferredSize(new java.awt.Dimension(76, 15));
+        label_MSG1.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        label_MSG1.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        label_MSG1.setText("문자열");
+        label_MSG1.setPreferredSize(new java.awt.Dimension(76, 15));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
-        ledNoticePanel2.add(label_MSG4, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(0, 15, 0, 5);
+        ledNoticePanel2.add(label_MSG1, gridBagConstraints);
 
-        label_Color12.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        label_Color12.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        label_Color12.setText("중간멈춤");
-        label_Color12.setPreferredSize(new java.awt.Dimension(76, 15));
+        label_Color1.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        label_Color1.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        label_Color1.setText("중간멈춤");
+        label_Color1.setPreferredSize(new java.awt.Dimension(76, 15));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 4;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
-        ledNoticePanel2.add(label_Color12, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(0, 15, 0, 5);
+        ledNoticePanel2.add(label_Color1, gridBagConstraints);
 
-        label_Font4.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        label_Font4.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        label_Font4.setText("폰트");
-        label_Font4.setMaximumSize(new java.awt.Dimension(100, 15));
-        label_Font4.setPreferredSize(new java.awt.Dimension(38, 15));
+        label_Font1.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        label_Font1.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        label_Font1.setText("폰트");
+        label_Font1.setMaximumSize(new java.awt.Dimension(100, 15));
+        label_Font1.setPreferredSize(new java.awt.Dimension(38, 15));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 4;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
-        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 0);
-        ledNoticePanel2.add(label_Font4, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(0, 30, 5, 5);
+        ledNoticePanel2.add(label_Font1, gridBagConstraints);
 
-        label_ContentType4.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        label_ContentType4.setText("표시유형");
+        label_ContentType1.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        label_ContentType1.setText("표시유형");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
-        ledNoticePanel2.add(label_ContentType4, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(0, 15, 0, 5);
+        ledNoticePanel2.add(label_ContentType1, gridBagConstraints);
 
         contentTypeBox2.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        contentTypeBox2.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "문구 자체", "주차장 이름" }));
-        contentTypeBox2.setMinimumSize(new java.awt.Dimension(123, 25));
+        contentTypeBox2.setMinimumSize(new java.awt.Dimension(123, 30));
         contentTypeBox2.setName("contentTypeBox2"); // NOI18N
-        contentTypeBox2.setPreferredSize(new java.awt.Dimension(123, 25));
-        contentTypeBox2.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
-            public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
-            }
-            public void popupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {
-                contentTypeBox2PopupMenuWillBecomeInvisible(evt);
-            }
-            public void popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {
-            }
-        });
+        contentTypeBox2.setPreferredSize(new java.awt.Dimension(123, 30));
         contentTypeBox2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 contentTypeBox2ActionPerformed(evt);
@@ -1346,13 +1365,14 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 1;
+        gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 0);
         ledNoticePanel2.add(contentTypeBox2, gridBagConstraints);
 
         tf_VerbatimContent2.setColumns(23);
         tf_VerbatimContent2.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        tf_VerbatimContent2.setMinimumSize(new java.awt.Dimension(250, 23));
+        tf_VerbatimContent2.setMinimumSize(new Dimension(250, TEXT_FIELD_HEIGHT));
         tf_VerbatimContent2.setName("tf_VerbatimContent2"); // NOI18N
-        tf_VerbatimContent2.setPreferredSize(new java.awt.Dimension(250, 23));
+        tf_VerbatimContent2.setPreferredSize(new Dimension(250, TEXT_FIELD_HEIGHT));
         tf_VerbatimContent2.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 tf_VerbatimContent2KeyReleased(evt);
@@ -1365,158 +1385,150 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 5;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 0, 5, 10);
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 10);
         ledNoticePanel2.add(tf_VerbatimContent2, gridBagConstraints);
 
         charColor2.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        charColor2.setMinimumSize(new java.awt.Dimension(70, 25));
+        charColor2.setMinimumSize(new java.awt.Dimension(70, 30));
         charColor2.setName("charColor2"); // NOI18N
-        charColor2.setPreferredSize(new java.awt.Dimension(70, 25));
-        charColor2.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
-            public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
-            }
-            public void popupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {
-                charColor2PopupMenuWillBecomeInvisible(evt);
-            }
-            public void popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {
+        charColor2.setPreferredSize(new java.awt.Dimension(70, 30));
+        charColor2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                charColor2ActionPerformed(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 3;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
         ledNoticePanel2.add(charColor2, gridBagConstraints);
 
         charFont2.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        charFont2.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "굴림체", "궁서체" }));
-        charFont2.setMinimumSize(new java.awt.Dimension(70, 25));
+        charFont2.setMinimumSize(new java.awt.Dimension(70, 30));
         charFont2.setName("charFont2"); // NOI18N
-        charFont2.setPreferredSize(new java.awt.Dimension(70, 25));
-        charFont2.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
-            public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
-            }
-            public void popupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {
-                charFont2PopupMenuWillBecomeInvisible(evt);
-            }
-            public void popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {
+        charFont2.setPreferredSize(new java.awt.Dimension(70, 30));
+        charFont2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                charFont2ActionPerformed(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 4;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
         ledNoticePanel2.add(charFont2, gridBagConstraints);
 
         combo_StartEffect2.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         combo_StartEffect2.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "왼쪽흐름", "오른쪽흐름", "위로흐름", "아래로흐름", "정지", "깜빡임", "반전", "플레싱", "블라인드", "레이저", "중앙이동", "펼침", "좌흐름적색깜빡임", "우흐름적색깜빡임", "좌흐름녹색깜빡임", "우흐름녹색깜빡임", "회전", "좌우열기", "좌우닫기", "상하열기", "상하닫기", "모듈별이동", "모듈별회전", "상하색분리", "좌우색분리", "테두리이동", "확대", "세로확대", "가로확대", "줄깜빡임", "가로쌓기", "흩뿌리기" }));
-        combo_StartEffect2.setMinimumSize(new java.awt.Dimension(123, 25));
+        combo_StartEffect2.setMinimumSize(new java.awt.Dimension(123, 30));
         combo_StartEffect2.setName("combo_StartEffect2"); // NOI18N
-        combo_StartEffect2.setPreferredSize(new java.awt.Dimension(123, 25));
-        combo_StartEffect2.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
-            public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
-            }
-            public void popupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {
-                combo_StartEffect2PopupMenuWillBecomeInvisible(evt);
-            }
-            public void popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {
+        combo_StartEffect2.setPreferredSize(new java.awt.Dimension(123, 30));
+        combo_StartEffect2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                combo_StartEffect2ActionPerformed(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 3;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(0, 5, 5, 0);
         ledNoticePanel2.add(combo_StartEffect2, gridBagConstraints);
 
         combo_FinishEffect2.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         combo_FinishEffect2.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "효과없음", "왼쪽흐름", "오른쪽흐름", "위로흐름", "아래로흐름", "정지", "깜빡임", "반전", "플레싱", "블라인드", "레이저", "중앙이동", "펼침", "좌흐름적색깜빡임", "우흐름적색깜빡임", "좌흐름녹색깜빡임", "우흐름녹색깜빡임", "회전", "좌우열기", "좌우닫기", "상하열기", "상하닫기", "모듈별이동", "모듈별회전", "상하색분리", "좌우색분리", "테두리이동", "확대", "세로확대", "가로확대", "줄깜빡임", "가로쌓기", "흩뿌리기" }));
-        combo_FinishEffect2.setMinimumSize(new java.awt.Dimension(123, 25));
+        combo_FinishEffect2.setMinimumSize(new java.awt.Dimension(123, 30));
         combo_FinishEffect2.setName("combo_FinishEffect2"); // NOI18N
-        combo_FinishEffect2.setPreferredSize(new java.awt.Dimension(123, 25));
-        combo_FinishEffect2.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
-            public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
-            }
-            public void popupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {
-                combo_FinishEffect2PopupMenuWillBecomeInvisible(evt);
-            }
-            public void popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {
+        combo_FinishEffect2.setPreferredSize(new java.awt.Dimension(123, 30));
+        combo_FinishEffect2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                combo_FinishEffect2ActionPerformed(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 5;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 20, 0);
+        gridBagConstraints.insets = new java.awt.Insets(0, 5, 10, 0);
         ledNoticePanel2.add(combo_FinishEffect2, gridBagConstraints);
 
-        label_Color13.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        label_Color13.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        label_Color13.setText("색상");
-        label_Color13.setMaximumSize(new java.awt.Dimension(100, 15));
-        label_Color13.setPreferredSize(new java.awt.Dimension(38, 15));
+        label_Color8.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        label_Color8.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        label_Color8.setText("색상");
+        label_Color8.setMaximumSize(new java.awt.Dimension(100, 15));
+        label_Color8.setPreferredSize(new java.awt.Dimension(38, 15));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 3;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
-        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 0);
-        ledNoticePanel2.add(label_Color13, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(0, 30, 5, 5);
+        ledNoticePanel2.add(label_Color8, gridBagConstraints);
 
-        label_Color14.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        label_Color14.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        label_Color14.setText("마침효과");
-        label_Color14.setPreferredSize(new java.awt.Dimension(76, 15));
+        label_Color9.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        label_Color9.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        label_Color9.setText("마침효과");
+        label_Color9.setPreferredSize(new java.awt.Dimension(76, 15));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 5;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 20, 0);
-        ledNoticePanel2.add(label_Color14, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(0, 15, 10, 5);
+        ledNoticePanel2.add(label_Color9, gridBagConstraints);
 
-        label_Color15.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        label_Color15.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        label_Color15.setText("시작효과");
-        label_Color15.setPreferredSize(new java.awt.Dimension(76, 15));
+        label_Color10.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        label_Color10.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        label_Color10.setText("시작효과");
+        label_Color10.setPreferredSize(new java.awt.Dimension(76, 15));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 3;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
-        ledNoticePanel2.add(label_Color15, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(0, 15, 5, 5);
+        ledNoticePanel2.add(label_Color10, gridBagConstraints);
 
-        label_Color16.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        label_Color16.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        label_Color16.setText("초");
-        label_Color16.setPreferredSize(new java.awt.Dimension(25, 15));
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 4;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 20);
-        ledNoticePanel2.add(label_Color16, gridBagConstraints);
+        midStopPanel2.setMaximumSize(new java.awt.Dimension(95, 30));
+        midStopPanel2.setPreferredSize(new java.awt.Dimension(100, 30));
+        midStopPanel2.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 0, 0));
 
         combo_PauseTime2.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         combo_PauseTime2.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10" }));
-        combo_PauseTime2.setMinimumSize(new java.awt.Dimension(70, 25));
+        combo_PauseTime2.setMaximumSize(new java.awt.Dimension(70, 30));
+        combo_PauseTime2.setMinimumSize(new java.awt.Dimension(70, 30));
         combo_PauseTime2.setName("combo_PauseTime2"); // NOI18N
-        combo_PauseTime2.setPreferredSize(new java.awt.Dimension(70, 25));
-        combo_PauseTime2.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
-            public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
-            }
-            public void popupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {
-                combo_PauseTime2PopupMenuWillBecomeInvisible(evt);
-            }
-            public void popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {
+        combo_PauseTime2.setPreferredSize(new java.awt.Dimension(70, 30));
+        combo_PauseTime2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                combo_PauseTime2ActionPerformed(evt);
             }
         });
+        midStopPanel2.add(combo_PauseTime2);
+
+        label_Color11.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        label_Color11.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        label_Color11.setText("초");
+        label_Color11.setMaximumSize(new java.awt.Dimension(25, 15));
+        label_Color11.setMinimumSize(new java.awt.Dimension(25, 15));
+        label_Color11.setPreferredSize(new java.awt.Dimension(25, 15));
+        midStopPanel2.add(label_Color11);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 4;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        ledNoticePanel2.add(combo_PauseTime2, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(0, 5, 5, 0);
+        ledNoticePanel2.add(midStopPanel2, gridBagConstraints);
 
         useLEDnoticeCkBox2.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        useLEDnoticeCkBox2.setSelected(true);
         useLEDnoticeCkBox2.setText("사용");
         useLEDnoticeCkBox2.setHorizontalTextPosition(javax.swing.SwingConstants.LEADING);
         useLEDnoticeCkBox2.setName("useLEDnoticeCkBox2"); // NOI18N
+        useLEDnoticeCkBox2.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                useLEDnoticeCkBox2ItemStateChanged(evt);
+            }
+        });
         useLEDnoticeCkBox2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 useLEDnoticeCkBox2ActionPerformed(evt);
@@ -1526,11 +1538,16 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
-        gridBagConstraints.insets = new java.awt.Insets(10, 0, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(10, 15, 10, 5);
         ledNoticePanel2.add(useLEDnoticeCkBox2, gridBagConstraints);
 
         demoButton2.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         demoButton2.setText("현재");
+        demoButton2.setEnabled(false);
+        demoButton2.setMaximumSize(new java.awt.Dimension(59, 30));
+        demoButton2.setMinimumSize(new java.awt.Dimension(59, 30));
+        demoButton2.setName("demoButton2"); // NOI18N
+        demoButton2.setPreferredSize(new java.awt.Dimension(59, 30));
         demoButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 demoButton2ActionPerformed(evt);
@@ -1539,11 +1556,16 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 5;
         gridBagConstraints.gridy = 3;
-        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(0, 15, 5, 0);
         ledNoticePanel2.add(demoButton2, gridBagConstraints);
 
         demoFinishButton2.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         demoFinishButton2.setText("그만");
+        demoFinishButton2.setEnabled(false);
+        demoFinishButton2.setMaximumSize(new java.awt.Dimension(59, 30));
+        demoFinishButton2.setMinimumSize(new java.awt.Dimension(59, 30));
+        demoFinishButton2.setName("demoFinishButton2"); // NOI18N
+        demoFinishButton2.setPreferredSize(new java.awt.Dimension(59, 30));
         demoFinishButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 demoFinishButton2ActionPerformed(evt);
@@ -1552,16 +1574,16 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 5;
         gridBagConstraints.gridy = 5;
-        gridBagConstraints.insets = new java.awt.Insets(0, 10, 20, 0);
+        gridBagConstraints.insets = new java.awt.Insets(0, 15, 10, 0);
         ledNoticePanel2.add(demoFinishButton2, gridBagConstraints);
 
-        jLabel43.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        jLabel43.setText("시연보기");
+        jLabel42.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        jLabel42.setText("시연보기");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 5;
         gridBagConstraints.gridy = 2;
-        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 0);
-        ledNoticePanel2.add(jLabel43, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(0, 15, 0, 0);
+        ledNoticePanel2.add(jLabel42, gridBagConstraints);
 
         startEffectHelpButton2.setBackground(new java.awt.Color(153, 255, 153));
         startEffectHelpButton2.setFont(new java.awt.Font("Dotum", 1, 14)); // NOI18N
@@ -1578,6 +1600,7 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 3;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
         ledNoticePanel2.add(startEffectHelpButton2, gridBagConstraints);
 
         demoCurrHelpButton2.setBackground(new java.awt.Color(153, 255, 153));
@@ -1595,7 +1618,7 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 6;
         gridBagConstraints.gridy = 3;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 15);
+        gridBagConstraints.insets = new java.awt.Insets(0, 5, 5, 15);
         ledNoticePanel2.add(demoCurrHelpButton2, gridBagConstraints);
 
         demoAllHelpButton2.setBackground(new java.awt.Color(153, 255, 153));
@@ -1613,29 +1636,33 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 6;
         gridBagConstraints.gridy = 4;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 15);
+        gridBagConstraints.insets = new java.awt.Insets(0, 5, 5, 15);
         ledNoticePanel2.add(demoAllHelpButton2, gridBagConstraints);
 
-        endEffectHelpButton1.setBackground(new java.awt.Color(153, 255, 153));
-        endEffectHelpButton1.setFont(new java.awt.Font("Dotum", 1, 14)); // NOI18N
-        endEffectHelpButton1.setIcon(getQuest20_Icon());
-        endEffectHelpButton1.setMargin(new java.awt.Insets(2, 4, 2, 4));
-        endEffectHelpButton1.setMinimumSize(new java.awt.Dimension(20, 20));
-        endEffectHelpButton1.setOpaque(false);
-        endEffectHelpButton1.setPreferredSize(new java.awt.Dimension(20, 20));
-        endEffectHelpButton1.addActionListener(new java.awt.event.ActionListener() {
+        endEffectHelpButton2.setBackground(new java.awt.Color(153, 255, 153));
+        endEffectHelpButton2.setFont(new java.awt.Font("Dotum", 1, 14)); // NOI18N
+        endEffectHelpButton2.setIcon(getQuest20_Icon());
+        endEffectHelpButton2.setMargin(new java.awt.Insets(2, 4, 2, 4));
+        endEffectHelpButton2.setMinimumSize(new java.awt.Dimension(20, 20));
+        endEffectHelpButton2.setOpaque(false);
+        endEffectHelpButton2.setPreferredSize(new java.awt.Dimension(20, 20));
+        endEffectHelpButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                endEffectHelpButton1ActionPerformed(evt);
+                endEffectHelpButton2ActionPerformed(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 5;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 20, 0);
-        ledNoticePanel2.add(endEffectHelpButton1, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 0);
+        ledNoticePanel2.add(endEffectHelpButton2, gridBagConstraints);
 
         demoAllButton2.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         demoAllButton2.setText("전체");
+        demoAllButton2.setMaximumSize(new java.awt.Dimension(59, 30));
+        demoAllButton2.setMinimumSize(new java.awt.Dimension(59, 30));
+        demoAllButton2.setName("demoAllButton2"); // NOI18N
+        demoAllButton2.setPreferredSize(new java.awt.Dimension(59, 30));
         demoAllButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 demoAllButton2ActionPerformed(evt);
@@ -1644,25 +1671,26 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 5;
         gridBagConstraints.gridy = 4;
-        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(0, 15, 5, 0);
         ledNoticePanel2.add(demoAllButton2, gridBagConstraints);
 
-        pauseTimeHelpButton1.setBackground(new java.awt.Color(153, 255, 153));
-        pauseTimeHelpButton1.setFont(new java.awt.Font("Dotum", 1, 14)); // NOI18N
-        pauseTimeHelpButton1.setIcon(getQuest20_Icon());
-        pauseTimeHelpButton1.setMargin(new java.awt.Insets(2, 4, 2, 4));
-        pauseTimeHelpButton1.setMinimumSize(new java.awt.Dimension(20, 20));
-        pauseTimeHelpButton1.setOpaque(false);
-        pauseTimeHelpButton1.setPreferredSize(new java.awt.Dimension(20, 20));
-        pauseTimeHelpButton1.addActionListener(new java.awt.event.ActionListener() {
+        pauseTimeHelpButton2.setBackground(new java.awt.Color(153, 255, 153));
+        pauseTimeHelpButton2.setFont(new java.awt.Font("Dotum", 1, 14)); // NOI18N
+        pauseTimeHelpButton2.setIcon(getQuest20_Icon());
+        pauseTimeHelpButton2.setMargin(new java.awt.Insets(2, 4, 2, 4));
+        pauseTimeHelpButton2.setMinimumSize(new java.awt.Dimension(20, 20));
+        pauseTimeHelpButton2.setOpaque(false);
+        pauseTimeHelpButton2.setPreferredSize(new java.awt.Dimension(20, 20));
+        pauseTimeHelpButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                pauseTimeHelpButton1ActionPerformed(evt);
+                pauseTimeHelpButton2ActionPerformed(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 4;
-        ledNoticePanel2.add(pauseTimeHelpButton1, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
+        ledNoticePanel2.add(pauseTimeHelpButton2, gridBagConstraints);
 
         useCkBoxHelpButton2.setBackground(new java.awt.Color(153, 255, 153));
         useCkBoxHelpButton2.setFont(new java.awt.Font("Dotum", 1, 14)); // NOI18N
@@ -1679,68 +1707,61 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.insets = new java.awt.Insets(10, 0, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(10, 0, 10, 0);
         ledNoticePanel2.add(useCkBoxHelpButton2, gridBagConstraints);
 
-        ledNoticePanelVehicle.addTab("상단", ledNoticePanel2);
+        ledNoticePanelVehicle.addTab(TOP_TAB_TITLE.getContent(), ledNoticePanel2);
 
         ledNoticePanel3.setName("eBoard" + EBD_DisplayUsage.CAR_ENTRY_BOTTOM_ROW.getVal());
         ledNoticePanel3.setLayout(new java.awt.GridBagLayout());
 
-        label_MSG5.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        label_MSG5.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        label_MSG5.setText("문자열");
-        label_MSG5.setPreferredSize(new java.awt.Dimension(76, 15));
+        label_MSG3.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        label_MSG3.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        label_MSG3.setText("문자열");
+        label_MSG3.setPreferredSize(new java.awt.Dimension(76, 15));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
-        ledNoticePanel3.add(label_MSG5, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(0, 15, 0, 5);
+        ledNoticePanel3.add(label_MSG3, gridBagConstraints);
 
-        label_Color17.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        label_Color17.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        label_Color17.setText("중간멈춤");
-        label_Color17.setPreferredSize(new java.awt.Dimension(76, 15));
+        label_Color3.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        label_Color3.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        label_Color3.setText("중간멈춤");
+        label_Color3.setPreferredSize(new java.awt.Dimension(76, 15));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 4;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
-        ledNoticePanel3.add(label_Color17, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(0, 15, 0, 5);
+        ledNoticePanel3.add(label_Color3, gridBagConstraints);
 
-        label_Font5.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        label_Font5.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        label_Font5.setText("폰트");
-        label_Font5.setMaximumSize(new java.awt.Dimension(100, 15));
-        label_Font5.setPreferredSize(new java.awt.Dimension(38, 15));
+        label_Font3.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        label_Font3.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        label_Font3.setText("폰트");
+        label_Font3.setMaximumSize(new java.awt.Dimension(100, 15));
+        label_Font3.setPreferredSize(new java.awt.Dimension(38, 15));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 4;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
-        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 0);
-        ledNoticePanel3.add(label_Font5, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(0, 30, 5, 5);
+        ledNoticePanel3.add(label_Font3, gridBagConstraints);
 
-        label_ContentType5.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        label_ContentType5.setText("표시유형");
+        label_ContentType3.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        label_ContentType3.setText("표시유형");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
-        ledNoticePanel3.add(label_ContentType5, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(0, 15, 0, 5);
+        ledNoticePanel3.add(label_ContentType3, gridBagConstraints);
 
         contentTypeBox3.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        contentTypeBox3.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "문구 자체", "주차장 이름" }));
-        contentTypeBox3.setMinimumSize(new java.awt.Dimension(123, 25));
+        contentTypeBox3.setMinimumSize(new java.awt.Dimension(123, 30));
         contentTypeBox3.setName("contentTypeBox3"); // NOI18N
-        contentTypeBox3.setPreferredSize(new java.awt.Dimension(123, 25));
-        contentTypeBox3.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
-            public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
-            }
-            public void popupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {
-                contentTypeBox3PopupMenuWillBecomeInvisible(evt);
-            }
-            public void popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {
-            }
-        });
+        contentTypeBox3.setPreferredSize(new java.awt.Dimension(123, 30));
         contentTypeBox3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 contentTypeBox3ActionPerformed(evt);
@@ -1749,13 +1770,14 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 1;
+        gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 0);
         ledNoticePanel3.add(contentTypeBox3, gridBagConstraints);
 
         tf_VerbatimContent3.setColumns(23);
         tf_VerbatimContent3.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        tf_VerbatimContent3.setMinimumSize(new java.awt.Dimension(250, 23));
+        tf_VerbatimContent3.setMinimumSize(new Dimension(250, TEXT_FIELD_HEIGHT));
         tf_VerbatimContent3.setName("tf_VerbatimContent3"); // NOI18N
-        tf_VerbatimContent3.setPreferredSize(new java.awt.Dimension(250, 23));
+        tf_VerbatimContent3.setPreferredSize(new Dimension(250, TEXT_FIELD_HEIGHT));
         tf_VerbatimContent3.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 tf_VerbatimContent3KeyReleased(evt);
@@ -1768,161 +1790,138 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 5;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 0, 5, 10);
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 10);
         ledNoticePanel3.add(tf_VerbatimContent3, gridBagConstraints);
 
         charColor3.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        charColor3.setMinimumSize(new java.awt.Dimension(70, 25));
+        charColor3.setMinimumSize(new java.awt.Dimension(70, 30));
         charColor3.setName("charColor3"); // NOI18N
-        charColor3.setPreferredSize(new java.awt.Dimension(70, 25));
-        charColor3.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
-            public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
-            }
-            public void popupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {
-                charColor3PopupMenuWillBecomeInvisible(evt);
-            }
-            public void popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {
+        charColor3.setPreferredSize(new java.awt.Dimension(70, 30));
+        charColor3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                charColor3ActionPerformed(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 3;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
         ledNoticePanel3.add(charColor3, gridBagConstraints);
 
         charFont3.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        charFont3.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "굴림체", "궁서체" }));
-        charFont3.setMinimumSize(new java.awt.Dimension(70, 25));
+        charFont3.setMinimumSize(new java.awt.Dimension(70, 30));
         charFont3.setName("charFont3"); // NOI18N
-        charFont3.setPreferredSize(new java.awt.Dimension(70, 25));
-        charFont3.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
-            public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
-            }
-            public void popupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {
-                charFont3PopupMenuWillBecomeInvisible(evt);
-            }
-            public void popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {
+        charFont3.setPreferredSize(new java.awt.Dimension(70, 30));
+        charFont3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                charFont3ActionPerformed(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 4;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
         ledNoticePanel3.add(charFont3, gridBagConstraints);
 
         combo_StartEffect3.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         combo_StartEffect3.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "왼쪽흐름", "오른쪽흐름", "위로흐름", "아래로흐름", "정지", "깜빡임", "반전", "플레싱", "블라인드", "레이저", "중앙이동", "펼침", "좌흐름적색깜빡임", "우흐름적색깜빡임", "좌흐름녹색깜빡임", "우흐름녹색깜빡임", "회전", "좌우열기", "좌우닫기", "상하열기", "상하닫기", "모듈별이동", "모듈별회전", "상하색분리", "좌우색분리", "테두리이동", "확대", "세로확대", "가로확대", "줄깜빡임", "가로쌓기", "흩뿌리기" }));
         combo_StartEffect3.setEnabled(false);
-        combo_StartEffect3.setMinimumSize(new java.awt.Dimension(123, 25));
+        combo_StartEffect3.setMinimumSize(new java.awt.Dimension(123, 30));
         combo_StartEffect3.setName("combo_StartEffect3"); // NOI18N
-        combo_StartEffect3.setPreferredSize(new java.awt.Dimension(123, 25));
-        combo_StartEffect3.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
-            public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
-            }
-            public void popupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {
-                combo_StartEffect3PopupMenuWillBecomeInvisible(evt);
-            }
-            public void popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {
-            }
-        });
+        combo_StartEffect3.setPreferredSize(new java.awt.Dimension(123, 30));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 3;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(0, 5, 5, 0);
         ledNoticePanel3.add(combo_StartEffect3, gridBagConstraints);
 
         combo_FinishEffect3.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         combo_FinishEffect3.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "효과없음", "왼쪽흐름", "오른쪽흐름", "위로흐름", "아래로흐름", "정지", "깜빡임", "반전", "플레싱", "블라인드", "레이저", "중앙이동", "펼침", "좌흐름적색깜빡임", "우흐름적색깜빡임", "좌흐름녹색깜빡임", "우흐름녹색깜빡임", "회전", "좌우열기", "좌우닫기", "상하열기", "상하닫기", "모듈별이동", "모듈별회전", "상하색분리", "좌우색분리", "테두리이동", "확대", "세로확대", "가로확대", "줄깜빡임", "가로쌓기", "흩뿌리기" }));
         combo_FinishEffect3.setEnabled(false);
-        combo_FinishEffect3.setMinimumSize(new java.awt.Dimension(123, 25));
+        combo_FinishEffect3.setMinimumSize(new java.awt.Dimension(123, 30));
         combo_FinishEffect3.setName("combo_FinishEffect3"); // NOI18N
-        combo_FinishEffect3.setPreferredSize(new java.awt.Dimension(123, 25));
-        combo_FinishEffect3.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
-            public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
-            }
-            public void popupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {
-                combo_FinishEffect3PopupMenuWillBecomeInvisible(evt);
-            }
-            public void popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {
-            }
-        });
+        combo_FinishEffect3.setPreferredSize(new java.awt.Dimension(123, 30));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 5;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 20, 0);
+        gridBagConstraints.insets = new java.awt.Insets(0, 5, 10, 0);
         ledNoticePanel3.add(combo_FinishEffect3, gridBagConstraints);
 
-        label_Color18.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        label_Color18.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        label_Color18.setText("색상");
-        label_Color18.setMaximumSize(new java.awt.Dimension(100, 15));
-        label_Color18.setPreferredSize(new java.awt.Dimension(38, 15));
+        label_Color26.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        label_Color26.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        label_Color26.setText("색상");
+        label_Color26.setMaximumSize(new java.awt.Dimension(100, 15));
+        label_Color26.setPreferredSize(new java.awt.Dimension(38, 15));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 3;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
-        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 0);
-        ledNoticePanel3.add(label_Color18, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(0, 30, 5, 5);
+        ledNoticePanel3.add(label_Color26, gridBagConstraints);
 
-        label_Color19.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        label_Color19.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        label_Color19.setText("마침효과");
-        label_Color19.setPreferredSize(new java.awt.Dimension(76, 15));
+        label_Color27.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        label_Color27.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        label_Color27.setText("마침효과");
+        label_Color27.setPreferredSize(new java.awt.Dimension(76, 15));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 5;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 20, 0);
-        ledNoticePanel3.add(label_Color19, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(0, 15, 10, 5);
+        ledNoticePanel3.add(label_Color27, gridBagConstraints);
 
-        label_Color20.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        label_Color20.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        label_Color20.setText("시작효과");
-        label_Color20.setPreferredSize(new java.awt.Dimension(76, 15));
+        label_Color28.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        label_Color28.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        label_Color28.setText("시작효과");
+        label_Color28.setPreferredSize(new java.awt.Dimension(76, 15));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 3;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
-        ledNoticePanel3.add(label_Color20, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(0, 15, 5, 5);
+        ledNoticePanel3.add(label_Color28, gridBagConstraints);
 
-        label_Color21.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        label_Color21.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        label_Color21.setText("초");
-        label_Color21.setPreferredSize(new java.awt.Dimension(25, 15));
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 4;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 20);
-        ledNoticePanel3.add(label_Color21, gridBagConstraints);
+        midStopPanel3.setMaximumSize(new java.awt.Dimension(95, 30));
+        midStopPanel3.setPreferredSize(new java.awt.Dimension(100, 30));
+        midStopPanel3.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 0, 0));
 
-        combo_PauseTime3.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        combo_PauseTime3.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10" }));
-        combo_PauseTime3.setEnabled(false);
-        combo_PauseTime3.setMinimumSize(new java.awt.Dimension(70, 25));
-        combo_PauseTime3.setName("combo_PauseTime3"); // NOI18N
-        combo_PauseTime3.setPreferredSize(new java.awt.Dimension(70, 25));
-        combo_PauseTime3.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
-            public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
-            }
-            public void popupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {
-                combo_PauseTime3PopupMenuWillBecomeInvisible(evt);
-            }
-            public void popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {
-            }
-        });
+        combo_PauseTime5.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        combo_PauseTime5.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10" }));
+        combo_PauseTime5.setEnabled(false);
+        combo_PauseTime5.setMaximumSize(new java.awt.Dimension(70, 30));
+        combo_PauseTime5.setMinimumSize(new java.awt.Dimension(70, 30));
+        combo_PauseTime5.setName("combo_PauseTime3"); // NOI18N
+        combo_PauseTime5.setPreferredSize(new java.awt.Dimension(70, 30));
+        midStopPanel3.add(combo_PauseTime5);
+
+        label_Color29.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        label_Color29.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        label_Color29.setText("초");
+        label_Color29.setMaximumSize(new java.awt.Dimension(25, 15));
+        label_Color29.setMinimumSize(new java.awt.Dimension(25, 15));
+        label_Color29.setPreferredSize(new java.awt.Dimension(25, 15));
+        midStopPanel3.add(label_Color29);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 4;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        ledNoticePanel3.add(combo_PauseTime3, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(0, 5, 5, 0);
+        ledNoticePanel3.add(midStopPanel3, gridBagConstraints);
 
         useLEDnoticeCkBox3.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        useLEDnoticeCkBox3.setSelected(true);
         useLEDnoticeCkBox3.setText("사용");
         useLEDnoticeCkBox3.setHorizontalTextPosition(javax.swing.SwingConstants.LEADING);
         useLEDnoticeCkBox3.setName("useLEDnoticeCkBox3"); // NOI18N
+        useLEDnoticeCkBox3.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                useLEDnoticeCkBox3ItemStateChanged(evt);
+            }
+        });
         useLEDnoticeCkBox3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 useLEDnoticeCkBox3ActionPerformed(evt);
@@ -1932,11 +1931,16 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
-        gridBagConstraints.insets = new java.awt.Insets(10, 0, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(10, 15, 10, 5);
         ledNoticePanel3.add(useLEDnoticeCkBox3, gridBagConstraints);
 
         demoButton3.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         demoButton3.setText("현재");
+        demoButton3.setEnabled(false);
+        demoButton3.setMaximumSize(new java.awt.Dimension(59, 30));
+        demoButton3.setMinimumSize(new java.awt.Dimension(59, 30));
+        demoButton3.setName("demoButton3"); // NOI18N
+        demoButton3.setPreferredSize(new java.awt.Dimension(59, 30));
         demoButton3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 demoButton3ActionPerformed(evt);
@@ -1945,11 +1949,16 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 5;
         gridBagConstraints.gridy = 3;
-        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(0, 15, 5, 0);
         ledNoticePanel3.add(demoButton3, gridBagConstraints);
 
         demoFinishButton3.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         demoFinishButton3.setText("그만");
+        demoFinishButton3.setEnabled(false);
+        demoFinishButton3.setMaximumSize(new java.awt.Dimension(59, 30));
+        demoFinishButton3.setMinimumSize(new java.awt.Dimension(59, 30));
+        demoFinishButton3.setName("demoFinishButton3"); // NOI18N
+        demoFinishButton3.setPreferredSize(new java.awt.Dimension(59, 30));
         demoFinishButton3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 demoFinishButton3ActionPerformed(evt);
@@ -1958,16 +1967,16 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 5;
         gridBagConstraints.gridy = 5;
-        gridBagConstraints.insets = new java.awt.Insets(0, 10, 20, 0);
+        gridBagConstraints.insets = new java.awt.Insets(0, 15, 10, 0);
         ledNoticePanel3.add(demoFinishButton3, gridBagConstraints);
 
-        jLabel44.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        jLabel44.setText("시연보기");
+        jLabel46.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        jLabel46.setText("시연보기");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 5;
         gridBagConstraints.gridy = 2;
-        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 0);
-        ledNoticePanel3.add(jLabel44, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(0, 15, 0, 0);
+        ledNoticePanel3.add(jLabel46, gridBagConstraints);
 
         startEffectHelpButton3.setBackground(new java.awt.Color(153, 255, 153));
         startEffectHelpButton3.setFont(new java.awt.Font("Dotum", 1, 14)); // NOI18N
@@ -1984,6 +1993,7 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 3;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
         ledNoticePanel3.add(startEffectHelpButton3, gridBagConstraints);
 
         demoCurrHelpButton3.setBackground(new java.awt.Color(153, 255, 153));
@@ -2001,7 +2011,7 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 6;
         gridBagConstraints.gridy = 3;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 15);
+        gridBagConstraints.insets = new java.awt.Insets(0, 5, 5, 15);
         ledNoticePanel3.add(demoCurrHelpButton3, gridBagConstraints);
 
         demoAllHelpButton3.setBackground(new java.awt.Color(153, 255, 153));
@@ -2019,29 +2029,33 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 6;
         gridBagConstraints.gridy = 4;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 15);
+        gridBagConstraints.insets = new java.awt.Insets(0, 5, 5, 15);
         ledNoticePanel3.add(demoAllHelpButton3, gridBagConstraints);
 
-        endEffectHelpButton2.setBackground(new java.awt.Color(153, 255, 153));
-        endEffectHelpButton2.setFont(new java.awt.Font("Dotum", 1, 14)); // NOI18N
-        endEffectHelpButton2.setIcon(getQuest20_Icon());
-        endEffectHelpButton2.setMargin(new java.awt.Insets(2, 4, 2, 4));
-        endEffectHelpButton2.setMinimumSize(new java.awt.Dimension(20, 20));
-        endEffectHelpButton2.setOpaque(false);
-        endEffectHelpButton2.setPreferredSize(new java.awt.Dimension(20, 20));
-        endEffectHelpButton2.addActionListener(new java.awt.event.ActionListener() {
+        endEffectHelpButton3.setBackground(new java.awt.Color(153, 255, 153));
+        endEffectHelpButton3.setFont(new java.awt.Font("Dotum", 1, 14)); // NOI18N
+        endEffectHelpButton3.setIcon(getQuest20_Icon());
+        endEffectHelpButton3.setMargin(new java.awt.Insets(2, 4, 2, 4));
+        endEffectHelpButton3.setMinimumSize(new java.awt.Dimension(20, 20));
+        endEffectHelpButton3.setOpaque(false);
+        endEffectHelpButton3.setPreferredSize(new java.awt.Dimension(20, 20));
+        endEffectHelpButton3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                endEffectHelpButton2ActionPerformed(evt);
+                endEffectHelpButton3ActionPerformed(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 5;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 20, 0);
-        ledNoticePanel3.add(endEffectHelpButton2, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 0);
+        ledNoticePanel3.add(endEffectHelpButton3, gridBagConstraints);
 
         demoAllButton3.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         demoAllButton3.setText("전체");
+        demoAllButton3.setMaximumSize(new java.awt.Dimension(59, 30));
+        demoAllButton3.setMinimumSize(new java.awt.Dimension(59, 30));
+        demoAllButton3.setName("demoAllButton3"); // NOI18N
+        demoAllButton3.setPreferredSize(new java.awt.Dimension(59, 30));
         demoAllButton3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 demoAllButton3ActionPerformed(evt);
@@ -2050,25 +2064,26 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 5;
         gridBagConstraints.gridy = 4;
-        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(0, 15, 5, 0);
         ledNoticePanel3.add(demoAllButton3, gridBagConstraints);
 
-        pauseTimeHelpButton2.setBackground(new java.awt.Color(153, 255, 153));
-        pauseTimeHelpButton2.setFont(new java.awt.Font("Dotum", 1, 14)); // NOI18N
-        pauseTimeHelpButton2.setIcon(getQuest20_Icon());
-        pauseTimeHelpButton2.setMargin(new java.awt.Insets(2, 4, 2, 4));
-        pauseTimeHelpButton2.setMinimumSize(new java.awt.Dimension(20, 20));
-        pauseTimeHelpButton2.setOpaque(false);
-        pauseTimeHelpButton2.setPreferredSize(new java.awt.Dimension(20, 20));
-        pauseTimeHelpButton2.addActionListener(new java.awt.event.ActionListener() {
+        pauseTimeHelpButton3.setBackground(new java.awt.Color(153, 255, 153));
+        pauseTimeHelpButton3.setFont(new java.awt.Font("Dotum", 1, 14)); // NOI18N
+        pauseTimeHelpButton3.setIcon(getQuest20_Icon());
+        pauseTimeHelpButton3.setMargin(new java.awt.Insets(2, 4, 2, 4));
+        pauseTimeHelpButton3.setMinimumSize(new java.awt.Dimension(20, 20));
+        pauseTimeHelpButton3.setOpaque(false);
+        pauseTimeHelpButton3.setPreferredSize(new java.awt.Dimension(20, 20));
+        pauseTimeHelpButton3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                pauseTimeHelpButton2ActionPerformed(evt);
+                pauseTimeHelpButton3ActionPerformed(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 4;
-        ledNoticePanel3.add(pauseTimeHelpButton2, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
+        ledNoticePanel3.add(pauseTimeHelpButton3, gridBagConstraints);
 
         useCkBoxHelpButton3.setBackground(new java.awt.Color(153, 255, 153));
         useCkBoxHelpButton3.setFont(new java.awt.Font("Dotum", 1, 14)); // NOI18N
@@ -2085,12 +2100,12 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.insets = new java.awt.Insets(10, 0, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(10, 0, 10, 0);
         ledNoticePanel3.add(useCkBoxHelpButton3, gridBagConstraints);
 
-        ledNoticePanelVehicle.addTab("하단", ledNoticePanel3);
+        ledNoticePanelVehicle.addTab(BOTTOM_TAB_TITLE.getContent(), ledNoticePanel3);
 
-        ledNoticeTabbedPane.addTab("차량", ledNoticePanelVehicle);
+        ledNoticeTabbedPane.addTab(VEHICLE_TAB_TITLE.getContent(), ledNoticePanelVehicle);
 
         centerPanel.add(ledNoticeTabbedPane);
         centerPanel.add(filler1);
@@ -2156,13 +2171,13 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
             .addGroup(buttonPanelLayout.createSequentialGroup()
                 .addGap(0, 0, 0)
                 .addComponent(filler8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 36, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 62, Short.MAX_VALUE)
                 .addComponent(btn_Save, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(10, 10, 10)
                 .addComponent(btn_Cancel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(10, 10, 10)
                 .addComponent(btn_Exit, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 35, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 62, Short.MAX_VALUE)
                 .addComponent(myMetaKeyLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         buttonPanelLayout.setVerticalGroup(
@@ -2189,7 +2204,7 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
         southPanel.setLayout(southPanelLayout);
         southPanelLayout.setHorizontalGroup(
             southPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 601, Short.MAX_VALUE)
+            .addGap(0, 654, Short.MAX_VALUE)
         );
         southPanelLayout.setVerticalGroup(
             southPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -2202,14 +2217,19 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void useLEDnoticeCkBox0ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_useLEDnoticeCkBox0ActionPerformed
-        if (!useLEDnoticeCkBox0.isSelected()) {
-            useLEDnoticeCkBox1.setSelected(false);
-        }
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                if (!useLEDnoticeCkBox0.isSelected()) {
+                    useLEDnoticeCkBox1.setSelected(false);
+                }
+                changeOtherComponentEnabled(DEFAULT_TOP_ROW, useLEDnoticeCkBox0.isSelected());
+            }
+        }); 
     }//GEN-LAST:event_useLEDnoticeCkBox0ActionPerformed
 
     private void demoButton0ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_demoButton0ActionPerformed
         demoCurrentSetting(DEFAULT_TOP_ROW);
-        enableFinishButton(0, true);
     }//GEN-LAST:event_demoButton0ActionPerformed
 
     private void demoFinishButton0ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_demoFinishButton0ActionPerformed
@@ -2222,8 +2242,10 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
     }//GEN-LAST:event_startEffectHelpButton0ActionPerformed
 
     private void demoCurrHelpButton0ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_demoCurrHelpButton0ActionPerformed
-        JOptionPane.showMessageDialog(this, "상, 하단 연계된 설정을 시연함" + System.lineSeparator()
-            + "[그만] 버튼 사용으로 시연 종료!");
+        JOptionPane.showMessageDialog(this, 
+                "현재 설정 상태가 지속적으로" + System.lineSeparator()
+                        + "시연되므로, 관찰이 끝나면, 아래" + System.lineSeparator()
+                        + "[그만]버튼을 사용하여 중단 할 것!");
     }//GEN-LAST:event_demoCurrHelpButton0ActionPerformed
 
     private void demoAllHelpButton0ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_demoAllHelpButton0ActionPerformed
@@ -2231,13 +2253,12 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
     }//GEN-LAST:event_demoAllHelpButton0ActionPerformed
 
     private void endEffectHelpButton0ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_endEffectHelpButton0ActionPerformed
-        JOptionPane.showMessageDialog(this,
-            "하단 사용[V] 될 경우," + System.lineSeparator() + "자동으로 '효과 없음' 설정됨");
+        JOptionPane.showMessageDialog(this, "[" + BOTTOM_TAB_TITLE.getContent() + 
+                "]이 사용[V] 될 경우," + System.lineSeparator() + "자동으로 '효과 없음' 설정됨");
     }//GEN-LAST:event_endEffectHelpButton0ActionPerformed
 
     private void demoAllButton0ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_demoAllButton0ActionPerformed
         demoAllEffects(0);
-        enableFinishButton(0, true);        
     }//GEN-LAST:event_demoAllButton0ActionPerformed
 
     private void btn_ExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_ExitActionPerformed
@@ -2262,21 +2283,17 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
     }//GEN-LAST:event_formWindowClosing
 
     private void contentTypeBox0ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_contentTypeBox0ActionPerformed
-        setButtonEnabledIf_ContentTypeChanged(0);    
-        reflectSelectionToVerbatimContent(0);
+//        setButtonEnabledIf_ContentTypeChanged(0);    
+//        reflectSelectionToVerbatimContent(0);
     }//GEN-LAST:event_contentTypeBox0ActionPerformed
 
     private void pauseTimeHelpButton0ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pauseTimeHelpButton0ActionPerformed
-        JOptionPane.showMessageDialog(this,
-            "하단 사용[V]의 경우," + System.lineSeparator() + "자동설정 값 '1' (초) 임!");
+        JOptionPane.showMessageDialog(this,"[" + BOTTOM_TAB_TITLE.getContent() + 
+                "]이 사용[V]의 경우," + System.lineSeparator() + "자동설정 값 '1' (초) 임!");
     }//GEN-LAST:event_pauseTimeHelpButton0ActionPerformed
 
     private void useCkBoxHelpButton0ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_useCkBoxHelpButton0ActionPerformed
-        JOptionPane.showMessageDialog(this,
-            "전광판 기본 표시 문구 행 사용 지침" + System.lineSeparator() + 
-                "      - 상, 하단 행 모두 사용하거나," + System.lineSeparator() + 
-                "      - 상단 행만 사용하거나," + System.lineSeparator() + 
-                "      - 두 행 모두 사용하지 아니함.");
+        showHowToUseRows();
     }//GEN-LAST:event_useCkBoxHelpButton0ActionPerformed
 
     private void tf_VerbatimContent0KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tf_VerbatimContent0KeyReleased
@@ -2306,170 +2323,6 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
             }
         });
     }//GEN-LAST:event_ledNoticePanelDefaultStateChanged
-
-    private void contentTypeBox2PopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_contentTypeBox2PopupMenuWillBecomeInvisible
-        checkContentTypeBoxAndEnableButtons(2);
-    }//GEN-LAST:event_contentTypeBox2PopupMenuWillBecomeInvisible
-
-    private void contentTypeBox2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_contentTypeBox2ActionPerformed
-        reflectSelectionToVerbatimContent(2);
-    }//GEN-LAST:event_contentTypeBox2ActionPerformed
-
-    private void tf_VerbatimContent2KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tf_VerbatimContent2KeyReleased
-        changeButtonEnabled_IfVerbatimChanged(2);
-    }//GEN-LAST:event_tf_VerbatimContent2KeyReleased
-
-    private void charColor2PopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_charColor2PopupMenuWillBecomeInvisible
-        changeButtonEnabled_IfColorChanged(2);
-    }//GEN-LAST:event_charColor2PopupMenuWillBecomeInvisible
-
-    private void charFont2PopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_charFont2PopupMenuWillBecomeInvisible
-        changeButtonEnabled_IfFontChanged(2);
-    }//GEN-LAST:event_charFont2PopupMenuWillBecomeInvisible
-
-    private void combo_StartEffect2PopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_combo_StartEffect2PopupMenuWillBecomeInvisible
-        changeButtonEnabled_IfStartEffectChanged(2);
-    }//GEN-LAST:event_combo_StartEffect2PopupMenuWillBecomeInvisible
-
-    private void combo_FinishEffect2PopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_combo_FinishEffect2PopupMenuWillBecomeInvisible
-        changeButtonEnabled_IfFinishEffectChanged(2);
-    }//GEN-LAST:event_combo_FinishEffect2PopupMenuWillBecomeInvisible
-
-    private void combo_PauseTime2PopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_combo_PauseTime2PopupMenuWillBecomeInvisible
-        changeButtonEnabled_IfPauseTimeChanged(2);
-    }//GEN-LAST:event_combo_PauseTime2PopupMenuWillBecomeInvisible
-
-    private void useLEDnoticeCkBox2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_useLEDnoticeCkBox2ActionPerformed
-        checkLEDnoticeRowUsageChangeAndChangeButtonEnabled(CAR_ENTRY_TOP_ROW);
-        changeOtherComponentEnabled(CAR_ENTRY_TOP_ROW, useLEDnoticeCkBox2.isSelected());
-        
-        if (!useLEDnoticeCkBox2.isSelected()) {
-            useLEDnoticeCkBox3.setSelected(false);
-        }
-    }//GEN-LAST:event_useLEDnoticeCkBox2ActionPerformed
-
-    private void demoButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_demoButton2ActionPerformed
-        demoCurrentInterruptSettings();
-    }//GEN-LAST:event_demoButton2ActionPerformed
-
-    private void demoFinishButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_demoFinishButton2ActionPerformed
-        finishAllEffectDemo(2);
-    }//GEN-LAST:event_demoFinishButton2ActionPerformed
-
-    private void startEffectHelpButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startEffectHelpButton2ActionPerformed
-        giveStartEffectAutoAdjustmentPossibility();
-    }//GEN-LAST:event_startEffectHelpButton2ActionPerformed
-
-    private void demoCurrHelpButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_demoCurrHelpButton2ActionPerformed
-        JOptionPane.showMessageDialog(this, "현재 설정 상태를 시연함" + System.lineSeparator()
-                + "입차 표시 3초 후, 기본 표시로 복귀함" + System.lineSeparator()
-                + "[그만] 버튼 사용으로 시연 종료!");        
-    }//GEN-LAST:event_demoCurrHelpButton2ActionPerformed
-
-    private void demoAllHelpButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_demoAllHelpButton2ActionPerformed
-        showPopUpForDemoAllHelpButton();
-    }//GEN-LAST:event_demoAllHelpButton2ActionPerformed
-
-    private void endEffectHelpButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_endEffectHelpButton1ActionPerformed
-        JOptionPane.showMessageDialog(this,
-                "차량 도착의 경우, 기본 표시와 달리" + System.lineSeparator() +
-                "마침 효과는 설정한 대로 적용됨.");
-    }//GEN-LAST:event_endEffectHelpButton1ActionPerformed
-
-    private void demoAllButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_demoAllButton2ActionPerformed
-        demoAllEffects(2);
-    }//GEN-LAST:event_demoAllButton2ActionPerformed
-
-    private void pauseTimeHelpButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pauseTimeHelpButton1ActionPerformed
-        JOptionPane.showMessageDialog(this,
-                "차량 도착의 경우, 기본 표시와 달리" + System.lineSeparator() +
-                "중간 멈춤 시간은 설정한 대로 적용됨.");        
-    }//GEN-LAST:event_pauseTimeHelpButton1ActionPerformed
-
-    private void useCkBoxHelpButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_useCkBoxHelpButton2ActionPerformed
-        JOptionPane.showMessageDialog(this,
-            "전광판 차량 표시 문구 행 사용 지침" + System.lineSeparator() + 
-                "      - 상, 하단 행 모두 사용하거나," + System.lineSeparator() + 
-                "      - 상단 행만 사용하거나," + System.lineSeparator() + 
-                "      - 두 행 모두 사용하지 아니함.");        
-    }//GEN-LAST:event_useCkBoxHelpButton2ActionPerformed
-
-    private void contentTypeBox3PopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_contentTypeBox3PopupMenuWillBecomeInvisible
-        checkContentTypeBoxAndEnableButtons(3);
-    }//GEN-LAST:event_contentTypeBox3PopupMenuWillBecomeInvisible
-
-    private void contentTypeBox3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_contentTypeBox3ActionPerformed
-        reflectSelectionToVerbatimContent(3);        
-    }//GEN-LAST:event_contentTypeBox3ActionPerformed
-
-    private void tf_VerbatimContent3KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tf_VerbatimContent3KeyReleased
-        changeButtonEnabled_IfVerbatimChanged(3);
-    }//GEN-LAST:event_tf_VerbatimContent3KeyReleased
-
-    private void charColor3PopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_charColor3PopupMenuWillBecomeInvisible
-        changeButtonEnabled_IfColorChanged(3);
-    }//GEN-LAST:event_charColor3PopupMenuWillBecomeInvisible
-
-    private void charFont3PopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_charFont3PopupMenuWillBecomeInvisible
-        changeButtonEnabled_IfFontChanged(3);
-    }//GEN-LAST:event_charFont3PopupMenuWillBecomeInvisible
-
-    private void combo_StartEffect3PopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_combo_StartEffect3PopupMenuWillBecomeInvisible
-    }//GEN-LAST:event_combo_StartEffect3PopupMenuWillBecomeInvisible
-
-    private void combo_FinishEffect3PopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_combo_FinishEffect3PopupMenuWillBecomeInvisible
-    }//GEN-LAST:event_combo_FinishEffect3PopupMenuWillBecomeInvisible
-
-    private void combo_PauseTime3PopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_combo_PauseTime3PopupMenuWillBecomeInvisible
-    }//GEN-LAST:event_combo_PauseTime3PopupMenuWillBecomeInvisible
-
-    private void useLEDnoticeCkBox3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_useLEDnoticeCkBox3ActionPerformed
-        checkLEDnoticeRowUsageChangeAndChangeButtonEnabled(CAR_ENTRY_BOTTOM_ROW);
-        changeOtherComponentEnabled(CAR_ENTRY_BOTTOM_ROW, useLEDnoticeCkBox3.isSelected());
-        
-        if (useLEDnoticeCkBox3.isSelected()) {
-            useLEDnoticeCkBox2.setSelected(true);
-        }
-    }//GEN-LAST:event_useLEDnoticeCkBox3ActionPerformed
-
-    private void demoButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_demoButton3ActionPerformed
-        demoCurrentInterruptSettings();
-    }//GEN-LAST:event_demoButton3ActionPerformed
-
-    private void demoFinishButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_demoFinishButton3ActionPerformed
-        finishAllEffectDemo(3);
-    }//GEN-LAST:event_demoFinishButton3ActionPerformed
-
-    private void startEffectHelpButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startEffectHelpButton3ActionPerformed
-        giveWhyCarLowRowEffectNotUsed();
-    }//GEN-LAST:event_startEffectHelpButton3ActionPerformed
-
-    private void demoCurrHelpButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_demoCurrHelpButton3ActionPerformed
-        JOptionPane.showMessageDialog(this, "상, 하단 연계된 설정을 시연함" + System.lineSeparator()
-            + "[그만] 버튼 사용으로 시연 종료!");
-    }//GEN-LAST:event_demoCurrHelpButton3ActionPerformed
-
-    private void demoAllHelpButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_demoAllHelpButton3ActionPerformed
-        showPopUpForDemoAllHelpButton();
-    }//GEN-LAST:event_demoAllHelpButton3ActionPerformed
-
-    private void endEffectHelpButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_endEffectHelpButton2ActionPerformed
-        giveWhyCarLowRowEffectNotUsed();
-    }//GEN-LAST:event_endEffectHelpButton2ActionPerformed
-
-    private void demoAllButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_demoAllButton3ActionPerformed
-        demoAllEffects(3);
-    }//GEN-LAST:event_demoAllButton3ActionPerformed
-
-    private void pauseTimeHelpButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pauseTimeHelpButton2ActionPerformed
-        giveWhyCarLowRowEffectNotUsed();
-    }//GEN-LAST:event_pauseTimeHelpButton2ActionPerformed
-
-    private void useCkBoxHelpButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_useCkBoxHelpButton3ActionPerformed
-        JOptionPane.showMessageDialog(this,
-            "사용[V]의 경우, 자동으로" + System.lineSeparator() 
-                    + "상단 행을 사용[V]으로 설정함");
-    }//GEN-LAST:event_useCkBoxHelpButton3ActionPerformed
 
     private void ledNoticeTabbedPaneStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_ledNoticeTabbedPaneStateChanged
         if (componentMap == null)
@@ -2574,14 +2427,19 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
     }//GEN-LAST:event_combo_PauseTime1ActionPerformed
 
     private void useLEDnoticeCkBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_useLEDnoticeCkBox1ActionPerformed
-        if (useLEDnoticeCkBox1.isSelected()) {
-            useLEDnoticeCkBox0.setSelected(true);
-        }      
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                if (useLEDnoticeCkBox1.isSelected()) {
+                    useLEDnoticeCkBox0.setSelected(true);
+                }      
+            }
+        });  
     }//GEN-LAST:event_useLEDnoticeCkBox1ActionPerformed
 
     private void demoButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_demoButton1ActionPerformed
         demoCurrentSetting(DEFAULT_BOTTOM_ROW);
-        enableFinishButton(1, true);
+//        enableFinishButton(1, true);
     }//GEN-LAST:event_demoButton1ActionPerformed
 
     private void demoFinishButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_demoFinishButton1ActionPerformed
@@ -2594,8 +2452,7 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
     }//GEN-LAST:event_startEffectHelpButton1ActionPerformed
 
     private void demoCurrHelpButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_demoCurrHelpButton1ActionPerformed
-        JOptionPane.showMessageDialog(this, "상, 하단 연계된 설정을 시연함" + System.lineSeparator()
-            + "[그만] 버튼 사용으로 시연 종료!");
+        current2ndRowDemoHelp();
     }//GEN-LAST:event_demoCurrHelpButton1ActionPerformed
 
     private void demoAllHelpButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_demoAllHelpButton1ActionPerformed
@@ -2604,20 +2461,19 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
 
     private void demoAllButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_demoAllButton1ActionPerformed
         demoAllEffects(1);
-        enableFinishButton(1, true);
     }//GEN-LAST:event_demoAllButton1ActionPerformed
 
     private void useCkBoxHelpButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_useCkBoxHelpButton1ActionPerformed
+        String rowName = TOP_TAB_TITLE.getContent();
         JOptionPane.showMessageDialog(this,
-            "사용[V]되는 경우, 아래같이 상단 행 설정 자동 변경됨!" + System.lineSeparator() + 
-                "      - 상단 행 사용[V] 설정하며," + System.lineSeparator() + 
-                "      - 상단 행 '중간 멈춤' 1초로 변경하며," + System.lineSeparator() + 
-                "      - 상단 행 '마침 효과'를 '효과 없음'으로 변환함.");
+            "사용[V]되는 경우, 아래 같이 " + rowName + " 설정이 강제 변경됨!" + System.lineSeparator() + 
+                "    - " + rowName + " 사용[V] 설정하며," + System.lineSeparator() + 
+                "    - " + rowName + " '중간 멈춤' 1초로 변경하며," + System.lineSeparator() + 
+                "    - " + rowName + " '마침 효과'를 '효과 없음'으로 변환함.");
     }//GEN-LAST:event_useCkBoxHelpButton1ActionPerformed
 
     private void useLEDnoticeCkBox0ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_useLEDnoticeCkBox0ItemStateChanged
         setButtonEnabledIf_UseCkBoxChanged(0);
-        changeOtherComponentEnabled(DEFAULT_TOP_ROW, useLEDnoticeCkBox0.isSelected());
     }//GEN-LAST:event_useLEDnoticeCkBox0ItemStateChanged
 
     private void useLEDnoticeCkBox1ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_useLEDnoticeCkBox1ItemStateChanged
@@ -2630,10 +2486,160 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
     }//GEN-LAST:event_ledNoticePanel0FocusGained
 
     private void ledNoticePanel0ComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_ledNoticePanel0ComponentShown
-        // TODO add your handling code here:
         System.out.println("0 shown");
         changeDependantPropEnabled();
     }//GEN-LAST:event_ledNoticePanel0ComponentShown
+
+    private void contentTypeBox2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_contentTypeBox2ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_contentTypeBox2ActionPerformed
+
+    private void tf_VerbatimContent2KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tf_VerbatimContent2KeyReleased
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tf_VerbatimContent2KeyReleased
+
+    private void charColor2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_charColor2ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_charColor2ActionPerformed
+
+    private void charFont2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_charFont2ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_charFont2ActionPerformed
+
+    private void combo_StartEffect2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_combo_StartEffect2ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_combo_StartEffect2ActionPerformed
+
+    private void combo_FinishEffect2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_combo_FinishEffect2ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_combo_FinishEffect2ActionPerformed
+
+    private void combo_PauseTime2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_combo_PauseTime2ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_combo_PauseTime2ActionPerformed
+
+    private void useLEDnoticeCkBox2ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_useLEDnoticeCkBox2ItemStateChanged
+        setButtonEnabledIf_UseCkBoxChanged(2);
+        changeOtherComponentEnabled(CAR_ENTRY_TOP_ROW, useLEDnoticeCkBox2.isSelected());
+    }//GEN-LAST:event_useLEDnoticeCkBox2ItemStateChanged
+
+    private void useLEDnoticeCkBox2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_useLEDnoticeCkBox2ActionPerformed
+        if (!useLEDnoticeCkBox2.isSelected()) {
+            useLEDnoticeCkBox3.setSelected(false);
+        }
+    }//GEN-LAST:event_useLEDnoticeCkBox2ActionPerformed
+
+    private void demoButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_demoButton2ActionPerformed
+        demoCurrentSetting(CAR_ENTRY_TOP_ROW);
+    }//GEN-LAST:event_demoButton2ActionPerformed
+
+    private void demoFinishButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_demoFinishButton2ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_demoFinishButton2ActionPerformed
+
+    private void startEffectHelpButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startEffectHelpButton2ActionPerformed
+        giveStartEffectAutoAdjustmentPossibility();
+    }//GEN-LAST:event_startEffectHelpButton2ActionPerformed
+
+    private void demoCurrHelpButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_demoCurrHelpButton2ActionPerformed
+        current1stRowDemoHelp();
+    }//GEN-LAST:event_demoCurrHelpButton2ActionPerformed
+
+    private void demoAllHelpButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_demoAllHelpButton2ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_demoAllHelpButton2ActionPerformed
+
+    private void endEffectHelpButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_endEffectHelpButton2ActionPerformed
+
+    }//GEN-LAST:event_endEffectHelpButton2ActionPerformed
+
+    private void demoAllButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_demoAllButton2ActionPerformed
+        demoAllEffects(2);
+    }//GEN-LAST:event_demoAllButton2ActionPerformed
+
+    private void pauseTimeHelpButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pauseTimeHelpButton2ActionPerformed
+//        showOneSecondForcedHelpDialog();
+    }//GEN-LAST:event_pauseTimeHelpButton2ActionPerformed
+
+    private void useCkBoxHelpButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_useCkBoxHelpButton2ActionPerformed
+        showHowToUseRows();
+    }//GEN-LAST:event_useCkBoxHelpButton2ActionPerformed
+
+    private void contentTypeBox3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_contentTypeBox3ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_contentTypeBox3ActionPerformed
+
+    private void tf_VerbatimContent3KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tf_VerbatimContent3KeyReleased
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tf_VerbatimContent3KeyReleased
+
+    private void charColor3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_charColor3ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_charColor3ActionPerformed
+
+    private void charFont3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_charFont3ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_charFont3ActionPerformed
+
+    private void useLEDnoticeCkBox3ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_useLEDnoticeCkBox3ItemStateChanged
+        setButtonEnabledIf_UseCkBoxChanged(3);
+        changeOtherComponentEnabled(CAR_ENTRY_BOTTOM_ROW, useLEDnoticeCkBox3.isSelected());
+    }//GEN-LAST:event_useLEDnoticeCkBox3ItemStateChanged
+
+    private void useLEDnoticeCkBox3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_useLEDnoticeCkBox3ActionPerformed
+//        if (useLEDnoticeCkBox3.isSelected()) {
+//            useLEDnoticeCkBox2.setSelected(true);
+//        } 
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                if (useLEDnoticeCkBox3.isSelected()) {
+                    useLEDnoticeCkBox2.setSelected(true);
+                }      
+            }
+        });          
+    }//GEN-LAST:event_useLEDnoticeCkBox3ActionPerformed
+
+    private void demoButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_demoButton3ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_demoButton3ActionPerformed
+
+    private void demoFinishButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_demoFinishButton3ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_demoFinishButton3ActionPerformed
+
+    private void startEffectHelpButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startEffectHelpButton3ActionPerformed
+        giveWhyCarLowRowEffectNotUsed();
+    }//GEN-LAST:event_startEffectHelpButton3ActionPerformed
+
+    private void demoCurrHelpButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_demoCurrHelpButton3ActionPerformed
+        current2ndRowDemoHelp();
+    }//GEN-LAST:event_demoCurrHelpButton3ActionPerformed
+
+    private void demoAllHelpButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_demoAllHelpButton3ActionPerformed
+        showPopUpForDemoAllHelpButton();
+    }//GEN-LAST:event_demoAllHelpButton3ActionPerformed
+
+    private void endEffectHelpButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_endEffectHelpButton3ActionPerformed
+        giveWhyCarLowRowEffectNotUsed();
+    }//GEN-LAST:event_endEffectHelpButton3ActionPerformed
+
+    private void demoAllButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_demoAllButton3ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_demoAllButton3ActionPerformed
+
+    private void pauseTimeHelpButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pauseTimeHelpButton3ActionPerformed
+        giveWhyCarLowRowEffectNotUsed();
+    }//GEN-LAST:event_pauseTimeHelpButton3ActionPerformed
+
+    private void useCkBoxHelpButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_useCkBoxHelpButton3ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_useCkBoxHelpButton3ActionPerformed
+
+    private void contentTypeBox0ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_contentTypeBox0ItemStateChanged
+        setButtonEnabledIf_ContentTypeChanged(0);    
+        reflectSelectionToVerbatimContent(0);
+    }//GEN-LAST:event_contentTypeBox0ItemStateChanged
 
     /**
      *  Decide whether to use the verbatim text field after checking the content type.
@@ -2688,7 +2694,7 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
     private javax.swing.JComboBox combo_PauseTime0;
     private javax.swing.JComboBox combo_PauseTime1;
     private javax.swing.JComboBox combo_PauseTime2;
-    private javax.swing.JComboBox combo_PauseTime3;
+    private javax.swing.JComboBox combo_PauseTime5;
     private javax.swing.JComboBox combo_StartEffect0;
     private javax.swing.JComboBox combo_StartEffect1;
     private javax.swing.JComboBox combo_StartEffect2;
@@ -2718,47 +2724,47 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
     private javax.swing.JButton demoFinishButton2;
     private javax.swing.JButton demoFinishButton3;
     private javax.swing.JButton endEffectHelpButton0;
-    private javax.swing.JButton endEffectHelpButton1;
     private javax.swing.JButton endEffectHelpButton2;
+    private javax.swing.JButton endEffectHelpButton3;
     private javax.swing.Box.Filler filler1;
     private javax.swing.Box.Filler filler8;
     private javax.swing.JLabel jLabel41;
-    private javax.swing.JLabel jLabel43;
-    private javax.swing.JLabel jLabel44;
+    private javax.swing.JLabel jLabel42;
     private javax.swing.JLabel jLabel45;
+    private javax.swing.JLabel jLabel46;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JLabel label_Color0;
-    private javax.swing.JLabel label_Color12;
-    private javax.swing.JLabel label_Color13;
-    private javax.swing.JLabel label_Color14;
-    private javax.swing.JLabel label_Color15;
-    private javax.swing.JLabel label_Color16;
-    private javax.swing.JLabel label_Color17;
-    private javax.swing.JLabel label_Color18;
-    private javax.swing.JLabel label_Color19;
+    private javax.swing.JLabel label_Color1;
+    private javax.swing.JLabel label_Color10;
+    private javax.swing.JLabel label_Color11;
     private javax.swing.JLabel label_Color2;
-    private javax.swing.JLabel label_Color20;
-    private javax.swing.JLabel label_Color21;
     private javax.swing.JLabel label_Color22;
     private javax.swing.JLabel label_Color23;
     private javax.swing.JLabel label_Color24;
     private javax.swing.JLabel label_Color25;
+    private javax.swing.JLabel label_Color26;
+    private javax.swing.JLabel label_Color27;
+    private javax.swing.JLabel label_Color28;
+    private javax.swing.JLabel label_Color29;
+    private javax.swing.JLabel label_Color3;
     private javax.swing.JLabel label_Color4;
     private javax.swing.JLabel label_Color5;
     private javax.swing.JLabel label_Color6;
     private javax.swing.JLabel label_Color7;
+    private javax.swing.JLabel label_Color8;
+    private javax.swing.JLabel label_Color9;
     private javax.swing.JLabel label_ContentType0;
+    private javax.swing.JLabel label_ContentType1;
     private javax.swing.JLabel label_ContentType2;
-    private javax.swing.JLabel label_ContentType4;
-    private javax.swing.JLabel label_ContentType5;
+    private javax.swing.JLabel label_ContentType3;
     private javax.swing.JLabel label_Font0;
+    private javax.swing.JLabel label_Font1;
     private javax.swing.JLabel label_Font2;
-    private javax.swing.JLabel label_Font4;
-    private javax.swing.JLabel label_Font5;
+    private javax.swing.JLabel label_Font3;
     private javax.swing.JLabel label_MSG0;
+    private javax.swing.JLabel label_MSG1;
     private javax.swing.JLabel label_MSG2;
-    private javax.swing.JLabel label_MSG4;
-    private javax.swing.JLabel label_MSG5;
+    private javax.swing.JLabel label_MSG3;
     private javax.swing.JPanel ledNoticePanel0;
     private javax.swing.JPanel ledNoticePanel1;
     private javax.swing.JPanel ledNoticePanel2;
@@ -2770,10 +2776,12 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
     private javax.swing.Box.Filler leftFiller;
     private javax.swing.JPanel midStopPanel0;
     private javax.swing.JPanel midStopPanel1;
+    private javax.swing.JPanel midStopPanel2;
+    private javax.swing.JPanel midStopPanel3;
     private javax.swing.JLabel myMetaKeyLabel;
     private javax.swing.JButton pauseTimeHelpButton0;
-    private javax.swing.JButton pauseTimeHelpButton1;
     private javax.swing.JButton pauseTimeHelpButton2;
+    private javax.swing.JButton pauseTimeHelpButton3;
     private javax.swing.Box.Filler rightFiller;
     private javax.swing.JPanel southPanel;
     private javax.swing.JButton startEffectHelpButton0;
@@ -2885,8 +2893,18 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
     }
 
     private void changeOtherComponentEnabled(EBD_DisplayUsage usage, boolean selected) {
-        ((JComboBox)componentMap.get("contentTypeBox" + usage.ordinal())).setEnabled(selected);
-        ((JTextField)componentMap.get("tf_VerbatimContent" + usage.ordinal())).setEnabled(selected);
+        JComboBox contTypeCBox = (JComboBox)componentMap.get("contentTypeBox" + usage.ordinal());
+        
+        contTypeCBox.setEnabled(selected);
+        String typeName = (String)contTypeCBox.getSelectedItem();
+        JTextField verbatimField = (JTextField)
+                componentMap.get("tf_VerbatimContent" + usage.ordinal());
+        
+        if (selected && typeName.equals(Verbatim.getLabel())) {
+            verbatimField.setEnabled(true);
+        } else {
+            verbatimField.setEnabled(false);
+        }
         
         ((JComboBox)componentMap.get("charColor" + usage.ordinal())).setEnabled(selected);
         ((JComboBox)componentMap.get("charFont" + usage.ordinal())).setEnabled(selected);
@@ -2902,8 +2920,7 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
         } else {
             ((JComboBox)componentMap.get("combo_FinishEffect" + usage.ordinal())).setEnabled(selected);
         }
-//        System.out.println("name: " + ("demoButton" + usage.ordinal()));
-//        if ()
+        System.out.println("name: " + ("demoButton" + usage.ordinal()));
         ((JButton)componentMap.get("demoButton" + usage.ordinal())).setEnabled(selected);
     }
 
@@ -2925,12 +2942,12 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
         }
     }
 
-    private void changeEnabled_of_SaveCancelButtons(int usage, boolean onOff) {
-        JButton buton = (JButton) componentMap.get("btn_Save" + usage);
-        buton.setEnabled(onOff);
+    private void changeEnabled_of_SaveCancelButtons(boolean onOff) {
+//        JButton buton = (JButton) componentMap.get("btn_Save");
+        btn_Save.setEnabled(onOff);
         
-        buton = (JButton) componentMap.get("btn_Cancel" + usage);
-        buton.setEnabled(onOff);
+//        buton = (JButton) componentMap.get("btn_Cancel");
+        btn_Cancel.setEnabled(onOff);
         
         btn_Exit.setEnabled(!onOff);
     }
@@ -2948,37 +2965,32 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
 
     private void selectItemsForSelectedTab(EBD_DisplayUsage usage) {
         int ordinal = usage.ordinal();
-        
-//        JButton saveButton = (JButton)componentMap.get("btn_Save" + ordinal);
-//        if (saveButton != null && !saveButton.isEnabled()) 
-        {            
-            JCheckBox usChkBox = (JCheckBox)componentMap.get("useLEDnoticeCkBox" + ordinal);
-            usChkBox.setSelected(ledNoticeSettings[ordinal].isUsed);
 
-//            EBD_DisplayUsage usage = EBD_DisplayUsage.values()[ordinal];
-            changeOtherComponentEnabled(usage, ledNoticeSettings[ordinal].isUsed);
-            
-            JComboBox cmboBox = (JComboBox)componentMap.get("contentTypeBox" + ordinal);
-            cmboBox.setSelectedIndex(ledNoticeSettings[ordinal].contentTypeIdx);
-            
-            JTextField textField = (JTextField)componentMap.get("tf_VerbatimContent" + ordinal);
-            textField.setText(ledNoticeSettings[ordinal].verbatimContent);
-            
-            cmboBox = (JComboBox)componentMap.get("combo_StartEffect" + ordinal);
-            cmboBox.setSelectedIndex(ledNoticeSettings[ordinal].startEffectIdx);
-            
-            cmboBox = (JComboBox)componentMap.get("combo_PauseTime" + ordinal);
-            cmboBox.setSelectedIndex(ledNoticeSettings[ordinal].pauseTimeIdx);
-            
-            cmboBox = (JComboBox)componentMap.get("combo_FinishEffect" + ordinal);
-            cmboBox.setSelectedIndex(ledNoticeSettings[ordinal].finishEffectIdx);
-            
-            cmboBox = (JComboBox)componentMap.get("charColor" + ordinal);
-            cmboBox.setSelectedIndex(ledNoticeSettings[ordinal].colorIdx);
-            
-            cmboBox = (JComboBox)componentMap.get("charFont" + ordinal);
-            cmboBox.setSelectedIndex(ledNoticeSettings[ordinal].fontIdx);
-        }
+        changeOtherComponentEnabled(usage, ledNoticeSettings[ordinal].isUsed);
+
+        JComboBox cmboBox = (JComboBox)componentMap.get("contentTypeBox" + ordinal);
+        cmboBox.setSelectedIndex(ledNoticeSettings[ordinal].contentTypeIdx);
+
+        JTextField textField = (JTextField)componentMap.get("tf_VerbatimContent" + ordinal);
+        textField.setText(ledNoticeSettings[ordinal].verbatimContent);
+
+        cmboBox = (JComboBox)componentMap.get("combo_StartEffect" + ordinal);
+        cmboBox.setSelectedIndex(ledNoticeSettings[ordinal].startEffectIdx);
+
+        cmboBox = (JComboBox)componentMap.get("combo_PauseTime" + ordinal);
+        cmboBox.setSelectedIndex(ledNoticeSettings[ordinal].pauseTimeIdx);
+
+        cmboBox = (JComboBox)componentMap.get("combo_FinishEffect" + ordinal);
+        cmboBox.setSelectedIndex(ledNoticeSettings[ordinal].finishEffectIdx);
+
+        cmboBox = (JComboBox)componentMap.get("charColor" + ordinal);
+        cmboBox.setSelectedIndex(ledNoticeSettings[ordinal].colorIdx);
+
+        cmboBox = (JComboBox)componentMap.get("charFont" + ordinal);
+        cmboBox.setSelectedIndex(ledNoticeSettings[ordinal].fontIdx);
+
+        JCheckBox usChkBox = (JCheckBox)componentMap.get("useLEDnoticeCkBox" + ordinal);
+        usChkBox.setSelected(ledNoticeSettings[ordinal].isUsed);            
     }
 
     private void saveLEDnoticeSettingsTab(EBD_DisplayUsage usage) {
@@ -3055,7 +3067,7 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
             if (result == 1) {
                 // reload global ledNotice settings variable
                 readLEDnoticeSettings(ledNoticeSettings);
-                changeEnabled_of_SaveCancelButtons(index, false);
+                changeEnabled_of_SaveCancelButtons(false);
             } else {
                 JOptionPane.showMessageDialog(this, "This LEDnotice settings update saving DB operation failed.",
                     "DB Update Operation Failure", JOptionPane.ERROR_MESSAGE);
@@ -3081,7 +3093,7 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
         
         int index = usage.ordinal();
         
-        changeEnabled_of_SaveCancelButtons(index, false);
+        changeEnabled_of_SaveCancelButtons(false);
         selectItemsForSelectedTab(usage);
 //        selectItemsForSelectedTab(index % 2, index / 2);
     }
@@ -3176,7 +3188,8 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
     }
 
     private void giveWhyCarLowRowEffectNotUsed() {
-        JOptionPane.showMessageDialog(this, "차량 도착- 하단 행의 경우, " + System.lineSeparator()
+        JOptionPane.showMessageDialog(this, VEHICLE_TAB_TITLE.getContent() + "-[" 
+                + BOTTOM_TAB_TITLE.getContent() + "]의 경우, " + System.lineSeparator()
             + "시작효과, 중간멈춤, 마침효과는 사용되지 않음." + System.lineSeparator()
             + "상단 행과 같이 하나의 동작으로 처리되기 때문임.");          
     }
@@ -3247,8 +3260,30 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
             combo_PauseTime0.setEnabled(false);
             combo_FinishEffect0.setEnabled(false);
         } else {
-            combo_PauseTime0.setEnabled(true);
-            combo_FinishEffect0.setEnabled(true);
+            boolean enableThis = useLEDnoticeCkBox0.isSelected();
+            combo_PauseTime0.setEnabled(enableThis);
+            combo_FinishEffect0.setEnabled(enableThis);
         }
+    }
+
+    private void showHowToUseRows() {
+        JOptionPane.showMessageDialog(this,
+            "전광판 표시 행 사용 지침" + System.lineSeparator() + System.lineSeparator() + 
+                "   - " + TOP_TAB_TITLE.getContent() + ", " +
+                    BOTTOM_TAB_TITLE.getContent() + " 모두 사용하거나," + System.lineSeparator() + 
+                "   - " + TOP_TAB_TITLE.getContent() + "만 사용하거나," + System.lineSeparator() + 
+                "   - 두 행 모두 사용하지 아니함.");
+    }
+
+    private void current2ndRowDemoHelp() {
+        JOptionPane.showMessageDialog(this, "상, 하단 연계된 설정을 시연함" + System.lineSeparator()
+            + "[그만] 버튼 사용으로 시연 종료!");
+    }
+
+    private void current1stRowDemoHelp() {
+        JOptionPane.showMessageDialog(this, 
+                "현재 설정 상태를 시연함" + System.lineSeparator()
+                        + "입차 표시 3초 후, 기본 표시로 복귀함" + System.lineSeparator()
+                        + "[그만] 버튼 사용으로 시연 종료!");
     }
 }
