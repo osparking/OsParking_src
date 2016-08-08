@@ -28,6 +28,7 @@ import static com.osparking.global.Globals.font_Style;
 import static com.osparking.global.Globals.font_Type;
 import static com.osparking.global.Globals.getQuest20_Icon;
 import static com.osparking.global.Globals.head_font_Size;
+import static com.osparking.global.Globals.logParkingException;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.BOTTOM_TAB_TITLE;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.DEFAULT_TAB_TITLE;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.TOP_TAB_TITLE;
@@ -51,6 +52,7 @@ import static com.osparking.global.names.OSP_enums.EBD_DisplayUsage.DEFAULT_TOP_
 import com.osparking.global.names.OSP_enums.PermissionType;
 import com.osparking.osparking.ControlGUI;
 import com.osparking.osparking.Settings_System;
+import static com.osparking.osparking.device.LEDnotice.LEDnoticeManager.demoFinished;
 import static com.osparking.osparking.device.LEDnotice.LEDnoticeManager.ledNoticeSettings;
 import static com.osparking.osparking.device.LEDnotice.LEDnoticeManager.readLEDnoticeSettings;
 import com.osparking.osparking.device.LEDnotice.LEDnotice_enums.EffectType;
@@ -65,6 +67,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -191,7 +194,7 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
                         E_Board.ordinal()][gateNo];
 
                 manager.showAllEffects(tabIndex, stopIndex, colorIdx, fontIdx);
-                enableFinishButton(tabIndex, true);    
+                enableFinishButton(tabIndex, true);  // aa  
             }
         }    
     }
@@ -2417,6 +2420,7 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
 
     private void demoFinishButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_demoFinishButton1ActionPerformed
         finishAllEffectDemo(1);
+        enableFinishButton(1, false);                
     }//GEN-LAST:event_demoFinishButton1ActionPerformed
 
     private void startEffectHelpButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startEffectHelpButton1ActionPerformed
@@ -2506,7 +2510,8 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
     }//GEN-LAST:event_demoButton2ActionPerformed
 
     private void demoFinishButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_demoFinishButton2ActionPerformed
-        // TODO add your handling code here:
+        finishAllEffectDemo(2);
+        enableFinishButton(2, false);                
     }//GEN-LAST:event_demoFinishButton2ActionPerformed
 
     private void startEffectHelpButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startEffectHelpButton2ActionPerformed
@@ -2577,7 +2582,8 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
     }//GEN-LAST:event_demoButton3ActionPerformed
 
     private void demoFinishButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_demoFinishButton3ActionPerformed
-        // TODO add your handling code here:
+        finishAllEffectDemo(3);
+        enableFinishButton(3, false);                
     }//GEN-LAST:event_demoFinishButton3ActionPerformed
 
     private void startEffectHelpButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startEffectHelpButton3ActionPerformed
@@ -2881,6 +2887,9 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
         ((JComboBox)componentMap.get("charColor" + usage.ordinal())).setEnabled(selected);
         ((JComboBox)componentMap.get("charFont" + usage.ordinal())).setEnabled(selected);
         
+        System.out.println("name: " + ("demoButton" + usage.ordinal()));
+        ((JButton)componentMap.get("demoButton" + usage.ordinal())).setEnabled(selected);
+        
         if (usage == CAR_ENTRY_BOTTOM_ROW)
             return; 
         
@@ -2892,8 +2901,6 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
         } else {
             ((JComboBox)componentMap.get("combo_FinishEffect" + usage.ordinal())).setEnabled(selected);
         }
-        System.out.println("name: " + ("demoButton" + usage.ordinal()));
-        ((JButton)componentMap.get("demoButton" + usage.ordinal())).setEnabled(selected);
     }
 
     private void showPopUpForDemoAllHelpButton() {
@@ -3180,7 +3187,7 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
         );
     }
 
-    private void demoCurrentInterruptSettings(int index) {
+    private void demoCurrentInterruptSettings(int buttonIndex) {
         LEDnoticeSettings topSetting = getLEDnoticeSetting(CAR_ENTRY_TOP_ROW);
         LEDnoticeSettings bottomSetting = getLEDnoticeSetting(CAR_ENTRY_BOTTOM_ROW);
         
@@ -3189,8 +3196,8 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
         
         manager.sendCarArrival_interruptMessage(topSetting, bottomSetting, (byte)gateNo, "서울32가1234", 
                 PermissionType.DISALLOWED, "노상주차경고", 3000);
-        enableFinishButton(index, true);
-
+        enableFinishButton(buttonIndex, true);
+        waitDemoCompletionEvent(buttonIndex);
     }
 
     private void setButtonEnabledIf_UseCkBoxChanged(int index) {
@@ -3259,5 +3266,29 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
                 "현재 설정 상태를 시연함" + System.lineSeparator()
                         + "입차 표시 3초 후, 기본 표시로 복귀하나" + System.lineSeparator()
                         + "중간에 [그만] 버튼 사용으로 시연 종료 가능함.");
+    }
+
+    private void waitDemoCompletionEvent(final int buttonIndex) {
+        /**
+         * Create a thread and make it wait for an event that happens when 
+         * the demo finished on the LEDnotice board side.
+         * When it wakes up, disables the finishButton for the demo operation. 
+         */
+        Thread disabler = new Thread() {
+            public void run() {
+                synchronized(demoFinished[gateNo]) {
+                    try {
+                        System.out.println("waiting for ......................................... " + buttonIndex);
+                        demoFinished[gateNo].wait();
+                        System.out.println("woke up about to disable button for " + buttonIndex);
+                        enableFinishButton(buttonIndex, false);                
+                        
+                    } catch (InterruptedException ex) {
+                        logParkingException(Level.SEVERE, ex, "LEDnotice demo, disabler exception", gateNo);
+                    }
+                }
+            }
+        };
+        disabler.start();
     }
 }

@@ -144,7 +144,7 @@ public class LEDnoticeManager extends Thread implements
     private CommPort commPort;
     
     InputStream inStream;
-    
+    public static Object[] demoFinished;
     /**
      * 
      * @param mainForm main GUI form of the whole manager program
@@ -155,6 +155,10 @@ public class LEDnoticeManager extends Thread implements
         super("osp_EBD_" + deviceNo + "_Manager");
         this.mainForm = mainForm; 
         this.deviceNo = deviceNo;
+        demoFinished = new Object[gateCount + 1];
+        for (int i = 1; i <= gateCount; i++) {
+            demoFinished[i] = new Object();
+        }
         
         ledNoticeMessages = new LEDnoticeMessageQueue(msgQdoor, 
                     mainForm.getPerfomStatistics()[E_Board.ordinal()][deviceNo]);

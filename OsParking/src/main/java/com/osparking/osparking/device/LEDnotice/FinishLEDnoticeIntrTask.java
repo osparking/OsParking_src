@@ -21,6 +21,7 @@ import com.osparking.global.names.IDevice;
 import com.osparking.global.names.OSP_enums;
 import static com.osparking.global.names.OSP_enums.DeviceType.E_Board;
 import com.osparking.osparking.ControlGUI;
+import static com.osparking.osparking.device.LEDnotice.LEDnoticeManager.demoFinished;
 import static com.osparking.osparking.device.LEDnotice.LEDnotice_enums.GROUP_TYPE.INTR_GROUP;
 import static com.osparking.osparking.device.LEDnotice.LEDnotice_enums.LED_MsgType.DEL_GROUP;
 import static com.osparking.osparking.device.LEDnotice.LEDnotice_enums.LED_MsgType.INTR_TXT_OFF;
@@ -66,6 +67,9 @@ public class FinishLEDnoticeIntrTask extends TimerTask {
 
             manager.getLedNoticeMessages().add(new MsgItem(DEL_GROUP, 
                     manager.ledNoticeProtocol.delGroup(INTR_GROUP)));
+            synchronized(demoFinished[deviceNo]) {
+                demoFinished[deviceNo].notifyAll();
+            }
             System.out.println("Interrupt stop message queued");
         } catch (InterruptedException ex) {
             logParkingException(Level.SEVERE, ex, "LEDnotice Board #" + deviceNo + " sender wait socket conn'");
