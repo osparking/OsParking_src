@@ -650,11 +650,12 @@ public class LEDnoticeManager extends Thread implements
                         // display default message
                         showDefaultMessage();
                         demoThread = null;
-                        return;
+                    } finally {
+                        synchronized(demoFinished[deviceNo]) {
+                            demoFinished[deviceNo].notifyAll();
+                        }                        
                     }
                 };
-
-             
             };
             demoThread.start();
         } catch (NullPointerException e){
@@ -678,7 +679,6 @@ public class LEDnoticeManager extends Thread implements
         if (demoThread != null) {
             demoThread.interrupt();
             demoThread = null;
-        } else {
             getLedNoticeMessages().add(new MsgItem(DEL_GROUP, ledNoticeProtocol.delGroup(TEXT_GROUP)));
             showDefaultMessage();
         }
@@ -1182,5 +1182,10 @@ public class LEDnoticeManager extends Thread implements
     @Override
     public boolean isConnected() {
         throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    void finishCurrentSettingDemo(int ordinal) {
+        getLedNoticeMessages().add(new MsgItem(DEL_GROUP, ledNoticeProtocol.delGroup(TEXT_GROUP)));
+        showDefaultMessage();
     }
 }

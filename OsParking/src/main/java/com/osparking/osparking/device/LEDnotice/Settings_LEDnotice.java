@@ -67,12 +67,10 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
-import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 
 /**
@@ -90,17 +88,7 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
 
     private HashMap<String, Component> componentMap = new HashMap<String,Component>();
     
-    boolean[] inDemoMode = new boolean[EBD_DisplayUsage.values().length];
     ControlGUI dummyMainForm = null;
-    
-    void cancelDemoIfRunning() {
-        for (EBD_DisplayUsage usage : EBD_DisplayUsage.values()) {
-            if (inDemoMode[usage.ordinal()]) {
-                finishAllEffectDemo(usage.ordinal());
-                inDemoMode[usage.ordinal()] = false;
-            }
-        }
-    }
     
     /**
      * Creates new form NewJFrame
@@ -134,7 +122,6 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
         
         for (EBD_DisplayUsage usage : EBD_DisplayUsage.values()) {
             selectItemsForSelectedTab(usage);
-            inDemoMode[usage.ordinal()] = false;
         }
         changedControls.clear();
     }
@@ -156,17 +143,17 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
     {
         int gateNo = findGateNoUsingLEDnotice();
         
-        cancelDemoIfRunning();
-        
         if (gateNo == -1) {
             JOptionPane.showMessageDialog(this, "설정된 LEDnotice 장치가 없습니다.");
             return;
         } else {
             LEDnoticeSettings aSetting = getLEDnoticeSetting(usage);
             
-            inDemoMode[usage.ordinal()] = true;
             manager.showCurrentEffect(usage, aSetting); 
-            enableFinishButton(usage.ordinal(), true);
+            JOptionPane.showMessageDialog(null, "현재 설정에 대한 시연이 진행 중입니다." +
+                    System.lineSeparator() + "충분히 관찰하셨으면, 아래" + 
+                    System.lineSeparator() + "확인 버튼을 클릭하십시오.");
+            manager.finishCurrentSettingDemo(usage.ordinal());
         }
     }
 
@@ -177,25 +164,23 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
     private void demoAllEffects(int tabIndex) {
         int gateNo = findGateNoUsingLEDnotice();
     
-        cancelDemoIfRunning();
-        
         if (gateNo == -1) {
             JOptionPane.showMessageDialog(this, "설정된 LEDnotice 장치가 없습니다.");
             return;
         } else {
-            if (mainForm == null) {
-                JOptionPane.showMessageDialog(this, "먼저 오즈파킹을 가동하십시오.");
-            } else {
-                int stopIndex = ((JComboBox)componentMap.get("combo_PauseTime" + tabIndex)).getSelectedIndex();
-                int colorIdx = ((JComboBox)componentMap.get("charColor" + tabIndex)).getSelectedIndex();
-                int fontIdx = ((JComboBox)componentMap.get("charFont" + tabIndex)).getSelectedIndex();
-                inDemoMode[tabIndex] = true;
-                LEDnoticeManager manager = (LEDnoticeManager)mainForm.getDeviceManagers()[
-                        E_Board.ordinal()][gateNo];
-
-                manager.showAllEffects(tabIndex, stopIndex, colorIdx, fontIdx);
-                enableFinishButton(tabIndex, true);  // aa  
-            }
+            int stopIndex = ((JComboBox)componentMap.get("combo_PauseTime" + tabIndex)).getSelectedIndex();
+            int colorIdx = ((JComboBox)componentMap.get("charColor" + tabIndex)).getSelectedIndex();
+            int fontIdx = ((JComboBox)componentMap.get("charFont" + tabIndex)).getSelectedIndex();
+            
+            manager.showAllEffects(tabIndex, stopIndex, colorIdx, fontIdx);
+            waitDemoCompletionEvent(tabIndex);
+            JOptionPane.showMessageDialog(null, "모든 효과를 순서대로 시연 중입니다." +
+                    System.lineSeparator() + "관찰을 종료하려면, 아래" + 
+                    System.lineSeparator() + "[확인] 버튼을 클릭하십시오." +
+                    System.lineSeparator() + "모든 효과 시연 종료 후, 자동으로" +
+                    System.lineSeparator() + "기본 표시로 복귀합니다.");
+            finishAllEffectDemo(tabIndex);
+            
         }    
     }
     
@@ -315,7 +300,6 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
         label_Color7 = new javax.swing.JLabel();
         useLEDnoticeCkBox0 = new javax.swing.JCheckBox();
         demoButton0 = new javax.swing.JButton();
-        demoFinishButton0 = new javax.swing.JButton();
         jLabel41 = new javax.swing.JLabel();
         startEffectHelpButton0 = new javax.swing.JButton();
         demoCurrHelpButton0 = new javax.swing.JButton();
@@ -343,7 +327,6 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
         label_Color25 = new javax.swing.JLabel();
         useLEDnoticeCkBox1 = new javax.swing.JCheckBox();
         demoButton1 = new javax.swing.JButton();
-        demoFinishButton1 = new javax.swing.JButton();
         jLabel45 = new javax.swing.JLabel();
         startEffectHelpButton1 = new javax.swing.JButton();
         demoCurrHelpButton1 = new javax.swing.JButton();
@@ -370,7 +353,6 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
         label_Color11 = new javax.swing.JLabel();
         useLEDnoticeCkBox2 = new javax.swing.JCheckBox();
         demoButton2 = new javax.swing.JButton();
-        demoFinishButton2 = new javax.swing.JButton();
         jLabel42 = new javax.swing.JLabel();
         startEffectHelpButton2 = new javax.swing.JButton();
         demoCurrHelpButton2 = new javax.swing.JButton();
@@ -398,7 +380,6 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
         label_Color29 = new javax.swing.JLabel();
         useLEDnoticeCkBox3 = new javax.swing.JCheckBox();
         demoButton3 = new javax.swing.JButton();
-        demoFinishButton3 = new javax.swing.JButton();
         jLabel46 = new javax.swing.JLabel();
         startEffectHelpButton3 = new javax.swing.JButton();
         demoCurrHelpButton3 = new javax.swing.JButton();
@@ -462,11 +443,6 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
         ledNoticeTabbedPane.setMinimumSize(new java.awt.Dimension(521, 268));
         ledNoticeTabbedPane.setName("ledNoticeTabbedPane"); // NOI18N
         ledNoticeTabbedPane.setPreferredSize(new java.awt.Dimension(506, 280));
-        ledNoticeTabbedPane.addChangeListener(new javax.swing.event.ChangeListener() {
-            public void stateChanged(javax.swing.event.ChangeEvent evt) {
-                ledNoticeTabbedPaneStateChanged(evt);
-            }
-        });
 
         ledNoticePanelDefault.setBorder(javax.swing.BorderFactory.createEtchedBorder(java.awt.Color.black, null));
         ledNoticePanelDefault.setTabPlacement(javax.swing.JTabbedPane.LEFT);
@@ -474,11 +450,6 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
         ledNoticePanelDefault.setMinimumSize(new java.awt.Dimension(300, 260));
         ledNoticePanelDefault.setName("Default_Panel"); // NOI18N
         ledNoticePanelDefault.setPreferredSize(new java.awt.Dimension(516, 280));
-        ledNoticePanelDefault.addChangeListener(new javax.swing.event.ChangeListener() {
-            public void stateChanged(javax.swing.event.ChangeEvent evt) {
-                ledNoticePanelDefaultStateChanged(evt);
-            }
-        });
 
         ledNoticePanel0.setMinimumSize(new java.awt.Dimension(433, 260));
         ledNoticePanel0.setName("eBoard" + EBD_DisplayUsage.DEFAULT_TOP_ROW.getVal());
@@ -545,11 +516,6 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
         contentTypeBox0.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 contentTypeBox0ItemStateChanged(evt);
-            }
-        });
-        contentTypeBox0.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                contentTypeBox0ActionPerformed(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -749,24 +715,6 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
         gridBagConstraints.gridy = 3;
         gridBagConstraints.insets = new java.awt.Insets(0, 15, 5, 0);
         ledNoticePanel0.add(demoButton0, gridBagConstraints);
-
-        demoFinishButton0.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        demoFinishButton0.setText("그만");
-        demoFinishButton0.setEnabled(false);
-        demoFinishButton0.setMaximumSize(new java.awt.Dimension(59, 30));
-        demoFinishButton0.setMinimumSize(new java.awt.Dimension(59, 30));
-        demoFinishButton0.setName("demoFinishButton0"); // NOI18N
-        demoFinishButton0.setPreferredSize(new java.awt.Dimension(59, 30));
-        demoFinishButton0.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                demoFinishButton0ActionPerformed(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 5;
-        gridBagConstraints.gridy = 5;
-        gridBagConstraints.insets = new java.awt.Insets(0, 15, 10, 0);
-        ledNoticePanel0.add(demoFinishButton0, gridBagConstraints);
 
         jLabel41.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         jLabel41.setText("시연보기");
@@ -1155,24 +1103,6 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(0, 15, 5, 0);
         ledNoticePanel1.add(demoButton1, gridBagConstraints);
 
-        demoFinishButton1.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        demoFinishButton1.setText("그만");
-        demoFinishButton1.setEnabled(false);
-        demoFinishButton1.setMaximumSize(new java.awt.Dimension(59, 30));
-        demoFinishButton1.setMinimumSize(new java.awt.Dimension(59, 30));
-        demoFinishButton1.setName("demoFinishButton1"); // NOI18N
-        demoFinishButton1.setPreferredSize(new java.awt.Dimension(59, 30));
-        demoFinishButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                demoFinishButton1ActionPerformed(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 5;
-        gridBagConstraints.gridy = 5;
-        gridBagConstraints.insets = new java.awt.Insets(0, 15, 10, 0);
-        ledNoticePanel1.add(demoFinishButton1, gridBagConstraints);
-
         jLabel45.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         jLabel45.setText("시연보기");
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -1278,13 +1208,13 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
         ledNoticePanelVehicle.setTabPlacement(javax.swing.JTabbedPane.LEFT);
         ledNoticePanelVehicle.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         ledNoticePanelVehicle.setName("Vehicle_Panel"); // NOI18N
-        ledNoticePanelVehicle.addChangeListener(new javax.swing.event.ChangeListener() {
-            public void stateChanged(javax.swing.event.ChangeEvent evt) {
-                ledNoticePanelVehicleStateChanged(evt);
-            }
-        });
 
         ledNoticePanel2.setName("eBoard" + EBD_DisplayUsage.CAR_ENTRY_TOP_ROW.getVal());
+        ledNoticePanel2.addComponentListener(new java.awt.event.ComponentAdapter() {
+            public void componentShown(java.awt.event.ComponentEvent evt) {
+                ledNoticePanel2ComponentShown(evt);
+            }
+        });
         ledNoticePanel2.setLayout(new java.awt.GridBagLayout());
 
         label_MSG1.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
@@ -1334,9 +1264,9 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
         contentTypeBox2.setMinimumSize(new java.awt.Dimension(123, 30));
         contentTypeBox2.setName("contentTypeBox2"); // NOI18N
         contentTypeBox2.setPreferredSize(new java.awt.Dimension(123, 30));
-        contentTypeBox2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                contentTypeBox2ActionPerformed(evt);
+        contentTypeBox2.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                contentTypeBox2ItemStateChanged(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -1535,24 +1465,6 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
         gridBagConstraints.gridy = 3;
         gridBagConstraints.insets = new java.awt.Insets(0, 15, 5, 0);
         ledNoticePanel2.add(demoButton2, gridBagConstraints);
-
-        demoFinishButton2.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        demoFinishButton2.setText("그만");
-        demoFinishButton2.setEnabled(false);
-        demoFinishButton2.setMaximumSize(new java.awt.Dimension(59, 30));
-        demoFinishButton2.setMinimumSize(new java.awt.Dimension(59, 30));
-        demoFinishButton2.setName("demoFinishButton2"); // NOI18N
-        demoFinishButton2.setPreferredSize(new java.awt.Dimension(59, 30));
-        demoFinishButton2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                demoFinishButton2ActionPerformed(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 5;
-        gridBagConstraints.gridy = 5;
-        gridBagConstraints.insets = new java.awt.Insets(0, 15, 10, 0);
-        ledNoticePanel2.add(demoFinishButton2, gridBagConstraints);
 
         jLabel42.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         jLabel42.setText("시연보기");
@@ -1929,24 +1841,6 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(0, 15, 5, 0);
         ledNoticePanel3.add(demoButton3, gridBagConstraints);
 
-        demoFinishButton3.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        demoFinishButton3.setText("그만");
-        demoFinishButton3.setEnabled(false);
-        demoFinishButton3.setMaximumSize(new java.awt.Dimension(59, 30));
-        demoFinishButton3.setMinimumSize(new java.awt.Dimension(59, 30));
-        demoFinishButton3.setName("demoFinishButton3"); // NOI18N
-        demoFinishButton3.setPreferredSize(new java.awt.Dimension(59, 30));
-        demoFinishButton3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                demoFinishButton3ActionPerformed(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 5;
-        gridBagConstraints.gridy = 5;
-        gridBagConstraints.insets = new java.awt.Insets(0, 15, 10, 0);
-        ledNoticePanel3.add(demoFinishButton3, gridBagConstraints);
-
         jLabel46.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         jLabel46.setText("시연보기");
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -2209,20 +2103,13 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
         demoCurrentSetting(DEFAULT_TOP_ROW);
     }//GEN-LAST:event_demoButton0ActionPerformed
 
-    private void demoFinishButton0ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_demoFinishButton0ActionPerformed
-        finishAllEffectDemo(0);
-        enableFinishButton(0, false);                
-    }//GEN-LAST:event_demoFinishButton0ActionPerformed
-
     private void startEffectHelpButton0ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startEffectHelpButton0ActionPerformed
         giveStartEffectAutoAdjustmentPossibility();
     }//GEN-LAST:event_startEffectHelpButton0ActionPerformed
 
     private void demoCurrHelpButton0ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_demoCurrHelpButton0ActionPerformed
         JOptionPane.showMessageDialog(this, 
-                "현재 설정 상태가 지속적으로" + System.lineSeparator()
-                        + "시연되므로, 관찰이 끝나면, 아래" + System.lineSeparator()
-                        + "[그만]버튼을 사용하여 중단 할 것!");
+                "현재 설정 상태가 지속적으로" + System.lineSeparator() + "시연합니다");
     }//GEN-LAST:event_demoCurrHelpButton0ActionPerformed
 
     private void demoAllHelpButton0ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_demoAllHelpButton0ActionPerformed
@@ -2249,7 +2136,6 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
     }//GEN-LAST:event_btn_SaveActionPerformed
 
     private void btn_CancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_CancelActionPerformed
-
         for (EBD_DisplayUsage usage : EBD_DisplayUsage.values()) {
             cancelModification(usage);
         }
@@ -2258,11 +2144,6 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         tryToCloseEBDSettingsForm();
     }//GEN-LAST:event_formWindowClosing
-
-    private void contentTypeBox0ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_contentTypeBox0ActionPerformed
-//        setButtonEnabledIf_ContentTypeChanged(0);    
-//        reflectSelectionToVerbatimContent(0);
-    }//GEN-LAST:event_contentTypeBox0ActionPerformed
 
     private void pauseTimeHelpButton0ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pauseTimeHelpButton0ActionPerformed
         JOptionPane.showMessageDialog(this,"[" + BOTTOM_TAB_TITLE.getContent() + 
@@ -2276,82 +2157,6 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
     private void tf_VerbatimContent0KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tf_VerbatimContent0KeyReleased
         changeButtonEnabled_IfVerbatimChanged(0);
     }//GEN-LAST:event_tf_VerbatimContent0KeyReleased
-
-    private void ledNoticePanelDefaultStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_ledNoticePanelDefaultStateChanged
-        if (componentMap == null)
-            return;
-        
-        cancelDemoIfRunning();
-        
-        final int row = ledNoticePanelDefault.getSelectedIndex();
-        int prevTabIdx = (row == 0 ? 1 : 0);
-        JButton saveButton = (JButton)componentMap.get("btn_Save" + prevTabIdx);
-        
-//        if (saveButton != null && saveButton.isEnabled()) {
-//            JOptionPane.showMessageDialog(this, 
-//                    "LEDnotice 설정이 변경 중입니다.," + System.lineSeparator()
-//                            + "[저장] 혹은 [취소] 중 하나를 선택하십시오!");
-//            ledNoticePanelDefault.setSelectedIndex(prevTabIdx);
-//        }
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-//                selectItemsForSelectedTab(row, 0); // 0 : default column
-            }
-        });
-    }//GEN-LAST:event_ledNoticePanelDefaultStateChanged
-
-    private void ledNoticeTabbedPaneStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_ledNoticeTabbedPaneStateChanged
-        if (componentMap == null)
-            return;
-        
-        cancelDemoIfRunning();
-        
-        final int column = ledNoticeTabbedPane.getSelectedIndex();
-        int prevTabIdx = (column == 0 ? 1 : 0);
-        JButton saveButtonTop = (JButton)componentMap.get("btn_Save" + (prevTabIdx * 2));
-        JButton saveButtonBottom = (JButton)componentMap.get("btn_Save" + (prevTabIdx * 2 + 1));
-        
-//        if ((saveButtonTop != null && saveButtonTop.isEnabled()) || 
-//                (saveButtonBottom != null && saveButtonBottom.isEnabled())) {
-//            JOptionPane.showMessageDialog(this, 
-//                    "LEDnotice 설정이 변경 중입니다.," + System.lineSeparator()
-//                            + "[저장] 혹은 [취소] 중 하나를 선택하십시오!");
-//            ledNoticeTabbedPane.setSelectedIndex(prevTabIdx);
-//        }
-        final int row = ((JTabbedPane)ledNoticeTabbedPane.getSelectedComponent()).getSelectedIndex();
-        
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-//                selectItemsForSelectedTab(row, column);
-            }
-        });
-    }//GEN-LAST:event_ledNoticeTabbedPaneStateChanged
-
-    private void ledNoticePanelVehicleStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_ledNoticePanelVehicleStateChanged
-        if (componentMap == null)
-            return;
-        
-        cancelDemoIfRunning();
-        
-        final int row = ledNoticePanelVehicle.getSelectedIndex();
-        int prevTabIdx = (row == 0 ? 1 : 0);
-        JButton saveButton = (JButton)componentMap.get("btn_Save" + (2 + prevTabIdx));
-        
-        if (saveButton != null && saveButton.isEnabled()) {
-            JOptionPane.showMessageDialog(this, 
-                    "LEDnotice 설정이 변경 중입니다.," + System.lineSeparator()
-                            + "[저장] 혹은 [취소] 중 하나를 선택하십시오!");
-            ledNoticePanelVehicle.setSelectedIndex(prevTabIdx);
-        }
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-//                selectItemsForSelectedTab(row, 1); // 1 : vehicle column
-            }
-        });        
-    }//GEN-LAST:event_ledNoticePanelVehicleStateChanged
 
     private void combo_StartEffect0ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_combo_StartEffect0ActionPerformed
         changeButtonEnabled_IfStartEffectChanged(0);
@@ -2376,7 +2181,6 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
     private void contentTypeBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_contentTypeBox1ActionPerformed
         setButtonEnabledIf_ContentTypeChanged(1);    
         reflectSelectionToVerbatimContent(1);
-
     }//GEN-LAST:event_contentTypeBox1ActionPerformed
 
     private void tf_VerbatimContent1KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tf_VerbatimContent1KeyReleased
@@ -2418,11 +2222,6 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
         demoCurrentSetting(DEFAULT_BOTTOM_ROW);
     }//GEN-LAST:event_demoButton1ActionPerformed
 
-    private void demoFinishButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_demoFinishButton1ActionPerformed
-        finishAllEffectDemo(1);
-        enableFinishButton(1, false);                
-    }//GEN-LAST:event_demoFinishButton1ActionPerformed
-
     private void startEffectHelpButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startEffectHelpButton1ActionPerformed
         giveStartEffectAutoAdjustmentPossibility();
     }//GEN-LAST:event_startEffectHelpButton1ActionPerformed
@@ -2458,61 +2257,57 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
     }//GEN-LAST:event_useLEDnoticeCkBox1ItemStateChanged
 
     private void ledNoticePanel0FocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_ledNoticePanel0FocusGained
-        System.out.println("0 gained");
     }//GEN-LAST:event_ledNoticePanel0FocusGained
 
     private void ledNoticePanel0ComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_ledNoticePanel0ComponentShown
-        System.out.println("0 shown");
         changeDependantPropEnabled();
+        changeOtherComponentEnabled(DEFAULT_TOP_ROW, useLEDnoticeCkBox0.isSelected());        
     }//GEN-LAST:event_ledNoticePanel0ComponentShown
 
-    private void contentTypeBox2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_contentTypeBox2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_contentTypeBox2ActionPerformed
-
     private void tf_VerbatimContent2KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tf_VerbatimContent2KeyReleased
-        // TODO add your handling code here:
+        changeButtonEnabled_IfVerbatimChanged(2);
     }//GEN-LAST:event_tf_VerbatimContent2KeyReleased
 
     private void charColor2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_charColor2ActionPerformed
-        // TODO add your handling code here:
+        changeButtonEnabled_IfColorChanged(2); 
     }//GEN-LAST:event_charColor2ActionPerformed
 
     private void charFont2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_charFont2ActionPerformed
-        // TODO add your handling code here:
+        changeButtonEnabled_IfFontChanged(2);
     }//GEN-LAST:event_charFont2ActionPerformed
 
     private void combo_StartEffect2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_combo_StartEffect2ActionPerformed
-        // TODO add your handling code here:
+        changeButtonEnabled_IfStartEffectChanged(2);
     }//GEN-LAST:event_combo_StartEffect2ActionPerformed
 
     private void combo_FinishEffect2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_combo_FinishEffect2ActionPerformed
-        // TODO add your handling code here:
+        changeButtonEnabled_IfFinishEffectChanged(2);
     }//GEN-LAST:event_combo_FinishEffect2ActionPerformed
 
     private void combo_PauseTime2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_combo_PauseTime2ActionPerformed
-        // TODO add your handling code here:
+        changeButtonEnabled_IfPauseTimeChanged(2);
     }//GEN-LAST:event_combo_PauseTime2ActionPerformed
 
     private void useLEDnoticeCkBox2ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_useLEDnoticeCkBox2ItemStateChanged
         setButtonEnabledIf_UseCkBoxChanged(2);
-        changeOtherComponentEnabled(CAR_ENTRY_TOP_ROW, useLEDnoticeCkBox2.isSelected());
     }//GEN-LAST:event_useLEDnoticeCkBox2ItemStateChanged
 
     private void useLEDnoticeCkBox2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_useLEDnoticeCkBox2ActionPerformed
-        if (!useLEDnoticeCkBox2.isSelected()) {
-            useLEDnoticeCkBox3.setSelected(false);
-        }
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                if (!useLEDnoticeCkBox2.isSelected()) {
+                    useLEDnoticeCkBox3.setSelected(false);
+                }
+                changeOtherComponentEnabled(CAR_ENTRY_TOP_ROW, useLEDnoticeCkBox2.isSelected());
+            }
+        });         
+        
     }//GEN-LAST:event_useLEDnoticeCkBox2ActionPerformed
 
     private void demoButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_demoButton2ActionPerformed
         demoCurrentInterruptSettings(2);
     }//GEN-LAST:event_demoButton2ActionPerformed
-
-    private void demoFinishButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_demoFinishButton2ActionPerformed
-        finishAllEffectDemo(2);
-        enableFinishButton(2, false);                
-    }//GEN-LAST:event_demoFinishButton2ActionPerformed
 
     private void startEffectHelpButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startEffectHelpButton2ActionPerformed
         giveStartEffectAutoAdjustmentPossibility();
@@ -2523,7 +2318,7 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
     }//GEN-LAST:event_demoCurrHelpButton2ActionPerformed
 
     private void demoAllHelpButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_demoAllHelpButton2ActionPerformed
-        // TODO add your handling code here:
+        showPopUpForDemoAllHelpButton();
     }//GEN-LAST:event_demoAllHelpButton2ActionPerformed
 
     private void endEffectHelpButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_endEffectHelpButton2ActionPerformed
@@ -2535,7 +2330,6 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
     }//GEN-LAST:event_demoAllButton2ActionPerformed
 
     private void pauseTimeHelpButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pauseTimeHelpButton2ActionPerformed
-//        showOneSecondForcedHelpDialog();
     }//GEN-LAST:event_pauseTimeHelpButton2ActionPerformed
 
     private void useCkBoxHelpButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_useCkBoxHelpButton2ActionPerformed
@@ -2543,19 +2337,20 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
     }//GEN-LAST:event_useCkBoxHelpButton2ActionPerformed
 
     private void contentTypeBox3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_contentTypeBox3ActionPerformed
-        // TODO add your handling code here:
+        setButtonEnabledIf_ContentTypeChanged(3);    
+        reflectSelectionToVerbatimContent(3);
     }//GEN-LAST:event_contentTypeBox3ActionPerformed
 
     private void tf_VerbatimContent3KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tf_VerbatimContent3KeyReleased
-        // TODO add your handling code here:
+        changeButtonEnabled_IfVerbatimChanged(3);
     }//GEN-LAST:event_tf_VerbatimContent3KeyReleased
 
     private void charColor3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_charColor3ActionPerformed
-        // TODO add your handling code here:
+        changeButtonEnabled_IfColorChanged(3);
     }//GEN-LAST:event_charColor3ActionPerformed
 
     private void charFont3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_charFont3ActionPerformed
-        // TODO add your handling code here:
+        changeButtonEnabled_IfFontChanged(3);
     }//GEN-LAST:event_charFont3ActionPerformed
 
     private void useLEDnoticeCkBox3ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_useLEDnoticeCkBox3ItemStateChanged
@@ -2564,9 +2359,6 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
     }//GEN-LAST:event_useLEDnoticeCkBox3ItemStateChanged
 
     private void useLEDnoticeCkBox3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_useLEDnoticeCkBox3ActionPerformed
-//        if (useLEDnoticeCkBox3.isSelected()) {
-//            useLEDnoticeCkBox2.setSelected(true);
-//        } 
         java.awt.EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
@@ -2580,11 +2372,6 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
     private void demoButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_demoButton3ActionPerformed
         demoCurrentInterruptSettings(3);
     }//GEN-LAST:event_demoButton3ActionPerformed
-
-    private void demoFinishButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_demoFinishButton3ActionPerformed
-        finishAllEffectDemo(3);
-        enableFinishButton(3, false);                
-    }//GEN-LAST:event_demoFinishButton3ActionPerformed
 
     private void startEffectHelpButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startEffectHelpButton3ActionPerformed
         giveWhyCarLowRowEffectNotUsed();
@@ -2603,7 +2390,7 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
     }//GEN-LAST:event_endEffectHelpButton3ActionPerformed
 
     private void demoAllButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_demoAllButton3ActionPerformed
-        // TODO add your handling code here:
+        demoAllEffects(3);
     }//GEN-LAST:event_demoAllButton3ActionPerformed
 
     private void pauseTimeHelpButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pauseTimeHelpButton3ActionPerformed
@@ -2611,13 +2398,21 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
     }//GEN-LAST:event_pauseTimeHelpButton3ActionPerformed
 
     private void useCkBoxHelpButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_useCkBoxHelpButton3ActionPerformed
-        // TODO add your handling code here:
     }//GEN-LAST:event_useCkBoxHelpButton3ActionPerformed
 
     private void contentTypeBox0ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_contentTypeBox0ItemStateChanged
         setButtonEnabledIf_ContentTypeChanged(0);    
         reflectSelectionToVerbatimContent(0);
     }//GEN-LAST:event_contentTypeBox0ItemStateChanged
+
+    private void contentTypeBox2ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_contentTypeBox2ItemStateChanged
+        setButtonEnabledIf_ContentTypeChanged(2);
+        reflectSelectionToVerbatimContent(2);
+    }//GEN-LAST:event_contentTypeBox2ItemStateChanged
+
+    private void ledNoticePanel2ComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_ledNoticePanel2ComponentShown
+        changeOtherComponentEnabled(CAR_ENTRY_TOP_ROW, useLEDnoticeCkBox2.isSelected());
+    }//GEN-LAST:event_ledNoticePanel2ComponentShown
 
     /**
      *  Decide whether to use the verbatim text field after checking the content type.
@@ -2697,10 +2492,6 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
     private javax.swing.JButton demoCurrHelpButton1;
     private javax.swing.JButton demoCurrHelpButton2;
     private javax.swing.JButton demoCurrHelpButton3;
-    private javax.swing.JButton demoFinishButton0;
-    private javax.swing.JButton demoFinishButton1;
-    private javax.swing.JButton demoFinishButton2;
-    private javax.swing.JButton demoFinishButton3;
     private javax.swing.JButton endEffectHelpButton0;
     private javax.swing.JButton endEffectHelpButton2;
     private javax.swing.JButton endEffectHelpButton3;
@@ -2793,26 +2584,12 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
         return index;
     }    
     
-    private void checkLEDnoticeRowUsageChangeAndChangeButtonEnabled(EBD_DisplayUsage usage ) {
-        JCheckBox useChkBox = (JCheckBox)componentMap.get("useLEDnoticeCkBox" + usage.ordinal());
-        
-        // 전역변수 값과 현재 설정되고 있는 값을 비교!
-        if (LEDnoticeManager.ledNoticeSettings[usage.ordinal()].isUsed && !useChkBox.isSelected() ||
-                !LEDnoticeManager.ledNoticeSettings[usage.ordinal()].isUsed && useChkBox.isSelected())
-        {
-            changedControls.add(useChkBox);            
-        } else {
-            changedControls.remove(useChkBox);            
-        }    
-    }    
-
     private void tryToCloseEBDSettingsForm() {
         if (formMode == FormMode.UpdateMode) {
             JOptionPane.showMessageDialog(this, 
                     "E-Board settings is being modified," + System.lineSeparator()
                             + "Either [Save] or [Cancel] current changes!"); 
         } else {
-            cancelDemoIfRunning();
             if (parent == null) {
                 if (connectionType[E_Board.ordinal()][gateNo] == TCP_IP.ordinal()) {
                     ((ISocket) mainForm.getDeviceManagers()[E_Board.ordinal()][gateNo]).setSocket(null);
@@ -2824,7 +2601,6 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
                 manager.interrupt();
                 mainForm.dispose();                
             } else {
-//                parent.setEBDsettings(null);
                 parent.disposeEBoardDialog();
             }
             this.dispose();    
@@ -2887,7 +2663,6 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
         ((JComboBox)componentMap.get("charColor" + usage.ordinal())).setEnabled(selected);
         ((JComboBox)componentMap.get("charFont" + usage.ordinal())).setEnabled(selected);
         
-        System.out.println("name: " + ("demoButton" + usage.ordinal()));
         ((JButton)componentMap.get("demoButton" + usage.ordinal())).setEnabled(selected);
         
         if (usage == CAR_ENTRY_BOTTOM_ROW)
@@ -2907,27 +2682,12 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
         int count = EffectType.values().length;
         JOptionPane.showMessageDialog(this, "시작효과, 중간멈춤, 색상 및 효과를" + System.lineSeparator() +
                 "적용하여 총 '" + count + "' 개의 효과를" + System.lineSeparator()
-            + "효과명을 사용하여 상단 행에 시연." + System.lineSeparator()
-            + "[그만] 버튼 사용으로 시연 종료!");    
-    }
-
-    private void checkContentTypeBoxAndEnableButtons(final int usage) {
-        JComboBox cBox = (JComboBox)componentMap.get("contentTypeBox" + usage);
-        
-        if (ledNoticeSettings[usage].contentTypeIdx == cBox.getSelectedIndex()) {
-            changedControls.remove(cBox);            
-        } else {
-            changedControls.add(cBox);            
-        }
+            + "효과명을 사용하여 제 1행에 시연합니다.");    
     }
 
     private void changeEnabled_of_SaveCancelButtons(boolean onOff) {
-//        JButton buton = (JButton) componentMap.get("btn_Save");
         btn_Save.setEnabled(onOff);
-        
-//        buton = (JButton) componentMap.get("btn_Cancel");
         btn_Cancel.setEnabled(onOff);
-        
         btn_Exit.setEnabled(!onOff);
     }
 
@@ -2973,10 +2733,6 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
     }
 
     private void saveLEDnoticeSettingsTab(EBD_DisplayUsage usage) {
-        
-        if (usage == CAR_ENTRY_BOTTOM_ROW || usage == CAR_ENTRY_TOP_ROW)
-            return;
-        
         int index = usage.ordinal();
         JComboBox comboBox = null;
         Connection conn = null;
@@ -3070,11 +2826,8 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
         if (usage == CAR_ENTRY_BOTTOM_ROW || usage == CAR_ENTRY_TOP_ROW)
             return;
         
-        int index = usage.ordinal();
-        
         changeEnabled_of_SaveCancelButtons(false);
         selectItemsForSelectedTab(usage);
-//        selectItemsForSelectedTab(index % 2, index / 2);
     }
 
     private void changeButtonEnabled_IfStartEffectChanged(final int index) {
@@ -3129,16 +2882,6 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
         }
     }
 
-//    private void changeButtonEnabled_IfStartEffectChanged(final int usage) {
-//        changeButtonEnabled_IfStartEffectChanged(usage);
-//        java.awt.EventQueue.invokeLater(new Runnable() {
-//            @Override
-//            public void run() {
-//                forcedChangeOfStartEffectIfNeeded(usage);
-//            }
-//        });     
-//    }
-
     private void checkNonsenseEmptyContent(final int usage) {
         // 유형이 [문구 자체]인데, 문자열이 빈 문자열이면 경고 팝업창 띄움
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -3170,7 +2913,7 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
         JOptionPane.showMessageDialog(this, VEHICLE_TAB_TITLE.getContent() + "-[" 
                 + BOTTOM_TAB_TITLE.getContent() + "]의 경우, " + System.lineSeparator()
             + "시작효과, 중간멈춤, 마침효과는 사용되지 않음." + System.lineSeparator()
-            + "상단 행과 같이 하나의 동작으로 처리되기 때문임.");          
+            + TOP_TAB_TITLE.getContent() + "과 같이 하나의 동작으로 처리되기 때문임.");
     }
 
     private LEDnoticeSettings getLEDnoticeSetting(EBD_DisplayUsage ebd_DisplayUsage) {
@@ -3191,13 +2934,15 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
         LEDnoticeSettings topSetting = getLEDnoticeSetting(CAR_ENTRY_TOP_ROW);
         LEDnoticeSettings bottomSetting = getLEDnoticeSetting(CAR_ENTRY_BOTTOM_ROW);
         
-        cancelDemoIfRunning();
-        inDemoMode[CAR_ENTRY_TOP_ROW.ordinal()] = true;
-        
         manager.sendCarArrival_interruptMessage(topSetting, bottomSetting, (byte)gateNo, "서울32가1234", 
                 PermissionType.DISALLOWED, "노상주차경고", 3000);
-        enableFinishButton(buttonIndex, true);
         waitDemoCompletionEvent(buttonIndex);
+        JOptionPane.showMessageDialog(null, "현재 설정을 시연 중입니다." +
+                System.lineSeparator() + "관찰을 종료하려면, 아래" + 
+                System.lineSeparator() + "[확인] 버튼을 클릭하십시오." +
+                System.lineSeparator() + "1회 시연 후에는, 자동으로" +
+                System.lineSeparator() + "기본 표시로 복귀됩니다.");
+        finishAllEffectDemo(buttonIndex);        
     }
 
     private void setButtonEnabledIf_UseCkBoxChanged(int index) {
@@ -3219,16 +2964,6 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
         } else {
             changedControls.add(cBox);            
         }
-    }
-
-    private void enableFinishButton(int index, boolean flag) {
-        JButton button = (JButton)componentMap.get("demoFinishButton" + index);
-        button.setEnabled(flag);
-        
-        button = (JButton)componentMap.get("demoButton" + index);
-        button.setEnabled(!flag);
-        button = (JButton)componentMap.get("demoAllButton" + index);
-        button.setEnabled(!flag);
     }
 
     private void changeDependantPropEnabled() {
@@ -3257,15 +2992,13 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
     }
 
     private void current2ndRowDemoHelp() {
-        JOptionPane.showMessageDialog(this, "상, 하단 연계된 설정을 시연함" + System.lineSeparator()
-            + "[그만] 버튼 사용으로 시연 종료!");
+        JOptionPane.showMessageDialog(this, "제 1행과 제 2행을 연계한 설정을 시연합니다.");
     }
 
     private void current1stRowDemoHelp() {
         JOptionPane.showMessageDialog(this, 
-                "현재 설정 상태를 시연함" + System.lineSeparator()
-                        + "입차 표시 3초 후, 기본 표시로 복귀하나" + System.lineSeparator()
-                        + "중간에 [그만] 버튼 사용으로 시연 종료 가능함.");
+                "현재 설정 상태를 시연하는데" + System.lineSeparator()
+                        + "입차 표시 3초 후, 기본 표시가 복귀됩니다.");
     }
 
     private void waitDemoCompletionEvent(final int buttonIndex) {
@@ -3278,11 +3011,8 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
             public void run() {
                 synchronized(demoFinished[gateNo]) {
                     try {
-                        System.out.println("waiting for ......................................... " + buttonIndex);
                         demoFinished[gateNo].wait();
-                        System.out.println("woke up about to disable button for " + buttonIndex);
-                        enableFinishButton(buttonIndex, false);                
-                        
+                        finishAllEffectDemo(buttonIndex);
                     } catch (InterruptedException ex) {
                         logParkingException(Level.SEVERE, ex, "LEDnotice demo, disabler exception", gateNo);
                     }
