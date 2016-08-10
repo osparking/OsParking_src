@@ -25,6 +25,7 @@ import static com.osparking.global.Globals.GENERAL_DEVICE;
 import static com.osparking.global.Globals.getFormattedRealNumber;
 import static com.osparking.global.Globals.logParkingOperation;
 import static com.osparking.global.Globals.timeFormat;
+import static com.osparking.global.names.ControlEnums.LabelContent.VEHICLES_LABEL;
 import com.osparking.global.names.OSP_enums.OpLogLevel;
 
 /**
@@ -124,7 +125,7 @@ public class PassingDelayStat {
             resultString = getFormattedRealNumber(passingDelayPreviousAverageMs, 1) + "ms on " 
                     + new SimpleDateFormat("yyyy-MM-dd ").format(passingDelayCalculationTime) 
                     + timeFormat.format(passingDelayCalculationTime) 
-                    + " (" + passingDelayPreviousPopulation + " vehicles)";
+                    + " (" + passingDelayPreviousPopulation + VEHICLES_LABEL.getContent() + ")";
         
         return resultString;
     }

@@ -950,7 +950,7 @@
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                   <Connection code="new java.awt.Font(font_Type, font_Style, font_Size+6)" type="code"/>
                 </Property>
-                <Property name="mnemonic" type="int" value="79"/>
+                <Property name="mnemonic" type="int" value="80"/>
                 <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                   <Connection code="OPEN_LABEL.getContent()" type="code"/>
                 </Property>

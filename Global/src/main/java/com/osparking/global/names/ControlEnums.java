@@ -95,6 +95,9 @@ public class ControlEnums {
     }
     
     public enum LabelContent {
+        CLOSED_LABEL("(폐쇄)", "(closed)"), 
+        STOPPED_LABEL("(정지)", "(stopped)"), 
+        RATE_LABEL("비율 : ", "Rate : "), 
         COM_PORT_ID_LABEL("COM 포트 ID : ", "COM Port ID : "), 
         LEVEL_LABEL("레벨 : ", "Level : "), 
         DEVICE_LABEL("장치", "Device"), 
@@ -180,7 +183,8 @@ public class ControlEnums {
         LAST_24HOURS_LABEL ("최근 24시간",  "Last 24 hour"),
         DURATION_SET_LABEL("기간지정",  "Duration"),
         VISIT_TARGET_LABEL("방문 대상",  "Visit Place"),
-        OPEN_LABEL("입구 개방(O)",  "Open Gate"),
+        OPEN_LABEL("<HTML>입구 개방(<U>P</U>)</HTML>",  "OPen Gate"),
+        
         VISIT_OVERVIEW("방문 요약",  "Overview"),
         NON_REGI_TAG2_LABEL("방문부서",  "Visit Departments"),
         DISALLOW_LABEL("입차 불허(C)",  "Close Gate"),
@@ -336,6 +340,18 @@ public class ControlEnums {
     }
         
     public enum MsgContent {
+        RESEND("재전송율: ", "resend/open: "), 
+        NO_STAT("통계 자료 없슴", "No command statistics"), 
+        ACK_MAX(", 최대: ", ", max: "), 
+        ACK_AVG("회신 지연--평균", "ACK delay--avg"), 
+        OPEN_CMD("개방수", "Opens"), 
+        DISPLAY_CMD("표시수", "Displays"), 
+        CAMERA_SIM("모의카메라", "Camera Sim'"), 
+        E_BOARD_SIM("모의전광판", "E-board Sim'"), 
+        GATEBAR_SIM("모의차단기", "Gate bar Sim'"), 
+        P_DELAY_DEF_1("* 통과 지연 정의 : ", "*Passing Delay Definition:"), 
+        P_DELAY_DEF_2("차량 영상 첫 바이트 도달", "first byte arrival of car image"), 
+        P_DELAY_DEF_3("차단기 개방 지시 인지 회신", "gate bar open ACK arrival"), 
         AFFILI_DIAG_L1("다음 상위 소속 명칭을 변경합니까?", 
                 "Want to change the following higher affiliation?"),
         AFFILI_DIAG_L2(" - 상위 소속 : ", 
@@ -510,6 +526,9 @@ public class ControlEnums {
     }
 
     public enum DialogMessages {
+        PASSING_DELAY_AVG("통과 지연 평균 : ", "Passing Delay Average"),
+        ARTIF_ERROR_RATE("인공 오류율 : ", "Artificial error rate: "),
+        CONN_TRIAL("연결시도 장치 : ", "Device to connect : "),
         VerbatimDialog("다음 패널의 요소가 누락되었습니다.", 
                 "Panel Field is missing as follows."),
         PopSizeHelp1("차량 통과 지연 시간 계산을", "Determines the population"),
@@ -943,14 +962,14 @@ public class ControlEnums {
                 "Very First Run of OsParking!"),
         NO_MSG("없음", "N/A"),
         ERROR_RATE_MSG ("인공 에러율: ", "Artificial error rate: "),
-        NO_APP_MSG("인공 에러 없음", "No artificial error"),
+        NO_APP_MSG("인공 오류 없음", "No artificial error"),
         NO_SOCKET_DISCON_MSG(": 소켓 단절 없음.", ": no socket disconn'"),
         NO_COMMAND_MSG("개방 명령 없음.", "no Open command statistics"),
         OPEN_MSG("개방", "Open"),
         INTERRUPT_MSG("입차", "Interrupt"),
         DISCONN_MSG("단절됨", "disconnected"),
         CONN_MSG("연결됨", "connected"),
-        ON_ARTIFI_ERROR_MSG("인공 에러 삽입", "Artificial error is on"),
+        ON_ARTIFI_ERROR_MSG("인공 오류 삽입", "Artificial error is on"),
         ERROR_RATE_MSG2("에러율 : ", "prob of error: "),
         ERROR_MSG("에러 ", "error"),
         ERROR_CHECK_BOX_MSG("에러 체크 박스를 먼저 선택해주세요. ",

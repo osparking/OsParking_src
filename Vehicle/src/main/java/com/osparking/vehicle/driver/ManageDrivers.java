@@ -199,8 +199,8 @@ public class ManageDrivers extends javax.swing.JFrame {
         saveSheet_Button.setText(SAVE_ODS_BTN.getContent());
         closeFormButton.setText(CLOSE_BTN.getContent());
         
-        Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
-        setLocation(screen.width - this.getSize().width, 0);
+//        Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
+        setLocation(0, 0); // (screen.width - this.getSize().width, 0);
         
         refreshComboBox(searchL1ComboBox, getPrompter(AffiliationL1, searchL1ComboBox),
                 AffiliationL1, -1, getPrevListParentKey());
@@ -821,10 +821,10 @@ public class ManageDrivers extends javax.swing.JFrame {
             }
         });
         searchName.addInputMethodListener(new java.awt.event.InputMethodListener() {
+            public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
+            }
             public void inputMethodTextChanged(java.awt.event.InputMethodEvent evt) {
                 searchNameInputMethodTextChanged(evt);
-            }
-            public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
             }
         });
         searchName.addKeyListener(new java.awt.event.KeyAdapter() {

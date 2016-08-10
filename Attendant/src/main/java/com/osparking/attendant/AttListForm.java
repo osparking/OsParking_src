@@ -165,6 +165,7 @@ public class AttListForm extends javax.swing.JFrame {
         this.mainGUI = mainGUI;
         try {
             initComponents();
+            setLocation(0, 0);
             setIconImages(OSPiconList);
             
             // Make last 8 digits of the user ID visible on the user password label.

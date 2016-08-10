@@ -193,7 +193,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
          * Set icon for the simulated camera program
          */
         setIconImages(OSPiconList);
-        this.setLocationRelativeTo(null);
+//        this.setLocationRelativeTo(null);
         this.getContentPane().setBackground(PopUpBackground);       
         adjustTables();
         loadL1_Affiliation(0, "");
@@ -3253,8 +3253,8 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 AffiliationBuildingForm runForm = new AffiliationBuildingForm();
-                Point screenCenter = getTopLeftPointToPutThisFrameAtScreenCenter(runForm);
-                runForm.setLocation(screenCenter);
+//                Point screenCenter = getTopLeftPointToPutThisFrameAtScreenCenter(runForm);
+//                runForm.setLocation(screenCenter);
                 runForm.setVisible(true);
                 runForm.setDefaultCloseOperation(
                         javax.swing.WindowConstants.EXIT_ON_CLOSE);

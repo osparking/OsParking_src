@@ -353,7 +353,7 @@ public class DisAllowedCar extends javax.swing.JFrame {
         buttonPanel.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 10, 0));
 
         openBarButton.setFont(new java.awt.Font(font_Type, font_Style, font_Size+6));
-        openBarButton.setMnemonic('o');
+        openBarButton.setMnemonic('P');
         openBarButton.setText(OPEN_LABEL.getContent());
         openBarButton.setMaximumSize(new java.awt.Dimension(160, 60));
         openBarButton.setMinimumSize(new java.awt.Dimension(160, 60));
@@ -420,9 +420,12 @@ public class DisAllowedCar extends javax.swing.JFrame {
         if(parent != null){
             parent.raiseGateBar(gateNo, imageSN, delay);
                 
+//            long arrSeqNo = parent.insertDBrecord(gateNo, arrivalTm, tagRecognized, tagEnteredAs,
+//                    bImg, -1, -1, null, BarOperation.MANUAL);
+//            parent.updateMainForm(gateNo, tagRecognized, arrSeqNo, BarOperation.MANUAL);
             long arrSeqNo = parent.insertDBrecord(gateNo, arrivalTm, tagRecognized, tagEnteredAs,
                     bImg, -1, -1, null, BarOperation.MANUAL);
-            parent.updateMainForm(gateNo, tagRecognized, arrSeqNo, BarOperation.MANUAL);
+            parent.updateMainForm(gateNo, tagRecognized, arrSeqNo, BarOperation.STOPPED);
             parent.isGateBusy[gateNo] = false;
         }
         timer.cancel();

@@ -589,7 +589,7 @@ public class VisitingCar extends javax.swing.JFrame {
         buttonPanel.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 10, 0));
 
         openBarButton.setFont(new java.awt.Font(font_Type, font_Style, font_Size+6));
-        openBarButton.setMnemonic('O');
+        openBarButton.setMnemonic('P');
         openBarButton.setText(OPEN_LABEL.getContent());
         openBarButton.setMaximumSize(new java.awt.Dimension(160, 60));
         openBarButton.setMinimumSize(new java.awt.Dimension(160, 60));

@@ -27,8 +27,10 @@ import static com.osparking.global.names.ControlEnums.ComboBoxItemTypes.LOWER_CB
 import static com.osparking.global.names.ControlEnums.ComboBoxItemTypes.LOWER_HIGHER_CB_ITEM;
 import static com.osparking.global.names.ControlEnums.ComboBoxItemTypes.ROOM_BUILDING_CB_ITEM;
 import static com.osparking.global.names.ControlEnums.ComboBoxItemTypes.ROOM_CB_ITEM;
+import static com.osparking.global.names.ControlEnums.DialogMessages.CONN_TRIAL;
 import com.osparking.global.names.ControlEnums.Languages;
 import static com.osparking.global.names.ControlEnums.Languages.KOREAN;
+import static com.osparking.global.names.ControlEnums.TextType.DISCONN_MSG;
 import com.osparking.global.names.ConvComboBoxItem;
 import static com.osparking.global.names.DB_Access.PIC_HEIGHT;
 import java.awt.Color;
@@ -1862,7 +1864,7 @@ public class Globals {
     }
     
     /**
-     * closes socket connection to a gate bar.
+     * closes socket connection to a device.
      * 
      * before closing the socket, it cancels any existing relevant tasks.
      */
@@ -1875,9 +1877,9 @@ public class Globals {
         {
             if (isConnected(socket))
             {
-                String msg =  "Gate bar #" + gateNo;
+                String msg =  devType.getContent() + " " + "#" + gateNo;
 
-                addMessageLine(textArea, "  ------" + msg + " disconnected");
+                addMessageLine(textArea, "  ------" + msg + " " + DISCONN_MSG.getContent() );
                 logParkingException(Level.INFO, e, description + " " + msg);
 
                 long closeTm = System.currentTimeMillis();
@@ -1892,8 +1894,8 @@ public class Globals {
         if (connTimer != null) {
             if (!beingShutdown) {
                 connTimer.reRunOnce();
-                addMessageLine(textArea, "Trying to connect to Gate #" 
-                        + gateNo + " " + devType);
+                addMessageLine(textArea, CONN_TRIAL.getContent() + "#" 
+                        + gateNo + " " + devType.getContent());
             }
         }        
     }

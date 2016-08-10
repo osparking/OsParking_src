@@ -16,12 +16,12 @@
  */
 package com.osparking.osparking.statistics;
 
-import static com.osparking.global.Globals.GENERAL_DEVICE;
 import static com.osparking.global.Globals.getFormattedRealNumber;
-import static com.osparking.global.Globals.logParkingOperation;
+import static com.osparking.global.names.ControlEnums.MsgContent.ACK_AVG;
+import static com.osparking.global.names.ControlEnums.MsgContent.ACK_MAX;
+import static com.osparking.global.names.ControlEnums.MsgContent.NO_STAT;
+import static com.osparking.global.names.ControlEnums.MsgContent.RESEND;
 import static com.osparking.global.names.DB_Access.statCount;
-import com.osparking.global.names.OSP_enums;
-import com.osparking.global.names.OSP_enums.OpLogLevel;
 
 /**
  *
@@ -95,19 +95,19 @@ public class DeviceCommand {
         StringBuilder sb = new StringBuilder();
         
         if (commandCount == 0) {
-            sb.append("\tno Open command statistics");
+            sb.append("\t" + NO_STAT.getContent());
         } else {
             sb.append(commandName);
-            sb.append("s: ");
+            sb.append(": ");
             sb.append(commandCount);
             sb.append(System.lineSeparator());
 
-            sb.append("      ACK delay--avg(ms): ");
-            sb.append(getFormattedRealNumber(commAckDelayTot/(float)commandCount, 1) + ", max: ");
+            sb.append("      " + ACK_AVG.getContent() + "(ms): ");
+            sb.append(getFormattedRealNumber(commAckDelayTot/(float)commandCount, 1) + ACK_MAX.getContent());
             sb.append(commAckDelayMax);
             sb.append(System.lineSeparator());
 
-            sb.append("      resend/open: ");
+            sb.append("      " + RESEND.getContent());
             sb.append(getFormattedRealNumber(commResendCntTot/(float)commandCount, 2));
             sb.append(System.lineSeparator());
         }

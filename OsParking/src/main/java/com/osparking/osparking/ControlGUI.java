@@ -32,17 +32,24 @@ import static com.osparking.global.names.ControlEnums.ButtonTypes.CAR_ARRIVAL_BT
 import static com.osparking.global.names.ControlEnums.ButtonTypes.STATISTICS_BTN;
 import static com.osparking.global.names.ControlEnums.ButtonTypes.USERS_BTN;
 import static com.osparking.global.names.ControlEnums.ButtonTypes.VEHICLES_BTN;
+import static com.osparking.global.names.ControlEnums.DialogMessages.ARTIF_ERROR_RATE;
 import static com.osparking.global.names.ControlEnums.DialogMessages.AUTO_LOGOUT;
 import static com.osparking.global.names.ControlEnums.DialogMessages.OSPARKING_STOPS;
+import static com.osparking.global.names.ControlEnums.DialogMessages.PASSING_DELAY_AVG;
 import static com.osparking.global.names.ControlEnums.DialogMessages.SHUT_DOWN_CONFIRM_DIALOG;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.CONFIRM_LOGOUT;
+import static com.osparking.global.names.ControlEnums.DialogTitleTypes.ERROR_DIALOGTITLE;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.MAIN_GUI_TITLE;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.SYSTEM_SHUTDOWN_CONFIRM;
 import static com.osparking.global.names.ControlEnums.LabelContent.CAMERA_LABEL;
+import static com.osparking.global.names.ControlEnums.LabelContent.CLOSED_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.E_BOARD_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.GATE_BAR_LABEL;
+import static com.osparking.global.names.ControlEnums.LabelContent.GATE_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.OPEN_LABEL;
+import static com.osparking.global.names.ControlEnums.LabelContent.RATE_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.STATUS_LABEL;
+import static com.osparking.global.names.ControlEnums.LabelContent.STOPPED_LABEL;
 import static com.osparking.global.names.ControlEnums.MenuITemTypes.AFFILIATION_MENU;
 import static com.osparking.global.names.ControlEnums.MenuITemTypes.ARRIVAL_MENU_ITEM;
 import static com.osparking.global.names.ControlEnums.MenuITemTypes.BOOTING_MENU_ITEM;
@@ -64,10 +71,20 @@ import static com.osparking.global.names.ControlEnums.MenuITemTypes.USERS_MENU;
 import static com.osparking.global.names.ControlEnums.MenuITemTypes.VEHICLE_MANAGE_MENU_ITEM;
 import static com.osparking.global.names.ControlEnums.MenuITemTypes.VEHICLE_MENU;
 import static com.osparking.global.names.ControlEnums.MsgContent.ASK_LOGOUT;
+import static com.osparking.global.names.ControlEnums.MsgContent.CAMERA_SIM;
+import static com.osparking.global.names.ControlEnums.MsgContent.DISPLAY_CMD;
+import static com.osparking.global.names.ControlEnums.MsgContent.E_BOARD_SIM;
+import static com.osparking.global.names.ControlEnums.MsgContent.GATEBAR_SIM;
 import static com.osparking.global.names.ControlEnums.MsgContent.LOG_IN;
 import static com.osparking.global.names.ControlEnums.MsgContent.LOG_OUT;
+import static com.osparking.global.names.ControlEnums.MsgContent.OPEN_CMD;
+import static com.osparking.global.names.ControlEnums.MsgContent.P_DELAY_DEF_1;
+import static com.osparking.global.names.ControlEnums.MsgContent.P_DELAY_DEF_2;
+import static com.osparking.global.names.ControlEnums.MsgContent.P_DELAY_DEF_3;
 import static com.osparking.global.names.ControlEnums.MsgContent.SYSTEM_START;
 import static com.osparking.global.names.ControlEnums.MsgContent.SYSTEM_STOP;
+import static com.osparking.global.names.ControlEnums.TextType.NO_APP_MSG;
+import static com.osparking.global.names.ControlEnums.TextType.ON_ARTIFI_ERROR_MSG;
 import static com.osparking.global.names.DB_Access.deviceType;
 import static com.osparking.global.names.DB_Access.enteranceAllowed;
 import static com.osparking.global.names.DB_Access.gateCount;
@@ -443,9 +460,9 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
                 }
                 String command = null;
                 if (type == GateBar)
-                    command = "Open";
+                    command = OPEN_CMD.getContent();
                 else 
-                    command = "Interrupt";
+                    command = DISPLAY_CMD.getContent();
                 perfomStatistics[type.ordinal()][gNo] = new DeviceCommand(command);
             }  
             
@@ -658,6 +675,7 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
         VehiclesButton = new javax.swing.JButton();
         UsersButton = new javax.swing.JButton();
         filler3 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
+        dummyButton = new javax.swing.JButton();
         autoGateOpenCheckBox = new javax.swing.JCheckBox();
         filler4 = new javax.swing.Box.Filler(new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 32767));
         ClockLabel = new javax.swing.JLabel();
@@ -780,9 +798,9 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
         MainToolBar.setRollover(true);
         MainToolBar.setAlignmentX(Component.LEFT_ALIGNMENT);
         MainToolBar.setBorderPainted(false);
-        MainToolBar.setMaximumSize(new Dimension(Short.MAX_VALUE, 32));
-        MainToolBar.setMinimumSize(new java.awt.Dimension(473, 32));
-        MainToolBar.setPreferredSize(new java.awt.Dimension(483, 32));
+        MainToolBar.setMaximumSize(new Dimension(Short.MAX_VALUE, 35));
+        MainToolBar.setMinimumSize(new java.awt.Dimension(473, 35));
+        MainToolBar.setPreferredSize(new java.awt.Dimension(483, 35));
         MainToolBar.add(fillerLeft);
 
         CarIOListButton.setBackground(MainBackground);
@@ -791,9 +809,9 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
         CarIOListButton.setAlignmentY(0.0F);
         CarIOListButton.setFocusable(false);
         CarIOListButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        CarIOListButton.setMaximumSize(new java.awt.Dimension(120, 23));
-        CarIOListButton.setMinimumSize(new java.awt.Dimension(120, 23));
-        CarIOListButton.setPreferredSize(new java.awt.Dimension(120, 23));
+        CarIOListButton.setMaximumSize(new java.awt.Dimension(120, 30));
+        CarIOListButton.setMinimumSize(new java.awt.Dimension(120, 30));
+        CarIOListButton.setPreferredSize(new java.awt.Dimension(120, 30));
         CarIOListButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         CarIOListButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -809,9 +827,9 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
         VehiclesButton.setEnabled(false);
         VehiclesButton.setFocusable(false);
         VehiclesButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        VehiclesButton.setMaximumSize(new java.awt.Dimension(120, 23));
-        VehiclesButton.setMinimumSize(new java.awt.Dimension(120, 23));
-        VehiclesButton.setPreferredSize(new java.awt.Dimension(120, 23));
+        VehiclesButton.setMaximumSize(new java.awt.Dimension(120, 30));
+        VehiclesButton.setMinimumSize(new java.awt.Dimension(120, 30));
+        VehiclesButton.setPreferredSize(new java.awt.Dimension(120, 30));
         VehiclesButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         VehiclesButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -827,9 +845,9 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
         UsersButton.setEnabled(false);
         UsersButton.setFocusable(false);
         UsersButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        UsersButton.setMaximumSize(new java.awt.Dimension(120, 23));
-        UsersButton.setMinimumSize(new java.awt.Dimension(120, 23));
-        UsersButton.setPreferredSize(new java.awt.Dimension(120, 23));
+        UsersButton.setMaximumSize(new java.awt.Dimension(120, 30));
+        UsersButton.setMinimumSize(new java.awt.Dimension(120, 30));
+        UsersButton.setPreferredSize(new java.awt.Dimension(120, 30));
         UsersButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         UsersButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -839,6 +857,19 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
         MainToolBar.add(UsersButton);
         MainToolBar.add(Box.createHorizontalGlue());
         MainToolBar.add(filler3);
+
+        dummyButton.setMnemonic('P');
+        dummyButton.setText("jButton1");
+        dummyButton.setFocusable(false);
+        dummyButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        dummyButton.setPreferredSize(new java.awt.Dimension(0, 0));
+        dummyButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        dummyButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                dummyButtonActionPerformed(evt);
+            }
+        });
+        MainToolBar.add(dummyButton);
 
         autoGateOpenCheckBox.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         autoGateOpenCheckBox.setText(OPEN_LABEL.getContent());
@@ -952,7 +983,7 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
         jPanel1.add(filler15);
 
         errorCheckBox.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        errorCheckBox.setText("error");
+        errorCheckBox.setText(ERROR_DIALOGTITLE.getContent());
         errorCheckBox.setEnabled(false);
         errorCheckBox.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         errorCheckBox.setHorizontalTextPosition(javax.swing.SwingConstants.LEADING);
@@ -1536,8 +1567,6 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
         setSize(new java.awt.Dimension(895, 667));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
-          
-
     
     private void closeButtonClicked(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_closeButtonClicked
         askUserIntentionOnProgramStop(false);
@@ -1728,11 +1757,12 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
 
     private void errorCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_errorCheckBoxActionPerformed
         if (getErrorCheckBox().isSelected()) {
-            addMessageLine(MessageTextArea, "Artificial error is on");
-            addMessageLine(MessageTextArea, "\tprob of error: " + getFormattedRealNumber(ERROR_RATE, 2));
-            errorLabel.setText("error : " + getFormattedRealNumber(ERROR_RATE, 2));
+            addMessageLine(MessageTextArea, ON_ARTIFI_ERROR_MSG.getContent());
+            addMessageLine(MessageTextArea, 
+                    "\t" + ARTIF_ERROR_RATE.getContent() + " : " + getFormattedRealNumber(ERROR_RATE, 2));
+            errorLabel.setText(RATE_LABEL.getContent() + getFormattedRealNumber(ERROR_RATE, 2));
         } else {
-            addMessageLine(MessageTextArea, "No artificial error");
+            addMessageLine(MessageTextArea, NO_APP_MSG.getContent());
             errorLabel.setText("");
         }
     }//GEN-LAST:event_errorCheckBoxActionPerformed
@@ -1762,7 +1792,7 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
                addMessageLine(MessageTextArea,"current error rate(=" 
                         + getFormattedRealNumber(ERROR_RATE, 2) + ") is max!");
             }
-            errorLabel.setText("error : " + getFormattedRealNumber(ERROR_RATE, 2));
+            errorLabel.setText(RATE_LABEL.getContent() + getFormattedRealNumber(ERROR_RATE, 2));
         } else {
             addMessageLine(MessageTextArea, "First, select error check box, OK?");
         }
@@ -1777,7 +1807,7 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
                addMessageLine(MessageTextArea,"current error rate(=" 
                         + getFormattedRealNumber(ERROR_RATE, 2) + ") is max!");
             }
-            errorLabel.setText("error : " + getFormattedRealNumber(ERROR_RATE, 2));
+            errorLabel.setText(RATE_LABEL.getContent() + getFormattedRealNumber(ERROR_RATE, 2));
         } else {
             addMessageLine(MessageTextArea, "First, select error check box, OK?");
         }
@@ -1789,7 +1819,7 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
 
         if (DEBUG) {
             //<editor-fold desc="-- Show detailed performance statistics">
-            perfDesc.append("Artificial error rate: ");
+            perfDesc.append(ARTIF_ERROR_RATE.getContent());
             if (errorCheckBox.isSelected()) {
                 perfDesc.append(getFormattedRealNumber(ERROR_RATE, 2));
             } else {
@@ -1800,7 +1830,7 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
             for (DeviceType type : DeviceType.values()) {
                 for (int gateNo = 1; gateNo <= gateCount; gateNo++ ) {
                     perfDesc.append("            ");
-                    perfDesc.append(type + " #" + gateNo 
+                    perfDesc.append(type.getContent() + " #" + gateNo 
                             + getSockConnStat()[type.ordinal()][gateNo].getPerformanceDescription());
                 }
                 perfDesc.append(System.lineSeparator());
@@ -1820,7 +1850,7 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
                 }   
             }
             perfDesc.append(gateBar);
-            perfDesc.append(System.lineSeparator());        
+            //perfDesc.append(System.lineSeparator());        
             perfDesc.append("            ");
             //</editor-fold>
         }
@@ -1829,19 +1859,19 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
          * Display major performance statistics.
          */
         
-        perfDesc.append("[Passing Delay Average(ms)]" + System.lineSeparator());
+        perfDesc.append("[" + PASSING_DELAY_AVG.getContent() + "(ms)]" + System.lineSeparator());
         
         fetchPassingDelay();
         for (int gateNo = 1; gateNo <= gateCount; gateNo++) {
-            perfDesc.append("            Gate #" + gateNo + " :");
+            perfDesc.append("            " + GATE_LABEL.getContent() + "#" + gateNo + " :");
             perfDesc.append(getPassingDelayStat()[gateNo].getPassingDelayAvg());
             perfDesc.append(System.lineSeparator());        
         }  
         perfDesc.append("            ");
-        perfDesc.append("* Passing delay is from " + System.lineSeparator() 
-                + "    <first byte arrival of car image> to" + System.lineSeparator());
+        perfDesc.append(P_DELAY_DEF_1.getContent() + System.lineSeparator() 
+                + "    <" + P_DELAY_DEF_2.getContent() + "> ~" + System.lineSeparator());
         perfDesc.append("    ");
-        perfDesc.append("<gate bar open ACK arrival>." + System.lineSeparator());
+        perfDesc.append("<" + P_DELAY_DEF_3.getContent() + ">." + System.lineSeparator());
         
         addMessageLine(MessageTextArea, perfDesc.toString());        
         MessageTextArea.setCaretPosition(MessageTextArea.getDocument().getLength() 
@@ -1860,6 +1890,10 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
         new ManageArrivalList().run();
     }//GEN-LAST:event_CarIOListButtonActionPerformed
 
+    private void dummyButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dummyButtonActionPerformed
+        autoGateOpenCheckBox.setSelected(!autoGateOpenCheckBox.isSelected());
+    }//GEN-LAST:event_dummyButtonActionPerformed
+
     LedProtocol ledNoticeProtocol = new LedProtocol(); 
 
     private String getDevType(DeviceType type, byte gateNo) {
@@ -1868,7 +1902,7 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
             case Camera:
                 switch (Globals.gateDeviceTypes[gateNo].cameraType) {
                     case Simulator:
-                        typeName = "CamSim";
+                        typeName = CAMERA_SIM.getContent();
                         break;
                     default:
                         typeName = Globals.gateDeviceTypes[gateNo].cameraType.toString();
@@ -1879,7 +1913,7 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
             case E_Board:
                 switch (Globals.gateDeviceTypes[gateNo].eBoardType) {
                     case Simulator:
-                        typeName = "EBDsim";
+                        typeName = E_BOARD_SIM.getContent();
                         break;
                     default:
                         typeName = Globals.gateDeviceTypes[gateNo].eBoardType.toString();
@@ -1890,7 +1924,7 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
             case GateBar:
                 switch (Globals.gateDeviceTypes[gateNo].gateBarType) {
                     case Simulator:
-                        typeName = "BarSim";
+                        typeName = GATEBAR_SIM.getContent();
                         break;
                     default:
                         typeName = Globals.gateDeviceTypes[gateNo].gateBarType.toString();
@@ -2128,6 +2162,7 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
     private javax.swing.JButton carEntryButton;
     private javax.swing.JPanel connStatusPanel;
     private javax.swing.JPanel debugPanel;
+    private javax.swing.JButton dummyButton;
     private javax.swing.JPanel entryPanel;
     private javax.swing.JButton errDecButton;
     private javax.swing.JButton errIncButton;
@@ -2619,9 +2654,9 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
             
             String suffix = "";
             if (barOptn == BarOperation.REMAIN_CLOSED) {
-                suffix = "(closed)";
+                suffix = CLOSED_LABEL.getContent();
             } else if (barOptn == BarOperation.STOPPED) {
-                suffix = "(stopped)";
+                suffix = STOPPED_LABEL.getContent();
             }
             // add a row to the recent entry list for the gate
             listModel.add(0, new CarAdmission("-" + tmDisplay + tagRecognized + suffix, 
