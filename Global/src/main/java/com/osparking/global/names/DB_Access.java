@@ -16,6 +16,7 @@
  */
 package com.osparking.global.names;
 
+import static com.osparking.global.CommonData.ADMIN_ID;
 import static com.osparking.global.CommonData.statCountArr;
 import com.osparking.global.Globals;
 import java.sql.Connection;
@@ -27,12 +28,20 @@ import java.util.Locale;
 import java.util.logging.Level;
 import static com.osparking.global.Globals.*;
 import static com.osparking.global.Globals.sdf;
+import static com.osparking.global.names.ControlEnums.DialogMessages.NAME_ADMIN;
+import static com.osparking.global.names.ControlEnums.DialogMessages.NAME_GUEST;
+import static com.osparking.global.names.ControlEnums.DialogMessages.NAME_MANAGER;
+import static com.osparking.global.names.ControlEnums.DialogTitleTypes.DEFAULT_USER_TITLE;
+import static com.osparking.global.names.ControlEnums.LabelContent.DEFAULT_USER_LINE1;
+import static com.osparking.global.names.ControlEnums.LabelContent.DEFAULT_USER_LINE2;
 import static com.osparking.global.names.ControlEnums.LabelContent.GATE_LABEL;
 import static com.osparking.global.names.ControlEnums.Languages.ENGLISH;
 import static com.osparking.global.names.ControlEnums.Languages.KOREAN;
 import static com.osparking.global.names.ControlEnums.TextType.LETEST_MSG;
 import static com.osparking.global.names.ControlEnums.TextType.PASSING_MSG;
 import static com.osparking.global.names.ControlEnums.TextType.SECOND_MSG;
+import static com.osparking.global.names.JDBCMySQL.OSP_PHONE;
+import static com.osparking.global.names.JDBCMySQL.PASSWORD;
 import com.osparking.global.names.OSP_enums.DeviceType;
 import static com.osparking.global.names.OSP_enums.DeviceType.Camera;
 import static com.osparking.global.names.OSP_enums.DeviceType.E_Board;
@@ -51,6 +60,8 @@ import com.osparking.global.names.OSP_enums.OpLogLevel;
 import com.osparking.global.names.OSP_enums.PWStrengthLevel;
 import com.osparking.global.names.OSP_enums.PermissionType;
 import java.util.Date;
+import javax.swing.JOptionPane;
+import static javax.swing.JOptionPane.INFORMATION_MESSAGE;
 
 /**
  *
@@ -135,6 +146,99 @@ public class DB_Access {
     
     public static String[][] deviceComID = null;
 
+    /**
+     * Make sure 3 default users(admin, manager, guest) exists.
+     */
+    public static void makeSureBasicUserExistance() {
+        /**
+         * Check if admin, manager and guest user accounts exists and create it not.
+         */
+        // admin
+        int cuCount = 0; // Created Users
+        String cuIDstr = "";
+        
+        String id = ADMIN_ID;
+        if (getRecordCount("users_osp", "id", id) == 0) {
+            /**
+             * Create admin acount.
+             */
+            cuCount += createDefaultUsers(id, NAME_ADMIN.getContent(), true);
+            cuIDstr = id;
+        }
+        
+        id = "manager";
+        if (getRecordCount("users_osp", "id", id) == 0) {
+            /**
+             * Create admin acount.
+             */
+            cuCount += createDefaultUsers(id, NAME_MANAGER.getContent(), true);
+            if (cuIDstr.length() > 0) {
+                cuIDstr += ", " + id;
+            } else {
+                cuIDstr = id;
+            }
+        }
+        
+        id = "guest";
+        if (getRecordCount("users_osp", "id", id) == 0) {
+            /**
+             * Create admin acount.
+             */
+            cuCount += createDefaultUsers(id, NAME_GUEST.getContent(), false);
+            if (cuIDstr.length() > 0) {
+                cuIDstr += ", " + id;
+            } else {
+                cuIDstr = id;
+            }
+        }
+        
+        if (cuCount > 0) {
+            /**
+             * Let user know about the creation of some default users.
+             */
+            String message = DEFAULT_USER_LINE1.getContent() + System.lineSeparator() 
+                    + DEFAULT_USER_LINE2.getContent() + cuIDstr;
+            JOptionPane.showMessageDialog(null, message, DEFAULT_USER_TITLE.getContent(), 
+                    INFORMATION_MESSAGE);
+        }
+    } 
+    
+    private static int createDefaultUsers(String id, String name, boolean isManager) {
+        Connection conn = null;        
+        PreparedStatement createAttendant = null;
+        String sql = "Insert Into  users_osp (id, name, password, isManager, phone)" 
+                + " Values (?, ?, md5(?), ?, ?)";
+        int result = -1;
+        try {
+            int pIndex = 1;
+            conn = JDBCMySQL.getConnection();
+            createAttendant = conn.prepareStatement(sql);
+            
+            // <editor-fold defaultstate="collapsed" desc="-- Provide actual value to each field">
+            createAttendant.setString(pIndex++, id);
+            createAttendant.setString(pIndex++, name);
+            createAttendant.setString(pIndex++, PASSWORD);
+            if (isManager) {
+                createAttendant.setInt(pIndex++, 1);
+            } else {
+                createAttendant.setInt(pIndex++, 0);
+            }
+            createAttendant.setString(pIndex++, OSP_PHONE);
+            // </editor-fold>
+
+            result = createAttendant.executeUpdate();
+
+        } catch (SQLException ex) {
+            logParkingException(Level.SEVERE, ex, 
+                    "(ID: " + id + 
+                    ", name: " + name + 
+                    ", phone: " + OSP_PHONE + ")");                    
+        } finally {
+            closeDBstuff(conn, createAttendant, null, "(ID: " + id + ")");
+            return result;
+        }
+    }    
+    
     public static boolean passwordMatched(String userID, String passwd) 
     {
         boolean result = false;

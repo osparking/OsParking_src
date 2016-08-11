@@ -20,6 +20,7 @@ import com.osparking.attendant.AttListForm;
 import com.osparking.attendant.LoginDialog;
 import com.osparking.attendant.LoginEventListener;
 import com.osparking.attendant.LoginWindowEvent;
+import com.osparking.global.CommonData;
 import static com.osparking.global.CommonData.ImgHeight;
 import static com.osparking.global.CommonData.ImgWidth;
 import static com.osparking.global.CommonData.metaKeyLabel;
@@ -85,6 +86,7 @@ import static com.osparking.global.names.ControlEnums.MsgContent.SYSTEM_START;
 import static com.osparking.global.names.ControlEnums.MsgContent.SYSTEM_STOP;
 import static com.osparking.global.names.ControlEnums.TextType.NO_APP_MSG;
 import static com.osparking.global.names.ControlEnums.TextType.ON_ARTIFI_ERROR_MSG;
+import com.osparking.global.names.DB_Access;
 import static com.osparking.global.names.DB_Access.deviceType;
 import static com.osparking.global.names.DB_Access.enteranceAllowed;
 import static com.osparking.global.names.DB_Access.gateCount;
@@ -3314,6 +3316,7 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
                 if (!DEBUG) {
                     Globals.shortLicenseDialog(null);
                 }
+                DB_Access.makeSureBasicUserExistance();
                 ControlGUI mainForm = new ControlGUI(false);
                 if (!DEBUG) {
                     mainForm.removeDebugPanel();

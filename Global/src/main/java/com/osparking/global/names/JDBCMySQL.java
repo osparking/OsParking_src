@@ -34,6 +34,7 @@ public class JDBCMySQL {
     public static final String DB_URL = "jdbc:mysql://localhost/parkinglot?useUnicode=true&characterEncoding=utf-8";
     public static final String USER = "gate_1";
     public static final String PASSWORD = "1234";
+    public static final String OSP_PHONE = "02-858-9168";
     private static Logger logException = null;
 
     private JDBCMySQL() {

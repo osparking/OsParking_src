@@ -246,6 +246,8 @@ public class ControlEnums {
         
         UPDATE_SAVE_HELP("자료 갱신 후 [엔터] 키로 마감(=저장)할 것!",
                 "Press enter after the data modification!"),
+        DEFAULT_USER_LINE1("[생성된 기본 아이디]", "[Created Default User ID]"),
+        DEFAULT_USER_LINE2("- 아이디 목록: ", "- ID List: "),
         OVERLAPPED_PORT_DIALOG_1("아래 두 장치가 같은 포트를", "Two devices are set to use the same "),
         OVERLAPPED_PORT_DIALOG_2("사용하게 잘못 설정되었습니다.", "COM port. It is an error."),
         OVERLAPPED_PORT_DIALOG_3("그래도 설정을 저장하겠습니까?", "Do you still want to save the settings?"),
@@ -526,6 +528,9 @@ public class ControlEnums {
     }
 
     public enum DialogMessages {
+        NAME_ADMIN("관리자", "Administrator"),
+        NAME_MANAGER("운영자", "Operator"),
+        NAME_GUEST("김손님", "Guest Kim"),
         PASSING_DELAY_AVG("통과 지연 평균 : ", "Passing Delay Average"),
         ARTIF_ERROR_RATE("인공 오류율 : ", "Artificial error rate: "),
         CONN_TRIAL("연결시도 장치 : ", "Device to connect : "),
@@ -872,6 +877,7 @@ public class ControlEnums {
     }
     
     public static enum DialogTitleTypes {
+        DEFAULT_USER_TITLE("사용자 생성", "User Creation"),
         E_BOARD_SIM_TITLE("모의 전광판 설정", "E-Board Simulator"),
         OVERLAPPED_PORT_TITLE("COM 포트 중복 사용", "PORT USAGE ERROR"),
         IP_ERROR_TITLE("IP 주소 오류", "IP Address Error"),
