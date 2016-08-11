@@ -44,6 +44,7 @@ import static com.osparking.global.names.ControlEnums.MsgContent.MISSING_ADMIN;
 import static com.osparking.global.names.ControlEnums.TitleTypes.LOGIN_DIALOG_TITLE;
 import static com.osparking.global.names.DB_Access.readSettings;
 import com.osparking.global.names.JDBCMySQL;
+import static com.osparking.global.names.JDBCMySQL.PASSWORD;
 import java.awt.Dimension;
 import java.awt.event.KeyEvent;
 import static java.awt.event.KeyEvent.VK_ENTER;
@@ -156,7 +157,7 @@ public class LoginDialog extends javax.swing.JDialog {
         });
 
         password.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        password.setText("1234");
+        password.setText(PASSWORD);
         password.setPreferredSize(new java.awt.Dimension(80, 30));
         password.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {

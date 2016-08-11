@@ -12,9 +12,11 @@ import static com.osparking.global.names.ControlEnums.DialogMessages.USER_DELETE
 import static com.osparking.global.names.ControlEnums.DialogMessages.USER_DELETE_CONF_2;
 import static com.osparking.global.names.ControlEnums.DialogMessages.USER_DELETE_CONF_3;
 import static com.osparking.global.names.ControlEnums.DialogMessages.USER_DELETE_CONF_TITLE;
+import com.osparking.global.names.DB_Access;
 import static com.osparking.global.names.DB_Access.getRecordCount;
 import static com.osparking.global.names.DB_Access.readSettings;
 import com.osparking.global.names.JDBCMySQL;
+import static com.osparking.global.names.JDBCMySQL.PASSWORD;
 import static com.osparking.global.names.JDBCMySQL.getConnection;
 import com.osparking.global.names.OSP_enums.DriverCol;
 import java.sql.Connection;
@@ -417,10 +419,11 @@ public class InsertGUI extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void manager5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_manager5ActionPerformed
+        DB_Access.makeSureBasicUserExistance();
 
         int result = 0; 
         for (int idx = 1; idx <= 5; idx++) {
-            result += createUser("man", idx, true);
+            result += createUser("manager", idx, true);
         }
         updateAttendantCount();
     }//GEN-LAST:event_manager5ActionPerformed
@@ -430,9 +433,11 @@ public class InsertGUI extends javax.swing.JFrame {
     }
     
     private void general100ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_general100ActionPerformed
+        DB_Access.makeSureBasicUserExistance();
+
         int result = 0; 
         for (int idx = 1; idx <= 100; idx++) {
-            result += createUser("gen", idx, false);
+            result += createUser("oguest", idx, false);
         }
         updateAttendantCount();
     }//GEN-LAST:event_general100ActionPerformed
@@ -892,25 +897,24 @@ public class InsertGUI extends javax.swing.JFrame {
     private int createUser(String idCore, int suffix, boolean isManager) {
         Connection conn = null;        
         PreparedStatement createAttendant = null;
-        String sql = "Insert Into  users_osp (id, name, password, email, isManager, " + 
-                "cellphone, phone) values (?, ?, md5(?), ?, ?, ?, ?)";
+        String sql = "Insert Into  users_osp (id, name, password, isManager, " + 
+                "cellphone, phone) values (?, ?, md5(?), ?, ?, ?)";
         int result = -1;
         
-        String suffixStr = String.format("00%d", suffix);
+        String suffixStr = String.format("%d", suffix);
         String userID = idCore + suffixStr;
-        String userName = null;
-        String email = null;
+        String userName = getRandomLastName() + getRandomFirstName();
         
-        if (isManager) {
-            userName = "어중이 " + suffixStr;
-            email = "dudu" + suffixStr + "@osparking.com";
+        PhoneType phoneType = getPhoneType();
+        
+        String phone = null;
+        String cell = null;
+        
+        if (phoneType == PhoneType.landLine) {
+            phone = getRandomLandLine();
         } else {
-            userName = "데일 카네기 " + suffixStr;
-            email = "dudu" + suffixStr + "@gmail.com";
+            cell = getRandomCellNumber();
         }
-        String passwd = "1234";
-        String cell = "010-2888-9999";
-        String phone = "02-888-7656";
         
         try {
             int pIndex = 1;
@@ -920,12 +924,7 @@ public class InsertGUI extends javax.swing.JFrame {
             // <editor-fold defaultstate="collapsed" desc="-- Provide actual value to each field">
             createAttendant.setString(pIndex++, userID);
             createAttendant.setString(pIndex++, userName);
-            createAttendant.setString(pIndex++, passwd);
-            if (email.length() == 0) {
-                createAttendant.setString(pIndex++, null);
-            } else {
-                createAttendant.setString(pIndex++, email);
-            }
+            createAttendant.setString(pIndex++, PASSWORD);
             if (isManager) {
                 createAttendant.setInt(pIndex++, 1);
             } else {

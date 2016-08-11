@@ -518,7 +518,6 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
                 connectDeviceTimer[type.ordinal()][gateNo].runOnce(new ConnectDeviceTask(this, type, gateNo));
                 
                 if (deviceManagers[type.ordinal()][gateNo] != null) {
-//                    JOptionPane.showMessageDialog(this, "start");
                     deviceManagers[type.ordinal()][gateNo].start();
                 }
             }
@@ -3284,7 +3283,6 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
     }
 
     public void insertDebugPanel() {
-//        Status_Panel.remove(debugPanel);
         debugPanel.setVisible(true);
         Dimension debugDim = debugPanel.getPreferredSize();
         int h = debugDim.height + connStatusPanel.getPreferredSize().height;
@@ -3293,7 +3291,6 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
     }
     
     public void removeDebugPanel() {
-//        Status_Panel.remove(debugPanel);
         debugPanel.setVisible(false);
         Status_Panel.setPreferredSize(connStatusPanel.getPreferredSize());
     }
@@ -3339,9 +3336,6 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
                 }
                 DB_Access.makeSureBasicUserExistance();
                 ControlGUI mainForm = new ControlGUI(false);
-//                if (!DEBUG || !isManager) {
-//                    mainForm.removeDebugPanel();
-//                }
                 parentGUI = mainForm;
                 mainForm.recordSystemStart();
                 mainForm.setVisible(true);
