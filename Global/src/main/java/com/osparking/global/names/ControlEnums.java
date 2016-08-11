@@ -50,7 +50,7 @@ public class ControlEnums {
     }    
     
     public enum TitleTypes {
-//        LENGTH_ERROR_TITLE("길이 초과 오류", "System Settings"),
+        CAR_ARRIVALS_TITLE("최근 차량 도착(시간 역순)", "Recent Car Arrivals(Recent First)"),
         SETTINGS_TITLE("시스템 설정", "System Settings"),
         LOGIN_DIALOG_TITLE("오즈파킹 로그인", "OsParking Login"),
         LOGIN_FRAME_TITLE("주차관리 로그인", "Attendant Login"),

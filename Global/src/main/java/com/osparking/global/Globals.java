@@ -562,6 +562,7 @@ public class Globals {
 
     public static String font_Type = "SansSerif";
     public static int font_Size = 14;
+    public static int font_Size_List = 12;
     public static int LABEL_INC = 3;
     public static int CONTENT_INC = 5;
     public static int head_font_Size = 16;

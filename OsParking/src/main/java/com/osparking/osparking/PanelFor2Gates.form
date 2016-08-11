@@ -29,7 +29,7 @@
         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
           <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
             <TitledBorder title="Gate 1 Title">
-              <Font PropertyName="font" name="Dotum" size="14" style="1"/>
+              <Connection PropertyName="font" code="new java.awt.Font(font_Type, font_Style, font_Size)" type="code"/>
             </TitledBorder>
           </Border>
         </Property>
@@ -108,7 +108,7 @@
             <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
               <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
                 <TitledBorder position="3" title="Recent Car Arrivals">
-                  <Font PropertyName="font" name="Dotum" size="13" style="1"/>
+                  <Connection PropertyName="font" code="new java.awt.Font(font_Type, font_Style, font_Size)" type="code"/>
                 </TitledBorder>
               </Border>
             </Property>
@@ -129,8 +129,8 @@
                     <BevelBorder/>
                   </Border>
                 </Property>
-                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                  <Font name="Dotum" size="12" style="1"/>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                  <Connection code="new java.awt.Font(font_Type, font_Style, font_Size_List)" type="code"/>
                 </Property>
                 <Property name="model" type="javax.swing.ListModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                   <Connection code="(DefaultListModel&lt;CarAdmission&gt;)admissionListModel[1]" type="code"/>
@@ -159,7 +159,7 @@
         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
           <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
             <TitledBorder title="Gate 2 Title">
-              <Font PropertyName="font" name="Dotum" size="14" style="1"/>
+              <Connection PropertyName="font" code="new java.awt.Font(font_Type, font_Style, font_Size)" type="code"/>
             </TitledBorder>
           </Border>
         </Property>
@@ -239,7 +239,7 @@
             <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
               <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
                 <TitledBorder position="3" title="Recent Car Arrivals">
-                  <Font PropertyName="font" name="Dotum" size="13" style="1"/>
+                  <Connection PropertyName="font" code="new java.awt.Font(font_Type, font_Style, font_Size)" type="code"/>
                 </TitledBorder>
               </Border>
             </Property>
@@ -260,8 +260,8 @@
                     <BevelBorder/>
                   </Border>
                 </Property>
-                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                  <Font name="Dotum" size="12" style="1"/>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                  <Connection code="new java.awt.Font(font_Type, font_Style, font_Size_List)" type="code"/>
                 </Property>
                 <Property name="model" type="javax.swing.ListModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                   <Connection code="(DefaultListModel&lt;CarAdmission&gt;)admissionListModel[2]" type="code"/>

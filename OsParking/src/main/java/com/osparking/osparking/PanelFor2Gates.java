@@ -25,6 +25,7 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import com.osparking.global.names.CarAdmission;
 import static com.osparking.global.Globals.*;
+import static com.osparking.global.names.ControlEnums.TitleTypes.CAR_ARRIVALS_TITLE;
 import static com.osparking.osparking.Common.fixPanelDimemsion;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
@@ -47,6 +48,9 @@ public class PanelFor2Gates extends GatePanel {
      */
     public PanelFor2Gates() {
         initComponents();
+        
+        changeFonts();
+        
         CarPicLabels[1] = CarPicLabel1;
         CarPicLabels[2] = CarPicLabel2;
         entryList[1] = List_Gate1;
@@ -105,7 +109,7 @@ public class PanelFor2Gates extends GatePanel {
         setLayout(new javax.swing.BoxLayout(this, javax.swing.BoxLayout.LINE_AXIS));
 
         Panel_Gate1.setBackground(MainBackground);
-        Panel_Gate1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Gate 1 Title", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dotum", 1, 14))); // NOI18N
+        Panel_Gate1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Gate 1 Title", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font(font_Type, font_Style, font_Size)));
         Panel_Gate1.setMaximumSize(new Dimension(Short.MAX_VALUE, Short.MAX_VALUE));
         Panel_Gate1.setName("Panel_Gate1"); // NOI18N
         Panel_Gate1.setPreferredSize(new java.awt.Dimension(343, 450));
@@ -133,11 +137,11 @@ public class PanelFor2Gates extends GatePanel {
         Panel_Gate1.add(CarPicLabel1);
         Panel_Gate1.add(filler2);
 
-        ScrollPane_Gate1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Recent Car Arrivals", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.BELOW_TOP, new java.awt.Font("Dotum", 1, 13))); // NOI18N
+        ScrollPane_Gate1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Recent Car Arrivals", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.BELOW_TOP, new java.awt.Font(font_Type, font_Style, font_Size)));
         ScrollPane_Gate1.setPreferredSize(new java.awt.Dimension(302, 155));
 
         List_Gate1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        List_Gate1.setFont(new java.awt.Font("Dotum", 1, 12)); // NOI18N
+        List_Gate1.setFont(new java.awt.Font(font_Type, font_Style, font_Size_List));
         List_Gate1.setModel((DefaultListModel<CarAdmission>)admissionListModel[1]);
         List_Gate1.setMaximumSize(new Dimension(Short.MAX_VALUE, Short.MAX_VALUE));
         List_Gate1.setMinimumSize(new java.awt.Dimension(45, 240));
@@ -149,7 +153,7 @@ public class PanelFor2Gates extends GatePanel {
         add(Panel_Gate1);
 
         Panel_Gate2.setBackground(MainBackground);
-        Panel_Gate2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Gate 2 Title", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dotum", 1, 14))); // NOI18N
+        Panel_Gate2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Gate 2 Title", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font(font_Type, font_Style, font_Size)));
         Panel_Gate2.setMaximumSize(new Dimension(Short.MAX_VALUE, Short.MAX_VALUE));
         Panel_Gate2.setName("Panel_Gate1"); // NOI18N
         Panel_Gate2.setPreferredSize(new java.awt.Dimension(343, 450));
@@ -178,11 +182,11 @@ public class PanelFor2Gates extends GatePanel {
         Panel_Gate2.add(CarPicLabel2);
         Panel_Gate2.add(filler4);
 
-        ScrollPane_Gate2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Recent Car Arrivals", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.BELOW_TOP, new java.awt.Font("Dotum", 1, 13))); // NOI18N
+        ScrollPane_Gate2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Recent Car Arrivals", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.BELOW_TOP, new java.awt.Font(font_Type, font_Style, font_Size)));
         ScrollPane_Gate2.setPreferredSize(new java.awt.Dimension(302, 155));
 
         List_Gate2.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        List_Gate2.setFont(new java.awt.Font("Dotum", 1, 12)); // NOI18N
+        List_Gate2.setFont(new java.awt.Font(font_Type, font_Style, font_Size_List));
         List_Gate2.setModel((DefaultListModel<CarAdmission>)admissionListModel[2]);
         List_Gate2.setMaximumSize(new Dimension(Short.MAX_VALUE, Short.MAX_VALUE));
         List_Gate2.setMinimumSize(new java.awt.Dimension(45, 240));
@@ -332,5 +336,20 @@ public class PanelFor2Gates extends GatePanel {
     @Override
     public javax.swing.JLabel getMarginLabel() {
         return MarginLabel;
+    }
+
+    private void changeFonts() {
+        ScrollPane_Gate1.setBorder(javax.swing.BorderFactory.createTitledBorder(
+                null, CAR_ARRIVALS_TITLE.getContent(), 
+                javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, 
+                javax.swing.border.TitledBorder.BELOW_TOP, 
+                new java.awt.Font(font_Type, font_Style, font_Size)));
+        List_Gate1.setFont(new java.awt.Font(font_Type, font_Style, font_Size_List));
+        ScrollPane_Gate2.setBorder(javax.swing.BorderFactory.createTitledBorder(
+                null, CAR_ARRIVALS_TITLE.getContent(), 
+                javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, 
+                javax.swing.border.TitledBorder.BELOW_TOP, 
+                new java.awt.Font(font_Type, font_Style, font_Size)));
+        List_Gate2.setFont(new java.awt.Font(font_Type, font_Style, font_Size_List));
     }
 }

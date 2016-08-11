@@ -25,6 +25,7 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import com.osparking.global.names.CarAdmission;
 import static com.osparking.global.Globals.*;
+import static com.osparking.global.names.ControlEnums.TitleTypes.CAR_ARRIVALS_TITLE;
 import java.awt.Toolkit;
 import static com.osparking.osparking.Common.fixPanelDimemsion;
 import java.awt.event.ComponentAdapter;
@@ -48,6 +49,8 @@ public class PanelFor1Gate extends GatePanel {
      */
     public PanelFor1Gate() {
         initComponents();
+
+        changeFonts();
         CarPicLabels[1] = CarPicLabel1;  
         entryList[1] = List_Gate1;
         models[1] = model_1;    
@@ -249,4 +252,13 @@ public class PanelFor1Gate extends GatePanel {
     public JLabel getMarginLabel() {
         return MarginLabel;
     }
+
+    private void changeFonts() {
+        ScrollPane_Gate1.setBorder(javax.swing.BorderFactory.createTitledBorder(
+                null, CAR_ARRIVALS_TITLE.getContent(), 
+                javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, 
+                javax.swing.border.TitledBorder.BELOW_TOP, 
+                new java.awt.Font(font_Type, font_Style, font_Size)));
+        List_Gate1.setFont(new java.awt.Font(font_Type, font_Style, font_Size_List));        
+    } 
 }

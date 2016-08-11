@@ -1105,7 +1105,7 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
         Status_Panel.add(debugPanel);
 
         connStatusPanel.setBackground(MainBackground);
-        connStatusPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        connStatusPanel.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
         connStatusPanel.setMaximumSize(new java.awt.Dimension(65000, 65000));
         connStatusPanel.setMinimumSize(new java.awt.Dimension(280, 20));
         connStatusPanel.setPreferredSize(new java.awt.Dimension(300, 120));
@@ -2549,8 +2549,10 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
         }
         // put titles to the gate panels
         for (int gateNo =1; gateNo <= gateCount; gateNo++)
-        {
+        {            
             TitledBorder tBorder = (TitledBorder)getGatePanel().getPanel_Gate(gateNo).getBorder();
+
+            tBorder.setTitleFont(new java.awt.Font(font_Type, font_Style, font_Size));
             tBorder.setTitle(gateNames[gateNo]);
         }
         WholePanel.add(getGatePanel(), java.awt.BorderLayout.CENTER);
@@ -2677,10 +2679,9 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
         } 
     }
 
-    public long insertDBrecord(int gateNo, Date arrivalTm, String tagRecognized, 
-            String tagEnteredAs, BufferedImage bufferedImage, int unitSeqNo, int l2No, 
-            String visitReason, BarOperation barOp) {
-
+    public long insertDBrecord(int gateNo, Date arrivalTm, String tagRecognized, String tagEnteredAs, 
+            BufferedImage bufferedImage, int unitSeqNo, int l2No, String visitReason, BarOperation barOp) 
+    {
         String arrivalTmStr = sdf.format(arrivalTm);
 
         StringBuffer sb = new StringBuffer(" Insert Into Car_arrival (GateNo, ArrivalTime, ");
