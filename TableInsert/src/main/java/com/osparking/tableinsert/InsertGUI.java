@@ -8,6 +8,10 @@ package com.osparking.tableinsert;
 import static com.mysql.jdbc.MysqlErrorNumbers.ER_DUP_ENTRY;
 import static com.osparking.global.Globals.OSPiconList;
 import static com.osparking.global.Globals.closeDBstuff;
+import static com.osparking.global.names.ControlEnums.DialogMessages.USER_DELETE_CONF_1;
+import static com.osparking.global.names.ControlEnums.DialogMessages.USER_DELETE_CONF_2;
+import static com.osparking.global.names.ControlEnums.DialogMessages.USER_DELETE_CONF_3;
+import static com.osparking.global.names.ControlEnums.DialogMessages.USER_DELETE_CONF_TITLE;
 import static com.osparking.global.names.DB_Access.getRecordCount;
 import static com.osparking.global.names.DB_Access.readSettings;
 import com.osparking.global.names.JDBCMySQL;
@@ -21,6 +25,9 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Random;
 import javax.swing.JOptionPane;
+import static javax.swing.JOptionPane.OK_CANCEL_OPTION;
+import static javax.swing.JOptionPane.OK_OPTION;
+import static javax.swing.JOptionPane.QUESTION_MESSAGE;
 
 /**
  *
@@ -431,24 +438,27 @@ public class InsertGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_general100ActionPerformed
 
     private void deleteAll_no_adminActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteAll_no_adminActionPerformed
-        Connection conn = null;
-        Statement deleteStmt = null;
-        String sqlDelete = "delete from users_osp where id <> 'admin'";
-        int resultCount = 0;
-        try {
-            conn = JDBCMySQL.getConnection();
-            deleteStmt = conn.createStatement();
-            resultCount = deleteStmt.executeUpdate(sqlDelete);
+       /**
+         * Delete car arrival and login records too.
+         * Let the user know about this catestropic delete beforehand.
+         */
+        String msg = USER_DELETE_CONF_1.getContent() + System.lineSeparator()
+                + System.lineSeparator()
+                + USER_DELETE_CONF_2.getContent() + System.lineSeparator()
+                + System.lineSeparator()
+                + USER_DELETE_CONF_3.getContent() + System.lineSeparator();
+        int response = JOptionPane.showConfirmDialog(null, msg, USER_DELETE_CONF_TITLE.getContent(),
+                OK_CANCEL_OPTION, QUESTION_MESSAGE);
+        
+        if (response != OK_OPTION) {
+            return;
+        } else {
+            deleteTable("delete from loginrecord  where userID <> 'admin'", "Log in");
+            deleteTable("delete from car_arrival where AttendantID <> 'admin';", "Arrival");
+            deleteTable("delete from users_osp where id <> 'admin'", "User");
 
-            JOptionPane.showMessageDialog(this, 
-                    "Deleted record count: " + resultCount,
-                    "Mass delete result", JOptionPane.PLAIN_MESSAGE);
-        } catch (Exception se) {
-            System.out.println("mass deletion exception");
-        }  finally {
-            closeDBstuff(conn, deleteStmt, null, "delete except 'admin'");
-        } 
-        updateAttendantCount();
+            updateAttendantCount();
+        }
     }//GEN-LAST:event_deleteAll_no_adminActionPerformed
 
     private void quitProgramActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_quitProgramActionPerformed
@@ -1113,6 +1123,26 @@ public class InsertGUI extends javax.swing.JFrame {
 
     private void updateVehicleCount() {
         vehicleCount.setText(String.valueOf(getRecordCount("vehicles", -1)));
+    }
+
+    private void deleteTable(String sqlDelete, String infoType) {
+        Connection conn = null;
+        Statement deleteStmt = null;
+        int resultCount = 0;
+        
+        try {
+            conn = JDBCMySQL.getConnection();
+            deleteStmt = conn.createStatement();
+            resultCount = deleteStmt.executeUpdate(sqlDelete);
+
+            JOptionPane.showMessageDialog(this, 
+                    "Deleted " + infoType + " Count: " + resultCount,
+                    "Table Deletion Result", JOptionPane.PLAIN_MESSAGE);
+        } catch (Exception se) {
+            System.out.println("mass deletion exception");
+        }  finally {
+            closeDBstuff(conn, deleteStmt, null, "delete except 'admin'");
+        } 
     }
 
     public enum PhoneType {

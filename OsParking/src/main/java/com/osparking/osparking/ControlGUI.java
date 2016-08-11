@@ -1619,6 +1619,15 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
 //            }
 //        });  
         //</editor-fold>        
+        
+        if (DEBUG && loginID != null && loginID.equals(CommonData.ADMIN_ID)) {
+            insertDebugPanel();
+        } else {
+            removeDebugPanel();
+        }
+//        if (!DEBUG || !isManager) {
+//            removeDebugPanel();
+//        }        
     }//GEN-LAST:event_processLogIn
     
     private void processCloseProgram(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_processCloseProgram
@@ -3121,6 +3130,9 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
                 processLogoutReally();
                 enableAdminOnlyItem(false);
                 isLoggedOut = true;
+                if (debugPanel.isVisible()) {
+                    removeDebugPanel();
+                }
             }
         } catch (Exception ex) {
             com.osparking.global.Globals.logParkingException(Level.SEVERE, ex, "(Process User Logout)");
@@ -3271,8 +3283,17 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
         }
     }
 
+    public void insertDebugPanel() {
+//        Status_Panel.remove(debugPanel);
+        debugPanel.setVisible(true);
+        Dimension debugDim = debugPanel.getPreferredSize();
+        int h = debugDim.height + connStatusPanel.getPreferredSize().height;
+                
+        Status_Panel.setPreferredSize(new Dimension(debugDim.width, h));
+    }
+    
     public void removeDebugPanel() {
-        Status_Panel.remove(debugPanel);
+//        Status_Panel.remove(debugPanel);
         debugPanel.setVisible(false);
         Status_Panel.setPreferredSize(connStatusPanel.getPreferredSize());
     }
@@ -3318,9 +3339,9 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
                 }
                 DB_Access.makeSureBasicUserExistance();
                 ControlGUI mainForm = new ControlGUI(false);
-                if (!DEBUG) {
-                    mainForm.removeDebugPanel();
-                }
+//                if (!DEBUG || !isManager) {
+//                    mainForm.removeDebugPanel();
+//                }
                 parentGUI = mainForm;
                 mainForm.recordSystemStart();
                 mainForm.setVisible(true);
