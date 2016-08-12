@@ -472,7 +472,7 @@ public class Globals {
                     tagNumber = "26누8648"; 
                     break;
                 case 2:
-                    tagNumber = "12가3456"; 
+                    tagNumber = "12거3456";
                     break;
                 case 3:
                     tagNumber = "26로3689"; 
@@ -492,27 +492,26 @@ public class Globals {
         } else {
             switch (picNo) {
                 case 1:
-                    tagNumber = "52GA8648"; 
+                    tagNumber = "26Nu8648"; 
                     break;
                 case 2:
-                    tagNumber = "47NU8868"; 
+                    tagNumber = "12GA3456"; 
                     break;
                 case 3:
-                    tagNumber = "SEOUL31NA3416"; 
+                    tagNumber = "26RO3689"; 
                     break;
                 case 4:
-                    tagNumber = "GYEONG42GO6003"; 
+                    tagNumber = "SOUL11GA1234"; 
                     break;
                 case 5:
-                    tagNumber = "30MO8186"; 
+                    tagNumber = "52GA3108"; 
                     break;
                 case 6:
-                    tagNumber = "SEOUL32GA1234"; 
+                    tagNumber = "39NA2764"; 
                     break;
                 default:
                     break;
             }
-            
         }
         
         return tagNumber;

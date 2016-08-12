@@ -6,6 +6,7 @@
 package com.osparking.tableinsert;
 
 import static com.mysql.jdbc.MysqlErrorNumbers.ER_DUP_ENTRY;
+import com.osparking.global.Globals;
 import static com.osparking.global.Globals.OSPiconList;
 import static com.osparking.global.Globals.closeDBstuff;
 import static com.osparking.global.names.ControlEnums.DialogMessages.USER_DELETE_CONF_1;
@@ -804,65 +805,28 @@ public class InsertGUI extends javax.swing.JFrame {
         
         int createdVehicles = 0;
         
+        createdVehicles = insertFourVehiclesWithImage();
+        
+        boolean parkPermed = false; // Parking is permitted at the moment.
+        boolean wholeCmp = false; // Car number comparison using whole characters.
+        
         while (createdVehicles < 1000) {
-
-            //<editor-fold desc="Generate vehicle property values">
-            // generate necessary and optional field values
-            // generate plate number
-            String tagNumber = getTagNumber();
-
-            // choose a random driver
-            Integer driverSN = (Integer)getRandomElement(driver_sn_arr);
-
-            // select notify at 70%
-            boolean notify = false;
-            if (rand.nextFloat() > 0.3) {
-                notify = true;
-            }
-
             // select whole at 10%
-            boolean wholeCmp = false;
-            if (rand.nextFloat() > 0.9) {
+            String tagNumber = getTagNumber();
+            
+            if (rand.nextFloat() > 0.99) {
                 wholeCmp = true;
+            } else {
+                wholeCmp = false;
             }
 
             // select permitted at 90%
-            boolean parkPermed = false;
-            if (rand.nextFloat() > 0.1) {
+            if (rand.nextFloat() > 0.05) {
                 parkPermed = true;
-            }
-
-            // select reason text at 20%
-            String reasonStr = null;
-            if (rand.nextFloat() > 0.8) {
-                if (rand.nextInt() % 2 == 0) {
-                    reasonStr = "주차위반";
-                } else {
-                    reasonStr = "퇴거";
-                }
-            }
-
-            // select other info at 30%
-            String otherInfo = null;
-            if (rand.nextFloat() > 0.7) {
-                float chance = rand.nextFloat();
-                if (chance < 0.3) {
-                    otherInfo = "현대";
-                } else if (chance < 0.5) {
-                    otherInfo = "기아";
-                } else if (chance < 0.7) {
-                    otherInfo = "삼성";
-                } else if (chance < 0.85) {
-                    otherInfo = "폭스바겐";
-                } else {
-                    otherInfo = "벤츠";
-                } 
-            }
-            //</editor-fold>
-
-            // Create a vehicle using those prepared field values
-            createdVehicles += createVehicle(tagNumber, driverSN, notify, 
-                    wholeCmp, parkPermed, reasonStr, otherInfo);
+            } else {
+                parkPermed = false;
+            }       
+            createdVehicles += createAndInsertOneCar(tagNumber, wholeCmp, parkPermed);
         }
 
         JOptionPane.showMessageDialog(this, 
@@ -1142,6 +1106,75 @@ public class InsertGUI extends javax.swing.JFrame {
         }  finally {
             closeDBstuff(conn, deleteStmt, null, "delete except 'admin'");
         } 
+    }
+
+    /**
+     * Insert one dummy car into the Vehicles table.
+     * 
+     * @param tagNumber License plate number of the vehicle.
+     * @param wholeCmp Tells whether single Korean character also need to be compared.
+     * @param parkPermed Tells if parking is permitted or not.
+     * @return the number of inserted vehicles. (Usually 1.)
+     */
+    private int createAndInsertOneCar(String tagNumber, boolean wholeCmp, 
+            boolean parkPermed) 
+    {
+            //<editor-fold desc="Generate vehicle property values">
+            // generate necessary and optional field values
+            // generate plate number
+
+            // choose a random driver
+            Integer driverSN = (Integer)getRandomElement(driver_sn_arr);
+
+            // select notify at 70%
+            boolean notify = false;
+            if (rand.nextFloat() > 0.3) {
+                notify = true;
+            }
+
+            // select reason text at 20%
+            String reasonStr = null;
+            if (!parkPermed && rand.nextFloat() > 0.8) {
+                if (rand.nextInt() % 2 == 0) {
+                    reasonStr = "주차위반";
+                } else {
+                    reasonStr = "퇴거";
+                }
+            }
+
+            // select other info at 30%
+            String otherInfo = null;
+            if (rand.nextFloat() > 0.7) {
+                float chance = rand.nextFloat();
+                if (chance < 0.3) {
+                    otherInfo = "현대";
+                } else if (chance < 0.5) {
+                    otherInfo = "기아";
+                } else if (chance < 0.7) {
+                    otherInfo = "삼성";
+                } else if (chance < 0.85) {
+                    otherInfo = "폭스바겐";
+                } else {
+                    otherInfo = "벤츠";
+                } 
+            }
+            //</editor-fold>
+
+            // Create a vehicle using those prepared field values
+            return createVehicle(tagNumber, driverSN, notify, 
+                    wholeCmp, parkPermed, reasonStr, otherInfo);
+    }
+
+    private int insertFourVehiclesWithImage() {
+        int count = 0;
+        
+        for (byte i = 1; i <= 2; i++) {
+            count += createAndInsertOneCar(Globals.getTagNumber(i), false, true);
+        }
+        count += createAndInsertOneCar(Globals.getTagNumber((byte)3), true, true);
+        count += createAndInsertOneCar(Globals.getTagNumber((byte)4), true, false);
+        
+        return count;
     }
 
     public enum PhoneType {
