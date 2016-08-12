@@ -2442,49 +2442,23 @@ public class AttListForm extends javax.swing.JFrame {
             usersTable.changeSelection(selectIndex, 0, false, false); 
             usersTable.requestFocus();
             
-            String dialogMessage = "";
-            
-            switch (language) {
-                case KOREAN:
-                    dialogMessage = "사용자(ID: " + userIDText.getText().trim() + 
-                            ") 정보가\n성공적으로 수정되었습니다.";
-                    break;
-
-                case ENGLISH:
-                    dialogMessage ="A user(ID: " + userIDText.getText().trim() + ") information" + 
-                            System.lineSeparator() + "successfully modified.";
-                    break;
-                    
-                default:
-                    break;
-            }
+            String dialogMessage = USER_UPDATE_1.getContent() + System.lineSeparator()
+                            + System.lineSeparator() 
+                            + USER_UPDATE_2.getContent() + userIDText.getText().trim();
             JOptionPane.showMessageDialog(this, dialogMessage,
                     ATT_USER_UPDATE_DIALOGTITLE.getContent(),
                     JOptionPane.PLAIN_MESSAGE);
             
             clearPasswordFields();
-            multiFuncButton.setEnabled(false);
+//            multiFuncButton.setEnabled(false);
             changedControls.clear();
             logParkingOperation(OpLogLevel.SettingsChange, getModifiedUserInfo());       
         } else {
             //<editor-fold desc="-- Handle the case of update failure">
-            String dialogMessage = "";
+            String dialogMessage = USER_UPDATE_A.getContent() + System.lineSeparator()
+                            + System.lineSeparator() 
+                            + USER_UPDATE_2.getContent() + userIDText.getText().trim();
             
-            switch (language) {
-                case KOREAN:
-                    dialogMessage = "정보 수정에 실패하였습니다!\n  "
-                            + "ID: " +  userIDText.getText().trim();
-                    break;
-                    
-                case ENGLISH:
-                    dialogMessage = "User Info Change Failure!" + System.lineSeparator() + 
-                            "ID: " +  userIDText.getText().trim();
-                    break;
-                    
-                default:
-                    break;
-            }
-                
             JOptionPane.showMessageDialog(this, dialogMessage,
                     ATT_USER_UPDATE_DIALOGTITLE.getContent(), 
                     JOptionPane.PLAIN_MESSAGE);            

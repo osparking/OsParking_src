@@ -528,6 +528,9 @@ public class ControlEnums {
     }
 
     public enum DialogMessages {
+        USER_UPDATE_1("아래 사용자 정보가 갱신되었습니다.", "Below user information modified."),
+        USER_UPDATE_2("- 사용자 아이디 : ", "- User ID : "),
+        USER_UPDATE_A("아래 사용자 정보 갱신에 실패하였습니다.", "User information update failure Notice."),
         NAME_ADMIN("관리자", "Administrator"),
         NAME_MANAGER("운영자", "Operator"),
         NAME_GUEST("김손님", "Guest Kim"),
