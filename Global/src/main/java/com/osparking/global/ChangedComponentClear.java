@@ -34,10 +34,11 @@ public class ChangedComponentClear {
     }
     
     public boolean remove(Component compo) {
+        boolean result = changedControls.remove(compo);
         if (changedControls.size() == 0) {
             clearButton.setEnabled(false);
         }
-        return changedControls.remove(compo);
+        return result;
     }
     
     public boolean add(Component compo) {
