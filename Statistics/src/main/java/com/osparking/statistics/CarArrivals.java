@@ -29,7 +29,6 @@ import static com.osparking.global.CommonData.normGUIwidth;
 import static com.osparking.global.CommonData.numberCellRenderer;
 import static com.osparking.global.CommonData.pointColor;
 import static com.osparking.global.CommonData.tipColor;
-import static com.osparking.global.DataSheet.saveODSfile;
 import static com.osparking.global.DataSheet.verifyOdsExtension;
 import java.awt.Component;
 import java.awt.image.BufferedImage;
@@ -47,7 +46,6 @@ import static com.osparking.global.names.ControlEnums.ButtonTypes.CLOSE_BTN;
 import static com.osparking.global.names.ControlEnums.ButtonTypes.FIX_IT_BTN;
 import static com.osparking.global.names.ControlEnums.ButtonTypes.SEARCH_BTN;
 import static com.osparking.global.names.ControlEnums.ComboBoxItemTypes.*;
-import static com.osparking.global.names.ControlEnums.DialogMessages.ARRIVAL_SAVE_ODS_FAIL_DIALOG;
 import static com.osparking.global.names.ControlEnums.DialogMessages.DATE_INPUT_CHECK_DIALOG;
 import static com.osparking.global.names.ControlEnums.DialogMessages.DATE_INPUT_ERROR_DIALOG;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.NOTICE_DIALOGTITLE;
@@ -76,7 +74,6 @@ import static com.osparking.global.names.ControlEnums.TitleTypes.*;
 import static com.osparking.global.names.ControlEnums.TableTypes.ARRIVAL_TIME_HEADER;
 import static com.osparking.global.names.ControlEnums.TableTypes.CAR_TAG_HEADER;
 import static com.osparking.global.names.ControlEnums.TableTypes.HIGHER_HEADER;
-import static com.osparking.global.names.ControlEnums.TableTypes.LOWER_HEADER;
 import static com.osparking.global.names.ControlEnums.TableTypes.ORDER_HEADER;
 import static com.osparking.global.names.ControlEnums.TextType.CAR_TAG_TF;
 import static com.osparking.global.names.ControlEnums.TextType.LOG_OUT_TF;
@@ -1795,17 +1792,17 @@ public class CarArrivals extends javax.swing.JFrame {
             BeginDateChooser.setEnabled(true);
             EndDateChooser.setEnabled(true);
         }
-        changeSetButtonEnabled(SearchPeriod.GivenPeriod);        
+        changeSearchButtonEnabled();        
     }//GEN-LAST:event_periodRadioButtonActionPerformed
 
     private void oneDayRadioButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_oneDayRadioButtonActionPerformed
         disablePeriodChooser();
-        changeSetButtonEnabled(SearchPeriod.OneDay);
+        changeSearchButtonEnabled();        
     }//GEN-LAST:event_oneDayRadioButtonActionPerformed
 
     private void oneHourRadioButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_oneHourRadioButtonActionPerformed
         disablePeriodChooser();
-        changeSetButtonEnabled(SearchPeriod.OneHour);
+        changeSearchButtonEnabled();        
     }//GEN-LAST:event_oneHourRadioButtonActionPerformed
 
     private void clearSearchPropertiesButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearSearchPropertiesButtonActionPerformed
@@ -2734,14 +2731,6 @@ public class CarArrivals extends javax.swing.JFrame {
         } else {
             changedControls.add(comboBox);
         }     
-    }
-
-    private void changeSetButtonEnabled(SearchPeriod newPeriod ) {
-        if (newPeriod.ordinal() == SEARCH_PERIOD ) {
-            setSearchPeriodOptionButton.setEnabled(false);
-        } else {
-            setSearchPeriodOptionButton.setEnabled(true);
-        }
     }
 
     /**
