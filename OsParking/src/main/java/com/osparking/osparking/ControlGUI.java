@@ -1727,7 +1727,6 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
                     processCarEntry(gateNo, --manualSimulationImageID,
                             camMan.carTagNumber, null, camMan.rawImage); 
                 }   
-                    
             } else {
                 System.out.println("not connected");
                 addMessageLine(getMessageTextArea(), "카메라 #" + gateNo +" 단절 상태임");

@@ -469,22 +469,22 @@ public class Globals {
         if (language == KOREAN) {
             switch (picNo) {
                 case 1:
-                    tagNumber = "00"; 
+                    tagNumber = "26누8648"; 
                     break;
                 case 2:
-                    tagNumber = "00로1789"; 
+                    tagNumber = "12가3456"; 
                     break;
                 case 3:
-                    tagNumber = "00무2311"; 
+                    tagNumber = "26로3689"; 
                     break;
                 case 4:
-                    tagNumber = "경기42고6003"; 
+                    tagNumber = "서울11가1234"; 
                     break;
                 case 5:
-                    tagNumber = "01나0421"; 
+                    tagNumber = "52가3108"; 
                     break;
                 case 6:
-                    tagNumber = "01라8338"; 
+                    tagNumber = "39나2764"; 
                     break;
                 default:
                     break;
