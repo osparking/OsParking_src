@@ -3036,10 +3036,7 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
 
                 // fetch vehicle registration status from DB
                 if (setting.contentType == VEHICLE_TAG) {
-                    if (permission == UNREGISTERED)
-                        displayText = tagRecogedAs;
-                    else
-                        displayText = tagEnteredAs.toString();
+                    displayText = tagRecogedAs;
                 } else { // REGISTRATION_STAT
                     if (permission == ALLOWED)
                         displayText = "Registered Car";

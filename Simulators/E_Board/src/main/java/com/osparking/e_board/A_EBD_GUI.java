@@ -59,11 +59,7 @@ import java.util.List;
 import static javax.swing.text.html.HTML.Tag.HEAD;
 
 /**
-<<<<<<< HEAD
  * E-Board Simulator GUI -- Part of OsParking simulator package which is developed by Open Source 
-=======
- * E-Board Simulator GUI -- Part of OSParking simulator package which is developed by Open Source 
->>>>>>> osparking/master
  * Parking Inc.
  * Electronic Board simulator consists of a socket reader and display form module.
  * <p>Company Web Site : <a href="http://www.osparking.com">http://www.osparking.com</a><p>
@@ -157,19 +153,11 @@ public class A_EBD_GUI extends javax.swing.JFrame implements DeviceGUI {
         
         // create a reader for the socket to the manager and start it
         //</editor-fold>                
-//<<<<<<< HEAD
         defaultDisplaySettings[TOP_ROW.ordinal()] = readEBoardUsageSettings(DEFAULT_TOP_ROW);
         defaultDisplaySettings[BOTTOM_ROW.ordinal()] = readEBoardUsageSettings(DEFAULT_BOTTOM_ROW);        
         
         changeE_BoardDisplay(TOP_ROW, defaultDisplaySettings[TOP_ROW.ordinal()]);
         changeE_BoardDisplay(BOTTOM_ROW, defaultDisplaySettings[BOTTOM_ROW.ordinal()]);
-//=======
-//        defaultDisplaySettings[TOP_ROW] = readEBoardUsageSettings(DEFAULT_TOP_ROW);
-//        defaultDisplaySettings[BOTTOM_ROW] = readEBoardUsageSettings(DEFAULT_BOTTOM_ROW);        
-//        
-//        changeE_BoardDisplay(TOP_ROW, defaultDisplaySettings[TOP_ROW]);
-//        changeE_BoardDisplay(BOTTOM_ROW, defaultDisplaySettings[BOTTOM_ROW]);
-//>>>>>>> osparking/master
         
         if (DEBUG)
             System.out.println("E Board #" + ID + " started");
@@ -559,11 +547,7 @@ public class A_EBD_GUI extends javax.swing.JFrame implements DeviceGUI {
         return finishingOperation;
     }
 
-//<<<<<<< HEAD
     synchronized void  changeE_BoardDisplay(DisplayArea row, EBD_DisplaySetting rowSetting)
-//=======
-//    synchronized void  changeE_BoardDisplay(byte row, EBD_DisplaySetting rowSetting)
-//>>>>>>> osparking/master
     {
         JTextField rowTextField = (row == TOP_ROW ? topTextField : botTextField);
          
@@ -595,20 +579,14 @@ public class A_EBD_GUI extends javax.swing.JFrame implements DeviceGUI {
         }   
         //</editor-fold>        
         
-//<<<<<<< HEAD
         ParkingTimer outerTaskTimer = parking_Display_OuterTimer[row.ordinal()];
-//=======
-//        ParkingTimer outerTaskTimer = parking_Display_OuterTimer[row];
-//>>>>>>> osparking/master
+
         if (outerTaskTimer.hasTask()) {
             outerTaskTimer.cancelTask();
         }
     
-//<<<<<<< HEAD
         ParkingTimer innerTaskTimer = parking_Display_InnerTimer[row.ordinal()]; 
-//=======
-//        ParkingTimer innerTaskTimer = parking_Display_InnerTimer[row]; 
-//>>>>>>> osparking/master
+
         if (innerTaskTimer.hasTask()) {
             innerTaskTimer.cancelTask();
         }        
@@ -617,7 +595,6 @@ public class A_EBD_GUI extends javax.swing.JFrame implements DeviceGUI {
             rowTextField.setMargin(new Insets(2, 2, 2, 2) );            
             rowTextField.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         } else {
-//<<<<<<< HEAD
             outerCycleTask[row.ordinal()] = new OuterCycleTask(this, row, rowSetting);
             if (rowSetting.displayPattern == BLINKING) {
                 rowTextField.setMargin(new Insets(2, 2, 2, 2) );            
@@ -625,15 +602,6 @@ public class A_EBD_GUI extends javax.swing.JFrame implements DeviceGUI {
                 outerTaskTimer.reschedule(outerCycleTask[row.ordinal()], 0, rowSetting.displayCycle);
             } else {
                 outerTaskTimer.runOnce(outerCycleTask[row.ordinal()]);
-//=======
-//            outerCycleTask[row] = new OuterCycleTask(this, row, rowSetting);
-//            if (rowSetting.displayPattern == BLINKING) {
-//                rowTextField.setMargin(new Insets(2, 2, 2, 2) );            
-//                rowTextField.setHorizontalAlignment(javax.swing.JTextField.CENTER);            
-//                outerTaskTimer.reschedule(outerCycleTask[row], 0, rowSetting.displayCycle);
-//            } else {
-//                outerTaskTimer.runOnce(outerCycleTask[row]);
-//>>>>>>> osparking/master
             }
         }
         

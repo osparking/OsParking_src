@@ -52,7 +52,6 @@ import static com.osparking.global.names.OSP_enums.EBD_DisplayUsage.DEFAULT_TOP_
 import static com.osparking.global.names.OSP_enums.MsgCode.EBD_ACK;
 import static com.osparking.global.names.OSP_enums.MsgCode.JustBooted;
 import java.net.SocketTimeoutException;
-import static javax.swing.text.html.HTML.Tag.HEAD;
 
 /**
  *
@@ -200,7 +199,6 @@ public class EBoardReader extends Thread implements DeviceReader {
                                     // and call _Display method
                                     // in case of real hardware, code snippet below should really decode coreBytes
                                     // refer interruptCurrentDisplay method which perform a similar task.
-//<<<<<<< HEAD
                                     if (coreBytes[0] == TOP_ROW.ordinal()) {
                                         eBoardGUI.defaultDisplaySettings[TOP_ROW.ordinal()] =
                                                 readEBoardUsageSettings(DEFAULT_TOP_ROW);
@@ -211,22 +209,8 @@ public class EBoardReader extends Thread implements DeviceReader {
                                                 readEBoardUsageSettings(DEFAULT_BOTTOM_ROW);        
                                         eBoardGUI.changeE_BoardDisplay(BOTTOM_ROW, 
                                                 eBoardGUI.defaultDisplaySettings[BOTTOM_ROW.ordinal()]);
-//=======
-//                                    if (coreBytes[0] == TOP_ROW) {
-//                                        eBoardGUI.defaultDisplaySettings[TOP_ROW] =
-//                                                readEBoardUsageSettings(DEFAULT_TOP_ROW);
-//                                        eBoardGUI.changeE_BoardDisplay(
-//                                                TOP_ROW, eBoardGUI.defaultDisplaySettings[TOP_ROW]); 
-//                                    } else {
-//                                        eBoardGUI.defaultDisplaySettings[BOTTOM_ROW] = 
-//                                                readEBoardUsageSettings(DEFAULT_BOTTOM_ROW);        
-//                                        eBoardGUI.changeE_BoardDisplay(
-//                                                BOTTOM_ROW, eBoardGUI.defaultDisplaySettings[BOTTOM_ROW]);
-//>>>>>>> osparking/master
                                     }
                                     //</editor-fold>
-//                                    if (DEBUG) 
-//                                        saveMsgSN(msgSN, eBoardGUI.prevMsgSN[coreBytes[0]]);
                                     eBoardGUI.prevMsgSN[coreBytes[0]] = msgSN;
                                 }
 
@@ -372,8 +356,8 @@ public class EBoardReader extends Thread implements DeviceReader {
     private void addUpBytes(byte code, byte[] lenBytes, byte[] restOfMessage, byte[] checkShort) {
         
         int total = code;
-        total += lenBytes[0]; // msgLen[1]
-        total += lenBytes[1]; // msgLen[0]
+        total += lenBytes[0];
+        total += lenBytes[1];
         for (byte aByte : restOfMessage) {
             total += aByte;
         }
