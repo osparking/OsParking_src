@@ -370,17 +370,17 @@ public class CameraManager extends Thread implements IDevice.IManager, IDevice.I
     private byte getPictureNo(int size) {
         byte picNo = 0;
         
-        if (size == 47610)
+        if (size == 176522)
             picNo = 1;
-        else if (size == 35476)
+        else if (size == 175597)
             picNo = 2;
-        else if (size == 35103)
+        else if (size == 176697)
             picNo = 3;
-        else if (size == 23330)
+        else if (size == 166746)
             picNo = 4;
-        else if (size == 28217)
+        else if (size == 171906)
             picNo = 5;
-        else if (size ==  42467)
+        else if (size ==  182274)
             picNo = 6;
         
         return picNo;

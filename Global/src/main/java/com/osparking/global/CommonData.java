@@ -19,6 +19,8 @@ package com.osparking.global;
 import static com.osparking.global.Globals.font_Size;
 import static com.osparking.global.Globals.font_Style;
 import static com.osparking.global.Globals.font_Type;
+import static com.osparking.global.Globals.getBufferedImage;
+import static com.osparking.global.Globals.getTagNumber;
 import static com.osparking.global.names.ControlEnums.MenuITemTypes.META_KEY_LABEL;
 import java.awt.Color;
 import java.awt.Component;
@@ -80,6 +82,14 @@ public class CommonData { // new Dimension(carTagWidth, 30)
     }
     
     public static final int[] statCountArr = {1, 10, 100, 1000, 10000, 100000};   
+
+    public static CameraMessage[] dummyMessages = new CameraMessage[7]; 
+    static {
+        for (byte idx = 1; idx <= 6; idx++) {
+            dummyMessages[idx] 
+                    = new CameraMessage( "car" + idx + ".jpg", getTagNumber(idx), getBufferedImage(idx)); 
+        }
+    }
     
     public static DefaultTableCellRenderer numberCellRenderer = new DefaultTableCellRenderer() {
         Border padding = BorderFactory.createEmptyBorder(0, 15, 0, 15);

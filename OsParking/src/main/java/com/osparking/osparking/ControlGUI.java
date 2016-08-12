@@ -20,9 +20,11 @@ import com.osparking.attendant.AttListForm;
 import com.osparking.attendant.LoginDialog;
 import com.osparking.attendant.LoginEventListener;
 import com.osparking.attendant.LoginWindowEvent;
+import com.osparking.global.CameraMessage;
 import com.osparking.global.CommonData;
 import static com.osparking.global.CommonData.ImgHeight;
 import static com.osparking.global.CommonData.ImgWidth;
+import static com.osparking.global.CommonData.dummyMessages;
 import static com.osparking.global.CommonData.metaKeyLabel;
 import com.osparking.global.Globals;
 import static com.osparking.global.Globals.*;
@@ -123,7 +125,6 @@ import com.osparking.global.names.ParkingTimer;
 import com.osparking.global.names.SocketConnStat;
 import com.osparking.global.names.ToleranceLevel;
 import com.osparking.osparking.device.CameraManager;
-import com.osparking.osparking.device.CameraMessage;
 import com.osparking.osparking.device.ConnectDeviceTask;
 import com.osparking.osparking.device.EBoardManager;
 import com.osparking.osparking.device.GateBarManager;
@@ -396,7 +397,6 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
         setSize(screen.width - CAMERA_GUI_WIDTH, screen.height - GATE_BAR_HEIGHT - TASK_BAR_HEIGHT);
         
         // Info' make below lines comments after ths camera-less simulation phase completes
-        formCameraMessageArray();
         addMessageLine(MessageTextArea, "" );
         addMessageLine(MessageTextArea, SYSTEM_START.getContent());
         logParkingOperation(OpLogLevel.LogAlways, SYSTEM_START.getContent());
@@ -2565,18 +2565,6 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
             tBorder.setTitle(gateNames[gateNo]);
         }
         WholePanel.add(getGatePanel(), java.awt.BorderLayout.CENTER);
-    }
-
-    static CameraMessage[] dummyMessages = new CameraMessage[7];
-
-    private void formCameraMessageArray() {
-        for (byte idx = 1; idx <= 6; idx++) {
-            dummyMessages[idx] 
-                    = new CameraMessage( "car" + idx + ".jpg", getTagNumber(idx), getBufferedImage(idx)); 
-    }
-        // 2: full comparison. 
-        // 3: unregistered
-        // 5: not permitted
     }
 
     /**

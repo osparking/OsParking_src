@@ -35,6 +35,7 @@ import com.osparking.camera.stat.CommandPerformance;
 import com.osparking.deviceglobal.AcceptManagerTask;
 import com.osparking.deviceglobal.DeviceGUI;
 import static com.osparking.deviceglobal.DeviceGlobals.setIconList;
+import static com.osparking.global.CommonData.dummyMessages;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.FocusTraversalPolicy;
@@ -706,15 +707,20 @@ public class CameraGUI extends javax.swing.JFrame implements DeviceGUI {
     
     public void displayCarEntry(JLabel imageLabel, String filename) {
         try {
-            ImageIcon iIcon = null;
-            BufferedImage bufImage 
-                    = ImageIO.read(getClass().getResourceAsStream("/" + filename));
-            iIcon = createStretchedIcon(imageLabel.getPreferredSize(), bufImage, false);
-            imageLabel.setIcon(iIcon);  // display car image on the label for the gate
-        } catch (IOException e) {
+            BufferedImage bufImage = ImageIO.read(getClass().getResourceAsStream("/" + filename));
+            // display car image on the label for the gate
+            imageLabel.setIcon(createStretchedIcon(imageLabel.getPreferredSize(), bufImage, false));
+        } 
+        catch (IOException e) {
             logParkingExceptionStatus(Level.SEVERE, e, "while reading artificial car image", 
                     criticalInfoTextField, cameraID);
         }
+    }    
+    
+    public void displayCarEntry(JLabel imageLabel, int imageIndex) {
+        BufferedImage bufImage = dummyMessages[imageIndex].getBufferedImg();
+        // display car image on the label for the gate
+        imageLabel.setIcon(createStretchedIcon(imageLabel.getPreferredSize(), bufImage, false));          
     }    
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -941,8 +947,6 @@ public class CameraGUI extends javax.swing.JFrame implements DeviceGUI {
     }
     
     public void sendCarImage(byte imageFileNo, int generationSN) {
-        String filename = "car" + imageFileNo + ".jpg";
-        
         /**
          * send car arrival image to the manager
          */
@@ -950,11 +954,11 @@ public class CameraGUI extends javax.swing.JFrame implements DeviceGUI {
         this.imageFileNo = imageFileNo;
         imageGenerationTimeMs = System.currentTimeMillis();
 
-        getImageTransmissionTimer().reschedule(new ImageTransmissionTask(this, generationSN, filename));
+        getImageTransmissionTimer().reschedule(new ImageTransmissionTask(this, generationSN, imageFileNo));
 
         // reflect this car arrival to the camera GUI
         addMessageLine(getMessageTextArea(), getTagNumber(imageFileNo) + "(seq #: " + generationSN + ")");
-        displayCarEntry(getPicLabel(), filename);        
+        displayCarEntry(getPicLabel(), imageFileNo);        
     }             
 
     /**
@@ -998,7 +1002,6 @@ class CameraTraversalPolicy extends FocusTraversalPolicy {
             
             Component[] components = { cameraGUI.managerIPaddr, cameraGUI.cameraID_TextField,
                 cameraGUI.errorCheckBox};
-//            componentMap = makeComponentMap(components);
              augmentComponentMap(cameraGUI, componentMap);
         }        
     }

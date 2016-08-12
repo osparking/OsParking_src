@@ -16,6 +16,7 @@
  */
 package com.osparking.camera;
 
+import static com.osparking.global.CommonData.dummyMessages;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -45,7 +46,7 @@ public class ImageTransmissionTask implements Runnable {
     byte[] imageMessageBytes = null;
 
     
-    public ImageTransmissionTask(CameraGUI cameraGUI, int genSeqNo, String filename) {
+    public ImageTransmissionTask(CameraGUI cameraGUI, int genSeqNo, byte imageFileNo) {
         this.cameraGUI = cameraGUI;
         this.reader = (CameraReader) cameraGUI.getReader();
         this.genSeqNo = genSeqNo;
@@ -54,8 +55,9 @@ public class ImageTransmissionTask implements Runnable {
         
         try {
             // reads the image file and create a byte array for the image to send
-            BufferedImage image = ImageIO.
-                    read(getClass().getResourceAsStream("/" + filename));
+            BufferedImage image = dummyMessages[imageFileNo].getBufferedImg();
+//                    ImageIO.
+//                    read(getClass().getResourceAsStream("/" + filename));
 
             ImageIO.write(image, "jpg", byteArrayOutputStream);
             image = null;
@@ -68,7 +70,7 @@ public class ImageTransmissionTask implements Runnable {
         int imageSZ = byteArrayOutputStream.size();
         imageMessageBytes = new byte[9 + imageSZ];
         
-        System.out.println("file: " + filename + ", size: " + imageSZ);
+        System.out.println("file: " + imageFileNo + ", size: " + imageSZ);
         
         imageMessageBytes[0] = (byte)CarImage.ordinal();
         System.arraycopy(imgIDarr, 0, imageMessageBytes, 1, 4);
