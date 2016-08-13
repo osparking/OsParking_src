@@ -2839,8 +2839,6 @@ public class Settings_System extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, SAVE_SETTINGS_DIALOG.getContent(),
                 SETTINGS_SAVE_RESULT.getContent(), JOptionPane.PLAIN_MESSAGE);
             enableSaveCancelButtons(false);
-//            ChangeSettings.changeEnabled_of_SaveCancelButtons(SettingsSaveButton, SettingsCancelButton, 
-//                    SettingsCloseButton, changedControls.size());            
         } else {
             JOptionPane.showMessageDialog(this, "The storage system settings failed.",
                 SETTINGS_SAVE_RESULT.getContent(), JOptionPane.ERROR_MESSAGE);
@@ -3136,72 +3134,100 @@ public class Settings_System extends javax.swing.JFrame {
     private void Camera1_TypeCBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_Camera1_TypeCBoxItemStateChanged
         if (evt.getStateChange() == ItemEvent.SELECTED) {
             setButtonEnabled_If_DeviceTypeChanged(1, Camera);
+            java.awt.EventQueue.invokeLater(new Runnable() {
+                public void run() {
+                    setPortNumber(Camera, Camera1_TypeCBox.getSelectedIndex(), (byte)1, 
+                            Camera1_Port_TextField);
+                }
+            });             
         }
     }//GEN-LAST:event_Camera1_TypeCBoxItemStateChanged
 
     private void Camera2_TypeCBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_Camera2_TypeCBoxItemStateChanged
         if (evt.getStateChange() == ItemEvent.SELECTED) {
             setButtonEnabled_If_DeviceTypeChanged(2, Camera);
+            setPortNumber(Camera, Camera2_TypeCBox.getSelectedIndex(), (byte)2, 
+                    Camera2_Port_TextField);
         }
     }//GEN-LAST:event_Camera2_TypeCBoxItemStateChanged
 
     private void Camera3_TypeCBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_Camera3_TypeCBoxItemStateChanged
         if (evt.getStateChange() == ItemEvent.SELECTED) {
             setButtonEnabled_If_DeviceTypeChanged(3, Camera);
+            setPortNumber(Camera, Camera3_TypeCBox.getSelectedIndex(), (byte)3, 
+                    Camera3_Port_TextField);
         }
     }//GEN-LAST:event_Camera3_TypeCBoxItemStateChanged
 
     private void Camera4_TypeCBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_Camera4_TypeCBoxItemStateChanged
         if (evt.getStateChange() == ItemEvent.SELECTED) {
             setButtonEnabled_If_DeviceTypeChanged(4, Camera);
+            setPortNumber(Camera, Camera4_TypeCBox.getSelectedIndex(), (byte)4, 
+                    Camera4_Port_TextField);
         }
     }//GEN-LAST:event_Camera4_TypeCBoxItemStateChanged
 
     private void E_Board2_TypeCBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_E_Board2_TypeCBoxItemStateChanged
         if (evt.getStateChange() == ItemEvent.SELECTED) {
             setButtonEnabled_If_DeviceTypeChanged(2, E_Board);
+            setPortNumber(E_Board, E_Board2_TypeCBox.getSelectedIndex(), (byte)2, 
+                    E_Board2_Port_TextField);
         }
     }//GEN-LAST:event_E_Board2_TypeCBoxItemStateChanged
 
     private void E_Board1_TypeCBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_E_Board1_TypeCBoxItemStateChanged
         if (evt.getStateChange() == ItemEvent.SELECTED) {
             setButtonEnabled_If_DeviceTypeChanged(1, E_Board);
+            setPortNumber(E_Board, E_Board1_TypeCBox.getSelectedIndex(), (byte)1, 
+                    E_Board1_Port_TextField);
         }
     }//GEN-LAST:event_E_Board1_TypeCBoxItemStateChanged
 
     private void E_Board3_TypeCBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_E_Board3_TypeCBoxItemStateChanged
         if (evt.getStateChange() == ItemEvent.SELECTED) {
             setButtonEnabled_If_DeviceTypeChanged(3, E_Board);
+            setPortNumber(E_Board, E_Board3_TypeCBox.getSelectedIndex(), (byte)3, 
+                    E_Board3_Port_TextField);
         }
     }//GEN-LAST:event_E_Board3_TypeCBoxItemStateChanged
 
     private void E_Board4_TypeCBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_E_Board4_TypeCBoxItemStateChanged
         if (evt.getStateChange() == ItemEvent.SELECTED) {
             setButtonEnabled_If_DeviceTypeChanged(4, E_Board);
+            setPortNumber(E_Board, E_Board4_TypeCBox.getSelectedIndex(), (byte)4, 
+                    E_Board4_Port_TextField);
         }
     }//GEN-LAST:event_E_Board4_TypeCBoxItemStateChanged
 
     private void GateBar1_TypeCBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_GateBar1_TypeCBoxItemStateChanged
         if (evt.getStateChange() == ItemEvent.SELECTED) {
             setButtonEnabled_If_DeviceTypeChanged(1, GateBar);
+            setPortNumber(GateBar, GateBar1_TypeCBox.getSelectedIndex(), (byte)1, 
+                    GateBar1_Port_TextField);
         }
     }//GEN-LAST:event_GateBar1_TypeCBoxItemStateChanged
 
     private void GateBar2_TypeCBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_GateBar2_TypeCBoxItemStateChanged
         if (evt.getStateChange() == ItemEvent.SELECTED) {
             setButtonEnabled_If_DeviceTypeChanged(2, GateBar);
+            setPortNumber(GateBar, GateBar2_TypeCBox.getSelectedIndex(), (byte)2, 
+                    GateBar2_Port_TextField);
         }
     }//GEN-LAST:event_GateBar2_TypeCBoxItemStateChanged
 
     private void GateBar3_TypeCBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_GateBar3_TypeCBoxItemStateChanged
         if (evt.getStateChange() == ItemEvent.SELECTED) {
             setButtonEnabled_If_DeviceTypeChanged(3, GateBar);
+            setPortNumber(GateBar, GateBar3_TypeCBox.getSelectedIndex(), (byte)3, 
+                    GateBar3_Port_TextField);
         }
     }//GEN-LAST:event_GateBar3_TypeCBoxItemStateChanged
 
     private void GateBar4_TypeCBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_GateBar4_TypeCBoxItemStateChanged
         if (evt.getStateChange() == ItemEvent.SELECTED) {
             setButtonEnabled_If_DeviceTypeChanged(4, GateBar);
+            setPortNumber(GateBar, GateBar4_TypeCBox.getSelectedIndex(), (byte)4, 
+                    GateBar4_Port_TextField);
         }
     }//GEN-LAST:event_GateBar4_TypeCBoxItemStateChanged
 
@@ -3769,61 +3795,37 @@ public class Settings_System extends javax.swing.JFrame {
             GatesTabbedPane.setEnabledAt(i, false);
         }
         
-        for (int i = 0; i < gateCount; i++) {
+        for (byte gateNo = 1; gateNo <= gateCount; gateNo++) {
             //<editor-fold desc="-- Init device IP address and Port numbers">
-            GatesTabbedPane.setEnabledAt(i, true);
+            GatesTabbedPane.setEnabledAt(gateNo-1, true);
 
             // fill gate name textfields
-            ((JTextField)getComponentByName("TextFieldGateName" +(i+1))).setText(gateNames[i+1]);
+            ((JTextField)getComponentByName("TextFieldGateName" + gateNo)).setText(gateNames[gateNo]);
             
-            // load 3 device IP address textfields
-            ((JTextField)getComponentByName("Camera" +(i+1) + "_IP_TextField"))
-                    .setText(deviceIP[Camera.ordinal() ][i+1]);
-            
-            ((JTextField)getComponentByName("GateBar" +(i+1) + "_IP_TextField"))
-                    .setText(deviceIP[GateBar.ordinal() ][i+1]);
-            
-            ((JTextField)getComponentByName("E_Board" +(i+1) + "_IP_TextField"))
-                    .setText(deviceIP[E_Board.ordinal() ][i+1]);
-            
-            // load 3 device port textfields
-            ((JTextField)getComponentByName("Camera" +(i+1) + "_Port_TextField"))
-                    .setText(devicePort[Camera.ordinal() ][i+1]);
-            
-            ((JTextField)getComponentByName("GateBar" +(i+1) + "_Port_TextField"))
-                    .setText(devicePort[GateBar.ordinal() ][i+1]);
-            
-            ((JTextField)getComponentByName("E_Board" +(i+1) + "_Port_TextField"))
-                    .setText(devicePort[E_Board.ordinal() ][i+1]);
-            //</editor-fold>
-        }
-        
-        for (int gate = 1; gate <= gateCount; gate++) { 
-            //<editor-fold desc="-- Combo Box item init for device and connection type of each gate">
-            JComboBox comboBx = ((JComboBox)getComponentByName("Camera" +gate + "_TypeCBox"));
-            if (comboBx != null) {
-                comboBx.setSelectedIndex(DB_Access.deviceType[Camera.ordinal()][gate]);
-            }
-            
-            comboBx = ((JComboBox)getComponentByName("E_Board" +gate + "_TypeCBox"));
-            if (comboBx != null) {
-                comboBx.setSelectedIndex(DB_Access.deviceType[E_Board.ordinal()][gate]);
-            }
-            
-            comboBx = ((JComboBox)getComponentByName("GateBar" +gate + "_TypeCBox"));
-            if (comboBx != null) {
-                comboBx.setSelectedIndex(DB_Access.deviceType[GateBar.ordinal()][gate]);
-            }
-            
-            for (DeviceType devType: DeviceType.values()) {
-                comboBx = ((JComboBox)getComponentByName(devType.name() +gate + "_connTypeCBox"));
+            for (DeviceType devType : DeviceType.values()) {
+                // device type and device connection type for each device on every gate
+                JComboBox comboBx = ((JComboBox)getComponentByName(devType.toString() +gateNo + "_TypeCBox"));
+                int subTypeIdx = -1;
                 if (comboBx != null) {
-                    comboBx.setSelectedIndex(DB_Access.connectionType[devType.ordinal()][gate]);
+                    subTypeIdx = DB_Access.deviceType[devType.ordinal()][gateNo];
+                    comboBx.setSelectedIndex(DB_Access.deviceType[devType.ordinal()][gateNo]);
                 }
+                comboBx = ((JComboBox)getComponentByName(devType.name() +gateNo + "_connTypeCBox"));
+                if (comboBx != null) {
+                    comboBx.setSelectedIndex(DB_Access.connectionType[devType.ordinal()][gateNo]);
+                }
+                
+                // load device IP address and port textfields
+                ((JTextField)getComponentByName(devType.toString() + gateNo + "_IP_TextField"))
+                        .setText(deviceIP[devType.ordinal()][gateNo]);
+                
+                JTextField portField = (JTextField)
+                        getComponentByName(devType.toString() + gateNo + "_Port_TextField");
+                
+                setPortNumber(devType, subTypeIdx, gateNo, portField);
             }
             //</editor-fold>
         }
-        
         enableSaveCancelButtons(false);
     }
     
@@ -3997,7 +3999,7 @@ public class Settings_System extends javax.swing.JFrame {
         
         sb.append("  , cameraType = ?");
         sb.append("  , cameraIP = ? ");
-        sb.append("  , cameraPort = ?");
+        sb.append("  , cameraPort = ?");   
         
         sb.append("  , e_boardType = ? ");
         sb.append("  , e_boardConnType = ? ");
@@ -4031,13 +4033,13 @@ public class Settings_System extends javax.swing.JFrame {
                 
                 for (DeviceType type : DeviceType.values()) {
                     cBox = (JComboBox)componentMap.get(type.toString() + gateID + "_TypeCBox");
-                    int newType = cBox.getSelectedIndex();
+                    int newSubType = cBox.getSelectedIndex();
                     
-                    if (newType != deviceType[type.ordinal()][gateID]) {
+                    if (newSubType != deviceType[type.ordinal()][gateID]) {
                         majorChange[0] = true;
                     }
                     
-                    updateSettings.setInt(pIndex++, cBox == null ? 0 : newType);
+                    updateSettings.setInt(pIndex++, cBox == null ? 0 : newSubType);
                     if (type != Camera) {
                         cBox = (JComboBox)componentMap.get(type.toString() + gateID + "_connTypeCBox");
                         
@@ -4048,8 +4050,15 @@ public class Settings_System extends javax.swing.JFrame {
                     }
                     updateSettings.setString(pIndex++, 
                             ((JTextField) componentMap.get(type.toString() + gateID + "_IP_TextField")).getText().trim());
-                    updateSettings.setString(pIndex++, 
-                            ((JTextField) componentMap.get(type.toString() + gateID + "_Port_TextField")).getText().trim());
+                    
+                    String portStr = "";
+                    if (newSubType == SIMULATOR) {
+                        // Simulator port number is determined programmatically. So, leave the original value alone.
+                        portStr = devicePort[type.ordinal()][gateID]; 
+                    } else {
+                        portStr = ((JTextField) componentMap.get(type.toString() + gateID + "_Port_TextField")).getText().trim();
+                    }
+                    updateSettings.setString(pIndex++, portStr);
                 }
                 updateSettings.setInt(pIndex++, gateID);
                 // </editor-fold>
@@ -4616,6 +4625,18 @@ public class Settings_System extends javax.swing.JFrame {
      */
     public JDialog getE_BoardDialog() {
         return eBoardDialog;
+    }
+
+    private void setPortNumber(DeviceType devType, int subType, byte gateNo, JTextField portField) 
+    {
+        if (subType == SIMULATOR) {
+            int portNo = getPort(devType, gateNo, Globals.versionType) + gateNo;
+            portField.setText(Integer.toString(portNo));
+            portField.setEnabled(false);
+        } else {
+            portField.setText(devicePort[devType.ordinal()][gateNo]);
+            portField.setEnabled(true);
+        }
     }
 
     private static class COM_ID_Usage {

@@ -155,6 +155,7 @@ public class Globals {
     public static int PARKING_LOT_NAME_LENGTH_MAX = 30;
     public static int VERBATIM_CONTENT_LENGTH_MAX = 100;
     public static int PORT_NUMBER_LENGTH_MAX = 5;
+    public static int SIMULATOR = 0;
 
     public static DefaultListModel<?>[] admissionListModel = new DefaultListModel<?> [5];
 
