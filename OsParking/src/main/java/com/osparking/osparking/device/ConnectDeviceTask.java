@@ -64,7 +64,8 @@ public class ConnectDeviceTask implements Runnable {
             try {
                 //<editor-fold desc="-- establish socket connection">
                 int portNo = getGateDevicePortNo(deviceType, deviceID);
-                
+                System.out.println("Device type : " + deviceType.getContent() + ", #" +  deviceID +
+                        ", IP: " + deviceIP[deviceType.ordinal()][deviceID] + ", Port: " + portNo);
                 if (DEBUG && (seq == 0 || seq % 20 == 1)) {
                     managerGUI.getStatusTextField().setText(
                             "Socket() IP: " + deviceIP[deviceType.ordinal()][deviceID] + ", port: " + 

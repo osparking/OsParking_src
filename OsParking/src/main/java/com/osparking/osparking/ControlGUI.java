@@ -2603,7 +2603,7 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
         sb.append("ifnull(TagEnteredAs, TagRecognized)) as msgLine, ");
         sb.append("If (BarOperation = "); 
         sb.append(BarOperation.REMAIN_CLOSED.ordinal());
-        sb.append(", '(closed)', '') as BarOptn ");
+        sb.append(", '" + CLOSED_LABEL.getContent() + "', '') as BarOptn ");
         sb.append("from car_arrival ");
         sb.append("where gateno = ? ");
         sb.append("order by arrSeqno desc ");
