@@ -114,6 +114,7 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
+import static java.awt.event.ItemEvent.SELECTED;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.text.SimpleDateFormat;
@@ -146,6 +147,7 @@ public class AttListForm extends javax.swing.JFrame {
     boolean Email_usable = true;
     String usableEmail = null;
     String searchCondition = "";
+    String searchString = "";
     private static Logger logException = null;
     private static Logger logOperation = null;
     private static PasswordValidator pwValidator = new PasswordValidator(); 
@@ -1001,7 +1003,7 @@ public class AttListForm extends javax.swing.JFrame {
         adminAuth2CheckBox.setText(MANAGER_HEADER.getContent());
         adminAuth2CheckBox.setToolTipText("");
         adminAuth2CheckBox.setEnabled(false);
-        adminAuth2CheckBox.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        adminAuth2CheckBox.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         adminAuth2CheckBox.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
 
         javax.swing.GroupLayout topInPanel2Layout = new javax.swing.GroupLayout(topInPanel2);
@@ -1035,7 +1037,7 @@ public class AttListForm extends javax.swing.JFrame {
         countValue.setText("0");
 
         topUserIdLabel.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        topUserIdLabel.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        topUserIdLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         topUserIdLabel.setText(LOGIN_ID_LABEL.getContent() + ": " +loginID);
         topUserIdLabel.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         topUserIdLabel.setMaximumSize(new java.awt.Dimension(20000, 26));
@@ -1218,6 +1220,11 @@ public class AttListForm extends javax.swing.JFrame {
         searchCriteriaComboBox.setMaximumSize(new java.awt.Dimension(90, 30));
         searchCriteriaComboBox.setMinimumSize(new java.awt.Dimension(90, 30));
         searchCriteriaComboBox.setPreferredSize(new java.awt.Dimension(90, 30));
+        searchCriteriaComboBox.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                searchCriteriaComboBoxItemStateChanged(evt);
+            }
+        });
         searchPanel.add(searchCriteriaComboBox);
 
         searchText.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
@@ -1234,11 +1241,17 @@ public class AttListForm extends javax.swing.JFrame {
                 searchTextFocusLost(evt);
             }
         });
+        searchText.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                searchTextKeyReleased(evt);
+            }
+        });
         searchPanel.add(searchText);
 
         searchButton.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         searchButton.setMnemonic('S');
         searchButton.setText(SEARCH_BTN.getContent());
+        searchButton.setEnabled(false);
         searchButton.setMargin(new java.awt.Insets(0, 0, 0, 0));
         searchButton.setMaximumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
         searchButton.setMinimumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
@@ -1854,15 +1867,12 @@ public class AttListForm extends javax.swing.JFrame {
     
     private void searchButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchButtonActionPerformed
         try {
-            String searchStr = searchText.getText().trim();
-            if (hintShown) {
-                searchCondition = "";
+            searchCondition = getSearchCondition();
+            
+            if (!hintShown) {
+                searchString = searchText.getText().trim();
             } else {
-                if (searchCriteriaComboBox.getSelectedIndex() == ATTLIST_ComboBoxTypes.ID.ordinal()) {
-                    searchCondition = " where id like '%" + searchStr + "%'";
-                } else {
-                    searchCondition = " where name like '%" + searchStr + "%'";
-                }
+                searchString = "";
             }
             List sortKeys = usersTable.getRowSorter().getSortKeys();                
             
@@ -2202,6 +2212,16 @@ public class AttListForm extends javax.swing.JFrame {
         }        
     }//GEN-LAST:event_searchTextFocusLost
 
+    private void searchCriteriaComboBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_searchCriteriaComboBoxItemStateChanged
+        if (evt.getStateChange() == SELECTED) {
+            manageSearchButton();
+        }
+    }//GEN-LAST:event_searchCriteriaComboBoxItemStateChanged
+
+    private void searchTextKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_searchTextKeyReleased
+        manageSearchButton();
+    }//GEN-LAST:event_searchTextKeyReleased
+
     private void clearPasswordFields() {
         userPassword.setText("");
         new1Password.setText("");
@@ -2507,7 +2527,10 @@ public class AttListForm extends javax.swing.JFrame {
         usersTable.setEnabled(flag);
         searchText.setEnabled(flag);
         searchCriteriaComboBox.setEnabled(flag);
-        searchButton.setEnabled(flag);
+        if (flag)
+            searchTextKeyReleased(null);
+        else 
+            searchButton.setEnabled(flag);
         saveOdsButton. setEnabled(flag);
         closeFormButton.setEnabled(flag); 
 
@@ -2615,6 +2638,26 @@ public class AttListForm extends javax.swing.JFrame {
     private void clearDetailsForEmptyList() {
         clearAttendantDetail(false);
         disableModifiability();    
+    }
+
+    private String getSearchCondition() {
+        if (!hintShown && searchText.getText().trim().length() > 0) {
+            if (searchCriteriaComboBox.getSelectedIndex() == ATTLIST_ComboBoxTypes.ID.ordinal()) {
+                return " where id like ?";
+            } else {
+                return " where name like ?";
+            }
+        }
+        return "";
+    }
+
+    private void manageSearchButton() {
+        String searchWhole = getSearchCondition() + searchText.getText().trim();
+        if (searchWhole.equals(searchCondition + searchString)) {
+            searchButton.setEnabled(false);
+        } else {
+            searchButton.setEnabled(true);
+        }
     }
 
     private static class Ctrl_F_Action extends AbstractAction {
@@ -2780,9 +2823,13 @@ public class AttListForm extends javax.swing.JFrame {
         sb.append("date_format(lastModiTime, '%Y-%m-%d') as 'Modified' ");
         sb.append("from users_osp");
         sb.append(searchCondition);
+        
         try {
             conn = JDBCMySQL.getConnection();
             pstmt = conn.prepareStatement(sb.toString());
+            if (searchCondition.length() > 0) {
+                pstmt.setString(1, "%" + searchString + "%");
+            }
             rs = pstmt.executeQuery();
 
             model.setRowCount(0);
@@ -2803,10 +2850,11 @@ public class AttListForm extends javax.swing.JFrame {
         } finally {
             closeDBstuff(conn, pstmt, rs, "(refresh user list displaying table)");
             Dimension tableDim = new Dimension(usersTable.getSize().width, 
-                    usersTable.getRowHeight() * (usersTable.getRowCount() + 1)); 
+                    usersTable.getRowHeight() * usersTable.getRowCount()); 
             usersTable.setSize(tableDim);
             usersTable.setPreferredSize(tableDim);
             countValue.setText(String.valueOf(usersTable.getRowCount()));
+            searchButton.setEnabled(false);
             
             return model.getRowCount();
         }
