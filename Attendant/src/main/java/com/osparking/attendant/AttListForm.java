@@ -317,13 +317,13 @@ public class AttListForm extends javax.swing.JFrame {
         new1Password = new javax.swing.JPasswordField();
         PWHelpButton = new javax.swing.JButton();
         newPW2Label = new javax.swing.JLabel();
+        newPW2ReqLabel = new javax.swing.JLabel();
         new2Password = new javax.swing.JPasswordField();
         userPWLabel = new javax.swing.JLabel();
         userPWReqLabel = new javax.swing.JLabel();
         userPassword = new javax.swing.JPasswordField();
         createDate = new javax.swing.JLabel();
         creationDateText = new javax.swing.JTextField();
-        newPW2ReqLabel = new javax.swing.JLabel();
         centerPanel = new javax.swing.JPanel();
         titlePanel = new javax.swing.JPanel();
         attendantGUI_title = new javax.swing.JLabel();
@@ -812,11 +812,11 @@ public class AttListForm extends javax.swing.JFrame {
         userDetailsPanel.add(changePWCheckBox, gridBagConstraints);
 
         newPW1Label.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        newPW1Label.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        newPW1Label.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
         newPW1Label.setText(NEW_PW_LABLE.getContent());
-        newPW1Label.setMaximumSize(new java.awt.Dimension(130, 21));
-        newPW1Label.setMinimumSize(new java.awt.Dimension(130, 21));
-        newPW1Label.setPreferredSize(new java.awt.Dimension(130, 21));
+        newPW1Label.setMaximumSize(new java.awt.Dimension(150, 21));
+        newPW1Label.setMinimumSize(new java.awt.Dimension(150, 21));
+        newPW1Label.setPreferredSize(new java.awt.Dimension(150, 21));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 18;
@@ -873,15 +873,28 @@ public class AttListForm extends javax.swing.JFrame {
         userDetailsPanel.add(PWHelpButton, gridBagConstraints);
 
         newPW2Label.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        newPW2Label.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        newPW2Label.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
         newPW2Label.setText(REPEAT_PW_LABEL.getContent());
         newPW2Label.setMaximumSize(new java.awt.Dimension(150, 21));
-        newPW2Label.setMinimumSize(new java.awt.Dimension(130, 21));
+        newPW2Label.setMinimumSize(new java.awt.Dimension(150, 21));
         newPW2Label.setPreferredSize(new java.awt.Dimension(150, 21));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 20;
         userDetailsPanel.add(newPW2Label, gridBagConstraints);
+
+        newPW2ReqLabel.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        newPW2ReqLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        newPW2ReqLabel.setText("\u25CF");
+        newPW2ReqLabel.setToolTipText("");
+        newPW2ReqLabel.setEnabled(false);
+        newPW2ReqLabel.setMaximumSize(new java.awt.Dimension(24, 26));
+        newPW2ReqLabel.setMinimumSize(new java.awt.Dimension(24, 21));
+        newPW2ReqLabel.setPreferredSize(new java.awt.Dimension(24, 26));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 20;
+        userDetailsPanel.add(newPW2ReqLabel, gridBagConstraints);
 
         new2Password.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         new2Password.setToolTipText(REPEAT_PW_INPUT_TOOLTIP.getContent());
@@ -953,19 +966,6 @@ public class AttListForm extends javax.swing.JFrame {
         gridBagConstraints.gridy = 24;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         userDetailsPanel.add(creationDateText, gridBagConstraints);
-
-        newPW2ReqLabel.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        newPW2ReqLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        newPW2ReqLabel.setText("\u25CF");
-        newPW2ReqLabel.setToolTipText("");
-        newPW2ReqLabel.setEnabled(false);
-        newPW2ReqLabel.setMaximumSize(new java.awt.Dimension(24, 26));
-        newPW2ReqLabel.setMinimumSize(new java.awt.Dimension(24, 21));
-        newPW2ReqLabel.setPreferredSize(new java.awt.Dimension(24, 26));
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 20;
-        userDetailsPanel.add(newPW2ReqLabel, gridBagConstraints);
 
         westPanel.add(userDetailsPanel);
 
@@ -1829,9 +1829,15 @@ public class AttListForm extends javax.swing.JFrame {
 
             // <editor-fold defaultstate="collapsed" desc="-- Enable password fields">           
             changePWCheckBox.setSelected(true);
+            newPW1Label.setText(PW_LABLE.getContent());
+            newPW1ReqLabel.setEnabled(true);
             new1Password.setEnabled(true);
-            PWHelpButton.setEnabled(true);
+            
+            newPW2Label.setText(REPEAT_PW.getContent());
+            newPW2ReqLabel.setEnabled(true);
             new2Password.setEnabled(true);
+            
+            PWHelpButton.setEnabled(true);
             // </editor-fold>     
 
             // Set currend date to creation date text box
@@ -1850,8 +1856,7 @@ public class AttListForm extends javax.swing.JFrame {
             newPW1ReqLabel.setText("\u25CF");
             newPW2ReqLabel.setText("\u25CF");
             changePWLabel.setEnabled(false);
-            newPW1Label.setText(NEW_PW_LABLE.getContent());
-            newPW2Label.setText(REPEAT_PW_LABEL.getContent());
+            getContentPane().repaint();
             // </editor-fold>   
         } catch (Exception ex) {
             logParkingException(Level.SEVERE, ex, "(User Action: Clicked Create New User Button)");         

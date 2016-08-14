@@ -135,6 +135,8 @@ public class ControlEnums {
         CHANGE_PW_LABEL("비밀번호 변경",  "Change Password"),
         NEW_PW_LABLE("새 비밀번호",  "New Password"),
         REPEAT_PW_LABEL("새 비밀번호 반복",  "Repeat Password"),
+        PW_LABLE("비밀번호",  "Password"),
+        REPEAT_PW("비밀번호 반복",  "Repeat Password"),
         MY_PW_LABEL("비밀번호",  "Password"),
         CREATION_LABEL("자료 생성일",  "Creation Date"),
         AFFILIATION_LIST_LABEL("상위 소속 목록",  "Higher Affiliations"),
