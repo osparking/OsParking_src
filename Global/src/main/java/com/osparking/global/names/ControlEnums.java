@@ -798,7 +798,7 @@ public class ControlEnums {
                 + "[Yes] => to select Room(number)\n"
                 + "[No] => to cancel driver update"),
         
-        PW_FOURDIGIT_DIALOG("  - 숫자(0~9) 네 자리로 구성", "  - four digit number (0~9)"),
+        PW_FOURDIGIT_DIALOG("  - 정확히 네 자리 숫자", "  - Exact four digit number"),
         
         PW_SIXDIGIT_DIALOG("  - 6 ~ 40자로 구성\n"
                 + "  - 영문 문자(a-z,A~Z)를 한 글자 이상 포함\n"

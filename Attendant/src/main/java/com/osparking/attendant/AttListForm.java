@@ -2205,7 +2205,8 @@ public class AttListForm extends javax.swing.JFrame {
     }//GEN-LAST:event_managerHelpButtonActionPerformed
 
     private void searchTextFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_searchTextFocusGained
-        if (searchText.getText().equals(CTRL_F_TOOLTIP.getContent())) {
+//        if (searchText.getText().equals(CTRL_F_TOOLTIP.getContent())) {
+        if (hintShown) {
             searchText.setText("");
             hintShown = false;            
             searchText.setForeground(new Color(0, 0, 0));
