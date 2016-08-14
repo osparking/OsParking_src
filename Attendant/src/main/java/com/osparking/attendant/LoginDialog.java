@@ -259,23 +259,26 @@ public class LoginDialog extends javax.swing.JDialog {
         }
     }    
         
-    public boolean loginCheckGood(String userID, String passwd) {
+    public boolean loginCheckGood(String lowerID, String passwd) {
         boolean result = false;
         Connection conn = null;
         PreparedStatement pstmt = null;    
         ResultSet rs = null;
+        String userID = null;
+        
         try 
         {
             // Check if ID exists and password matches
             conn = JDBCMySQL.getConnection();
-            pstmt = conn.prepareStatement("Select md5(?) as hashedPW, " + 
+            pstmt = conn.prepareStatement("Select id, md5(?) as hashedPW, " + 
                     "password as pwInDB, isManager " + 
                     "from users_osp where id = ?");
             pstmt.setString(1, passwd);
-            pstmt.setString(2, userID);
+            pstmt.setString(2, lowerID);
             rs = pstmt.executeQuery();
             if (rs.next()) {
                 //<editor-fold defaultstate="collapsed" desc="-- For the existing ID, check if password matches.">
+                userID = rs.getString("id");                               
                 String hashedPW = rs.getString("hashedPW");                               
                 String pwInDB = rs.getString("pwInDB");                               
                 int isManager = rs.getInt("isManager");  
