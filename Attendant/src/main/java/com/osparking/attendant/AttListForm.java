@@ -96,6 +96,7 @@ import static com.osparking.global.names.ControlEnums.ToolTipContent.CELL_PHONE_
 import static com.osparking.global.names.ControlEnums.ToolTipContent.CHK_DUP_ID_TIP;
 import static com.osparking.global.names.ControlEnums.ToolTipContent.CHK_E_MAIL_TIP;
 import static com.osparking.global.names.ControlEnums.ToolTipContent.CTRL_F_TOOLTIP;
+import static com.osparking.global.names.ControlEnums.ToolTipContent.EMAIL_TOOLTIP;
 import static com.osparking.global.names.ControlEnums.ToolTipContent.ID_INPUT_TOOLTIP;
 import static com.osparking.global.names.ControlEnums.ToolTipContent.NAME_INPUT_TOOLTIP;
 import static com.osparking.global.names.ControlEnums.ToolTipContent.PHONE_INPUT_TOOLTIP;
@@ -748,6 +749,7 @@ public class AttListForm extends javax.swing.JFrame {
 
         emailAddrText.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         emailAddrText.setHorizontalAlignment(javax.swing.JTextField.LEFT);
+        emailAddrText.setToolTipText(EMAIL_TOOLTIP.getContent() + "userID@company.com");
         emailAddrText.setEnabled(false);
         emailAddrText.setMaximumSize(new java.awt.Dimension(32767, 30));
         emailAddrText.setMinimumSize(new java.awt.Dimension(140, 30));
@@ -1597,6 +1599,7 @@ public class AttListForm extends javax.swing.JFrame {
                 multiFuncButton.setMnemonic('m');
                 createButton.setEnabled(true);
                 deleteButton.setEnabled(true);
+                showAttendantDetail(usersTable.getSelectedRow());
             }
         } catch (Exception ex) {
             String mode = (formMode == FormMode.CreateMode ? "Create" : "Modify");
@@ -2289,7 +2292,6 @@ public class AttListForm extends javax.swing.JFrame {
         setFormMode(FormMode.NormalMode);
         
         // <editor-fold defaultstate="collapsed" desc="-- Disable login ID related controls in search mode">            
-//        managerCheckBox.setEnabled(false); 
         managerCBoxEnabled(false);
         userIDText.setEnabled(false); 
         userIDText.setEditable(false);       

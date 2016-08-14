@@ -410,6 +410,7 @@ public class ControlEnums {
     public enum ToolTipContent {
         ENABLING_CONDITION("활성화하려면 기간을 변경하십시오.", "To enable, change period!"),
         CTRL_F_TOOLTIP("(Ctrl+F)", "(Ctrl+F)"),
+        EMAIL_TOOLTIP("이메일 형태 : ", "Email format : "),
         INSERT_TOOLTIP("(입력 후 엔터 키)", "(Type and Enter)"),
         SEARCH_TOOLTIP("포커스 이동: Control+F", "To focus Click Ctrl+F"),
         LOGIN_BTN_TOOLTIP("관리자 로그인", "Click to Login"),
@@ -420,7 +421,7 @@ public class ControlEnums {
         ID_INPUT_TOOLTIP("영문숫자 최대 20자!", "Up to 20 alphanumeric characters"),
         NAME_INPUT_TOOLTIP("두 자 이상 입력하세요", "Please enter at least two characters"),
         PW_INPUT_TOOTLTIP("현 사용자 비번 입력!", "Current User Password!"),
-        CELL_INPUT_TOOLTIP("숫자 11자리 입력하세요", "Enter the 11-digit number"),
+        CELL_INPUT_TOOLTIP("숫자 10 혹은 11자리 입력하세요", "Enter the 10 or 11 digit number"),
         PHONE_INPUT_TOOLTIP("숫자 4자리 이상 입력하세요", "Please enter at least a four-digit number"),
         CELL_PHONE_TOOLTIP("전화 한대 이상 입력하세요", "Please enter at least one phone number"),
         NUMBER_FORMAT_ERROR_MSG("번호 값이므로 숫자만 입력 가능합니다.",
@@ -670,20 +671,28 @@ public class ControlEnums {
                 "      (일반에 매니저 권한 부여 불가)" + System.getProperty("line.separator") +
                 System.getProperty("line.separator") +
                 "3. 일반 : 하위" +System.getProperty("line.separator") +
-                "    - 자기 계정에 대한 갱신 권한" +
-                "* 누구도 자기의 매니저 속성 변경 불가" +System.getProperty("line.separator") +
-                "* 누구도 자기의 계정 삭제 불가" +System.getProperty("line.separator")
+                "    - 자기 계정에 대한 갱신 권한" + System.getProperty("line.separator") +
+                System.getProperty("line.separator") +
+                "4. 사용자 전체" +System.getProperty("line.separator") +
+                "    - 모두 자기 계정 속성 변경 가능" + System.getProperty("line.separator") +
+                "      (단, 매니저 속성은 변경 불가)" + System.getProperty("line.separator") +
+                "    - 누구도 자기 계정 삭제 불가"
                 ,
                 "1. admin(: user ID) : high level" + System.getProperty("line.separator") +
                 "    - All rights for the managers and the ordinaries" + System.getProperty("line.separator") +
                 "      (rights: insert, update, delete)" + System.getProperty("line.separator") +
+                System.getProperty("line.separator") +
                 "2. Managers : middle level" + System.getProperty("line.separator") +
                 "    - All the rights for the ordinaries " + System.getProperty("line.separator") +
                 "      (manager check box disabled)" + System.getProperty("line.separator") +
+                System.getProperty("line.separator") +
                 "3. Ordinaries : low level" + System.getProperty("line.separator") +
                 "    - Update own account information" + System.getProperty("line.separator") +
-                "* No one can change own manager check box" + System.getProperty("line.separator") +
-                "* No one can delete own account" + System.getProperty("line.separator")
+                System.getProperty("line.separator") +
+                "4. Every user" +System.getProperty("line.separator") +                        
+                "    -  Can update own information" + System.getProperty("line.separator") +
+                "       (but manager property is an exception)" + System.getProperty("line.separator") +
+                "    -  Can not delete own account" + System.getProperty("line.separator")
         ),
         DRIVER_CLOSE_FORM_DIALOG(
                 " 중인 운전자 정보를 버리겠습니까?", " will be discarded, is it OK?"),
