@@ -605,7 +605,7 @@ public class AttListForm extends javax.swing.JFrame {
         gridBagConstraints.gridx = 6;
         gridBagConstraints.gridy = 4;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        gridBagConstraints.weightx = 0.5;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 5);
         userDetailsPanel.add(managerHelpButton, gridBagConstraints);
 
         nameLabel.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
@@ -869,7 +869,7 @@ public class AttListForm extends javax.swing.JFrame {
         gridBagConstraints.gridx = 6;
         gridBagConstraints.gridy = 18;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        gridBagConstraints.weightx = 0.5;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 5);
         userDetailsPanel.add(PWHelpButton, gridBagConstraints);
 
         newPW2Label.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
@@ -1522,7 +1522,7 @@ public class AttListForm extends javax.swing.JFrame {
         // given cellphone number exists, it should be longer than 10
         String cellPhone = cellPhoneText.getText().trim();
         int cellDigCount = getNumericDigitCount(cellPhone);
-        if (cellPhone.length() > 0 && cellDigCount != 11) {
+        if (cellPhone.length() > 0 && cellDigCount != 10 && cellDigCount != 11) {
             if (wrongFields.toString().length() == 0)
                 cellPhoneText.requestFocus();
             wrongFields.append(ATT_CELL_CHECK_DIALOG.getContent()+ System.lineSeparator());
@@ -1576,7 +1576,7 @@ public class AttListForm extends javax.swing.JFrame {
         } else {
             if (wrongFields.toString().length() == 0)
                 userPassword.requestFocus();                    
-            wrongFields.append(loginID + ADMIN_PW_CHECK_DIALOG.getContent() 
+            wrongFields.append("  - " + loginID + ADMIN_PW_CHECK_DIALOG.getContent() 
                     + System.lineSeparator());
             result = false;
         }        
