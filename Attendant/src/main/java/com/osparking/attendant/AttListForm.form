@@ -11,6 +11,9 @@
         <Property name="dialogTitle" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
           <Connection code="ATTENDANT_ODS_TITLE.getContent()" type="code"/>
         </Property>
+        <Property name="fileFilter" type="javax.swing.filechooser.FileFilter" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+          <Connection code="new OdsFileOnly()" type="code"/>
+        </Property>
         <Property name="toolTipText" type="java.lang.String" value=""/>
         <Property name="enabled" type="boolean" value="false"/>
         <Property name="name" type="java.lang.String" value="" noResource="true"/>

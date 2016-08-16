@@ -25,6 +25,8 @@ import static com.osparking.global.names.ControlEnums.MenuITemTypes.META_KEY_LAB
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import static java.awt.JobAttributes.DestinationType.FILE;
+import java.io.File;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -67,7 +69,10 @@ public class CommonData { // new Dimension(carTagWidth, 30)
     public static final int bigButtonHeight = 60;
     public static final Dimension bigButtonDim = 
             new Dimension(CommonData.bigButtonWidth, bigButtonHeight);
-    
+    public static File ODS_DIRECTORY = null; 
+    static {
+        ODS_DIRECTORY = new File(System.getProperty("user.home") + File.separator + ODS_FILE_DIR);
+    }
     public static JLabel metaKeyLabel = new JLabel(META_KEY_LABEL.getContent());  
     public static final Color tipColor = new java.awt.Color(0xff, 0x85, 0x33);
     public static final Color tipColorTrans = new java.awt.Color(0xff, 0x85, 0x33, 127);

@@ -171,7 +171,7 @@ public class Globals {
         driverTable.setColumnSelectionInterval(colIdx, colIdx);     
     }    
     
-    public static void determineLoginID() {
+    public static String determineLoginID() {
         String managerID = "manager";
         String guestID = "guest";
         Object[] possibleValues = { ADMIN_ID, managerID, guestID};
@@ -187,8 +187,9 @@ public class Globals {
                 Globals.isManager = true;
             } else if (loginID.equals(guestID)) {
                 Globals.isManager = false;                 
-            }        
+            }
         }
+        return loginID;
     }
     
     public static void augmentComponentMap(

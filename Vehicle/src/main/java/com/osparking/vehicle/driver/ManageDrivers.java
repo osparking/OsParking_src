@@ -20,6 +20,7 @@ import static com.mysql.jdbc.MysqlErrorNumbers.ER_DUP_ENTRY;
 import com.osparking.global.CommonData;
 import static com.osparking.global.CommonData.ADMIN_ID;
 import static com.osparking.global.CommonData.NOT_LISTED;
+import static com.osparking.global.CommonData.ODS_DIRECTORY;
 import static com.osparking.global.CommonData.PROMPTER_KEY;
 import static com.osparking.global.CommonData.buttonHeightNorm;
 import static com.osparking.global.CommonData.buttonWidthNorm;
@@ -34,7 +35,6 @@ import static com.osparking.vehicle.driver.DriverTable.updateRow;
 import static com.osparking.vehicle.driver.ODSReader.getWrongCellPointString;
 import java.awt.Dimension;
 import java.awt.Point;
-import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import static java.awt.event.KeyEvent.VK_SHIFT;
 import java.io.File;
@@ -120,6 +120,7 @@ import static com.osparking.global.names.OSP_enums.DriverCol.DriverName;
 import static com.osparking.global.names.OSP_enums.DriverCol.LandLine;
 import static com.osparking.global.names.OSP_enums.DriverCol.UnitNo;
 import static com.osparking.global.names.OSP_enums.OpLogLevel.EBDsettingsChange;
+import com.osparking.global.names.OdsFileOnly;
 import com.osparking.global.names.PComboBox;
 import com.osparking.global.names.WrappedInt;
 import static com.osparking.vehicle.CommonData.DTCW_BN;
@@ -345,10 +346,11 @@ public class ManageDrivers extends javax.swing.JFrame {
                     insertSave_Button.setText(CREATE_BTN.getContent());
                     insertSave_Button.setMnemonic('r');
                 } else if (prevMode == FormMode.UpdateMode) {
-                    insertSave_Button.setEnabled(true);
                     modiSave_Button.setText(MODIFY_BTN.getContent());
                     modiSave_Button.setMnemonic('m');
                 }
+                insertSave_Button.setEnabled(true && isManager);
+                
                 if (driverTable.getSelectedRowCount() > 0) {
                     deleteDriver_Button.setEnabled(true);
                 }
@@ -597,7 +599,11 @@ public class ManageDrivers extends javax.swing.JFrame {
         ));
         jScrollPane1.setViewportView(jTable1);
 
+        odsFileChooser.setCurrentDirectory(ODS_DIRECTORY);
+
         saveFileChooser.setDialogType(javax.swing.JFileChooser.SAVE_DIALOG);
+        saveFileChooser.setCurrentDirectory(ODS_DIRECTORY);
+        saveFileChooser.setFileFilter(new OdsFileOnly());
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle(DRIVER_LIST_FRAME_TITLE.getContent());
@@ -1926,16 +1932,16 @@ public class ManageDrivers extends javax.swing.JFrame {
         initializeLoggers();
         checkOptions(args);
         readSettings();
-        determineLoginID();
-        
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                ManageDrivers mainForm = new ManageDrivers(null);
-                mainForm.setLocation(0, 0);
-                mainForm.setVisible(true);
-            }
-        });
+        if (determineLoginID() != null) {
+            /* Create and display the form */
+            java.awt.EventQueue.invokeLater(new Runnable() {
+                public void run() {
+                    ManageDrivers mainForm = new ManageDrivers(null);
+                    mainForm.setLocation(0, 0);
+                    mainForm.setVisible(true);
+                }
+            });
+        }
     }
     
     static ConvComboBoxItem prevItem = null;

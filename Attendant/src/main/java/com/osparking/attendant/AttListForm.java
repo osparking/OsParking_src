@@ -111,6 +111,7 @@ import com.osparking.global.names.JDBCMySQL;
 import static com.osparking.global.names.JDBCMySQL.getHashedPW;
 import com.osparking.global.names.JTextFieldLimit;
 import com.osparking.global.names.OSP_enums.OpLogLevel;
+import com.osparking.global.names.OdsFileOnly;
 import com.osparking.global.names.ParentGUI;
 import java.awt.Color;
 import java.awt.Component;
@@ -368,6 +369,7 @@ public class AttListForm extends javax.swing.JFrame {
         saveFileChooser.setDialogType(javax.swing.JFileChooser.SAVE_DIALOG);
         saveFileChooser.setApproveButtonText(SAVE_BTN.getContent());
         saveFileChooser.setDialogTitle(ATTENDANT_ODS_TITLE.getContent());
+        saveFileChooser.setFileFilter(new OdsFileOnly());
         saveFileChooser.setToolTipText("");
         saveFileChooser.setEnabled(false);
         saveFileChooser.setName(""); // NOI18N
@@ -1625,14 +1627,13 @@ public class AttListForm extends javax.swing.JFrame {
     private void saveOdsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveOdsButtonActionPerformed
         String searchWord = searchText.getText().trim();
         String filename = "사용자목록";
+        
         if (hintShown || searchWord.length() == 0) {
         } else {
             String searchField = searchCriteriaComboBox.getSelectedItem().toString();
             filename += "_" + searchField + "_" + searchWord;
         }
-//        saveODSfile(this, usersTable, saveFileChooser, USER_SAVE_ODS_FAIL_DIALOG.getContent());
-        saveODSfileName(this, usersTable, saveFileChooser, USER_SAVE_ODS_FAIL_DIALOG.getContent(),
-                filename);
+        saveODSfileName(null, usersTable, saveFileChooser, USER_SAVE_ODS_FAIL_DIALOG.getContent(), filename);
     }//GEN-LAST:event_saveOdsButtonActionPerformed
 
     private void deleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteButtonActionPerformed
@@ -2726,20 +2727,6 @@ public class AttListForm extends javax.swing.JFrame {
             return "Text documents (*.txt)";
         }
     }        
-    
-    class OdsFileOnly extends javax.swing.filechooser.FileFilter {
-        @Override
-        public boolean accept(File file) {
-            // Allow only directories, or files with ".txt" extension
-            return file.isDirectory() || file.getAbsolutePath().endsWith(".ods");
-        }
-        @Override
-        public String getDescription() {
-            // This description will be displayed in the dialog,
-            // hard-coded = ugly, should be done via I18N
-            return "ods documents (*.ods)";
-        }
-    }  
     
     // <editor-fold defaultstate="collapsed" desc="-- System Generated Code Section">
     // Variables declaration - do not modify//GEN-BEGIN:variables

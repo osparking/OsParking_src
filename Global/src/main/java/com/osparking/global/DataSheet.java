@@ -34,6 +34,8 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import static javax.swing.JOptionPane.OK_CANCEL_OPTION;
 import javax.swing.JTable;
+import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import org.jopendocument.dom.OOUtils;
@@ -51,7 +53,8 @@ public class DataSheet {
      * @param saveFileChooser
      * @param file 
      */
-    public static void verifyOdsExtension(JFileChooser saveFileChooser, File[] file) {
+    public static String verifyOdsExtension(JFileChooser saveFileChooser, File[] file) {
+        String ext = "";
         String pathname = null;
         try {
             pathname = file[0].getAbsolutePath();
@@ -66,7 +69,8 @@ public class DataSheet {
                     // pure file name(except extension name) has no ".ods" suffix
                     // So, to make it a ods file, append ".ods" extension to the filename.
                     //</editor-fold>
-                    pathname += ".ods";
+                    ext = ".ods";
+                    pathname += ext;
                     file[0] = new File(pathname);
                 } else {
                     // pathname already has ".ods" as its suffix
@@ -74,6 +78,8 @@ public class DataSheet {
             }
         } catch (Exception ex) {
             logParkingException(Level.SEVERE, ex, "(File: " + pathname + ")");
+        } finally {
+            return ext;
         }
     }    
     
@@ -90,39 +96,19 @@ public class DataSheet {
             JFileChooser saveFileChooser, String emptyTableMsg)
     {
         // Check the size of the list and if empty just return saying "noting to save"
-        saveFileChooser.setFileFilter(new OdsFileOnly());
-        
+//        saveFileChooser.setFileFilter(new OdsFileOnly());
+
+        String currDir = saveFileChooser.getCurrentDirectory().getAbsolutePath();
+        makeSurePathExists(currDir);
         int returnVal = saveFileChooser.showSaveDialog(aFrame);
 
         if (returnVal == JFileChooser.APPROVE_OPTION) {
-            File[] file = new File[1];
-            
-            file[0] = saveFileChooser.getSelectedFile();
-            verifyOdsExtension(saveFileChooser, file);            
-            
-            final Object[][] data =
-                    new Object[tableToSave.getModel().getRowCount()][tableToSave.getColumnCount()];
-            
-            for (int row = 0; row < tableToSave.getModel().getRowCount(); row ++) {
-                int rowM = tableToSave.convertRowIndexToModel(row);
-                
-                for (int col = 0; col < tableToSave.getColumnCount(); col++) {
-                    data[rowM][col] = tableToSave.getValueAt(rowM, col);
-                }
-            }
-            
-            String[] columns = new String[tableToSave.getColumnCount()];
-            for (int col = 0; col < tableToSave.getColumnCount(); col++) {
-                columns[col] = (String)tableToSave.getColumnModel().getColumn(col).getHeaderValue();
-            }
-            
-            TableModel model = new DefaultTableModel(data, columns);
-            try {
-                SpreadSheet.createEmpty(model).saveAs(file[0]);
-                OOUtils.open(file[0]);
-            } catch (IOException ex) {
-                System.out.println("File save exception: " + ex.getMessage());
-            }                
+            String filePath = saveFileChooser.getCurrentDirectory().getAbsolutePath();
+            String dirPath = saveFileChooser.getCurrentDirectory().getAbsolutePath();
+            String filename = saveFileChooser.getSelectedFile().getName();
+
+            filePath += File.separator + filename;
+            saveOrNotWithFixedName(saveFileChooser, filePath, tableToSave, dirPath, filename);
         }        
     }
     
@@ -139,66 +125,91 @@ public class DataSheet {
             JFileChooser saveFileChooser, String emptyTableMsg, String filename)
     {
         // Check the size of the list and if empty just return saying "noting to save"
-        saveFileChooser.setFileFilter(new OdsFileOnly());
+//        saveFileChooser.setFileFilter(new OdsFileOnly());
+        
         String dirPath = System.getProperty("user.home") + File.separator + ODS_FILE_DIR;
         
         // Make sure the 'ods' folder exists in the user home directory.
-        File dirFile = new File(dirPath);
-        Boolean result = dirFile.mkdirs();
+        makeSurePathExists(dirPath);
 
-        String filePath = dirPath +  File.separator + filename + ".ods";
+        String filePath = dirPath +  File.separator + filename;
         File defFile = new File(filePath);
         saveFileChooser.setSelectedFile(defFile);
+        
         int returnVal = saveFileChooser.showSaveDialog(aFrame);
 
         if (returnVal == JFileChooser.APPROVE_OPTION) {
-            File[] file = new File[1];
-            
-            file[0] = saveFileChooser.getSelectedFile();
-            verifyOdsExtension(saveFileChooser, file);
-            
-            if (file[0].exists() && !file[0].isDirectory()) { 
-                String msg = OVERWRITE_WARNING_DIALOG.getContent() + System.lineSeparator()
-                        + System.lineSeparator()
-                        + ODS_SAVE_DIALOG_3.getContent() + filePath + System.lineSeparator()
-                        + USER_DELETE_CONF_3.getContent();
-                int response = JOptionPane.showConfirmDialog(null, msg, OVERWRITE_WARNING_TITLE.getContent(),
-                        OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE); 
-                if (response == JOptionPane.CANCEL_OPTION) {
-                    return;
-                }
-            }
-            
-            final Object[][] data =
-                    new Object[tableToSave.getModel().getRowCount()][tableToSave.getColumnCount()];
-            
-            for (int row = 0; row < tableToSave.getModel().getRowCount(); row ++) {
-                int rowM = tableToSave.convertRowIndexToModel(row);
-                
-                for (int col = 0; col < tableToSave.getColumnCount(); col++) {
-                    data[rowM][col] = tableToSave.getValueAt(rowM, col);
-                }
-            }
-            
-            String[] columns = new String[tableToSave.getColumnCount()];
-            for (int col = 0; col < tableToSave.getColumnCount(); col++) {
-                columns[col] = (String)tableToSave.getColumnModel().getColumn(col).getHeaderValue();
-            }
-            
-            TableModel model = new DefaultTableModel(data, columns);
-            try {
-                SpreadSheet.createEmpty(model).saveAs(file[0]);
-                String message = ODS_SAVE_DIALOG_1.getContent() + System.lineSeparator() + 
-                        System.lineSeparator() +
-                        ODS_SAVE_DIALOG_2.getContent() + dirPath + System.lineSeparator() + 
-                        ODS_SAVE_DIALOG_3.getContent() + filename + ".ods" + System.lineSeparator();
-                JOptionPane.showMessageDialog(saveFileChooser, message, 
-                        ODS_SAVE_TITLE.getContent(), JOptionPane.INFORMATION_MESSAGE);
-                OOUtils.open(file[0]);
-            } catch (IOException ex) {
-                System.out.println("File save exception: " + ex.getMessage());
-            }                
-        }        
+            String selPath = saveFileChooser.getSelectedFile().getAbsolutePath();
+            String selCore = saveFileChooser.getSelectedFile().getName();
+            saveOrNotWithFixedName(saveFileChooser, selPath, tableToSave, dirPath, selCore);
+        }
     }
-    
+
+    private static void saveOrNotWithFixedName(JFileChooser saveFileChooser, 
+            String filePath, JTable tableToSave, String dirPath, String coreName) 
+    {
+        File[] file = new File[1];
+        String filename = coreName;
+        FileFilter filter = saveFileChooser.getFileFilter();
+        
+        file[0] = saveFileChooser.getSelectedFile();
+        if (filter instanceof OdsFileOnly) {
+            filePath += ".ods";
+            filename = coreName + ".ods";
+        } 
+        verifyOdsExtension(saveFileChooser, file);
+
+        //<editor-fold desc="-- Determine if to overwrite existing file.">
+        if (file[0].exists() && !file[0].isDirectory()) { 
+            String msg = OVERWRITE_WARNING_DIALOG.getContent() + System.lineSeparator()
+                    + System.lineSeparator()
+                    + ODS_SAVE_DIALOG_3.getContent() + filePath + System.lineSeparator()
+                    + System.lineSeparator()
+                    + USER_DELETE_CONF_3.getContent();
+            int response = JOptionPane.showConfirmDialog(null, msg, OVERWRITE_WARNING_TITLE.getContent(),
+                    OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE); 
+            if (response == JOptionPane.CANCEL_OPTION) {
+                return;
+            }
+        }
+        //</editor-fold>
+            
+        final Object[][] data =
+                new Object[tableToSave.getModel().getRowCount()][tableToSave.getColumnCount()];
+
+        for (int row = 0; row < tableToSave.getModel().getRowCount(); row ++) {
+            int rowM = tableToSave.convertRowIndexToModel(row);
+
+            for (int col = 0; col < tableToSave.getColumnCount(); col++) {
+                data[rowM][col] = tableToSave.getValueAt(rowM, col);
+            }
+        }
+
+        String[] columns = new String[tableToSave.getColumnCount()];
+        for (int col = 0; col < tableToSave.getColumnCount(); col++) {
+            columns[col] = (String)tableToSave.getColumnModel().getColumn(col).getHeaderValue();
+        }
+
+        TableModel model = new DefaultTableModel(data, columns);
+        
+        try {
+            SpreadSheet.createEmpty(model).saveAs(file[0]);
+            //<editor-fold desc="-- Display ods file saving result.">
+            String message = ODS_SAVE_DIALOG_1.getContent() + System.lineSeparator() + 
+                    System.lineSeparator() +
+                    ODS_SAVE_DIALOG_2.getContent() + dirPath + System.lineSeparator() + 
+                    ODS_SAVE_DIALOG_3.getContent() + filename + System.lineSeparator();
+            JOptionPane.showMessageDialog(saveFileChooser, message, 
+                    ODS_SAVE_TITLE.getContent(), JOptionPane.INFORMATION_MESSAGE);
+            OOUtils.open(file[0]);
+            //</editor-fold>
+        } catch (IOException ex) {
+            System.out.println("File save exception: " + ex.getMessage());
+        }                
+    }
+
+    private static void makeSurePathExists(String dirPath) {
+        File dirFile = new File(dirPath);
+        Boolean result = dirFile.mkdirs();
+    }
 }
