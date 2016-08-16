@@ -2545,10 +2545,13 @@ public class AttListForm extends javax.swing.JFrame {
         usersTable.setEnabled(flag);
         searchText.setEnabled(flag);
         searchCriteriaComboBox.setEnabled(flag);
-        if (flag)
+        if (flag) {
             searchTextKeyReleased(null);
-        else 
-            searchButton.setEnabled(flag);
+        } else {
+            if (!flag) {
+                searchButton.setEnabled(flag);
+            }
+        }
         saveOdsButton. setEnabled(flag);
         closeFormButton.setEnabled(flag); 
 
@@ -2671,6 +2674,10 @@ public class AttListForm extends javax.swing.JFrame {
 
     private void manageSearchButton() {
         String searchWhole = getSearchCondition() + searchText.getText().trim();
+        
+        if (hintShown) {
+            searchWhole = "";
+        }
         if (searchWhole.equals(searchCondition + searchString)) {
             searchButton.setEnabled(false);
         } else {
