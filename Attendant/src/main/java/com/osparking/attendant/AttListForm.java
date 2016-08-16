@@ -30,6 +30,7 @@ import static com.osparking.global.CommonData.putCellCenter;
 import static com.osparking.global.CommonData.tableRowHeight;
 import static com.osparking.global.CommonData.tipColor;
 import static com.osparking.global.DataSheet.saveODSfile;
+import static com.osparking.global.DataSheet.saveODSfileName;
 import java.awt.Point;
 import java.io.File;
 import java.sql.Connection;
@@ -61,6 +62,7 @@ import com.osparking.global.Globals;
 import com.osparking.global.names.ControlEnums.ATTLIST_ComboBoxTypes;
 import static com.osparking.global.names.ControlEnums.ButtonTypes.*;
 import static com.osparking.global.names.ControlEnums.DialogMessages.*;
+import static com.osparking.global.names.ControlEnums.DialogTitleTypes.ATTENDANT_ODS_TITLE;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.ATT_EMAIL_DUP_DIALOGTITLE;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.ATT_EMAIL_SYNTAX_CHECK_DIALOG;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.ATT_HELP_DIALOGTITLE;
@@ -365,7 +367,7 @@ public class AttListForm extends javax.swing.JFrame {
 
         saveFileChooser.setDialogType(javax.swing.JFileChooser.SAVE_DIALOG);
         saveFileChooser.setApproveButtonText(SAVE_BTN.getContent());
-        saveFileChooser.setDialogTitle("");
+        saveFileChooser.setDialogTitle(ATTENDANT_ODS_TITLE.getContent());
         saveFileChooser.setToolTipText("");
         saveFileChooser.setEnabled(false);
         saveFileChooser.setName(""); // NOI18N
@@ -1621,7 +1623,16 @@ public class AttListForm extends javax.swing.JFrame {
     }    
     
     private void saveOdsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveOdsButtonActionPerformed
-        saveODSfile(this, usersTable, saveFileChooser, USER_SAVE_ODS_FAIL_DIALOG.getContent());
+        String searchWord = searchText.getText().trim();
+        String filename = "사용자목록";
+        if (hintShown || searchWord.length() == 0) {
+        } else {
+            String searchField = searchCriteriaComboBox.getSelectedItem().toString();
+            filename += "_" + searchField + "_" + searchWord;
+        }
+//        saveODSfile(this, usersTable, saveFileChooser, USER_SAVE_ODS_FAIL_DIALOG.getContent());
+        saveODSfileName(this, usersTable, saveFileChooser, USER_SAVE_ODS_FAIL_DIALOG.getContent(),
+                filename);
     }//GEN-LAST:event_saveOdsButtonActionPerformed
 
     private void deleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteButtonActionPerformed
@@ -2205,7 +2216,6 @@ public class AttListForm extends javax.swing.JFrame {
     }//GEN-LAST:event_managerHelpButtonActionPerformed
 
     private void searchTextFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_searchTextFocusGained
-//        if (searchText.getText().equals(CTRL_F_TOOLTIP.getContent())) {
         if (hintShown) {
             searchText.setText("");
             hintShown = false;            

@@ -8,7 +8,9 @@
         <Property name="approveButtonText" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
           <Connection code="SAVE_BTN.getContent()" type="code"/>
         </Property>
-        <Property name="dialogTitle" type="java.lang.String" value=""/>
+        <Property name="dialogTitle" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+          <Connection code="ATTENDANT_ODS_TITLE.getContent()" type="code"/>
+        </Property>
         <Property name="toolTipText" type="java.lang.String" value=""/>
         <Property name="enabled" type="boolean" value="false"/>
         <Property name="name" type="java.lang.String" value="" noResource="true"/>

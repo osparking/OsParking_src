@@ -41,6 +41,7 @@ public class CommonData { // new Dimension(carTagWidth, 30)
     /**
      * Combobox selected item index when not selected.
      */
+    public static final String ODS_FILE_DIR = "ods";
     public static final String ADMIN_ID = "admin";
     public static final String CA_ROW_VAR = "T3";
     public static final int NOT_SELECTED = -1; 

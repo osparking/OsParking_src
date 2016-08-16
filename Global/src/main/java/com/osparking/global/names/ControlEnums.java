@@ -268,6 +268,10 @@ public class ControlEnums {
         LOGGIND_DIALOG_E(" - 등록차량 정보 변경", " - Vehicles Info Change"),
         LOGGIND_DIALOG_F(" - 전광판 설정 변경", " - E-Board Settings Change"),
         LIMIT_DESCRIPTION("길이 한계", "Length Limit"),
+        
+        ODS_SAVE_DIALOG_1("ods 파일이 아래와 같이 생성되었습니다.", "ods file created as follows."),
+        ODS_SAVE_DIALOG_2("- 폴더명 : ", "- Folder : "),
+        ODS_SAVE_DIALOG_3("- 파일명 : ", "- File name : "),
         NUMBER_LIMIT_DESCRIPTION("번호 길이 한계", "Number Length Limit")
         ;
         
@@ -546,7 +550,10 @@ public class ControlEnums {
                 "This operation also deletes following records, too."),
         USER_DELETE_CONF_2("- 기록 : 사용자 로그인, 차량 도착", "- Record : user login, car arrival"),
         USER_DELETE_CONF_3("그래도 진행하시겠습니까?", "Still want to continue?"),
+        OVERWRITE_WARNING_DIALOG("이미 존재하는 아래 파일이 덧 쓰여지게 됩니다.", 
+                "Existing following file will be overwritten!"),
         USER_DELETE_CONF_TITLE("많은 삭제 경고", "Much Delete Warning"),
+        OVERWRITE_WARNING_TITLE("파일 덧쓰기 경고", "File Overwrite Warning"),
         PopSizeHelp1("차량 통과 지연 시간 계산을", "Determines the population"),
         PopSizeHelp2("위한 통계처리에 있어서", "size to calculate average"),
         PopSizeHelp3("모집단의 크기를 정한다.", "vehicle passing delay."),
@@ -896,6 +903,7 @@ public class ControlEnums {
     }
     
     public static enum DialogTitleTypes {
+        ODS_SAVE_TITLE("ods 파일 생성 위치", "ods File Location"),
         DEFAULT_USER_TITLE("사용자 생성", "User Creation"),
         E_BOARD_SIM_TITLE("모의 전광판 설정", "E-Board Simulator"),
         OVERLAPPED_PORT_TITLE("COM 포트 중복 사용", "PORT USAGE ERROR"),
@@ -951,6 +959,7 @@ public class ControlEnums {
         LANGUAGE_SELECT_DIALOGTITLE(LANGUAGE_LABEL.getContent() + " 용도", 
                 LANGUAGE_LABEL.getContent() + " Usage"),
         STATISTICS_INPUT_ERROR_DIALOGTITLE("통계 주기 입력 오류", "Statistics Cycle Input Error"),
+        ATTENDANT_ODS_TITLE("사용자 목록 ods 파일로 저장하기", "Saving User List into an ods File"),
         PHOTO_SIZE_INPUT_ERROR_DIALOGTITLE("사진 크기 입력 오류", "Picture Size Input Error"),
         SYSTEM_SHUTDOWN_CONFIRM("종료 의사 확인", "Shutdown Confirmation"),
         MAIN_GUI_TITLE("㈜오픈소스파킹", "Open Source Parking Inc.");
