@@ -21,6 +21,7 @@ import com.osparking.global.CommonData;
 import static com.osparking.global.CommonData.ADMIN_ID;
 import static com.osparking.global.CommonData.NOT_LISTED;
 import static com.osparking.global.CommonData.ODS_DIRECTORY;
+import static com.osparking.global.CommonData.ODS_FILEPATH;
 import static com.osparking.global.CommonData.PROMPTER_KEY;
 import static com.osparking.global.CommonData.buttonHeightNorm;
 import static com.osparking.global.CommonData.buttonWidthNorm;
@@ -77,6 +78,7 @@ import static com.osparking.global.Globals.attachNumberCondition;
 import static com.osparking.global.Globals.closeDBstuff;
 import static com.osparking.global.Globals.determineLoginID;
 import static com.osparking.global.Globals.getPrompter;
+import static com.osparking.global.Globals.getQuest20_Icon;
 import static com.osparking.global.Globals.head_font_Size;
 import static com.osparking.global.Globals.initializeLoggers;
 import static com.osparking.global.Globals.isManager;
@@ -95,6 +97,7 @@ import static com.osparking.global.names.ControlEnums.FormModeString.SEARCH;
 import static com.osparking.global.names.ControlEnums.LabelContent.COUNT_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.CREATE_MODE_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.FOCUS_MOVE_NOTE;
+import static com.osparking.global.names.ControlEnums.LabelContent.HELP_DRIVER_TITLE;
 import static com.osparking.global.names.ControlEnums.LabelContent.MODE_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.MODIFY_MODE_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.REQUIRE_FIELD_NOTE;
@@ -119,6 +122,7 @@ import static com.osparking.global.names.OSP_enums.DriverCol.CellPhone;
 import static com.osparking.global.names.OSP_enums.DriverCol.DriverName;
 import static com.osparking.global.names.OSP_enums.DriverCol.LandLine;
 import static com.osparking.global.names.OSP_enums.DriverCol.UnitNo;
+import com.osparking.global.names.OSP_enums.ODS_TYPE;
 import static com.osparking.global.names.OSP_enums.OpLogLevel.EBDsettingsChange;
 import com.osparking.global.names.OdsFileOnly;
 import com.osparking.global.names.PComboBox;
@@ -137,12 +141,17 @@ import static com.osparking.vehicle.CommonData.invalidCell;
 import static com.osparking.vehicle.CommonData.invalidName;
 import static com.osparking.vehicle.CommonData.invalidPhone;
 import com.osparking.vehicle.LabelBlinker;
+import com.osparking.vehicle.ODS_HelpJDialog;
 import java.awt.AWTEvent;
 import java.awt.Color;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.nio.channels.FileChannel;
 import java.util.Locale;
+import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.SwingUtilities;
 import javax.swing.table.TableCellEditor;
@@ -527,6 +536,7 @@ public class ManageDrivers extends javax.swing.JFrame {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
+        java.awt.GridBagConstraints gridBagConstraints;
 
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
@@ -583,6 +593,10 @@ public class ManageDrivers extends javax.swing.JFrame {
         readSheet_Button = new javax.swing.JButton();
         saveSheet_Button = new javax.swing.JButton();
         closeFormButton = new javax.swing.JButton();
+        HelpPanel = new javax.swing.JPanel();
+        odsHelpButton = new javax.swing.JButton();
+        filler6 = new javax.swing.Box.Filler(new java.awt.Dimension(5, 0), new java.awt.Dimension(5, 0), new java.awt.Dimension(5, 32767));
+        sampleButton = new javax.swing.JButton();
         eastPanel = new javax.swing.JPanel();
         southPanel = new javax.swing.JPanel();
 
@@ -1027,7 +1041,8 @@ public class ManageDrivers extends javax.swing.JFrame {
         wholePanel.add(driversScrollPane);
         wholePanel.add(filler15_5);
 
-        bottomButtonPanel.setMaximumSize(new java.awt.Dimension(33727, 40));
+        bottomButtonPanel.setMaximumSize(new java.awt.Dimension(33727, 70));
+        bottomButtonPanel.setPreferredSize(new java.awt.Dimension(902, 70));
 
         leftButtons.setMaximumSize(new java.awt.Dimension(32767, 40));
         leftButtons.setMinimumSize(new java.awt.Dimension(300, 40));
@@ -1089,10 +1104,14 @@ public class ManageDrivers extends javax.swing.JFrame {
         });
         leftButtons.add(cancelButton);
 
-        rightButtons.setMaximumSize(new java.awt.Dimension(32767, 40));
-        rightButtons.setMinimumSize(new java.awt.Dimension(350, 40));
-        rightButtons.setPreferredSize(new java.awt.Dimension(470, 40));
-        rightButtons.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT, 10, 0));
+        rightButtons.setAlignmentX(1.0F);
+        rightButtons.setMaximumSize(new java.awt.Dimension(32767, 70));
+        rightButtons.setMinimumSize(new java.awt.Dimension(350, 70));
+        rightButtons.setPreferredSize(new java.awt.Dimension(470, 70));
+        java.awt.GridBagLayout rightButtonsLayout = new java.awt.GridBagLayout();
+        rightButtonsLayout.columnWidths = new int[] {0, 10, 0, 10, 0, 10, 0, 10, 0};
+        rightButtonsLayout.rowHeights = new int[] {0, 0, 0};
+        rightButtons.setLayout(rightButtonsLayout);
 
         deleteAll_button.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         deleteAll_button.setMnemonic('a');
@@ -1107,7 +1126,10 @@ public class ManageDrivers extends javax.swing.JFrame {
                 deleteAll_buttonActionPerformed(evt);
             }
         });
-        rightButtons.add(deleteAll_button);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        rightButtons.add(deleteAll_button, gridBagConstraints);
 
         readSheet_Button.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         readSheet_Button.setMnemonic('O');
@@ -1122,7 +1144,10 @@ public class ManageDrivers extends javax.swing.JFrame {
                 readSheet_ButtonActionPerformed(evt);
             }
         });
-        rightButtons.add(readSheet_Button);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 0;
+        rightButtons.add(readSheet_Button, gridBagConstraints);
 
         saveSheet_Button.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         saveSheet_Button.setMnemonic('A');
@@ -1137,7 +1162,10 @@ public class ManageDrivers extends javax.swing.JFrame {
                 saveSheet_ButtonActionPerformed(evt);
             }
         });
-        rightButtons.add(saveSheet_Button);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 0;
+        rightButtons.add(saveSheet_Button, gridBagConstraints);
 
         closeFormButton.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         closeFormButton.setMnemonic('c');
@@ -1150,7 +1178,51 @@ public class ManageDrivers extends javax.swing.JFrame {
                 closeFormButtonActionPerformed(evt);
             }
         });
-        rightButtons.add(closeFormButton);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridy = 0;
+        rightButtons.add(closeFormButton, gridBagConstraints);
+
+        HelpPanel.setMaximumSize(new java.awt.Dimension(110, 70));
+        HelpPanel.setMinimumSize(new java.awt.Dimension(110, 30));
+        HelpPanel.setPreferredSize(new java.awt.Dimension(110, 30));
+        HelpPanel.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 0, 0));
+
+        odsHelpButton.setBackground(new java.awt.Color(153, 255, 153));
+        odsHelpButton.setFont(new java.awt.Font("Dotum", 1, 14)); // NOI18N
+        odsHelpButton.setIcon(getQuest20_Icon());
+        odsHelpButton.setIconTextGap(0);
+        odsHelpButton.setMargin(new java.awt.Insets(0, 0, 0, 0));
+        odsHelpButton.setMaximumSize(new java.awt.Dimension(20, 20));
+        odsHelpButton.setMinimumSize(new java.awt.Dimension(20, 20));
+        odsHelpButton.setOpaque(false);
+        odsHelpButton.setPreferredSize(new java.awt.Dimension(20, 20));
+        odsHelpButton.setRequestFocusEnabled(false);
+        odsHelpButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                odsHelpButtonActionPerformed(evt);
+            }
+        });
+        HelpPanel.add(odsHelpButton);
+        HelpPanel.add(filler6);
+
+        sampleButton.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        sampleButton.setMnemonic('M');
+        sampleButton.setText(SAMPLE_BTN.getContent());
+        sampleButton.setMaximumSize(new java.awt.Dimension(80, 30));
+        sampleButton.setMinimumSize(new java.awt.Dimension(80, 30));
+        sampleButton.setPreferredSize(new java.awt.Dimension(80, 30));
+        sampleButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                sampleButtonActionPerformed(evt);
+            }
+        });
+        HelpPanel.add(sampleButton);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 2;
+        rightButtons.add(HelpPanel, gridBagConstraints);
 
         javax.swing.GroupLayout bottomButtonPanelLayout = new javax.swing.GroupLayout(bottomButtonPanel);
         bottomButtonPanel.setLayout(bottomButtonPanelLayout);
@@ -1158,7 +1230,7 @@ public class ManageDrivers extends javax.swing.JFrame {
             bottomButtonPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(bottomButtonPanelLayout.createSequentialGroup()
                 .addComponent(leftButtons, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 32, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(rightButtons, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         bottomButtonPanelLayout.setVerticalGroup(
@@ -1902,6 +1974,67 @@ public class ManageDrivers extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_searchL1ComboBoxPopupMenuWillBecomeVisible
 
+    private void odsHelpButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_odsHelpButtonActionPerformed
+        JDialog helpDialog = new ODS_HelpJDialog(this, false, 
+                HELP_DRIVER_TITLE.getContent(), ODS_TYPE.DRIVER);
+        Point buttonPoint = odsHelpButton.getLocationOnScreen();
+        Point framePoint = new Point();
+        this.getLocation(framePoint);
+        
+        int dialogWidth = helpDialog.getSize().width;
+        int dialogHeight = helpDialog.getSize().height;
+        
+        int helpDialogX = buttonPoint.x - dialogWidth / 2;
+        if (helpDialogX < 0) {
+            helpDialogX = 0;
+        }
+        
+        int helpDialogY = buttonPoint.y - dialogHeight - 10;
+        if (helpDialogY < 0) {
+            helpDialogY = 0;
+        }
+        
+        helpDialog.setLocation(helpDialogX, helpDialogY);
+        helpDialog.setVisible(true);        
+    }//GEN-LAST:event_odsHelpButtonActionPerformed
+
+    private void sampleButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sampleButtonActionPerformed
+        String sampleFilenameCore = "driversEng";
+        // Ask user the name and location for the ods file to save
+        String odsFullPath = getOdsFullPath(this, saveFileChooser, "", sampleFilenameCore);
+        
+        // Read sample ods resource file
+        ClassLoader classLoader = getClass().getClassLoader();
+        File source = new File(classLoader.getResource(sampleFilenameCore + ".ods").getFile());        
+        String extension = saveFileChooser.getFileFilter().getDescription();
+        
+        if (extension.indexOf("*.ods") >= 0) {
+            odsFullPath += ".ods";
+        }
+        
+        File destin = new File(odsFullPath);
+        try {
+            // Write resource into the file chosen by the user
+            copyFileUsingFileChannels(source, destin);
+        } catch (IOException ex) {
+            logParkingException(Level.SEVERE, ex, sampleFilenameCore + " downloading error");
+        }
+    }//GEN-LAST:event_sampleButtonActionPerformed
+
+    private static void copyFileUsingFileChannels(File source, File dest)
+                    throws IOException {
+        FileChannel inputChannel = null;
+        FileChannel outputChannel = null;
+        try {
+                inputChannel = new FileInputStream(source).getChannel();
+                outputChannel = new FileOutputStream(dest).getChannel();
+                outputChannel.transferFrom(inputChannel, 0, inputChannel.size());
+        } finally {
+                inputChannel.close();
+                outputChannel.close();
+        }
+    }    
+    
     /**
      * @param args the command line arguments
      */
@@ -2079,6 +2212,7 @@ public class ManageDrivers extends javax.swing.JFrame {
         
     // <editor-fold defaultstate="collapsed" desc="-- Netbeans Generated Control Item Variables ">                               
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPanel HelpPanel;
     private javax.swing.JPanel balancer;
     private javax.swing.JPanel bottomButtonPanel;
     private javax.swing.JButton cancelButton;
@@ -2098,6 +2232,7 @@ public class ManageDrivers extends javax.swing.JFrame {
     private javax.swing.Box.Filler filler3;
     private javax.swing.Box.Filler filler4;
     private javax.swing.Box.Filler filler5;
+    private javax.swing.Box.Filler filler6;
     private javax.swing.Box.Filler filler66;
     private javax.swing.JLabel formModeLabel;
     public javax.swing.JButton insertSave_Button;
@@ -2111,8 +2246,10 @@ public class ManageDrivers extends javax.swing.JFrame {
     private javax.swing.JLabel myMetaKeyLabel;
     private javax.swing.JPanel northPanel;
     private javax.swing.JFileChooser odsFileChooser;
+    private javax.swing.JButton odsHelpButton;
     private javax.swing.JButton readSheet_Button;
     private javax.swing.JPanel rightButtons;
+    private javax.swing.JButton sampleButton;
     private javax.swing.JFileChooser saveFileChooser;
     private javax.swing.JButton saveSheet_Button;
     private javax.swing.JComboBox searchBuildingComboBox;
@@ -2844,5 +2981,21 @@ public class ManageDrivers extends javax.swing.JFrame {
                     lowerCol, parentKey, getPrevListParentKey());        
             lowerCBox.setSelectedItem(selItem);
         }    
+    }
+
+    private String getOdsFullPath(ManageDrivers aFrame, JFileChooser saveFileChooser, 
+            String errMsg, String filename)
+    {
+        String fullPath = "";
+        String filePath = ODS_FILEPATH +  File.separator + filename;
+        File defFile = new File(filePath);
+        
+        saveFileChooser.setSelectedFile(defFile);
+        
+        if (saveFileChooser.showSaveDialog(aFrame) == JFileChooser.APPROVE_OPTION) {
+            fullPath = saveFileChooser.getSelectedFile().getAbsolutePath();
+            String selCore = saveFileChooser.getSelectedFile().getName();
+        }     
+        return fullPath;
     }
 }

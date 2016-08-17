@@ -16,7 +16,7 @@
  */
 package com.osparking.global;
 
-import static com.osparking.global.CommonData.ODS_FILE_DIR;
+import static com.osparking.global.CommonData.ODS_FILEPATH;
 import static com.osparking.global.Globals.logParkingException;
 import static com.osparking.global.names.ControlEnums.DialogMessages.OVERWRITE_WARNING_DIALOG;
 import static com.osparking.global.names.ControlEnums.DialogMessages.OVERWRITE_WARNING_TITLE;
@@ -35,7 +35,6 @@ import javax.swing.JOptionPane;
 import static javax.swing.JOptionPane.OK_CANCEL_OPTION;
 import javax.swing.JTable;
 import javax.swing.filechooser.FileFilter;
-import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import org.jopendocument.dom.OOUtils;
@@ -96,10 +95,6 @@ public class DataSheet {
             JFileChooser saveFileChooser, String emptyTableMsg)
     {
         // Check the size of the list and if empty just return saying "noting to save"
-//        saveFileChooser.setFileFilter(new OdsFileOnly());
-
-        String currDir = saveFileChooser.getCurrentDirectory().getAbsolutePath();
-        makeSurePathExists(currDir);
         int returnVal = saveFileChooser.showSaveDialog(aFrame);
 
         if (returnVal == JFileChooser.APPROVE_OPTION) {
@@ -124,15 +119,7 @@ public class DataSheet {
     public static void saveODSfileName(JFrame aFrame, JTable tableToSave,
             JFileChooser saveFileChooser, String emptyTableMsg, String filename)
     {
-        // Check the size of the list and if empty just return saying "noting to save"
-//        saveFileChooser.setFileFilter(new OdsFileOnly());
-        
-        String dirPath = System.getProperty("user.home") + File.separator + ODS_FILE_DIR;
-        
-        // Make sure the 'ods' folder exists in the user home directory.
-        makeSurePathExists(dirPath);
-
-        String filePath = dirPath +  File.separator + filename;
+        String filePath = ODS_FILEPATH +  File.separator + filename;
         File defFile = new File(filePath);
         saveFileChooser.setSelectedFile(defFile);
         
@@ -141,7 +128,7 @@ public class DataSheet {
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             String selPath = saveFileChooser.getSelectedFile().getAbsolutePath();
             String selCore = saveFileChooser.getSelectedFile().getName();
-            saveOrNotWithFixedName(saveFileChooser, selPath, tableToSave, dirPath, selCore);
+            saveOrNotWithFixedName(saveFileChooser, selPath, tableToSave, ODS_FILEPATH, selCore);
         }
     }
 
@@ -206,10 +193,5 @@ public class DataSheet {
         } catch (IOException ex) {
             System.out.println("File save exception: " + ex.getMessage());
         }                
-    }
-
-    private static void makeSurePathExists(String dirPath) {
-        File dirFile = new File(dirPath);
-        Boolean result = dirFile.mkdirs();
     }
 }

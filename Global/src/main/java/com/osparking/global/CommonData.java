@@ -70,8 +70,10 @@ public class CommonData { // new Dimension(carTagWidth, 30)
     public static final Dimension bigButtonDim = 
             new Dimension(CommonData.bigButtonWidth, bigButtonHeight);
     public static File ODS_DIRECTORY = null; 
+    public static String ODS_FILEPATH = System.getProperty("user.home") + File.separator + ODS_FILE_DIR; 
     static {
-        ODS_DIRECTORY = new File(System.getProperty("user.home") + File.separator + ODS_FILE_DIR);
+        makeSurePathExists(ODS_FILEPATH);
+        ODS_DIRECTORY = new File(ODS_FILEPATH);
     }
     public static JLabel metaKeyLabel = new JLabel(META_KEY_LABEL.getContent());  
     public static final Color tipColor = new java.awt.Color(0xff, 0x85, 0x33);
@@ -86,6 +88,12 @@ public class CommonData { // new Dimension(carTagWidth, 30)
     static {
         putCellCenter.setHorizontalAlignment(JLabel.CENTER);    
     }
+    
+    // Make sure the 'ods' folder exists in the user home directory.
+    private static void makeSurePathExists(String dirPath) {
+        File dirFile = new File(dirPath);
+        dirFile.mkdirs();
+    }    
     
     public static final int[] statCountArr = {1, 10, 100, 1000, 10000, 100000};   
 

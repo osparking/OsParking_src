@@ -145,6 +145,7 @@ public class ControlEnums {
         ROOM_LIST_LABEL("호실 목록",  "Rooms of Building"), 
         HELP_AFFIL_LABEL("소속 명칭 ods 파일 형식",  "Affiliation name list ods file content"), 
         HELP_BUILDING_LABEL("건물 호실 ods 파일 형식", "Building room number list ods file content"), 
+        HELP_DRIVER_TITLE("운전자 ods 파일 형식", "Driver list ods file content"), 
         AFFILI_MODE_STRING("소속, 부서", "Affiliations"), 
         BUILDING_MODE_STRING("건물, 호실", "Building, Units"), 
         WORK_PANEL_LABEL("작업 대상 : ",  "Work Panel :"), 
@@ -289,6 +290,7 @@ public class ControlEnums {
     
     public enum ButtonTypes {
         LOGIN_BTN("로그인(L)", "Login"),
+        SAMPLE_BTN("샘플(M)", "SaMple"),
         CLOSE_BTN("닫기(C)", "Close"),
         SAVE_BTN("저장(S)", "Save"),
         CREATE_BTN("생성(R)", "Create"),
@@ -903,6 +905,7 @@ public class ControlEnums {
     }
     
     public static enum DialogTitleTypes {
+        ODS_HELP_TITLE("ods 파일 도움말", "ods File Help"),
         ODS_SAVE_TITLE("ods 파일 생성 위치", "ods File Location"),
         DEFAULT_USER_TITLE("사용자 생성", "User Creation"),
         E_BOARD_SIM_TITLE("모의 전광판 설정", "E-Board Simulator"),

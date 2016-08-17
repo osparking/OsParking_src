@@ -39,12 +39,13 @@ import static com.osparking.global.Globals.font_Style;
 import static com.osparking.global.Globals.font_Type;
 import static com.osparking.global.Globals.language;
 import static com.osparking.global.Globals.logParkingException;
-import com.osparking.global.names.ControlEnums;
 import static com.osparking.global.names.ControlEnums.ButtonTypes.CLOSE_BTN;
+import static com.osparking.global.names.ControlEnums.DialogTitleTypes.ODS_HELP_TITLE;
 import com.osparking.global.names.ControlEnums.TextType;
 import static com.osparking.global.names.DB_Access.parkingLotLocale;
 import com.osparking.global.names.ImageDisplay;
 import com.osparking.global.names.OSP_enums.ODS_TYPE;
+import java.awt.Dimension;
 
 /**
  *
@@ -72,23 +73,19 @@ public class ODS_HelpJDialog extends javax.swing.JDialog {
         initComponents();
         setIconImages(OSPiconList);
 
-        String title = "";
-        
-        switch (language) {
-            case KOREAN:
-                title = (odsType == ODS_TYPE.AFFILIATION ? "소속" : "건물") + " ods 파일 도움말";
-                break;
-                
-            case ENGLISH:
-                title = "Help on '" + (odsType == ODS_TYPE.AFFILIATION ? "Affliation" : "Building") + "' ods File";
-                break;
-                
-            default:
-                break;
-        }        
+        String title = odsType + " " + ODS_HELP_TITLE.getContent();
         
         setTitle(title);
+        int imgLblWidthBefore = odsHelpLabel.getPreferredSize().width;
         setHelpContents(helpTitle, odsType);
+        int imgLblWidthAfter = odsHelpLabel.getPreferredSize().width;
+        int widthDiff = imgLblWidthAfter - imgLblWidthBefore;
+        
+        Dimension size = getSize();
+        Dimension newSize = new Dimension(size.width + widthDiff, size.height);
+        setPreferredSize(newSize);
+        setSize(newSize);
+        setResizable(false);
 
         // Close the dialog when Esc is pressed
         String cancelName = "cancel";
@@ -137,7 +134,6 @@ public class ODS_HelpJDialog extends javax.swing.JDialog {
 
         setTitle("Help on ods File");
         setMinimumSize(new java.awt.Dimension(560, 550));
-        setResizable(false);
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 closeDialog(evt);
@@ -319,30 +315,46 @@ public class ODS_HelpJDialog extends javax.swing.JDialog {
         ImageIcon odsHelp_icon = null;
         String filename = null;
         
-        if (odsType == ODS_TYPE.AFFILIATION) {
-            switch(parkingLotLocale.getLanguage()){
-                    case "ko" :
-                        filename = "/affiliation_good_Kor.png";
-                        break;
-                     default:
+        switch (odsType) {
+            case AFFILIATION:
+                switch(language){
+                    case ENGLISH:
                         filename = "/affiliation_good_Eng.png";
                         break;
-                }
-        }
-        else {
-            switch(parkingLotLocale.getLanguage()){
-                    case "ko" :
-                        filename = "/building_good_Kor.png";
-                        break;
                     default:
+                       filename = "/affiliation_good_Kor.png";
+                       break;
+                }
+                break;
+            case BUILDING:
+                switch(language){
+                    case ENGLISH:
                         filename = "/building_good_Eng.png";
                         break;
+                    default:
+                        filename = "/building_good_Kor.png";
+                        break;
                 }
+                break;
+            case DRIVER:
+                switch(language){
+                    case ENGLISH:
+                        filename = "/read_driver_ods_sampleEng.png";
+                        break;
+                    default:
+                        filename = "/read_driver_ods_sample.png";
+                        break;
+                }
+                break;
+            default:
+                break;
         }
         
         try {
             BufferedImage originalImg = ImageIO.read(getClass().getResource(filename));
+            odsHelpLabel.setPreferredSize(new Dimension(originalImg.getWidth(), originalImg.getHeight()));
             odsHelp_icon = createStretchedIcon(odsHelpLabel.getPreferredSize(), originalImg, false);
+            
         } catch (Exception ex) {
             logParkingException(Level.SEVERE, ex, "(while stretching help image file");
         }
