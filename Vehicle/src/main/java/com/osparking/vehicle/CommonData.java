@@ -58,8 +58,14 @@ public class CommonData {
         }
     }
     
+    /**
+     * Check if car driver cellular phone number provided.
+     * @param cell
+     * @return 
+     */
     public static boolean invalidCell(String cell) {
-        if (0 < getNumericDigitCount(cell) && getNumericDigitCount(cell) < 10) {
+        // Driver cell phone number must be privided at any rate.
+        if (getNumericDigitCount(cell) < 10) {
             return true;
         } else {
             return false;

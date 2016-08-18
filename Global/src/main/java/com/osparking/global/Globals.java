@@ -2031,9 +2031,6 @@ public class Globals {
             Object prompter, OSP_enums.DriverCol column, int parentkey,
             int[] getPrevListParentKey)
     {
-        if (DEBUG) {
-            System.out.println(++count + " refreshing ...............");
-        }
         comboBox.removeAllItems();
         comboBox.addItem(prompter);
         loadComboBoxItems(comboBox, column, parentkey);

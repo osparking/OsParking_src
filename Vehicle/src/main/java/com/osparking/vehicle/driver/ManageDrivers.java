@@ -2018,25 +2018,27 @@ public class ManageDrivers extends javax.swing.JFrame {
         }          
             
         // Ask user the name and location for the ods file to save
-        String odsFullPath = getOdsFullPath(this, saveFileChooser, "", sampleFilenameCore);
+        StringBuffer odsFullPath = new StringBuffer();
         
-        // Read sample ods resource file
-        ClassLoader classLoader = getClass().getClassLoader();
-        File source = new File(classLoader.getResource(sampleFilenameCore + ".ods").getFile());        
-        String extension = saveFileChooser.getFileFilter().getDescription();
-        
-        if (extension.indexOf("*.ods") >= 0 && !odsFullPath.endsWith(".ods")) {
-            odsFullPath += ".ods";
-        }
-        
-        File destin = new File(odsFullPath);
-        try {
-            // Write resource into the file chosen by the user
-            if (!noOverwritePossibleExistingSameFile(destin, odsFullPath)) {
-                copyFileUsingFileChannels(source, destin);
+        if (getOdsFullPath(this, saveFileChooser, odsFullPath, sampleFilenameCore)) {
+            // Read sample ods resource file
+            ClassLoader classLoader = getClass().getClassLoader();
+            File source = new File(classLoader.getResource(sampleFilenameCore + ".ods").getFile());        
+            String extension = saveFileChooser.getFileFilter().getDescription();
+
+            if (extension.indexOf("*.ods") >= 0 && !odsFullPath.toString().endsWith(".ods")) {
+                odsFullPath.append(".ods");
             }
-        } catch (IOException ex) {
-            logParkingException(Level.SEVERE, ex, sampleFilenameCore + " downloading error");
+
+            File destin = new File(odsFullPath.toString());
+            try {
+                // Write resource into the file chosen by the user
+                if (!noOverwritePossibleExistingSameFile(destin, odsFullPath.toString())) {
+                    copyFileUsingFileChannels(source, destin);
+                }
+            } catch (IOException ex) {
+                logParkingException(Level.SEVERE, ex, sampleFilenameCore + " downloading error");
+            }
         }
     }//GEN-LAST:event_sampleButtonActionPerformed
 
@@ -3004,19 +3006,19 @@ public class ManageDrivers extends javax.swing.JFrame {
         }    
     }
 
-    private String getOdsFullPath(ManageDrivers aFrame, JFileChooser saveFileChooser, 
-            String errMsg, String filename)
+    private boolean getOdsFullPath(ManageDrivers aFrame, JFileChooser saveFileChooser, 
+            StringBuffer fullPath, String filename)
     {
-        String fullPath = "";
         String filePath = ODS_FILEPATH +  File.separator + filename;
         File defFile = new File(filePath);
         
         saveFileChooser.setSelectedFile(defFile);
         
         if (saveFileChooser.showSaveDialog(aFrame) == JFileChooser.APPROVE_OPTION) {
-            fullPath = saveFileChooser.getSelectedFile().getAbsolutePath();
-            String selCore = saveFileChooser.getSelectedFile().getName();
-        }     
-        return fullPath;
+            fullPath.append(saveFileChooser.getSelectedFile().getAbsolutePath());
+            return true;
+        } else {
+            return false;
+        }
     }
 }
