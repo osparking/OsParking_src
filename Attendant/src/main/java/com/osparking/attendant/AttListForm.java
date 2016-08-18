@@ -1633,7 +1633,8 @@ public class AttListForm extends javax.swing.JFrame {
             String searchField = searchCriteriaComboBox.getSelectedItem().toString();
             filename += "_" + searchField + "_" + searchWord;
         }
-        saveODSfileName(null, usersTable, saveFileChooser, USER_SAVE_ODS_FAIL_DIALOG.getContent(), filename);
+        saveODSfileName(null, usersTable, saveFileChooser, 
+                USER_SAVE_ODS_FAIL_DIALOG.getContent(), filename);
     }//GEN-LAST:event_saveOdsButtonActionPerformed
 
     private void deleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteButtonActionPerformed

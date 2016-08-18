@@ -20,6 +20,8 @@ import static com.mysql.jdbc.MysqlErrorNumbers.ER_DUP_ENTRY;
 import static com.mysql.jdbc.MysqlErrorNumbers.ER_NO;
 import static com.mysql.jdbc.MysqlErrorNumbers.ER_YES;
 import com.osparking.global.CommonData;
+import static com.osparking.global.CommonData.ADMIN_ID;
+import static com.osparking.global.CommonData.ODS_DIRECTORY;
 import static com.osparking.global.CommonData.buttonHeightNorm;
 import static com.osparking.global.CommonData.buttonWidthNorm;
 import static com.osparking.global.CommonData.buttonWidthWide;
@@ -27,7 +29,9 @@ import static com.osparking.global.CommonData.normGUIheight;
 import static com.osparking.global.CommonData.numberCellRenderer;
 import static com.osparking.global.CommonData.pointColor;
 import static com.osparking.global.CommonData.tableRowHeight;
-import static com.osparking.global.DataSheet.saveODSfile;
+import static com.osparking.global.DataSheet.noOverwritePossibleExistingSameFile;
+import static com.osparking.global.DataSheet.saveODSfileName;
+import com.osparking.global.Globals;
 import static com.osparking.global.Globals.BLDG_TAB_WIDTH;
 import static com.osparking.global.Globals.PopUpBackground;
 import static com.osparking.global.Globals.font_Size;
@@ -36,9 +40,9 @@ import static com.osparking.global.Globals.font_Type;
 import static com.osparking.global.Globals.OSPiconList;
 import static com.osparking.global.Globals.checkOptions;
 import static com.osparking.global.Globals.closeDBstuff;
+import static com.osparking.global.Globals.determineLoginID;
 import static com.osparking.global.Globals.emptyLastRowPossible;
 import static com.osparking.global.Globals.getQuest20_Icon;
-import static com.osparking.global.Globals.getTopLeftPointToPutThisFrameAtScreenCenter;
 import static com.osparking.global.Globals.head_font_Size;
 import static com.osparking.global.Globals.highlightTableRow;
 import static com.osparking.global.Globals.initializeLoggers;
@@ -46,8 +50,10 @@ import static com.osparking.global.Globals.insertBuilding;
 import static com.osparking.global.Globals.insertBuildingUnit;
 import static com.osparking.global.Globals.insertLevel1Affiliation;
 import static com.osparking.global.Globals.insertLevel2Affiliation;
+import static com.osparking.global.Globals.isManager;
 import static com.osparking.global.Globals.language;
 import static com.osparking.global.Globals.logParkingException;
+import static com.osparking.global.Globals.loginID;
 import static com.osparking.global.Globals.rejectEmptyInput;
 import static com.osparking.global.Globals.removeEmptyRow;
 import static com.osparking.global.names.ControlEnums.ButtonTypes.*;
@@ -123,6 +129,7 @@ import static com.osparking.global.names.ControlEnums.TableTypes.LOWER_HEADER;
 import static com.osparking.global.names.ControlEnums.TableTypes.ORDER_HEADER;
 import static com.osparking.global.names.ControlEnums.TableTypes.ROOM_HEADER;
 import static com.osparking.global.names.ControlEnums.TitleTypes.AFFILI_BUILD_FRAME_TITLE;
+import static com.osparking.global.names.ControlEnums.ToolTipContent.DRIVER_ODS_UPLOAD_SAMPLE_DOWNLOAD;
 import static com.osparking.global.names.ControlEnums.ToolTipContent.INSERT_TOOLTIP;
 import static com.osparking.global.names.ControlEnums.ToolTipContent.NUMBER_FORMAT_ERROR_MSG;
 import static com.osparking.global.names.DB_Access.parkingLotLocale;
@@ -284,14 +291,16 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
         bottomPanel = new javax.swing.JPanel();
         h30_5 = new javax.swing.Box.Filler(new java.awt.Dimension(40, 30), new java.awt.Dimension(40, 30), new java.awt.Dimension(40, 30));
         closePanel = new javax.swing.JPanel();
+        leftButtons = new javax.swing.JPanel();
         deleteAll_Affiliation = new javax.swing.JButton();
-        readODSpan = new javax.swing.JPanel();
         readSheet = new javax.swing.JButton();
-        ODSAffiliHelp = new javax.swing.JButton();
         saveSheet = new javax.swing.JButton();
+        ODSAffiliHelp = new javax.swing.JButton();
+        sampleButton = new javax.swing.JButton();
         closeFormButton = new javax.swing.JButton();
         bottomGap = new javax.swing.JPanel();
 
+        odsFileChooser.setCurrentDirectory(ODS_DIRECTORY);
         odsFileChooser.setFileFilter(new OdsFileOnly());
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -355,7 +364,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jSeparator2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 729, Short.MAX_VALUE)
+            .addComponent(jSeparator2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 851, Short.MAX_VALUE)
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -393,7 +402,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
         helpPanel.setLayout(helpPanelLayout);
         helpPanelLayout.setHorizontalGroup(
             helpPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(csHelpLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 649, Short.MAX_VALUE)
+            .addComponent(csHelpLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 771, Short.MAX_VALUE)
         );
         helpPanelLayout.setVerticalGroup(
             helpPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -537,6 +546,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     insertL1_Button.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
     insertL1_Button.setMnemonic('R');
     insertL1_Button.setText(CREATE_BTN.getContent());
+    insertL1_Button.setEnabled(false);
     insertL1_Button.setMaximumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
     insertL1_Button.setMinimumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
     insertL1_Button.setPreferredSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
@@ -879,14 +889,8 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
         }
     });
     BuildingTable.addKeyListener(new java.awt.event.KeyAdapter() {
-        public void keyPressed(java.awt.event.KeyEvent evt) {
-            BuildingTableKeyPressed(evt);
-        }
         public void keyReleased(java.awt.event.KeyEvent evt) {
             BuildingTableKeyReleased(evt);
-        }
-        public void keyTyped(java.awt.event.KeyEvent evt) {
-            BuildingTableKeyTyped(evt);
         }
     });
     scrollTopRight.setViewportView(BuildingTable);
@@ -1218,9 +1222,17 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     bottomPanel.setLayout(new java.awt.BorderLayout());
     bottomPanel.add(h30_5, java.awt.BorderLayout.NORTH);
 
-    closePanel.setMaximumSize(new Dimension(4000, buttonHeightNorm));
-    closePanel.setMinimumSize(new Dimension(150, buttonHeightNorm + 2));
-    closePanel.setPreferredSize(new Dimension(40, buttonHeightNorm + 2));
+    closePanel.setMaximumSize(new Dimension(4000, 70));
+    closePanel.setMinimumSize(new Dimension(150, 70));
+    closePanel.setPreferredSize(new Dimension(40, 70));
+
+    leftButtons.setMaximumSize(new java.awt.Dimension(401, 70));
+    leftButtons.setMinimumSize(new java.awt.Dimension(401, 70));
+    leftButtons.setPreferredSize(new java.awt.Dimension(401, 70));
+    java.awt.GridBagLayout leftButtonsLayout = new java.awt.GridBagLayout();
+    leftButtonsLayout.columnWidths = new int[] {0, 10, 0, 10, 0};
+    leftButtonsLayout.rowHeights = new int[] {0, 0, 0};
+    leftButtons.setLayout(leftButtonsLayout);
 
     deleteAll_Affiliation.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
     deleteAll_Affiliation.setText(DELETE_ALL_BTN.getContent());
@@ -1232,9 +1244,10 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
             deleteAll_AffiliationActionPerformed(evt);
         }
     });
-
-    readODSpan.setMinimumSize(new Dimension(130, buttonHeightNorm));
-    readODSpan.setPreferredSize(new Dimension(140, buttonHeightNorm));
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 0;
+    gridBagConstraints.gridy = 0;
+    leftButtons.add(deleteAll_Affiliation, gridBagConstraints);
 
     readSheet.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
     readSheet.setMnemonic('O');
@@ -1248,6 +1261,26 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
             readSheetActionPerformed(evt);
         }
     });
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 2;
+    gridBagConstraints.gridy = 0;
+    leftButtons.add(readSheet, gridBagConstraints);
+
+    saveSheet.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+    saveSheet.setText(SAVE_ODS_BTN.getContent());
+    saveSheet.setEnabled(false);
+    saveSheet.setMaximumSize(new Dimension(buttonWidthWide, buttonHeightNorm));
+    saveSheet.setMinimumSize(new Dimension(buttonWidthWide, buttonHeightNorm));
+    saveSheet.setPreferredSize(new Dimension(buttonWidthWide, buttonHeightNorm));
+    saveSheet.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            saveSheetActionPerformed(evt);
+        }
+    });
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 4;
+    gridBagConstraints.gridy = 0;
+    leftButtons.add(saveSheet, gridBagConstraints);
 
     ODSAffiliHelp.setBackground(new java.awt.Color(153, 255, 153));
     ODSAffiliHelp.setFont(new java.awt.Font("Dotum", 1, 14)); // NOI18N
@@ -1262,38 +1295,30 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
             ODSAffiliHelpActionPerformed(evt);
         }
     });
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 2;
+    gridBagConstraints.gridy = 2;
+    gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+    leftButtons.add(ODSAffiliHelp, gridBagConstraints);
 
-    javax.swing.GroupLayout readODSpanLayout = new javax.swing.GroupLayout(readODSpan);
-    readODSpan.setLayout(readODSpanLayout);
-    readODSpanLayout.setHorizontalGroup(
-        readODSpanLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-        .addGroup(readODSpanLayout.createSequentialGroup()
-            .addGap(2, 2, 2)
-            .addComponent(readSheet, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-            .addGap(0, 0, 0)
-            .addComponent(ODSAffiliHelp, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-    );
-    readODSpanLayout.setVerticalGroup(
-        readODSpanLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, readODSpanLayout.createSequentialGroup()
-            .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(ODSAffiliHelp, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-            .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        .addGroup(readODSpanLayout.createSequentialGroup()
-            .addComponent(readSheet, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addContainerGap())
-    );
-
-    saveSheet.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-    saveSheet.setText(SAVE_ODS_BTN.getContent());
-    saveSheet.setMaximumSize(new Dimension(buttonWidthWide, buttonHeightNorm));
-    saveSheet.setMinimumSize(new Dimension(buttonWidthWide, buttonHeightNorm));
-    saveSheet.setPreferredSize(new Dimension(buttonWidthWide, buttonHeightNorm));
-    saveSheet.addActionListener(new java.awt.event.ActionListener() {
+    sampleButton.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+    sampleButton.setMnemonic('M');
+    sampleButton.setText(SAMPLE_BTN.getContent());
+    sampleButton.setToolTipText(DRIVER_ODS_UPLOAD_SAMPLE_DOWNLOAD.getContent());
+    sampleButton.setEnabled(false);
+    sampleButton.setMaximumSize(new java.awt.Dimension(80, 30));
+    sampleButton.setMinimumSize(new java.awt.Dimension(80, 30));
+    sampleButton.setPreferredSize(new java.awt.Dimension(80, 30));
+    sampleButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent evt) {
-            saveSheetActionPerformed(evt);
+            sampleButtonActionPerformed(evt);
         }
     });
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 2;
+    gridBagConstraints.gridy = 2;
+    gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
+    leftButtons.add(sampleButton, gridBagConstraints);
 
     closeFormButton.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
     closeFormButton.setMnemonic('c');
@@ -1312,25 +1337,24 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     closePanelLayout.setHorizontalGroup(
         closePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
         .addGroup(closePanelLayout.createSequentialGroup()
-            .addGap(40, 40, 40)
-            .addComponent(deleteAll_Affiliation, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-            .addGap(10, 10, 10)
-            .addComponent(readODSpan, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)
-            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-            .addComponent(saveSheet, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 161, Short.MAX_VALUE)
+            .addContainerGap()
+            .addComponent(leftButtons, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addContainerGap(438, Short.MAX_VALUE))
+        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, closePanelLayout.createSequentialGroup()
+            .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(closeFormButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-            .addGap(40, 40, 40))
+            .addGap(284, 284, 284))
     );
     closePanelLayout.setVerticalGroup(
         closePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
         .addGroup(closePanelLayout.createSequentialGroup()
+            .addContainerGap()
             .addGroup(closePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(readODSpan, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 42, Short.MAX_VALUE)
-                .addComponent(deleteAll_Affiliation, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(saveSheet, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(closeFormButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGap(0, 0, 0))
+                .addGroup(closePanelLayout.createSequentialGroup()
+                    .addGap(84, 84, 84)
+                    .addComponent(closeFormButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(leftButtons, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGap(0, 0, Short.MAX_VALUE))
     );
 
     bottomPanel.add(closePanel, java.awt.BorderLayout.CENTER);
@@ -1360,8 +1384,8 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
                             if (index1 >= 0) 
                             {
                                 Object L1_no = L1_Affiliation.getModel().getValueAt(index1, 2);
-                                modifyL1_Button.setEnabled(L1_no == null ? false : true);
-                                deleteL1_Button.setEnabled(L1_no == null ? false : true);
+                                modifyL1_Button.setEnabled(L1_no != null && isManager ? true : false);
+                                deleteL1_Button.setEnabled(L1_no != null && isManager ? true : false);
                                 loadL2_Affiliation(L1_no, 0, "");
                             }
                             else
@@ -1396,8 +1420,8 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
                             if (index2 >= 0)
                             {
                                 Object L2_no = L2_Affiliation.getModel().getValueAt(index2, 2);
-                                deleteL2_Button.setEnabled(L2_no == null ? false : true);               
-                                modifyL2_Button.setEnabled(L2_no == null ? false : true);    
+                                deleteL2_Button.setEnabled(L2_no != null && isManager ? true : false); 
+                                modifyL2_Button.setEnabled(L2_no != null && isManager ? true : false);
                             }
                             else
                             {
@@ -2094,13 +2118,17 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
 
     private void saveSheetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveSheetActionPerformed
         if (affiL1_Control.isSelected()) {
-            saveODSfile(this, L1_Affiliation, odsFileChooser, USER_SAVE_ODS_FAIL_DIALOG.getContent());
+            saveODSfileName(this, L1_Affiliation, odsFileChooser, 
+                    USER_SAVE_ODS_FAIL_DIALOG.getContent(), L1_TABLE.getContent());
         } else if (affiL2_Control.isSelected()) {
-            saveODSfile(this, L2_Affiliation, odsFileChooser, USER_SAVE_ODS_FAIL_DIALOG.getContent());
+            saveODSfileName(this, L2_Affiliation, odsFileChooser, 
+                    USER_SAVE_ODS_FAIL_DIALOG.getContent(), affiBotTitle.getText());
         } else if (buildingControl.isSelected()) {
-            saveODSfile(this, BuildingTable, odsFileChooser, USER_SAVE_ODS_FAIL_DIALOG.getContent());
+            saveODSfileName(this, BuildingTable, odsFileChooser, 
+                    USER_SAVE_ODS_FAIL_DIALOG.getContent(), Building.getContent());
         } else if (unitControl.isSelected()) {
-            saveODSfile(this, UnitTable, odsFileChooser, USER_SAVE_ODS_FAIL_DIALOG.getContent());
+            saveODSfileName(this, UnitTable, odsFileChooser, 
+                    USER_SAVE_ODS_FAIL_DIALOG.getContent(), UnitLabel.getText());
         }
     }//GEN-LAST:event_saveSheetActionPerformed
 
@@ -2301,12 +2329,20 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
             boolean enable = L1_no != null 
                     && selected 
                     && formMode == FormMode.NormalMode;
-
-            modifyButton.setEnabled(enable);
-            deleteButton.setEnabled(enable);
+            if (isManager) {
+                modifyButton.setEnabled(enable);
+                deleteButton.setEnabled(enable);
+            } else {
+                modifyButton.setEnabled(false);
+                deleteButton.setEnabled(false);
+            }
         }
         
-        insertButton.setEnabled(formMode == FormMode.NormalMode && selected);
+        if (isManager) {
+            insertButton.setEnabled(formMode == FormMode.NormalMode && selected);
+        } else {
+            insertButton.setEnabled(false);
+        }
         table.setEnabled(selected);
         if (selected) {
             workPanelName.setText(((RXTable)table).getTableType().getContent());
@@ -2403,16 +2439,6 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_cancelUnit_ButtonActionPerformed
 
-    private void BuildingTableKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_BuildingTableKeyTyped
-        System.out.println("Typed: '" + evt.getKeyChar() + "'");
-        // TODO add your handling code here:
-    }//GEN-LAST:event_BuildingTableKeyTyped
-
-    private void BuildingTableKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_BuildingTableKeyPressed
-        System.out.println("Pressed: '" + evt.getKeyChar() + "'");
-        // TODO add your handling code here:
-    }//GEN-LAST:event_BuildingTableKeyPressed
-
     private void affiL2_ControlItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_affiL2_ControlItemStateChanged
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
@@ -2492,6 +2518,44 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     private void botRightMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_botRightMouseClicked
         unitControl.setSelected(true);
     }//GEN-LAST:event_botRightMouseClicked
+
+    private void sampleButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sampleButtonActionPerformed
+        String sampleFilenameCore = "";
+
+        switch(language){
+            case ENGLISH:
+            sampleFilenameCore = "driversEng";
+            break;
+
+            default:
+            sampleFilenameCore = "drivers";
+            break;
+        }
+
+        // Ask user the name and location for the ods file to save
+        StringBuffer odsFullPath = new StringBuffer();
+
+//        if (getOdsFullPath(this, saveFileChooser, odsFullPath, sampleFilenameCore)) {
+//            // Read sample ods resource file
+//            ClassLoader classLoader = getClass().getClassLoader();
+//            File source = new File(classLoader.getResource(sampleFilenameCore + ".ods").getFile());
+//            String extension = saveFileChooser.getFileFilter().getDescription();
+//
+//            if (extension.indexOf("*.ods") >= 0 && !odsFullPath.toString().endsWith(".ods")) {
+//                odsFullPath.append(".ods");
+//            }
+//
+//            File destin = new File(odsFullPath.toString());
+//            try {
+//                // Write resource into the file chosen by the user
+//                if (!noOverwritePossibleExistingSameFile(destin, odsFullPath.toString())) {
+//                    copyFileUsingFileChannels(source, destin);
+//                }
+//            } catch (IOException ex) {
+//                logParkingException(Level.SEVERE, ex, sampleFilenameCore + " downloading error");
+//            }
+//        }
+    }//GEN-LAST:event_sampleButtonActionPerformed
 
     private void adjustTables() {
         adjustAffiliationTable(L1_Affiliation);
@@ -2573,6 +2637,8 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
             closeDBstuff(conn, selectStmt, rs, excepMsg);
         }
 
+        saveSheet.setEnabled(false);
+        
         // <editor-fold defaultstate="collapsed" desc="-- Selection of a higher affiliation and loading of its lower affil'">
         int numRows = model.getRowCount();
         if (numRows > 0)
@@ -2587,8 +2653,9 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
                 viewIndexToHighlight--;
             }
             highlightTableRow(L1_Affiliation, viewIndexToHighlight);
-//            modifyL1_Button.setEnabled(true);                
-//            deleteL1_Button.setEnabled(true);                
+            if (isManager) {
+                saveSheet.setEnabled(true);
+            }
         }
         else
         {
@@ -2706,8 +2773,10 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
                     }
                 }
                 highlightTableRow(L2_Affiliation, viewIndex);  
-                modifyL2_Button.setEnabled(true);                
-                deleteL2_Button.setEnabled(true);                      
+                if (isManager) {
+                    modifyL2_Button.setEnabled(true);                
+                    deleteL2_Button.setEnabled(true);                      
+                }
             }                                
         }            
     }
@@ -2770,6 +2839,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
+    private javax.swing.JPanel leftButtons;
     private javax.swing.JLabel modeString;
     private javax.swing.JButton modifyBuilding_Button;
     private javax.swing.JButton modifyL1_Button;
@@ -2780,8 +2850,8 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     private javax.swing.JPanel radioPanel2;
     private javax.swing.JPanel radioPanel3;
     private javax.swing.JPanel radioPanel4;
-    private javax.swing.JPanel readODSpan;
     private javax.swing.JButton readSheet;
+    private javax.swing.JButton sampleButton;
     private javax.swing.JButton saveSheet;
     private javax.swing.JScrollPane scrollBotLeft;
     private javax.swing.JScrollPane scrollTopLeft;
@@ -2941,8 +3011,10 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
                     viewIndex--;
                 }
                 highlightTableRow(UnitTable, viewIndex);
-                modifyUnit_Button.setEnabled(true);                
-                deleteUnit_Button.setEnabled(true);                       
+                if (isManager) {                
+                    modifyUnit_Button.setEnabled(true);                
+                    deleteUnit_Button.setEnabled(true);                       
+                }
             }
         }          
     }
@@ -2982,8 +3054,9 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
                     {
                         Object bldg_seq_no = BuildingTable.getModel().getValueAt(bIndex, 2);
                         boolean enable = bldg_seq_no != null && buildingControl.isSelected();
-                        deleteBuilding_Button.setEnabled(enable);
-                        modifyBuilding_Button.setEnabled(enable);
+                        boolean flag = isManager ? enable : false;
+                        deleteBuilding_Button.setEnabled(flag);
+                        modifyBuilding_Button.setEnabled(flag);
                         
                         if (BuildingTable.getModel().getValueAt(bIndex, 0) == null) 
                         {
@@ -3026,8 +3099,8 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
                     else
                     {
                         Object L2_no = UnitTable.getModel().getValueAt(uIndex, 1);
-                        deleteUnit_Button.setEnabled(L2_no == null ? false : true);               
-                        modifyUnit_Button.setEnabled(L2_no == null ? false : true);               
+                        deleteUnit_Button.setEnabled(L2_no != null && isManager ? true : false);
+                        modifyUnit_Button.setEnabled(L2_no != null && isManager ? true : false);
                     }
                     
                     if (emptyLastRowPossible(insertUnit_Button, UnitTable))
@@ -3252,12 +3325,14 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                AffiliationBuildingForm runForm = new AffiliationBuildingForm();
-//                Point screenCenter = getTopLeftPointToPutThisFrameAtScreenCenter(runForm);
-//                runForm.setLocation(screenCenter);
-                runForm.setVisible(true);
-                runForm.setDefaultCloseOperation(
-                        javax.swing.WindowConstants.EXIT_ON_CLOSE);
+                if (loginID != null ||
+                        loginID == null && determineLoginID() != null) 
+                {
+                    AffiliationBuildingForm runForm = new AffiliationBuildingForm();
+                    runForm.setVisible(true);
+                    runForm.setDefaultCloseOperation(
+                            javax.swing.WindowConstants.EXIT_ON_CLOSE);
+                }
             }
         });
     }
@@ -3282,9 +3357,17 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     }
 
     private void changeBottomButtonsEnbled(boolean b) {
-        deleteAll_Affiliation.setEnabled(b);
+        if (loginID.equals(ADMIN_ID)) {
+            deleteAll_Affiliation.setEnabled(b);
+        } else {
+            deleteAll_Affiliation.setEnabled(false);
+        }
         readSheet.setEnabled(b);
-        saveSheet.setEnabled(b);
+        if (isManager) {
+            saveSheet.setEnabled(b);
+        } else {
+            saveSheet.setEnabled(false);
+        }
         closeFormButton.setEnabled(b);
     }
 
@@ -3315,6 +3398,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
                 (new LabelBlinker()).displayHelpMessage(csHelpLabel, 
                         CREATE_SAVE_HELP.getContent(), !createBlinked);  
                 createBlinked = true;
+                adminOperationEnabled(false);
                 break;   
                 
             case NormalMode:
@@ -3324,6 +3408,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
                 (new LabelBlinker()).displayHelpMessage(csHelpLabel, 
                         CHOOSE_PANEL_DIALOG.getContent(), !normalBlinked); 
                 normalBlinked = true;
+                adminOperationEnabled(true);
                 break;
                 
             case UpdateMode:
@@ -3333,11 +3418,22 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
                 (new LabelBlinker()).displayHelpMessage(csHelpLabel, 
                         UPDATE_SAVE_HELP.getContent(), !updateBlinked);                  
                 updateBlinked = true;
+                adminOperationEnabled(false);
                 break;
                 
             default:
                 break;
         } 
+    }    
+    
+    private void adminOperationEnabled(boolean flag) {
+        if (flag && Globals.loginID != null && Globals.loginID.equals(ADMIN_ID)) {
+            deleteAll_Affiliation.setEnabled(true);
+            readSheet.setEnabled(true);
+        } else {
+            deleteAll_Affiliation.setEnabled(false);
+            readSheet.setEnabled(false);
+        }
     }    
 
     private void abortCreation(TableType tableType) {
