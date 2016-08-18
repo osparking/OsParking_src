@@ -416,6 +416,8 @@ public class ControlEnums {
     public enum ToolTipContent {
         ENABLING_CONDITION("활성화하려면 기간을 변경하십시오.", "To enable, change period!"),
         CTRL_F_TOOLTIP("(Ctrl+F)", "(Ctrl+F)"),
+        DRIVER_ODS_UPLOAD_SAMPLE_PNG("ods 표본 그림 보기", "Sample ods file image"),
+        DRIVER_ODS_UPLOAD_SAMPLE_DOWNLOAD("ods 표본 내려받기", "Download sample file"),
         EMAIL_TOOLTIP("이메일 형태 : ", "Email format : "),
         INSERT_TOOLTIP("(입력 후 엔터 키)", "(Type and Enter)"),
         SEARCH_TOOLTIP("포커스 이동: Control+F", "To focus Click Ctrl+F"),

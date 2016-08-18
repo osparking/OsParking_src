@@ -1197,6 +1197,9 @@
                         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                           <Connection code="getQuest20_Icon()" type="code"/>
                         </Property>
+                        <Property name="toolTipText" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                          <Connection code="DRIVER_ODS_UPLOAD_SAMPLE_PNG.getContent()" type="code"/>
+                        </Property>
                         <Property name="iconTextGap" type="int" value="0"/>
                         <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
                           <Insets value="[0, 0, 0, 0]"/>
@@ -1241,6 +1244,9 @@
                         <Property name="mnemonic" type="int" value="77"/>
                         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                           <Connection code="SAMPLE_BTN.getContent()" type="code"/>
+                        </Property>
+                        <Property name="toolTipText" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                          <Connection code="DRIVER_ODS_UPLOAD_SAMPLE_DOWNLOAD.getContent()" type="code"/>
                         </Property>
                         <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                           <Dimension value="[80, 30]"/>

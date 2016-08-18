@@ -30,6 +30,7 @@ import static com.osparking.global.CommonData.normGUIwidth;
 import static com.osparking.global.CommonData.pointColor;
 import static com.osparking.global.CommonData.tableRowHeight;
 import static com.osparking.global.CommonData.tipColor;
+import static com.osparking.global.DataSheet.noOverwritePossibleExistingSameFile;
 import static com.osparking.global.DataSheet.saveODSfile;
 import com.osparking.global.Globals;
 import static com.osparking.vehicle.driver.DriverTable.updateRow;
@@ -110,6 +111,8 @@ import static com.osparking.global.names.ControlEnums.TableTypes.*;
 import static com.osparking.global.names.ControlEnums.TextType.*;
 import static com.osparking.global.names.ControlEnums.ToolTipContent.CELL_PHONE_INPUT_TOOLTIP;
 import static com.osparking.global.names.ControlEnums.ToolTipContent.DRIVER_INPUT_TOOLTIP;
+import static com.osparking.global.names.ControlEnums.ToolTipContent.DRIVER_ODS_UPLOAD_SAMPLE_DOWNLOAD;
+import static com.osparking.global.names.ControlEnums.ToolTipContent.DRIVER_ODS_UPLOAD_SAMPLE_PNG;
 import static com.osparking.global.names.ControlEnums.ToolTipContent.LANDLINE_INPUT_TOOLTIP;
 import com.osparking.global.names.InnoComboBoxItem;
 import static com.osparking.global.names.JDBCMySQL.getConnection;
@@ -1191,6 +1194,7 @@ public class ManageDrivers extends javax.swing.JFrame {
         odsHelpButton.setBackground(new java.awt.Color(153, 255, 153));
         odsHelpButton.setFont(new java.awt.Font("Dotum", 1, 14)); // NOI18N
         odsHelpButton.setIcon(getQuest20_Icon());
+        odsHelpButton.setToolTipText(DRIVER_ODS_UPLOAD_SAMPLE_PNG.getContent());
         odsHelpButton.setIconTextGap(0);
         odsHelpButton.setMargin(new java.awt.Insets(0, 0, 0, 0));
         odsHelpButton.setMaximumSize(new java.awt.Dimension(20, 20));
@@ -1209,6 +1213,7 @@ public class ManageDrivers extends javax.swing.JFrame {
         sampleButton.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         sampleButton.setMnemonic('M');
         sampleButton.setText(SAMPLE_BTN.getContent());
+        sampleButton.setToolTipText(DRIVER_ODS_UPLOAD_SAMPLE_DOWNLOAD.getContent());
         sampleButton.setMaximumSize(new java.awt.Dimension(80, 30));
         sampleButton.setMinimumSize(new java.awt.Dimension(80, 30));
         sampleButton.setPreferredSize(new java.awt.Dimension(80, 30));
@@ -1999,7 +2004,18 @@ public class ManageDrivers extends javax.swing.JFrame {
     }//GEN-LAST:event_odsHelpButtonActionPerformed
 
     private void sampleButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sampleButtonActionPerformed
-        String sampleFilenameCore = "driversEng";
+        String sampleFilenameCore = "";
+        
+        switch(language){
+            case ENGLISH:
+                sampleFilenameCore = "driversEng";
+                break;
+
+            default:
+                sampleFilenameCore = "drivers";
+                break;
+        }          
+            
         // Ask user the name and location for the ods file to save
         String odsFullPath = getOdsFullPath(this, saveFileChooser, "", sampleFilenameCore);
         
@@ -2008,14 +2024,16 @@ public class ManageDrivers extends javax.swing.JFrame {
         File source = new File(classLoader.getResource(sampleFilenameCore + ".ods").getFile());        
         String extension = saveFileChooser.getFileFilter().getDescription();
         
-        if (extension.indexOf("*.ods") >= 0) {
+        if (extension.indexOf("*.ods") >= 0 && !odsFullPath.endsWith(".ods")) {
             odsFullPath += ".ods";
         }
         
         File destin = new File(odsFullPath);
         try {
             // Write resource into the file chosen by the user
-            copyFileUsingFileChannels(source, destin);
+            if (!noOverwritePossibleExistingSameFile(destin, odsFullPath)) {
+                copyFileUsingFileChannels(source, destin);
+            }
         } catch (IOException ex) {
             logParkingException(Level.SEVERE, ex, sampleFilenameCore + " downloading error");
         }

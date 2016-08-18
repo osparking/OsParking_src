@@ -147,17 +147,8 @@ public class DataSheet {
         verifyOdsExtension(saveFileChooser, file);
 
         //<editor-fold desc="-- Determine if to overwrite existing file.">
-        if (file[0].exists() && !file[0].isDirectory()) { 
-            String msg = OVERWRITE_WARNING_DIALOG.getContent() + System.lineSeparator()
-                    + System.lineSeparator()
-                    + ODS_SAVE_DIALOG_3.getContent() + filePath + System.lineSeparator()
-                    + System.lineSeparator()
-                    + USER_DELETE_CONF_3.getContent();
-            int response = JOptionPane.showConfirmDialog(null, msg, OVERWRITE_WARNING_TITLE.getContent(),
-                    OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE); 
-            if (response == JOptionPane.CANCEL_OPTION) {
-                return;
-            }
+        if (noOverwritePossibleExistingSameFile(file[0], filePath)) {
+            return;
         }
         //</editor-fold>
             
@@ -193,5 +184,21 @@ public class DataSheet {
         } catch (IOException ex) {
             System.out.println("File save exception: " + ex.getMessage());
         }                
+    }
+
+    public static boolean noOverwritePossibleExistingSameFile(File file, String filePath) {
+        if (file.exists() && !file.isDirectory()) { 
+            String msg = OVERWRITE_WARNING_DIALOG.getContent() + System.lineSeparator()
+                    + System.lineSeparator()
+                    + ODS_SAVE_DIALOG_3.getContent() + filePath + System.lineSeparator()
+                    + System.lineSeparator()
+                    + USER_DELETE_CONF_3.getContent();
+            int response = JOptionPane.showConfirmDialog(null, msg, OVERWRITE_WARNING_TITLE.getContent(),
+                    OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE); 
+            if (response == JOptionPane.CANCEL_OPTION) {
+                return true;
+            }
+        }
+        return false;
     }
 }
