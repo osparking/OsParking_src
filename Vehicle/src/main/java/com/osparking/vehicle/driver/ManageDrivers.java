@@ -2512,6 +2512,8 @@ public class ManageDrivers extends javax.swing.JFrame {
                 JOptionPane.QUESTION_MESSAGE);
         if (response == JOptionPane.YES_OPTION){
             insertCarDriver(name, row);
+        } else {
+            cancelButtonActionPerformed(null);
         }
             
         driverTable.requestFocusInWindow();

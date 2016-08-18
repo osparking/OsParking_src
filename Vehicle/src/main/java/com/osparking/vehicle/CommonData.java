@@ -59,7 +59,7 @@ public class CommonData {
     }
     
     public static boolean invalidCell(String cell) {
-        if (getNumericDigitCount(cell) < 10) {
+        if (0 < getNumericDigitCount(cell) && getNumericDigitCount(cell) < 10) {
             return true;
         } else {
             return false;
