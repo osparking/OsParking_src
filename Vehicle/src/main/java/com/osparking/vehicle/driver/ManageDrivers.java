@@ -266,10 +266,12 @@ public class ManageDrivers extends javax.swing.JFrame {
         int rowIdx = driverTable.getSelectedRow();
         int colIdx = childColumn.getNumVal() - 1; 
 
-        if (getPrevItemParentKey()[childColumn.getNumVal()] != currKey) {
+        if (rowIdx != -1 && getPrevItemParentKey()[childColumn.getNumVal()] != currKey) {
             getPrevItemParentKey()[childColumn.getNumVal()] = currKey;
+            System.out.println("Row: " + rowIdx + ", Col: " + colIdx);
             TableCellEditor editor = driverTable.getCellEditor(rowIdx, colIdx);
             Object parentCBox = (JComboBox)(((DefaultCellEditor)editor).getComponent());
+            
             driverTable.setValueAt(
                     getPrompter(childColumn, parentCBox),
                     rowIdx, 
@@ -1520,7 +1522,6 @@ public class ManageDrivers extends javax.swing.JFrame {
             public void run() {  
                 if (getFormMode() == FormMode.CreateMode ) {
                     finalizeDriverCreation();
-                    
                 } else {
                     int row = driverTable.convertRowIndexToModel(driverTable.getSelectedRow());
                     finalizeDriverUpdate(row);

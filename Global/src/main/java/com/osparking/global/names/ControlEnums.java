@@ -797,17 +797,17 @@ public class ControlEnums {
         
         SUGGEST_SUPPLY_L2("\"하위소속\"을 선택 하시겠습니까?.\n"
                 + "[예] => 하위소속 선택\n"
-                + "[아니오] => 전체 수정 취소\n", 
+                + "[아니오] => 전체 작업 취소\n", 
                 " Want to select \'Lower Affiliation\'?\n"
                 + "[Yes] => to select Lower Affiliation\n"
-                + "[No] => to cancel driver update"),
+                + "[No] => to cancel whole task"),
         
         SUGGEST_SUPPLY_UNIT("\"호실번호\"를 선택 하시겠습니까?\n"
                 + "[예] => 호실번호 선택\n"
-                + "[아니오] => 전체 수정 취소\n",
+                + "[아니오] => 전체 작업 취소\n",
                 "Want to select \'Room\'?\n"
                 + "[Yes] => to select Room(number)\n"
-                + "[No] => to cancel driver update"),
+                + "[No] => to cancel whole task"),
         
         PW_FOURDIGIT_DIALOG("  - 정확히 네 자리 숫자", "  - Exact four digit number"),
         
