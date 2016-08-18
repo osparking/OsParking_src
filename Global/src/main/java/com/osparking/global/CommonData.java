@@ -22,10 +22,12 @@ import static com.osparking.global.Globals.font_Type;
 import static com.osparking.global.Globals.getBufferedImage;
 import static com.osparking.global.Globals.getTagNumber;
 import static com.osparking.global.names.ControlEnums.MenuITemTypes.META_KEY_LABEL;
+import static com.sun.javafx.tk.Toolkit.getToolkit;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
-import static java.awt.JobAttributes.DestinationType.FILE;
+import java.awt.Toolkit;
+import java.awt.event.KeyEvent;
 import java.io.File;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -88,6 +90,20 @@ public class CommonData { // new Dimension(carTagWidth, 30)
     static {
         putCellCenter.setHorizontalAlignment(JLabel.CENTER);    
     }
+    
+    public static void rejectNonNumericKeys(KeyEvent evt) {
+        char c = evt.getKeyChar();
+        if ( !(
+                (c >= '0') && (c <= '9') ||
+                (c == KeyEvent.VK_BACK_SPACE) ||
+                (c == KeyEvent.VK_DELETE) ||
+                (c == KeyEvent.VK_ENTER)
+                ))
+        {
+            Toolkit.getDefaultToolkit().beep();
+            evt.consume();
+        }    
+    }    
     
     // Make sure the 'ods' folder exists in the user home directory.
     private static void makeSurePathExists(String dirPath) {

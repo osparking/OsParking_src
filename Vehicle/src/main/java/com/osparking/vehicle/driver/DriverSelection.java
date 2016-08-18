@@ -19,6 +19,7 @@ package com.osparking.vehicle.driver;
 import static com.osparking.global.CommonData.buttonHeightNorm;
 import static com.osparking.global.CommonData.buttonWidthNorm;
 import static com.osparking.global.CommonData.putCellCenter;
+import static com.osparking.global.CommonData.rejectNonNumericKeys;
 import static com.osparking.global.CommonData.tableRowHeight;
 import static com.osparking.global.CommonData.tipColor;
 import com.osparking.vehicle.VehiclesForm;
@@ -526,7 +527,7 @@ public class DriverSelection extends javax.swing.JFrame {
     }//GEN-LAST:event_searchCellMousePressed
 
     private void searchNameFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_searchNameFocusGained
-        if (searchName.getText().equals(DRIVER_TF.getContent())) {
+        if (nameHintShown) {
             searchName.setText("");
             nameHintShown = false;            
             searchName.setForeground(new Color(0, 0, 0));
@@ -551,6 +552,7 @@ public class DriverSelection extends javax.swing.JFrame {
     }//GEN-LAST:event_searchNameKeyTyped
 
     private void searchCellKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_searchCellKeyTyped
+        rejectNonNumericKeys(evt);
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 changeSearchButtonEnabled();
@@ -748,7 +750,7 @@ public class DriverSelection extends javax.swing.JFrame {
         StringBuffer cond = new StringBuffer();
         String searchStr = searchName.getText().trim();
         
-        if(!nameHintShown && searchStr.length() > 0) {
+        if (!nameHintShown && searchStr.length() > 0) {
             attachCondition(cond, "name", searchStr);
         }
         

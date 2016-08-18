@@ -415,6 +415,7 @@ public class ControlEnums {
     
     public enum ToolTipContent {
         ENABLING_CONDITION("활성화하려면 기간을 변경하십시오.", "To enable, change period!"),
+        SEARCH_BTN_TOOLTIP("검색 조건 바꾸면 활성화 됨", "To enable, change search condition."),
         CTRL_F_TOOLTIP("(Ctrl+F)", "(Ctrl+F)"),
         DRIVER_ODS_UPLOAD_SAMPLE_PNG("ods 표본 그림 보기", "Sample ods file image"),
         DRIVER_ODS_UPLOAD_SAMPLE_DOWNLOAD("ods 표본 내려받기", "Download sample file"),

@@ -69,6 +69,7 @@ import static com.osparking.global.CommonData.TEXT_FIELD_HEIGHT;
 import static com.osparking.global.CommonData.buttonHeightNorm;
 import static com.osparking.global.CommonData.buttonHeightShort;
 import static com.osparking.global.CommonData.buttonWidthNorm;
+import static com.osparking.global.CommonData.rejectNonNumericKeys;
 import static com.osparking.global.CommonData.statCountArr;
 import static com.osparking.global.CommonData.tipColor;
 import static com.osparking.global.names.ControlEnums.ButtonTypes.CANCEL_BTN;
@@ -4165,20 +4166,6 @@ public class Settings_System extends javax.swing.JFrame {
         keys.add(ctrlTab);
         KeyboardFocusManager.getCurrentKeyboardFocusManager().
                 setDefaultFocusTraversalKeys(KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS, keys);    
-    }
-
-    private void rejectNonNumericKeys(KeyEvent evt) {
-        char c = evt.getKeyChar();
-        if ( !(
-                (c >= '0') && (c <= '9') ||
-                (c == KeyEvent.VK_BACK_SPACE) ||
-                (c == KeyEvent.VK_DELETE) ||
-                (c == KeyEvent.VK_ENTER)
-                ))
-        {
-            getToolkit().beep();
-            evt.consume();
-        }    
     }
 
     private void changeSaveEnabledForConnTypeChange(DeviceType currDevType, int gateNo) {

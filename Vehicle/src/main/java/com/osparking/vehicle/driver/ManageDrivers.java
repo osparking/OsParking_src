@@ -114,6 +114,7 @@ import static com.osparking.global.names.ControlEnums.ToolTipContent.DRIVER_INPU
 import static com.osparking.global.names.ControlEnums.ToolTipContent.DRIVER_ODS_UPLOAD_SAMPLE_DOWNLOAD;
 import static com.osparking.global.names.ControlEnums.ToolTipContent.DRIVER_ODS_UPLOAD_SAMPLE_PNG;
 import static com.osparking.global.names.ControlEnums.ToolTipContent.LANDLINE_INPUT_TOOLTIP;
+import static com.osparking.global.names.ControlEnums.ToolTipContent.SEARCH_BTN_TOOLTIP;
 import com.osparking.global.names.InnoComboBoxItem;
 import static com.osparking.global.names.JDBCMySQL.getConnection;
 import com.osparking.global.names.OSP_enums;
@@ -316,8 +317,10 @@ public class ManageDrivers extends javax.swing.JFrame {
         cancelButton.setEnabled(!flag);        
         if (flag && isManager && driverTable.getRowCount() > 0) {
             saveSheet_Button.setEnabled(true);
+            sampleButton.setEnabled(true);
         } else {
             saveSheet_Button.setEnabled(false);
+            sampleButton.setEnabled(false);
         }
     }    
     
@@ -794,6 +797,7 @@ public class ManageDrivers extends javax.swing.JFrame {
         searchButton.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         searchButton.setMnemonic('s');
         searchButton.setText("검색(S)");
+        searchButton.setToolTipText(SEARCH_BTN_TOOLTIP.getContent());
         searchButton.setEnabled(false);
         searchButton.setMaximumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
         searchButton.setMinimumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
@@ -1216,6 +1220,7 @@ public class ManageDrivers extends javax.swing.JFrame {
         sampleButton.setMnemonic('M');
         sampleButton.setText(SAMPLE_BTN.getContent());
         sampleButton.setToolTipText(DRIVER_ODS_UPLOAD_SAMPLE_DOWNLOAD.getContent());
+        sampleButton.setEnabled(false);
         sampleButton.setMaximumSize(new java.awt.Dimension(80, 30));
         sampleButton.setMinimumSize(new java.awt.Dimension(80, 30));
         sampleButton.setPreferredSize(new java.awt.Dimension(80, 30));
@@ -2209,6 +2214,7 @@ public class ManageDrivers extends javax.swing.JFrame {
         int numRows = model.getRowCount();
         
         saveSheet_Button.setEnabled(false);
+        sampleButton.setEnabled(false);
         if (numRows > 0) {  
             // <editor-fold defaultstate="collapsed" desc="-- Highlight a selected driver">                          
             if (driverName.length() > 0) {
@@ -2225,6 +2231,7 @@ public class ManageDrivers extends javax.swing.JFrame {
             }
             if (isManager) {
                 saveSheet_Button.setEnabled(true);
+                sampleButton.setEnabled(true);
             }
             //</editor-fold>
         }        
