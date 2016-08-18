@@ -42,12 +42,14 @@ import static com.osparking.global.Globals.OSPiconList;
 import static com.osparking.global.Globals.SetAColumnWidth;
 import static com.osparking.global.Globals.checkOptions;
 import static com.osparking.global.Globals.closeDBstuff;
+import static com.osparking.global.Globals.determineLoginID;
 import static com.osparking.global.Globals.font_Size;
 import static com.osparking.global.Globals.font_Style;
 import static com.osparking.global.Globals.font_Type;
 import static com.osparking.global.Globals.head_font_Size;
 import static com.osparking.global.Globals.initializeLoggers;
 import static com.osparking.global.Globals.logParkingException;
+import static com.osparking.global.Globals.loginID;
 import static com.osparking.global.names.ControlEnums.ButtonTypes.*;
 import static com.osparking.global.names.ControlEnums.LabelContent.SEARCH_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.SELECT_DRIVER_HELP;
@@ -454,8 +456,12 @@ public class DriverSelection extends javax.swing.JFrame {
     }//GEN-LAST:event_formWindowClosing
 
     private void manageDriversButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_manageDriversButtonActionPerformed
-        ManageDrivers driverManageForm = new ManageDrivers(this);
-        driverManageForm.setVisible(true);
+        if (loginID != null ||
+                loginID == null && determineLoginID() != null) 
+        {
+            ManageDrivers driverManageForm = new ManageDrivers(this);
+            driverManageForm.setVisible(true);
+        }
     }//GEN-LAST:event_manageDriversButtonActionPerformed
 
     private void closeFormButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_closeFormButtonActionPerformed

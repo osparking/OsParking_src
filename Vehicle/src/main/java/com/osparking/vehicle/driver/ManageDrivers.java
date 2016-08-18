@@ -263,20 +263,26 @@ public class ManageDrivers extends javax.swing.JFrame {
     private void mayChangeLowerCBoxPrompt(AWTEvent e, DriverCol childColumn) 
     {
         JComboBox cBox = (JComboBox)(e.getSource());
-        int currKey = (Integer)(((ConvComboBoxItem)cBox.getSelectedItem()).getKeyValue()); 
-        int rowIdx = driverTable.getSelectedRow();
-        int colIdx = childColumn.getNumVal() - 1; 
+        ConvComboBoxItem item = (ConvComboBoxItem)cBox.getSelectedItem();
+        
+        if (item == null) {
+            return;
+        } else {
+            int currKey = (Integer)item.getKeyValue(); 
+            int rowIdx = driverTable.getSelectedRow();
+            int colIdx = childColumn.getNumVal() - 1; 
 
-        if (rowIdx != -1 && getPrevItemParentKey()[childColumn.getNumVal()] != currKey) {
-            getPrevItemParentKey()[childColumn.getNumVal()] = currKey;
-            System.out.println("Row: " + rowIdx + ", Col: " + colIdx);
-            TableCellEditor editor = driverTable.getCellEditor(rowIdx, colIdx);
-            Object parentCBox = (JComboBox)(((DefaultCellEditor)editor).getComponent());
-            
-            driverTable.setValueAt(
-                    getPrompter(childColumn, parentCBox),
-                    rowIdx, 
-                    childColumn.getNumVal());
+            if (rowIdx != -1 && getPrevItemParentKey()[childColumn.getNumVal()] != currKey) {
+                getPrevItemParentKey()[childColumn.getNumVal()] = currKey;
+                System.out.println("Row: " + rowIdx + ", Col: " + colIdx);
+                TableCellEditor editor = driverTable.getCellEditor(rowIdx, colIdx);
+                Object parentCBox = (JComboBox)(((DefaultCellEditor)editor).getComponent());
+
+                driverTable.setValueAt(
+                        getPrompter(childColumn, parentCBox),
+                        rowIdx, 
+                        childColumn.getNumVal());
+            }
         }
     }
 
