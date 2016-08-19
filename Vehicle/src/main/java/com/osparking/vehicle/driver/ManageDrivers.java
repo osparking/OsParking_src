@@ -141,13 +141,17 @@ import static com.osparking.vehicle.CommonData.DTCW_MAX;
 import static com.osparking.vehicle.CommonData.DTCW_RN;
 import static com.osparking.vehicle.CommonData.DTCW_UN;
 import static com.osparking.vehicle.CommonData.DTC_MARGIN;
+import static com.osparking.vehicle.CommonData.copyFileUsingFileChannels;
+import static com.osparking.vehicle.CommonData.wantToSaveFile;
 import static com.osparking.vehicle.CommonData.invalidCell;
 import static com.osparking.vehicle.CommonData.invalidName;
 import static com.osparking.vehicle.CommonData.invalidPhone;
+import static com.osparking.vehicle.CommonData.setHelpDialogLoc;
 import com.osparking.vehicle.LabelBlinker;
 import com.osparking.vehicle.ODS_HelpJDialog;
 import java.awt.AWTEvent;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
@@ -252,6 +256,10 @@ public class ManageDrivers extends javax.swing.JFrame {
         loadDriverData(UNKNOWN, "", "");
         setFormMode(FormMode.NormalMode);
         setSearchEnabled(true);
+        
+        if (isManager) {
+            sampleButton.setEnabled(true);
+        }
     }
     
     /** 
@@ -320,13 +328,16 @@ public class ManageDrivers extends javax.swing.JFrame {
         searchBuildingComboBox.setEnabled(flag);
         searchUnitComboBox.setEnabled(flag);
         closeFormButton.setEnabled(flag);     
-        cancelButton.setEnabled(!flag);        
-        if (flag && isManager && driverTable.getRowCount() > 0) {
-            saveSheet_Button.setEnabled(true);
-            sampleButton.setEnabled(true);
+        cancelButton.setEnabled(!flag);    
+        
+        if (flag && isManager) {
+            if (driverTable.getRowCount() > 0) {
+                saveSheet_Button.setEnabled(true);
+            } else {
+                saveSheet_Button.setEnabled(false);
+            }
         } else {
             saveSheet_Button.setEnabled(false);
-            sampleButton.setEnabled(false);
         }
     }    
     
@@ -856,10 +867,10 @@ public class ManageDrivers extends javax.swing.JFrame {
             }
         });
         searchName.addInputMethodListener(new java.awt.event.InputMethodListener() {
-            public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
-            }
             public void inputMethodTextChanged(java.awt.event.InputMethodEvent evt) {
                 searchNameInputMethodTextChanged(evt);
+            }
+            public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
             }
         });
         searchName.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -1994,24 +2005,8 @@ public class ManageDrivers extends javax.swing.JFrame {
     private void odsHelpButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_odsHelpButtonActionPerformed
         JDialog helpDialog = new ODS_HelpJDialog(this, false, 
                 HELP_DRIVER_TITLE.getContent(), ODS_TYPE.DRIVER);
-        Point buttonPoint = odsHelpButton.getLocationOnScreen();
-        Point framePoint = new Point();
-        this.getLocation(framePoint);
         
-        int dialogWidth = helpDialog.getSize().width;
-        int dialogHeight = helpDialog.getSize().height;
-        
-        int helpDialogX = buttonPoint.x - dialogWidth / 2;
-        if (helpDialogX < 0) {
-            helpDialogX = 0;
-        }
-        
-        int helpDialogY = buttonPoint.y - dialogHeight - 10;
-        if (helpDialogY < 0) {
-            helpDialogY = 0;
-        }
-        
-        helpDialog.setLocation(helpDialogX, helpDialogY);
+        setHelpDialogLoc(odsHelpButton, helpDialog);
         helpDialog.setVisible(true);        
     }//GEN-LAST:event_odsHelpButtonActionPerformed
 
@@ -2031,7 +2026,7 @@ public class ManageDrivers extends javax.swing.JFrame {
         // Ask user the name and location for the ods file to save
         StringBuffer odsFullPath = new StringBuffer();
         
-        if (getOdsFullPath(this, saveFileChooser, odsFullPath, sampleFilenameCore)) {
+        if (wantToSaveFile(this, saveFileChooser, odsFullPath, sampleFilenameCore)) {
             // Read sample ods resource file
             ClassLoader classLoader = getClass().getClassLoader();
             File source = new File(classLoader.getResource(sampleFilenameCore + ".ods").getFile());        
@@ -2052,20 +2047,6 @@ public class ManageDrivers extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_sampleButtonActionPerformed
-
-    private static void copyFileUsingFileChannels(File source, File dest)
-                    throws IOException {
-        FileChannel inputChannel = null;
-        FileChannel outputChannel = null;
-        try {
-                inputChannel = new FileInputStream(source).getChannel();
-                outputChannel = new FileOutputStream(dest).getChannel();
-                outputChannel.transferFrom(inputChannel, 0, inputChannel.size());
-        } finally {
-                inputChannel.close();
-                outputChannel.close();
-        }
-    }    
     
     /**
      * @param args the command line arguments
@@ -2220,7 +2201,6 @@ public class ManageDrivers extends javax.swing.JFrame {
         int numRows = model.getRowCount();
         
         saveSheet_Button.setEnabled(false);
-        sampleButton.setEnabled(false);
         if (numRows > 0) {  
             // <editor-fold defaultstate="collapsed" desc="-- Highlight a selected driver">                          
             if (driverName.length() > 0) {
@@ -2237,7 +2217,6 @@ public class ManageDrivers extends javax.swing.JFrame {
             }
             if (isManager) {
                 saveSheet_Button.setEnabled(true);
-                sampleButton.setEnabled(true);
             }
             //</editor-fold>
         }        
@@ -3019,19 +2998,19 @@ public class ManageDrivers extends javax.swing.JFrame {
         }    
     }
 
-    private boolean getOdsFullPath(ManageDrivers aFrame, JFileChooser saveFileChooser, 
-            StringBuffer fullPath, String filename)
-    {
-        String filePath = ODS_FILEPATH +  File.separator + filename;
-        File defFile = new File(filePath);
-        
-        saveFileChooser.setSelectedFile(defFile);
-        
-        if (saveFileChooser.showSaveDialog(aFrame) == JFileChooser.APPROVE_OPTION) {
-            fullPath.append(saveFileChooser.getSelectedFile().getAbsolutePath());
-            return true;
-        } else {
-            return false;
-        }
-    }
+//    private boolean getOdsFullPath(Component aFrame, JFileChooser saveFileChooser, 
+//            StringBuffer fullPath, String filename)
+//    {
+//        String filePath = ODS_FILEPATH +  File.separator + filename;
+//        File defFile = new File(filePath);
+//        
+//        saveFileChooser.setSelectedFile(defFile);
+//        
+//        if (saveFileChooser.showSaveDialog(aFrame) == JFileChooser.APPROVE_OPTION) {
+//            fullPath.append(saveFileChooser.getSelectedFile().getAbsolutePath());
+//            return true;
+//        } else {
+//            return false;
+//        }
+//    }
 }

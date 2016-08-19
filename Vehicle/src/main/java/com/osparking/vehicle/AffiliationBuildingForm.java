@@ -140,6 +140,9 @@ import static com.osparking.global.names.OSP_enums.ODS_TYPE.AFFILIATION;
 import static com.osparking.global.names.OSP_enums.ODS_TYPE.BUILDING;
 import com.osparking.global.names.OdsFileOnly;
 import com.osparking.global.names.WrappedInt;
+import static com.osparking.vehicle.CommonData.copyFileUsingFileChannels;
+import static com.osparking.vehicle.CommonData.setHelpDialogLoc;
+import static com.osparking.vehicle.CommonData.wantToSaveFile;
 import com.osparking.vehicle.driver.ODSReader;
 import static com.osparking.vehicle.driver.ODSReader.getWrongCellPointString;
 import java.awt.Color;
@@ -206,6 +209,10 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
         loadL1_Affiliation(0, "");
         loadBuilding(0, 0);
         setFormMode(NormalMode);
+        
+        if (isManager) {
+            sampleButton.setEnabled(true);
+        }        
     }    
 
     /**
@@ -220,6 +227,8 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
 
         odsFileChooser = new javax.swing.JFileChooser();
         fourPanels = new javax.swing.ButtonGroup();
+        saveFileChooser = new javax.swing.JFileChooser();
+        northPanel = new javax.swing.JPanel();
         wholePanel = new javax.swing.JPanel();
         topPanel = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
@@ -231,7 +240,6 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
         jSeparator2 = new javax.swing.JSeparator();
         BigMidPanel = new javax.swing.JPanel();
-        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(40, 0), new java.awt.Dimension(40, 0), new java.awt.Dimension(30, 32767));
         centerHelpPanel = new javax.swing.JPanel();
         helpPanel = new javax.swing.JPanel();
         csHelpLabel = new javax.swing.JLabel();
@@ -287,27 +295,47 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
         modifyUnit_Button = new javax.swing.JButton();
         deleteUnit_Button = new javax.swing.JButton();
         cancelUnit_Button = new javax.swing.JButton();
-        filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(40, 0), new java.awt.Dimension(40, 0), new java.awt.Dimension(30, 32767));
         bottomPanel = new javax.swing.JPanel();
         h30_5 = new javax.swing.Box.Filler(new java.awt.Dimension(40, 30), new java.awt.Dimension(40, 30), new java.awt.Dimension(40, 30));
         closePanel = new javax.swing.JPanel();
         leftButtons = new javax.swing.JPanel();
         deleteAll_Affiliation = new javax.swing.JButton();
         readSheet = new javax.swing.JButton();
-        saveSheet = new javax.swing.JButton();
+        saveSheet_Button = new javax.swing.JButton();
         ODSAffiliHelp = new javax.swing.JButton();
         sampleButton = new javax.swing.JButton();
+        filler8 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
         closeFormButton = new javax.swing.JButton();
-        bottomGap = new javax.swing.JPanel();
+        southPanel = new javax.swing.JPanel();
+        eastPanel = new javax.swing.JPanel();
+        westPanel = new javax.swing.JPanel();
 
         odsFileChooser.setCurrentDirectory(ODS_DIRECTORY);
         odsFileChooser.setFileFilter(new OdsFileOnly());
+
+        saveFileChooser.setDialogType(javax.swing.JFileChooser.SAVE_DIALOG);
+        saveFileChooser.setCurrentDirectory(ODS_DIRECTORY);
+        saveFileChooser.setFileFilter(new OdsFileOnly());
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle(AFFILI_BUILD_FRAME_TITLE.getContent());
         setBackground(PopUpBackground);
         setMinimumSize(new Dimension(750, normGUIheight));
-        setPreferredSize(new Dimension(750, normGUIheight));
+
+        northPanel.setPreferredSize(new java.awt.Dimension(729, 40));
+
+        javax.swing.GroupLayout northPanelLayout = new javax.swing.GroupLayout(northPanel);
+        northPanel.setLayout(northPanelLayout);
+        northPanelLayout.setHorizontalGroup(
+            northPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 729, Short.MAX_VALUE)
+        );
+        northPanelLayout.setVerticalGroup(
+            northPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 40, Short.MAX_VALUE)
+        );
+
+        getContentPane().add(northPanel, java.awt.BorderLayout.NORTH);
 
         wholePanel.setLayout(new java.awt.BorderLayout());
 
@@ -364,7 +392,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jSeparator2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 851, Short.MAX_VALUE)
+            .addComponent(jSeparator2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 649, Short.MAX_VALUE)
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -379,7 +407,6 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
 
         BigMidPanel.setMinimumSize(new java.awt.Dimension(380, 320));
         BigMidPanel.setLayout(new javax.swing.BoxLayout(BigMidPanel, javax.swing.BoxLayout.X_AXIS));
-        BigMidPanel.add(filler1);
 
         centerHelpPanel.setPreferredSize(new java.awt.Dimension(0, 0));
         centerHelpPanel.setLayout(new java.awt.BorderLayout());
@@ -402,7 +429,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
         helpPanel.setLayout(helpPanelLayout);
         helpPanelLayout.setHorizontalGroup(
             helpPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(csHelpLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 771, Short.MAX_VALUE)
+            .addComponent(csHelpLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 649, Short.MAX_VALUE)
         );
         helpPanelLayout.setVerticalGroup(
             helpPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1213,22 +1240,23 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     centerHelpPanel.add(centerPanel, java.awt.BorderLayout.CENTER);
 
     BigMidPanel.add(centerHelpPanel);
-    BigMidPanel.add(filler2);
 
     wholePanel.add(BigMidPanel, java.awt.BorderLayout.CENTER);
 
-    bottomPanel.setMinimumSize(new java.awt.Dimension(200, 108));
-    bottomPanel.setPreferredSize(new java.awt.Dimension(200, 108));
+    bottomPanel.setMaximumSize(new java.awt.Dimension(2147483647, 100));
+    bottomPanel.setMinimumSize(new java.awt.Dimension(200, 100));
+    bottomPanel.setPreferredSize(new java.awt.Dimension(200, 100));
     bottomPanel.setLayout(new java.awt.BorderLayout());
     bottomPanel.add(h30_5, java.awt.BorderLayout.NORTH);
 
     closePanel.setMaximumSize(new Dimension(4000, 70));
     closePanel.setMinimumSize(new Dimension(150, 70));
     closePanel.setPreferredSize(new Dimension(40, 70));
+    closePanel.setLayout(new javax.swing.BoxLayout(closePanel, javax.swing.BoxLayout.X_AXIS));
 
-    leftButtons.setMaximumSize(new java.awt.Dimension(401, 70));
-    leftButtons.setMinimumSize(new java.awt.Dimension(401, 70));
-    leftButtons.setPreferredSize(new java.awt.Dimension(401, 70));
+    leftButtons.setMaximumSize(new java.awt.Dimension(370, 70));
+    leftButtons.setMinimumSize(new java.awt.Dimension(370, 70));
+    leftButtons.setPreferredSize(new java.awt.Dimension(370, 70));
     java.awt.GridBagLayout leftButtonsLayout = new java.awt.GridBagLayout();
     leftButtonsLayout.columnWidths = new int[] {0, 10, 0, 10, 0};
     leftButtonsLayout.rowHeights = new int[] {0, 0, 0};
@@ -1266,21 +1294,21 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     gridBagConstraints.gridy = 0;
     leftButtons.add(readSheet, gridBagConstraints);
 
-    saveSheet.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-    saveSheet.setText(SAVE_ODS_BTN.getContent());
-    saveSheet.setEnabled(false);
-    saveSheet.setMaximumSize(new Dimension(buttonWidthWide, buttonHeightNorm));
-    saveSheet.setMinimumSize(new Dimension(buttonWidthWide, buttonHeightNorm));
-    saveSheet.setPreferredSize(new Dimension(buttonWidthWide, buttonHeightNorm));
-    saveSheet.addActionListener(new java.awt.event.ActionListener() {
+    saveSheet_Button.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+    saveSheet_Button.setText(SAVE_ODS_BTN.getContent());
+    saveSheet_Button.setEnabled(false);
+    saveSheet_Button.setMaximumSize(new Dimension(buttonWidthWide, buttonHeightNorm));
+    saveSheet_Button.setMinimumSize(new Dimension(buttonWidthWide, buttonHeightNorm));
+    saveSheet_Button.setPreferredSize(new Dimension(buttonWidthWide, buttonHeightNorm));
+    saveSheet_Button.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent evt) {
-            saveSheetActionPerformed(evt);
+            saveSheet_ButtonActionPerformed(evt);
         }
     });
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 4;
     gridBagConstraints.gridy = 0;
-    leftButtons.add(saveSheet, gridBagConstraints);
+    leftButtons.add(saveSheet_Button, gridBagConstraints);
 
     ODSAffiliHelp.setBackground(new java.awt.Color(153, 255, 153));
     ODSAffiliHelp.setFont(new java.awt.Font("Dotum", 1, 14)); // NOI18N
@@ -1320,6 +1348,9 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
     leftButtons.add(sampleButton, gridBagConstraints);
 
+    closePanel.add(leftButtons);
+    closePanel.add(filler8);
+
     closeFormButton.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
     closeFormButton.setMnemonic('c');
     closeFormButton.setText(CLOSE_BTN.getContent());
@@ -1331,41 +1362,58 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
             closeFormButtonActionPerformed(evt);
         }
     });
-
-    javax.swing.GroupLayout closePanelLayout = new javax.swing.GroupLayout(closePanel);
-    closePanel.setLayout(closePanelLayout);
-    closePanelLayout.setHorizontalGroup(
-        closePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-        .addGroup(closePanelLayout.createSequentialGroup()
-            .addContainerGap()
-            .addComponent(leftButtons, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-            .addContainerGap(438, Short.MAX_VALUE))
-        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, closePanelLayout.createSequentialGroup()
-            .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(closeFormButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-            .addGap(284, 284, 284))
-    );
-    closePanelLayout.setVerticalGroup(
-        closePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-        .addGroup(closePanelLayout.createSequentialGroup()
-            .addContainerGap()
-            .addGroup(closePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(closePanelLayout.createSequentialGroup()
-                    .addGap(84, 84, 84)
-                    .addComponent(closeFormButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addComponent(leftButtons, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-            .addGap(0, 0, Short.MAX_VALUE))
-    );
+    closePanel.add(closeFormButton);
 
     bottomPanel.add(closePanel, java.awt.BorderLayout.CENTER);
-
-    bottomGap.setMinimumSize(new java.awt.Dimension(10, 36));
-    bottomGap.setPreferredSize(new java.awt.Dimension(100, 36));
-    bottomPanel.add(bottomGap, java.awt.BorderLayout.SOUTH);
 
     wholePanel.add(bottomPanel, java.awt.BorderLayout.SOUTH);
 
     getContentPane().add(wholePanel, java.awt.BorderLayout.CENTER);
+
+    southPanel.setPreferredSize(new java.awt.Dimension(729, 40));
+
+    javax.swing.GroupLayout southPanelLayout = new javax.swing.GroupLayout(southPanel);
+    southPanel.setLayout(southPanelLayout);
+    southPanelLayout.setHorizontalGroup(
+        southPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addGap(0, 729, Short.MAX_VALUE)
+    );
+    southPanelLayout.setVerticalGroup(
+        southPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addGap(0, 40, Short.MAX_VALUE)
+    );
+
+    getContentPane().add(southPanel, java.awt.BorderLayout.SOUTH);
+
+    eastPanel.setPreferredSize(new java.awt.Dimension(40, 514));
+
+    javax.swing.GroupLayout eastPanelLayout = new javax.swing.GroupLayout(eastPanel);
+    eastPanel.setLayout(eastPanelLayout);
+    eastPanelLayout.setHorizontalGroup(
+        eastPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addGap(0, 40, Short.MAX_VALUE)
+    );
+    eastPanelLayout.setVerticalGroup(
+        eastPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addGap(0, 514, Short.MAX_VALUE)
+    );
+
+    getContentPane().add(eastPanel, java.awt.BorderLayout.LINE_END);
+
+    westPanel.setPreferredSize(new java.awt.Dimension(40, 514));
+
+    javax.swing.GroupLayout westPanelLayout = new javax.swing.GroupLayout(westPanel);
+    westPanel.setLayout(westPanelLayout);
+    westPanelLayout.setHorizontalGroup(
+        westPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addGap(0, 40, Short.MAX_VALUE)
+    );
+    westPanelLayout.setVerticalGroup(
+        westPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addGap(0, 514, Short.MAX_VALUE)
+    );
+
+    getContentPane().add(westPanel, java.awt.BorderLayout.WEST);
 
     pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -2116,7 +2164,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_UnitTableFocusLost
 
-    private void saveSheetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveSheetActionPerformed
+    private void saveSheet_ButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveSheet_ButtonActionPerformed
         if (affiL1_Control.isSelected()) {
             saveODSfileName(this, L1_Affiliation, odsFileChooser, 
                     USER_SAVE_ODS_FAIL_DIALOG.getContent(), L1_TABLE.getContent());
@@ -2130,7 +2178,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
             saveODSfileName(this, UnitTable, odsFileChooser, 
                     USER_SAVE_ODS_FAIL_DIALOG.getContent(), UnitLabel.getText());
         }
-    }//GEN-LAST:event_saveSheetActionPerformed
+    }//GEN-LAST:event_saveSheet_ButtonActionPerformed
 
     private void deleteAll_AffiliationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteAll_AffiliationActionPerformed
 
@@ -2210,32 +2258,19 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     }//GEN-LAST:event_readSheetActionPerformed
 
     private void ODSAffiliHelpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ODSAffiliHelpActionPerformed
-
+        JDialog helpDialog;
+        
         if (chosenPanelFor() == AFFILIATION) {
-            JDialog helpDialog = new ODS_HelpJDialog(this, false, 
+            helpDialog = new ODS_HelpJDialog(this, false, 
                     HELP_AFFIL_LABEL.getContent(),
                     ODS_TYPE.AFFILIATION);
-            Point buttonPoint = new Point();
-            ODSAffiliHelp.getLocation(buttonPoint);
-            Point framePoint = new Point();
-            this.getLocation(framePoint);
-            int leftMargin = filler1.getSize().width + affiliationPanel.getSize().width;
-            helpDialog.setLocation(framePoint.x + leftMargin, framePoint.y + 30);
-            helpDialog.setVisible(true);
         } else {
-            JDialog helpDialog = new ODS_HelpJDialog(this, false, 
+            helpDialog = new ODS_HelpJDialog(this, false, 
                     HELP_BUILDING_LABEL.getContent(),
                     ODS_TYPE.BUILDING);
-            Point buttonPoint = new Point();
-            ODSAffiliHelp.getLocation(buttonPoint);
-            Point framePoint = new Point();
-            this.getLocation(framePoint);
-            int rightWidth = getSize().width - 
-                    (helpDialog.getSize().width + filler5.getSize().width + 
-                    buildingPanel.getWidth() + filler2.getSize().width);
-            helpDialog.setLocation(framePoint.x + rightWidth, framePoint.y + 30);                
-            helpDialog.setVisible(true);    
         }
+        setHelpDialogLoc(ODSAffiliHelp, helpDialog);
+        helpDialog.setVisible(true);
     }//GEN-LAST:event_ODSAffiliHelpActionPerformed
 
     private void closeFormButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_closeFormButtonActionPerformed
@@ -2522,39 +2557,45 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     private void sampleButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sampleButtonActionPerformed
         String sampleFilenameCore = "";
 
-        switch(language){
+        switch(language) {
             case ENGLISH:
-            sampleFilenameCore = "driversEng";
-            break;
+                sampleFilenameCore = "driversEng";
+                break;
 
             default:
-            sampleFilenameCore = "drivers";
-            break;
+                sampleFilenameCore = "drivers";
+                break;
         }
+        
+        if (chosenPanelFor() == AFFILIATION) {
+            sampleFilenameCore = "Affiliations";
+        } else {
+            sampleFilenameCore = "buildings";
+        }        
 
         // Ask user the name and location for the ods file to save
         StringBuffer odsFullPath = new StringBuffer();
 
-//        if (getOdsFullPath(this, saveFileChooser, odsFullPath, sampleFilenameCore)) {
-//            // Read sample ods resource file
-//            ClassLoader classLoader = getClass().getClassLoader();
-//            File source = new File(classLoader.getResource(sampleFilenameCore + ".ods").getFile());
-//            String extension = saveFileChooser.getFileFilter().getDescription();
-//
-//            if (extension.indexOf("*.ods") >= 0 && !odsFullPath.toString().endsWith(".ods")) {
-//                odsFullPath.append(".ods");
-//            }
-//
-//            File destin = new File(odsFullPath.toString());
-//            try {
-//                // Write resource into the file chosen by the user
-//                if (!noOverwritePossibleExistingSameFile(destin, odsFullPath.toString())) {
-//                    copyFileUsingFileChannels(source, destin);
-//                }
-//            } catch (IOException ex) {
-//                logParkingException(Level.SEVERE, ex, sampleFilenameCore + " downloading error");
-//            }
-//        }
+        if (wantToSaveFile(this, saveFileChooser, odsFullPath, sampleFilenameCore)) {
+            // Read sample ods resource file
+            ClassLoader classLoader = getClass().getClassLoader();
+            File source = new File(classLoader.getResource(sampleFilenameCore + ".ods").getFile());
+            String extension = saveFileChooser.getFileFilter().getDescription();
+
+            if (extension.indexOf("*.ods") >= 0 && !odsFullPath.toString().endsWith(".ods")) {
+                odsFullPath.append(".ods");
+            }
+
+            File destin = new File(odsFullPath.toString());
+            try {
+                // Write resource into the file chosen by the user
+                if (!noOverwritePossibleExistingSameFile(destin, odsFullPath.toString())) {
+                    copyFileUsingFileChannels(source, destin);
+                }
+            } catch (IOException ex) {
+                logParkingException(Level.SEVERE, ex, sampleFilenameCore + " downloading error");
+            }
+        }
     }//GEN-LAST:event_sampleButtonActionPerformed
 
     private void adjustTables() {
@@ -2637,7 +2678,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
             closeDBstuff(conn, selectStmt, rs, excepMsg);
         }
 
-        saveSheet.setEnabled(false);
+        saveSheet_Button.setEnabled(false);
         
         // <editor-fold defaultstate="collapsed" desc="-- Selection of a higher affiliation and loading of its lower affil'">
         int numRows = model.getRowCount();
@@ -2654,7 +2695,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
             }
             highlightTableRow(L1_Affiliation, viewIndexToHighlight);
             if (isManager) {
-                saveSheet.setEnabled(true);
+                saveSheet_Button.setEnabled(true);
             }
         }
         else
@@ -2800,7 +2841,6 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     private javax.swing.JLabel bldgTopTitle;
     private javax.swing.JPanel botLeft;
     private javax.swing.JPanel botRight;
-    private javax.swing.JPanel bottomGap;
     private javax.swing.JPanel bottomPanel;
     private javax.swing.JRadioButton buildingControl;
     private javax.swing.JPanel buildingPanel;
@@ -2818,13 +2858,13 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     private javax.swing.JButton deleteL1_Button;
     private javax.swing.JButton deleteL2_Button;
     private javax.swing.JButton deleteUnit_Button;
-    private javax.swing.Box.Filler filler1;
-    private javax.swing.Box.Filler filler2;
+    private javax.swing.JPanel eastPanel;
     private javax.swing.Box.Filler filler3;
     private javax.swing.Box.Filler filler4;
     private javax.swing.Box.Filler filler5;
     private javax.swing.Box.Filler filler6;
     private javax.swing.Box.Filler filler7;
+    private javax.swing.Box.Filler filler8;
     private javax.swing.ButtonGroup fourPanels;
     private javax.swing.Box.Filler h30_5;
     private javax.swing.JPanel helpPanel;
@@ -2845,6 +2885,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     private javax.swing.JButton modifyL1_Button;
     private javax.swing.JButton modifyL2_Button;
     private javax.swing.JButton modifyUnit_Button;
+    private javax.swing.JPanel northPanel;
     private javax.swing.JFileChooser odsFileChooser;
     private javax.swing.JPanel radioPanel1;
     private javax.swing.JPanel radioPanel2;
@@ -2852,14 +2893,17 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     private javax.swing.JPanel radioPanel4;
     private javax.swing.JButton readSheet;
     private javax.swing.JButton sampleButton;
-    private javax.swing.JButton saveSheet;
+    private javax.swing.JFileChooser saveFileChooser;
+    private javax.swing.JButton saveSheet_Button;
     private javax.swing.JScrollPane scrollBotLeft;
     private javax.swing.JScrollPane scrollTopLeft;
     private javax.swing.JScrollPane scrollTopRight;
+    private javax.swing.JPanel southPanel;
     private javax.swing.JPanel topLeft;
     private javax.swing.JPanel topPanel;
     private javax.swing.JPanel topRight;
     private javax.swing.JRadioButton unitControl;
+    private javax.swing.JPanel westPanel;
     private javax.swing.JPanel wholePanel;
     private javax.swing.JLabel workPanel;
     private javax.swing.JLabel workPanelName;
@@ -3362,11 +3406,11 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
         } else {
             deleteAll_Affiliation.setEnabled(false);
         }
-        readSheet.setEnabled(b);
+        saveSheet_Button.setEnabled(b);
         if (isManager) {
-            saveSheet.setEnabled(b);
+            readSheet.setEnabled(b);
         } else {
-            saveSheet.setEnabled(false);
+            readSheet.setEnabled(false);
         }
         closeFormButton.setEnabled(b);
     }

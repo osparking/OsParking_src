@@ -16,7 +16,18 @@
  */
 package com.osparking.vehicle;
 
+import static com.osparking.global.CommonData.ODS_FILEPATH;
 import static com.osparking.global.Globals.getNumericDigitCount;
+import java.awt.Component;
+import java.awt.Point;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.channels.FileChannel;
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JFileChooser;
 
 /**
  *
@@ -79,4 +90,52 @@ public class CommonData {
             return false;
         }
     }
+    
+    public static void setHelpDialogLoc(JButton odsHelpButton, JDialog helpDialog) {
+        Point buttonPoint = odsHelpButton.getLocationOnScreen();
+        int dialogWidth = helpDialog.getSize().width;
+        int dialogHeight = helpDialog.getSize().height;
+        
+        int helpDialogX = buttonPoint.x - dialogWidth / 2;
+        
+        if (helpDialogX < 0) {
+            helpDialogX = 0;
+        }
+        
+        int helpDialogY = buttonPoint.y - dialogHeight - 10;
+        if (helpDialogY < 0) {
+            helpDialogY = 0;
+        }
+        helpDialog.setLocation(helpDialogX, helpDialogY);
+    }   
+    
+    public static boolean wantToSaveFile(Component aFrame, 
+            JFileChooser saveFileChooser, StringBuffer fullPath, String filename)
+    {
+        String filePath = ODS_FILEPATH +  File.separator + filename;
+        File defFile = new File(filePath);
+        
+        saveFileChooser.setSelectedFile(defFile);
+        
+        if (saveFileChooser.showSaveDialog(aFrame) == JFileChooser.APPROVE_OPTION) {
+            fullPath.append(saveFileChooser.getSelectedFile().getAbsolutePath());
+            return true;
+        } else {
+            return false;
+        }
+    }    
+    
+    public static void copyFileUsingFileChannels(File source, File dest)
+                    throws IOException {
+        FileChannel inputChannel = null;
+        FileChannel outputChannel = null;
+        try {
+                inputChannel = new FileInputStream(source).getChannel();
+                outputChannel = new FileOutputStream(dest).getChannel();
+                outputChannel.transferFrom(inputChannel, 0, inputChannel.size());
+        } finally {
+                inputChannel.close();
+                outputChannel.close();
+        }
+    }       
 }

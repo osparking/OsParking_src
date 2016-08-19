@@ -67,7 +67,8 @@ public class ODS_HelpJDialog extends javax.swing.JDialog {
     /**
      * Creates new form NewOkCancelDialog
      */
-    public ODS_HelpJDialog(java.awt.Frame parent, boolean modal, String helpTitle, ODS_TYPE odsType) {        
+    public ODS_HelpJDialog(java.awt.Frame parent, boolean modal, String helpTitle, 
+            ODS_TYPE odsType) {        
         super(parent, modal);
         this.odsType = odsType;
         initComponents();
@@ -77,12 +78,16 @@ public class ODS_HelpJDialog extends javax.swing.JDialog {
         
         setTitle(title);
         int imgLblWidthBefore = odsHelpLabel.getPreferredSize().width;
+        int imgLblHeightBefore = odsHelpLabel.getPreferredSize().height;
         setHelpContents(helpTitle, odsType);
         int imgLblWidthAfter = odsHelpLabel.getPreferredSize().width;
+        int imgLblHeightAfter = odsHelpLabel.getPreferredSize().height;
         int widthDiff = imgLblWidthAfter - imgLblWidthBefore;
+        int heightDiff = imgLblHeightAfter - imgLblHeightBefore;
         
         Dimension size = getSize();
-        Dimension newSize = new Dimension(size.width + widthDiff, size.height);
+        Dimension newSize = new Dimension(size.width + widthDiff, 
+                size.height + heightDiff);
         setPreferredSize(newSize);
         setSize(newSize);
         setResizable(false);
@@ -115,15 +120,15 @@ public class ODS_HelpJDialog extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        westFiller = new javax.swing.Box.Filler(new java.awt.Dimension(40, 0), new java.awt.Dimension(40, 0), new java.awt.Dimension(40, 32767));
+        topFiller = new javax.swing.Box.Filler(new java.awt.Dimension(0, 20), new java.awt.Dimension(0, 40), new java.awt.Dimension(32767, 20));
+        centerPanel = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 20), new java.awt.Dimension(0, 20), new java.awt.Dimension(32767, 20));
-        filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 20), new java.awt.Dimension(0, 20), new java.awt.Dimension(32767, 20));
         jPanel3 = new javax.swing.JPanel();
-        filler3 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
+        filler3 = new javax.swing.Box.Filler(new java.awt.Dimension(90, 0), new java.awt.Dimension(90, 0), new java.awt.Dimension(90, 0));
         HelpTitleLabel = new javax.swing.JLabel();
-        filler4 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
         closeButton = new javax.swing.JButton();
-        filler5 = new javax.swing.Box.Filler(new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 32767));
         jScrollPane1 = new javax.swing.JScrollPane(topTextArea,
             JScrollPane.VERTICAL_SCROLLBAR_NEVER,
             JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED
@@ -131,6 +136,8 @@ public class ODS_HelpJDialog extends javax.swing.JDialog {
         topTextArea = new javax.swing.JTextArea();
         jPanel2 = new javax.swing.JPanel();
         odsHelpLabel = new javax.swing.JLabel();
+        botFiller = new javax.swing.Box.Filler(new java.awt.Dimension(0, 20), new java.awt.Dimension(0, 40), new java.awt.Dimension(32767, 20));
+        eastFiller = new javax.swing.Box.Filler(new java.awt.Dimension(40, 0), new java.awt.Dimension(40, 0), new java.awt.Dimension(40, 32767));
 
         setTitle("Help on ods File");
         setMinimumSize(new java.awt.Dimension(560, 550));
@@ -139,26 +146,24 @@ public class ODS_HelpJDialog extends javax.swing.JDialog {
                 closeDialog(evt);
             }
         });
-        getContentPane().setLayout(new javax.swing.BoxLayout(getContentPane(), javax.swing.BoxLayout.PAGE_AXIS));
+        getContentPane().add(westFiller, java.awt.BorderLayout.LINE_START);
+        getContentPane().add(topFiller, java.awt.BorderLayout.NORTH);
+
+        centerPanel.setLayout(new javax.swing.BoxLayout(centerPanel, javax.swing.BoxLayout.Y_AXIS));
 
         jPanel1.setLayout(new java.awt.BorderLayout());
         jPanel1.add(filler1, java.awt.BorderLayout.SOUTH);
-        jPanel1.add(filler2, java.awt.BorderLayout.NORTH);
 
         jPanel3.setMinimumSize(new java.awt.Dimension(217, 30));
-        jPanel3.setLayout(new javax.swing.BoxLayout(jPanel3, javax.swing.BoxLayout.LINE_AXIS));
-        jPanel3.add(filler3);
 
         HelpTitleLabel.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         HelpTitleLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         HelpTitleLabel.setText("<Help Window Title>");
         HelpTitleLabel.setToolTipText("");
         HelpTitleLabel.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        HelpTitleLabel.setMaximumSize(new java.awt.Dimension(300, 23));
-        HelpTitleLabel.setMinimumSize(new java.awt.Dimension(300, 23));
-        HelpTitleLabel.setPreferredSize(new java.awt.Dimension(300, 23));
-        jPanel3.add(HelpTitleLabel);
-        jPanel3.add(filler4);
+        HelpTitleLabel.setMaximumSize(new java.awt.Dimension(200, 23));
+        HelpTitleLabel.setMinimumSize(new java.awt.Dimension(200, 23));
+        HelpTitleLabel.setPreferredSize(new java.awt.Dimension(200, 23));
 
         closeButton.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         closeButton.setMnemonic('C');
@@ -171,13 +176,38 @@ public class ODS_HelpJDialog extends javax.swing.JDialog {
                 closeButtonActionPerformed(evt);
             }
         });
-        jPanel3.add(closeButton);
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addComponent(filler3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
+                .addComponent(HelpTitleLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(closeButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addComponent(filler3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGap(1, 1, 1)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(HelpTitleLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(closeButton, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addGap(6, 6, 6))
+        );
+
         getRootPane().setDefaultButton(closeButton);
-        jPanel3.add(filler5);
 
         jPanel1.add(jPanel3, java.awt.BorderLayout.CENTER);
 
-        getContentPane().add(jPanel1);
+        centerPanel.add(jPanel1);
 
         jScrollPane1.setHorizontalScrollBar(null);
 
@@ -189,7 +219,7 @@ public class ODS_HelpJDialog extends javax.swing.JDialog {
         topTextArea.setPreferredSize(new java.awt.Dimension(511, 94));
         jScrollPane1.setViewportView(topTextArea);
 
-        getContentPane().add(jScrollPane1);
+        centerPanel.add(jScrollPane1);
 
         jPanel2.setLayout(new java.awt.BorderLayout());
 
@@ -209,7 +239,11 @@ public class ODS_HelpJDialog extends javax.swing.JDialog {
         });
         jPanel2.add(odsHelpLabel, java.awt.BorderLayout.CENTER);
 
-        getContentPane().add(jPanel2);
+        centerPanel.add(jPanel2);
+
+        getContentPane().add(centerPanel, java.awt.BorderLayout.CENTER);
+        getContentPane().add(botFiller, java.awt.BorderLayout.SOUTH);
+        getContentPane().add(eastFiller, java.awt.BorderLayout.EAST);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -289,18 +323,20 @@ public class ODS_HelpJDialog extends javax.swing.JDialog {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel HelpTitleLabel;
+    private javax.swing.Box.Filler botFiller;
+    private javax.swing.JPanel centerPanel;
     private javax.swing.JButton closeButton;
+    private javax.swing.Box.Filler eastFiller;
     private javax.swing.Box.Filler filler1;
-    private javax.swing.Box.Filler filler2;
     private javax.swing.Box.Filler filler3;
-    private javax.swing.Box.Filler filler4;
-    private javax.swing.Box.Filler filler5;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel odsHelpLabel;
+    private javax.swing.Box.Filler topFiller;
     private javax.swing.JTextArea topTextArea;
+    private javax.swing.Box.Filler westFiller;
     // End of variables declaration//GEN-END:variables
 
     private int returnStatus = RET_CANCEL;
@@ -319,20 +355,20 @@ public class ODS_HelpJDialog extends javax.swing.JDialog {
             case AFFILIATION:
                 switch(language){
                     case ENGLISH:
-                        filename = "/affiliation_good_Eng.png";
+                        filename = "/affiliation_Eng.png";
                         break;
                     default:
-                       filename = "/affiliation_good_Kor.png";
+                       filename = "/affiliation_Kor.png";
                        break;
                 }
                 break;
             case BUILDING:
                 switch(language){
                     case ENGLISH:
-                        filename = "/building_good_Eng.png";
+                        filename = "/building_Eng.png";
                         break;
                     default:
-                        filename = "/building_good_Kor.png";
+                        filename = "/building_Kor.png";
                         break;
                 }
                 break;
