@@ -2979,6 +2979,7 @@
                             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                               <Connection code="CLEAR_BTN.getContent()" type="code"/>
                             </Property>
+                            <Property name="enabled" type="boolean" value="false"/>
                             <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                               <Connection code="new Dimension(buttonWidthNorm, buttonHeightNorm)" type="code"/>
                             </Property>
@@ -3018,6 +3019,7 @@
                             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                               <Connection code="SEARCH_BTN.getContent()" type="code"/>
                             </Property>
+                            <Property name="enabled" type="boolean" value="false"/>
                             <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                               <Connection code="new Dimension(buttonWidthNorm, buttonHeightNorm)" type="code"/>
                             </Property>

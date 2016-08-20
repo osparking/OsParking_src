@@ -21,6 +21,8 @@ import static com.mysql.jdbc.MysqlErrorNumbers.ER_NO;
 import static com.mysql.jdbc.MysqlErrorNumbers.ER_YES;
 import com.osparking.global.CommonData;
 import static com.osparking.global.CommonData.ADMIN_ID;
+import static com.osparking.global.CommonData.DARK_BLUE;
+import static com.osparking.global.CommonData.LIGHT_BLUE;
 import static com.osparking.global.CommonData.ODS_DIRECTORY;
 import static com.osparking.global.CommonData.buttonHeightNorm;
 import static com.osparking.global.CommonData.buttonWidthNorm;
@@ -150,6 +152,8 @@ import static java.awt.Color.black;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.awt.event.ItemEvent;
+import static java.awt.event.ItemEvent.SELECTED;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
@@ -192,6 +196,7 @@ import org.jopendocument.dom.spreadsheet.SpreadSheet;
  */
 public class AffiliationBuildingForm extends javax.swing.JFrame {
     private FormMode formMode = NormalMode;
+    private int[] prevSelection = new int[4];
     /**
      * Creates new form BuildingManageFrame
      */
@@ -203,11 +208,11 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
          * Set icon for the simulated camera program
          */
         setIconImages(OSPiconList);
-//        this.setLocationRelativeTo(null);
         this.getContentPane().setBackground(PopUpBackground);       
         adjustTables();
         loadL1_Affiliation(0, "");
         loadBuilding(0, 0);
+        BuildingTable.setSelectionBackground(LIGHT_BLUE);
         setFormMode(NormalMode);
         
         if (isManager) {
@@ -320,7 +325,8 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle(AFFILI_BUILD_FRAME_TITLE.getContent());
         setBackground(PopUpBackground);
-        setMinimumSize(new Dimension(750, normGUIheight));
+        setMinimumSize(new Dimension(750, normGUIheight + 30));
+        setPreferredSize(new java.awt.Dimension(750, 750));
 
         northPanel.setPreferredSize(new java.awt.Dimension(729, 40));
 
@@ -507,6 +513,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     .setHorizontalAlignment(JLabel.CENTER);
     L1_Affiliation.setDoubleBuffered(true);
     L1_Affiliation.setRowHeight(tableRowHeight);
+    L1_Affiliation.setSelectionBackground(DARK_BLUE);
     L1_Affiliation.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     L1_Affiliation.addFocusListener(new java.awt.event.FocusAdapter() {
         public void focusLost(java.awt.event.FocusEvent evt) {
@@ -707,6 +714,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     L2_Affiliation.setDoubleBuffered(true);
     L2_Affiliation.setEnabled(false);
     L2_Affiliation.setRowHeight(tableRowHeight);
+    L2_Affiliation.setSelectionBackground(DARK_BLUE);
     L2_Affiliation.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     L2_Affiliation.addFocusListener(new java.awt.event.FocusAdapter() {
         public void focusLost(java.awt.event.FocusEvent evt) {
@@ -909,6 +917,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     BuildingTable.setDoubleBuffered(true);
     BuildingTable.setEnabled(false);
     BuildingTable.setRowHeight(tableRowHeight);
+    BuildingTable.setSelectionBackground(DARK_BLUE);
     L1_Affiliation.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     BuildingTable.addFocusListener(new java.awt.event.FocusAdapter() {
         public void focusLost(java.awt.event.FocusEvent evt) {
@@ -1099,6 +1108,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     UnitTable.getColumnModel().getColumn(1).setCellRenderer(numberCellRenderer);
     UnitTable.setDoubleBuffered(true);
     UnitTable.setRowHeight(tableRowHeight);
+    UnitTable.setSelectionBackground(DARK_BLUE);
     L2_Affiliation.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     UnitTable.addFocusListener(new java.awt.event.FocusAdapter() {
         public void focusLost(java.awt.event.FocusEvent evt) {
@@ -1330,8 +1340,8 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     leftButtons.add(ODSAffiliHelp, gridBagConstraints);
 
     sampleButton.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-    sampleButton.setMnemonic('M');
-    sampleButton.setText(SAMPLE_BTN.getContent());
+    sampleButton.setMnemonic('S');
+    sampleButton.setText(SAMPLE2_BTN.getContent());
     sampleButton.setToolTipText(DRIVER_ODS_UPLOAD_SAMPLE_DOWNLOAD.getContent());
     sampleButton.setEnabled(false);
     sampleButton.setMaximumSize(new java.awt.Dimension(80, 30));
@@ -1438,7 +1448,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
                             }
                             else
                             {
-                                loadL2_Affiliation(null, 0, "");
+                                // loadL2_Affiliation(null, 0, ""); abcd
                             }
 
                             // clear L2List selection
@@ -2477,6 +2487,13 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     private void affiL2_ControlItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_affiL2_ControlItemStateChanged
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
+                if (evt.getStateChange() == SELECTED) {
+                    if (L1_Affiliation.getSelectedRowCount() == 0) {
+                        int prevSel = prevSelection[L1_TABLE.ordinal()];
+                        L1_Affiliation.setRowSelectionInterval(prevSel, prevSel);
+                    }
+                }
+                manageSelection(evt, L2_Affiliation);
                 changeControlEnabledForTable(L2_TABLE);
             }
         }); 
@@ -2485,6 +2502,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     private void affiL1_ControlItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_affiL1_ControlItemStateChanged
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
+                manageSelection(evt, L1_Affiliation);
                 changeControlEnabledForTable(L1_TABLE);
             }
         });
@@ -2493,6 +2511,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     private void unitControlItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_unitControlItemStateChanged
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
+                manageSelection(evt, UnitTable);
                 changeControlEnabledForTable(UnitTab);                             
             }
         }); 
@@ -2501,6 +2520,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     private void buildingControlItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_buildingControlItemStateChanged
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
+                manageSelection(evt, BuildingTable);
                 changeControlEnabledForTable(Building);                
             }
         });  
@@ -2959,7 +2979,8 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
                 viewIndex = BuildingTable.convertRowIndexToView(model_Index);
             } else if (viewIndex == numRows)
             {
-                // "number of remaining rows == deleted row index" means the row deleted was the last row
+                // "number of remaining rows == deleted row index" means
+                // the row deleted was the last row
                 // In this case, highlight the previous row      
                 viewIndex--;
             }
@@ -3807,6 +3828,14 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
         if (table.editCellAt(row, 1)) {
             table.getEditorComponent().requestFocus();
         }      
+    }
+
+    private void manageSelection(ItemEvent evt, JTable table) {
+        if (evt.getStateChange() == SELECTED) {
+            table.setSelectionBackground(DARK_BLUE);
+        } else {
+            table.setSelectionBackground(LIGHT_BLUE);
+        }
     }
 
     private class HdrMouseListener extends MouseAdapter {

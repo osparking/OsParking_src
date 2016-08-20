@@ -84,6 +84,8 @@ public class CommonData { // new Dimension(carTagWidth, 30)
         metaKeyLabel.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         metaKeyLabel.setForeground(tipColor);
     }
+    public static final Color DARK_BLUE = new Color(0x00, 0x33, 0x66);
+    public static final Color LIGHT_BLUE = new Color(0xb3, 0xd9, 0xFF);
     public static final Color pointColor = new java.awt.Color(255, 51, 51);
     
     public static final DefaultTableCellRenderer putCellCenter = new DefaultTableCellRenderer();

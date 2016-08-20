@@ -2997,20 +2997,4 @@ public class ManageDrivers extends javax.swing.JFrame {
             lowerCBox.setSelectedItem(selItem);
         }    
     }
-
-//    private boolean getOdsFullPath(Component aFrame, JFileChooser saveFileChooser, 
-//            StringBuffer fullPath, String filename)
-//    {
-//        String filePath = ODS_FILEPATH +  File.separator + filename;
-//        File defFile = new File(filePath);
-//        
-//        saveFileChooser.setSelectedFile(defFile);
-//        
-//        if (saveFileChooser.showSaveDialog(aFrame) == JFileChooser.APPROVE_OPTION) {
-//            fullPath.append(saveFileChooser.getSelectedFile().getAbsolutePath());
-//            return true;
-//        } else {
-//            return false;
-//        }
-//    }
 }

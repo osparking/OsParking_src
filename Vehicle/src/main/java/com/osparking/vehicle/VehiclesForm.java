@@ -917,6 +917,7 @@ public class VehiclesForm extends javax.swing.JFrame {
         clearButton.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         clearButton.setMnemonic('l');
         clearButton.setText(CLEAR_BTN.getContent());
+        clearButton.setEnabled(false);
         clearButton.setMaximumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
         clearButton.setMinimumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
         clearButton.setPreferredSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
@@ -931,6 +932,7 @@ public class VehiclesForm extends javax.swing.JFrame {
         searchButton.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         searchButton.setMnemonic('s');
         searchButton.setText(SEARCH_BTN.getContent());
+        searchButton.setEnabled(false);
         searchButton.setMaximumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
         searchButton.setMinimumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
         searchButton.setPreferredSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
