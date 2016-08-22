@@ -16,6 +16,7 @@
  */
 package com.osparking.osparking;
 
+import static com.osparking.global.CommonData.ODS_DIRECTORY;
 import static com.osparking.global.CommonData.buttonHeightNorm;
 import static com.osparking.global.CommonData.buttonWidthNorm;
 import static com.osparking.global.CommonData.normGUIheight;
@@ -28,6 +29,7 @@ import static com.osparking.global.Globals.OSPiconList;
 import static com.osparking.global.Globals.SetAColumnWidth;
 import static com.osparking.global.Globals.checkOptions;
 import static com.osparking.global.Globals.closeDBstuff;
+import static com.osparking.global.Globals.determineLoginID;
 import static com.osparking.global.Globals.font_Size;
 import static com.osparking.global.Globals.font_Style;
 import static com.osparking.global.Globals.font_Type;
@@ -53,6 +55,7 @@ import static com.osparking.global.names.ControlEnums.ToolTipContent.ENABLING_CO
 import static com.osparking.global.names.DB_Access.parkingLotLocale;
 import static com.osparking.global.names.DB_Access.readSettings;
 import com.osparking.global.names.JDBCMySQL;
+import com.osparking.global.names.OdsFileOnly;
 import java.awt.Dimension;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -163,6 +166,8 @@ public class RunRecordList extends javax.swing.JFrame {
         CloseFormButton = new javax.swing.JButton();
 
         saveFileChooser.setDialogType(javax.swing.JFileChooser.SAVE_DIALOG);
+        saveFileChooser.setCurrentDirectory(ODS_DIRECTORY);
+        saveFileChooser.setFileFilter(new OdsFileOnly());
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle(RUN_RECORD_FRAME_TITLE.getContent());
@@ -475,13 +480,14 @@ public class RunRecordList extends javax.swing.JFrame {
         checkOptions(args);
         readSettings();
         
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new RunRecordList().setVisible(true);
-                
-            }
-        });
+        if (determineLoginID() != null) {
+            /* Create and display the form */
+            java.awt.EventQueue.invokeLater(new Runnable() {
+                public void run() {
+                    new RunRecordList().setVisible(true);
+                }
+            });
+        }
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
