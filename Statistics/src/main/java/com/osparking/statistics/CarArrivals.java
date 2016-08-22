@@ -1775,6 +1775,7 @@ public class CarArrivals extends javax.swing.JFrame {
             pStmt = conn.prepareStatement(sql);
             pStmt.setInt(1, option);
             if (pStmt.executeUpdate() == 1) {
+                SEARCH_PERIOD = option;
                 JOptionPane.showConfirmDialog(null, PERIOD_SETTING_RESULT.getContent(),
                     NOTICE_DIALOGTITLE.getContent(),
                     JOptionPane.PLAIN_MESSAGE, INFORMATION_MESSAGE);
@@ -1791,18 +1792,25 @@ public class CarArrivals extends javax.swing.JFrame {
         if (periodRadioButton.isSelected()) {
             BeginDateChooser.setEnabled(true);
             EndDateChooser.setEnabled(true);
+            changeSetButtonEnabled(SearchPeriod.GivenPeriod);
         }
-        changeSearchButtonEnabled();        
+        changeSearchButtonEnabled();
     }//GEN-LAST:event_periodRadioButtonActionPerformed
 
     private void oneDayRadioButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_oneDayRadioButtonActionPerformed
-        disablePeriodChooser();
-        changeSearchButtonEnabled();        
+        if (oneDayRadioButton.isSelected()) {
+            disablePeriodChooser();
+            changeSetButtonEnabled(SearchPeriod.OneDay);
+        }
+        changeSearchButtonEnabled();
     }//GEN-LAST:event_oneDayRadioButtonActionPerformed
 
     private void oneHourRadioButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_oneHourRadioButtonActionPerformed
-        disablePeriodChooser();
-        changeSearchButtonEnabled();        
+        if (oneHourRadioButton.isSelected()) {
+            disablePeriodChooser();
+            changeSetButtonEnabled(SearchPeriod.OneHour);
+        }
+        changeSearchButtonEnabled();
     }//GEN-LAST:event_oneHourRadioButtonActionPerformed
 
     private void clearSearchPropertiesButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearSearchPropertiesButtonActionPerformed
@@ -1843,16 +1851,9 @@ public class CarArrivals extends javax.swing.JFrame {
     }//GEN-LAST:event_searchUnitComboBoxPopupMenuWillBecomeInvisible
 
     private void searchUnitComboBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_searchUnitComboBoxItemStateChanged
-        changeSearchButtonEnabled();
-
-        if (searchUnitComboBox.getSelectedIndex() == NOT_SELECTED) {
-            changedControls.remove(searchUnitComboBox);
-        } else {
-            if (searchL2ComboBox.getSelectedIndex() == CommonData.PROMPTER_KEY) {
-                changedControls.remove(searchUnitComboBox);
-            } else {
-                changedControls.add(searchUnitComboBox);
-            }
+        if (evt.getStateChange() == SELECTED) {
+            changeSearchButtonEnabled();
+            applyCBoxItemChangeToChangedSet(searchUnitComboBox);
         }
     }//GEN-LAST:event_searchUnitComboBoxItemStateChanged
 
@@ -1891,16 +1892,9 @@ public class CarArrivals extends javax.swing.JFrame {
     }//GEN-LAST:event_searchL2ComboBoxPopupMenuWillBecomeInvisible
 
     private void searchL2ComboBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_searchL2ComboBoxItemStateChanged
-        changeSearchButtonEnabled();
-
-        if (searchL2ComboBox.getSelectedIndex() == NOT_SELECTED) {
-            changedControls.remove(searchL2ComboBox);
-        } else {
-            if (searchL2ComboBox.getSelectedIndex() == CommonData.PROMPTER_KEY) {
-                changedControls.remove(searchL2ComboBox);
-            } else {
-                changedControls.add(searchL2ComboBox);
-            }
+        if (evt.getStateChange() == SELECTED) {
+            changeSearchButtonEnabled();
+            applyCBoxItemChangeToChangedSet(searchL2ComboBox);            
         }
     }//GEN-LAST:event_searchL2ComboBoxItemStateChanged
 
@@ -1920,7 +1914,7 @@ public class CarArrivals extends javax.swing.JFrame {
     }//GEN-LAST:event_searchL1ComboBoxActionPerformed
 
     private void gateBarCBItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_gateBarCBItemStateChanged
-        if (evt.getStateChange() == SELECTED && gateBarCB.getSelectedIndex() != 0) {
+        if (evt.getStateChange() == SELECTED) {
             changeSearchButtonEnabled();
             applyCBoxItemChangeToChangedSet(gateBarCB);
         }
@@ -1957,12 +1951,14 @@ public class CarArrivals extends javax.swing.JFrame {
     }//GEN-LAST:event_attendantCBPopupMenuWillBecomeVisible
 
     private void attendantCBItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_attendantCBItemStateChanged
-        changeSearchButtonEnabled();
-        applyCBoxItemChangeToChangedSet(attendantCB);
+        if (evt.getStateChange() == SELECTED) {
+            changeSearchButtonEnabled();
+            applyCBoxItemChangeToChangedSet(attendantCB);
+        }
     }//GEN-LAST:event_attendantCBItemStateChanged
 
     private void gateCBItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_gateCBItemStateChanged
-        if (evt.getStateChange() == SELECTED && gateCB.getSelectedIndex() != 0) {
+        if (evt.getStateChange() == SELECTED) {
             changeSearchButtonEnabled();
             applyCBoxItemChangeToChangedSet(gateCB);
         }
@@ -2558,6 +2554,9 @@ public class CarArrivals extends javax.swing.JFrame {
             attachConditionT3(cond, "attendantID", (String)selValue);
         }
 
+        if (gateBarCB.getSelectedItem() == null) {
+            return "";
+        }
         keyObj =((ConvComboBoxItem)gateBarCB.getSelectedItem()).getKeyValue();
         if (keyObj.getClass() == Integer.class && (Integer)keyObj == NOT_SELECTED) {
         } else {
@@ -2782,6 +2781,19 @@ public class CarArrivals extends javax.swing.JFrame {
         gateCB.addItem(new ConvComboBoxItem(-1, GATE_CB_ITEM.getContent()));
         for (int i = 1; i <= gateCount; i++) {
             gateCB.addItem(new ConvComboBoxItem(i, gateNames[i]));
+        }
+    }
+
+    private void changeSetButtonEnabled(SearchPeriod searchPeriod) {
+        if (searchPeriod.ordinal() == SEARCH_PERIOD) {
+            // They are same, so disable SET button
+            setSearchPeriodOptionButton.setEnabled(false);
+        } else {
+            if (isManager) {
+                setSearchPeriodOptionButton.setEnabled(true);
+            } else {
+                setSearchPeriodOptionButton.setEnabled(false);
+            }
         }
     }
 }

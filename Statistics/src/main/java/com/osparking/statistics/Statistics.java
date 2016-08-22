@@ -17,6 +17,7 @@
 package com.osparking.statistics;
 
 import static com.osparking.global.Globals.checkOptions;
+import static com.osparking.global.Globals.determineLoginID;
 import static com.osparking.global.Globals.initializeLoggers;
 import static com.osparking.global.names.DB_Access.readSettings;
 
@@ -57,14 +58,16 @@ public class Statistics {
         checkOptions(args);
         readSettings();
         
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                CarArrivals vehicleArrivals = new CarArrivals();
-                vehicleArrivals.setDefaultCloseOperation(
-                        javax.swing.WindowConstants.EXIT_ON_CLOSE);
-                vehicleArrivals.setVisible(true);
-            }
-        });        
+        if (determineLoginID() != null) {
+            /* Create and display the form */
+            java.awt.EventQueue.invokeLater(new Runnable() {
+                public void run() {
+                    CarArrivals vehicleArrivals = new CarArrivals();
+                    vehicleArrivals.setDefaultCloseOperation(
+                            javax.swing.WindowConstants.EXIT_ON_CLOSE);
+                    vehicleArrivals.setVisible(true);
+                }
+            });   
+        }
     }
 }
