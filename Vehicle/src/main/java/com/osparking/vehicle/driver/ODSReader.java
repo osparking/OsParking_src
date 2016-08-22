@@ -52,9 +52,12 @@ import static com.osparking.global.names.ControlEnums.DialogMessages.DRIVER_ODS_
 import static com.osparking.global.names.ControlEnums.DialogMessages.DRIVER_ODS_READ_RESULT4;
 import static com.osparking.global.names.ControlEnums.DialogMessages.READ_FAIL_AFFILIATION_ODS_DIALOG;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.*;
+import com.osparking.global.names.DB_Access;
+import static com.osparking.global.names.DB_Access.insertOneVehicle;
 import static com.osparking.global.names.JDBCMySQL.getConnection;
 import com.osparking.global.names.OSP_enums.DriverCol;
 import com.osparking.global.names.OSP_enums.VehicleCol;
+import com.osparking.global.names.OSP_enums.VehicleOds;
 import com.osparking.global.names.WrappedInt;
 import static com.osparking.vehicle.CommonData.invalidCell;
 import static com.osparking.vehicle.CommonData.invalidName;
@@ -752,7 +755,7 @@ public class ODSReader {
         int numBlankRow = 0;
         for (int nRowIndex = 1; true; nRowIndex++)
         {   
-            //<editor-fold defaultstate="collapsed" desc="-- finish loading or skip row">              
+            //<editor-fold defaultstate="collapsed" desc="-- finish loading or skip a row">              
             // check if column 1 and 2 are empty, if so, consider it a blank row
             if (aBlankRow(sheet, nRowIndex)) {
                 numBlankRow++;
@@ -789,8 +792,6 @@ public class ODSReader {
                     }
                     
                     JOptionPane.showConfirmDialog(null, sb.toString(),
-//                            getTextFor(READ_VEHICLE_ODS_DIALOG, sb, 
-//                                    vehicleCount, duplicateCount, vehicleReject).toString(), 
                             ODS_CHECK_RESULT_TITLE.getContent(), 
                             JOptionPane.PLAIN_MESSAGE, INFORMATION_MESSAGE);                               
                     return;                    
@@ -799,67 +800,64 @@ public class ODSReader {
                 }
             }      
             //</editor-fold>
+
+            //<editor-fold defaultstate="collapsed" desc="-- Iterate through each column">   
+            String plateNo = "";
+            int seqNo = 0;
+            int notification = 0;
+            int  wholeTag = 0;
+            int  parkPermit = 1;
+            String reasonTxt = "";
+            String otherTxt = "";
             
-            //<editor-fold defaultstate="collapsed" desc="-- Iterate through each column">  
-            String carTag = (String)getCellValueAt(sheet, VehicleCol.PlateNumber.getNumVal(), nRowIndex).getValue();
-            String driver = (String)getCellValueAt(sheet, VehicleCol.Name.getNumVal(), nRowIndex).getValue();
-            String affiliation = (String)getCellValueAt(sheet, VehicleCol.Affiliation.getNumVal(), nRowIndex).getValue();
-            String building = (String)getCellValueAt(sheet, VehicleCol.Building.getNumVal(), nRowIndex).getValue();
-            String otherInfo = (String)getCellValueAt(sheet, VehicleCol.OtherInfo.getNumVal(), nRowIndex).getValue();
-            String cellPhone = (String)getCellValueAt(sheet, VehicleCol.CellPhone.getNumVal(), nRowIndex).getValue();
-            String phone = (String)getCellValueAt(sheet, VehicleCol.Phone.getNumVal(), nRowIndex).getValue();
-            int notification = Integer.parseInt(getCellValueAt(sheet, VehicleCol.Notification.getNumVal(), nRowIndex).getValue().toString());
-            int whole = Integer.parseInt(getCellValueAt(sheet, VehicleCol.Whole.getNumVal(), nRowIndex).getValue().toString());
-            int permitted = Integer.parseInt(getCellValueAt(sheet, VehicleCol.Permitted.getNumVal(), nRowIndex).getValue().toString());
-            String causes = (String)getCellValueAt(sheet, VehicleCol.Causes.getNumVal(), nRowIndex).getValue();
-            String creation = (String)getCellValueAt(sheet, VehicleCol.Creation.getNumVal(), nRowIndex).getValue();
-            String modification = (String)getCellValueAt(sheet, VehicleCol.Modification.getNumVal(), nRowIndex).getValue();
-            if(modification.equals(""))
-                modification = null;
-            int SeqNo = Integer.parseInt(getCellValueAt(sheet, VehicleCol.SeqNo.getNumVal(), nRowIndex).getValue().toString());
-            //</editor-fold>
-
-            Connection conn = null;
-            PreparedStatement createDriver = null;
-            String excepMsg = "while creating car driver info for : " + carTag;
-    
-            int result = 0;
-            try {
-                //<editor-fold defaultstate="collapsed" desc="--Insert driver info into Database">  
+            for(VehicleOds odsCol : VehicleOds.values())
+            {
+                MutableCell cell = sheet.getCellAt(odsCol.ordinal(), nRowIndex);
+                Object cellObj = cell.getValue();
                 
-                String sql = "Insert Into vehicles (PLATE_NUMBER, DRIVER_SEQ_NO, "
-                        + "NOTI_REQUESTED, WHOLE_REQUIRED, OTHER_INFO, " 
-                        + " PERMITTED, CREATIONDATE, LASTMODIDATE, Remark)" 
-                        + " Values (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-
-                conn = getConnection();
-                createDriver = conn.prepareStatement(sql);
-                createDriver.setString(1, carTag);
-                createDriver.setInt(2, SeqNo);
-                createDriver.setInt(3, notification);
-                createDriver.setInt(4, whole);
-                createDriver.setString(5, otherInfo);
-                createDriver.setInt(6, permitted);
-                createDriver.setString(7, creation);
-                createDriver.setString(8, modification);
-                createDriver.setString(9, causes);
-
-                result = createDriver.executeUpdate();
-                //</editor-fold>
-            } catch (SQLException ex) {
-                if (ex.getErrorCode() == ER_DUP_ENTRY) {
-                    duplicateCount++;
-                } else {
-                    logParkingException(Level.SEVERE, ex, excepMsg);
+                switch (odsCol) {
+                    case PlateNumber:
+                        plateNo = (String) cellObj;
+                        break;
+                        
+                    case DriverSN:
+                        seqNo = Integer.parseInt(cellObj.toString().trim());
+                        break;
+                        
+                    case Notification:
+                        notification = Integer.parseInt(cellObj.toString().trim());
+                        break;
+                        
+                    case Whole:
+                        wholeTag = Integer.parseInt(cellObj.toString().trim());
+                        break;
+                        
+                    case Permitted:
+                        parkPermit = Integer.parseInt(cellObj.toString().trim());
+                        break;
+                        
+                    case Causes:
+                        reasonTxt = (String) cellObj;
+                        break;
+                        
+                    case OtherInfo:
+                        otherTxt = (String) cellObj;
+                        break;
+                        
+                    default:
+                        break;
                 }
-            } finally {
-                if (result == 1) {
-                    vehicleCount++;
-                } else {
-                    vehicleReject++;
-                }  
-                closeDBstuff(conn, createDriver, null, excepMsg);
             }
+            //</editor-fold>
+    
+            int result = insertOneVehicle(plateNo, seqNo, notification,
+                    wholeTag, parkPermit, reasonTxt, otherTxt);
+
+            if (result == 1) {
+                vehicleCount++;
+            } else {
+                vehicleReject++;
+            }  
         }
     }
 
@@ -985,7 +983,7 @@ public class ODSReader {
         }
     }
     
-    public boolean chekcVehiclesODS(Sheet sheet, ArrayList<Point> wrongCells, WrappedInt driverTotal){
+    public boolean checkVehiclesODS(Sheet sheet, ArrayList<Point> wrongCells, WrappedInt driverTotal){
         int numBlankRow = 0;
         MutableCell cell = null;
         
@@ -1003,38 +1001,47 @@ public class ODSReader {
             }
             
             //<editor-fold defaultstate="collapsed" desc="-- Iterate through each column">    
-            for(int nColIndex =0 ; nColIndex < 15; nColIndex++)
+            for(int column = 0 ; column < VehicleOds.values().length ; column++)
             {
-                cell = sheet.getCellAt(nColIndex, nRowIndex);
+                cell = sheet.getCellAt(column, nRowIndex);
                 Object cellObj = cell.getValue();
-                int column = nColIndex;
                 
-                if (column == VehicleCol.PlateNumber.getNumVal()) {
-                    if (cellObj.toString().trim().length() == 0) {
-                        wrongCells.add(new Point(nRowIndex+1, column));
+                if (column == VehicleOds.PlateNumber.ordinal()) {
+                    if (/* tag number wrong format */ true) 
+                    {
+                        String tagNumber = (String) cellObj;
+                        if (tagNumber.trim().length() == 0) {
+                            wrongCells.add(new Point(nRowIndex+1, column));
+                        }
                     }
-                } else if (column == VehicleCol.Name.getNumVal()) {
-                    if (cellObj.toString().trim().length() == 0) {
+                } else if (column == VehicleOds.DriverSN.ordinal()) {
+                    String driverSN = cellObj.toString();
+                    if (driverSN == null || driverSN.trim().length() == 0) {
                         wrongCells.add(new Point(nRowIndex+1, column));
+                    } else {
+                        boolean wrongDriverNumber = false;
+                        try {
+                            Integer.parseInt(driverSN);
+                            if (DB_Access.getRecordCount("carDriver", "SEQ_NO", driverSN) != 1) 
+                            { 
+                                // Either no driver or multiple drivers.
+                                wrongDriverNumber = true;
+                            }
+                        } catch (NumberFormatException ex) {
+                            wrongDriverNumber = true;
+                        } finally {
+                            if (wrongDriverNumber) {
+                                wrongCells.add(new Point(nRowIndex+1, column));
+                            }
+                        }
                     }
-                } else if(column == VehicleCol.Notification.getNumVal()){
-                    if (cellObj.toString().trim().length() == 0) {
-                        wrongCells.add(new Point(nRowIndex+1, column));
-                    }
-                } else if(column == VehicleCol.Whole.getNumVal()){
-                    if (cellObj.toString().trim().length() == 0) {
-                        wrongCells.add(new Point(nRowIndex+1, column));
-                    }
-                } else if(column == VehicleCol.Permitted.getNumVal()){
-                    if (cellObj.toString().trim().length() == 0) {
-                        wrongCells.add(new Point(nRowIndex+1, column));
-                    }
-                } else if(column == VehicleCol.Creation.getNumVal()){
-                    if (cellObj.toString().trim().length() == 0) {
-                        wrongCells.add(new Point(nRowIndex+1, column));
-                    }
-                } else if(column == VehicleCol.SeqNo.getNumVal()){
-                    if (cellObj.toString().trim().length() == 0) {
+                } else if (column == VehicleOds.Notification.ordinal() ||
+                        column == VehicleOds.Whole.ordinal() ||
+                        column == VehicleOds.Permitted.ordinal()) 
+                {
+                    int option = Integer.parseInt(cellObj.toString().trim());
+                    
+                    if (option != 0 && option != 1) {
                         wrongCells.add(new Point(nRowIndex+1, column));
                     }
                 }
@@ -1042,8 +1049,6 @@ public class ODSReader {
             //</editor-fold>
             driverTotal.setValue(driverTotal.getValue() + 1);
         }
-        
-        
         
         if (wrongCells.size() > 0) {
             return false;

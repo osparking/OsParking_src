@@ -42,6 +42,7 @@ import static com.osparking.global.names.ControlEnums.TextType.PASSING_MSG;
 import static com.osparking.global.names.ControlEnums.TextType.SECOND_MSG;
 import static com.osparking.global.names.JDBCMySQL.OSP_PHONE;
 import static com.osparking.global.names.JDBCMySQL.PASSWORD;
+import static com.osparking.global.names.JDBCMySQL.getConnection;
 import com.osparking.global.names.OSP_enums.DeviceType;
 import static com.osparking.global.names.OSP_enums.DeviceType.Camera;
 import static com.osparking.global.names.OSP_enums.DeviceType.E_Board;
@@ -768,4 +769,38 @@ public class DB_Access {
         else 
             return strField;
     }
+    
+    public static int insertOneVehicle(String plateNo, int seqNo, int notification, 
+            int wholeTag, int parkPermit, String reasonTxt, String otherTxt) {
+        Connection conn = null;
+        PreparedStatement createDriver = null;
+        String excepMsg = "in creation of a car with tag number: " + plateNo;
+
+        int result = 0;
+        try {
+            StringBuffer sb = new StringBuffer("Insert Into Vehicles (");
+            sb.append(" PLATE_NUMBER, DRIVER_SEQ_NO, NOTI_REQUESTED,");
+            sb.append(" WHOLE_REQUIRED, PERMITTED, Remark, OTHER_INFO, ");
+            sb.append(" CREATIONDATE) Values (?, ?, ?, ?, ?, ?, ?, current_timestamp)");
+
+            conn = getConnection();
+            createDriver = conn.prepareStatement(sb.toString());
+            int loc = 1;
+            
+            createDriver.setString(loc++, plateNo);
+            createDriver.setInt(loc++, seqNo);
+            createDriver.setInt(loc++, notification);
+            createDriver.setInt(loc++, wholeTag);
+            createDriver.setInt(loc++, parkPermit);
+            createDriver.setString(loc++, reasonTxt);
+            createDriver.setString(loc++, otherTxt);
+            
+            result = createDriver.executeUpdate();
+        } catch (SQLException e) {
+            logParkingException(Level.SEVERE, e, excepMsg);
+        } finally {
+            closeDBstuff(conn, createDriver, null, excepMsg);
+            return result;
+        }
+    }    
 }

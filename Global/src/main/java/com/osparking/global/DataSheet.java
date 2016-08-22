@@ -81,7 +81,7 @@ public class DataSheet {
             return ext;
         }
     }    
-    
+
     /**
      * Saves data in a Java Table into an Open Office Calc file. 
      * Note that Open Office Calc has its file extension of 'ods'.
@@ -135,23 +135,23 @@ public class DataSheet {
     private static void saveOrNotWithFixedName(JFileChooser saveFileChooser, 
             String filePath, JTable tableToSave, String dirPath, String coreName) 
     {
-        File[] file = new File[1];
+        File file = null;
         String filename = coreName;
         FileFilter filter = saveFileChooser.getFileFilter();
         
-        file[0] = saveFileChooser.getSelectedFile();
-        if (filter instanceof OdsFileOnly) {
+        file = saveFileChooser.getSelectedFile();
+        if (filter instanceof OdsFileOnly ||
+                !(filePath.toLowerCase().endsWith(".ods"))) {
             filePath += ".ods";
-            filename = coreName + ".ods";
+            filename += ".ods";
+            file = new File(filePath);
         } 
-        verifyOdsExtension(saveFileChooser, file);
 
-        //<editor-fold desc="-- Determine if to overwrite existing file.">
-        if (noOverwritePossibleExistingSameFile(file[0], filePath)) {
+        if (noOverwritePossibleExistingSameFile(file, filePath)) {
             return;
         }
-        //</editor-fold>
             
+        //<editor-fold desc="-- Prepare data to save">
         final Object[][] data =
                 new Object[tableToSave.getModel().getRowCount()][tableToSave.getColumnCount()];
 
@@ -167,19 +167,21 @@ public class DataSheet {
         for (int col = 0; col < tableToSave.getColumnCount(); col++) {
             columns[col] = (String)tableToSave.getColumnModel().getColumn(col).getHeaderValue();
         }
+        //</editor-fold>
 
         TableModel model = new DefaultTableModel(data, columns);
         
         try {
-            SpreadSheet.createEmpty(model).saveAs(file[0]);
-            //<editor-fold desc="-- Display ods file saving result.">
+            SpreadSheet.createEmpty(model).saveAs(file);
+            //<editor-fold desc="-- Display result.">
             String message = ODS_SAVE_DIALOG_1.getContent() + System.lineSeparator() + 
                     System.lineSeparator() +
                     ODS_SAVE_DIALOG_2.getContent() + dirPath + System.lineSeparator() + 
                     ODS_SAVE_DIALOG_3.getContent() + filename + System.lineSeparator();
             JOptionPane.showMessageDialog(saveFileChooser, message, 
                     ODS_SAVE_TITLE.getContent(), JOptionPane.INFORMATION_MESSAGE);
-            OOUtils.open(file[0]);
+            
+            OOUtils.open(file);
             //</editor-fold>
         } catch (IOException ex) {
             System.out.println("File save exception: " + ex.getMessage());

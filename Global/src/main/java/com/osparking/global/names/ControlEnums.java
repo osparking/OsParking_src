@@ -146,6 +146,7 @@ public class ControlEnums {
         HELP_AFFIL_LABEL("소속 명칭 ods 파일 형식",  "Affiliation name list ods file content"), 
         HELP_BUILDING_LABEL("건물 호실 ods 파일 형식", "Building room number list ods file content"), 
         HELP_DRIVER_TITLE("운전자 ods 파일 형식", "Driver list ods file content"), 
+        HELP_VEHICLE_ODS("등록차량 ods 파일 형식", "Vehicle list ods file format"), 
         AFFILI_MODE_STRING("소속, 부서", "Affiliations"), 
         BUILDING_MODE_STRING("건물, 호실", "Building, Units"), 
         WORK_PANEL_LABEL("작업 대상 : ",  "Work Panel :"), 

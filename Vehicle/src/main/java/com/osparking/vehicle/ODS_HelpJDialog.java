@@ -382,6 +382,16 @@ public class ODS_HelpJDialog extends javax.swing.JDialog {
                         break;
                 }
                 break;
+            case VEHICLE:
+                switch(language){
+                    case ENGLISH:
+                        filename = "/vehicle_Eng.png";
+                        break;
+                    default:
+                        filename = "/vehicle_Kor.png";
+                        break;
+                }
+                break;
             default:
                 break;
         }

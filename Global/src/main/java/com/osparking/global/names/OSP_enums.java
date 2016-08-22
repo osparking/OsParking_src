@@ -109,6 +109,16 @@ public class OSP_enums {
         }    
     }
 
+    public enum VehicleOds {
+        PlateNumber,
+        DriverSN,
+        Notification,
+        Whole,
+        Permitted,
+        Causes,
+        OtherInfo
+    }   
+    
     public enum VehicleCol {
         RowNo(0),
         PlateNumber(1),
@@ -152,7 +162,8 @@ public class OSP_enums {
     public enum ODS_TYPE {
         AFFILIATION("소속", "AFFILI'"),
         BUILDING("건물", "Bldg"),
-        DRIVER("운전자", "Driver");
+        DRIVER("운전자", "Driver"),
+        VEHICLE("등록차량", "Vehicle");
         
         ODS_TYPE(String korean, String english) {
             label[KOREAN.ordinal()] = korean;

@@ -19,9 +19,9 @@ package com.osparking.vehicle.driver;
 import static com.mysql.jdbc.MysqlErrorNumbers.ER_DUP_ENTRY;
 import com.osparking.global.CommonData;
 import static com.osparking.global.CommonData.ADMIN_ID;
+import static com.osparking.global.CommonData.FIRST_ROW;
 import static com.osparking.global.CommonData.NOT_LISTED;
 import static com.osparking.global.CommonData.ODS_DIRECTORY;
-import static com.osparking.global.CommonData.ODS_FILEPATH;
 import static com.osparking.global.CommonData.PROMPTER_KEY;
 import static com.osparking.global.CommonData.buttonHeightNorm;
 import static com.osparking.global.CommonData.buttonWidthNorm;
@@ -151,13 +151,9 @@ import com.osparking.vehicle.LabelBlinker;
 import com.osparking.vehicle.ODS_HelpJDialog;
 import java.awt.AWTEvent;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.nio.channels.FileChannel;
 import java.util.Locale;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
@@ -210,7 +206,7 @@ public class ManageDrivers extends javax.swing.JFrame {
          */
         insertSave_Button.setText(CREATE_BTN.getContent());
         modiSave_Button.setText(MODIFY_BTN.getContent());
-        deleteDriver_Button.setText(DELETE_BTN.getContent());
+        deleteButton.setText(DELETE_BTN.getContent());
         cancelButton.setText(CANCEL_BTN.getContent());
         deleteAll_button.setText(DELETE_ALL_BTN.getContent());
         readSheet_Button.setText(READ_ODS_BTN.getContent());
@@ -352,10 +348,10 @@ public class ManageDrivers extends javax.swing.JFrame {
             case CreateMode:
                 formModeLabel.setText(CREATE_MODE_LABEL.getContent());
                 setSearchEnabled(false);
-                modiSave_Button.setEnabled(false);
                 insertSave_Button.setText(SAVE_BTN.getContent());
                 insertSave_Button.setMnemonic('s');
-                deleteDriver_Button.setEnabled(false);
+                modiSave_Button.setEnabled(false);
+                deleteButton.setEnabled(false);
                 deleteAll_button.setEnabled(false);
                 adminOperationEnabled(false);
                 tipLabel.setVisible(true);
@@ -367,8 +363,7 @@ public class ManageDrivers extends javax.swing.JFrame {
                 insertSave_Button.setEnabled(false);
                 modiSave_Button.setText(SAVE_BTN.getContent());
                 modiSave_Button.setMnemonic('s');
-                deleteDriver_Button.setEnabled(false);
-                deleteAll_button.setEnabled(false);
+                deleteButton.setEnabled(false);
                 adminOperationEnabled(false);
                 tipLabel.setVisible(true);                
                 break;
@@ -386,7 +381,8 @@ public class ManageDrivers extends javax.swing.JFrame {
                 insertSave_Button.setEnabled(true && isManager);
                 
                 if (driverTable.getSelectedRowCount() > 0) {
-                    deleteDriver_Button.setEnabled(true);
+                    modiSave_Button.setEnabled(isManager);
+                    deleteButton.setEnabled(isManager);
                 }
                 adminOperationEnabled(true);
                 tipLabel.setVisible(false);
@@ -412,10 +408,10 @@ public class ManageDrivers extends javax.swing.JFrame {
                     case NormalMode:
                         if (driverTable.getSelectedRowCount() == 0) {
                             modiSave_Button.setEnabled(false);
-                            deleteDriver_Button.setEnabled(false);
+                            deleteButton.setEnabled(false);
                         } else {
-                            modiSave_Button.setEnabled(true);
-                            deleteDriver_Button.setEnabled(true);
+                            modiSave_Button.setEnabled(isManager);
+                            deleteButton.setEnabled(isManager);
                         }
                         break;
                     case CreateMode: 
@@ -611,7 +607,7 @@ public class ManageDrivers extends javax.swing.JFrame {
         leftButtons = new javax.swing.JPanel();
         insertSave_Button = new javax.swing.JButton();
         modiSave_Button = new javax.swing.JButton();
-        deleteDriver_Button = new javax.swing.JButton();
+        deleteButton = new javax.swing.JButton();
         cancelButton = new javax.swing.JButton();
         rightButtons = new javax.swing.JPanel();
         deleteAll_button = new javax.swing.JButton();
@@ -647,7 +643,6 @@ public class ManageDrivers extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle(DRIVER_LIST_FRAME_TITLE.getContent());
         setMinimumSize(new Dimension(normGUIwidth, normGUIheight));
-        setPreferredSize(new Dimension(normGUIwidth,normGUIheight));
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 formWindowClosing(evt);
@@ -864,13 +859,6 @@ public class ManageDrivers extends javax.swing.JFrame {
         searchName.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
                 searchNameMousePressed(evt);
-            }
-        });
-        searchName.addInputMethodListener(new java.awt.event.InputMethodListener() {
-            public void inputMethodTextChanged(java.awt.event.InputMethodEvent evt) {
-                searchNameInputMethodTextChanged(evt);
-            }
-            public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
             }
         });
         searchName.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -1102,19 +1090,19 @@ public class ManageDrivers extends javax.swing.JFrame {
         });
         leftButtons.add(modiSave_Button);
 
-        deleteDriver_Button.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        deleteDriver_Button.setMnemonic('d');
-        deleteDriver_Button.setText("삭제(D)");
-        deleteDriver_Button.setEnabled(false);
-        deleteDriver_Button.setMaximumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
-        deleteDriver_Button.setMinimumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
-        deleteDriver_Button.setPreferredSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
-        deleteDriver_Button.addActionListener(new java.awt.event.ActionListener() {
+        deleteButton.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        deleteButton.setMnemonic('d');
+        deleteButton.setText("삭제(D)");
+        deleteButton.setEnabled(false);
+        deleteButton.setMaximumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
+        deleteButton.setMinimumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
+        deleteButton.setPreferredSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
+        deleteButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                deleteDriver_ButtonActionPerformed(evt);
+                deleteButtonActionPerformed(evt);
             }
         });
-        leftButtons.add(deleteDriver_Button);
+        leftButtons.add(deleteButton);
 
         cancelButton.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         cancelButton.setMnemonic('C');
@@ -1412,7 +1400,7 @@ public class ManageDrivers extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_modiSave_ButtonActionPerformed
 
-    private void deleteDriver_ButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteDriver_ButtonActionPerformed
+    private void deleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteButtonActionPerformed
         int rowV = driverTable.getSelectedRow();
         int rowM = -1;
         if (rowV != -1)
@@ -1532,7 +1520,7 @@ public class ManageDrivers extends javax.swing.JFrame {
             }
             //</editor-fold>
         }
-    }//GEN-LAST:event_deleteDriver_ButtonActionPerformed
+    }//GEN-LAST:event_deleteButtonActionPerformed
 
     private void driversTableKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_driversTableKeyReleased
         if (getFormMode() == FormMode.NormalMode 
@@ -1717,7 +1705,6 @@ public class ManageDrivers extends javax.swing.JFrame {
                     if (colBeforeCreate != -1) 
                         driverTable.changeSelection(rowBeforeCreate, colBeforeCreate, false, false);
                     highlightTableRow(driverTable, rowBeforeCreate);
-                    deleteDriver_Button.setEnabled(true);
                     driverTable.requestFocusInWindow();
                 }
             } else {
@@ -1976,10 +1963,6 @@ public class ManageDrivers extends javax.swing.JFrame {
         });
     }//GEN-LAST:event_searchPhoneKeyTyped
 
-    private void searchNameInputMethodTextChanged(java.awt.event.InputMethodEvent evt) {//GEN-FIRST:event_searchNameInputMethodTextChanged
-        System.out.println("text changed");
-    }//GEN-LAST:event_searchNameInputMethodTextChanged
-
     private void searchL1ComboBoxPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_searchL1ComboBoxPopupMenuWillBecomeInvisible
         changeSearchButtonEnabled();
     }//GEN-LAST:event_searchL1ComboBoxPopupMenuWillBecomeInvisible
@@ -2094,7 +2077,6 @@ public class ManageDrivers extends javax.swing.JFrame {
     static int prevRow = -1;
     static int prevCol = -1;
     
-    final int FIRST_ROW = 0;
     final int UNKNOWN = -1;
     
     /**
@@ -2213,7 +2195,6 @@ public class ManageDrivers extends javax.swing.JFrame {
             }
             if (0 <= viewIndex && viewIndex < numRows) {
                 highlightTableRow(driverTable, viewIndex);
-                deleteDriver_Button.setEnabled(true);
             }
             if (isManager) {
                 saveSheet_Button.setEnabled(true);
@@ -2234,7 +2215,7 @@ public class ManageDrivers extends javax.swing.JFrame {
     private javax.swing.JLabel countLbl;
     private javax.swing.JLabel countValue;
     private javax.swing.JButton deleteAll_button;
-    private javax.swing.JButton deleteDriver_Button;
+    private javax.swing.JButton deleteButton;
     private javax.swing.JScrollPane driversScrollPane;
     public static javax.swing.JTable driversTable;
     private javax.swing.JPanel eastPanel;
@@ -2923,7 +2904,6 @@ public class ManageDrivers extends javax.swing.JFrame {
                 setFormMode(FormMode.NormalMode);
                 if (rowBeforeCreate != -1) {
                     highlightTableRow(driverTable, rowBeforeCreate);
-                    deleteDriver_Button.setEnabled(true);
                 }                
             } else {
                 restoreDriverList(updateRow);                  

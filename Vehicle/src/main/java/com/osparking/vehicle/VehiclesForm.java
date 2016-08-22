@@ -17,6 +17,9 @@
 package com.osparking.vehicle;
 
 import com.osparking.global.CommonData;
+import static com.osparking.global.CommonData.ADMIN_ID;
+import static com.osparking.global.CommonData.FIRST_ROW;
+import static com.osparking.global.CommonData.ODS_DIRECTORY;
 import static com.osparking.global.CommonData.buttonHeightNorm;
 import static com.osparking.global.CommonData.buttonHeightShort;
 import static com.osparking.global.CommonData.buttonWidthNorm;
@@ -27,7 +30,9 @@ import static com.osparking.global.CommonData.pointColor;
 import static com.osparking.global.CommonData.putCellCenter;
 import static com.osparking.global.CommonData.tableRowHeight;
 import static com.osparking.global.CommonData.tipColor;
+import static com.osparking.global.DataSheet.noOverwritePossibleExistingSameFile;
 import static com.osparking.global.DataSheet.saveODSfile;
+import com.osparking.global.Globals;
 import com.osparking.vehicle.driver.DriverSelection;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -69,6 +74,7 @@ import static com.osparking.global.names.ControlEnums.LabelContent.COUNT_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.CREATE_MODE_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.DATA_REQUIRED;
 import static com.osparking.global.names.ControlEnums.LabelContent.EXACT_COMP_LABEL;
+import static com.osparking.global.names.ControlEnums.LabelContent.HELP_DRIVER_TITLE;
 import static com.osparking.global.names.ControlEnums.LabelContent.MODE_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.MODIFY_MODE_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.MODI_DATE_LABEL;
@@ -97,13 +103,20 @@ import static com.osparking.global.names.ControlEnums.ToolTipContent.AFFILIATION
 import static com.osparking.global.names.ControlEnums.ToolTipContent.BUILDING_TOOLTIP;
 import static com.osparking.global.names.ControlEnums.ToolTipContent.CAR_TAG_INPUT_TOOLTIP;
 import static com.osparking.global.names.ControlEnums.ToolTipContent.DRIVER_INPUT_TOOLTIP;
+import static com.osparking.global.names.ControlEnums.ToolTipContent.DRIVER_ODS_UPLOAD_SAMPLE_DOWNLOAD;
+import static com.osparking.global.names.ControlEnums.ToolTipContent.DRIVER_ODS_UPLOAD_SAMPLE_PNG;
 import static com.osparking.global.names.ControlEnums.ToolTipContent.OTHER_TOOLTIP;
+import static com.osparking.global.names.DB_Access.insertOneVehicle;
 import static com.osparking.global.names.JDBCMySQL.getConnection;
 import com.osparking.global.names.JTextFieldLimit;
 import com.osparking.global.names.OSP_enums;
+import com.osparking.global.names.OSP_enums.ODS_TYPE;
 import com.osparking.global.names.OSP_enums.VehicleCol;
+import com.osparking.global.names.OdsFileOnly;
 import com.osparking.global.names.PComboBox;
 import com.osparking.global.names.WrappedInt;
+import static com.osparking.vehicle.CommonData.copyFileUsingFileChannels;
+import static com.osparking.vehicle.CommonData.setHelpDialogLoc;
 import static com.osparking.vehicle.CommonData.vAffiliWidth;
 import static com.osparking.vehicle.CommonData.vBuildingWidth;
 import static com.osparking.vehicle.CommonData.vCauseWidth;
@@ -111,16 +124,18 @@ import static com.osparking.vehicle.CommonData.vDriverNmWidth;
 import static com.osparking.vehicle.CommonData.vOtherWidth;
 import static com.osparking.vehicle.CommonData.vPlateNoWidth;
 import static com.osparking.vehicle.CommonData.vRowNoWidth;
+import static com.osparking.vehicle.CommonData.wantToSaveFile;
 import com.osparking.vehicle.driver.ODSReader;
 import static com.osparking.vehicle.driver.ODSReader.getWrongCellPointString;
 import java.awt.Dimension;
 import java.awt.Point;
-import java.awt.Rectangle;
+import static java.awt.event.ItemEvent.SELECTED;
 import java.util.ArrayList;
 import java.util.logging.Logger;
+import javax.swing.JDialog;
 import javax.swing.JLabel;
 import static javax.swing.JOptionPane.WARNING_MESSAGE;
-import javax.swing.JTable;
+import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableCellRenderer;
 import org.jopendocument.dom.spreadsheet.Sheet;
 import org.jopendocument.dom.spreadsheet.SpreadSheet;
@@ -134,6 +149,8 @@ public class VehiclesForm extends javax.swing.JFrame {
     private FormMode formMode; 
     private DriverObj driverObj = new DriverObj("", 0);
     final int UNKNOWN = -1;
+    private String prevSearchCondition = null;    
+    private String currSearchCondition = null;       
     
     /**
      * Creates new form Vehicles
@@ -153,8 +170,12 @@ public class VehiclesForm extends javax.swing.JFrame {
         attachEnterHandler(disallowReason);
         
         setFormMode(FormMode.NormalMode);
+        setSearchEnabled(true);
+        
         loadSearchBox();
         attachEventListenerToVehicleTable();
+        
+        adminOperationEnabled(true);        
         loadVehicleTable(0, "");
         driverTextField.addActionListener(new ActionListener(){
             @Override
@@ -171,8 +192,21 @@ public class VehiclesForm extends javax.swing.JFrame {
         
         // limit the number of characters that can be entered to the (dis)allow reason field
         reasonTextField.setDocument(new JTextFieldLimit(20));
+        
+        if (isManager) {
+            sampleButton.setEnabled(true);
+        }        
     }
 
+    private void changeSearchButtonEnabled() {
+        currSearchCondition = formSearchCondition();
+        if (currSearchCondition.equals(prevSearchCondition)) {
+            searchButton.setEnabled(false);
+        } else {
+            searchButton.setEnabled(true);
+        }
+    }
+    
     private void openDriverSelectionForm(VehiclesForm mySelf) {
         int seqNo = 0; 
         
@@ -226,11 +260,10 @@ public class VehiclesForm extends javax.swing.JFrame {
         saveFileChooser = new javax.swing.JFileChooser();
         odsFileChooser = new javax.swing.JFileChooser();
         filler40_1 = new javax.swing.Box.Filler(new java.awt.Dimension(40, 0), new java.awt.Dimension(40, 0), new java.awt.Dimension(40, 32767));
-        wholePanel = new javax.swing.JPanel();
-        topPanel = new javax.swing.JPanel();
         topMarginPanel = new javax.swing.JPanel();
         dummyButton1 = new javax.swing.JButton();
-        jPanel2 = new javax.swing.JPanel();
+        wholePanel = new javax.swing.JPanel();
+        topPanel = new javax.swing.JPanel();
         leftPanel = new javax.swing.JPanel();
         aboutjPanel = new javax.swing.JPanel();
         seeLicenseButton = new javax.swing.JButton();
@@ -303,42 +336,43 @@ public class VehiclesForm extends javax.swing.JFrame {
         filler50 = new javax.swing.Box.Filler(new java.awt.Dimension(3, 0), new java.awt.Dimension(15, 0), new java.awt.Dimension(3, 32767));
         jScrollPane1 = new javax.swing.JScrollPane();
         vehiclesTable = new RXTable(Vehicles);
-        filler4 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 32767));
-        filler40_2 = new javax.swing.Box.Filler(new java.awt.Dimension(40, 0), new java.awt.Dimension(40, 0), new java.awt.Dimension(40, 32767));
         allButtonsPanel = new javax.swing.JPanel();
         filler55 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 15), new java.awt.Dimension(0, 15), new java.awt.Dimension(32767, 15));
         centerThridPanel = new javax.swing.JPanel();
-        filler56 = new javax.swing.Box.Filler(new java.awt.Dimension(40, 0), new java.awt.Dimension(40, 0), new java.awt.Dimension(40, 32767));
         insertSave_Button = new javax.swing.JButton();
         modiSave_Button = new javax.swing.JButton();
         deleteButton = new javax.swing.JButton();
         cancel_Button = new javax.swing.JButton();
         filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
+        rightButtons = new javax.swing.JPanel();
         deleteAllVehicles = new javax.swing.JButton();
         readSheet_Button = new javax.swing.JButton();
         saveSheet_Button = new javax.swing.JButton();
         closeFormButton = new javax.swing.JButton();
-        filler57 = new javax.swing.Box.Filler(new java.awt.Dimension(40, 0), new java.awt.Dimension(40, 0), new java.awt.Dimension(40, 32767));
-        filler54 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 40), new java.awt.Dimension(0, 40), new java.awt.Dimension(32767, 40));
+        HelpPanel = new javax.swing.JPanel();
+        odsHelpButton = new javax.swing.JButton();
+        filler6 = new javax.swing.Box.Filler(new java.awt.Dimension(5, 0), new java.awt.Dimension(5, 0), new java.awt.Dimension(5, 32767));
+        sampleButton = new javax.swing.JButton();
+        filler40_2 = new javax.swing.Box.Filler(new java.awt.Dimension(40, 0), new java.awt.Dimension(40, 0), new java.awt.Dimension(40, 32767));
+        southPanel = new javax.swing.JPanel();
 
         saveFileChooser.setDialogType(javax.swing.JFileChooser.SAVE_DIALOG);
+        saveFileChooser.setCurrentDirectory(ODS_DIRECTORY);
+        saveFileChooser.setFileFilter(new OdsFileOnly());
+
+        odsFileChooser.setCurrentDirectory(ODS_DIRECTORY);
+        odsFileChooser.setFileFilter(new OdsFileOnly());
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle(VEHICLESFORM_FRAME_TITLE.getContent());
-        setMinimumSize(new Dimension(normGUIwidth, normGUIheight + 30));
-        setPreferredSize(new Dimension(normGUIwidth, normGUIheight + 30));
+        setMinimumSize(new Dimension(normGUIwidth, normGUIheight + 61));
+        setPreferredSize(new Dimension(normGUIwidth, normGUIheight + 61));
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 formWindowClosing(evt);
             }
         });
         getContentPane().add(filler40_1, java.awt.BorderLayout.WEST);
-
-        wholePanel.setMinimumSize(new java.awt.Dimension(1190, 790));
-        wholePanel.setPreferredSize(new java.awt.Dimension(1190, 790));
-        wholePanel.setLayout(new java.awt.BorderLayout());
-
-        topPanel.setLayout(new javax.swing.BoxLayout(topPanel, javax.swing.BoxLayout.Y_AXIS));
 
         topMarginPanel.setMaximumSize(new java.awt.Dimension(32767, 40));
         topMarginPanel.setMinimumSize(new java.awt.Dimension(100, 40));
@@ -357,11 +391,13 @@ public class VehiclesForm extends javax.swing.JFrame {
         });
         topMarginPanel.add(dummyButton1);
 
-        topPanel.add(topMarginPanel);
+        getContentPane().add(topMarginPanel, java.awt.BorderLayout.NORTH);
 
-        jPanel2.setLayout(new java.awt.BorderLayout());
-        topPanel.add(jPanel2);
+        wholePanel.setMinimumSize(new java.awt.Dimension(1190, 790));
+        wholePanel.setPreferredSize(new java.awt.Dimension(1190, 790));
+        wholePanel.setLayout(new java.awt.BorderLayout());
 
+        topPanel.setLayout(new javax.swing.BoxLayout(topPanel, javax.swing.BoxLayout.Y_AXIS));
         wholePanel.add(topPanel, java.awt.BorderLayout.NORTH);
 
         leftPanel.setMaximumSize(new java.awt.Dimension(393204, 32767));
@@ -998,6 +1034,11 @@ public class VehiclesForm extends javax.swing.JFrame {
                 searchCarTagMousePressed(evt);
             }
         });
+        searchCarTag.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                searchCarTagKeyTyped(evt);
+            }
+        });
         searchPanel.add(searchCarTag);
 
         searchDriver.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
@@ -1017,6 +1058,11 @@ public class VehiclesForm extends javax.swing.JFrame {
                 searchDriverMousePressed(evt);
             }
         });
+        searchDriver.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                searchDriverKeyTyped(evt);
+            }
+        });
         searchPanel.add(searchDriver);
 
         searchAffiliCBox.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
@@ -1024,6 +1070,11 @@ public class VehiclesForm extends javax.swing.JFrame {
         searchAffiliCBox.setMaximumSize(new java.awt.Dimension(32767, 30));
         searchAffiliCBox.setMinimumSize(new Dimension(vAffiliWidth - 10, 30));
         searchAffiliCBox.setPreferredSize(new Dimension(vAffiliWidth - 5, 30));
+        searchAffiliCBox.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                searchAffiliCBoxItemStateChanged(evt);
+            }
+        });
         searchPanel.add(searchAffiliCBox);
 
         searchBldgCBox.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
@@ -1031,6 +1082,11 @@ public class VehiclesForm extends javax.swing.JFrame {
         searchBldgCBox.setMaximumSize(new java.awt.Dimension(32767, 30));
         searchBldgCBox.setMinimumSize(new Dimension(vBuildingWidth - 10, 30));
         searchBldgCBox.setPreferredSize(new Dimension(vBuildingWidth - 5, 30));
+        searchBldgCBox.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                searchBldgCBoxItemStateChanged(evt);
+            }
+        });
         searchPanel.add(searchBldgCBox);
 
         searchETC.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
@@ -1050,6 +1106,11 @@ public class VehiclesForm extends javax.swing.JFrame {
                 searchETCMousePressed(evt);
             }
         });
+        searchETC.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                searchETCKeyTyped(evt);
+            }
+        });
         searchPanel.add(searchETC);
 
         disallowReason.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
@@ -1067,6 +1128,11 @@ public class VehiclesForm extends javax.swing.JFrame {
         disallowReason.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
                 disallowReasonMousePressed(evt);
+            }
+        });
+        disallowReason.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                disallowReasonKeyTyped(evt);
             }
         });
         searchPanel.add(disallowReason);
@@ -1136,17 +1202,13 @@ public class VehiclesForm extends javax.swing.JFrame {
 
         wholePanel.add(centerPanel, java.awt.BorderLayout.CENTER);
 
-        getContentPane().add(wholePanel, java.awt.BorderLayout.CENTER);
-        getContentPane().add(filler4, java.awt.BorderLayout.PAGE_START);
-        getContentPane().add(filler40_2, java.awt.BorderLayout.EAST);
-
         allButtonsPanel.setPreferredSize(new java.awt.Dimension(1270, 95));
         allButtonsPanel.setLayout(new javax.swing.BoxLayout(allButtonsPanel, javax.swing.BoxLayout.Y_AXIS));
         allButtonsPanel.add(filler55);
 
-        centerThridPanel.setMaximumSize(new java.awt.Dimension(33397, 40));
-        centerThridPanel.setMinimumSize(new java.awt.Dimension(769, 40));
-        centerThridPanel.setPreferredSize(new java.awt.Dimension(769, 40));
+        centerThridPanel.setMaximumSize(new java.awt.Dimension(33397, 70));
+        centerThridPanel.setMinimumSize(new java.awt.Dimension(769, 70));
+        centerThridPanel.setPreferredSize(new java.awt.Dimension(769, 70));
 
         insertSave_Button.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         insertSave_Button.setMnemonic('r');
@@ -1199,9 +1261,18 @@ public class VehiclesForm extends javax.swing.JFrame {
             }
         });
 
+        rightButtons.setMaximumSize(new java.awt.Dimension(470, 70));
+        rightButtons.setMinimumSize(new java.awt.Dimension(470, 70));
+        rightButtons.setPreferredSize(new java.awt.Dimension(470, 70));
+        java.awt.GridBagLayout rightButtonsLayout = new java.awt.GridBagLayout();
+        rightButtonsLayout.columnWidths = new int[] {0, 10, 0, 10, 0, 10, 0};
+        rightButtonsLayout.rowHeights = new int[] {0, 0, 0};
+        rightButtons.setLayout(rightButtonsLayout);
+
         deleteAllVehicles.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         deleteAllVehicles.setMnemonic('e');
         deleteAllVehicles.setText(DELETE_ALL_BTN.getContent());
+        deleteAllVehicles.setEnabled(false);
         deleteAllVehicles.setMaximumSize(new Dimension(CommonData.buttonWidthWide, buttonHeightNorm));
         deleteAllVehicles.setMinimumSize(new Dimension(CommonData.buttonWidthWide, buttonHeightNorm));
         deleteAllVehicles.setPreferredSize(new Dimension(CommonData.buttonWidthWide, buttonHeightNorm));
@@ -1210,10 +1281,15 @@ public class VehiclesForm extends javax.swing.JFrame {
                 deleteAllVehiclesActionPerformed(evt);
             }
         });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        rightButtons.add(deleteAllVehicles, gridBagConstraints);
 
         readSheet_Button.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         readSheet_Button.setMnemonic('o');
         readSheet_Button.setText(READ_ODS_BTN.getContent());
+        readSheet_Button.setEnabled(false);
         readSheet_Button.setMaximumSize(new Dimension(CommonData.buttonWidthWide, buttonHeightNorm));
         readSheet_Button.setMinimumSize(new Dimension(CommonData.buttonWidthWide, buttonHeightNorm));
         readSheet_Button.setPreferredSize(new Dimension(CommonData.buttonWidthWide, buttonHeightNorm));
@@ -1222,10 +1298,15 @@ public class VehiclesForm extends javax.swing.JFrame {
                 readSheet_ButtonActionPerformed(evt);
             }
         });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 0;
+        rightButtons.add(readSheet_Button, gridBagConstraints);
 
         saveSheet_Button.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         saveSheet_Button.setMnemonic('a');
         saveSheet_Button.setText(SAVE_ODS_BTN.getContent());
+        saveSheet_Button.setEnabled(false);
         saveSheet_Button.setMaximumSize(new Dimension(CommonData.buttonWidthWide, buttonHeightNorm));
         saveSheet_Button.setMinimumSize(new Dimension(CommonData.buttonWidthWide, buttonHeightNorm));
         saveSheet_Button.setPreferredSize(new Dimension(CommonData.buttonWidthWide, buttonHeightNorm));
@@ -1234,6 +1315,10 @@ public class VehiclesForm extends javax.swing.JFrame {
                 saveSheet_ButtonActionPerformed(evt);
             }
         });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 0;
+        rightButtons.add(saveSheet_Button, gridBagConstraints);
 
         closeFormButton.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         closeFormButton.setMnemonic('c');
@@ -1246,15 +1331,61 @@ public class VehiclesForm extends javax.swing.JFrame {
                 closeFormButtonActionPerformed(evt);
             }
         });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridy = 0;
+        rightButtons.add(closeFormButton, gridBagConstraints);
+
+        HelpPanel.setMaximumSize(new java.awt.Dimension(110, 70));
+        HelpPanel.setMinimumSize(new java.awt.Dimension(110, 30));
+        HelpPanel.setPreferredSize(new java.awt.Dimension(110, 30));
+        HelpPanel.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 0, 0));
+
+        odsHelpButton.setBackground(new java.awt.Color(153, 255, 153));
+        odsHelpButton.setFont(new java.awt.Font("Dotum", 1, 14)); // NOI18N
+        odsHelpButton.setIcon(getQuest20_Icon());
+        odsHelpButton.setToolTipText(DRIVER_ODS_UPLOAD_SAMPLE_PNG.getContent());
+        odsHelpButton.setIconTextGap(0);
+        odsHelpButton.setMargin(new java.awt.Insets(0, 0, 0, 0));
+        odsHelpButton.setMaximumSize(new java.awt.Dimension(20, 20));
+        odsHelpButton.setMinimumSize(new java.awt.Dimension(20, 20));
+        odsHelpButton.setOpaque(false);
+        odsHelpButton.setPreferredSize(new java.awt.Dimension(20, 20));
+        odsHelpButton.setRequestFocusEnabled(false);
+        odsHelpButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                odsHelpButtonActionPerformed(evt);
+            }
+        });
+        HelpPanel.add(odsHelpButton);
+        HelpPanel.add(filler6);
+
+        sampleButton.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        sampleButton.setMnemonic('M');
+        sampleButton.setText(SAMPLE_BTN.getContent());
+        sampleButton.setToolTipText(DRIVER_ODS_UPLOAD_SAMPLE_DOWNLOAD.getContent());
+        sampleButton.setEnabled(false);
+        sampleButton.setMaximumSize(new java.awt.Dimension(80, 30));
+        sampleButton.setMinimumSize(new java.awt.Dimension(80, 30));
+        sampleButton.setPreferredSize(new java.awt.Dimension(80, 30));
+        sampleButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                sampleButtonActionPerformed(evt);
+            }
+        });
+        HelpPanel.add(sampleButton);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 2;
+        rightButtons.add(HelpPanel, gridBagConstraints);
 
         javax.swing.GroupLayout centerThridPanelLayout = new javax.swing.GroupLayout(centerThridPanel);
         centerThridPanel.setLayout(centerThridPanelLayout);
         centerThridPanelLayout.setHorizontalGroup(
             centerThridPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(centerThridPanelLayout.createSequentialGroup()
-                .addGap(10, 10, 10)
-                .addComponent(filler56, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(10, 10, 10)
+                .addGap(0, 0, 0)
                 .addComponent(insertSave_Button, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(10, 10, 10)
                 .addComponent(modiSave_Button, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1262,47 +1393,53 @@ public class VehiclesForm extends javax.swing.JFrame {
                 .addComponent(deleteButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(10, 10, 10)
                 .addComponent(cancel_Button, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(10, 10, 10)
-                .addComponent(filler2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGroup(centerThridPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(centerThridPanelLayout.createSequentialGroup()
-                        .addGap(494, 494, 494)
-                        .addComponent(filler57, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(192, Short.MAX_VALUE))
+                        .addGap(10, 10, 10)
+                        .addComponent(filler2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap())
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, centerThridPanelLayout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(deleteAllVehicles, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(10, 10, 10)
-                        .addComponent(readSheet_Button, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(10, 10, 10)
-                        .addComponent(saveSheet_Button, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(10, 10, 10)
-                        .addComponent(closeFormButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(40, 40, 40))))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 246, Short.MAX_VALUE)
+                        .addComponent(rightButtons, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
         );
         centerThridPanelLayout.setVerticalGroup(
             centerThridPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(insertSave_Button, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-            .addComponent(modiSave_Button, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-            .addComponent(deleteButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-            .addComponent(cancel_Button, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-            .addGroup(centerThridPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                .addComponent(saveSheet_Button, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addComponent(closeFormButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addComponent(readSheet_Button, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addComponent(deleteAllVehicles, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
             .addGroup(centerThridPanelLayout.createSequentialGroup()
-                .addContainerGap(40, Short.MAX_VALUE)
+                .addComponent(rightButtons, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(filler2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(centerThridPanelLayout.createSequentialGroup()
                 .addGroup(centerThridPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(filler56, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(filler2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(filler57, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(insertSave_Button, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(modiSave_Button, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(deleteButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cancel_Button, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         allButtonsPanel.add(centerThridPanel);
-        allButtonsPanel.add(filler54);
 
-        getContentPane().add(allButtonsPanel, java.awt.BorderLayout.PAGE_END);
+        wholePanel.add(allButtonsPanel, java.awt.BorderLayout.SOUTH);
+
+        getContentPane().add(wholePanel, java.awt.BorderLayout.CENTER);
+        getContentPane().add(filler40_2, java.awt.BorderLayout.EAST);
+
+        southPanel.setMaximumSize(new java.awt.Dimension(32767, 40));
+        southPanel.setMinimumSize(new java.awt.Dimension(0, 40));
+        southPanel.setPreferredSize(new java.awt.Dimension(1270, 40));
+
+        javax.swing.GroupLayout southPanelLayout = new javax.swing.GroupLayout(southPanel);
+        southPanel.setLayout(southPanelLayout);
+        southPanelLayout.setHorizontalGroup(
+            southPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 1270, Short.MAX_VALUE)
+        );
+        southPanelLayout.setVerticalGroup(
+            southPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+
+        getContentPane().add(southPanel, java.awt.BorderLayout.SOUTH);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -1443,7 +1580,7 @@ public class VehiclesForm extends javax.swing.JFrame {
     }//GEN-LAST:event_deleteAllVehiclesActionPerformed
 
     private void searchButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchButtonActionPerformed
-        loadVehicleTable(0, "");
+        loadVehicleTable(FIRST_ROW, "");
     }//GEN-LAST:event_searchButtonActionPerformed
 
     private void readSheet_ButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_readSheet_ButtonActionPerformed
@@ -1466,7 +1603,7 @@ public class VehiclesForm extends javax.swing.JFrame {
 
                     WrappedInt driverTotal = new WrappedInt();
 
-                    if (objODSReader.chekcVehiclesODS(sheet, wrongCells, driverTotal))
+                    if (objODSReader.checkVehiclesODS(sheet, wrongCells, driverTotal))
                     {
                         StringBuilder sb = new StringBuilder();
                         
@@ -1548,6 +1685,7 @@ public class VehiclesForm extends javax.swing.JFrame {
     }//GEN-LAST:event_searchETCFocusLost
 
     private void clearButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearButtonActionPerformed
+        clearButton.setEnabled(false);
 
         searchCarTag.setText(CAR_TAG_TF.getContent());
         searchDriver.setText(DRIVER_TF.getContent());
@@ -1556,6 +1694,8 @@ public class VehiclesForm extends javax.swing.JFrame {
         searchETC.setText(OTHER_INFO_TF.getContent());
         disallowReason.setText(DIS_REASON_TF.getContent());
         vehiclesTable.requestFocus();
+        
+        changeSearchButtonEnabled();
     }//GEN-LAST:event_clearButtonActionPerformed
 
     private void disallowReasonFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_disallowReasonFocusLost
@@ -1635,6 +1775,106 @@ public class VehiclesForm extends javax.swing.JFrame {
         carTagTextField.requestFocus();
     }//GEN-LAST:event_dummyButton1ActionPerformed
 
+    private void searchCarTagKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_searchCarTagKeyTyped
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                changeSearchButtonEnabled();
+            }
+        }); 
+    }//GEN-LAST:event_searchCarTagKeyTyped
+
+    private void searchDriverKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_searchDriverKeyTyped
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                changeSearchButtonEnabled();
+            }
+        }); 
+    }//GEN-LAST:event_searchDriverKeyTyped
+
+    private void searchETCKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_searchETCKeyTyped
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                changeSearchButtonEnabled();
+            }
+        }); 
+    }//GEN-LAST:event_searchETCKeyTyped
+
+    private void disallowReasonKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_disallowReasonKeyTyped
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                changeSearchButtonEnabled();
+            }
+        }); 
+    }//GEN-LAST:event_disallowReasonKeyTyped
+
+    private void searchAffiliCBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_searchAffiliCBoxItemStateChanged
+        if (evt.getStateChange() == SELECTED) {
+            changeSearchButtonEnabled();
+        }
+    }//GEN-LAST:event_searchAffiliCBoxItemStateChanged
+
+    private void searchBldgCBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_searchBldgCBoxItemStateChanged
+        if (evt.getStateChange() == SELECTED) {
+            changeSearchButtonEnabled();
+        }
+    }//GEN-LAST:event_searchBldgCBoxItemStateChanged
+
+    private void odsHelpButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_odsHelpButtonActionPerformed
+        JDialog helpDialog = new ODS_HelpJDialog(this, false,
+            HELP_DRIVER_TITLE.getContent(), ODS_TYPE.VEHICLE);
+
+        setHelpDialogLoc(odsHelpButton, helpDialog);
+        helpDialog.setVisible(true);
+    }//GEN-LAST:event_odsHelpButtonActionPerformed
+
+    private void sampleButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sampleButtonActionPerformed
+        String sampleFilenameCore = "";
+
+        switch(language){
+            case ENGLISH:
+            sampleFilenameCore = "vehiclesEng";
+            break;
+
+            default:
+            sampleFilenameCore = "vehiclesKor";
+            break;
+        }
+
+        // Ask user the name and location for the ods file to save
+        StringBuffer odsFullPath = new StringBuffer();
+
+        if (wantToSaveFile(this, saveFileChooser, odsFullPath, sampleFilenameCore)) {
+            // Read sample ods resource file
+            ClassLoader classLoader = getClass().getClassLoader();
+            File source = new File(classLoader.getResource(sampleFilenameCore + ".ods").getFile());
+            String extension = saveFileChooser.getFileFilter().getDescription();
+
+            if (extension.indexOf("*.ods") >= 0 && !odsFullPath.toString().endsWith(".ods")) {
+                odsFullPath.append(".ods");
+            }
+
+            File destin = new File(odsFullPath.toString());
+            try {
+                // Write resource into the file chosen by the user
+                if (!noOverwritePossibleExistingSameFile(destin, odsFullPath.toString())) {
+                    copyFileUsingFileChannels(source, destin);
+                }
+            } catch (IOException ex) {
+                logParkingException(Level.SEVERE, ex, sampleFilenameCore + " downloading error");
+            }
+        }
+    }//GEN-LAST:event_sampleButtonActionPerformed
+
+    private void adminOperationEnabled(boolean flag) {
+        if (flag && Globals.loginID != null && Globals.loginID.equals(ADMIN_ID)) {
+            deleteAllVehicles.setEnabled(true);
+            readSheet_Button.setEnabled(true);
+        } else {
+            deleteAllVehicles.setEnabled(false);
+            readSheet_Button.setEnabled(false);
+        }
+    }
+    
     /**
      * @param args the command line arguments
      */
@@ -1668,19 +1908,21 @@ public class VehiclesForm extends javax.swing.JFrame {
         initializeLoggers();
         checkOptions(args);
         readSettings();
-        
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                VehiclesForm mainForm = new VehiclesForm();
-                mainForm.setVisible(true);
-                shortLicenseDialog(mainForm, "Vehicle Manager Program", "upper left");                
-            }
-        });
+        if (determineLoginID() != null) {
+            /* Create and display the form */
+            java.awt.EventQueue.invokeLater(new Runnable() {
+                public void run() {
+                    VehiclesForm mainForm = new VehiclesForm();
+                    mainForm.setVisible(true);
+                    shortLicenseDialog(mainForm, "Vehicle Manager Program", "upper left");                
+                }
+            });
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="-- automaticically defined variables">                              
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPanel HelpPanel;
     private javax.swing.JPanel RequiredPanel1;
     private javax.swing.JPanel aboutjPanel;
     private javax.swing.JPanel allButtonsPanel;
@@ -1710,17 +1952,14 @@ public class VehiclesForm extends javax.swing.JFrame {
     private javax.swing.Box.Filler filler2;
     private javax.swing.Box.Filler filler3;
     private javax.swing.Box.Filler filler31;
-    private javax.swing.Box.Filler filler4;
     private javax.swing.Box.Filler filler40_1;
     private javax.swing.Box.Filler filler40_2;
     private javax.swing.Box.Filler filler42;
     private javax.swing.Box.Filler filler5;
     private javax.swing.Box.Filler filler50;
     private javax.swing.Box.Filler filler53;
-    private javax.swing.Box.Filler filler54;
     private javax.swing.Box.Filler filler55;
-    private javax.swing.Box.Filler filler56;
-    private javax.swing.Box.Filler filler57;
+    private javax.swing.Box.Filler filler6;
     private javax.swing.JLabel formModeLabel;
     private javax.swing.JLabel formTitleLabel;
     public javax.swing.JButton insertSave_Button;
@@ -1728,7 +1967,6 @@ public class VehiclesForm extends javax.swing.JFrame {
     private javax.swing.JLabel isTagReqLabel;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
-    private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
@@ -1746,6 +1984,7 @@ public class VehiclesForm extends javax.swing.JFrame {
     private javax.swing.JCheckBox notiCheckBox;
     private javax.swing.JLabel notiLabel;
     private javax.swing.JFileChooser odsFileChooser;
+    private javax.swing.JButton odsHelpButton;
     private javax.swing.JTextField otherInfoTextField;
     private javax.swing.JLabel otherLabel;
     private javax.swing.JCheckBox permitCheckBox;
@@ -1755,9 +1994,11 @@ public class VehiclesForm extends javax.swing.JFrame {
     private javax.swing.JButton readSheet_Button;
     private javax.swing.JLabel reasonLabel;
     private javax.swing.JTextField reasonTextField;
+    private javax.swing.JPanel rightButtons;
     private javax.swing.JPanel rowCountSz;
     private javax.swing.JLabel rowNumLabel;
     private javax.swing.JTextField rowNumTextField;
+    private javax.swing.JButton sampleButton;
     private javax.swing.JFileChooser saveFileChooser;
     private javax.swing.JButton saveSheet_Button;
     private javax.swing.JComboBox searchAffiliCBox;
@@ -1769,6 +2010,7 @@ public class VehiclesForm extends javax.swing.JFrame {
     private javax.swing.JPanel searchPanel;
     private javax.swing.JButton seeLicenseButton;
     private javax.swing.JButton selectDriverButton;
+    private javax.swing.JPanel southPanel;
     private javax.swing.JLabel tarTagLabel;
     private javax.swing.JPanel titleBelow;
     private javax.swing.JPanel titlePanelReal;
@@ -1781,27 +2023,20 @@ public class VehiclesForm extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
     //</editor-fold>
 
-    public void loadVehicleTable(int viewIndex, String plateNo) {
-        DefaultTableModel model = (DefaultTableModel) vehiclesTable.getModel();  
-        model.setRowCount(0);
-        int listNum = 1;
-        // <editor-fold defaultstate="collapsed" desc="-- load vehicle list">                          
-        Connection conn = null;
-        Statement selectStmt = null;
-        ResultSet rs = null;
-        String excepMsg = "(registered vehicle list loading)";
+    private String formSearchCondition() {
+        StringBuffer cond = new StringBuffer();
         
-        try {
-            // <editor-fold defaultstate="collapsed" desc="-- construct SQL statement">  
-            StringBuffer cond = new StringBuffer();
-            if (!searchCarTag.getText().trim().equals(CAR_TAG_TF.getContent()))
-                attachCondition(cond, "PLATE_NUMBER", searchCarTag.getText().trim());
-            if (!searchDriver.getText().trim().equals(DRIVER_TF.getContent()))
-                attachCondition(cond, "NAME", searchDriver.getText().trim());
+        if (!searchCarTag.getText().trim().equals(CAR_TAG_TF.getContent()))
+            attachCondition(cond, "PLATE_NUMBER", searchCarTag.getText().trim());
+        if (!searchDriver.getText().trim().equals(DRIVER_TF.getContent()))
+            attachCondition(cond, "NAME", searchDriver.getText().trim());
 
-            Object keyObj =((ConvComboBoxItem)searchAffiliCBox.getSelectedItem()).getKeyValue();
-            attachIntCondition(cond, "L2_NO", (Integer) keyObj); 
+        Object keyObj =((ConvComboBoxItem)searchAffiliCBox.getSelectedItem()).getKeyValue();
+        attachIntCondition(cond, "L2_NO", (Integer) keyObj); 
 
+        if (searchBldgCBox.getSelectedItem() == null) {
+            return "";
+        } else {
             keyObj =((ConvComboBoxItem)searchBldgCBox.getSelectedItem()).getKeyValue();
             attachIntCondition(cond, "UNIT_SEQ_NO", (Integer)keyObj);
 
@@ -1811,6 +2046,28 @@ public class VehiclesForm extends javax.swing.JFrame {
             if (!disallowReason.getText().trim().equals(DIS_REASON_TF.getContent()))
                 attachCondition(cond, "REMARK", disallowReason.getText().trim());
 
+            if (cond.length() > 0) {
+                clearButton.setEnabled(true);
+                return "Where " + cond;
+            } else {
+                clearButton.setEnabled(false);
+                return "";
+            }            
+//            return (cond.length() > 0 ? "Where " + cond : "");
+        }
+    }
+    
+    public void loadVehicleTable(int viewIndex, String plateNo) {
+        DefaultTableModel model = (DefaultTableModel) vehiclesTable.getModel();  
+        model.setRowCount(0);
+        // <editor-fold defaultstate="collapsed" desc="-- load vehicle list">                          
+        Connection conn = null;
+        Statement selectStmt = null;
+        ResultSet rs = null;
+        String excepMsg = "(registered vehicle list loading)";
+        
+        try {
+            // <editor-fold defaultstate="collapsed" desc="-- construct SQL statement">  
             StringBuffer sb = new StringBuffer(); 
             sb.append("SELECT @ROWNUM := @ROWNUM + 1 recNo, TA.* ");
             sb.append("FROM ( ");
@@ -1830,7 +2087,8 @@ public class VehiclesForm extends javax.swing.JFrame {
             sb.append("   LEFT JOIN building_unit U ON UNIT_SEQ_NO = U.SEQ_NO");
             sb.append("   LEFT JOIN building_table BT ON BLDG_SEQ_NO = BT.SEQ_NO) TA,");
             sb.append("   (SELECT @rownum := 0) r ");
-            sb.append((cond.length() > 0 ? "Where " + cond : ""));
+            prevSearchCondition = formSearchCondition();
+            sb.append(prevSearchCondition);            
             sb.append(" ORDER BY PLATE_NUMBER");
             //</editor-fold>   
             
@@ -1868,7 +2126,7 @@ public class VehiclesForm extends javax.swing.JFrame {
         } finally {
             closeDBstuff(conn, selectStmt, rs, excepMsg);
             Dimension tableDim = new Dimension(vehiclesTable.getSize().width, 
-                    vehiclesTable.getRowHeight() * (vehiclesTable.getRowCount() + 1)); 
+                    vehiclesTable.getRowHeight() * (vehiclesTable.getRowCount())); 
             vehiclesTable.setSize(tableDim);
             vehiclesTable.setPreferredSize(tableDim);
             countValue.setText(String.valueOf(vehiclesTable.getRowCount()));            
@@ -1881,15 +2139,11 @@ public class VehiclesForm extends javax.swing.JFrame {
             showVehicleDetail(viewIndex);
             highlightTableRow(vehiclesTable, viewIndex); 
             vehiclesTable.requestFocus();
-            deleteButton.setEnabled(true);
-            modiSave_Button.setEnabled((true));
         } else {
             // clear left side panel vehicle details
             clearVehicleDetail();
-
-            deleteButton.setEnabled(false);    
-            modiSave_Button.setEnabled(false);            
         }
+        searchButton.setEnabled(false);        
     }
 
     private void hideSomeColumns() {
@@ -1945,8 +2199,6 @@ public class VehiclesForm extends javax.swing.JFrame {
                 vModel.getValueAt(viewIndex, VehicleCol.Creation.getNumVal()));
         lastModiTextField.setText((String)
                 vModel.getValueAt(viewIndex, VehicleCol.Modification.getNumVal()));  
-        
-        deleteButton.setEnabled(true);
     }
 
     private void attachEventListenerToVehicleTable() {
@@ -1954,8 +2206,19 @@ public class VehiclesForm extends javax.swing.JFrame {
         {
             @Override
             public void valueChanged(ListSelectionEvent e) {
+                if (e.getValueIsAdjusting()) 
+                    return;
+                
+                if (getFormMode() == FormMode.NormalMode) {
+                    if (vehiclesTable.getSelectedRowCount() == 0) {
+                        modiSave_Button.setEnabled(false);
+                        deleteButton.setEnabled(false);
+                    } else {
+                        modiSave_Button.setEnabled(isManager);
+                        deleteButton.setEnabled(isManager);
+                    }                    
+                }
                 java.awt.EventQueue.invokeLater(new Runnable() {
-
                     @Override
                     public void run() {
                         if (vehiclesTable.getSelectedRow() >= 0) {
@@ -2007,14 +2270,18 @@ public class VehiclesForm extends javax.swing.JFrame {
         searchBldgCBox.setEnabled(flag);
         searchETC.setEnabled(flag);
         disallowReason.setEnabled(flag);
-        clearButton.setEnabled(flag);
-        searchButton.setEnabled(flag);
-
-        deleteButton.setEnabled(flag);    
         closeFormButton.setEnabled(flag);
         cancel_Button.setEnabled(!flag);        
         
-        saveSheet_Button.setEnabled(flag);
+        if (flag && isManager) {
+            if (vehiclesTable.getRowCount() > 0) {
+                saveSheet_Button.setEnabled(true);
+            } else {
+                saveSheet_Button.setEnabled(false);
+            }
+        } else {
+            saveSheet_Button.setEnabled(false);
+        }        
     }
 
     /**
@@ -2031,17 +2298,23 @@ public class VehiclesForm extends javax.swing.JFrame {
             case CreateMode:
                 formModeLabel.setText(CREATE_MODE_LABEL.getContent());
                 setSearchEnabled(false);
+                modiSave_Button.setEnabled(false);
+                deleteButton.setEnabled(false);
                 insertSave_Button.setText(SAVE_BTN.getContent());
                 insertSave_Button.setMnemonic('s');
                 makeVehicleInfoFieldsEditable(true);
+                adminOperationEnabled(false);
                 break;
                 
             case UpdateMode:
                 formModeLabel.setText(MODIFY_MODE_LABEL.getContent());
                 setSearchEnabled(false);
+                insertSave_Button.setEnabled(false);
                 modiSave_Button.setText(SAVE_BTN.getContent());
                 modiSave_Button.setMnemonic('s');
+                deleteButton.setEnabled(false);
                 makeVehicleInfoFieldsEditable(true);
+                adminOperationEnabled(false);
                 break;
                 
             case NormalMode:
@@ -2054,7 +2327,14 @@ public class VehiclesForm extends javax.swing.JFrame {
                     modiSave_Button.setText(MODIFY_BTN.getContent());
                     modiSave_Button.setMnemonic('m');
                 }
+                insertSave_Button.setEnabled(true && isManager);
+                
+                if (vehiclesTable.getSelectedRowCount() > 0) {
+                    modiSave_Button.setEnabled(isManager);
+                    deleteButton.setEnabled(isManager);
+                }                
                 makeVehicleInfoFieldsEditable(false);
+                adminOperationEnabled(true);
                 break;
             default:
                 formModeLabel.setText("");
@@ -2091,15 +2371,6 @@ public class VehiclesForm extends javax.swing.JFrame {
         selectDriverButton.setEnabled(b);      
         deleteAllVehicles.setEnabled(!b);
         readSheet_Button.setEnabled(!b);
-        
-        if (getFormMode() == FormMode.CreateMode)
-            modiSave_Button.setEnabled(false);
-        else if (getFormMode() == FormMode.UpdateMode)
-            insertSave_Button.setEnabled(false);
-        else {
-            modiSave_Button.setEnabled(true);
-            insertSave_Button.setEnabled(true);
-        }
     }
     
     public void setDriverInfo(String name, String cell, String phone, int seqNo) {
@@ -2110,38 +2381,17 @@ public class VehiclesForm extends javax.swing.JFrame {
     }
 
     private int insertNewVehicle(StringBuffer plateNo, StringBuffer vehicleProperties) {
-        Connection conn = null;
-        PreparedStatement createDriver = null;
-        String excepMsg = "in creation of a car with tag number: " + carTagTextField.getText().trim();
+        plateNo.append(carTagTextField.getText().trim());
 
-        int result = 0;
-        try {
-            StringBuffer sb = new StringBuffer("Insert Into Vehicles (");
-            sb.append(" PLATE_NUMBER, DRIVER_SEQ_NO, NOTI_REQUESTED,");
-            sb.append(" WHOLE_REQUIRED, PERMITTED, Remark, OTHER_INFO, ");
-            sb.append(" CREATIONDATE) Values (?, ?, ?, ?, ?, ?, ?, current_timestamp)");
-
-            conn = getConnection();
-            createDriver = conn.prepareStatement(sb.toString());
-            plateNo.append(carTagTextField.getText().trim());
-            int loc = 1;
-            
-            createDriver.setString(loc++, plateNo.toString());
-            createDriver.setInt(loc++, driverObj.getSeqNo());
-            createDriver.setInt(loc++, notiCheckBox.isSelected() ? 1 : 0);
-            createDriver.setInt(loc++, wholeCheckBox.isSelected() ? 1 : 0);
-            createDriver.setInt(loc++, permitCheckBox.isSelected() ? 0 : 1);
-            createDriver.setString(loc++, reasonTextField.getText().trim());
-            createDriver.setString(loc++, otherInfoTextField.getText().trim());
-
+        int result = insertOneVehicle(plateNo.toString(), driverObj.getSeqNo(), 
+                notiCheckBox.isSelected() ? 1 : 0, wholeCheckBox.isSelected() ? 1 : 0,
+                permitCheckBox.isSelected() ? 0 : 1, reasonTextField.getText().trim(),
+                otherInfoTextField.getText().trim());
+        
+        if (result == 1) {
             vehicleProperties.append("Vehicle Creation Summary: " + System.lineSeparator());
-            getVehicleProperties(vehicleProperties);            
-            
-            result = createDriver.executeUpdate();
-        } catch (SQLException e) {
-            logParkingException(Level.SEVERE, e, excepMsg);
-        } finally {
-            closeDBstuff(conn, createDriver, null, excepMsg);
+            getVehicleProperties(vehicleProperties);
+            logParkingOperation(OSP_enums.OpLogLevel.EBDsettingsChange, operationLogName);
         }
         
         return result;         
@@ -2449,18 +2699,6 @@ public class VehiclesForm extends javax.swing.JFrame {
         vehicleProperties.append("  Detailed reason: " + reasonTextField.getText() + System.lineSeparator());
         vehicleProperties.append("  Other info': " + otherInfoTextField.getText() + System.lineSeparator());
     }
-    
-    private static void highlightTableRow(JTable table, int rowIndex) {
-        table.getSelectionModel().setSelectionInterval(rowIndex, rowIndex);
-        if(rowIndex + 15 > table.getRowCount())
-            table.scrollRectToVisible(new Rectangle(table.getCellRect(rowIndex, 2, true))); 
-        else if( 0 > table.getSelectedRow() -15)
-            table.scrollRectToVisible(new Rectangle(table.getCellRect(rowIndex, 2, true))); 
-        else     
-            table.scrollRectToVisible(new Rectangle(table.getCellRect(rowIndex-15, 2, true))); 
-        
-        
-    }  
 
     private void fixControlDimensions() {
         setComponentSize(rowNumTextField, new Dimension(carTagWidth, 30));
