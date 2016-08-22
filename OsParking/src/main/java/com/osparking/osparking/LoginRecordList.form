@@ -5,6 +5,12 @@
     <Component class="javax.swing.JFileChooser" name="saveFileChooser">
       <Properties>
         <Property name="dialogType" type="int" value="1"/>
+        <Property name="currentDirectory" type="java.io.File" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+          <Connection code="ODS_DIRECTORY" type="code"/>
+        </Property>
+        <Property name="fileFilter" type="javax.swing.filechooser.FileFilter" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+          <Connection code="new OdsFileOnly()" type="code"/>
+        </Property>
       </Properties>
     </Component>
   </NonVisualComponents>

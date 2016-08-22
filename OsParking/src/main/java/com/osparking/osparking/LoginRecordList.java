@@ -16,6 +16,7 @@
  */
 package com.osparking.osparking;
 
+import static com.osparking.global.CommonData.ODS_DIRECTORY;
 import static com.osparking.global.CommonData.buttonHeightNorm;
 import static com.osparking.global.CommonData.buttonWidthNorm;
 import static com.osparking.global.CommonData.normGUIheight;
@@ -60,6 +61,7 @@ import static com.osparking.global.names.ControlEnums.TableTypes.USER_ID_HEADER;
 import static com.osparking.global.names.ControlEnums.TableTypes.WORK_PERIOD;
 import static com.osparking.global.names.ControlEnums.TitleTypes.LOGIN_RECORD_FRAME_TITLE;
 import static com.osparking.global.names.ControlEnums.ToolTipContent.ENABLING_CONDITION;
+import com.osparking.global.names.OdsFileOnly;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import javax.swing.table.DefaultTableModel;
@@ -148,6 +150,8 @@ public class LoginRecordList extends javax.swing.JFrame {
         southPanel = new javax.swing.JPanel();
 
         saveFileChooser.setDialogType(javax.swing.JFileChooser.SAVE_DIALOG);
+        saveFileChooser.setCurrentDirectory(ODS_DIRECTORY);
+        saveFileChooser.setFileFilter(new OdsFileOnly());
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle(LOGIN_RECORD_FRAME_TITLE.getContent());
@@ -383,6 +387,7 @@ public class LoginRecordList extends javax.swing.JFrame {
 
     private void CloseFormButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CloseFormButtonActionPerformed
         setVisible(false);
+        dispose();
     }//GEN-LAST:event_CloseFormButtonActionPerformed
 
     private void saveSheet_ButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveSheet_ButtonActionPerformed
@@ -443,12 +448,14 @@ public class LoginRecordList extends javax.swing.JFrame {
         checkOptions(args);
         readSettings();
         
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new LoginRecordList().setVisible(true);
-            }
-        });
+        if (determineLoginID() != null) {
+            /* Create and display the form */
+            java.awt.EventQueue.invokeLater(new Runnable() {
+                public void run() {
+                    new LoginRecordList().setVisible(true);
+                }
+            });
+        }
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

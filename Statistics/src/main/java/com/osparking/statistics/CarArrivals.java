@@ -21,6 +21,7 @@ import com.osparking.global.CommonData;
 import static com.osparking.global.CommonData.ImgHeight;
 import static com.osparking.global.CommonData.ImgWidth;
 import static com.osparking.global.CommonData.NOT_SELECTED;
+import static com.osparking.global.CommonData.ODS_DIRECTORY;
 import static com.osparking.global.CommonData.bigButtonHeight;
 import static com.osparking.global.CommonData.buttonHeightNorm;
 import static com.osparking.global.CommonData.buttonWidthNorm;
@@ -29,7 +30,7 @@ import static com.osparking.global.CommonData.normGUIwidth;
 import static com.osparking.global.CommonData.numberCellRenderer;
 import static com.osparking.global.CommonData.pointColor;
 import static com.osparking.global.CommonData.tipColor;
-import static com.osparking.global.DataSheet.verifyOdsExtension;
+import static com.osparking.global.DataSheet.saveODSfile;
 import java.awt.Component;
 import java.awt.image.BufferedImage;
 import javax.swing.JLabel;
@@ -108,7 +109,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import static java.awt.event.ItemEvent.SELECTED;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Connection;
@@ -127,8 +127,6 @@ import javax.swing.Action;
 import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
-import javax.swing.JFileChooser;
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import static javax.swing.JOptionPane.INFORMATION_MESSAGE;
 import static javax.swing.JOptionPane.WARNING_MESSAGE;
@@ -140,9 +138,6 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableColumnModel;
-import javax.swing.table.TableModel;
-import org.jopendocument.dom.OOUtils;
-import org.jopendocument.dom.spreadsheet.SpreadSheet;
 
 /**
  *
@@ -169,7 +164,6 @@ public class CarArrivals extends javax.swing.JFrame {
     public CarArrivals() {
         initComponents();
         changedControls = new ChangedComponentClear(clearSearchPropertiesButton);
-//        changedCriteria = new ChangedComponentClear(searchButton);
         changeTableColumnHoriAlignment();
         BeginDateChooser.setLocale(parkingLotLocale);
         EndDateChooser.setLocale(parkingLotLocale);    
@@ -341,6 +335,8 @@ public class CarArrivals extends javax.swing.JFrame {
         wholeWest = new javax.swing.JPanel();
 
         saveFileChooser.setDialogType(javax.swing.JFileChooser.SAVE_DIALOG);
+        saveFileChooser.setCurrentDirectory(ODS_DIRECTORY);
+        saveFileChooser.setFileFilter(new OdsFileOnly());
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle(CAR_ARRIVALS_FRAME_TITLE.getContent());
@@ -1700,7 +1696,6 @@ public class CarArrivals extends javax.swing.JFrame {
 
     private void searchButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchButtonActionPerformed
         loadArrivalsListTable(true);
-//        searchedCarTag = carTagTF.getText().trim();
         searchButton.setEnabled(false);
     }//GEN-LAST:event_searchButtonActionPerformed
 
@@ -1714,9 +1709,6 @@ public class CarArrivals extends javax.swing.JFrame {
     }//GEN-LAST:event_seeLicenseButtonActionPerformed
 
     private void saveSheet_ButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveSheet_ButtonActionPerformed
-        /**
-         * Create wide arrivals list JTable.
-         */
         int columnCount = arrivalsList.getColumnCount() + CAExtra.values().length;
         Object[][] data = new Object[arrivalsList.getModel().getRowCount()][columnCount];
         
@@ -2154,7 +2146,6 @@ public class CarArrivals extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
     // </editor-fold>
 
-//    private String searchedCarTag = "";
     private void loadArrivalsListTable(boolean selectTop) {
         DefaultTableModel model = (DefaultTableModel) arrivalsList.getModel();  
         
@@ -2240,7 +2231,7 @@ public class CarArrivals extends javax.swing.JFrame {
                 arrivalsList.setRowSelectionInterval(0, 0);
                 arrivalsList.requestFocus();
             }
-            saveSheet_Button.setEnabled(true);
+            saveSheet_Button.setEnabled(isManager);
         }
     }
 
@@ -2627,8 +2618,6 @@ public class CarArrivals extends javax.swing.JFrame {
     }
 
     private void addBarOperationItems() {
-//        gateBarCB.removeAllItems();
-        
         gateBarCB.addItem(new ConvComboBoxItem(new Integer(-1), BAR_CB_ITEM.getContent()));
         for (BarOperation barOperation : BarOperation.values()) {
             gateBarCB.addItem(new ConvComboBoxItem(barOperation, barOperation.getContent()));
@@ -2732,35 +2721,6 @@ public class CarArrivals extends javax.swing.JFrame {
         }     
     }
 
-    /**
-     * Save data coming from a JFrame into ods (OpenOffice Calc) file.
-     * @param aFrame frame on which the data is currently displayed
-     * @param data data to save into ods file
-     * @param columns column names for the data columns
-     * @param saveFileChooser GUI dialog form where users enter file name and location.
-     */
-    private void saveODSfile(JFrame aFrame, Object[][] data, String[] columns,
-            JFileChooser saveFileChooser) {
-
-        saveFileChooser.setFileFilter(new OdsFileOnly());
-
-        int returnVal = saveFileChooser.showSaveDialog(aFrame);
-
-        if (returnVal == JFileChooser.APPROVE_OPTION) {
-            File[] file = new File[1];
-            
-            file[0] = saveFileChooser.getSelectedFile();
-            verifyOdsExtension(saveFileChooser, file);
-            TableModel model = new DefaultTableModel(data, columns);
-            try {
-                SpreadSheet.createEmpty(model).saveAs(file[0]);
-                OOUtils.open(file[0]);
-            } catch (IOException ex) {
-                System.out.println("File save exception: " + ex.getMessage());
-            }                
-        }        
-    }
-
     private void initSearchCriteria() {
         gateCB.setSelectedIndex(0);
         showCarTagTip();
@@ -2800,23 +2760,24 @@ public class CarArrivals extends javax.swing.JFrame {
 
 class HeaderCellRenderer implements TableCellRenderer {
  
-  private final TableCellRenderer wrappedRenderer;
-  private final JLabel label;
- 
-  public HeaderCellRenderer(TableCellRenderer wrappedRenderer) {
-    if (!(wrappedRenderer instanceof JLabel)) {
-      throw new IllegalArgumentException("The supplied renderer must inherit from JLabel");
+    private final TableCellRenderer wrappedRenderer;
+    private final JLabel label;
+
+    public HeaderCellRenderer(TableCellRenderer wrappedRenderer) {
+        if (!(wrappedRenderer instanceof JLabel)) {
+            throw new IllegalArgumentException("The supplied renderer must inherit from JLabel");
+        }
+        this.wrappedRenderer = wrappedRenderer;
+        this.label = (JLabel) wrappedRenderer;
     }
-    this.wrappedRenderer = wrappedRenderer;
-    this.label = (JLabel) wrappedRenderer;
-  }
  
-  @Override
-  public Component getTableCellRendererComponent(JTable table, Object value,
-          boolean isSelected, boolean hasFocus, int row, int column) {
-    wrappedRenderer.getTableCellRendererComponent(table, value,
-            isSelected, hasFocus, row, column);
-    label.setHorizontalAlignment(JLabel.CENTER);
-    return label;
-  }
+    @Override
+    public Component getTableCellRendererComponent(JTable table, Object value,
+            boolean isSelected, boolean hasFocus, int row, int column) 
+    {
+        wrappedRenderer.getTableCellRendererComponent(table, value, isSelected, hasFocus, 
+                row, column);
+        label.setHorizontalAlignment(JLabel.CENTER);
+        return label;
+    }
 }        

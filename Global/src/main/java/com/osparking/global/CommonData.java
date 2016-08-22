@@ -151,7 +151,7 @@ public class CommonData { // new Dimension(carTagWidth, 30)
         if (numRows == 0) {
             saveSheet_Button.setEnabled(false);
         } else {
-            saveSheet_Button.setEnabled(true);
+            saveSheet_Button.setEnabled(Globals.isManager);
         }       
     }    
 }

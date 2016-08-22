@@ -17,7 +17,6 @@
 package com.osparking.global;
 
 import static com.osparking.global.CommonData.ODS_FILEPATH;
-import static com.osparking.global.Globals.logParkingException;
 import static com.osparking.global.names.ControlEnums.DialogMessages.OVERWRITE_WARNING_DIALOG;
 import static com.osparking.global.names.ControlEnums.DialogMessages.OVERWRITE_WARNING_TITLE;
 import static com.osparking.global.names.ControlEnums.DialogMessages.USER_DELETE_CONF_3;
@@ -25,16 +24,13 @@ import static com.osparking.global.names.ControlEnums.DialogTitleTypes.ODS_SAVE_
 import static com.osparking.global.names.ControlEnums.LabelContent.ODS_SAVE_DIALOG_1;
 import static com.osparking.global.names.ControlEnums.LabelContent.ODS_SAVE_DIALOG_2;
 import static com.osparking.global.names.ControlEnums.LabelContent.ODS_SAVE_DIALOG_3;
-import com.osparking.global.names.OdsFileOnly;
 import java.io.File;
 import java.io.IOException;
-import java.util.logging.Level;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import static javax.swing.JOptionPane.OK_CANCEL_OPTION;
 import javax.swing.JTable;
-import javax.swing.filechooser.FileFilter;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import org.jopendocument.dom.OOUtils;
@@ -46,41 +42,41 @@ import org.jopendocument.dom.spreadsheet.SpreadSheet;
  */
 public class DataSheet {
     
-    /**
-     * Verify if the file has extension of 'ods'.
-     * 
-     * @param saveFileChooser
-     * @param file 
-     */
-    public static String verifyOdsExtension(JFileChooser saveFileChooser, File[] file) {
-        String ext = "";
-        String pathname = null;
-        try {
-            pathname = file[0].getAbsolutePath();
-            String extension = saveFileChooser.getFileFilter().getDescription();
-            if (extension.indexOf("*.ods") >= 0) {
-                // Finish making ods file name from the name supplied from the user
-                int start = pathname.length() - 4;
-                // Java doesn't have endsWithIgnoreCase. So, ...
-                if (start < 0 || !pathname.substring(start).equalsIgnoreCase(".ods")) {
-                    //<editor-fold defaultstate="collapsed" desc="// In case pathname doesn't have ".ods" suffix">
-                    // Give it the ".ods" extension, automatically.
-                    // pure file name(except extension name) has no ".ods" suffix
-                    // So, to make it a ods file, append ".ods" extension to the filename.
-                    //</editor-fold>
-                    ext = ".ods";
-                    pathname += ext;
-                    file[0] = new File(pathname);
-                } else {
-                    // pathname already has ".ods" as its suffix
-                }
-            }
-        } catch (Exception ex) {
-            logParkingException(Level.SEVERE, ex, "(File: " + pathname + ")");
-        } finally {
-            return ext;
-        }
-    }    
+//    /**
+//     * Verify if the file has extension of 'ods'.
+//     * 
+//     * @param saveFileChooser
+//     * @param file 
+//     */
+//    public static String verifyOdsExtension(JFileChooser saveFileChooser, File[] file) {
+//        String ext = "";
+//        String pathname = null;
+//        try {
+//            pathname = file[0].getAbsolutePath();
+//            String extension = saveFileChooser.getFileFilter().getDescription();
+//            if (extension.indexOf("*.ods") >= 0) {
+//                // Finish making ods file name from the name supplied from the user
+//                int start = pathname.length() - 4;
+//                // Java doesn't have endsWithIgnoreCase. So, ...
+//                if (start < 0 || !pathname.substring(start).equalsIgnoreCase(".ods")) {
+//                    //<editor-fold defaultstate="collapsed" desc="// In case pathname doesn't have ".ods" suffix">
+//                    // Give it the ".ods" extension, automatically.
+//                    // pure file name(except extension name) has no ".ods" suffix
+//                    // So, to make it a ods file, append ".ods" extension to the filename.
+//                    //</editor-fold>
+//                    ext = ".ods";
+//                    pathname += ext;
+//                    file[0] = new File(pathname);
+//                } else {
+//                    // pathname already has ".ods" as its suffix
+//                }
+//            }
+//        } catch (Exception ex) {
+//            logParkingException(Level.SEVERE, ex, "(File: " + pathname + ")");
+//        } finally {
+//            return ext;
+//        }
+//    }    
 
     /**
      * Saves data in a Java Table into an Open Office Calc file. 
@@ -103,8 +99,26 @@ public class DataSheet {
             String filename = saveFileChooser.getSelectedFile().getName();
 
             filePath += File.separator + filename;
-            saveOrNotWithFixedName(saveFileChooser, filePath, tableToSave, dirPath, filename);
+            
+            TableModel model = getSaveModel(tableToSave);
+            saveOrNotWithFixedName(saveFileChooser, filePath, model, dirPath, filename);
         }        
+    }
+    
+    public static void saveODSfile(JFrame aFrame, Object[][] data, String[] columns,
+            JFileChooser saveFileChooser) {
+        int returnVal = saveFileChooser.showSaveDialog(aFrame);
+
+        if (returnVal == JFileChooser.APPROVE_OPTION) 
+        {
+            String filePath = saveFileChooser.getCurrentDirectory().getAbsolutePath();
+            String dirPath = saveFileChooser.getCurrentDirectory().getAbsolutePath();
+            String filename = saveFileChooser.getSelectedFile().getName();
+
+            filePath += File.separator + filename;
+            TableModel model = new DefaultTableModel(data, columns);
+            saveOrNotWithFixedName(saveFileChooser, filePath, model, dirPath, filename);   
+        }
     }
     
     /**
@@ -128,20 +142,22 @@ public class DataSheet {
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             String selPath = saveFileChooser.getSelectedFile().getAbsolutePath();
             String selCore = saveFileChooser.getSelectedFile().getName();
-            saveOrNotWithFixedName(saveFileChooser, selPath, tableToSave, ODS_FILEPATH, selCore);
+            
+            TableModel model = getSaveModel(tableToSave);
+            
+            saveOrNotWithFixedName(saveFileChooser, selPath, model, ODS_FILEPATH, selCore);
         }
     }
 
-    private static void saveOrNotWithFixedName(JFileChooser saveFileChooser, 
-            String filePath, JTable tableToSave, String dirPath, String coreName) 
+    public static void saveOrNotWithFixedName(JFileChooser saveFileChooser, 
+            String filePath, TableModel model, String dirPath, String coreName) 
     {
         File file = null;
         String filename = coreName;
-        FileFilter filter = saveFileChooser.getFileFilter();
         
         file = saveFileChooser.getSelectedFile();
-        if (filter instanceof OdsFileOnly ||
-                !(filePath.toLowerCase().endsWith(".ods"))) {
+        if (!coreName.toLowerCase().endsWith(".ods")) 
+        {
             filePath += ".ods";
             filename += ".ods";
             file = new File(filePath);
@@ -150,26 +166,6 @@ public class DataSheet {
         if (noOverwritePossibleExistingSameFile(file, filePath)) {
             return;
         }
-            
-        //<editor-fold desc="-- Prepare data to save">
-        final Object[][] data =
-                new Object[tableToSave.getModel().getRowCount()][tableToSave.getColumnCount()];
-
-        for (int row = 0; row < tableToSave.getModel().getRowCount(); row ++) {
-            int rowM = tableToSave.convertRowIndexToModel(row);
-
-            for (int col = 0; col < tableToSave.getColumnCount(); col++) {
-                data[rowM][col] = tableToSave.getValueAt(rowM, col);
-            }
-        }
-
-        String[] columns = new String[tableToSave.getColumnCount()];
-        for (int col = 0; col < tableToSave.getColumnCount(); col++) {
-            columns[col] = (String)tableToSave.getColumnModel().getColumn(col).getHeaderValue();
-        }
-        //</editor-fold>
-
-        TableModel model = new DefaultTableModel(data, columns);
         
         try {
             SpreadSheet.createEmpty(model).saveAs(file);
@@ -202,5 +198,25 @@ public class DataSheet {
             }
         }
         return false;
+    }
+
+    private static TableModel getSaveModel(JTable tableToSave) {
+        final Object[][] data =
+                new Object[tableToSave.getModel().getRowCount()][tableToSave.getColumnCount()];
+
+        for (int row = 0; row < tableToSave.getModel().getRowCount(); row ++) {
+            int rowM = tableToSave.convertRowIndexToModel(row);
+
+            for (int col = 0; col < tableToSave.getColumnCount(); col++) {
+                data[rowM][col] = tableToSave.getValueAt(rowM, col);
+            }
+        }
+
+        String[] columns = new String[tableToSave.getColumnCount()];
+        for (int col = 0; col < tableToSave.getColumnCount(); col++) {
+            columns[col] = (String)tableToSave.getColumnModel().getColumn(col).getHeaderValue();
+        }
+
+        return new DefaultTableModel(data, columns);
     }
 }

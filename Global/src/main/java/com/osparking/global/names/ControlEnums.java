@@ -640,8 +640,7 @@ public class ControlEnums {
         DRIVER_DELETE_ALL_RESULT_DAILOG("모든 운전자가 삭제되었고" + System.getProperty("line.separator")
                 + "그들에게 등록된 모든 차량도 삭제되었습니다.", 
                 "All drivers are deleted" + System.getProperty("line.separator")
-                + "and all vehicles registered are deleted, too."
-),
+                + "and all vehicles registered are deleted, too."),
         DRIVER_MODIFY_FAIL_DAILOG(
                 "하나의 운전자만 선택하여 변경하십시오.", "Please narrow down to a single driver to update!"),
         DRIVER_CREATE_CANCEL_DIALOG("정말 운전자 생성을 취소합니까?", "Really cancel driver creation?"),

@@ -107,8 +107,9 @@ public class InsertGUI extends javax.swing.JFrame {
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Attendants"));
 
-        general100.setText("100 generals");
-        general100.setToolTipText("100 일반 사용자 생성");
+        general100.setText("100 guests");
+        general100.setToolTipText("Creates oguest1 to oguest100");
+        general100.setActionCommand("100 guests");
         general100.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 general100ActionPerformed(evt);
@@ -116,7 +117,7 @@ public class InsertGUI extends javax.swing.JFrame {
         });
 
         manager5.setText("5 managers");
-        manager5.setToolTipText("5 매니저 사용자 생성");
+        manager5.setToolTipText("Creates manager1 to manager5");
         manager5.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 manager5ActionPerformed(evt);
@@ -124,7 +125,7 @@ public class InsertGUI extends javax.swing.JFrame {
         });
 
         deleteAll_no_admin.setText("Del all (!admin)");
-        deleteAll_no_admin.setToolTipText("admin 제외 모두 삭제");
+        deleteAll_no_admin.setToolTipText("Delete users except 'admin'. Related car arrival and login records are deleted, too.");
         deleteAll_no_admin.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 deleteAll_no_adminActionPerformed(evt);
@@ -174,7 +175,7 @@ public class InsertGUI extends javax.swing.JFrame {
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Affili & Building"));
 
         affiliationsButton.setText("Insert Affiliations");
-        affiliationsButton.setToolTipText("5 매니저 사용자 생성");
+        affiliationsButton.setToolTipText("Inserts higher and lower affiliations.");
         affiliationsButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 affiliationsButtonActionPerformed(evt);
@@ -182,7 +183,7 @@ public class InsertGUI extends javax.swing.JFrame {
         });
 
         buildingsButton.setText("Insert Buildings");
-        buildingsButton.setToolTipText("5 매니저 사용자 생성");
+        buildingsButton.setToolTipText("Insert building and unit numbers.");
         buildingsButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 buildingsButtonActionPerformed(evt);
@@ -190,7 +191,7 @@ public class InsertGUI extends javax.swing.JFrame {
         });
 
         deleteAffiliation.setText("Delete affili/build");
-        deleteAffiliation.setToolTipText("5 매니저 사용자 생성");
+        deleteAffiliation.setToolTipText("Deletes affiliations and buildings and units.");
         deleteAffiliation.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 deleteAffiliationActionPerformed(evt);
@@ -274,7 +275,7 @@ public class InsertGUI extends javax.swing.JFrame {
         jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder("Drivers"));
 
         insertDrivers.setText("Insert Drivers");
-        insertDrivers.setToolTipText("5 매니저 사용자 생성");
+        insertDrivers.setToolTipText("Inserts 1000 drivers with random affiliation.");
         insertDrivers.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 insertDriversActionPerformed(evt);
@@ -282,7 +283,7 @@ public class InsertGUI extends javax.swing.JFrame {
         });
 
         deleteDrivers.setText("Delete all drivers");
-        deleteDrivers.setToolTipText("5 매니저 사용자 생성");
+        deleteDrivers.setToolTipText("Deletes all driver records.");
         deleteDrivers.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 deleteDriversActionPerformed(evt);
@@ -330,7 +331,7 @@ public class InsertGUI extends javax.swing.JFrame {
         jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder("Vehicles"));
 
         insertVehicles.setText("Insert 1K cars");
-        insertVehicles.setToolTipText("5 매니저 사용자 생성");
+        insertVehicles.setToolTipText("Inserts 1000 cars with many random properties. 4 of them are with images.");
         insertVehicles.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 insertVehiclesActionPerformed(evt);
@@ -338,7 +339,7 @@ public class InsertGUI extends javax.swing.JFrame {
         });
 
         deleteVehicles.setText("Delete all cars");
-        deleteVehicles.setToolTipText("5 매니저 사용자 생성");
+        deleteVehicles.setToolTipText("Deletes every registered cars.");
         deleteVehicles.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 deleteVehiclesActionPerformed(evt);

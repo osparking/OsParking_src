@@ -137,8 +137,9 @@
       <SubComponents>
         <Component class="javax.swing.JButton" name="general100">
           <Properties>
-            <Property name="text" type="java.lang.String" value="100 generals"/>
-            <Property name="toolTipText" type="java.lang.String" value="100 &#xc77c;&#xbc18; &#xc0ac;&#xc6a9;&#xc790; &#xc0dd;&#xc131;"/>
+            <Property name="text" type="java.lang.String" value="100 guests"/>
+            <Property name="toolTipText" type="java.lang.String" value="Creates oguest1 to oguest100"/>
+            <Property name="actionCommand" type="java.lang.String" value="100 guests"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="general100ActionPerformed"/>
@@ -147,7 +148,7 @@
         <Component class="javax.swing.JButton" name="manager5">
           <Properties>
             <Property name="text" type="java.lang.String" value="5 managers"/>
-            <Property name="toolTipText" type="java.lang.String" value="5 &#xb9e4;&#xb2c8;&#xc800; &#xc0ac;&#xc6a9;&#xc790; &#xc0dd;&#xc131;"/>
+            <Property name="toolTipText" type="java.lang.String" value="Creates manager1 to manager5"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="manager5ActionPerformed"/>
@@ -156,7 +157,7 @@
         <Component class="javax.swing.JButton" name="deleteAll_no_admin">
           <Properties>
             <Property name="text" type="java.lang.String" value="Del all (!admin)"/>
-            <Property name="toolTipText" type="java.lang.String" value="admin &#xc81c;&#xc678; &#xbaa8;&#xb450; &#xc0ad;&#xc81c;"/>
+            <Property name="toolTipText" type="java.lang.String" value="Delete users except &apos;admin&apos;. Related car arrival and login records are deleted, too."/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="deleteAll_no_adminActionPerformed"/>
@@ -251,7 +252,7 @@
         <Component class="javax.swing.JButton" name="affiliationsButton">
           <Properties>
             <Property name="text" type="java.lang.String" value="Insert Affiliations"/>
-            <Property name="toolTipText" type="java.lang.String" value="5 &#xb9e4;&#xb2c8;&#xc800; &#xc0ac;&#xc6a9;&#xc790; &#xc0dd;&#xc131;"/>
+            <Property name="toolTipText" type="java.lang.String" value="Inserts higher and lower affiliations."/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="affiliationsButtonActionPerformed"/>
@@ -260,7 +261,7 @@
         <Component class="javax.swing.JButton" name="buildingsButton">
           <Properties>
             <Property name="text" type="java.lang.String" value="Insert Buildings"/>
-            <Property name="toolTipText" type="java.lang.String" value="5 &#xb9e4;&#xb2c8;&#xc800; &#xc0ac;&#xc6a9;&#xc790; &#xc0dd;&#xc131;"/>
+            <Property name="toolTipText" type="java.lang.String" value="Insert building and unit numbers."/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="buildingsButtonActionPerformed"/>
@@ -269,7 +270,7 @@
         <Component class="javax.swing.JButton" name="deleteAffiliation">
           <Properties>
             <Property name="text" type="java.lang.String" value="Delete affili/build"/>
-            <Property name="toolTipText" type="java.lang.String" value="5 &#xb9e4;&#xb2c8;&#xc800; &#xc0ac;&#xc6a9;&#xc790; &#xc0dd;&#xc131;"/>
+            <Property name="toolTipText" type="java.lang.String" value="Deletes affiliations and buildings and units."/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="deleteAffiliationActionPerformed"/>
@@ -377,7 +378,7 @@
         <Component class="javax.swing.JButton" name="insertDrivers">
           <Properties>
             <Property name="text" type="java.lang.String" value="Insert Drivers"/>
-            <Property name="toolTipText" type="java.lang.String" value="5 &#xb9e4;&#xb2c8;&#xc800; &#xc0ac;&#xc6a9;&#xc790; &#xc0dd;&#xc131;"/>
+            <Property name="toolTipText" type="java.lang.String" value="Inserts 1000 drivers with random affiliation."/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="insertDriversActionPerformed"/>
@@ -386,7 +387,7 @@
         <Component class="javax.swing.JButton" name="deleteDrivers">
           <Properties>
             <Property name="text" type="java.lang.String" value="Delete all drivers"/>
-            <Property name="toolTipText" type="java.lang.String" value="5 &#xb9e4;&#xb2c8;&#xc800; &#xc0ac;&#xc6a9;&#xc790; &#xc0dd;&#xc131;"/>
+            <Property name="toolTipText" type="java.lang.String" value="Deletes all driver records."/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="deleteDriversActionPerformed"/>
@@ -452,7 +453,7 @@
         <Component class="javax.swing.JButton" name="insertVehicles">
           <Properties>
             <Property name="text" type="java.lang.String" value="Insert 1K cars"/>
-            <Property name="toolTipText" type="java.lang.String" value="5 &#xb9e4;&#xb2c8;&#xc800; &#xc0ac;&#xc6a9;&#xc790; &#xc0dd;&#xc131;"/>
+            <Property name="toolTipText" type="java.lang.String" value="Inserts 1000 cars with many random properties. 4 of them are with images."/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="insertVehiclesActionPerformed"/>
@@ -461,7 +462,7 @@
         <Component class="javax.swing.JButton" name="deleteVehicles">
           <Properties>
             <Property name="text" type="java.lang.String" value="Delete all cars"/>
-            <Property name="toolTipText" type="java.lang.String" value="5 &#xb9e4;&#xb2c8;&#xc800; &#xc0ac;&#xc6a9;&#xc790; &#xc0dd;&#xc131;"/>
+            <Property name="toolTipText" type="java.lang.String" value="Deletes every registered cars."/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="deleteVehiclesActionPerformed"/>

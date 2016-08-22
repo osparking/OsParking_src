@@ -8,6 +8,9 @@
         <Property name="approveButtonText" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
           <Connection code="SAVE_BTN.getContent()" type="code"/>
         </Property>
+        <Property name="currentDirectory" type="java.io.File" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+          <Connection code="ODS_DIRECTORY" type="code"/>
+        </Property>
         <Property name="dialogTitle" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
           <Connection code="ATTENDANT_ODS_TITLE.getContent()" type="code"/>
         </Property>

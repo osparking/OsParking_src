@@ -18,6 +18,7 @@ package com.osparking.attendant;
 
 import com.osparking.global.CommonData;
 import static com.osparking.global.CommonData.ADMIN_ID;
+import static com.osparking.global.CommonData.ODS_DIRECTORY;
 import static com.osparking.global.CommonData.buttonHeightNorm;
 import static com.osparking.global.CommonData.buttonHeightShort;
 import static com.osparking.global.CommonData.buttonWidthNorm;
@@ -29,7 +30,6 @@ import static com.osparking.global.CommonData.pointColor;
 import static com.osparking.global.CommonData.putCellCenter;
 import static com.osparking.global.CommonData.tableRowHeight;
 import static com.osparking.global.CommonData.tipColor;
-import static com.osparking.global.DataSheet.saveODSfile;
 import static com.osparking.global.DataSheet.saveODSfileName;
 import java.awt.Point;
 import java.io.File;
@@ -368,6 +368,7 @@ public class AttListForm extends javax.swing.JFrame {
 
         saveFileChooser.setDialogType(javax.swing.JFileChooser.SAVE_DIALOG);
         saveFileChooser.setApproveButtonText(SAVE_BTN.getContent());
+        saveFileChooser.setCurrentDirectory(ODS_DIRECTORY);
         saveFileChooser.setDialogTitle(ATTENDANT_ODS_TITLE.getContent());
         saveFileChooser.setFileFilter(new OdsFileOnly());
         saveFileChooser.setToolTipText("");
