@@ -56,8 +56,7 @@ import static com.osparking.global.names.OSP_enums.DeviceType.*;
 import com.osparking.global.names.OSP_enums.OpLogLevel;
 import static com.osparking.global.names.OSP_enums.OpLogLevel.LogAlways;
 import static com.osparking.global.names.OSP_enums.OpLogLevel.SettingsChange;
-import static com.osparking.global.names.OSP_enums.OpLogLevel.EBDsettingsChange;
-import com.osparking.global.names.PasswordValidator;
+import static com.osparking.global.names.OSP_enums.OpLogLevel.UserCarChange;
 import org.apache.commons.validator.routines.InetAddressValidator;
 import com.osparking.attendant.PWHelpJDialog;
 import com.osparking.global.ChangedComponentSave;
@@ -69,6 +68,7 @@ import static com.osparking.global.CommonData.TEXT_FIELD_HEIGHT;
 import static com.osparking.global.CommonData.buttonHeightNorm;
 import static com.osparking.global.CommonData.buttonHeightShort;
 import static com.osparking.global.CommonData.buttonWidthNorm;
+import static com.osparking.global.CommonData.pwValidator;
 import static com.osparking.global.CommonData.rejectNonNumericKeys;
 import static com.osparking.global.CommonData.statCountArr;
 import static com.osparking.global.CommonData.tipColor;
@@ -83,6 +83,7 @@ import static com.osparking.global.names.ControlEnums.ComboBoxItemTypes.FOUR_DIG
 import static com.osparking.global.names.ControlEnums.ComboBoxItemTypes.NO_LOGGING_CB_ITEM;
 import static com.osparking.global.names.ControlEnums.ComboBoxItemTypes.SETTINGS_LOGGING_CB_ITEM;
 import static com.osparking.global.names.ControlEnums.ComboBoxItemTypes.SIX_DIGIT_CB_ITEM;
+import static com.osparking.global.names.ControlEnums.DialogMessages.FAIL_SAVE_SETTINGS_DIALOG;
 import static com.osparking.global.names.ControlEnums.DialogMessages.PopSizeHelp1;
 import static com.osparking.global.names.ControlEnums.DialogMessages.PopSizeHelp2;
 import static com.osparking.global.names.ControlEnums.DialogMessages.PopSizeHelp3;
@@ -244,7 +245,6 @@ public class Settings_System extends javax.swing.JFrame {
                 comboBx.removeAllItems();
                 for (CameraType type: CameraType.values()) {
                     comboBx.addItem(type);
-//                    comboBx.addItem(type.getLabel());
                 }
             }
             
@@ -253,7 +253,6 @@ public class Settings_System extends javax.swing.JFrame {
                 comboBx.removeAllItems();
                 for (E_BoardType type: E_BoardType.values()) {
                     comboBx.addItem(type);
-//                    comboBx.addItem(type.getLabel());
                 }
             }
             
@@ -261,7 +260,6 @@ public class Settings_System extends javax.swing.JFrame {
             if (comboBx != null) {
                 comboBx.removeAllItems();
                 for (GateBarType type: GateBarType.values()) {
-//                    comboBx.addItem(type.getLabel());
                     comboBx.addItem(type);
                 }
             }
@@ -555,9 +553,9 @@ public class Settings_System extends javax.swing.JFrame {
         jLabel42.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         jLabel42.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel42.setText(LOT_NAME_LABEL.getContent());
-        jLabel42.setMaximumSize(new java.awt.Dimension(76, 27));
+        jLabel42.setMaximumSize(new java.awt.Dimension(170, 27));
         jLabel42.setMinimumSize(new java.awt.Dimension(76, 27));
-        jLabel42.setPreferredSize(new java.awt.Dimension(76, 27));
+        jLabel42.setPreferredSize(new java.awt.Dimension(170, 27));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -708,7 +706,7 @@ public class Settings_System extends javax.swing.JFrame {
         parkinglotOptionPanel.add(jLabel5, gridBagConstraints);
 
         MessageMaxLineComboBox.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        MessageMaxLineComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "100", "200", "300", "500", "1000" }));
+        MessageMaxLineComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "100", "200", "300", "500", "1,000" }));
         MessageMaxLineComboBox.setMinimumSize(new java.awt.Dimension(70, 23));
         MessageMaxLineComboBox.setName("MessageMaxLineComboBox"); // NOI18N
         MessageMaxLineComboBox.setPreferredSize(new java.awt.Dimension(70, 23));
@@ -917,9 +915,9 @@ public class Settings_System extends javax.swing.JFrame {
         jLabel4.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel4.setText(STATISTICS_SIZE_LABEL.getContent());
-        jLabel4.setMaximumSize(new java.awt.Dimension(176, 27));
-        jLabel4.setMinimumSize(new java.awt.Dimension(76, 27));
-        jLabel4.setPreferredSize(new java.awt.Dimension(170, 27));
+        jLabel4.setMaximumSize(new java.awt.Dimension(200, 27));
+        jLabel4.setMinimumSize(new java.awt.Dimension(200, 27));
+        jLabel4.setPreferredSize(new java.awt.Dimension(200, 27));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 7;
@@ -2587,7 +2585,7 @@ public class Settings_System extends javax.swing.JFrame {
                     + LOGGIND_DIALOG_D.getContent() + System.lineSeparator() 
                     + LOGGIND_DIALOG_E.getContent() + System.lineSeparator();
         } else
-        if (OptnLoggingLevelComboBox.getSelectedIndex() == OpLogLevel.EBDsettingsChange.ordinal()) {
+        if (OptnLoggingLevelComboBox.getSelectedIndex() == OpLogLevel.UserCarChange.ordinal()) {
             helpText += LOGGIND_DIALOG_A.getContent() + System.lineSeparator() 
                     + System.lineSeparator() 
                     + LOGGIND_DIALOG_F.getContent() + System.lineSeparator();
@@ -2599,7 +2597,7 @@ public class Settings_System extends javax.swing.JFrame {
     }//GEN-LAST:event_LoggingLevelHelpButtonActionPerformed
 
     private void PWHelpButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PWHelpButtonActionPerformed
-        PasswordValidator pwValidator = new PasswordValidator();
+//        PasswordValidator pwValidator = new PasswordValidator();
         short pwPowerLevel = (short)PWStrengthChoiceComboBox.getSelectedIndex();
         String helpText = pwValidator.getWrongPWFormatMsg(pwPowerLevel);
 
@@ -2752,7 +2750,7 @@ public class Settings_System extends javax.swing.JFrame {
                 
                 if (opLoggingIndex != optnLogLevel)
                 {
-                    logParkingOperation(OpLogLevel.SettingsChange, "Settings Change, Gen' Operation Log Level: " 
+                    logParkingOperation(OpLogLevel.LogAlways, "Settings Change, Gen' Operation Log Level: " 
                             + OptnLoggingLevelComboBox.getItemAt(opLoggingIndex) + " => " 
                             + OptnLoggingLevelComboBox.getItemAt(optnLogLevel));
                 }
@@ -2796,13 +2794,13 @@ public class Settings_System extends javax.swing.JFrame {
                 
                 if (EBD_flowCycle != flowCycle)
                 {
-                    logParkingOperation(OpLogLevel.EBDsettingsChange, "E-Board Settings Change, Cycles--flowing: " 
+                    logParkingOperation(OpLogLevel.UserCarChange, "E-Board Settings Change, Cycles--flowing: " 
                             + EBD_flowCycle + " => " + flowCycle);
                 }                
                 
                 if (EBD_blinkCycle != blinkCycle)
                 {
-                    logParkingOperation(OpLogLevel.EBDsettingsChange, "E-Board Settings Change, Cycles--blinking: " 
+                    logParkingOperation(OpLogLevel.UserCarChange, "E-Board Settings Change, Cycles--blinking: " 
                             + EBD_blinkCycle + " => " + blinkCycle);
                 }    
                 
@@ -2817,7 +2815,7 @@ public class Settings_System extends javax.swing.JFrame {
                 
                 Globals.getOperationLog().setLevel(index2Level(opLoggingIndex));
             } else {
-                JOptionPane.showMessageDialog(this, "The storage system settings failed.",
+                JOptionPane.showMessageDialog(this, FAIL_SAVE_SETTINGS_DIALOG.getContent(),
                     SETTINGS_SAVE_RESULT.getContent(), JOptionPane.ERROR_MESSAGE);
             }
             // </editor-fold>
@@ -2841,7 +2839,7 @@ public class Settings_System extends javax.swing.JFrame {
                 SETTINGS_SAVE_RESULT.getContent(), JOptionPane.PLAIN_MESSAGE);
             enableSaveCancelButtons(false);
         } else {
-            JOptionPane.showMessageDialog(this, "The storage system settings failed.",
+            JOptionPane.showMessageDialog(this, FAIL_SAVE_SETTINGS_DIALOG.getContent(),
                 SETTINGS_SAVE_RESULT.getContent(), JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_SettingsSaveButtonActionPerformed
@@ -3529,15 +3527,20 @@ public class Settings_System extends javax.swing.JFrame {
         initializeLoggers();
         checkOptions(args);
         readSettings();
-        EBD_DisplaySettings = DB_Access.readEBoardSettings();
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                //ControlGUI mainForm = new ControlGUI();
-                Settings_System form = new Settings_System(null);
-                form.setVisible(true);
+        
+        if (determineLoginID() != null) {
+            if (isManager) {
+                EBD_DisplaySettings = DB_Access.readEBoardSettings();
+                /* Create and display the form */
+                java.awt.EventQueue.invokeLater(new Runnable() {
+                    public void run() {
+                        //ControlGUI mainForm = new ControlGUI();
+                        Settings_System form = new Settings_System(null);
+                        form.setVisible(true);
+                    }
+                });
             }
-        });
+        }
     }
 
     //<editor-fold desc="-- Automatically generated form controls">
@@ -3870,7 +3873,7 @@ public class Settings_System extends javax.swing.JFrame {
                 case SettingsChange:
                     OptnLoggingLevelComboBox.addItem(SETTINGS_LOGGING_CB_ITEM.getContent());
                     break;
-                case EBDsettingsChange:
+                case UserCarChange:
                     OptnLoggingLevelComboBox.addItem(E_BOARD_LOGGING_CB_ITEM.getContent());
                     break;
             }

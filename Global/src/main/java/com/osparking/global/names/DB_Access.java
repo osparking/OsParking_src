@@ -16,6 +16,7 @@
  */
 package com.osparking.global.names;
 
+import com.osparking.global.CommonData;
 import static com.osparking.global.CommonData.ADMIN_ID;
 import static com.osparking.global.CommonData.statCountArr;
 import com.osparking.global.Globals;
@@ -377,6 +378,7 @@ public class DB_Access {
                             
                 parkingLotName = rs.getString("Lot_Name");
                 pwStrengthLevel = rs.getShort("PWStrengthLevel");   // Password Complexity Level
+                
                 opLoggingIndex = rs.getShort("OptnLoggingLevel");
                 parkingLotLocale = new Locale(rs.getString("languageCode"), rs.getString("countryCode"));
                 switch(parkingLotLocale.getLanguage()){
@@ -406,6 +408,7 @@ public class DB_Access {
         } catch (SQLException ex) {
             logParkingException(Level.SEVERE, ex, "(Loading System Settings from the DB)");
         } finally {
+            CommonData.pwValidator = new PasswordValidator();
             closeDBstuff(conn, selectStmt, rs, "(Releasing system DB resources after settings loading)");
         }
         readGateDevices();

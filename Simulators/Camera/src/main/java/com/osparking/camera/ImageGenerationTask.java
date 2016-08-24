@@ -135,7 +135,7 @@ public class ImageGenerationTask extends TimerTask {
                     imageFileNo = getNextCarNum(rand, imageFileNo);
                     cameraGUI.sendCarImage(imageFileNo, ++cameraGUI.generationSN);
                     if (DEBUG) {
-                        Globals.logParkingOperation(OpLogLevel.EBDsettingsChange, 
+                        Globals.logParkingOperation(OpLogLevel.UserCarChange, 
                             "Generated image ID : " + Integer.toString(cameraGUI.generationSN), cameraGUI.getID());
                         saveImageIDsent(cameraGUI.generationSN);
                     }                    

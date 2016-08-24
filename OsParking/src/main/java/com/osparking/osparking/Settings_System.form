@@ -144,13 +144,13 @@
                   <Connection code="LOT_NAME_LABEL.getContent()" type="code"/>
                 </Property>
                 <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                  <Dimension value="[76, 27]"/>
+                  <Dimension value="[170, 27]"/>
                 </Property>
                 <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                   <Dimension value="[76, 27]"/>
                 </Property>
                 <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                  <Dimension value="[76, 27]"/>
+                  <Dimension value="[170, 27]"/>
                 </Property>
               </Properties>
               <Constraints>
@@ -394,7 +394,7 @@
                     <StringItem index="1" value="200"/>
                     <StringItem index="2" value="300"/>
                     <StringItem index="3" value="500"/>
-                    <StringItem index="4" value="1000"/>
+                    <StringItem index="4" value="1,000"/>
                   </StringArray>
                 </Property>
                 <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
@@ -698,13 +698,13 @@
                   <Connection code="STATISTICS_SIZE_LABEL.getContent()" type="code"/>
                 </Property>
                 <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                  <Dimension value="[176, 27]"/>
+                  <Dimension value="[200, 27]"/>
                 </Property>
                 <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                  <Dimension value="[76, 27]"/>
+                  <Dimension value="[200, 27]"/>
                 </Property>
                 <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                  <Dimension value="[170, 27]"/>
+                  <Dimension value="[200, 27]"/>
                 </Property>
               </Properties>
               <Constraints>

@@ -3427,10 +3427,11 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
         } else {
             deleteAll_Affiliation.setEnabled(false);
         }
-        saveSheet_Button.setEnabled(b);
         if (isManager) {
+            saveSheet_Button.setEnabled(b);
             readSheet.setEnabled(b);
         } else {
+            saveSheet_Button.setEnabled(false);
             readSheet.setEnabled(false);
         }
         closeFormButton.setEnabled(b);

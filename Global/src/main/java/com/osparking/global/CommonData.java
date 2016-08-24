@@ -22,6 +22,7 @@ import static com.osparking.global.Globals.font_Type;
 import static com.osparking.global.Globals.getBufferedImage;
 import static com.osparking.global.Globals.getTagNumber;
 import static com.osparking.global.names.ControlEnums.MenuITemTypes.META_KEY_LABEL;
+import com.osparking.global.names.PasswordValidator;
 import static com.sun.javafx.tk.Toolkit.getToolkit;
 import java.awt.Color;
 import java.awt.Component;
@@ -45,6 +46,7 @@ public class CommonData { // new Dimension(carTagWidth, 30)
     /**
      * Combobox selected item index when not selected.
      */
+    public static PasswordValidator pwValidator = null;
     public static final int FIRST_ROW = 0;
     
     public static final String ODS_FILE_DIR = "ods";

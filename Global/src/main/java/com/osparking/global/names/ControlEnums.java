@@ -316,8 +316,8 @@ public class ControlEnums {
         FIX_IT_BTN("설정(F)", "Fix It"),
         SET_BUTTON("설정(S)", "Settings"),
         ARRIVALS_BTN("<HTML>입차기록(<U>A</U>)</HTML>", "<HTML><U>A</U>rrivals</HTML>"),
-        VEHICLES_BTN("<HTML>등록차목록(<U>V</U>)</HTML>", "<HTML><U>V</U>ehicles</HTML>"),
-        USERS_BTN("<HTML>사용자목록(<U>U</U>)</HTML>", "<HTML><U>U</U>sers</HTML>"),
+        VEHICLES_BTN("<HTML>차량관리(<U>V</U>)</HTML>", "<HTML><U>V</U>ehicles</HTML>"),
+        USERS_BTN("<HTML>사용자관리(<U>U</U>)</HTML>", "<HTML><U>U</U>sers</HTML>"),
         CAR_ARRIVAL_BTN("모의입차(M)", "Sim' Entry"),
         STATISTICS_BTN("통계", "statistics"),
         GATE_BAR_OPEN_BTN("차단기 열림(O)", "Open Bar"),
@@ -776,10 +776,9 @@ public class ControlEnums {
                     + "'OSParking' shuts down by itself." + System.lineSeparator() 
                     + "So, you need to start OSParking again."),
         
-        FAIL_SAVE_SETTINGS_DIALOG("시스템 설정 저장에 실패하였습니다.", "The storage system settings failed."),
+        FAIL_SAVE_SETTINGS_DIALOG("시스템 설정 저장에 실패하였습니다.", "The system settings saving failed."),
         SAVE_SETTINGS_DIALOG("설정 값이 저장 되었습니다.", "Settings saved successfully."),
         INPUT_ERROR_DAILOG("1 이상의 값을 입력하세요.", "Enter a value of 1 or more .."),
-//        IP_FORMAT_ERROR_DAILOG("의 IP 주소 형식이 올바르지 않습니다.", "in IP address format error"),
         
         SAVE_OR_CANEL_DIALOG("설정이 변경되었습니다..\n \n"
                     + "[저장] 또는 [취소]버튼을 선택해 주세요.", 
@@ -1158,24 +1157,27 @@ public class ControlEnums {
         
         public String getContent() {
                 return contents[language.ordinal()];
-        }          
-        
-    }      
+        }
+    }
     
     public enum MenuITemTypes{
-        RECORD_MENU("<HTML>주차기록(<U>A</U>)</HTML>", "<HTML><U>A</U> Records</HTML>"),
+        RECORD_MENU("각종기록", "Records"),
         ARRIVAL_MENU_ITEM("입차기록", "Arrival"),
         BOOTING_MENU_ITEM("실행기록", "Booting"),
         LOGIN_RECORD_MENU_ITEM("로그인기록", "Login"),
-        VEHICLE_MENU("<HTML>등록차량(<U>V</U>)</HTML>", "<HTML><U>V</U>ehicles</HTML>"),
+        VEHICLE_MENU("<HTML>차량\u22C5차주</HTML>", "<HTML>Car\u22C5Owner</HTML>"),
+//        VEHICLE_MENU("차량\u22Cad5차주", "Vehicles"),
         VEHICLE_MANAGE_MENU_ITEM("차량관리", "Vehicle"),
-        DRIVERS_MENU_ITEM("운전자", "Driver"),
+        DRIVERS_MENU_ITEM("차주관리", "Driver"),
         AFFILIATION_MENU("<HTML>건물소속(<U>F</U>)</HTML>", "<HTML>A<U>f</U>filiation</HTML>"),
-        USERS_MENU("<HTML>사용자(<U>U</U>)</HTML>", "<HTML><U>U</U>sers</HTML>"),
-        MANAGE_MENU_ITEM("목록관리", "Manage"),
-        SYSTEM_MENU("<HTML>실행명령(<U>S</U>)</HTML>", "<HTML><U>S</U>ystem</HTML>"),
-        SETTING_MENU_ITEM("설정", "Settins"),
+        USERS_MENU("사용자", "Users"),
+        MANAGE_MENU_ITEM("사용자관리", "Manage"),
+        SYSTEM_MENU("실행명령", "System"),
+        SETTING_MENU_ITEM("설정", "Settings"),
+        SETTING_MENU_ITEM_SC("설정(S)", "Settings"),
         QUIT_MENU_ITEM("종료", "Quit"),
+//        QUIT_MENU_ITEM_SC("<HTML>종료(<U>Q</U>)</HTML>", "Quit"),
+        QUIT_MENU_ITEM_SC("종료(Q)", "Quit"),
         LOGIN_MENU("<HTML>로그인(<U>I</U>)</HTML>", "<HTML>Log <U>I</U>n</HTML>"),
         LOGOUT_MENU("<HTML>로그아웃(<U>O</U>)</HTML>", "<HTML>Log <U>O</U>ut</HTML>"),
         LOGIN_MENU_ITEM("로그인", "Log In"),

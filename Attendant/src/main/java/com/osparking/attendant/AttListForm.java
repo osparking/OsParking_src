@@ -28,6 +28,7 @@ import static com.osparking.global.CommonData.normGUIheight;
 import static com.osparking.global.CommonData.normGUIwidth;
 import static com.osparking.global.CommonData.pointColor;
 import static com.osparking.global.CommonData.putCellCenter;
+import static com.osparking.global.CommonData.pwValidator;
 import static com.osparking.global.CommonData.tableRowHeight;
 import static com.osparking.global.CommonData.tipColor;
 import static com.osparking.global.DataSheet.saveODSfileName;
@@ -54,7 +55,6 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
 import static com.osparking.global.Globals.*;
-import com.osparking.global.names.PasswordValidator;
 
 import static javax.swing.JOptionPane.showMessageDialog;
 import static com.osparking.global.names.DB_Access.*;
@@ -154,7 +154,6 @@ public class AttListForm extends javax.swing.JFrame {
     String searchString = "";
     private static Logger logException = null;
     private static Logger logOperation = null;
-    private static PasswordValidator pwValidator = new PasswordValidator(); 
     ParentGUI mainGUI;
     boolean isStandalone = false;
     private HashSet<Component> changedControls = new HashSet<Component>();    
@@ -169,6 +168,8 @@ public class AttListForm extends javax.swing.JFrame {
     public AttListForm(ParentGUI mainGUI, String loginID, String loginPW, boolean isManager) {
         // Mark the first row as selected in default
         this.mainGUI = mainGUI;
+//        pwValidator = new PasswordValidator();
+        
         try {
             initComponents();
             setLocation(0, 0);
@@ -1278,6 +1279,7 @@ public class AttListForm extends javax.swing.JFrame {
         saveOdsButton.setText(SAVE_ODS_BTN.getContent());
         saveOdsButton.setToolTipText(SAVE_AS_TOOLTIP.getContent());
         saveOdsButton.setAutoscrolls(true);
+        saveOdsButton.setEnabled(false);
         saveOdsButton.setMargin(new java.awt.Insets(0, 0, 0, 0));
         saveOdsButton.setMaximumSize(new Dimension(CommonData.buttonWidthWide, buttonHeightNorm));
         saveOdsButton.setMinimumSize(new Dimension(CommonData.buttonWidthWide, buttonHeightNorm));
@@ -1760,7 +1762,7 @@ public class AttListForm extends javax.swing.JFrame {
                     usersTable.changeSelection(selectIndex, 0, false, false); 
                     usersTable.requestFocus();
                 }
-                logParkingOperation(OpLogLevel.SettingsChange, 
+                logParkingOperation(OpLogLevel.UserCarChange, 
                         ("* User deleted (ID:" + deleteID + ")"));
                 
                 String dialogMessage = "";
@@ -2491,9 +2493,8 @@ public class AttListForm extends javax.swing.JFrame {
                     JOptionPane.PLAIN_MESSAGE);
             
             clearPasswordFields();
-//            multiFuncButton.setEnabled(false);
             changedControls.clear();
-            logParkingOperation(OpLogLevel.SettingsChange, getModifiedUserInfo());       
+            logParkingOperation(OpLogLevel.UserCarChange, getModifiedUserInfo());       
         } else {
             //<editor-fold desc="-- Handle the case of update failure">
             String dialogMessage = USER_UPDATE_A.getContent() + System.lineSeparator()
@@ -2555,7 +2556,7 @@ public class AttListForm extends javax.swing.JFrame {
                 searchButton.setEnabled(flag);
             }
         }
-        saveOdsButton. setEnabled(flag);
+        saveOdsButton. setEnabled(flag & isManager);
         closeFormButton.setEnabled(flag); 
 
         cancelButton.setEnabled(!flag);

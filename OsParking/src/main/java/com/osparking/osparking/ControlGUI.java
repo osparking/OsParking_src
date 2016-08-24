@@ -20,7 +20,6 @@ import com.osparking.attendant.AttListForm;
 import com.osparking.attendant.LoginDialog;
 import com.osparking.attendant.LoginEventListener;
 import com.osparking.attendant.LoginWindowEvent;
-import com.osparking.global.CameraMessage;
 import com.osparking.global.CommonData;
 import static com.osparking.global.CommonData.ImgHeight;
 import static com.osparking.global.CommonData.ImgWidth;
@@ -67,8 +66,10 @@ import static com.osparking.global.names.ControlEnums.MenuITemTypes.LOGOUT_MENU_
 import static com.osparking.global.names.ControlEnums.MenuITemTypes.MANAGER_MANU;
 import static com.osparking.global.names.ControlEnums.MenuITemTypes.MANAGE_MENU_ITEM;
 import static com.osparking.global.names.ControlEnums.MenuITemTypes.QUIT_MENU_ITEM;
+import static com.osparking.global.names.ControlEnums.MenuITemTypes.QUIT_MENU_ITEM_SC;
 import static com.osparking.global.names.ControlEnums.MenuITemTypes.RECORD_MENU;
 import static com.osparking.global.names.ControlEnums.MenuITemTypes.SETTING_MENU_ITEM;
+import static com.osparking.global.names.ControlEnums.MenuITemTypes.SETTING_MENU_ITEM_SC;
 import static com.osparking.global.names.ControlEnums.MenuITemTypes.SYSTEM_MENU;
 import static com.osparking.global.names.ControlEnums.MenuITemTypes.USERS_MENU;
 import static com.osparking.global.names.ControlEnums.MenuITemTypes.VEHICLE_MANAGE_MENU_ITEM;
@@ -432,6 +433,7 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
         
         openCommAcked[0] = true;        
         
+        //<editor-fold desc="-- Initialize various kinds of timers">
         for (byte gateNo = 1; gateNo <= gateCount; gateNo++) {
             openCommandIDs[gateNo] = 0;
             openCommAcked[gateNo] = true;    
@@ -450,15 +452,14 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
                 sendEBDmsgTimer[gateNo][row.ordinal()] 
                         = new ParkingTimer(timerName, false, null, 0L, RESEND_PERIOD); 
             }            
-        }          
+        }     
+        //</editor-fold>
         
+        //<editor-fold desc="-- Create device managers for each gate.">
         for (DeviceType type : DeviceType.values()) {     
             for (int gNo = 1; gNo <= gateCount; gNo++) {
                 if (DEBUG) {
-                    /**
-                     * Prepare camera image ID log file.
-                     */
-                    prepareIDLogFile(type, gNo);
+                    prepareIDLogFile(type, gNo); // Camera image ID log file.
                 }
                 String command = null;
                 if (type == GateBar)
@@ -473,6 +474,7 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
                 
                 switch (type) {
                     case Camera: 
+                        //<editor-fold desc="-- Camera manager">
                         switch (Globals.gateDeviceTypes[gateNo].cameraType) {
                             case Blackfly:
                                 deviceManagers[type.ordinal()][gateNo]
@@ -484,9 +486,10 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
                                         = (IDevice.IManager)new CameraManager(this, gateNo);
                                 break;
                         }                        
+                        //</editor-fold>
                         break;
-                        
                     case E_Board: 
+                        //<editor-fold desc="-- E-board manager">
                         switch (Globals.gateDeviceTypes[gateNo].eBoardType) {
                             case LEDnotice:
                                 deviceManagers[type.ordinal()][gateNo]
@@ -498,9 +501,10 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
                                         = (IDevice.IManager)new EBoardManager(this, gateNo);
                                 break;
                         }
+                        //</editor-fold>
                         break;
-                        
                     case GateBar: // deviceType[GateBar.ordinal()][gateID]
+                        //<editor-fold desc="-- Gate bar manager">
                         switch (Globals.gateDeviceTypes[gateNo].gateBarType) {
                             case NaraBar:
                                 deviceManagers[type.ordinal()][gateNo] 
@@ -512,6 +516,7 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
                                         = (IDevice.IManager)new GateBarManager(this, gateNo);
                                 break;
                         }
+                        //</editor-fold>
                         break;
                 }
                 // start server socket listeners for all types of devices
@@ -522,6 +527,7 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
                 }
             }
         }
+        //</editor-fold>
 
         openCommandIssuedMs = new long[gateCount + 1];
         
@@ -550,7 +556,7 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
         
         if (!eBoardTest) {
             processLogIn(null);
-        }
+        }        
     }
     
     private void prepareIDLogFile(DeviceType devType, int gateNo) {
@@ -675,6 +681,7 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
         CarIOListButton = new javax.swing.JButton();
         VehiclesButton = new javax.swing.JButton();
         UsersButton = new javax.swing.JButton();
+        setOrQuit = new javax.swing.JButton();
         filler3 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
         dummyButton = new javax.swing.JButton();
         autoGateOpenCheckBox = new javax.swing.JCheckBox();
@@ -808,6 +815,7 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
         CarIOListButton.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         CarIOListButton.setText(ARRIVALS_BTN.getContent());
         CarIOListButton.setAlignmentY(0.0F);
+        CarIOListButton.setEnabled(false);
         CarIOListButton.setFocusable(false);
         CarIOListButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         CarIOListButton.setMaximumSize(new java.awt.Dimension(120, 30));
@@ -856,6 +864,24 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
             }
         });
         MainToolBar.add(UsersButton);
+
+        setOrQuit.setBackground(MainBackground);
+        setOrQuit.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        setOrQuit.setMnemonic('Q');
+        setOrQuit.setText("Set/Quit");
+        setOrQuit.setAlignmentY(0.0F);
+        setOrQuit.setFocusable(false);
+        setOrQuit.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        setOrQuit.setMaximumSize(new java.awt.Dimension(120, 30));
+        setOrQuit.setMinimumSize(new java.awt.Dimension(120, 30));
+        setOrQuit.setPreferredSize(new java.awt.Dimension(120, 30));
+        setOrQuit.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        setOrQuit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                setOrQuitActionPerformed(evt);
+            }
+        });
+        MainToolBar.add(setOrQuit);
         MainToolBar.add(Box.createHorizontalGlue());
         MainToolBar.add(filler3);
 
@@ -1335,13 +1361,14 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
         RecordsMenu.setText(RECORD_MENU.getContent());
         RecordsMenu.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         RecordsMenu.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        RecordsMenu.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        RecordsMenu.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
         RecordsMenu.setMaximumSize(new java.awt.Dimension(120, 32767));
         RecordsMenu.setPreferredSize(new java.awt.Dimension(100, 24));
 
         EntryRecordItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_A, java.awt.event.InputEvent.ALT_MASK));
         EntryRecordItem.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         EntryRecordItem.setText(ARRIVAL_MENU_ITEM.getContent());
+        EntryRecordItem.setEnabled(false);
         EntryRecordItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 EntryRecordItemActionPerformed(evt);
@@ -1454,7 +1481,7 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
         visibleMenuBar.add(AttendantMenu);
 
         CommandMenu.setBackground(MainBackground);
-        CommandMenu.setText(SYSTEM_MENU.getContent());
+        CommandMenu.setText(QUIT_MENU_ITEM_SC.getContent());
         CommandMenu.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         CommandMenu.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         CommandMenu.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
@@ -1506,6 +1533,7 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
 
         LoginUser.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_I, java.awt.event.InputEvent.ALT_MASK));
         LoginUser.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        LoginUser.setMnemonic('I');
         LoginUser.setText(LOGIN_MENU_ITEM.getContent());
         LoginUser.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1595,9 +1623,7 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
                         Globals.loginID = e.getUID();
                         Globals.loginPW = e.getPW();
                         Globals.isManager = e.getIsManager();
-                        if (Globals.isManager) {
-                            enableAdminOnlyItem(true);
-                        }
+
                         changeUserID_etc();
                         recordLogin();
                         addMessageLine(MessageTextArea, Globals.loginID + " " + LOG_IN.getContent());
@@ -1607,26 +1633,33 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
                 logParkingException(Level.SEVERE, ex, "(user login processing)");
             }
         }
-
-        getLoginDialog().setVisible(true);
-
+        getLoginDialog().setVisible(true); // Pop open login window
+      
+        if (Globals.isManager) {
+            enableAdminOnlyItem(true);
+            // Change one top menu command text for managers
+            setOrQuit.setText(SETTING_MENU_ITEM_SC.getContent());
+            setOrQuit.setMnemonic('S');
+            CommandMenu.setText(SYSTEM_MENU.getContent());
+        } else {
+            makeQuitVisible();
+        }
+              
         // <editor-fold defaultstate="collapsed" desc="-- automatic login during development">        
-//        java.awt.EventQueue.invokeLater(new Runnable() {
-//            public void run() {
-//                loginDialog.handleLoginAttempt();       
-//                SettingsItemActionPerformed(null);
-//            }
-//        });  
-        //</editor-fold>        
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                if (isManager) {
+//                    displaySystemSettings();
+                }
+            }
+        });  
+        //</editor-fold>  
         
         if (DEBUG && loginID != null && loginID.equals(CommonData.ADMIN_ID)) {
             insertDebugPanel();
         } else {
             removeDebugPanel();
         }
-//        if (!DEBUG || !isManager) {
-//            removeDebugPanel();
-//        }        
     }//GEN-LAST:event_processLogIn
     
     private void processCloseProgram(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_processCloseProgram
@@ -1667,11 +1700,12 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
     }//GEN-LAST:event_UsersButtonActionPerformed
 
     private void SettingsItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SettingsItemActionPerformed
-        if (configureSettingsForm == null) 
-        { 
-            setConfigureSettingsForm(new Settings_System(this));
-        }
-        configureSettingsForm.setVisible(true);
+        displaySystemSettings();
+//        if (configureSettingsForm == null) 
+//        { 
+//            setConfigureSettingsForm(new Settings_System(this));
+//        }
+//        configureSettingsForm.setVisible(true);
     }//GEN-LAST:event_SettingsItemActionPerformed
 
     private void RunRecordItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RunRecordItemActionPerformed
@@ -1903,6 +1937,14 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
         autoGateOpenCheckBox.setSelected(!autoGateOpenCheckBox.isSelected());
     }//GEN-LAST:event_dummyButtonActionPerformed
 
+    private void setOrQuitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_setOrQuitActionPerformed
+        if (isManager) {
+            displaySystemSettings();         
+        } else {
+            askUserIntentionOnProgramStop(false);
+        }
+    }//GEN-LAST:event_setOrQuitActionPerformed
+
     LedProtocol ledNoticeProtocol = new LedProtocol(); 
 
     private String getDevType(DeviceType type, byte gateNo) {
@@ -2126,6 +2168,21 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
         return new Dimension(panel1.width, panel1.height + panel2.height);
     }    
 
+    private void displaySystemSettings() {
+        if (configureSettingsForm == null) 
+        { 
+            setConfigureSettingsForm(new Settings_System(this));
+        }
+        configureSettingsForm.setVisible(true);   
+    }
+
+    private void makeQuitVisible() {
+        // Change one top menu command text for guests and no logins
+        setOrQuit.setText(QUIT_MENU_ITEM_SC.getContent());
+        setOrQuit.setMnemonic('Q');
+        CommandMenu.setText(QUIT_MENU_ITEM_SC.getContent());
+    }
+
     class ManageArrivalList extends Thread {
         public void run() {
             Thread.currentThread().setPriority(Thread.MIN_PRIORITY);
@@ -2235,6 +2292,7 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
     private javax.swing.JLabel row2Heading;
     private javax.swing.JLabel row3Heading;
     private javax.swing.JLabel row4Heading;
+    private javax.swing.JButton setOrQuit;
     public javax.swing.JButton showStatisticsBtn;
     private javax.swing.JPanel statusPanelGate1;
     private javax.swing.JPanel statusPanelGate2;
@@ -2248,7 +2306,8 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
     
     JLabel managerLabel = new JLabel(MANAGER_MANU.getContent()); 
     JLabel ID_Label = new JLabel(ID_LABEL_STR.getContent()); 
-    
+    private javax.swing.JButton SettingsButton;
+
     // JongbumPark's declaration
     private static GatePanel gatePanel;
     
@@ -2325,10 +2384,12 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
     private void AttendantTask_setEnabled(boolean b) {
         AttendantListItem.setEnabled(b);
         VehicleListItem.setEnabled(b);
+        EntryRecordItem.setEnabled(b);        
         DriverListItem.setEnabled(b);
     }
 
     private void MenuItems_setEnabled(boolean loggedIn) {
+        CarIOListButton.setEnabled(loggedIn);
         BuildingListItem.setEnabled(loggedIn);
         LoginUser.setEnabled(!loggedIn);
         LogoutUser.setEnabled(loggedIn);
@@ -2489,6 +2550,7 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
         Globals.loginPW = null;
         Globals.isManager = false;
         changeUserID_etc();
+        makeQuitVisible();
         AttendantTask_setEnabled(false);
     }
 

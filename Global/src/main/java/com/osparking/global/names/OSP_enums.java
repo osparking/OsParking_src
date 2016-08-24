@@ -65,47 +65,50 @@ public class OSP_enums {
     }
     
     public enum E_BoardType {
-        Simulator("모의장치"), 
-        LEDnotice("LEDnotice");
+        Simulator("모의장치", "Simulator"), 
+        LEDnotice("LED노티스", "LEDnotice");
         
-        private String label;
+        private String[] label = new String[Languages.values().length];        
         
-        E_BoardType(String label) {
-            this.label = label;
+        E_BoardType(String korean, String english) {
+            label[KOREAN.ordinal()] = korean;
+            label[ENGLISH.ordinal()] = english;
         }
 
         public String toString() {
-            return label;
+            return label[language.ordinal()];
         }          
     }
     
     public enum GateBarType {
-        Simulator("모의장치"), 
-        NaraBar("Nara Bar");
+        Simulator("모의장치", "Simulator"), 
+        NaraBar("나라바", "LEDnotice");
         
-        private String label;
+        private String[] label = new String[Languages.values().length];        
         
-        GateBarType(String label) {
-            this.label = label;
+        GateBarType(String korean, String english) {
+            label[KOREAN.ordinal()] = korean;
+            label[ENGLISH.ordinal()] = english;
         }
 
         public String toString() {
-            return label;
+            return label[language.ordinal()];
         }         
     }
     
     public enum CameraType {
-        Simulator("모의장치"), 
-        Blackfly("Blackfly");
+        Simulator("모의장치", "Simulator"), 
+        Blackfly("블랙플라이", "Blackfly");
         
-        private String label;
-        
-        CameraType(String label) {
-            this.label = label;
+        CameraType(String korean, String english) {
+            label[KOREAN.ordinal()] = korean;
+            label[ENGLISH.ordinal()] = english;
         }
+        
+        private String[] label = new String[Languages.values().length];        
 
         public String toString() {
-            return label;
+            return label[language.ordinal()];
         }    
     }
 
@@ -245,7 +248,7 @@ public class OSP_enums {
     public enum OpLogLevel {
         LogAlways, // log this operation always
         SettingsChange, // log system settings change
-        EBDsettingsChange // log system settings change plus E-board settings change
+        UserCarChange // log system settings change plus E-board settings change
     }    
     
     public enum DeviceType {

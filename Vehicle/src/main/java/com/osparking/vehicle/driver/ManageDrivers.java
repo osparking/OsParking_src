@@ -127,7 +127,7 @@ import static com.osparking.global.names.OSP_enums.DriverCol.DriverName;
 import static com.osparking.global.names.OSP_enums.DriverCol.LandLine;
 import static com.osparking.global.names.OSP_enums.DriverCol.UnitNo;
 import com.osparking.global.names.OSP_enums.ODS_TYPE;
-import static com.osparking.global.names.OSP_enums.OpLogLevel.EBDsettingsChange;
+import static com.osparking.global.names.OSP_enums.OpLogLevel.UserCarChange;
 import com.osparking.global.names.OdsFileOnly;
 import com.osparking.global.names.PComboBox;
 import com.osparking.global.names.WrappedInt;
@@ -529,7 +529,7 @@ public class ManageDrivers extends javax.swing.JFrame {
                 driverProperties.append("Driver Creation Summary: " + System.lineSeparator());
                 
                 getDriverProperties(driverName, cell, driverProperties, rowIndex, landLine, itemL2name, itemUnitName);  
-                Globals.logParkingOperation(EBDsettingsChange, driverProperties.toString(), Globals.GENERAL_DEVICE);
+                Globals.logParkingOperation(UserCarChange, driverProperties.toString(), Globals.GENERAL_DEVICE);
                 
                 // Redisplay the skinny driver selection form which this driver manage form is invoked
                 if (driverSelectionForm != null) {

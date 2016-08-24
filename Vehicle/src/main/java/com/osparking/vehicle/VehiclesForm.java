@@ -111,6 +111,7 @@ import static com.osparking.global.names.JDBCMySQL.getConnection;
 import com.osparking.global.names.JTextFieldLimit;
 import com.osparking.global.names.OSP_enums;
 import com.osparking.global.names.OSP_enums.ODS_TYPE;
+import com.osparking.global.names.OSP_enums.OpLogLevel;
 import com.osparking.global.names.OSP_enums.VehicleCol;
 import com.osparking.global.names.OdsFileOnly;
 import com.osparking.global.names.PComboBox;
@@ -1514,7 +1515,7 @@ public class VehiclesForm extends javax.swing.JFrame {
             {
                 setFormMode(FormMode.NormalMode);
                 loadVehicleTable(-1, carTagTextField.getText()); 
-                logParkingOperation(OSP_enums.OpLogLevel.SettingsChange, vehicleModification.toString());
+                logParkingOperation(OpLogLevel.UserCarChange, vehicleModification.toString());
             } else {
                 JOptionPane.showConfirmDialog(null, VEHICLE_MODIFY_FAIL_DAILOG.getContent(),
                                 VEHICLE_MODIFY_FAIL_DIALOGTITLE.getContent(), 
@@ -2391,7 +2392,7 @@ public class VehiclesForm extends javax.swing.JFrame {
         if (result == 1) {
             vehicleProperties.append("Vehicle Creation Summary: " + System.lineSeparator());
             getVehicleProperties(vehicleProperties);
-            logParkingOperation(OSP_enums.OpLogLevel.EBDsettingsChange, operationLogName);
+            logParkingOperation(OpLogLevel.UserCarChange, operationLogName);
         }
         
         return result;         
@@ -2552,7 +2553,8 @@ public class VehiclesForm extends javax.swing.JFrame {
                         default:
                             break;
                     }                    
-                    
+                    logParkingOperation(OpLogLevel.UserCarChange, 
+                            ("* Vechcle deleted :" + dialogMessage + ")"));
                     JOptionPane.showConfirmDialog(this, dialogMessage,
                             DELETE_RESULT_DIALOGTITLE.getContent(),
                             JOptionPane.PLAIN_MESSAGE, INFORMATION_MESSAGE);

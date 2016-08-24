@@ -136,6 +136,7 @@ public class Settings_EBoard extends javax.swing.JFrame {
         centerPanel = new javax.swing.JPanel();
         titlePanel = new javax.swing.JPanel();
         attendantGUI_title = new javax.swing.JLabel();
+        myMetaKeyLabel = new javax.swing.JLabel();
         eboardTabbedPanel = new javax.swing.JTabbedPane();
         eBoardTabPane1 = new javax.swing.JTabbedPane();
         eBoardPanel0 = new javax.swing.JPanel();
@@ -199,7 +200,6 @@ public class Settings_EBoard extends javax.swing.JFrame {
         btn_Cancel = new javax.swing.JButton();
         btn_Exit = new javax.swing.JButton();
         filler7 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
-        myMetaKeyLabel = new javax.swing.JLabel();
         southPanel = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
@@ -234,19 +234,33 @@ public class Settings_EBoard extends javax.swing.JFrame {
         attendantGUI_title.setMinimumSize(new java.awt.Dimension(76, 30));
         attendantGUI_title.setPreferredSize(new java.awt.Dimension(120, 30));
 
+        myMetaKeyLabel.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        myMetaKeyLabel.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        myMetaKeyLabel.setText(META_KEY_LABEL.getContent());
+        myMetaKeyLabel.setVerticalAlignment(javax.swing.SwingConstants.TOP);
+        myMetaKeyLabel.setMaximumSize(new java.awt.Dimension(80, 30));
+        myMetaKeyLabel.setMinimumSize(new java.awt.Dimension(80, 30));
+        myMetaKeyLabel.setName(""); // NOI18N
+        myMetaKeyLabel.setPreferredSize(new java.awt.Dimension(80, 30));
+        myMetaKeyLabel.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        myMetaKeyLabel.setForeground(tipColor);
+
         javax.swing.GroupLayout titlePanelLayout = new javax.swing.GroupLayout(titlePanel);
         titlePanel.setLayout(titlePanelLayout);
         titlePanelLayout.setHorizontalGroup(
             titlePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, titlePanelLayout.createSequentialGroup()
-                .addContainerGap(159, Short.MAX_VALUE)
+                .addContainerGap(154, Short.MAX_VALUE)
                 .addComponent(attendantGUI_title, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(157, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 82, Short.MAX_VALUE)
+                .addComponent(myMetaKeyLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         titlePanelLayout.setVerticalGroup(
             titlePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(titlePanelLayout.createSequentialGroup()
-                .addComponent(attendantGUI_title, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(titlePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(attendantGUI_title, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(myMetaKeyLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -1000,17 +1014,6 @@ public class Settings_EBoard extends javax.swing.JFrame {
             }
         });
 
-        myMetaKeyLabel.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        myMetaKeyLabel.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        myMetaKeyLabel.setText(META_KEY_LABEL.getContent());
-        myMetaKeyLabel.setVerticalAlignment(javax.swing.SwingConstants.TOP);
-        myMetaKeyLabel.setMaximumSize(new java.awt.Dimension(80, 25));
-        myMetaKeyLabel.setMinimumSize(new java.awt.Dimension(80, 25));
-        myMetaKeyLabel.setName(""); // NOI18N
-        myMetaKeyLabel.setPreferredSize(new java.awt.Dimension(80, 25));
-        myMetaKeyLabel.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        myMetaKeyLabel.setForeground(tipColor);
-
         javax.swing.GroupLayout buttonPanelLayout = new javax.swing.GroupLayout(buttonPanel);
         buttonPanel.setLayout(buttonPanelLayout);
         buttonPanelLayout.setHorizontalGroup(
@@ -1027,9 +1030,7 @@ public class Settings_EBoard extends javax.swing.JFrame {
                 .addComponent(btn_Exit, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(filler7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(myMetaKeyLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(79, Short.MAX_VALUE))
         );
         buttonPanelLayout.setVerticalGroup(
             buttonPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1037,7 +1038,6 @@ public class Settings_EBoard extends javax.swing.JFrame {
                 .addComponent(btn_Exit, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addComponent(btn_Save, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addComponent(btn_Cancel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-            .addComponent(myMetaKeyLabel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addComponent(filler8, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, buttonPanelLayout.createSequentialGroup()
                 .addGroup(buttonPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1468,7 +1468,7 @@ public class Settings_EBoard extends javax.swing.JFrame {
                 //<editor-fold desc="-- Log system settings change if set to do so">
                 String currVerbatimStr = parent.EBD_DisplaySettings[usage_row.ordinal()].verbatimContent;
                 if (typeItem == EBD_ContentType.VERBATIM && !currVerbatimStr.equals(verbatimStr)) {
-                    logParkingOperation(OpLogLevel.EBDsettingsChange,
+                    logParkingOperation(OpLogLevel.SettingsChange,
                             "E-Board Settings Change, Verbatim Message: " + currVerbatimStr + " => " + verbatimStr);
                 }
                 //</editor-fold>
