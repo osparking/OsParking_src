@@ -112,7 +112,7 @@ public class CommonData { // new Dimension(carTagWidth, 30)
     }    
     
     // Make sure the 'ods' folder exists in the user home directory.
-    private static void makeSurePathExists(String dirPath) {
+    public static void makeSurePathExists(String dirPath) {
         File dirFile = new File(dirPath);
         dirFile.mkdirs();
     }    

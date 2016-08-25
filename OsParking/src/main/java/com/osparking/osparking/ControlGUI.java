@@ -3340,6 +3340,12 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
         debugPanel.setVisible(false);
         Status_Panel.setPreferredSize(connStatusPanel.getPreferredSize());
     }
+    
+    public void displayStatus(String message) {
+        synchronized(getStatusTextField()) {
+            getStatusTextField().setText(message); 
+        }
+    }
     /**
      * @param args the command line arguments
      */

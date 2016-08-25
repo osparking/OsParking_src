@@ -542,6 +542,7 @@ public class ControlEnums {
     }
 
     public enum DialogMessages {
+        TIMED_OUT(" 시간 초과 ", " timed out "),
         CONN_REFUSED(" 연결 거부 ", " refused connection "),
         CONN_REFUSED_1(" 회", " times"),
         OsParking_FUNC_WARNING("※오즈파킹이 오작동할 수 있습니다.", "※OsParking could function improperly"),
