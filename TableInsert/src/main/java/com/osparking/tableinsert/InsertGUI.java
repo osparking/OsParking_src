@@ -93,9 +93,14 @@ public class InsertGUI extends javax.swing.JFrame {
         deleteVehicles = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         vehicleCount = new javax.swing.JLabel();
+        jPanel5 = new javax.swing.JPanel();
+        deleteLogins = new javax.swing.JButton();
+        deleteSysRun = new javax.swing.JButton();
+        deleteArrivals = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Attendant Table Management");
+        setResizable(false);
 
         quitProgram.setMnemonic('X');
         quitProgram.setText("Exit(X)");
@@ -109,7 +114,6 @@ public class InsertGUI extends javax.swing.JFrame {
 
         general100.setText("100 guests");
         general100.setToolTipText("Creates oguest1 to oguest100");
-        general100.setActionCommand("100 guests");
         general100.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 general100ActionPerformed(evt);
@@ -379,12 +383,68 @@ public class InsertGUI extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
+        jPanel5.setBorder(javax.swing.BorderFactory.createTitledBorder("Clear Records"));
+
+        deleteLogins.setText("Logins");
+        deleteLogins.setToolTipText("Deletes affiliations and buildings and units.");
+        deleteLogins.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deleteLoginsActionPerformed(evt);
+            }
+        });
+
+        deleteSysRun.setText("System Run");
+        deleteSysRun.setToolTipText("Deletes affiliations and buildings and units.");
+        deleteSysRun.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deleteSysRunActionPerformed(evt);
+            }
+        });
+
+        deleteArrivals.setText("Arrivals");
+        deleteArrivals.setToolTipText("Deletes affiliations and buildings and units.");
+        deleteArrivals.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deleteArrivalsActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
+        jPanel5.setLayout(jPanel5Layout);
+        jPanel5Layout.setHorizontalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(deleteLogins)
+                .addGap(18, 18, Short.MAX_VALUE)
+                .addComponent(deleteSysRun)
+                .addGap(18, 18, Short.MAX_VALUE)
+                .addComponent(deleteArrivals)
+                .addGap(15, 15, 15))
+        );
+
+        jPanel5Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {deleteArrivals, deleteLogins, deleteSysRun});
+
+        jPanel5Layout.setVerticalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(deleteLogins, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(deleteSysRun, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(deleteArrivals, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
+        );
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(quitProgram))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(40, 40, 40)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -395,10 +455,8 @@ public class InsertGUI extends javax.swing.JFrame {
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
-                                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(quitProgram)))
+                                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                            .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addGap(40, 40, 40))
         );
         layout.setVerticalGroup(
@@ -410,9 +468,11 @@ public class InsertGUI extends javax.swing.JFrame {
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(41, 41, 41)
+                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(22, 22, 22)
                 .addComponent(quitProgram, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(40, 40, 40))
         );
@@ -859,6 +919,18 @@ public class InsertGUI extends javax.swing.JFrame {
         updateBuildingCount();
     }//GEN-LAST:event_deleteAffiliationActionPerformed
 
+    private void deleteLoginsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteLoginsActionPerformed
+        deleteAllrecords("Delete From LoginRecord");
+    }//GEN-LAST:event_deleteLoginsActionPerformed
+
+    private void deleteSysRunActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteSysRunActionPerformed
+        deleteAllrecords("Delete From SystemRun");
+    }//GEN-LAST:event_deleteSysRunActionPerformed
+
+    private void deleteArrivalsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteArrivalsActionPerformed
+        deleteAllrecords("Delete From Car_Arrival");
+    }//GEN-LAST:event_deleteArrivalsActionPerformed
+
     private int createUser(String idCore, int suffix, boolean isManager) {
         Connection conn = null;        
         PreparedStatement createAttendant = null;
@@ -955,7 +1027,10 @@ public class InsertGUI extends javax.swing.JFrame {
     private javax.swing.JButton buildingsButton;
     private javax.swing.JButton deleteAffiliation;
     private javax.swing.JButton deleteAll_no_admin;
+    private javax.swing.JButton deleteArrivals;
     private javax.swing.JButton deleteDrivers;
+    private javax.swing.JButton deleteLogins;
+    private javax.swing.JButton deleteSysRun;
     private javax.swing.JButton deleteVehicles;
     private javax.swing.JLabel driverCount;
     private javax.swing.JButton general100;
@@ -972,6 +1047,7 @@ public class InsertGUI extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
     private javax.swing.JButton manager5;
     private javax.swing.JButton quitProgram;
     private javax.swing.JLabel unitCount;

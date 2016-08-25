@@ -1,0 +1,1 @@
+mysqldump -u root -p --databases parkinglot > parkinglot.sql
