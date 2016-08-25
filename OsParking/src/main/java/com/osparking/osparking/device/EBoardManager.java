@@ -461,14 +461,13 @@ public class EBoardManager extends Thread implements
     public static void sendEBoardDefaultSetting(ControlGUI mainForm, byte deviceNo, EBD_Row row) {
         if (! mainForm.getSendEBDmsgTimer()[deviceNo][row.ordinal()].hasTask())
         {
-            mainForm.getSendEBDmsgTimer()[deviceNo][row.ordinal()].reschedule(
-                        new SendEBDMessageTask(
-                            mainForm, deviceNo, row, 
-                            getEBDSimulatorDefaultMessage(deviceNo, row, --mainForm.msgSNs[deviceNo]),
-//                            mainForm.getDefaultMessage(
-//                                    deviceNo, row,
-//                                    --mainForm.msgSNs[deviceNo]), 
-                            mainForm.msgSNs[deviceNo]));
+            if (mainForm != null) {
+                mainForm.getSendEBDmsgTimer()[deviceNo][row.ordinal()].reschedule(
+                            new SendEBDMessageTask(
+                                mainForm, deviceNo, row, 
+                                getEBDSimulatorDefaultMessage(deviceNo, row, --mainForm.msgSNs[deviceNo]),
+                                mainForm.msgSNs[deviceNo]));
+            }
         }    
     }
 

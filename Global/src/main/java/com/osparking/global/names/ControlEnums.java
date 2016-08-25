@@ -542,6 +542,10 @@ public class ControlEnums {
     }
 
     public enum DialogMessages {
+        OsParking_FUNC_WARNING("※오즈파킹이 오작동할 수 있습니다.", "※OsParking could function improperly"),
+        MISSING_PORT_DIALOG_1("장치 포트 부재 내역 : ", "Missing device port details : "),
+        MISSING_PORT_DIALOG_2("  - 입구 번호 : ", "  - Gate No. :"),
+        MISSING_PORT_DIALOG_3("  - 장치 종류 : ", "  - Device Type : "),
         USER_UPDATE_1("아래 사용자 정보가 갱신되었습니다.", "Below user information modified."),
         USER_UPDATE_2("- 사용자 아이디 : ", "- User ID : "),
         USER_UPDATE_A("아래 사용자 정보 갱신에 실패하였습니다.", "User information update failure Notice."),

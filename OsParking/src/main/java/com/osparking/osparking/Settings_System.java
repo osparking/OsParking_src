@@ -169,6 +169,7 @@ import com.osparking.global.names.EBD_DisplaySetting;
 import com.osparking.global.names.OSP_enums.CameraType;
 import com.osparking.global.names.OSP_enums.ConnectionType;
 import static com.osparking.global.names.OSP_enums.ConnectionType.RS_232;
+import static com.osparking.global.names.OSP_enums.ConnectionType.TCP_IP;
 import com.osparking.global.names.OSP_enums.DeviceType;
 import com.osparking.global.names.OSP_enums.E_BoardType;
 import com.osparking.global.names.OSP_enums.GateBarType;
@@ -4619,11 +4620,17 @@ public class Settings_System extends javax.swing.JFrame {
 
     private void setPortNumber(DeviceType devType, int subType, byte gateNo, JTextField portField) 
     {
+        JComboBox comboBx = ((JComboBox)getComponentByName(devType.name() +gateNo + "_connTypeCBox"));
+        
         if (subType == SIMULATOR) {
+            comboBx.setSelectedIndex(TCP_IP.ordinal());
+            comboBx.setEnabled(false);
+            
             int portNo = getPort(devType, gateNo, Globals.versionType) + gateNo;
             portField.setText(Integer.toString(portNo));
             portField.setEnabled(false);
         } else {
+            comboBx.setEnabled(true);
             portField.setText(devicePort[devType.ordinal()][gateNo]);
             portField.setEnabled(true);
         }

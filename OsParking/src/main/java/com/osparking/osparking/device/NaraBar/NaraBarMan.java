@@ -10,6 +10,11 @@ import static com.osparking.global.Globals.DEBUG;
 import static com.osparking.global.Globals.addMessageLine;
 import static com.osparking.global.Globals.closeSocket;
 import static com.osparking.global.Globals.logParkingException;
+import static com.osparking.global.names.ControlEnums.DialogMessages.MISSING_PORT_DIALOG_1;
+import static com.osparking.global.names.ControlEnums.DialogMessages.MISSING_PORT_DIALOG_2;
+import static com.osparking.global.names.ControlEnums.DialogMessages.MISSING_PORT_DIALOG_3;
+import static com.osparking.global.names.ControlEnums.DialogMessages.OsParking_FUNC_WARNING;
+import static com.osparking.global.names.ControlEnums.DialogTitleTypes.ERROR_DIALOGTITLE;
 import com.osparking.global.names.DB_Access;
 import static com.osparking.global.names.DB_Access.connectionType;
 import static com.osparking.global.names.DB_Access.deviceComID;
@@ -79,16 +84,17 @@ public class NaraBarMan extends Thread implements IDevice.IManager, IDevice.ISer
             try {
                 portIdentifier = CommPortIdentifier.getPortIdentifier(portNumStr);
             } catch (NoSuchPortException ex) {
-                logParkingException(Level.SEVERE, ex, "prepare logging file", deviceNo);
-                String errorMsg = "'" + portNumStr + "'" + " : no such port error!";
-                String questMsg = "오즈파킹 실행을 중지하겠습니까?";
-                int response = JOptionPane.showConfirmDialog(mainGUI, 
-                        errorMsg + System.lineSeparator() + questMsg + System.lineSeparator(),
-                        "Error: " + portNumStr, JOptionPane.YES_NO_OPTION);
-
-                if (response == JOptionPane.YES_OPTION) {
-                    mainGUI.stopRunningTheProgram();
-                }                
+                logParkingException(Level.SEVERE, ex, "NoSuchPortException as '" + portNumStr + "'", 
+                        deviceNo);
+                
+                String msg = MISSING_PORT_DIALOG_1.getContent() + System.lineSeparator() +
+                        MISSING_PORT_DIALOG_2.getContent() + deviceNo + System.lineSeparator() +
+                        MISSING_PORT_DIALOG_3.getContent() + GateBar.getContent() + System.lineSeparator() +
+                        System.lineSeparator() + OsParking_FUNC_WARNING.getContent();
+                
+                JOptionPane.showMessageDialog(mainGUI, msg,
+                                ERROR_DIALOGTITLE.getContent() + " : " + portNumStr,
+                                JOptionPane.WARNING_MESSAGE);
             }
         } else {
             // 차단기 연결 소켓을 통하여 들어오는 메시지를 읽은 쓰레드 생성 및 가동
@@ -143,7 +149,7 @@ public class NaraBarMan extends Thread implements IDevice.IManager, IDevice.ISer
                                 //<editor-fold desc="-- Handle Serial connection">
                                 if (oStream != null) 
                                 {
-                                    System.out.print("\t\t[Bar] ");
+//                                    System.out.print("\t\t[Bar] ");
                                     switch (currItem.getType()) {
                                         
                                         case GateDown:

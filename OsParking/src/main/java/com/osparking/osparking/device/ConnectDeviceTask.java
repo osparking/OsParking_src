@@ -36,6 +36,7 @@ import static com.osparking.global.names.OSP_enums.ConnectionType.TCP_IP;
 import com.osparking.global.names.IDevice.ISocket;
 import com.osparking.global.names.OSP_enums;
 import com.osparking.osparking.device.BlackFly.BlackFlyManager;
+import gnu.io.CommPortIdentifier;
 import gnu.io.PortInUseException;
 import gnu.io.SerialPort;
 import gnu.io.UnsupportedCommOperationException;
@@ -78,7 +79,6 @@ public class ConnectDeviceTask implements Runnable {
                 {
                     IDevice.IManager manager = managerGUI.getDeviceManagers()[deviceType.ordinal()][deviceID];
                     
-                    boolean isBFcamConnected = true;
                     if (connectionType[deviceType.ordinal()][deviceID] == TCP_IP.ordinal()) 
                     {
                         if (deviceType == DeviceType.Camera &&
@@ -100,7 +100,11 @@ public class ConnectDeviceTask implements Runnable {
                         //<editor-fold desc="-- Open serial port">
                         IDevice.ISerial serialMan = (IDevice.ISerial)manager;
                         
-                        if (serialMan.getPortIdentifier().isCurrentlyOwned()) {
+                        CommPortIdentifier portID = serialMan.getPortIdentifier();
+                        if (portID == null) {
+                            continue;
+                        }
+                        if (portID.isCurrentlyOwned()) {
                             JOptionPane.showMessageDialog(managerGUI, "Gate #" + deviceID +" " 
                                     + deviceType + " serial port is currently OWNed");
                         } else {
@@ -135,7 +139,6 @@ public class ConnectDeviceTask implements Runnable {
                         managerGUI.tolerance[deviceType.ordinal()][deviceID].assignMAX();  
                         managerGUI.getSocketMutex()[deviceType.ordinal()][deviceID].notifyAll();                        
                     }
-//                    System.out.println("after notify all");
                 }
                 //</editor-fold>
                 return;
