@@ -28,6 +28,10 @@ import static com.osparking.global.Globals.PULSE_PERIOD;
 import static com.osparking.global.Globals.gateDeviceTypes;
 import static com.osparking.global.Globals.getGateDevicePortNo;
 import static com.osparking.global.Globals.logParkingException;
+import static com.osparking.global.Globals.timeFormat;
+import static com.osparking.global.names.ControlEnums.DialogMessages.CONN_REFUSED;
+import static com.osparking.global.names.ControlEnums.DialogMessages.CONN_REFUSED_1;
+import static com.osparking.global.names.ControlEnums.LabelContent.PORT_LABEL;
 import com.osparking.global.names.OSP_enums.DeviceType;
 import com.osparking.osparking.ControlGUI;
 import static com.osparking.global.names.DB_Access.deviceIP;
@@ -35,12 +39,11 @@ import static com.osparking.global.names.DB_Access.connectionType;
 import static com.osparking.global.names.OSP_enums.ConnectionType.TCP_IP;
 import com.osparking.global.names.IDevice.ISocket;
 import com.osparking.global.names.OSP_enums;
-import com.osparking.osparking.device.BlackFly.BlackFlyManager;
 import gnu.io.CommPortIdentifier;
 import gnu.io.PortInUseException;
 import gnu.io.SerialPort;
 import gnu.io.UnsupportedCommOperationException;
-import java.util.logging.Logger;
+import java.util.Date;
 import javax.swing.JOptionPane;
 
 /**
@@ -65,11 +68,11 @@ public class ConnectDeviceTask implements Runnable {
             try {
                 //<editor-fold desc="-- establish socket connection">
                 int portNo = getGateDevicePortNo(deviceType, deviceID);
-//                System.out.println("Device type : " + deviceType.getContent() + ", #" +  deviceID +
-//                        ", IP: " + deviceIP[deviceType.ordinal()][deviceID] + ", Port: " + portNo);
                 if (DEBUG && (seq == 0 || seq % 20 == 1)) {
                     managerGUI.getStatusTextField().setText(
-                            "Socket() IP: " + deviceIP[deviceType.ordinal()][deviceID] + ", port: " + 
+                            "D "+ deviceType.getContent() + " #"  + deviceID +
+                            ", IP: " + deviceIP[deviceType.ordinal()][deviceID] + ", " + 
+                                    PORT_LABEL.getContent() + ": " + 
                                     portNo + " (" + seq + "-th)");      
                 }
                 if (managerGUI.isSHUT_DOWN()) {
@@ -142,20 +145,19 @@ public class ConnectDeviceTask implements Runnable {
                 }
                 //</editor-fold>
                 return;
-            } catch (SocketTimeoutException ex) {
+//            } catch (SocketTimeoutException ex) {
             } catch (IOException e) {
                 //<editor-fold desc="--handle ioexception">
                 if (e.getMessage().indexOf("refused") >= 0) {
-                    String msg = deviceType + " #"  + deviceID + " refused connection: " + (++seq) + " times";
+                    String msg = timeFormat.format(new Date()) + "-- " + deviceType.getContent() +
+                            " #"  + deviceID + CONN_REFUSED.getContent() + 
+                            (++seq) + CONN_REFUSED_1.getContent();
 
                     managerGUI.getStatusTextField().setText(msg); 
                     if (seq % 20 == 1) {
                         logParkingException(Level.INFO, null, msg + System.lineSeparator(), deviceID);
                     }
-                    managerGUI.getStatusTextField().setText(msg);
-
                 } else {
-                    String tip = "";
                     if (e.getMessage().indexOf("timed out") >= 0) {
                     } else {
                         logParkingException(Level.SEVERE, e, "IOEx during socket connection", deviceID);

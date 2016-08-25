@@ -421,43 +421,6 @@ public class EBoardManager extends Thread implements
         this.socket = socket;
     }
 
-    /**
-     * closes socket connection to a gate bar.
-     * 
-     * before closing the socket, it cancels any existing relevant tasks.
-     */
-//    @Override
-//    public void finishConnection(Exception e, String description, byte gateNo) 
-//    {
-//        synchronized(mainForm.getSocketMutex()[E_Board.ordinal()][gateNo]) 
-//        {
-//            if (0 < gateNo && gateNo <= gateCount) 
-//            {
-//                if (isConnected(socket)) 
-//                {   
-//                    String msg =  "E-Board #" + gateNo;
-//
-//                    addMessageLine(mainForm.getMessageTextArea(), "  ------" +  msg + " disconnected");
-//                    logParkingException(Level.INFO, e, description + " " + msg);
-//
-//                    mainForm.getSockConnStat()[E_Board.ordinal()][gateNo].
-//                            recordSocketDisconnection(System.currentTimeMillis());
-//                    closeSocket(getSocket(), "while gate bar socket closing");
-//                    socket = null;
-//                }
-//            } else {
-//                System.out.println("this never ever gateNo");
-//            }
-//        }
-//            
-//        if (mainForm.getConnectDeviceTimer()[E_Board.ordinal()][gateNo] != null) {
-//            if (!mainForm.isSHUT_DOWN()) {
-//                mainForm.getConnectDeviceTimer()[E_Board.ordinal()][gateNo].reRunOnce();
-//                addMessageLine(mainForm.getMessageTextArea(), "Trying to connect to Camera #" + gateNo);
-//            }
-//        }
-//    }
-
     public static void sendEBoardDefaultSetting(ControlGUI mainForm, byte deviceNo, EBD_Row row) {
         if (! mainForm.getSendEBDmsgTimer()[deviceNo][row.ordinal()].hasTask())
         {

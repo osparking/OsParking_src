@@ -542,6 +542,8 @@ public class ControlEnums {
     }
 
     public enum DialogMessages {
+        CONN_REFUSED(" 연결 거부 ", " refused connection "),
+        CONN_REFUSED_1(" 회", " times"),
         OsParking_FUNC_WARNING("※오즈파킹이 오작동할 수 있습니다.", "※OsParking could function improperly"),
         MISSING_PORT_DIALOG_1("장치 포트 부재 내역 : ", "Missing device port details : "),
         MISSING_PORT_DIALOG_2("  - 입구 번호 : ", "  - Gate No. :"),

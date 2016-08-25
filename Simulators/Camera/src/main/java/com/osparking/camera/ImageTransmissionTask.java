@@ -69,9 +69,7 @@ public class ImageTransmissionTask implements Runnable {
         imgSizeArr = ByteBuffer.allocate(4).putInt(byteArrayOutputStream.size()).array();
         int imageSZ = byteArrayOutputStream.size();
         imageMessageBytes = new byte[9 + imageSZ];
-        
-        System.out.println("file: " + imageFileNo + ", size: " + imageSZ);
-        
+//        System.out.println("file: " + imageFileNo + ", size: " + imageSZ);
         imageMessageBytes[0] = (byte)CarImage.ordinal();
         System.arraycopy(imgIDarr, 0, imageMessageBytes, 1, 4);
         System.arraycopy(imgSizeArr, 0, imageMessageBytes, 5, 4);
