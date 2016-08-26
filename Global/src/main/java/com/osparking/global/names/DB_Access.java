@@ -546,7 +546,10 @@ public class DB_Access {
                 tagEnteredAs.append(rs.getString("Plate_Number"));
                 int permissionCode = rs.getInt("Permitted");
                 int all_number = rs.getInt("Whole_required");
-                remark.append(rs.getString("Remark"));
+                String remarkDB = rs.getString("Remark");
+                if (remarkDB != null) {
+                    remark.append(remarkDB);
+                }
                 
                 if (all_number == OSP_FALSE || tagRecognized.equals(tagEnteredAs.toString())) {
                     if (permissionCode == PermissionType.ALLOWED.ordinal()) {

@@ -4467,7 +4467,9 @@ public class Settings_System extends javax.swing.JFrame {
                     NUMBER_LIMIT_DESCRIPTION.getContent() + " : " + PORT_NUMBER_LENGTH_MAX,
                     ERROR_DIALOGTITLE.getContent(), JOptionPane.PLAIN_MESSAGE, WARNING_MESSAGE);            
             evt.consume();
-        }    
+        } else {
+            // check if portField input is in the available range of port number.
+        }
     }
 
     private void prepareComPortControls() {

@@ -116,7 +116,6 @@ public class DisAllowedCar extends javax.swing.JFrame {
                 openBarButton.requestFocus();
             }
         });  
-//        openBarButtonActionPerformed(null);
     }
     
     class RemindTask extends TimerTask {

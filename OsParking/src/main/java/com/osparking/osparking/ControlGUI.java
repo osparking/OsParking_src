@@ -25,6 +25,7 @@ import static com.osparking.global.CommonData.ImgHeight;
 import static com.osparking.global.CommonData.ImgWidth;
 import static com.osparking.global.CommonData.dummyMessages;
 import static com.osparking.global.CommonData.metaKeyLabel;
+import static com.osparking.global.CommonData.tipColor;
 import com.osparking.global.Globals;
 import static com.osparking.global.Globals.*;
 import com.osparking.global.names.CarAdmission;
@@ -65,6 +66,7 @@ import static com.osparking.global.names.ControlEnums.MenuITemTypes.LOGOUT_MENU;
 import static com.osparking.global.names.ControlEnums.MenuITemTypes.LOGOUT_MENU_ITEM;
 import static com.osparking.global.names.ControlEnums.MenuITemTypes.MANAGER_MANU;
 import static com.osparking.global.names.ControlEnums.MenuITemTypes.MANAGE_MENU_ITEM;
+import static com.osparking.global.names.ControlEnums.MenuITemTypes.META_KEY_LABEL;
 import static com.osparking.global.names.ControlEnums.MenuITemTypes.QUIT_MENU_ITEM;
 import static com.osparking.global.names.ControlEnums.MenuITemTypes.QUIT_MENU_ITEM_SC;
 import static com.osparking.global.names.ControlEnums.MenuITemTypes.RECORD_MENU;
@@ -682,12 +684,13 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
         VehiclesButton = new javax.swing.JButton();
         UsersButton = new javax.swing.JButton();
         setOrQuit = new javax.swing.JButton();
-        filler3 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
-        dummyButton = new javax.swing.JButton();
+        filler4 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(32767, 0));
+        myMetaKeyLabel = new javax.swing.JLabel();
+        autoOpenButton = new javax.swing.JButton();
+        filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(32767, 0));
         autoGateOpenCheckBox = new javax.swing.JCheckBox();
-        filler4 = new javax.swing.Box.Filler(new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 32767));
         ClockLabel = new javax.swing.JLabel();
-        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(20, 0), new java.awt.Dimension(0, 0));
+        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(15, 0), new java.awt.Dimension(15, 0), new java.awt.Dimension(15, 0));
         WholePanel = new javax.swing.JPanel();
         Panel_MainMsgList = new javax.swing.JPanel();
         LeftSide_Label = new javax.swing.JLabel();
@@ -883,20 +886,33 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
         });
         MainToolBar.add(setOrQuit);
         MainToolBar.add(Box.createHorizontalGlue());
-        MainToolBar.add(filler3);
+        MainToolBar.add(filler4);
 
-        dummyButton.setMnemonic('P');
-        dummyButton.setText("jButton1");
-        dummyButton.setFocusable(false);
-        dummyButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        dummyButton.setPreferredSize(new java.awt.Dimension(0, 0));
-        dummyButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        dummyButton.addActionListener(new java.awt.event.ActionListener() {
+        myMetaKeyLabel.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        myMetaKeyLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        myMetaKeyLabel.setText(META_KEY_LABEL.getContent());
+        myMetaKeyLabel.setVerticalAlignment(javax.swing.SwingConstants.TOP);
+        myMetaKeyLabel.setMaximumSize(new java.awt.Dimension(100, 25));
+        myMetaKeyLabel.setMinimumSize(new java.awt.Dimension(100, 25));
+        myMetaKeyLabel.setName(""); // NOI18N
+        myMetaKeyLabel.setPreferredSize(new java.awt.Dimension(100, 25));
+        myMetaKeyLabel.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        myMetaKeyLabel.setForeground(tipColor);
+        MainToolBar.add(myMetaKeyLabel);
+
+        autoOpenButton.setMnemonic('P');
+        autoOpenButton.setText("jButton1");
+        autoOpenButton.setFocusable(false);
+        autoOpenButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        autoOpenButton.setPreferredSize(new java.awt.Dimension(0, 0));
+        autoOpenButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        autoOpenButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                dummyButtonActionPerformed(evt);
+                autoOpenButtonActionPerformed(evt);
             }
         });
-        MainToolBar.add(dummyButton);
+        MainToolBar.add(autoOpenButton);
+        MainToolBar.add(filler2);
 
         autoGateOpenCheckBox.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         autoGateOpenCheckBox.setText(OPEN_LABEL.getContent());
@@ -908,18 +924,17 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
         autoGateOpenCheckBox.setMinimumSize(new java.awt.Dimension(77, 23));
         autoGateOpenCheckBox.setPreferredSize(new java.awt.Dimension(130, 23));
         MainToolBar.add(autoGateOpenCheckBox);
-        MainToolBar.add(filler4);
 
         ClockLabel.setBackground(MainBackground);
         ClockLabel.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         ClockLabel.setForeground(new java.awt.Color(255, 51, 51));
-        ClockLabel.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        ClockLabel.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         ClockLabel.setText("(clock)");
         ClockLabel.setAlignmentY(0.0F);
         ClockLabel.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        ClockLabel.setMaximumSize(new java.awt.Dimension(150, 23));
-        ClockLabel.setMinimumSize(new java.awt.Dimension(130, 23));
-        ClockLabel.setPreferredSize(new java.awt.Dimension(130, 23));
+        ClockLabel.setMaximumSize(new java.awt.Dimension(100, 23));
+        ClockLabel.setMinimumSize(new java.awt.Dimension(100, 23));
+        ClockLabel.setPreferredSize(new java.awt.Dimension(100, 23));
         MainToolBar.add(ClockLabel);
         MainToolBar.add(Box.createRigidArea(new Dimension(50, 0)));
         MainToolBar.add(filler1);
@@ -1933,9 +1948,9 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
         new ManageArrivalList().run();
     }//GEN-LAST:event_CarIOListButtonActionPerformed
 
-    private void dummyButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dummyButtonActionPerformed
+    private void autoOpenButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_autoOpenButtonActionPerformed
         autoGateOpenCheckBox.setSelected(!autoGateOpenCheckBox.isSelected());
-    }//GEN-LAST:event_dummyButtonActionPerformed
+    }//GEN-LAST:event_autoOpenButtonActionPerformed
 
     private void setOrQuitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_setOrQuitActionPerformed
         if (isManager) {
@@ -2225,10 +2240,10 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
     private javax.swing.JButton VehiclesButton;
     private javax.swing.JPanel WholePanel;
     private javax.swing.JCheckBox autoGateOpenCheckBox;
+    private javax.swing.JButton autoOpenButton;
     private javax.swing.JButton carEntryButton;
     private javax.swing.JPanel connStatusPanel;
     private javax.swing.JPanel debugPanel;
-    private javax.swing.JButton dummyButton;
     private javax.swing.JPanel entryPanel;
     private javax.swing.JButton errDecButton;
     private javax.swing.JButton errIncButton;
@@ -2245,6 +2260,7 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
     private javax.swing.Box.Filler filler17;
     private javax.swing.Box.Filler filler18;
     private javax.swing.Box.Filler filler19;
+    private javax.swing.Box.Filler filler2;
     private javax.swing.Box.Filler filler20;
     private javax.swing.Box.Filler filler21;
     private javax.swing.Box.Filler filler22;
@@ -2255,7 +2271,6 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
     private javax.swing.Box.Filler filler27;
     private javax.swing.Box.Filler filler28;
     private javax.swing.Box.Filler filler29;
-    private javax.swing.Box.Filler filler3;
     private javax.swing.Box.Filler filler30;
     private javax.swing.Box.Filler filler31;
     private javax.swing.Box.Filler filler32;
@@ -2288,6 +2303,7 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
     private javax.swing.JLabel labelE_Board4;
     private javax.swing.JMenuItem licenseMenuItem;
     private javax.swing.Box.Filler manager_ID_gap;
+    private javax.swing.JLabel myMetaKeyLabel;
     private javax.swing.JLabel row1Heading;
     private javax.swing.JLabel row2Heading;
     private javax.swing.JLabel row3Heading;
