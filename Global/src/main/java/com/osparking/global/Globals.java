@@ -572,7 +572,7 @@ public class Globals {
     /**
      * a sample car tag image file full path name
      */
-    public static final String restAreaImage = "/drawing.jpg";
+    public static final String restAreaImage = "/osparking_logo.jpg";
     
     /**
      * an initial value of the ID label on the main form

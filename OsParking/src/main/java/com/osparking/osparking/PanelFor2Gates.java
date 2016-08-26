@@ -205,7 +205,6 @@ public class PanelFor2Gates extends GatePanel {
 
         MarginLabel.setBackground(new java.awt.Color(255, 153, 153));
         MarginLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        MarginLabel.setVerticalAlignment(javax.swing.SwingConstants.TOP);
         MarginLabel.setMaximumSize(new Dimension(Short.MAX_VALUE, Short.MAX_VALUE));
         MarginLabel.setMinimumSize(new java.awt.Dimension(100, 100));
         MarginLabel.setName(""); // NOI18N

@@ -98,7 +98,8 @@ public class PanelFor1Gate extends GatePanel {
         setLayout(new java.awt.BorderLayout());
 
         Panel_Gate1.setBackground(MainBackground);
-        Panel_Gate1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Gate 1 Title", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dotum", 1, 14))); // NOI18N
+        Panel_Gate1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Gate 1 Title", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font(font_Type, font_Style, font_Size)));
+        Panel_Gate1.setFont(new java.awt.Font(font_Type, font_Style, font_Size_List));
         Panel_Gate1.setMaximumSize(new Dimension(Short.MAX_VALUE, Short.MAX_VALUE));
         Panel_Gate1.setName("Panel_Gate1"); // NOI18N
         Panel_Gate1.setPreferredSize(new java.awt.Dimension(343, 450));
@@ -126,11 +127,11 @@ public class PanelFor1Gate extends GatePanel {
         Panel_Gate1.add(CarPicLabel1);
         Panel_Gate1.add(filler1);
 
-        ScrollPane_Gate1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Recent Car Arrivals", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.BELOW_TOP, new java.awt.Font("Dotum", 1, 13))); // NOI18N
+        ScrollPane_Gate1.setBorder(new java.awt.Font(font_Type, font_Style, font_Size));
+        ScrollPane_Gate1.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         ScrollPane_Gate1.setPreferredSize(new java.awt.Dimension(302, 155));
 
         List_Gate1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        List_Gate1.setFont(new java.awt.Font("Dotum", 1, 12)); // NOI18N
         List_Gate1.setModel((DefaultListModel<CarAdmission>)admissionListModel[1]);
         List_Gate1.setMaximumSize(new Dimension(Short.MAX_VALUE, Short.MAX_VALUE));
         List_Gate1.setMinimumSize(new java.awt.Dimension(45, 240));
@@ -150,7 +151,6 @@ public class PanelFor1Gate extends GatePanel {
 
         MarginLabel.setBackground(new java.awt.Color(255, 153, 153));
         MarginLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        MarginLabel.setVerticalAlignment(javax.swing.SwingConstants.TOP);
         MarginLabel.setMaximumSize(new Dimension(Short.MAX_VALUE, Short.MAX_VALUE));
         MarginLabel.setName(""); // NOI18N
         MarginLabel.setPreferredSize(new java.awt.Dimension(200, 500));

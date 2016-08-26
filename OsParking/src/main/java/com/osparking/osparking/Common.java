@@ -86,8 +86,12 @@ public class Common {
                         new Dimension(width - 2, gatePanel.getSize().height));
                 BufferedImage marginImage 
                         = ImageIO.read(gatePanel.getClass().getResourceAsStream(restAreaImage));
+                int w = gatePanel.getMarginLabel().getSize().width;
+                int h = gatePanel.getMarginLabel().getSize().height;
+                int side = (w > h ? h / 2 : w / 2);
+                
                 gatePanel.getMarginLabel().setIcon(
-                        createStretchedIcon(gatePanel.getMarginLabel().getSize(), marginImage, true));
+                        createStretchedIcon(new Dimension(side, side), marginImage, true));
                 gatePanel.add(gatePanel.getMarginLabel());
             } else {
                 setComponentSize(gatePanel.getMarginLabel(), 
