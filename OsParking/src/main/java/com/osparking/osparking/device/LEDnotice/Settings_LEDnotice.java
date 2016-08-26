@@ -150,9 +150,11 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
             LEDnoticeSettings aSetting = getLEDnoticeSetting(usage);
             
             manager.showCurrentEffect(usage, aSetting); 
-            JOptionPane.showMessageDialog(null, "현재 설정에 대한 시연이 진행 중입니다." +
-                    System.lineSeparator() + "충분히 관찰하셨으면, 아래" + 
-                    System.lineSeparator() + "확인 버튼을 클릭하십시오.");
+            JOptionPane.showMessageDialog(null, "시연 종료 방법 안내 :" + System.lineSeparator() + 
+                    System.lineSeparator() + 
+                            "현재 설정에 대한 시연이 진행 중입니다." + System.lineSeparator() + 
+                            "충분히 관찰하셨으면, 아래 [확인] 버튼을" + System.lineSeparator() + 
+                            "클릭하여 시연을 종료하십시오.");
             manager.finishCurrentSettingDemo(usage.ordinal());
         }
     }
@@ -174,11 +176,12 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
             
             manager.showAllEffects(tabIndex, stopIndex, colorIdx, fontIdx);
             waitDemoCompletionEvent(tabIndex);
-            JOptionPane.showMessageDialog(null, "모든 효과를 순서대로 시연 중입니다." +
-                    System.lineSeparator() + "관찰을 종료하려면, 아래" + 
-                    System.lineSeparator() + "[확인] 버튼을 클릭하십시오." +
-                    System.lineSeparator() + "모든 효과 시연 종료 후, 자동으로" +
-                    System.lineSeparator() + "기본 표시로 복귀합니다.");
+            JOptionPane.showMessageDialog(null, "시연 종료 방법 안내 :" + System.lineSeparator() + 
+                    System.lineSeparator() +                     
+                    "모든 효과가 순서대로 시연되고 있습니다." + System.lineSeparator() + 
+                    "관찰을 종료하려면, 아래 [확인] 버튼을 " + System.lineSeparator() + 
+                    "클릭하십시오. 아니면, 모든 효과 1회 시연" + System.lineSeparator() +
+                    "후, 기본 표시로 복귀됩니다.");
             finishAllEffectDemo(tabIndex);
             
         }    
@@ -2937,11 +2940,11 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
         manager.sendCarArrival_interruptMessage(topSetting, bottomSetting, (byte)gateNo, "서울32가1234", 
                 PermissionType.DISALLOWED, "노상주차경고", 3000);
         waitDemoCompletionEvent(buttonIndex);
-        JOptionPane.showMessageDialog(null, "현재 설정을 시연 중입니다." +
-                System.lineSeparator() + "관찰을 종료하려면, 아래" + 
-                System.lineSeparator() + "[확인] 버튼을 클릭하십시오." +
-                System.lineSeparator() + "1회 시연 후에는, 자동으로" +
-                System.lineSeparator() + "기본 표시로 복귀됩니다.");
+        JOptionPane.showMessageDialog(null, 
+                "시연 종료 방법 안내 :" + System.lineSeparator() + System.lineSeparator() +
+                        "현재 설정을 시연 중입니다.  중간에 관찰을" + System.lineSeparator() +  
+                        "종료하려면, 아래 [확인] 버튼을 클릭하십시오." + System.lineSeparator() + 
+                        "놔두면 1회 시연 후 기본 표시로 복귀합니다.");
         finishAllEffectDemo(buttonIndex);        
     }
 
