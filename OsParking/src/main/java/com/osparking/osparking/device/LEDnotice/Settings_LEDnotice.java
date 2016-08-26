@@ -360,9 +360,7 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
         startEffectHelpButton2 = new javax.swing.JButton();
         demoCurrHelpButton2 = new javax.swing.JButton();
         demoAllHelpButton2 = new javax.swing.JButton();
-        endEffectHelpButton2 = new javax.swing.JButton();
         demoAllButton2 = new javax.swing.JButton();
-        pauseTimeHelpButton2 = new javax.swing.JButton();
         useCkBoxHelpButton2 = new javax.swing.JButton();
         ledNoticePanel3 = new javax.swing.JPanel();
         label_MSG3 = new javax.swing.JLabel();
@@ -1531,24 +1529,6 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(0, 5, 5, 15);
         ledNoticePanel2.add(demoAllHelpButton2, gridBagConstraints);
 
-        endEffectHelpButton2.setBackground(new java.awt.Color(153, 255, 153));
-        endEffectHelpButton2.setFont(new java.awt.Font("Dotum", 1, 14)); // NOI18N
-        endEffectHelpButton2.setIcon(getQuest20_Icon());
-        endEffectHelpButton2.setMargin(new java.awt.Insets(2, 4, 2, 4));
-        endEffectHelpButton2.setMinimumSize(new java.awt.Dimension(20, 20));
-        endEffectHelpButton2.setOpaque(false);
-        endEffectHelpButton2.setPreferredSize(new java.awt.Dimension(20, 20));
-        endEffectHelpButton2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                endEffectHelpButton2ActionPerformed(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 5;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 0);
-        ledNoticePanel2.add(endEffectHelpButton2, gridBagConstraints);
-
         demoAllButton2.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         demoAllButton2.setText("전체");
         demoAllButton2.setMaximumSize(new java.awt.Dimension(59, 30));
@@ -1565,24 +1545,6 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
         gridBagConstraints.gridy = 4;
         gridBagConstraints.insets = new java.awt.Insets(0, 15, 5, 0);
         ledNoticePanel2.add(demoAllButton2, gridBagConstraints);
-
-        pauseTimeHelpButton2.setBackground(new java.awt.Color(153, 255, 153));
-        pauseTimeHelpButton2.setFont(new java.awt.Font("Dotum", 1, 14)); // NOI18N
-        pauseTimeHelpButton2.setIcon(getQuest20_Icon());
-        pauseTimeHelpButton2.setMargin(new java.awt.Insets(2, 4, 2, 4));
-        pauseTimeHelpButton2.setMinimumSize(new java.awt.Dimension(20, 20));
-        pauseTimeHelpButton2.setOpaque(false);
-        pauseTimeHelpButton2.setPreferredSize(new java.awt.Dimension(20, 20));
-        pauseTimeHelpButton2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                pauseTimeHelpButton2ActionPerformed(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 4;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
-        ledNoticePanel2.add(pauseTimeHelpButton2, gridBagConstraints);
 
         useCkBoxHelpButton2.setBackground(new java.awt.Color(153, 255, 153));
         useCkBoxHelpButton2.setFont(new java.awt.Font("Dotum", 1, 14)); // NOI18N
@@ -2324,16 +2286,9 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
         showPopUpForDemoAllHelpButton();
     }//GEN-LAST:event_demoAllHelpButton2ActionPerformed
 
-    private void endEffectHelpButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_endEffectHelpButton2ActionPerformed
-
-    }//GEN-LAST:event_endEffectHelpButton2ActionPerformed
-
     private void demoAllButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_demoAllButton2ActionPerformed
         demoAllEffects(2);
     }//GEN-LAST:event_demoAllButton2ActionPerformed
-
-    private void pauseTimeHelpButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pauseTimeHelpButton2ActionPerformed
-    }//GEN-LAST:event_pauseTimeHelpButton2ActionPerformed
 
     private void useCkBoxHelpButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_useCkBoxHelpButton2ActionPerformed
         showHowToUseRows();
@@ -2401,6 +2356,12 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
     }//GEN-LAST:event_pauseTimeHelpButton3ActionPerformed
 
     private void useCkBoxHelpButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_useCkBoxHelpButton3ActionPerformed
+        String rowName = TOP_TAB_TITLE.getContent();
+        JOptionPane.showMessageDialog(this,
+            "사용[V]되는 경우, 아래 같이 " + rowName + " 설정이 강제 변경됨!" + System.lineSeparator() + 
+                "    - " + rowName + " 사용[V] 설정됨.");
+//                "    - " + rowName + " '중간 멈춤' 1초로 변경하며," + System.lineSeparator() + 
+//                "    - " + rowName + " '마침 효과'를 '효과 없음'으로 변환함.");
     }//GEN-LAST:event_useCkBoxHelpButton3ActionPerformed
 
     private void contentTypeBox0ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_contentTypeBox0ItemStateChanged
@@ -2496,7 +2457,6 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
     private javax.swing.JButton demoCurrHelpButton2;
     private javax.swing.JButton demoCurrHelpButton3;
     private javax.swing.JButton endEffectHelpButton0;
-    private javax.swing.JButton endEffectHelpButton2;
     private javax.swing.JButton endEffectHelpButton3;
     private javax.swing.Box.Filler filler1;
     private javax.swing.Box.Filler filler8;
@@ -2552,7 +2512,6 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
     private javax.swing.JPanel midStopPanel3;
     private javax.swing.JLabel myMetaKeyLabel;
     private javax.swing.JButton pauseTimeHelpButton0;
-    private javax.swing.JButton pauseTimeHelpButton2;
     private javax.swing.JButton pauseTimeHelpButton3;
     private javax.swing.Box.Filler rightFiller;
     private javax.swing.JPanel southPanel;
