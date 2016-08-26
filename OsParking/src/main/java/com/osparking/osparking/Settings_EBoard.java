@@ -52,6 +52,7 @@ import static com.osparking.global.names.ControlEnums.LabelContent.COLOR_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.DISPLAY_TYPE_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.EFFECT_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.FIELD_LABEL;
+import static com.osparking.global.names.ControlEnums.LabelContent.FLOW2L_CONF_0;
 import static com.osparking.global.names.ControlEnums.LabelContent.FLOW2L_CONF_1;
 import static com.osparking.global.names.ControlEnums.LabelContent.FLOW2L_CONF_2;
 import static com.osparking.global.names.ControlEnums.LabelContent.FONT_LABEL;
@@ -1428,6 +1429,7 @@ public class Settings_EBoard extends javax.swing.JFrame {
         Connection conn = null;
         PreparedStatement updateSettings = null;
         
+        //<editor-fold desc="-- Collect E-board simulator settings">
         String verbatimStr 
                 = ((JTextField) getComponentByName("tf_VerbatimContent" + usage_row.ordinal())).getText().trim();
         
@@ -1447,7 +1449,7 @@ public class Settings_EBoard extends javax.swing.JFrame {
         comboBox = (JComboBox) getComponentByName("combo_TextFont" + usage_row.ordinal());
         EBD_Fonts fontItem = (EBD_Fonts)
                 (((ConvComboBoxItem)comboBox.getSelectedItem()).getKeyValue());
-        
+        //</editor-fold>
         int result = 0;
         try {
             StringBuilder sb = new StringBuilder("Update eboard_settings SET ");
@@ -1458,19 +1460,22 @@ public class Settings_EBoard extends javax.swing.JFrame {
             updateSettings = conn.prepareStatement(sb.toString());
 
             int pIndex = 1;
+            //<editor-fold desc="-- Provide actual parameter to update statement">
             updateSettings.setString(pIndex++, verbatimStr);
             updateSettings.setInt(pIndex++, typeItem.ordinal());
-            //<editor-fold desc="-- Assign R-to-L flow to wide message">
+            //<editor-fold desc="-- Assign R-to-L flow to long messages">
             if (typeItem == EBD_ContentType.VERBATIM) {
                 JComboBox effectBox = ((JComboBox) getComponentByName(
                         "combo_DisplayEffect"+ usage_row.ordinal()));   
                 
                 if (patternItem != EBD_Effects.RTOL_FLOW && 
-                        strOverflowLabel(verbatimStr, usage_row)) {
+                        strOverflowLabel(verbatimStr, usage_row)) { // verbatimStr length matters
                     // Ask user if force pattern to "Flow-R-to-L"
                     int response = JOptionPane.showConfirmDialog(null, 
-                            FLOW2L_CONF_1.getContent() + System.lineSeparator() +
-                            FLOW2L_CONF_2.getContent(),
+                            FLOW2L_CONF_0.getContent() + usage_row.getPanelName() +
+                                    System.lineSeparator() + System.lineSeparator() +
+                                    FLOW2L_CONF_1.getContent() + System.lineSeparator() +
+                                    FLOW2L_CONF_2.getContent(),
                             EFFECT_TITLE.getContent(),
                             JOptionPane.YES_NO_OPTION, QUESTION_MESSAGE);                      
 
@@ -1481,12 +1486,11 @@ public class Settings_EBoard extends javax.swing.JFrame {
                 }
             }
             //</editor-fold>
-            // check verbatimStr length 
             updateSettings.setInt(pIndex++, patternItem.ordinal());
             updateSettings.setInt(pIndex++, colorItem.ordinal());
             updateSettings.setInt(pIndex++, fontItem.ordinal());
             updateSettings.setInt(pIndex++, usage_row.getVal());
-
+            //</editor-fold>
             result = updateSettings.executeUpdate();
              
         } catch (SQLException ex) {
@@ -1501,21 +1505,23 @@ public class Settings_EBoard extends javax.swing.JFrame {
                             "E-Board Settings Change, Verbatim Message: " + currVerbatimStr + " => " + verbatimStr);
                 }
                 //</editor-fold>
+                //<editor-fold desc="-- Apply new settings to global variable">
                 parent.EBD_DisplaySettings[usage_row.ordinal()].verbatimContent = verbatimStr;
                 parent.EBD_DisplaySettings[usage_row.ordinal()].contentType = typeItem;
                 parent.EBD_DisplaySettings[usage_row.ordinal()].displayPattern = patternItem;
                 parent.EBD_DisplaySettings[usage_row.ordinal()].textColor = colorItem;
                 parent.EBD_DisplaySettings[usage_row.ordinal()].textFont = fontItem;
+                //</editor-fold>
             } else {
                 JOptionPane.showMessageDialog(this, "This e-board settings update saving DB operation failed.",
                     "DB Update Operation Failure", JOptionPane.ERROR_MESSAGE);
             }
         }
-
         if (mainForm != null) { // when settings frame invoked alone, main form is null
             if (usage_row.ordinal() == DEFAULT_TOP_ROW.ordinal() 
                     || usage_row.ordinal() == DEFAULT_BOTTOM_ROW.ordinal()) 
             {
+                //<editor-fold desc="-- Apply new settings to the working e-board simulator">
                 for (byte gateNo = 1; gateNo <= gateCount; gateNo++) {
                     if (IDevice.isConnected(mainForm.getDeviceManagers()[E_Board.ordinal()][gateNo], E_Board, gateNo)) 
                     {
@@ -1527,6 +1533,7 @@ public class Settings_EBoard extends javax.swing.JFrame {
                         sendEBoardDefaultSetting(mainForm, gateNo, row);
                     }
                 }
+                //</editor-fold>
             }
         }
         return result;

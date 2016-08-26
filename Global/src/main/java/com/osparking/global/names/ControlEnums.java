@@ -233,8 +233,9 @@ public class ControlEnums {
         IP_ADDR_ERROR_2("바른 형식 : ", "Right format : "),
         LANGUAGE_HELP_1(" - 오즈파킹 각종 GUI 언어", " - OsParking GUI Language"),
         LANGUAGE_HELP_2(" - 날짜 입력 GUI 언어", " - Date Input Panel GUI Language"),
-        FLOW2L_CONF_1("'" + MESSAGE_LABEL.getContent() + "'이 전광판 보다 넓습니다.", 
-                MESSAGE_LABEL.getContent() + " is wide than e-board."),
+        FLOW2L_CONF_0("전광판 행 : ", "E-Board Row : "),
+        FLOW2L_CONF_1("위 행의 '" + MESSAGE_LABEL.getContent() + "'이 전광판을 초과합니다.", 
+                "Above row's '" + MESSAGE_LABEL.getContent() + " exceeds E-board width."),
         FLOW2L_CONF_2("'" + EFFECT_LABEL.getContent() + "'" + "를 '" + 
                 RTOL_CB_ITEM.getContent() + "'으로 바꾸시겠습니까?", 
                 "Want to change '" + EFFECT_LABEL.getContent() + "' to '" + RTOL_CB_ITEM.getContent() + "'?"),
