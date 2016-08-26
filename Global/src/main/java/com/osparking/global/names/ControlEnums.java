@@ -17,6 +17,7 @@
 package com.osparking.global.names;
 
 import static com.osparking.global.Globals.language;
+import static com.osparking.global.names.ControlEnums.ComboBoxItemTypes.RTOL_CB_ITEM;
 import static com.osparking.global.names.ControlEnums.LabelContent.LANGUAGE_LABEL;
 import static com.osparking.global.names.ControlEnums.Languages.ENGLISH;
 import static com.osparking.global.names.ControlEnums.Languages.KOREAN;
@@ -232,6 +233,12 @@ public class ControlEnums {
         IP_ADDR_ERROR_2("바른 형식 : ", "Right format : "),
         LANGUAGE_HELP_1(" - 오즈파킹 각종 GUI 언어", " - OsParking GUI Language"),
         LANGUAGE_HELP_2(" - 날짜 입력 GUI 언어", " - Date Input Panel GUI Language"),
+        FLOW2L_CONF_1("'" + MESSAGE_LABEL.getContent() + "'이 전광판 보다 넓습니다.", 
+                MESSAGE_LABEL.getContent() + " is wide than e-board."),
+        FLOW2L_CONF_2("'" + EFFECT_LABEL.getContent() + "'" + "를 '" + 
+                RTOL_CB_ITEM.getContent() + "'으로 바꾸시겠습니까?", 
+                "Want to change '" + EFFECT_LABEL.getContent() + "' to '" + RTOL_CB_ITEM.getContent() + "'?"),
+
         CHOOSE_PANEL_DIALOG("사용할 패널(제목, 목록, 분홍 버튼)을 선택하세요!", 
                 "Click the panel(title, table, pink button) to use!"),
         SELECT_DRIVER_HELP("운전자 행 클릭 후 [선택(T)] 버튼 사용",
@@ -915,6 +922,7 @@ public class ControlEnums {
     }
     
     public static enum DialogTitleTypes {
+        EFFECT_TITLE("효과" + " 변경 확인", "Effect" + " Change Confirm"),
         ODS_HELP_TITLE("ods 파일 도움말", "ods File Help"),
         ODS_SAVE_TITLE("ods 파일 생성 위치", "ods File Location"),
         DEFAULT_USER_TITLE("사용자 생성", "User Creation"),

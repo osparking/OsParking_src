@@ -20,6 +20,8 @@ import com.osparking.global.names.OSP_enums.EBD_Colors;
 import com.osparking.global.names.OSP_enums.EBD_ContentType;
 import com.osparking.global.names.OSP_enums.EBD_Fonts;
 import com.osparking.global.names.OSP_enums.EBD_Effects;
+import java.awt.Dimension;
+import java.awt.Font;
 
 /**
  *
@@ -42,6 +44,9 @@ public class EBD_DisplaySetting {
     public EBD_Effects displayPattern; // effect applied in displaying the content
     public EBD_Colors textColor;
     public EBD_Fonts textFont;
+    public static Font E_BoardTopFont = new Font("Dialog", Font.BOLD, 20);
+    public static Font E_BoardBotFont = new Font("Arial Black", Font.BOLD, 20);
+    public static Dimension EBD_LABEL_SZ = new Dimension(300, 35);
     
     public int displayCycle; // text blinking or (E-Board width long) text circulation time in milisecond (eg, 500, 8000)
             // cycleTime, blinkingTime, blinkTime

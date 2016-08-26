@@ -40,6 +40,7 @@ import static com.osparking.global.names.ControlEnums.DialogMessages.UPDATE_E_BO
 import static com.osparking.global.names.ControlEnums.DialogMessages.VerbatimDialog;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.BOTTOM_TAB_TITLE;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.DEFAULT_TAB_TITLE;
+import static com.osparking.global.names.ControlEnums.DialogTitleTypes.EFFECT_TITLE;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.ERROR_DIALOGTITLE;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.E_BOARD_SIM_TITLE;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.SAVE_DIALOGTITLE;
@@ -51,9 +52,10 @@ import static com.osparking.global.names.ControlEnums.LabelContent.COLOR_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.DISPLAY_TYPE_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.EFFECT_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.FIELD_LABEL;
+import static com.osparking.global.names.ControlEnums.LabelContent.FLOW2L_CONF_1;
+import static com.osparking.global.names.ControlEnums.LabelContent.FLOW2L_CONF_2;
 import static com.osparking.global.names.ControlEnums.LabelContent.FONT_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.LIMIT_DESCRIPTION;
-import static com.osparking.global.names.ControlEnums.LabelContent.LOT_NAME_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.MESSAGE_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.PANEL_LABEL;
 import static com.osparking.global.names.ControlEnums.MenuITemTypes.META_KEY_LABEL;
@@ -70,13 +72,19 @@ import com.osparking.global.names.OSP_enums.EBD_Fonts;
 import com.osparking.global.names.OSP_enums.EBD_Effects;
 import static com.osparking.osparking.device.EBoardManager.sendEBoardDefaultSetting;
 import static com.osparking.global.names.DB_Access.gateCount;
+import static com.osparking.global.names.EBD_DisplaySetting.EBD_LABEL_SZ;
+import static com.osparking.global.names.EBD_DisplaySetting.E_BoardBotFont;
+import static com.osparking.global.names.EBD_DisplaySetting.E_BoardTopFont;
 import com.osparking.global.names.OSP_enums.OpLogLevel;
 import com.osparking.global.names.IDevice;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.event.ItemEvent;
 import java.awt.event.KeyEvent;
 import javax.swing.JComponent;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import static javax.swing.JOptionPane.QUESTION_MESSAGE;
 import static javax.swing.JOptionPane.WARNING_MESSAGE;
 
 /**
@@ -1348,7 +1356,6 @@ public class Settings_EBoard extends javax.swing.JFrame {
         byte textFont = (byte) ((JComboBox)  getComponentByName(
                 "combo_TextFont" + usage_row.ordinal())).getSelectedIndex();
         
-        
         byte textColor = (byte) ((JComboBox)  getComponentByName(
                 "combo_TextColor" + usage_row.ordinal())).getSelectedIndex();
         
@@ -1453,6 +1460,28 @@ public class Settings_EBoard extends javax.swing.JFrame {
             int pIndex = 1;
             updateSettings.setString(pIndex++, verbatimStr);
             updateSettings.setInt(pIndex++, typeItem.ordinal());
+            //<editor-fold desc="-- Assign R-to-L flow to wide message">
+            if (typeItem == EBD_ContentType.VERBATIM) {
+                JComboBox effectBox = ((JComboBox) getComponentByName(
+                        "combo_DisplayEffect"+ usage_row.ordinal()));   
+                
+                if (patternItem != EBD_Effects.RTOL_FLOW && 
+                        strOverflowLabel(verbatimStr, usage_row)) {
+                    // Ask user if force pattern to "Flow-R-to-L"
+                    int response = JOptionPane.showConfirmDialog(null, 
+                            FLOW2L_CONF_1.getContent() + System.lineSeparator() +
+                            FLOW2L_CONF_2.getContent(),
+                            EFFECT_TITLE.getContent(),
+                            JOptionPane.YES_NO_OPTION, QUESTION_MESSAGE);                      
+
+                    if (response == JOptionPane.YES_OPTION) {
+                        effectBox.setSelectedIndex(EBD_Effects.RTOL_FLOW.ordinal());
+                        patternItem = EBD_Effects.RTOL_FLOW;
+                    }
+                }
+            }
+            //</editor-fold>
+            // check verbatimStr length 
             updateSettings.setInt(pIndex++, patternItem.ordinal());
             updateSettings.setInt(pIndex++, colorItem.ordinal());
             updateSettings.setInt(pIndex++, fontItem.ordinal());
@@ -1786,14 +1815,47 @@ public class Settings_EBoard extends javax.swing.JFrame {
 
     private void checkVerbatimContentLength(int index, KeyEvent evt) {
         JTextField verbatimContent = (JTextField) getComponentByName("tf_VerbatimContent" + index);
+        String pureMsg = verbatimContent.getText().trim();
         
-        if (verbatimContent.getText().trim().length() >= VERBATIM_CONTENT_LENGTH_MAX) 
+        if (pureMsg.length() >= VERBATIM_CONTENT_LENGTH_MAX) 
         {
             getToolkit().beep();
             JOptionPane.showConfirmDialog(this, MESSAGE_LABEL.getContent() + " " +
                     LIMIT_DESCRIPTION.getContent() + " : " + VERBATIM_CONTENT_LENGTH_MAX,
                     ERROR_DIALOGTITLE.getContent(), JOptionPane.PLAIN_MESSAGE, WARNING_MESSAGE);            
             evt.consume();
+        }
+    }
+
+    private boolean strOverflowLabel(String pureMsg, EBD_DisplayUsage usage_row) {
+        // Calculate message string width in pixels.
+        JLabel tempLabel = new JLabel(pureMsg);
+        Font eBdFont = null;
+        
+        if (usage_row == EBD_DisplayUsage.DEFAULT_TOP_ROW 
+                || usage_row == EBD_DisplayUsage.CAR_ENTRY_TOP_ROW ) 
+        {
+            eBdFont = E_BoardTopFont;
+        } else {
+            eBdFont = E_BoardBotFont;
+        }
+        
+        int currStyle = eBdFont.getStyle();
+        int currSize = eBdFont.getSize();  
+
+        JComboBox fontBox = (JComboBox) getComponentByName("combo_TextFont" + usage_row.ordinal());
+        ConvComboBoxItem item = (ConvComboBoxItem)fontBox.getSelectedItem();
+        String fontName = item.getLabel();
+        
+        tempLabel.setFont(new Font(fontName, currStyle, currSize));
+        Dimension dim = tempLabel.getPreferredSize();
+        
+        if (dim.width + 20 > EBD_LABEL_SZ.width) {
+            System.out.println("overflow");
+            return true;
+        } else {
+            System.out.println("fits in");
+            return false;
         }
     }
 }

@@ -39,7 +39,6 @@ import com.osparking.global.names.Blink_Task;
 import com.osparking.global.names.DeviceReader;
 import static com.osparking.global.Globals.*;
 
-import com.osparking.global.names.ParkingTimer;
 import com.osparking.global.names.ToleranceLevel;
 import static com.osparking.global.names.OSP_enums.EBD_Colors.*;
 import static com.osparking.global.names.OSP_enums.EBD_ContentType.*;
@@ -47,6 +46,9 @@ import static com.osparking.global.names.OSP_enums.EBD_DisplayUsage.*;
 import static com.osparking.global.names.OSP_enums.EBD_Fonts.*;
 import static com.osparking.global.names.OSP_enums.EBD_Effects.*;
 import static com.osparking.global.names.DB_Access.*;
+import static com.osparking.global.names.EBD_DisplaySetting.EBD_LABEL_SZ;
+import static com.osparking.global.names.EBD_DisplaySetting.E_BoardBotFont;
+import static com.osparking.global.names.EBD_DisplaySetting.E_BoardTopFont;
 import com.osparking.global.names.OSP_enums.DeviceType;
 import static com.osparking.global.names.OSP_enums.DeviceType.E_Board;
 import com.osparking.global.names.OSP_enums.DisplayArea;
@@ -56,7 +58,6 @@ import com.osparking.global.names.ParkingTimer;
 import java.awt.Image;
 import java.util.ArrayList;
 import java.util.List;
-import static javax.swing.text.html.HTML.Tag.HEAD;
 
 /**
  * E-Board Simulator GUI -- Part of OsParking simulator package which is developed by Open Source 
@@ -204,14 +205,16 @@ public class A_EBD_GUI extends javax.swing.JFrame implements DeviceGUI {
             }
         });
 
-        topTextField.setFont(new java.awt.Font("Dialog", 1, 20)); // NOI18N
+        topTextField.setFont(E_BoardTopFont);
         topTextField.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         topTextField.setText("E-Board Top Row");
         topTextField.setEnabled(false);
-        topTextField.setPreferredSize(new java.awt.Dimension(300, 35));
+        topTextField.setMaximumSize(EBD_LABEL_SZ);
+        topTextField.setMinimumSize(EBD_LABEL_SZ);
+        topTextField.setPreferredSize(EBD_LABEL_SZ);
         topTextField.setVerifyInputWhenFocusTarget(false);
 
-        botTextField.setFont(new java.awt.Font("Arial Black", 1, 20)); // NOI18N
+        botTextField.setFont(E_BoardBotFont);
         botTextField.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         botTextField.setText("E-Board Bottom Row");
         botTextField.setEnabled(false);
@@ -342,7 +345,7 @@ public class A_EBD_GUI extends javax.swing.JFrame implements DeviceGUI {
                             .addComponent(criticalInfoTextField)
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(topTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(topTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(botTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGap(0, 3, Short.MAX_VALUE)))
                         .addContainerGap())
