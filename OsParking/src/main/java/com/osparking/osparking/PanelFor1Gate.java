@@ -127,7 +127,11 @@ public class PanelFor1Gate extends GatePanel {
         Panel_Gate1.add(CarPicLabel1);
         Panel_Gate1.add(filler1);
 
-        ScrollPane_Gate1.setBorder(new java.awt.Font(font_Type, font_Style, font_Size));
+        ScrollPane_Gate1.setBorder(
+            javax.swing.BorderFactory.createTitledBorder(null,
+                "Gate 1 Title", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+                javax.swing.border.TitledBorder.DEFAULT_POSITION,
+                new java.awt.Font(font_Type, font_Style, font_Size)));
         ScrollPane_Gate1.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         ScrollPane_Gate1.setPreferredSize(new java.awt.Dimension(302, 155));
 

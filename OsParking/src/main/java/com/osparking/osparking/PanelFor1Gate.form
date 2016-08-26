@@ -106,7 +106,7 @@
         <Container class="javax.swing.JScrollPane" name="ScrollPane_Gate1">
           <Properties>
             <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-              <Connection code="new java.awt.Font(font_Type, font_Style, font_Size)" type="code"/>
+              <Connection code="&#xa;  javax.swing.BorderFactory.createTitledBorder(null, &#xa;  &quot;Gate 1 Title&quot;, javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, &#xa;  javax.swing.border.TitledBorder.DEFAULT_POSITION, &#xa;  new java.awt.Font(font_Type, font_Style, font_Size))" type="code"/>
             </Property>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
               <Connection code="new java.awt.Font(font_Type, font_Style, font_Size)" type="code"/>
