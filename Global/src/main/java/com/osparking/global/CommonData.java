@@ -96,6 +96,13 @@ public class CommonData { // new Dimension(carTagWidth, 30)
     static {
         putCellCenter.setHorizontalAlignment(JLabel.CENTER);    
     }
+
+    public static void adjustTableHeight(JTable usersTable) {
+        Dimension tableDim = new Dimension(usersTable.getSize().width, 
+                usersTable.getRowHeight() * usersTable.getRowCount()); 
+        usersTable.setSize(tableDim);
+        usersTable.setPreferredSize(tableDim);
+    }
     
     public static void rejectNonNumericKeys(KeyEvent evt) {
         char c = evt.getKeyChar();

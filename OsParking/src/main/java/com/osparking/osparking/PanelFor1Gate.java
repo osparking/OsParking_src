@@ -132,6 +132,7 @@ public class PanelFor1Gate extends GatePanel {
                 "Gate 1 Title", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
                 javax.swing.border.TitledBorder.DEFAULT_POSITION,
                 new java.awt.Font(font_Type, font_Style, font_Size)));
+        ScrollPane_Gate1.setAutoscrolls(true);
         ScrollPane_Gate1.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         ScrollPane_Gate1.setPreferredSize(new java.awt.Dimension(302, 155));
 

@@ -156,9 +156,7 @@ public class Globals {
     public static int VERBATIM_CONTENT_LENGTH_MAX = 100;
     public static int PORT_NUMBER_LENGTH_MAX = 5;
     public static int SIMULATOR = 0;
-
     public static DefaultListModel<?>[] admissionListModel = new DefaultListModel<?> [5];
-
     public static SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss"); 
     public static SimpleDateFormat timeFormatMMSS = new SimpleDateFormat("mm_ss"); 
     public static SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");    

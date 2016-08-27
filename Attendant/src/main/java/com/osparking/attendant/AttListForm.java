@@ -19,6 +19,7 @@ package com.osparking.attendant;
 import com.osparking.global.CommonData;
 import static com.osparking.global.CommonData.ADMIN_ID;
 import static com.osparking.global.CommonData.ODS_DIRECTORY;
+import static com.osparking.global.CommonData.adjustTableHeight;
 import static com.osparking.global.CommonData.buttonHeightNorm;
 import static com.osparking.global.CommonData.buttonHeightShort;
 import static com.osparking.global.CommonData.buttonWidthNorm;
@@ -2864,10 +2865,7 @@ public class AttListForm extends javax.swing.JFrame {
             logParkingException(Level.SEVERE, ex, "(refresh user list displaying table)");
         } finally {
             closeDBstuff(conn, pstmt, rs, "(refresh user list displaying table)");
-            Dimension tableDim = new Dimension(usersTable.getSize().width, 
-                    usersTable.getRowHeight() * usersTable.getRowCount()); 
-            usersTable.setSize(tableDim);
-            usersTable.setPreferredSize(tableDim);
+            adjustTableHeight(usersTable);
             countValue.setText(String.valueOf(usersTable.getRowCount()));
             searchButton.setEnabled(false);
             

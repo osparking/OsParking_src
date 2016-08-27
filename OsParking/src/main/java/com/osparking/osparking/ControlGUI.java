@@ -199,6 +199,7 @@ import javax.swing.Box;
 import javax.swing.DefaultListModel;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.ListSelectionModel;
@@ -955,10 +956,10 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
 
         LeftSide_Label.setBackground(MainBackground);
         LeftSide_Label.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        LeftSide_Label.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        LeftSide_Label.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         LeftSide_Label.setText(STATUS_LABEL.getContent());
         LeftSide_Label.setToolTipText("");
-        LeftSide_Label.setHorizontalTextPosition(javax.swing.SwingConstants.LEADING);
+        LeftSide_Label.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         LeftSide_Label.setMaximumSize(new java.awt.Dimension(280, 17));
         LeftSide_Label.setMinimumSize(new java.awt.Dimension(80, 17));
         LeftSide_Label.setName(""); // NOI18N
@@ -2198,6 +2199,13 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
         CommandMenu.setText(QUIT_MENU_ITEM_SC.getContent());
     }
 
+    private void adjustListHeight(JList arrivalList, int rowCount) {
+        Dimension tableDim = new Dimension(arrivalList.getSize().width, 
+                25 * rowCount); 
+        arrivalList.setSize(tableDim);
+        arrivalList.setPreferredSize(tableDim);        
+    }
+
     class ManageArrivalList extends Thread {
         public void run() {
             Thread.currentThread().setPriority(Thread.MIN_PRIORITY);
@@ -2692,6 +2700,7 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
         ResultSet rs = null;
         long arrSeqNo = 0;
         
+        int count = 0;
         try {
             // create the java statement
             conn = JDBCMySQL.getConnection();
@@ -2706,11 +2715,14 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
                 barOptn = rs.getString("BarOptn");
                 arrSeqNo = rs.getLong("arrseqno");
                 listModel.addElement(new CarAdmission(msgLine + barOptn, arrSeqNo));
+                count ++;
             }
         } catch (SQLException se) {
             logParkingException(Level.SEVERE, se, 
                     "(select car_recent for seqNo: " + String.valueOf(arrSeqNo));
         } finally {
+            System.out.println("Count : " + count);
+            adjustListHeight(getGatePanel().getEntryList(gateNo), listModel.getSize());
             closeDBstuff(conn, pStmt, rs, "(Loading previous car arrival records)");
         }
     }
