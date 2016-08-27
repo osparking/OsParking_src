@@ -2675,7 +2675,7 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
         DefaultListModel<CarAdmission> listModel 
                 = (DefaultListModel<CarAdmission>)admissionListModel[gateNo];
         
-        StringBuffer sb = new StringBuffer("select arrseqno, concat ('-', ");
+        StringBuffer sb = new StringBuffer("Select arrseqno, concat ('-', ");
         sb.append("substr(arrivaltime, 9, 2), ");
         sb.append("substr(arrivaltime, 11), ' ', ");
         sb.append("ifnull(TagEnteredAs, TagRecognized)) as msgLine, ");
@@ -2783,7 +2783,11 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
             stmt.setInt(index++, gateNo);
             stmt.setString(index++, arrivalTmStr);
             stmt.setString(index++, tagRecognized);
-            stmt.setString(index++, tagEnteredAs);
+            if (tagEnteredAs.length() == 0) {
+                stmt.setString(index++, null);
+            } else {
+                stmt.setString(index++, tagEnteredAs);
+            }
 
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             ImageIO.write(bufferedImage, "jpg", baos);

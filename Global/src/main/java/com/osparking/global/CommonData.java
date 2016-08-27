@@ -122,8 +122,8 @@ public class CommonData { // new Dimension(carTagWidth, 30)
     public static CameraMessage[] dummyMessages = new CameraMessage[7]; 
     static {
         for (byte idx = 1; idx <= 6; idx++) {
-            dummyMessages[idx] 
-                    = new CameraMessage( "car" + idx + ".jpg", getTagNumber(idx), getBufferedImage(idx)); 
+            dummyMessages[idx] = new CameraMessage( "car" + idx + ".jpg", 
+                    getTagNumber(idx), getBufferedImage(idx)); 
         }
     }
     

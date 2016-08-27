@@ -958,8 +958,8 @@ public class CameraGUI extends javax.swing.JFrame implements DeviceGUI {
 
         // reflect this car arrival to the camera GUI
         addMessageLine(getMessageTextArea(), getTagNumber(imageFileNo) + "(seq #: " + generationSN + ")");
-        displayCarEntry(getPicLabel(), imageFileNo);        
-    }             
+        displayCarEntry(getPicLabel(), imageFileNo);
+    }
 
     /**
      * @return the ID_MUTEX

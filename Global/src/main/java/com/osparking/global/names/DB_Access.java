@@ -562,7 +562,7 @@ public class DB_Access {
                 } else {
                     result = PermissionType.UNREGISTERED;           
                 }
-            }
+            } 
         } catch (SQLException ex) {
             logParkingException(Level.SEVERE, ex, "while checking vehicle park perm");
         } finally {
