@@ -1514,8 +1514,8 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
         LogInOutMenu.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         LogInOutMenu.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         LogInOutMenu.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
-        LogInOutMenu.setMaximumSize(new java.awt.Dimension(110, 32767));
-        LogInOutMenu.setMinimumSize(new java.awt.Dimension(110, 0));
+        LogInOutMenu.setMaximumSize(new java.awt.Dimension(110, 22));
+        LogInOutMenu.setMinimumSize(new java.awt.Dimension(110, 22));
         LogInOutMenu.setPreferredSize(new java.awt.Dimension(110, 22));
         LogInOutMenu.setRequestFocusEnabled(false);
 
@@ -1550,8 +1550,9 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
         IsManagerLabelMenu.setText("N");
         IsManagerLabelMenu.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         IsManagerLabelMenu.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
-        IsManagerLabelMenu.setMinimumSize(new java.awt.Dimension(20, 0));
-        IsManagerLabelMenu.setPreferredSize(new java.awt.Dimension(20, 19));
+        IsManagerLabelMenu.setMaximumSize(new java.awt.Dimension(20, 22));
+        IsManagerLabelMenu.setMinimumSize(new java.awt.Dimension(20, 22));
+        IsManagerLabelMenu.setPreferredSize(new java.awt.Dimension(20, 22));
 
         managerLabel.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
 
@@ -1569,9 +1570,9 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
         UserIDLabelMenu.setHideActionText(true);
         UserIDLabelMenu.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
         UserIDLabelMenu.setInheritsPopupMenu(true);
-        UserIDLabelMenu.setMaximumSize(new java.awt.Dimension(120, 32767));
-        UserIDLabelMenu.setMinimumSize(new java.awt.Dimension(90, 0));
-        UserIDLabelMenu.setPreferredSize(new java.awt.Dimension(90, 24));
+        UserIDLabelMenu.setMaximumSize(new java.awt.Dimension(120, 22));
+        UserIDLabelMenu.setMinimumSize(new java.awt.Dimension(90, 22));
+        UserIDLabelMenu.setPreferredSize(new java.awt.Dimension(90, 22));
 
         ID_Label.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
 

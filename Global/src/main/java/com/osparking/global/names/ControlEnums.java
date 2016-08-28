@@ -323,7 +323,7 @@ public class ControlEnums {
         MANAGE_BTN("운전자 관리(M)", "Manage Drivers"),
         FIX_IT_BTN("설정(F)", "Fix It"),
         SET_BUTTON("설정(S)", "Settings"),
-        ARRIVALS_BTN("<HTML>입차기록(<U>A</U>)</HTML>", "<HTML><U>A</U>rrivals</HTML>"),
+        ARRIVALS_BTN("<HTML>도착기록(<U>A</U>)</HTML>", "<HTML><U>A</U>rrivals</HTML>"),
         VEHICLES_BTN("<HTML>차량관리(<U>V</U>)</HTML>", "<HTML><U>V</U>ehicles</HTML>"),
         USERS_BTN("<HTML>사용자(<U>U</U>)</HTML>", "<HTML><U>U</U>sers</HTML>"),
         CAR_ARRIVAL_BTN("모의입차(M)", "Sim' Entry"),
@@ -1178,7 +1178,7 @@ public class ControlEnums {
     
     public enum MenuITemTypes{
         RECORD_MENU("각종기록", "Records"),
-        ARRIVAL_MENU_ITEM("입차기록", "Arrival"),
+        ARRIVAL_MENU_ITEM("도착기록", "Arrival"),
         BOOTING_MENU_ITEM("실행기록", "Booting"),
         LOGIN_RECORD_MENU_ITEM("로그인기록", "Login"),
         VEHICLE_MENU("<HTML>차량\u22C5차주</HTML>", "<HTML>Car\u22C5Owner</HTML>"),
