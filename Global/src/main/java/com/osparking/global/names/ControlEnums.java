@@ -96,6 +96,7 @@ public class ControlEnums {
     }
     
     public enum LabelContent {
+        EMPTY_REASON("(기록 없음)", "(No Record)"), 
         CLOSED_LABEL("(폐쇄)", "(closed)"), 
         STOPPED_LABEL("(정지)", "(stopped)"), 
         RATE_LABEL("비율 : ", "Rate : "), 

@@ -425,8 +425,6 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
         sendEBDmsgTimer = new ParkingTimer[gateCount + 1][4]; // 2: for two rows of each elec' board.
         
         errorCheckBox.setEnabled(DEBUG);
-        errIncButton.setEnabled(DEBUG);
-        errDecButton.setEnabled(DEBUG);
 
         openCommandIDs = new int[gateCount + 1];        
         openCommAcked = new boolean[gateCount + 1];        
@@ -1754,11 +1752,18 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
         if (getErrorCheckBox().isSelected()) {
             addMessageLine(MessageTextArea, ON_ARTIFI_ERROR_MSG.getContent());
             addMessageLine(MessageTextArea, 
-                    "\t" + ARTIF_ERROR_RATE.getContent() + " : " + getFormattedRealNumber(ERROR_RATE, 2));
+                    "\t" + ARTIF_ERROR_RATE.getContent() + getFormattedRealNumber(ERROR_RATE, 2));
             errorLabel.setText(RATE_LABEL.getContent() + getFormattedRealNumber(ERROR_RATE, 2));
+            
+            // Enable error rate change buttons
+            errIncButton.setEnabled(true);
+            errDecButton.setEnabled(true);
         } else {
             addMessageLine(MessageTextArea, NO_APP_MSG.getContent());
             errorLabel.setText("");
+            
+            errIncButton.setEnabled(false);
+            errDecButton.setEnabled(false);
         }
     }//GEN-LAST:event_errorCheckBoxActionPerformed
 
@@ -1779,33 +1784,25 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
     public Object MsgAreaMutex  = new Object();
       
     private void errIncButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_errIncButtonActionPerformed
-        if (errorCheckBox.isSelected()) {
-           if (ERROR_RATE < 0.9) {
-                ERROR_RATE += 0.1f;
-            } else {
-                
-               addMessageLine(MessageTextArea,"current error rate(=" 
-                        + getFormattedRealNumber(ERROR_RATE, 2) + ") is max!");
-            }
-            errorLabel.setText(RATE_LABEL.getContent() + getFormattedRealNumber(ERROR_RATE, 2));
-        } else {
-            addMessageLine(MessageTextArea, "First, select error check box, OK?");
-        }
+        if (ERROR_RATE < 0.9) {
+             ERROR_RATE += 0.1f;
+         } else {
+
+            addMessageLine(MessageTextArea,"current error rate(=" 
+                     + getFormattedRealNumber(ERROR_RATE, 2) + ") is max!");
+         }
+         errorLabel.setText(RATE_LABEL.getContent() + getFormattedRealNumber(ERROR_RATE, 2));
     }//GEN-LAST:event_errIncButtonActionPerformed
 
     private void errDecButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_errDecButtonActionPerformed
-        if (errorCheckBox.isSelected()) {
-            if (ERROR_RATE > 0.10) {
-                ERROR_RATE -= 0.1f;
-            } else {
-                
-               addMessageLine(MessageTextArea,"current error rate(=" 
-                        + getFormattedRealNumber(ERROR_RATE, 2) + ") is max!");
-            }
-            errorLabel.setText(RATE_LABEL.getContent() + getFormattedRealNumber(ERROR_RATE, 2));
+        if (ERROR_RATE > 0.10) {
+            ERROR_RATE -= 0.1f;
         } else {
-            addMessageLine(MessageTextArea, "First, select error check box, OK?");
+
+           addMessageLine(MessageTextArea,"current error rate(=" 
+                    + getFormattedRealNumber(ERROR_RATE, 2) + ") is max!");
         }
+        errorLabel.setText(RATE_LABEL.getContent() + getFormattedRealNumber(ERROR_RATE, 2));
     }//GEN-LAST:event_errDecButtonActionPerformed
 
     private void showStatisticsBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showStatisticsBtnActionPerformed

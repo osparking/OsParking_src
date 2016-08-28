@@ -41,6 +41,7 @@ import com.osparking.global.names.ControlEnums.BarOperation;
 import static com.osparking.global.names.ControlEnums.LabelContent.BlinkNotPermitted;
 import static com.osparking.global.names.ControlEnums.LabelContent.DISALLOW_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.DisallowReason;
+import static com.osparking.global.names.ControlEnums.LabelContent.EMPTY_REASON;
 import static com.osparking.global.names.ControlEnums.LabelContent.GATE_NAME_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.OPEN_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.RecogedTagLabel;
@@ -104,7 +105,13 @@ public class DisAllowedCar extends javax.swing.JFrame {
         
         recogTextField.setText(tagRecognized);
         regisTextField.setText(tagEnteredAs);
-        disAllowReasonTextField.setText(remark);
+        if (remark.length() == 0) {
+            disAllowReasonTextField.setForeground(tipColor);
+            disAllowReasonTextField.setText(EMPTY_REASON.getContent());
+        } else {
+            disAllowReasonTextField.setForeground(new Color(0, 0, 0));
+            disAllowReasonTextField.setText(remark);
+        }
         toolkit = Toolkit.getDefaultToolkit();
         timer = new Timer();
         timer.schedule(new RemindTask(), 0, //initial delay
