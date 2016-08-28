@@ -249,7 +249,7 @@ public class ManageDrivers extends javax.swing.JFrame {
         /**
          * Initialize table with real driver information
          */
-        loadDriverData(UNKNOWN, "", "");
+        loadDriverData(FIRST_ROW, "", "");
         setFormMode(FormMode.NormalMode);
         setSearchEnabled(true);
         

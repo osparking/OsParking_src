@@ -128,6 +128,7 @@ import static com.osparking.vehicle.CommonData.vRowNoWidth;
 import static com.osparking.vehicle.CommonData.wantToSaveFile;
 import com.osparking.vehicle.driver.ODSReader;
 import static com.osparking.vehicle.driver.ODSReader.getWrongCellPointString;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Point;
 import static java.awt.event.ItemEvent.SELECTED;
@@ -177,7 +178,7 @@ public class VehiclesForm extends javax.swing.JFrame {
         attachEventListenerToVehicleTable();
         
         adminOperationEnabled(true);        
-        loadVehicleTable(0, "");
+        loadVehicleTable(FIRST_ROW, "");
         driverTextField.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -1019,6 +1020,7 @@ public class VehiclesForm extends javax.swing.JFrame {
         searchPanel.add(jLabel11);
 
         searchCarTag.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        searchCarTag.setForeground(tipColor);
         searchCarTag.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         searchCarTag.setText(CAR_TAG_TF.getContent());
         searchCarTag.setToolTipText(CAR_TAG_INPUT_TOOLTIP.getContent());
@@ -1026,6 +1028,9 @@ public class VehiclesForm extends javax.swing.JFrame {
         searchCarTag.setMinimumSize(new Dimension(vPlateNoWidth - 10, 28));
         searchCarTag.setPreferredSize(new Dimension(vPlateNoWidth - 5, 28));
         searchCarTag.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                searchCarTagFocusGained(evt);
+            }
             public void focusLost(java.awt.event.FocusEvent evt) {
                 searchCarTagFocusLost(evt);
             }
@@ -1043,6 +1048,7 @@ public class VehiclesForm extends javax.swing.JFrame {
         searchPanel.add(searchCarTag);
 
         searchDriver.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        searchDriver.setForeground(tipColor);
         searchDriver.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         searchDriver.setText(DRIVER_TF.getContent());
         searchDriver.setToolTipText(DRIVER_INPUT_TOOLTIP.getContent());
@@ -1050,6 +1056,9 @@ public class VehiclesForm extends javax.swing.JFrame {
         searchDriver.setMinimumSize(new Dimension(vDriverNmWidth - 10, 28));
         searchDriver.setPreferredSize(new Dimension(vDriverNmWidth - 5, 28));
         searchDriver.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                searchDriverFocusGained(evt);
+            }
             public void focusLost(java.awt.event.FocusEvent evt) {
                 searchDriverFocusLost(evt);
             }
@@ -1091,6 +1100,7 @@ public class VehiclesForm extends javax.swing.JFrame {
         searchPanel.add(searchBldgCBox);
 
         searchETC.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        searchETC.setForeground(tipColor);
         searchETC.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         searchETC.setText(OTHER_INFO_TF.getContent());
         searchETC.setToolTipText(OTHER_TOOLTIP.getContent());
@@ -1098,6 +1108,9 @@ public class VehiclesForm extends javax.swing.JFrame {
         searchETC.setMinimumSize(new Dimension(vOtherWidth - 10, 28));
         searchETC.setPreferredSize(new Dimension(vOtherWidth - 5, 28));
         searchETC.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                searchETCFocusGained(evt);
+            }
             public void focusLost(java.awt.event.FocusEvent evt) {
                 searchETCFocusLost(evt);
             }
@@ -1115,6 +1128,7 @@ public class VehiclesForm extends javax.swing.JFrame {
         searchPanel.add(searchETC);
 
         disallowReason.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        disallowReason.setForeground(tipColor);
         disallowReason.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         disallowReason.setText(DIS_REASON_TF.getContent());
         disallowReason.setToolTipText(OTHER_TOOLTIP.getContent());
@@ -1122,6 +1136,9 @@ public class VehiclesForm extends javax.swing.JFrame {
         disallowReason.setMinimumSize(new Dimension(vCauseWidth - 10, 28));
         disallowReason.setPreferredSize(new Dimension(vCauseWidth - 5, 28));
         disallowReason.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                disallowReasonFocusGained(evt);
+            }
             public void focusLost(java.awt.event.FocusEvent evt) {
                 disallowReasonFocusLost(evt);
             }
@@ -1662,8 +1679,9 @@ public class VehiclesForm extends javax.swing.JFrame {
     }//GEN-LAST:event_searchCarTagMousePressed
 
     private void searchCarTagFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_searchCarTagFocusLost
-        if(searchCarTag.getText().trim().equals(""))
-            searchCarTag.setText(CAR_TAG_TF.getContent());
+        if (searchCarTag.getText().trim().length() == 0) {
+            showCarTagTip();
+        }
     }//GEN-LAST:event_searchCarTagFocusLost
 
     private void searchDriverMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_searchDriverMousePressed
@@ -1671,8 +1689,9 @@ public class VehiclesForm extends javax.swing.JFrame {
     }//GEN-LAST:event_searchDriverMousePressed
 
     private void searchDriverFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_searchDriverFocusLost
-        if(searchDriver.getText().trim().equals(""))
-            searchDriver.setText(DRIVER_TF.getContent());
+        if (searchDriver.getText().trim().length() == 0) {
+            showDriverTip();
+        }
     }//GEN-LAST:event_searchDriverFocusLost
 
     private void searchETCMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_searchETCMousePressed
@@ -1680,28 +1699,28 @@ public class VehiclesForm extends javax.swing.JFrame {
     }//GEN-LAST:event_searchETCMousePressed
 
     private void searchETCFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_searchETCFocusLost
-
-        if(searchETC.getText().trim().equals(""))
-            searchETC.setText(OTHER_INFO_TF.getContent());
+        if(searchETC.getText().trim().length() == 0) {
+            showEtcTip();
+        }
     }//GEN-LAST:event_searchETCFocusLost
 
     private void clearButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearButtonActionPerformed
         clearButton.setEnabled(false);
 
-        searchCarTag.setText(CAR_TAG_TF.getContent());
-        searchDriver.setText(DRIVER_TF.getContent());
+        showCarTagTip();
+        showDriverTip();
         searchAffiliCBox.setSelectedIndex(0);
         searchBldgCBox.setSelectedIndex(0);
-        searchETC.setText(OTHER_INFO_TF.getContent());
-        disallowReason.setText(DIS_REASON_TF.getContent());
+        showEtcTip();
+        showReasonTip();
         vehiclesTable.requestFocus();
-        
         changeSearchButtonEnabled();
     }//GEN-LAST:event_clearButtonActionPerformed
 
     private void disallowReasonFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_disallowReasonFocusLost
-        if(disallowReason.getText().trim().equals(""))
-            disallowReason.setText(DIS_REASON_TF.getContent());
+        if(disallowReason.getText().trim().length() == 0) {
+            showReasonTip();
+        }
     }//GEN-LAST:event_disallowReasonFocusLost
 
     private void disallowReasonMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_disallowReasonMousePressed
@@ -1866,6 +1885,38 @@ public class VehiclesForm extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_sampleButtonActionPerformed
 
+    private void searchCarTagFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_searchCarTagFocusGained
+        if (carTagHintShown) {
+            searchCarTag.setText("");
+            carTagHintShown = false;
+            searchCarTag.setForeground(new Color(0, 0, 0));
+        }
+    }//GEN-LAST:event_searchCarTagFocusGained
+
+    private void searchDriverFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_searchDriverFocusGained
+        if (driverHintShown) {
+            searchDriver.setText("");
+            driverHintShown = false;
+            searchDriver.setForeground(new Color(0, 0, 0));
+        }
+    }//GEN-LAST:event_searchDriverFocusGained
+
+    private void searchETCFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_searchETCFocusGained
+        if (etcHintShown) {
+            searchETC.setText("");
+            etcHintShown = false;
+            searchETC.setForeground(new Color(0, 0, 0));
+        }
+    }//GEN-LAST:event_searchETCFocusGained
+
+    private void disallowReasonFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_disallowReasonFocusGained
+        if (reasonHintShown) {
+            disallowReason.setText("");
+            reasonHintShown = false;
+            disallowReason.setForeground(new Color(0, 0, 0));
+        }
+    }//GEN-LAST:event_disallowReasonFocusGained
+
     private void adminOperationEnabled(boolean flag) {
         if (flag && Globals.loginID != null && Globals.loginID.equals(ADMIN_ID)) {
             deleteAllVehicles.setEnabled(true);
@@ -2027,10 +2078,15 @@ public class VehiclesForm extends javax.swing.JFrame {
     private String formSearchCondition() {
         StringBuffer cond = new StringBuffer();
         
-        if (!searchCarTag.getText().trim().equals(CAR_TAG_TF.getContent()))
-            attachCondition(cond, "PLATE_NUMBER", searchCarTag.getText().trim());
-        if (!searchDriver.getText().trim().equals(DRIVER_TF.getContent()))
-            attachCondition(cond, "NAME", searchDriver.getText().trim());
+        String searchStr = searchCarTag.getText().trim();
+        if (!carTagHintShown && searchStr.length() > 0) {
+            attachCondition(cond, "PLATE_NUMBER", searchStr);
+        }
+        
+        searchStr = searchDriver.getText().trim();
+        if (!driverHintShown && searchStr.length() > 0) {
+            attachCondition(cond, "NAME", searchStr);
+        }
 
         Object keyObj =((ConvComboBoxItem)searchAffiliCBox.getSelectedItem()).getKeyValue();
         attachIntCondition(cond, "L2_NO", (Integer) keyObj); 
@@ -2041,11 +2097,15 @@ public class VehiclesForm extends javax.swing.JFrame {
             keyObj =((ConvComboBoxItem)searchBldgCBox.getSelectedItem()).getKeyValue();
             attachIntCondition(cond, "UNIT_SEQ_NO", (Integer)keyObj);
 
-            if (!searchETC.getText().trim().equals(OTHER_INFO_TF.getContent()))
-                attachCondition(cond, "OTHER_INFO", searchETC.getText().trim());
+            searchStr = searchETC.getText().trim();
+            if (!etcHintShown && searchStr.length() > 0) {
+                attachCondition(cond, "OTHER_INFO", searchStr);
+            }
 
-            if (!disallowReason.getText().trim().equals(DIS_REASON_TF.getContent()))
-                attachCondition(cond, "REMARK", disallowReason.getText().trim());
+            searchStr = disallowReason.getText().trim();
+            if (!reasonHintShown && searchStr.length() > 0) {
+                attachCondition(cond, "REMARK", searchStr);
+            }
 
             if (cond.length() > 0) {
                 clearButton.setEnabled(true);
@@ -2054,7 +2114,6 @@ public class VehiclesForm extends javax.swing.JFrame {
                 clearButton.setEnabled(false);
                 return "";
             }            
-//            return (cond.length() > 0 ? "Where " + cond : "");
         }
     }
     
@@ -2145,27 +2204,6 @@ public class VehiclesForm extends javax.swing.JFrame {
             clearVehicleDetail();
         }
         searchButton.setEnabled(false);        
-    }
-
-    private void hideSomeColumns() {
-        TableColumnModel NumberTableModel = vehiclesTable.getColumnModel();
-        
-        NumberTableModel.removeColumn(
-                NumberTableModel.getColumn(VehicleCol.SeqNo.getNumVal()));
-        NumberTableModel.removeColumn(
-                NumberTableModel.getColumn(VehicleCol.Modification.getNumVal()));
-        NumberTableModel.removeColumn(
-                NumberTableModel.getColumn(VehicleCol.Creation.getNumVal()));
-        NumberTableModel.removeColumn(
-                NumberTableModel.getColumn(VehicleCol.Permitted.getNumVal()));
-        NumberTableModel.removeColumn(
-                NumberTableModel.getColumn(VehicleCol.Whole.getNumVal()));
-        NumberTableModel.removeColumn(
-                NumberTableModel.getColumn(VehicleCol.Notification.getNumVal()));
-        NumberTableModel.removeColumn(
-                NumberTableModel.getColumn(VehicleCol.Phone .getNumVal()));
-        NumberTableModel.removeColumn(
-                NumberTableModel.getColumn(VehicleCol.CellPhone.getNumVal()));
     }
 
     private void showVehicleDetail(int viewIndex) {
@@ -2705,5 +2743,34 @@ public class VehiclesForm extends javax.swing.JFrame {
     private void fixControlDimensions() {
         setComponentSize(rowNumTextField, new Dimension(carTagWidth, 30));
         setComponentSize(carTagTextField, new Dimension(carTagWidth, 30));
+    }
+
+    private void showCarTagTip() {
+        searchCarTag.setText(CAR_TAG_TF.getContent());
+        carTagHintShown = true;
+        searchCarTag.setForeground(tipColor);        
+    }
+    
+    private boolean carTagHintShown = true;
+    private boolean driverHintShown = true;
+    private boolean etcHintShown = true;
+    private boolean reasonHintShown = true;
+
+    private void showDriverTip() {
+        searchDriver.setText(DRIVER_TF.getContent());
+        driverHintShown = true;
+        searchDriver.setForeground(tipColor);
+    }
+
+    private void showEtcTip() {
+        searchETC.setText(OTHER_INFO_TF.getContent()); 
+        etcHintShown = true;
+        searchETC.setForeground(tipColor);
+    }
+
+    private void showReasonTip() {
+        disallowReason.setText(DIS_REASON_TF.getContent());
+        reasonHintShown = true;
+        disallowReason.setForeground(tipColor);
     }
 }
