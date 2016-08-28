@@ -169,7 +169,6 @@ public class AttListForm extends javax.swing.JFrame {
     public AttListForm(ParentGUI mainGUI, String loginID, String loginPW, boolean isManager) {
         // Mark the first row as selected in default
         this.mainGUI = mainGUI;
-//        pwValidator = new PasswordValidator();
         
         try {
             initComponents();
@@ -193,6 +192,9 @@ public class AttListForm extends javax.swing.JFrame {
 
             ListSelectionModel model = usersTable.getSelectionModel();
             model.addListSelectionListener(new AttendantRowSelectionListener());
+            
+//            setSearchEnabled(true);
+            setFormMode(FormMode.NormalMode);
             
             RefreshTableContents();
             int selectIndex = searchRow(loginID);
@@ -1914,12 +1916,12 @@ public class AttListForm extends javax.swing.JFrame {
             }
             usersTable.requestFocus();
             usersTable.getRowSorter().setSortKeys(sortKeys);  
-            if(usersTable.getRowCount()==0){
+            if (usersTable.getRowCount()==0){
                 multiFuncButton.setEnabled(false);
                 deleteButton.setEnabled(false);
             }else{
-                multiFuncButton.setEnabled(true);
-                deleteButton.setEnabled(true);
+                int selRow = usersTable.getSelectedRow();
+                changeFieldButtonUsability(selRow);
             }
         } catch (Exception ex) {
             logParkingException(Level.SEVERE, ex, 
@@ -2557,7 +2559,7 @@ public class AttListForm extends javax.swing.JFrame {
                 searchButton.setEnabled(flag);
             }
         }
-        saveOdsButton. setEnabled(flag & isManager);
+        saveOdsButton.setEnabled(flag && isManager);
         closeFormButton.setEnabled(flag); 
 
         cancelButton.setEnabled(!flag);
@@ -2886,11 +2888,8 @@ public class AttListForm extends javax.swing.JFrame {
 
         if (formMode != FormMode.CreateMode) {
             // <editor-fold defaultstate="collapsed" desc="-- Display ID and E-mail, initialize password">
-            String tableRowID = attModel.getValueAt(clickedRow, 0).toString();
-            boolean isManager = (attModel.getValueAt(clickedRow, 2).toString().equals("Y") ? true : false);
-        
-            userIDText.setText(tableRowID);
-            changeFieldButtonUsability(tableRowID, isManager);
+            userIDText.setText(attModel.getValueAt(clickedRow, 0).toString());
+            changeFieldButtonUsability(clickedRow);
         
             field = attModel.getValueAt(clickedRow, 5);
             if (field == null) {
@@ -2960,6 +2959,40 @@ public class AttListForm extends javax.swing.JFrame {
         }
     }    
  
+    private void changeFieldButtonUsability(int clickedRow) {
+        TableModel attModel = usersTable.getModel();
+        String rowID = attModel.getValueAt(clickedRow, 0).toString();
+        boolean rowForManager = (attModel.getValueAt(clickedRow, 2).toString().equals("Y") ? true : false);        
+                
+        if (loginID == null) {
+            return;
+        }
+        if (rowID.equals(loginID)) { 
+            // Login user self information is under consideration.
+            deleteButton.setEnabled(false);
+            changeUserPasswordEnabled(false);
+            changeTextFieldEnabled(true);
+            multiFuncButton.setEnabled(true);              
+        } else if (loginID.equals(ADMIN_ID) || // non-admin is handled row by admin
+                isManager && !rowForManager) // non-manager is handled row by manager
+        { 
+            deleteButton.setEnabled(true);
+            changeUserPasswordEnabled(true);
+            changeTextFieldEnabled(true);
+            multiFuncButton.setEnabled(true);                
+        } else {
+            disableModifiability();
+        }
+            
+        // Attendant is created by who?
+        if (isManager) {
+            createButton.setEnabled(true);   
+        } else {
+            createButton.setEnabled(false);       
+            managerCBoxEnabled(false);
+        }
+    }
+    
     private void changeFieldButtonUsability(String rowID, boolean rowForManager) {
         if (loginID == null) {
             return;
@@ -2990,7 +3023,6 @@ public class AttListForm extends javax.swing.JFrame {
             managerCBoxEnabled(false);
         }
     }
-    
 
     private void SetTableColumnWidth() {
         usersTable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);

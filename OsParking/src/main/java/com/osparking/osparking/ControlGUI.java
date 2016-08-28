@@ -1593,7 +1593,6 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
     private void processAttendantList(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_processAttendantList
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                
                 if (attendantsListForm == null)
                     attendantsListForm = new AttListForm(parentGUI, loginID, loginPW, isManager);
                 attendantsListForm.setVisible(true);
@@ -1689,11 +1688,6 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
 
     private void SettingsItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SettingsItemActionPerformed
         displaySystemSettings();
-//        if (configureSettingsForm == null) 
-//        { 
-//            setConfigureSettingsForm(new Settings_System(this));
-//        }
-//        configureSettingsForm.setVisible(true);
     }//GEN-LAST:event_SettingsItemActionPerformed
 
     private void RunRecordItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RunRecordItemActionPerformed
@@ -3179,6 +3173,10 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
                 if (affiliationBuildingForm != null) {
                     affiliationBuildingForm.dispose();
                     affiliationBuildingForm = null;
+                }
+                if (attendantsListForm != null) {
+                    attendantsListForm.dispose();
+                    attendantsListForm = null;
                 }
             }
         } catch (Exception ex) {
