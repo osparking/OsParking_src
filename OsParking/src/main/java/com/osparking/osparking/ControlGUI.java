@@ -683,7 +683,7 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
         CarIOListButton = new javax.swing.JButton();
         VehiclesButton = new javax.swing.JButton();
         UsersButton = new javax.swing.JButton();
-        setOrQuit = new javax.swing.JButton();
+        Quit = new javax.swing.JButton();
         filler4 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(32767, 0));
         myMetaKeyLabel = new javax.swing.JLabel();
         autoOpenButton = new javax.swing.JButton();
@@ -866,23 +866,23 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
         });
         MainToolBar.add(UsersButton);
 
-        setOrQuit.setBackground(MainBackground);
-        setOrQuit.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        setOrQuit.setMnemonic('Q');
-        setOrQuit.setText("Set/Quit");
-        setOrQuit.setAlignmentY(0.0F);
-        setOrQuit.setFocusable(false);
-        setOrQuit.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        setOrQuit.setMaximumSize(new java.awt.Dimension(120, 30));
-        setOrQuit.setMinimumSize(new java.awt.Dimension(120, 30));
-        setOrQuit.setPreferredSize(new java.awt.Dimension(120, 30));
-        setOrQuit.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        setOrQuit.addActionListener(new java.awt.event.ActionListener() {
+        Quit.setBackground(MainBackground);
+        Quit.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        Quit.setMnemonic('Q');
+        Quit.setText(QUIT_MENU_ITEM_SC.getContent());
+        Quit.setAlignmentY(0.0F);
+        Quit.setFocusable(false);
+        Quit.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        Quit.setMaximumSize(new java.awt.Dimension(120, 30));
+        Quit.setMinimumSize(new java.awt.Dimension(120, 30));
+        Quit.setPreferredSize(new java.awt.Dimension(120, 30));
+        Quit.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        Quit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                setOrQuitActionPerformed(evt);
+                QuitActionPerformed(evt);
             }
         });
-        MainToolBar.add(setOrQuit);
+        MainToolBar.add(Quit);
         MainToolBar.add(Box.createHorizontalGlue());
         MainToolBar.add(filler4);
 
@@ -1458,7 +1458,7 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
         visibleMenuBar.add(VehicleMenu);
 
         CommandMenu.setBackground(MainBackground);
-        CommandMenu.setText(QUIT_MENU_ITEM_SC.getContent());
+        CommandMenu.setText(SYSTEM_MENU.getContent());
         CommandMenu.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         CommandMenu.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         CommandMenu.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
@@ -1624,23 +1624,7 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
       
         if (Globals.isManager) {
             enableAdminOnlyItem(true);
-            // Change one top menu command text for managers
-            setOrQuit.setText(SETTING_MENU_ITEM_SC.getContent());
-            setOrQuit.setMnemonic('S');
-            CommandMenu.setText(SYSTEM_MENU.getContent());
-        } else {
-            makeQuitVisible();
         }
-              
-        // <editor-fold defaultstate="collapsed" desc="-- automatic login during development">        
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                if (isManager) {
-//                    displaySystemSettings();
-                }
-            }
-        });  
-        //</editor-fold>  
         
         if (DEBUG && loginID != null && loginID.equals(CommonData.ADMIN_ID)) {
             insertDebugPanel();
@@ -1904,13 +1888,9 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
         autoGateOpenCheckBox.setSelected(!autoGateOpenCheckBox.isSelected());
     }//GEN-LAST:event_autoOpenButtonActionPerformed
 
-    private void setOrQuitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_setOrQuitActionPerformed
-        if (isManager) {
-            displaySystemSettings();         
-        } else {
-            askUserIntentionOnProgramStop(false);
-        }
-    }//GEN-LAST:event_setOrQuitActionPerformed
+    private void QuitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_QuitActionPerformed
+        askUserIntentionOnProgramStop(false);
+    }//GEN-LAST:event_QuitActionPerformed
 
     private void AffiliBldgItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AffiliBldgItemActionPerformed
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -2156,9 +2136,9 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
 
     private void makeQuitVisible() {
         // Change one top menu command text for guests and no logins
-        setOrQuit.setText(QUIT_MENU_ITEM_SC.getContent());
-        setOrQuit.setMnemonic('Q');
-        CommandMenu.setText(QUIT_MENU_ITEM_SC.getContent());
+        Quit.setText(QUIT_MENU_ITEM_SC.getContent());
+        Quit.setMnemonic('Q');
+//        CommandMenu.setText(QUIT_MENU_ITEM_SC.getContent());
     }
 
     private void adjustListHeight(JList arrivalList, int rowCount) {
@@ -2198,6 +2178,7 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
     private javax.swing.JLabel PID_Label;
     private javax.swing.JPanel PanelMainTop;
     private javax.swing.JPanel Panel_MainMsgList;
+    private javax.swing.JButton Quit;
     private javax.swing.JMenu RecordsMenu;
     private javax.swing.JMenuItem RunRecordItem;
     private javax.swing.JMenuItem SettingsItem;
@@ -2276,7 +2257,6 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
     private javax.swing.JLabel row2Heading;
     private javax.swing.JLabel row3Heading;
     private javax.swing.JLabel row4Heading;
-    private javax.swing.JButton setOrQuit;
     public javax.swing.JButton showStatisticsBtn;
     private javax.swing.JPanel statusPanelGate1;
     private javax.swing.JPanel statusPanelGate2;
@@ -2534,7 +2514,6 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
         Globals.loginPW = null;
         Globals.isManager = false;
         changeUserID_etc();
-        makeQuitVisible();
         AttendantTask_setEnabled(false);
     }
 
