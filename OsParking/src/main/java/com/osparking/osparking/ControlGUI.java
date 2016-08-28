@@ -3176,6 +3176,10 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
                 if (debugPanel.isVisible()) {
                     removeDebugPanel();
                 }
+                if (affiliationBuildingForm != null) {
+                    affiliationBuildingForm.dispose();
+                    affiliationBuildingForm = null;
+                }
             }
         } catch (Exception ex) {
             com.osparking.global.Globals.logParkingException(Level.SEVERE, ex, "(Process User Logout)");

@@ -20,6 +20,7 @@ import com.osparking.global.CommonData;
 import static com.osparking.global.CommonData.ADMIN_ID;
 import static com.osparking.global.CommonData.FIRST_ROW;
 import static com.osparking.global.CommonData.ODS_DIRECTORY;
+import static com.osparking.global.CommonData.adminOperationEnabled;
 import static com.osparking.global.CommonData.buttonHeightNorm;
 import static com.osparking.global.CommonData.buttonHeightShort;
 import static com.osparking.global.CommonData.buttonWidthNorm;
@@ -134,6 +135,7 @@ import java.awt.Point;
 import static java.awt.event.ItemEvent.SELECTED;
 import java.util.ArrayList;
 import java.util.logging.Logger;
+import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import static javax.swing.JOptionPane.WARNING_MESSAGE;
@@ -177,7 +179,8 @@ public class VehiclesForm extends javax.swing.JFrame {
         loadSearchBox();
         attachEventListenerToVehicleTable();
         
-        adminOperationEnabled(true);        
+        adminOperationEnabled(true, deleteAllVehicles, readSheet_Button);
+//        adminOperationEnabled(true);        
         loadVehicleTable(FIRST_ROW, "");
         driverTextField.addActionListener(new ActionListener(){
             @Override
@@ -1916,16 +1919,16 @@ public class VehiclesForm extends javax.swing.JFrame {
             disallowReason.setForeground(new Color(0, 0, 0));
         }
     }//GEN-LAST:event_disallowReasonFocusGained
-
-    private void adminOperationEnabled(boolean flag) {
-        if (flag && Globals.loginID != null && Globals.loginID.equals(ADMIN_ID)) {
-            deleteAllVehicles.setEnabled(true);
-            readSheet_Button.setEnabled(true);
-        } else {
-            deleteAllVehicles.setEnabled(false);
-            readSheet_Button.setEnabled(false);
-        }
-    }
+    
+//    private void adminOperationEnabled(boolean flag) {
+//        if (flag && Globals.loginID != null && Globals.loginID.equals(ADMIN_ID)) {
+//            deleteAllVehicles.setEnabled(true);
+//            readSheet_Button.setEnabled(true);
+//        } else {
+//            deleteAllVehicles.setEnabled(false);
+//            readSheet_Button.setEnabled(false);
+//        }
+//    }
     
     /**
      * @param args the command line arguments
@@ -2342,7 +2345,7 @@ public class VehiclesForm extends javax.swing.JFrame {
                 insertSave_Button.setText(SAVE_BTN.getContent());
                 insertSave_Button.setMnemonic('s');
                 makeVehicleInfoFieldsEditable(true);
-                adminOperationEnabled(false);
+                adminOperationEnabled(false, deleteAllVehicles, readSheet_Button);
                 break;
                 
             case UpdateMode:
@@ -2353,7 +2356,7 @@ public class VehiclesForm extends javax.swing.JFrame {
                 modiSave_Button.setMnemonic('s');
                 deleteButton.setEnabled(false);
                 makeVehicleInfoFieldsEditable(true);
-                adminOperationEnabled(false);
+                adminOperationEnabled(false, deleteAllVehicles, readSheet_Button);
                 break;
                 
             case NormalMode:
@@ -2373,7 +2376,7 @@ public class VehiclesForm extends javax.swing.JFrame {
                     deleteButton.setEnabled(isManager);
                 }                
                 makeVehicleInfoFieldsEditable(false);
-                adminOperationEnabled(true);
+                adminOperationEnabled(true, deleteAllVehicles, readSheet_Button);                
                 break;
             default:
                 formModeLabel.setText("");

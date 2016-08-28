@@ -96,6 +96,19 @@ public class CommonData { // new Dimension(carTagWidth, 30)
     static {
         putCellCenter.setHorizontalAlignment(JLabel.CENTER);    
     }
+    
+    public static void adminOperationEnabled(boolean flag,
+            JButton deleteAllVehicles, JButton readSheet_Button) 
+    {
+        if (flag && Globals.loginID != null && Globals.loginID.equals(ADMIN_ID)) 
+        {
+            deleteAllVehicles.setEnabled(true);
+            readSheet_Button.setEnabled(true);
+        } else {
+            deleteAllVehicles.setEnabled(false);
+            readSheet_Button.setEnabled(false);
+        }
+    }    
 
     public static void adjustTableHeight(JTable usersTable) {
         Dimension tableDim = new Dimension(usersTable.getSize().width, 

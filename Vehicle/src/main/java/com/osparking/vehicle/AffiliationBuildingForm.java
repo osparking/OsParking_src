@@ -24,6 +24,7 @@ import static com.osparking.global.CommonData.ADMIN_ID;
 import static com.osparking.global.CommonData.DARK_BLUE;
 import static com.osparking.global.CommonData.LIGHT_BLUE;
 import static com.osparking.global.CommonData.ODS_DIRECTORY;
+import static com.osparking.global.CommonData.adminOperationEnabled;
 import static com.osparking.global.CommonData.buttonHeightNorm;
 import static com.osparking.global.CommonData.buttonWidthNorm;
 import static com.osparking.global.CommonData.buttonWidthWide;
@@ -210,6 +211,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
         setIconImages(OSPiconList);
         this.getContentPane().setBackground(PopUpBackground);       
         adjustTables();
+        adminOperationEnabled(true, deleteAll_Affiliation, readSheet);                
         loadL1_Affiliation(0, "");
         loadBuilding(0, 0);
         BuildingTable.setSelectionBackground(LIGHT_BLUE);
@@ -1274,6 +1276,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
 
     deleteAll_Affiliation.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
     deleteAll_Affiliation.setText(DELETE_ALL_BTN.getContent());
+    deleteAll_Affiliation.setEnabled(false);
     deleteAll_Affiliation.setMaximumSize(new Dimension(buttonWidthWide, buttonHeightNorm));
     deleteAll_Affiliation.setMinimumSize(new Dimension(buttonWidthWide, buttonHeightNorm));
     deleteAll_Affiliation.setPreferredSize(new Dimension(buttonWidthWide, buttonHeightNorm));
@@ -1291,6 +1294,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     readSheet.setMnemonic('O');
     readSheet.setText(READ_ODS_BTN.getContent());
     readSheet.setToolTipText("");
+    readSheet.setEnabled(false);
     readSheet.setMaximumSize(new Dimension(buttonWidthWide, buttonHeightNorm));
     readSheet.setMinimumSize(new Dimension(buttonWidthWide, buttonHeightNorm));
     readSheet.setPreferredSize(new Dimension(buttonWidthWide, buttonHeightNorm));
@@ -3464,7 +3468,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
                 (new LabelBlinker()).displayHelpMessage(csHelpLabel, 
                         CREATE_SAVE_HELP.getContent(), !createBlinked);  
                 createBlinked = true;
-                adminOperationEnabled(false);
+                adminOperationEnabled(false, deleteAll_Affiliation, readSheet);                
                 break;   
                 
             case NormalMode:
@@ -3474,7 +3478,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
                 (new LabelBlinker()).displayHelpMessage(csHelpLabel, 
                         CHOOSE_PANEL_DIALOG.getContent(), !normalBlinked); 
                 normalBlinked = true;
-                adminOperationEnabled(true);
+                adminOperationEnabled(true, deleteAll_Affiliation, readSheet);                
                 break;
                 
             case UpdateMode:
@@ -3484,22 +3488,12 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
                 (new LabelBlinker()).displayHelpMessage(csHelpLabel, 
                         UPDATE_SAVE_HELP.getContent(), !updateBlinked);                  
                 updateBlinked = true;
-                adminOperationEnabled(false);
+                adminOperationEnabled(false, deleteAll_Affiliation, readSheet);                
                 break;
                 
             default:
                 break;
         } 
-    }    
-    
-    private void adminOperationEnabled(boolean flag) {
-        if (flag && Globals.loginID != null && Globals.loginID.equals(ADMIN_ID)) {
-            deleteAll_Affiliation.setEnabled(true);
-            readSheet.setEnabled(true);
-        } else {
-            deleteAll_Affiliation.setEnabled(false);
-            readSheet.setEnabled(false);
-        }
     }    
 
     private void abortCreation(TableType tableType) {
