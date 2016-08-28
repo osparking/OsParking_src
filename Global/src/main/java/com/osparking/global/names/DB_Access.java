@@ -641,8 +641,6 @@ public class DB_Access {
     }
 
     private static int getFirstPart(String tagRecognized, StringBuilder firstPart) {
-        //        String firstPart = tagRecognized.substring(
-        //                tagRecognized.length() - 7, tagRecognized.length() - 5);
         int idx = 0;
         for (   ; idx < tagRecognized.length() && firstPart.length() < 2; idx++) {
             if (Character.isDigit(tagRecognized.charAt(idx))) {
@@ -656,8 +654,6 @@ public class DB_Access {
     }
 
     private static void getSecondPart(String tagRecognized, int secondStart, StringBuilder secondPart) {
-        //        String secondPart = tagRecognized.substring(
-        //                tagRecognized.length() - 4, tagRecognized.length());   
         int idx = secondStart;
         for (   ; idx < tagRecognized.length() && secondPart.length() < 4; idx++) {
             if (Character.isDigit(tagRecognized.charAt(idx))) {
@@ -681,19 +677,19 @@ public class DB_Access {
             
             int gateID = 0;
             String strField;
-            gateNames = new String[gateCount + 1];   // textual gate names assigned
-            deviceIP = new String[DeviceType.values().length][gateCount + 1];
-            devicePort = new String[DeviceType.values().length][gateCount + 1];
-            deviceType = new byte[DeviceType.values().length][gateCount + 1];
-            deviceComID = new String[DeviceType.values().length][gateCount + 1];
-            connectionType = new byte[DeviceType.values().length][gateCount + 1];
-            passingCountCurrent = new int[gateCount + 1];
-            passingDelayCurrentTotalMs = new int[gateCount + 1];
+            gateNames = new String[MAX_GATES + 1];   // textual gate names assigned
+            deviceIP = new String[DeviceType.values().length][MAX_GATES + 1];
+            devicePort = new String[DeviceType.values().length][MAX_GATES + 1];
+            deviceType = new byte[DeviceType.values().length][MAX_GATES + 1];
+            deviceComID = new String[DeviceType.values().length][MAX_GATES + 1];
+            connectionType = new byte[DeviceType.values().length][MAX_GATES + 1];
+            passingCountCurrent = new int[MAX_GATES + 1];
+            passingDelayCurrentTotalMs = new int[MAX_GATES + 1];
             
             rs = selectStmt.executeQuery("SELECT * FROM gatedevices order by GateID");
             while (rs.next() ) {
                 gateID = rs.getInt("GateID");
-                if (gateID > gateCount)
+                if (gateID > MAX_GATES)
                     break;
                 strField = rs.getString("gatename");
                 gateNames[gateID] = (strField == null ? "(anonymous)" : strField);
