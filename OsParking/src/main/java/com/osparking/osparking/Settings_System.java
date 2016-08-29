@@ -4135,31 +4135,6 @@ public class Settings_System extends javax.swing.JFrame {
         }     
     }
 
-    private void checkGateNameChangeAndChangeEnabled(int gateNo, Component comp) {
-//        JTextField gateNameField = (JTextField)componentMap.get("TextFieldGateName" + gateNo);
-//        
-//        ChangeSettings.changeStatus_Manager(SettingsSaveButton, SettingsCancelButton, SettingsCloseButton, 
-//                changedControls, comp, gateNameField.getText().trim(), gateNames[gateNo]);
-    }
-
-    private void changeButtonEnabledForIPchange(DeviceType device, int gateNo, Component comp) {
-//        JTextField deviceIpField = (JTextField)componentMap.get(device.toString() + gateNo + "_IP_TextField");
-//        
-//        ChangeSettings.changeStatus_Manager(SettingsSaveButton, SettingsCancelButton, SettingsCloseButton, 
-//                changedControls, comp, deviceIpField.getText().trim(), deviceIP[device.ordinal()][gateNo]);
-    }
-
-    private void changeButtonEnabledForPortChange(DeviceType device, 
-            int gateNo, Component comp) 
-    {
-//        JTextField devicePortField 
-//                = (JTextField)componentMap.get(device.toString() + gateNo + "_Port_TextField");
-//        
-//        ChangeSettings.changeStatus_Manager(SettingsSaveButton, SettingsCancelButton, 
-//                SettingsCloseButton, changedControls, comp, devicePortField.getText().trim(), 
-//                devicePort[device.ordinal()][gateNo]);
-    }
-
     private void makeEnterActAsTab() {
         KeyStroke enter = KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0);
         KeyStroke tab = KeyStroke.getKeyStroke(KeyEvent.VK_TAB, 0);
@@ -4170,78 +4145,6 @@ public class Settings_System extends javax.swing.JFrame {
         keys.add(ctrlTab);
         KeyboardFocusManager.getCurrentKeyboardFocusManager().
                 setDefaultFocusTraversalKeys(KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS, keys);    
-    }
-
-    private void changeSaveEnabledForConnTypeChange(DeviceType currDevType, int gateNo) {
-        JComboBox cBox = (JComboBox)componentMap.get("" + currDevType + gateNo + "_connTypeCBox");
-        
-        if (cBox.getSelectedIndex() == CommonData.NOT_SELECTED 
-                || cBox.getSelectedIndex() == connectionType[currDevType.ordinal()][gateNo])
-        {
-            enableSaveCancelButtons(false);
-        } else {
-            enableSaveCancelButtons(true);
-        }   
-        
-        JTextField txtField;
-        if (cBox.getSelectedIndex() == RS_232.ordinal()) {
-            txtField = (JTextField)componentMap.get(currDevType.toString() + gateNo + "_IP_TextField");
-            txtField.setEnabled(false);
-            txtField = (JTextField)componentMap.get(currDevType.toString() + gateNo + "_Port_TextField");
-            txtField.setEnabled(false);
-        } else {
-            txtField = (JTextField)componentMap.get(currDevType.toString() + gateNo + "_IP_TextField");
-            txtField.setEnabled(true);
-            txtField = (JTextField)componentMap.get(currDevType.toString() + gateNo + "_Port_TextField");
-            txtField.setEnabled(true);
-        }
-    }
-
-    private void showSerialConnectionDetail(final DeviceType deviceType, final int gateNo) {
-//        JPanel detailPan = (JPanel)componentMap.get (deviceType.toString() + gateNo + "_conn_detail_Pan");
-//        detailPan.removeAll();
-//
-//        JLabel comLabel = new javax.swing.JLabel();
-//        //<editor-fold desc="-- COM 포트 레이블 생성 및 추가">
-//        comLabel.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-//        comLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-//        comLabel.setText("COM port");
-//        comLabel.setPreferredSize(new java.awt.Dimension(90, 15));
-//
-//        comLabel.getAccessibleContext().setAccessibleName("COM_Lbl");
-//        //</editor-fold>
-//
-//        final JComboBox comPortID_CBox = new javax.swing.JComboBox();
-//        //<editor-fold desc="-- 시리얼 콤포트 번호 선택 콤보박스 생성 및 추가">
-//        comPortID_CBox.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-//        comPortID_CBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] {"3", "4", "5", "6"}));
-//        comPortID_CBox.setMinimumSize(new java.awt.Dimension(50, 23));
-//        comPortID_CBox.setName(deviceType.toString() + gateNo + "_comID_CBox"); // NOI18N
-//        comPortID_CBox.setPreferredSize(new java.awt.Dimension(50, 23));
-//        comPortID_CBox.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
-//            public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
-//            }
-//            public void popupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {
-////                ChangeSettings.changeStatus_Manager(SettingsSaveButton, SettingsCancelButton, SettingsCloseButton, 
-////                        changedControls, ((Component) evt.getSource()), 
-////                        (String) comPortID_CBox.getSelectedItem(), 
-////                        deviceComID[deviceType.ordinal()][gateNo]);                
-//            }
-//            public void popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {
-//            }
-//        });
-//        comPortID_CBox.setSelectedItem(deviceComID[deviceType.ordinal()][gateNo]);
-//        //</editor-fold>
-//
-//        detailPan.setLayout (new java.awt.FlowLayout(FlowLayout.CENTER, 5, 3));
-//        detailPan.add(comLabel);
-//        detailPan.add(comPortID_CBox);
-//        
-//        String name = ((JComboBox)comPortID_CBox).getName();
-//
-//        if (name != null && name.length() > 0) {
-//            componentMap.put(name, comPortID_CBox);
-//        }
     }
 
     private void showSocketConnectionDetail(DeviceType deviceType, int gateNo) {
@@ -4310,31 +4213,6 @@ public class Settings_System extends javax.swing.JFrame {
         com_ID_usageList.add(new COM_ID_Usage(gateNo, deviceType, currCOM_ID));
         
         return false;
-    }
-
-    /**
-     * When simulator connection type were not TCP/IP, popup a warning dialog
-     * and change connection type to TCP/IP forcefully.
-     * 
-     * @param deviceType
-     * @param gateNo 
-     */
-    private void enforceSimulatorTCP_IP(final DeviceType deviceType, final int gateNo) {
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                String prefix = deviceType.name() + gateNo;
-
-                JComboBox typeCBox = (JComboBox)componentMap.get(prefix + "_TypeCBox");
-                JComboBox connTypeCBox = (JComboBox)componentMap.get(prefix + "_connTypeCBox");
-
-                if (typeCBox.getSelectedIndex() == GateBarType.Simulator.ordinal() 
-                        && connTypeCBox.getSelectedIndex() != ConnectionType.TCP_IP.ordinal()) 
-                {
-                    JOptionPane.showMessageDialog(null, "모의 장치는 연결이 TCP-IP 라야 됨!");
-                    connTypeCBox.setSelectedIndex(ConnectionType.TCP_IP.ordinal());
-                }    
-            }
-        });        
     }
 
     private void tuneComponentSize() {

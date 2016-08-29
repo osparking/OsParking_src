@@ -16,10 +16,11 @@
  */
 package com.osparking.vehicle;
 
+import com.osparking.global.ChangedComponentClear;
 import com.osparking.global.CommonData;
-import static com.osparking.global.CommonData.ADMIN_ID;
 import static com.osparking.global.CommonData.FIRST_ROW;
 import static com.osparking.global.CommonData.ODS_DIRECTORY;
+import static com.osparking.global.CommonData.PROMPTER_KEY;
 import static com.osparking.global.CommonData.adminOperationEnabled;
 import static com.osparking.global.CommonData.buttonHeightNorm;
 import static com.osparking.global.CommonData.buttonHeightShort;
@@ -33,7 +34,6 @@ import static com.osparking.global.CommonData.tableRowHeight;
 import static com.osparking.global.CommonData.tipColor;
 import static com.osparking.global.DataSheet.noOverwritePossibleExistingSameFile;
 import static com.osparking.global.DataSheet.saveODSfile;
-import com.osparking.global.Globals;
 import com.osparking.vehicle.driver.DriverSelection;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -110,7 +110,6 @@ import static com.osparking.global.names.ControlEnums.ToolTipContent.OTHER_TOOLT
 import static com.osparking.global.names.DB_Access.insertOneVehicle;
 import static com.osparking.global.names.JDBCMySQL.getConnection;
 import com.osparking.global.names.JTextFieldLimit;
-import com.osparking.global.names.OSP_enums;
 import com.osparking.global.names.OSP_enums.ODS_TYPE;
 import com.osparking.global.names.OSP_enums.OpLogLevel;
 import com.osparking.global.names.OSP_enums.VehicleCol;
@@ -134,8 +133,8 @@ import java.awt.Dimension;
 import java.awt.Point;
 import static java.awt.event.ItemEvent.SELECTED;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Logger;
-import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import static javax.swing.JOptionPane.WARNING_MESSAGE;
@@ -155,12 +154,18 @@ public class VehiclesForm extends javax.swing.JFrame {
     final int UNKNOWN = -1;
     private String prevSearchCondition = null;    
     private String currSearchCondition = null;       
+    private String prevSearchString = null;    
+    private String currSearchString = null;       
+    private List<String> prevKeyList = new ArrayList<String>();
+    private List<String> currKeyList = new ArrayList<String>();
+    static private ChangedComponentClear changedControls; 
     
     /**
      * Creates new form Vehicles
      */
     public VehiclesForm() {
         initComponents();
+        changedControls = new ChangedComponentClear(clearButton);
         
         setIconImages(OSPiconList);
         
@@ -180,7 +185,6 @@ public class VehiclesForm extends javax.swing.JFrame {
         attachEventListenerToVehicleTable();
         
         adminOperationEnabled(true, deleteAllVehicles, readSheet_Button);
-//        adminOperationEnabled(true);        
         loadVehicleTable(FIRST_ROW, "");
         driverTextField.addActionListener(new ActionListener(){
             @Override
@@ -205,7 +209,11 @@ public class VehiclesForm extends javax.swing.JFrame {
 
     private void changeSearchButtonEnabled() {
         currSearchCondition = formSearchCondition();
-        if (currSearchCondition.equals(prevSearchCondition)) {
+        currSearchString = formSearchString();
+        if (currSearchCondition.equals(prevSearchCondition) 
+                && currSearchString.equals(prevSearchString)
+                && currKeyList.equals(prevKeyList)) 
+        {
             searchButton.setEnabled(false);
         } else {
             searchButton.setEnabled(true);
@@ -1044,6 +1052,9 @@ public class VehiclesForm extends javax.swing.JFrame {
             }
         });
         searchCarTag.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                searchCarTagKeyReleased(evt);
+            }
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 searchCarTagKeyTyped(evt);
             }
@@ -1072,6 +1083,9 @@ public class VehiclesForm extends javax.swing.JFrame {
             }
         });
         searchDriver.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                searchDriverKeyReleased(evt);
+            }
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 searchDriverKeyTyped(evt);
             }
@@ -1124,6 +1138,9 @@ public class VehiclesForm extends javax.swing.JFrame {
             }
         });
         searchETC.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                searchETCKeyReleased(evt);
+            }
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 searchETCKeyTyped(evt);
             }
@@ -1152,6 +1169,9 @@ public class VehiclesForm extends javax.swing.JFrame {
             }
         });
         disallowReason.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                disallowReasonKeyReleased(evt);
+            }
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 disallowReasonKeyTyped(evt);
             }
@@ -1570,7 +1590,6 @@ public class VehiclesForm extends javax.swing.JFrame {
     private void deleteAllVehiclesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteAllVehiclesActionPerformed
 
         int result = JOptionPane.showConfirmDialog(this, VEHICLE_DELETE_ALL_DAILOG.getContent(),
-//                        ((String[])Globals.DialogMSGList.get(VEHICLE_DELETE_ALL_DAILOG.getContent(),
                         DELETE_ALL_DAILOGTITLE.getContent(), 
                         JOptionPane.YES_NO_OPTION);
 
@@ -1757,7 +1776,6 @@ public class VehiclesForm extends javax.swing.JFrame {
         if (formMode == FormMode.CreateMode) {
             //<editor-fold defaultstate="collapsed" desc="--handle cancelling insertion">
             int response = JOptionPane.showConfirmDialog(null, VEHICLE_CREATE_CANCEL_DIALOG.getContent(),
-//                                ((String[])Globals.DialogMSGList.get(VEHICLE_CREATE_CANCEL_DIALOG.ordinal()))[ourLang], 
                                 WARING_DIALOGTITLE.getContent(), 
                                 JOptionPane.YES_NO_OPTION);
         
@@ -1832,12 +1850,22 @@ public class VehiclesForm extends javax.swing.JFrame {
 
     private void searchAffiliCBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_searchAffiliCBoxItemStateChanged
         if (evt.getStateChange() == SELECTED) {
+            if (searchAffiliCBox.getSelectedIndex() == PROMPTER_KEY) {
+                changedControls.remove(searchAffiliCBox);
+            } else {
+                changedControls.add(searchAffiliCBox);
+            }
             changeSearchButtonEnabled();
         }
     }//GEN-LAST:event_searchAffiliCBoxItemStateChanged
 
     private void searchBldgCBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_searchBldgCBoxItemStateChanged
         if (evt.getStateChange() == SELECTED) {
+            if (searchBldgCBox.getSelectedIndex() == PROMPTER_KEY) {
+                changedControls.remove(searchBldgCBox);
+            } else {
+                changedControls.add(searchBldgCBox);
+            }            
             changeSearchButtonEnabled();
         }
     }//GEN-LAST:event_searchBldgCBoxItemStateChanged
@@ -1919,16 +1947,46 @@ public class VehiclesForm extends javax.swing.JFrame {
             disallowReason.setForeground(new Color(0, 0, 0));
         }
     }//GEN-LAST:event_disallowReasonFocusGained
-    
-//    private void adminOperationEnabled(boolean flag) {
-//        if (flag && Globals.loginID != null && Globals.loginID.equals(ADMIN_ID)) {
-//            deleteAllVehicles.setEnabled(true);
-//            readSheet_Button.setEnabled(true);
-//        } else {
-//            deleteAllVehicles.setEnabled(false);
-//            readSheet_Button.setEnabled(false);
-//        }
-//    }
+
+    private void searchCarTagKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_searchCarTagKeyReleased
+        String searchStr = searchCarTag.getText().trim();
+        
+        if (!carTagHintShown && searchStr.length() > 0) {
+            changedControls.add(searchCarTag);
+        } else {
+            changedControls.remove(searchCarTag);
+        }
+    }//GEN-LAST:event_searchCarTagKeyReleased
+
+    private void searchDriverKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_searchDriverKeyReleased
+        String searchStr = searchDriver.getText().trim();
+        
+        if (!driverHintShown && searchStr.length() > 0) {
+            changedControls.add(searchDriver);
+        } else {
+            changedControls.remove(searchDriver);
+        }
+    }//GEN-LAST:event_searchDriverKeyReleased
+
+    private void searchETCKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_searchETCKeyReleased
+        String searchStr = searchETC.getText().trim();
+        
+        if (!etcHintShown && searchStr.length() > 0) {
+            changedControls.add(searchETC);
+        } else {
+            changedControls.remove(searchETC);
+        }
+    }//GEN-LAST:event_searchETCKeyReleased
+
+    private void disallowReasonKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_disallowReasonKeyReleased
+        String searchStr = disallowReason.getText().trim();
+        
+        if (!reasonHintShown && searchStr.length() > 0) {
+            changedControls.add(disallowReason);
+        } else {
+            changedControls.remove(disallowReason);
+        }
+    }//GEN-LAST:event_disallowReasonKeyReleased
     
     /**
      * @param args the command line arguments
@@ -1955,9 +2013,6 @@ public class VehiclesForm extends javax.swing.JFrame {
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(VehiclesForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
         //</editor-fold>
 
         initializeLoggers();
@@ -2079,45 +2134,51 @@ public class VehiclesForm extends javax.swing.JFrame {
     //</editor-fold>
 
     private String formSearchCondition() {
-        StringBuffer cond = new StringBuffer();
-        
+        StringBuffer cond = new StringBuffer();       
+
+        Object keyObj = ((ConvComboBoxItem)searchAffiliCBox.getSelectedItem()).getKeyValue();
+        attachIntCondition(cond, "L2_NO", (Integer) keyObj); 
+
+        if (searchBldgCBox.getSelectedItem() != null) {
+            keyObj = ((ConvComboBoxItem)searchBldgCBox.getSelectedItem()).getKeyValue();
+            attachIntCondition(cond, "UNIT_SEQ_NO", (Integer)keyObj);
+        }
+
+        if (cond.length() > 0) {
+            return cond.toString();
+        } else {
+            return "";
+        }            
+    }
+    
+    private String formSearchString() {
+        StringBuffer cond = new StringBuffer(); 
         String searchStr = searchCarTag.getText().trim();
+        
+        currKeyList.clear();
         if (!carTagHintShown && searchStr.length() > 0) {
-            attachCondition(cond, "PLATE_NUMBER", searchStr);
+            attachLikeCondition(cond, "PLATE_NUMBER", searchStr.length());
+            currKeyList.add(searchStr);
         }
         
         searchStr = searchDriver.getText().trim();
         if (!driverHintShown && searchStr.length() > 0) {
-            attachCondition(cond, "NAME", searchStr);
+            attachLikeCondition(cond, "NAME", searchStr.length());
+            currKeyList.add(searchStr);
+        }   
+
+        searchStr = searchETC.getText().trim();
+        if (!etcHintShown && searchStr.length() > 0) {
+            attachLikeCondition(cond, "OTHER_INFO", searchStr.length());
+            currKeyList.add(searchStr);
         }
 
-        Object keyObj =((ConvComboBoxItem)searchAffiliCBox.getSelectedItem()).getKeyValue();
-        attachIntCondition(cond, "L2_NO", (Integer) keyObj); 
-
-        if (searchBldgCBox.getSelectedItem() == null) {
-            return "";
-        } else {
-            keyObj =((ConvComboBoxItem)searchBldgCBox.getSelectedItem()).getKeyValue();
-            attachIntCondition(cond, "UNIT_SEQ_NO", (Integer)keyObj);
-
-            searchStr = searchETC.getText().trim();
-            if (!etcHintShown && searchStr.length() > 0) {
-                attachCondition(cond, "OTHER_INFO", searchStr);
-            }
-
-            searchStr = disallowReason.getText().trim();
-            if (!reasonHintShown && searchStr.length() > 0) {
-                attachCondition(cond, "REMARK", searchStr);
-            }
-
-            if (cond.length() > 0) {
-                clearButton.setEnabled(true);
-                return "Where " + cond;
-            } else {
-                clearButton.setEnabled(false);
-                return "";
-            }            
-        }
+        searchStr = disallowReason.getText().trim();
+        if (!reasonHintShown && searchStr.length() > 0) {
+            attachLikeCondition(cond, "REMARK", searchStr.length());
+            currKeyList.add(searchStr);
+        }  
+        return cond.toString();
     }
     
     public void loadVehicleTable(int viewIndex, String plateNo) {
@@ -2125,7 +2186,7 @@ public class VehiclesForm extends javax.swing.JFrame {
         model.setRowCount(0);
         // <editor-fold defaultstate="collapsed" desc="-- load vehicle list">                          
         Connection conn = null;
-        Statement selectStmt = null;
+        PreparedStatement fetchVehicles = null;
         ResultSet rs = null;
         String excepMsg = "(registered vehicle list loading)";
         
@@ -2150,14 +2211,40 @@ public class VehiclesForm extends javax.swing.JFrame {
             sb.append("   LEFT JOIN building_unit U ON UNIT_SEQ_NO = U.SEQ_NO");
             sb.append("   LEFT JOIN building_table BT ON BLDG_SEQ_NO = BT.SEQ_NO) TA,");
             sb.append("   (SELECT @rownum := 0) r ");
-            prevSearchCondition = formSearchCondition();
-            sb.append(prevSearchCondition);            
+
+            prevSearchCondition = currSearchCondition;
+            prevSearchString = currSearchString;
+            prevKeyList = currKeyList;
+            
+            if (currSearchCondition.length() > 0 || currSearchString.length() > 0) {
+                sb.append(" Where ");
+                if (currSearchCondition.length() > 0) {
+                    sb.append(currSearchCondition);
+                }
+                if (currSearchString.length() > 0) {
+                    if (currSearchCondition.length() > 0) {
+                        sb.append(" and ");
+                    }
+                    sb.append(currSearchString);
+                }
+            }            
             sb.append(" ORDER BY PLATE_NUMBER");
             //</editor-fold>   
             
             conn = getConnection();
-            selectStmt = conn.createStatement();
-            rs = selectStmt.executeQuery(sb.toString());
+            fetchVehicles = conn.prepareStatement(sb.toString());
+            int index = 1;
+            for (String searchKey : currKeyList) {
+                String key = searchKey.replace("!", "!!")
+                        .replace("!", "!!")
+                        .replace("%", "!%")
+                        .replace("_", "!_")
+                        .replace("[", "![");
+                
+                fetchVehicles.setString(index++, "%" + key + "%");                
+            }
+            
+            rs = fetchVehicles.executeQuery();
             model.setRowCount(0);
             while (rs.next()) {
                 // <editor-fold defaultstate="collapsed" desc="-- make a vehicle row">                          
@@ -2187,7 +2274,7 @@ public class VehiclesForm extends javax.swing.JFrame {
         } catch (SQLException ex) {
             logParkingException(Level.SEVERE, ex, excepMsg);
         } finally {
-            closeDBstuff(conn, selectStmt, rs, excepMsg);
+            closeDBstuff(conn, fetchVehicles, rs, excepMsg);
             Dimension tableDim = new Dimension(vehiclesTable.getSize().width, 
                     vehiclesTable.getRowHeight() * (vehiclesTable.getRowCount())); 
             vehiclesTable.setSize(tableDim);
@@ -2775,5 +2862,15 @@ public class VehiclesForm extends javax.swing.JFrame {
         disallowReason.setText(DIS_REASON_TF.getContent());
         reasonHintShown = true;
         disallowReason.setForeground(tipColor);
+    }
+
+    private void attachLikeCondition(StringBuffer cond, String column, int strLen) {
+        if (strLen > 0) {
+            if (cond.length() > 0)
+                cond.append(" and ");
+            else 
+                cond.append(" ");
+            cond.append(column + " like ?  ESCAPE '!' ");
+        }  
     }
 }
