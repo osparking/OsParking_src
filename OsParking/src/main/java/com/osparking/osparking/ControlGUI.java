@@ -233,6 +233,7 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
     private JLabel [] e_boardLEDs = null;
     private JLabel [] gateBarLEDs = null;
     private boolean SHUT_DOWN = false;  
+    private static final int BOTTOM_DISPLAY_MS = 30000;
     
     /**
      * Data members for peripheral devices (camera, gate bar, e-board)
@@ -3318,9 +3319,17 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
         Status_Panel.setPreferredSize(connStatusPanel.getPreferredSize());
     }
     
+    javax.swing.Timer clearStatus = new javax.swing.Timer(BOTTOM_DISPLAY_MS, new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            getStatusTextField().setText(null);
+        }
+    });
+            
     public void displayStatus(String message) {
         synchronized(getStatusTextField()) {
             getStatusTextField().setText(message); 
+            clearStatus.restart();
         }
     }
     /**

@@ -34,7 +34,6 @@ import static com.osparking.global.CommonData.pointColor;
 import static com.osparking.global.CommonData.tableRowHeight;
 import static com.osparking.global.DataSheet.noOverwritePossibleExistingSameFile;
 import static com.osparking.global.DataSheet.saveODSfileName;
-import com.osparking.global.Globals;
 import static com.osparking.global.Globals.BLDG_TAB_WIDTH;
 import static com.osparking.global.Globals.PopUpBackground;
 import static com.osparking.global.Globals.font_Size;
