@@ -469,22 +469,22 @@ public class Globals {
         if (language == KOREAN) {
             switch (picNo) {
                 case 1:
-                    tagNumber = "26누8648"; 
+                    tagNumber = "26누8648"; // parking permitted
                     break;
                 case 2:
-                    tagNumber = "12거3456";
+                    tagNumber = "12거3456"; // parking permitted
                     break;
                 case 3:
-                    tagNumber = "26로3689"; 
+                    tagNumber = "26로3689"; // permitted, exact comparision
                     break;
                 case 4:
-                    tagNumber = "서울11가1234"; 
+                    tagNumber = "서울11가1234"; // not permitted,bad parking habit
                     break;
                 case 5:
-                    tagNumber = "52가3108"; 
+                    tagNumber = "52가3108"; // unregistered car, visitor
                     break;
                 case 6:
-                    tagNumber = "39나2764"; 
+                    tagNumber = "39나2764"; // unregistered car, visitor
                     break;
                 default:
                     break;

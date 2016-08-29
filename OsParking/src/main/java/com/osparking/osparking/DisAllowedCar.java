@@ -22,14 +22,12 @@ import static com.osparking.global.CommonData.tipColor;
 import static com.osparking.global.Globals.CONTENT_INC;
 import static com.osparking.global.Globals.LABEL_INC;
 import java.awt.Color;
-import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
-import static com.osparking.global.Globals.getTopLeftPointToPutThisFrameAtScreenCenter;
 import static com.osparking.global.Globals.OSPiconList;
 import static com.osparking.global.names.DB_Access.readSettings;
 import static com.osparking.global.Globals.checkOptions;
@@ -57,7 +55,7 @@ import java.awt.event.WindowEvent;
  *
  * @author Open Source Parking Inc.
  */
-public class DisAllowedCar extends javax.swing.JFrame {
+public class DisAllowedCar extends javax.swing.JDialog {
 
     Toolkit toolkit;
     Timer timer;
@@ -85,10 +83,11 @@ public class DisAllowedCar extends javax.swing.JFrame {
      * @param bImg
      * @param delay 
      */
-    public DisAllowedCar(ControlGUI parent, String tagRecognized, Date arrivalTm, 
-            String tagEnteredAs, String remark, byte gateNo, int imageSN, 
-            BufferedImage bImg, int delay) 
+    public DisAllowedCar(ControlGUI parent, boolean modal, String tagRecognized, 
+            Date arrivalTm, String tagEnteredAs, String remark, byte gateNo, 
+            int imageSN, BufferedImage bImg, int delay) 
     {
+        super(parent, "Test", modal);
         initComponents();
         this.parent = parent;
         this.tagRecognized = tagRecognized;
@@ -100,8 +99,7 @@ public class DisAllowedCar extends javax.swing.JFrame {
         this.delay = delay;
         
         setIconImages(OSPiconList);
-        Point screenCenter = getTopLeftPointToPutThisFrameAtScreenCenter(this);
-        setLocation(screenCenter);        
+        setLocationRelativeTo(null);        
         
         recogTextField.setText(tagRecognized);
         regisTextField.setText(tagEnteredAs);
@@ -528,7 +526,7 @@ public class DisAllowedCar extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new DisAllowedCar(null, "30모8186", new Date(), "30모8186", "testing",
+                new DisAllowedCar(null, true, "30모8186", new Date(), "30모8186", "testing",
                     (byte)1, 1000000, null, 8000).setVisible(true);
                 
             }

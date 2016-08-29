@@ -1731,7 +1731,7 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
                 addMessageLine(getMessageTextArea(), "카메라 #" + gateNo +" 단절 상태임");
             }
         } else {
-            int imageNo = randomInteger.nextInt(6) + 1; // = 4;  visiting car
+            int imageNo = randomInteger.nextInt(6) + 1;
             String tagNumber = dummyMessages[imageNo].getCarNumber();
             BufferedImage carImage = dummyMessages[imageNo].getBufferedImg();
             
@@ -2001,7 +2001,7 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
             case DISALLOWED:
                 //<editor-fold desc="-- Handle Parking Disallowed Car"">
                 isGateBusy[cameraID] = true;
-                new DisAllowedCar(this, tagRecognized, arrivalTime,
+                new DisAllowedCar(this, true, tagRecognized, arrivalTime,
                         tagEnteredAs, remark, cameraID, imageSN, 
                         image, carPassingDelayMs).setVisible(true);
                 break;   
@@ -2010,7 +2010,7 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
             case UNREGISTERED:
                 //<editor-fold desc="-- Handle Unregistered Car"">
                 isGateBusy[cameraID] = true;
-                new VisitingCar(this, tagRecognized, arrivalTime, cameraID,
+                new VisitingCar(this, true, tagRecognized, arrivalTime, cameraID,
                         imageSN, image, carPassingDelayMs).setVisible(true);
                 break;
                 //</editor-fold>

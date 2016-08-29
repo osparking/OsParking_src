@@ -76,7 +76,7 @@ import java.awt.event.WindowEvent;
  *
  * @author Open Source Parking Inc.
  */
-public class VisitingCar extends javax.swing.JFrame {
+public class VisitingCar extends javax.swing.JDialog {
     ControlGUI parent = null;
     String tagRecognized;
     Date arrivalTime;
@@ -98,14 +98,14 @@ public class VisitingCar extends javax.swing.JFrame {
     /**
      * Creates new form VisitingCar
      */
-    public VisitingCar(ControlGUI parent, String tagRecognized, Date arrivalTime, 
-            byte gateNo, int imageSN, BufferedImage bImg, int delay) 
+    public VisitingCar(ControlGUI parent, boolean modal, String tagRecognized, 
+            Date arrivalTime, byte gateNo, int imageSN, BufferedImage bImg, int delay) 
     {
+        super(parent, "Test", modal);        
         initComponents();
         applyUserCode();
         setIconImages(OSPiconList);
-        Point screenCenter = getTopLeftPointToPutThisFrameAtScreenCenter(this);
-        setLocation(screenCenter);    
+        setLocationRelativeTo(null);        
         
         this.parent = parent;
         this.tagRecognized = tagRecognized; 
@@ -948,7 +948,7 @@ public class VisitingCar extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new VisitingCar(null, "12가3456", new Date(), (byte)1, 1, 
+                new VisitingCar(null, true, "12가3456", new Date(), (byte)1, 1, 
                         null, 8000).setVisible(true);
             }
         });
