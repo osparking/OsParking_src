@@ -244,11 +244,8 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
     private Object[][] socketMutex = null;
     private SocketConnStat[][] sockConnStat = null; // Socket Connection Status
     private DeviceCommand[][] perfomStatistics = null;    
-
     private ParkingTimer[] openGateCmdTimer = null;
-    
     public static EBD_DisplaySetting[] EBD_DisplaySettings = null;
-       
     public int[] prevImgSN = null; // the ID of the most recently processed car entry image    
     
     // data items for gate bars
