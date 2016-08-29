@@ -2867,8 +2867,8 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
      */
     public LoginDialog getLoginDialog() {
         if (loginDialog != null) {
-            loginDialog.getPassword().setText("");
-            loginDialog.getUserIDText().setText("");
+            loginDialog.getPassword().setText("1234");
+            loginDialog.getUserIDText().setText("admin");
         }
         return loginDialog;
     }

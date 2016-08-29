@@ -155,8 +155,10 @@ public class CarArrivals extends javax.swing.JFrame {
     private Dimension prevSize = null;
     private String prevSearchCondition = "";
     private String currSearchCondition = "";
+    private String prevSearchCarTag = "";
+    private String currSearchCarTag = "";
     static private ChangedComponentClear changedControls; 
-//    static private ChangedComponentClear changedCriteria; 
+    private boolean carTagTipShown = true;
     
     /**
      * Creates new form CarArrivals
@@ -476,9 +478,6 @@ public class CarArrivals extends javax.swing.JFrame {
         carTagTF.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 carTagTFKeyReleased(evt);
-            }
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                carTagTFKeyTyped(evt);
             }
         });
         carTagPanel.add(carTagTF);
@@ -1956,56 +1955,52 @@ public class CarArrivals extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_gateCBItemStateChanged
 
-    private boolean isCarTagEmpty() {
+    private boolean isCarTagEmpty(StringBuffer carTag) {
         String carTagStr = carTagTF.getText().trim();
         
-        if (carTagStr.length() == 0) {
-            return true;
-        } else if (carTagStr.equals(CAR_TAG_TF.getContent())) {
+        if (carTagStr.length() == 0 || carTagTipShown) {
             return true;
         } else {
+            if (carTag != null) {
+                carTag.append(carTagStr);
+            }
             return false;
         }
     }
     
-    private void carTagTFKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_carTagTFKeyTyped
-        if (isCarTagEmpty()) {
+    private void showCarTagTip() {
+        carTagTF.setText(CAR_TAG_TF.getContent());
+        carTagTF.setForeground(tipColor);
+        carTagTipShown = true;
+    }    
+    
+    private void carTagTFKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_carTagTFKeyReleased
+        if (isCarTagEmpty(null)) {
             changedControls.remove(carTagTF);
         } else {
             changedControls.add(carTagTF);
         }
+        
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 changeSearchButtonEnabled();
             }
-        });
-    }//GEN-LAST:event_carTagTFKeyTyped
-
-    private void showCarTagTip() {
-        carTagTF.setText(CAR_TAG_TF.getContent());
-        carTagTF.setForeground(tipColor);
-    }    
-    
-    private void carTagTFKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_carTagTFKeyReleased
-        if (isCarTagEmpty()) {
-            changedControls.remove(carTagTF);
-        } else {
-            changedControls.add(carTagTF);
-        }
+        });        
     }//GEN-LAST:event_carTagTFKeyReleased
 
     private void carTagTFFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_carTagTFFocusLost
         String searchTag = carTagTF.getText().trim();
-        if(searchTag.equals("") || searchTag.equals(CAR_TAG_TF.getContent()) ) 
-        {
+        
+        if (searchTag.equals("") && !carTagTipShown) {
             showCarTagTip();
         }
     }//GEN-LAST:event_carTagTFFocusLost
 
     private void carTagTFFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_carTagTFFocusGained
-        if (carTagTF.getText().equals(CAR_TAG_TF.getContent())) {
+        if (carTagTipShown) {
             carTagTF.setText("");
             carTagTF.setForeground(new Color(0, 0, 0));
+            carTagTipShown = false;
         }
     }//GEN-LAST:event_carTagTFFocusGained
 
@@ -2180,20 +2175,41 @@ public class CarArrivals extends javax.swing.JFrame {
         sb.append("  WHERE CA.TagEnteredAs = '' OR CA.TagEnteredAs IS NULL) T2) ");
         sb.append(") " + CommonData.CA_ROW_VAR);
         prevSearchCondition = currSearchCondition;
-        sb.append((currSearchCondition.length() > 0 ? " Where " + currSearchCondition : ""));
+        prevSearchCarTag = currSearchCarTag;
+        if (currSearchCondition.length() > 0 || currSearchCarTag.length() > 0) {
+            sb.append(" Where ");
+            if (currSearchCondition.length() > 0) {
+                sb.append(currSearchCondition);
+            }
+            if (currSearchCarTag.length() > 0) {
+                if (currSearchCondition.length() > 0) {
+                    sb.append(" and ");
+                }
+                sb.append(CommonData.CA_ROW_VAR + ".tagRecognized like ? ESCAPE '!'");
+            }
+        }
         sb.append(" ORDER by " + CommonData.CA_ROW_VAR + ".arrSeqNo desc");
         //</editor-fold>
         
         Connection conn = null;
-        Statement selectStmt = null;
+        PreparedStatement selectStmt = null;
         ResultSet rs = null;
         
         try {
             // <editor-fold defaultstate="collapsed" desc="-- load vehicle list">                          
             conn = getConnection();
-            selectStmt = conn.createStatement();
-            rs = selectStmt.executeQuery(sb.toString());
-            
+            selectStmt = conn.prepareStatement(sb.toString());
+                
+            if (!isCarTagEmpty(null)) {
+                String carTag = currSearchCarTag.replace("!", "!!")
+                        .replace("!", "!!")
+                        .replace("%", "!%")
+                        .replace("_", "!_")
+                        .replace("[", "![");
+                
+                selectStmt.setString(1, "%" + carTag + "%");
+            }
+            rs = selectStmt.executeQuery();
             addSelectionChangeListener(false);
             model.setRowCount(0);
             
@@ -2531,9 +2547,6 @@ public class CarArrivals extends javax.swing.JFrame {
         Object keyObj =((ConvComboBoxItem)gateCB.getSelectedItem()).getKeyValue();
         
         attachIntConditionT3(cond, "GateNo", (Integer) keyObj);   
-        if (!isCarTagEmpty()) {
-            attachConditionT3(cond, "tagRecognized", carTagTF.getText().trim());
-        }
 
         Object selValue = ((ConvComboBoxItem)attendantCB.getSelectedItem()).getKeyValue();
         if (selValue == null) {
@@ -2699,17 +2712,19 @@ public class CarArrivals extends javax.swing.JFrame {
     }
     
     private void changeSearchButtonEnabled() {
-        String cond = formSearchCondition();
+        currSearchCondition = formSearchCondition();
+        StringBuffer carTag = new StringBuffer();
         
-        if (cond.equals("")) {
-            return; 
+        if (isCarTagEmpty(carTag)) {
+            currSearchCarTag = "";
         } else {
-            currSearchCondition = cond;
-            if (currSearchCondition.equals(prevSearchCondition)) {
-                searchButton.setEnabled(false);
-            } else {
-                searchButton.setEnabled(true);
-            }
+            currSearchCarTag = carTag.toString();
+        }        
+        if (currSearchCondition.equals(prevSearchCondition) 
+                && currSearchCarTag.equals(prevSearchCarTag)) {
+            searchButton.setEnabled(false);
+        } else {
+            searchButton.setEnabled(true);
         }
     }
 

@@ -236,17 +236,18 @@ public class LoginDialog extends javax.swing.JDialog {
     {
         //<editor-fold defaultstate="collapsed" desc="-- Request ID and PW textboxes be filled">
         // Check if both user ID and password were entered.
-        if (getUserIDText().getText().trim().length() == 0)            
+        String userID = getUserIDText().getText().trim();
+        if (userID.length() == 0)
         {
             showMessageDialog(this, INPUT_ID_DIALOG.getContent());
             return;
-        } else if (getPassword().getPassword().length== 0) 
+        } else if (getPassword().getPassword().length== 0)
         {
             showMessageDialog(this, INPUT_PW_DIALOG.getContent());
-            return;            
-        }        
+            return;
+        }
         //</editor-fold>
-        String lowerID = getUserIDText().getText().toLowerCase();
+        String lowerID = userID.toLowerCase();
         boolean checkGood = loginCheckGood(lowerID, new String(getPassword().getPassword()));
 
         if (checkGood) {
