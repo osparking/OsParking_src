@@ -17,6 +17,7 @@
 package com.osparking.vehicle.driver;
 
 import static com.mysql.jdbc.MysqlErrorNumbers.ER_DUP_ENTRY;
+import com.osparking.global.ChangedComponentClear;
 import com.osparking.global.CommonData;
 import static com.osparking.global.CommonData.ADMIN_ID;
 import static com.osparking.global.CommonData.FIRST_ROW;
@@ -141,11 +142,13 @@ import static com.osparking.vehicle.CommonData.DTCW_MAX;
 import static com.osparking.vehicle.CommonData.DTCW_RN;
 import static com.osparking.vehicle.CommonData.DTCW_UN;
 import static com.osparking.vehicle.CommonData.DTC_MARGIN;
+import static com.osparking.vehicle.CommonData.attachLikeCondition;
 import static com.osparking.vehicle.CommonData.copyFileUsingFileChannels;
 import static com.osparking.vehicle.CommonData.wantToSaveFile;
 import static com.osparking.vehicle.CommonData.invalidCell;
 import static com.osparking.vehicle.CommonData.invalidName;
 import static com.osparking.vehicle.CommonData.invalidPhone;
+import static com.osparking.vehicle.CommonData.prependEscape;
 import static com.osparking.vehicle.CommonData.setHelpDialogLoc;
 import com.osparking.vehicle.LabelBlinker;
 import com.osparking.vehicle.ODS_HelpJDialog;
@@ -153,7 +156,9 @@ import java.awt.AWTEvent;
 import java.awt.Color;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
+import static java.awt.event.ItemEvent.SELECTED;
 import java.awt.event.ItemListener;
+import java.util.List;
 import java.util.Locale;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
@@ -176,8 +181,13 @@ public class ManageDrivers extends javax.swing.JFrame {
     private boolean cellHintShown = true;    
     private boolean phoneHintShown = true;    
     private String prevSearchCondition = null;    
-    private String currSearchCondition = null;    
-
+    private String currSearchCondition = "";    
+    private String prevSearchString = null;    
+    private String currSearchString = "";       
+    private List<String> prevKeyList = new ArrayList<String>();
+    private List<String> currKeyList = new ArrayList<String>();
+    static private ChangedComponentClear changedControls; 
+    
     /**
      * Key of parent combobox item for which (this) child combobox item 
      * list is formed.
@@ -196,6 +206,8 @@ public class ManageDrivers extends javax.swing.JFrame {
     public ManageDrivers(DriverSelection driverSelectionForm) {
         this.driverSelectionForm = driverSelectionForm;
         initComponents();
+        changedControls = new ChangedComponentClear(clearButton);
+        
         setIconImages(OSPiconList);      
         for (int i = 0; i <prevItemParentKey.length; i++) {
             prevItemParentKey[i] = -1;
@@ -213,8 +225,7 @@ public class ManageDrivers extends javax.swing.JFrame {
         saveSheet_Button.setText(SAVE_ODS_BTN.getContent());
         closeFormButton.setText(CLOSE_BTN.getContent());
         
-//        Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
-        setLocation(0, 0); // (screen.width - this.getSize().width, 0);
+        setLocation(0, 0); 
         
         refreshComboBox(searchL1ComboBox, getPrompter(AffiliationL1, searchL1ComboBox),
                 AffiliationL1, -1, getPrevListParentKey());
@@ -307,12 +318,17 @@ public class ManageDrivers extends javax.swing.JFrame {
 
     private void changeSearchButtonEnabled() {
         currSearchCondition = formSearchCondition();
-        if (currSearchCondition.equals(prevSearchCondition)) {
+        
+        currKeyList = new ArrayList<String>();
+        currSearchString = formSearchString(currKeyList);
+        if (currSearchCondition.equals(prevSearchCondition) 
+                && currSearchString.equals(prevSearchString)
+                && currKeyList.equals(prevKeyList)) 
+        {
             searchButton.setEnabled(false);
         } else {
             searchButton.setEnabled(true);
         }
-        releaseCount = 0;
     }
 
     private void setSearchEnabled(boolean flag) {
@@ -894,6 +910,9 @@ public class ManageDrivers extends javax.swing.JFrame {
             }
         });
         searchCell.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                searchCellKeyReleased(evt);
+            }
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 searchCellKeyTyped(evt);
             }
@@ -923,6 +942,9 @@ public class ManageDrivers extends javax.swing.JFrame {
             }
         });
         searchPhone.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                searchPhoneKeyReleased(evt);
+            }
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 searchPhoneKeyTyped(evt);
             }
@@ -936,6 +958,11 @@ public class ManageDrivers extends javax.swing.JFrame {
         searchL1ComboBox.setMaximumSize(new Dimension(DTCW_L1*DTCW_MAX - DTC_MARGIN, 28));
         searchL1ComboBox.setMinimumSize(new Dimension(DTCW_L1 - DTC_MARGIN, 28));
         searchL1ComboBox.setPreferredSize(new Dimension(DTCW_L1 - DTC_MARGIN, 28));
+        searchL1ComboBox.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                searchL1ComboBoxItemStateChanged(evt);
+            }
+        });
         searchL1ComboBox.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
             public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
             }
@@ -961,6 +988,11 @@ public class ManageDrivers extends javax.swing.JFrame {
         searchL2ComboBox.setMaximumSize(new Dimension(DTCW_L2*DTCW_MAX - DTC_MARGIN, 28));
         searchL2ComboBox.setMinimumSize(new Dimension(DTCW_L2 - DTC_MARGIN, 28));
         searchL2ComboBox.setPreferredSize(new Dimension(DTCW_L2 - DTC_MARGIN, 28));
+        searchL2ComboBox.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                searchL2ComboBoxItemStateChanged(evt);
+            }
+        });
         searchL2ComboBox.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
             public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
             }
@@ -981,6 +1013,11 @@ public class ManageDrivers extends javax.swing.JFrame {
         searchBuildingComboBox.setMaximumSize(new Dimension(DTCW_BN*DTCW_MAX - DTC_MARGIN, 28));
         searchBuildingComboBox.setMinimumSize(new Dimension(DTCW_BN - DTC_MARGIN, 28));
         searchBuildingComboBox.setPreferredSize(new Dimension(DTCW_BN - DTC_MARGIN, 28));
+        searchBuildingComboBox.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                searchBuildingComboBoxItemStateChanged(evt);
+            }
+        });
         searchBuildingComboBox.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
             public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
             }
@@ -1005,6 +1042,11 @@ public class ManageDrivers extends javax.swing.JFrame {
         searchUnitComboBox.setMaximumSize(new Dimension(DTCW_UN*DTCW_MAX - DTC_MARGIN, 28));
         searchUnitComboBox.setMinimumSize(new Dimension(DTCW_UN - DTC_MARGIN, 28));
         searchUnitComboBox.setPreferredSize(new Dimension(DTCW_UN - DTC_MARGIN, 28));
+        searchUnitComboBox.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                searchUnitComboBoxItemStateChanged(evt);
+            }
+        });
         searchUnitComboBox.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
             public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
             }
@@ -1912,23 +1954,23 @@ public class ManageDrivers extends javax.swing.JFrame {
     }//GEN-LAST:event_searchNameFocusGained
 
     private void searchNameKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_searchNameKeyReleased
-        if (++releaseCount >= 2) 
-        {
-            SwingUtilities.invokeLater(new Runnable() {
-                public void run() {
-                    searchButton.setEnabled(true);
-                    releaseCount = 0;
-                }
-            });        
+        String searchStr = searchName.getText().trim();
+        
+        if (!nameHintShown && searchStr.length() > 0) {
+            changedControls.add(searchName);
+        } else {
+            changedControls.remove(searchName);
         }
-    }//GEN-LAST:event_searchNameKeyReleased
-
-    private void searchNameKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_searchNameKeyTyped
+        
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 changeSearchButtonEnabled();
             }
-        });   
+        });      
+    }//GEN-LAST:event_searchNameKeyReleased
+
+    private void searchNameKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_searchNameKeyTyped
+  
     }//GEN-LAST:event_searchNameKeyTyped
 
     private void searchCellFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_searchCellFocusGained
@@ -1940,11 +1982,7 @@ public class ManageDrivers extends javax.swing.JFrame {
     }//GEN-LAST:event_searchCellFocusGained
 
     private void searchCellKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_searchCellKeyTyped
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                changeSearchButtonEnabled();
-            }
-        });           
+         
     }//GEN-LAST:event_searchCellKeyTyped
 
     private void searchPhoneFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_searchPhoneFocusGained
@@ -1956,11 +1994,7 @@ public class ManageDrivers extends javax.swing.JFrame {
     }//GEN-LAST:event_searchPhoneFocusGained
 
     private void searchPhoneKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_searchPhoneKeyTyped
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                changeSearchButtonEnabled();
-            }
-        });
+
     }//GEN-LAST:event_searchPhoneKeyTyped
 
     private void searchL1ComboBoxPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_searchL1ComboBoxPopupMenuWillBecomeInvisible
@@ -2030,6 +2064,76 @@ public class ManageDrivers extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_sampleButtonActionPerformed
+
+    private void searchCellKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_searchCellKeyReleased
+        String searchStr = searchCell.getText().trim();
+        
+        if (!cellHintShown && searchStr.length() > 0) {
+            changedControls.add(searchCell);
+        } else {
+            changedControls.remove(searchCell);
+        }
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                changeSearchButtonEnabled();
+            }
+        });
+    }//GEN-LAST:event_searchCellKeyReleased
+
+    private void searchPhoneKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_searchPhoneKeyReleased
+        String searchStr = searchPhone.getText().trim();
+        
+        if (!phoneHintShown && searchStr.length() > 0) {
+            changedControls.add(searchPhone);
+        } else {
+            changedControls.remove(searchPhone);
+        }
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                changeSearchButtonEnabled();
+            }
+        });
+    }//GEN-LAST:event_searchPhoneKeyReleased
+
+    private void searchL1ComboBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_searchL1ComboBoxItemStateChanged
+        if (evt.getStateChange() == SELECTED) {
+            if (searchL1ComboBox.getSelectedIndex() == PROMPTER_KEY) {
+                changedControls.remove(searchL1ComboBox);
+            } else {
+                changedControls.add(searchL1ComboBox);
+            }
+        }
+    }//GEN-LAST:event_searchL1ComboBoxItemStateChanged
+
+    private void searchL2ComboBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_searchL2ComboBoxItemStateChanged
+        if (evt.getStateChange() == SELECTED) {
+            if (searchL2ComboBox.getSelectedIndex() == PROMPTER_KEY) {
+                changedControls.remove(searchL2ComboBox);
+            } else {
+                changedControls.add(searchL2ComboBox);
+            }
+        }
+    }//GEN-LAST:event_searchL2ComboBoxItemStateChanged
+
+    private void searchBuildingComboBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_searchBuildingComboBoxItemStateChanged
+        if (evt.getStateChange() == SELECTED) {
+            if (searchBuildingComboBox.getSelectedIndex() == PROMPTER_KEY) {
+                changedControls.remove(searchBuildingComboBox);
+            } else {
+                changedControls.add(searchBuildingComboBox);
+            }
+        }
+    }//GEN-LAST:event_searchBuildingComboBoxItemStateChanged
+
+    private void searchUnitComboBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_searchUnitComboBoxItemStateChanged
+        if (evt.getStateChange() == SELECTED) {
+            if (searchUnitComboBox.getSelectedIndex() == PROMPTER_KEY) {
+                changedControls.remove(searchUnitComboBox);
+            } else {
+                changedControls.add(searchUnitComboBox);
+            }
+        }
+    }//GEN-LAST:event_searchUnitComboBoxItemStateChanged
     
     /**
      * @param args the command line arguments
@@ -2090,7 +2194,7 @@ public class ManageDrivers extends javax.swing.JFrame {
     public void loadDriverData(int viewIndex, String driverName, String cellPhone) {
 
         Connection conn = null;
-        Statement selectStmt = null;
+        PreparedStatement fetchDrivers = null;
         ResultSet rs = null;
         String excepMsg = "(vehicle driver infomation loading)";
 
@@ -2114,14 +2218,36 @@ public class ManageDrivers extends javax.swing.JFrame {
             sb.append("  LEFT JOIN building_unit BU ON UNIT_SEQ_NO = BU.SEQ_NO");
             sb.append("  LEFT JOIN building_table BT ON BLDG_SEQ_NO = BT.SEQ_NO) TA,");
             sb.append("  (SELECT @rownum := 0) r ");
-            prevSearchCondition = formSearchCondition();
-            sb.append(prevSearchCondition);
+
+            prevSearchCondition = currSearchCondition;
+            prevSearchString = currSearchString;
+            prevKeyList = currKeyList;            
+            
+            if (currSearchCondition.length() > 0 || currSearchString.length() > 0) {
+                sb.append(" Where ");
+                if (currSearchCondition.length() > 0) {
+                    sb.append(currSearchCondition);
+                }
+                if (currSearchString.length() > 0) {
+                    if (currSearchCondition.length() > 0) {
+                        sb.append(" and ");
+                    }
+                    sb.append(currSearchString);
+                }
+            }    
+            
             sb.append(" ORDER BY NAME, L1_NAME, TA.L2_NAME, TA.BLDG_NO, TA.UNIT_NO");
             //</editor-fold>
             
             conn = getConnection();
-            selectStmt = conn.createStatement();
-            rs = selectStmt.executeQuery(sb.toString());
+            fetchDrivers = conn.prepareStatement(sb.toString());
+            
+            int index = 1;
+            for (String searchKey : currKeyList) {
+                fetchDrivers.setString(index++, "%" + prependEscape(searchKey) + "%");                
+            }            
+            
+            rs = fetchDrivers.executeQuery();
             while (rs.next()) {
                 if (viewIndex == UNKNOWN) // refreshing list after a new driver insertion
                 {
@@ -2176,7 +2302,7 @@ public class ManageDrivers extends javax.swing.JFrame {
         } catch (SQLException ex) {
             logParkingException(Level.SEVERE, ex, excepMsg);
         } finally {            
-            closeDBstuff(conn, selectStmt, rs, excepMsg);
+            closeDBstuff(conn, fetchDrivers, rs, excepMsg);
             countValue.setText(String.valueOf(driverTable.getRowCount()));                        
         }
             
@@ -2345,14 +2471,14 @@ public class ManageDrivers extends javax.swing.JFrame {
             //</editor-fold>                
         } finally {
             //<editor-fold desc="-- Return resources and summarize update.">
-            closeDBstuff(conn, updateDriver, null, excepMsg);  
+            closeDBstuff(conn, updateDriver, null, excepMsg);
             if (result == 1) {
                 driverProperties.append("Driver Update Summary: " + System.lineSeparator());
                 driverProperties.append(" - Name: " + driverName + System.lineSeparator());                
                 driverProperties.append(" - Cell phone: " + cellPhone + System.lineSeparator());                
                 driverProperties.append(" - Landline: " + landLine + System.lineSeparator());                
                 driverProperties.append(" - Level 2: " + itemL2name + System.lineSeparator());                
-                driverProperties.append(" - Unit no: " + itemUnitName + System.lineSeparator());                
+                driverProperties.append(" - Unit no: " + itemUnitName + System.lineSeparator());
             } else {
                 driverProperties.append("Update for driver '" + driverName + "' failed.");
             }
@@ -2703,26 +2829,15 @@ public class ManageDrivers extends javax.swing.JFrame {
 
     private String formSearchCondition() {
         StringBuffer cond = new StringBuffer();
-        String searchStr = searchName.getText().trim();
-        
-        if (!nameHintShown && searchStr.length() > 0) {
-            attachCondition(cond, "name", searchStr);
-        }
-        
-        searchStr = searchCell.getText().trim();
-        if (!cellHintShown && searchStr.length() > 0) {
-            attachCondition(cond, "cellphone", searchStr);
-        }
-        
-        searchStr = searchPhone.getText().trim();
-        if (!phoneHintShown && searchStr.length() > 0) {
-            attachCondition(cond, "phone", searchStr);
-        }
 
         /**
          * Append affiliation condition if applicable.
          */
         InnoComboBoxItem lower_Item = (InnoComboBoxItem)searchL2ComboBox.getSelectedItem();
+        
+        if (lower_Item == null) {
+            return "";
+        }
         int lower_Index = lower_Item.getKeys().length - 1;
         
         attachNumberCondition(cond, "L1_NO", "L2_NO", 
@@ -2737,14 +2852,8 @@ public class ManageDrivers extends javax.swing.JFrame {
         attachNumberCondition(cond, "B_SEQ_NO", "U_SEQ_NO", (Integer)
                 ((ConvComboBoxItem)searchBuildingComboBox.getSelectedItem()).getKeyValue(),
                 (Integer)(lower_Item.getKeys()[lower_Index]));   
-        
-        if (cond.length() > 0) {
-            clearButton.setEnabled(true);
-            return "Where " + cond.toString();
-        } else {
-            clearButton.setEnabled(false);
-            return "";
-        }
+
+        return cond.toString();
     }
 
     /**
@@ -2976,5 +3085,29 @@ public class ManageDrivers extends javax.swing.JFrame {
                     lowerCol, parentKey, getPrevListParentKey());        
             lowerCBox.setSelectedItem(selItem);
         }    
+    }
+
+    private String formSearchString(List<String> keyList) {
+        StringBuffer cond = new StringBuffer();
+        String searchStr = searchName.getText().trim();
+        
+        if (!nameHintShown && searchStr.length() > 0) {
+            attachLikeCondition(cond, "name", searchStr.length());
+            keyList.add(searchStr);            
+        }
+        
+        searchStr = searchCell.getText().trim();
+        if (!cellHintShown && searchStr.length() > 0) {
+            attachLikeCondition(cond, "cellphone", searchStr.length());
+            keyList.add(searchStr);            
+        }
+        
+        searchStr = searchPhone.getText().trim();
+        if (!phoneHintShown && searchStr.length() > 0) {
+            attachLikeCondition(cond, "phone", searchStr.length());
+            keyList.add(searchStr);            
+        }
+        
+        return cond.toString();
     }
 }
