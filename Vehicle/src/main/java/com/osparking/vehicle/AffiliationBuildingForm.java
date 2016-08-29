@@ -1878,8 +1878,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
                 String sql = "Update building_table Set BLDG_NO = ? Where SEQ_NO = ?";
                 int seqNo = (Integer)(model.getValueAt(rowIndex, 2));
                 String excepMsg = "(Original building no: " + prevBldgNo + ")";
-                int result = updateBuildingUnit(rowIndex, bnoInteger, seqNo, sql, 
-                        excepMsg, BuildingTable, BUILDING_IN_DIALOG.getContent());
+                int result = updateBuildingUnit(bnoInteger, seqNo, sql, excepMsg);
                 
                 if (result == ER_NO) {
                     loadBuilding(-1, bnoInteger); // Refresh building number list after update
@@ -1964,8 +1963,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
                 String sql = "Update BUILDING_UNIT Set UNIT_NO = ? Where SEQ_NO = ?";
                 int seqNo = (Integer)model.getValueAt(rowIndex, 2);
                 String excepMsg = "(Oiriginal UNIT No: " + prevUnitNo + ")";
-                int result = updateBuildingUnit(rowIndex, unoInteger, seqNo,
-                        sql, excepMsg, BuildingTable, BUILDING_IN_DIALOG.getContent());
+                int result = updateBuildingUnit(unoInteger, seqNo, sql, excepMsg);
                 if (result == ER_NO) {
                     // Refresh room number list table after a room number update
                     loadUnitNumberTable((Integer)bldgNo, bModel.getValueAt(bIndex, 2), -1, unoInteger); 
@@ -3644,8 +3642,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
      * @param content
      * @return 
      */
-    private int updateBuildingUnit(int rowIndex, int data, int seqNo,
-            String sql, String excepMsg, JTable BuildingTable, String content) 
+    private int updateBuildingUnit(int data, int seqNo, String sql, String excepMsg)
     {
         Connection conn = null;
         PreparedStatement updateStmt = null;
