@@ -27,7 +27,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.logging.Level;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
@@ -60,9 +59,14 @@ import static com.osparking.global.names.ControlEnums.TitleTypes.SELECT_BTN;
 import static com.osparking.global.names.ControlEnums.ToolTipContent.CELL_PHONE_INPUT_TOOLTIP;
 import static com.osparking.global.names.ControlEnums.ToolTipContent.DRIVER_INPUT_TOOLTIP;
 import static com.osparking.global.names.JDBCMySQL.getConnection;
+import static com.osparking.vehicle.CommonData.prependEscape;
+import static com.osparking.vehicle.CommonData.attachLikeCondition;
 import com.osparking.vehicle.LabelBlinker;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.sql.PreparedStatement;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 import javax.swing.JLabel;
 import javax.swing.SwingUtilities;
@@ -85,7 +89,10 @@ public class DriverSelection extends javax.swing.JFrame {
     
     private boolean nameHintShown = true;
     private boolean cellHintShown = true;    
-    private String prevSearchCondition = null;
+    private String prevSearchString = null;    
+    private String currSearchString = null;       
+    private List<String> prevKeyList = new ArrayList<String>();
+    private List<String> currKeyList = new ArrayList<String>();    
     
     /**
      * Creates new form DriverSelection
@@ -99,6 +106,7 @@ public class DriverSelection extends javax.swing.JFrame {
         setIconImages(OSPiconList);
         
         adjustSkinnyTable();
+        currSearchString = formSearchString(currKeyList);
         loadSkinnyDriverTable(seqNo);
         attachEnterHandler(searchName);
         attachEnterHandler(searchCell); 
@@ -295,9 +303,6 @@ public class DriverSelection extends javax.swing.JFrame {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 searchNameKeyReleased(evt);
             }
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                searchNameKeyTyped(evt);
-            }
         });
         searchPanel.add(searchName);
         searchPanel.add(filler7);
@@ -323,6 +328,9 @@ public class DriverSelection extends javax.swing.JFrame {
             }
         });
         searchCell.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                searchCellKeyReleased(evt);
+            }
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 searchCellKeyTyped(evt);
             }
@@ -549,39 +557,29 @@ public class DriverSelection extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_searchCellFocusGained
 
-    private void searchNameKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_searchNameKeyTyped
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                changeSearchButtonEnabled();
-            }
-        });        
-    }//GEN-LAST:event_searchNameKeyTyped
-
     private void searchCellKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_searchCellKeyTyped
-        rejectNonNumericKeys(evt);
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                changeSearchButtonEnabled();
-            }
-        });        
+        rejectNonNumericKeys(evt);       
     }//GEN-LAST:event_searchCellKeyTyped
 
     /**
      * Used to detect a partial input of Korean alphabet and allow the "searchButton" enabled.
      * Without it, Koreans might be ansious about the delay of the button becoming usable.
      */
-    int releaseCount = 0;
     private void searchNameKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_searchNameKeyReleased
-        if (++releaseCount >= 2) 
-        {
-            SwingUtilities.invokeLater(new Runnable() {
-                public void run() {
-                    searchButton.setEnabled(true);
-                    releaseCount = 0;
-                }
-            });        
-        }
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                changeSearchButtonEnabled();
+            }
+        });        
     }//GEN-LAST:event_searchNameKeyReleased
+
+    private void searchCellKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_searchCellKeyReleased
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                changeSearchButtonEnabled();
+            }
+        }); 
+    }//GEN-LAST:event_searchCellKeyReleased
 
     /**
      * @param args the command line arguments
@@ -658,7 +656,7 @@ public class DriverSelection extends javax.swing.JFrame {
     public void loadSkinnyDriverTable(int seqNo) {
         
         Connection conn = null;
-        Statement selectStmt = null;
+        PreparedStatement fetchDrivers = null;
         ResultSet rs = null;
         DefaultTableModel model = null;
         
@@ -667,19 +665,29 @@ public class DriverSelection extends javax.swing.JFrame {
         int currentRow = 0;   
             
         try {
-            // <editor-fold defaultstate="collapsed" desc="-- load car driver list">                          
-            conn = getConnection();
-            selectStmt = conn.createStatement();
-            
+            // <editor-fold defaultstate="collapsed" desc="-- load car driver list">                                      
             StringBuilder sb = new StringBuilder(); 
+            
             sb.append("SELECT @recNo := @recNo + 1 recNo, A.* ");
             sb.append("From (select name, CELLPHONE, Phone, SEQ_NO ");
             sb.append("  from cardriver order by NAME, CELLPHONE) A, ");
             sb.append("  (SELECT @recNo := 0) tmp ");
-            prevSearchCondition = formSearchCondition();
-            sb.append(prevSearchCondition);
-        
-            rs = selectStmt.executeQuery(sb.toString());
+            
+            prevSearchString = currSearchString;
+            prevKeyList = currKeyList;            
+            if (currSearchString.length() > 0) {
+                sb.append(" Where " + currSearchString);
+            } 
+            
+            conn = getConnection();
+            fetchDrivers = conn.prepareStatement(sb.toString());   
+
+            int index = 1;
+            for (String searchKey : currKeyList) {
+                fetchDrivers.setString(index++, "%" + prependEscape(searchKey) + "%");  
+            }            
+            
+            rs = fetchDrivers.executeQuery();
             
             model = (DefaultTableModel) skinnyDriverTable.getModel();  
             model.setRowCount(0);
@@ -700,7 +708,7 @@ public class DriverSelection extends javax.swing.JFrame {
         } catch (SQLException ex) {
             logParkingException(Level.SEVERE, ex, excepMsg);
         } finally {
-            closeDBstuff(conn, selectStmt, rs, excepMsg);
+            closeDBstuff(conn, fetchDrivers, rs, excepMsg);
         }
         if (highlightRow != -1 && model.getRowCount() > 0) {
             skinnyDriverTable.setRowSelectionInterval(highlightRow, highlightRow);
@@ -752,29 +760,23 @@ public class DriverSelection extends javax.swing.JFrame {
         compo.getActionMap().put("handleEnter", handleEnter);
     }    
     
-    private String formSearchCondition() {
+    private String formSearchString(List<String> keyList) {
         StringBuffer cond = new StringBuffer();
         String searchStr = searchName.getText().trim();
-        
+
         if (!nameHintShown && searchStr.length() > 0) {
-            attachCondition(cond, "name", searchStr);
+            attachLikeCondition(cond, "name", searchStr.length());
+            keyList.add(searchStr);            
         }
         
         searchStr = searchCell.getText().trim();
         if (!cellHintShown && searchStr.length() > 0) {
-            attachCondition(cond, "cellphone", searchStr);
+            attachLikeCondition(cond, "cellphone", searchStr.length());
+            keyList.add(searchStr);            
         }
         
-        return cond.length() > 0 ? "Where " + cond.toString() : "";
+        return cond.toString();
     }
-    
-    private void attachCondition(StringBuffer cond, String column, String content) {
-        if (content.length() > 0) {
-            if (cond.length() > 0)
-                cond.append(" and ");
-            cond.append(column + " like '%" + content + "%' ");
-        }            
-    }      
 
     private void assignDriverToVehicle() {
         setVisible(false);
@@ -793,13 +795,15 @@ public class DriverSelection extends javax.swing.JFrame {
     }
 
     private void changeSearchButtonEnabled() {
-        String currSearchCondition = formSearchCondition();
-        if (currSearchCondition.equals(prevSearchCondition)) {
+        currKeyList = new ArrayList<String>();
+        currSearchString = formSearchString(currKeyList);
+        if (currSearchString.equals(prevSearchString)
+                && currKeyList.equals(prevKeyList)) 
+        {
             searchButton.setEnabled(false);
         } else {
             searchButton.setEnabled(true);
-        }
-        releaseCount = 0;
+        }        
     }
 
     private class DriverSelectionListener implements ListSelectionListener {

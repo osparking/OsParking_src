@@ -116,7 +116,9 @@ import com.osparking.global.names.OSP_enums.VehicleCol;
 import com.osparking.global.names.OdsFileOnly;
 import com.osparking.global.names.PComboBox;
 import com.osparking.global.names.WrappedInt;
+import static com.osparking.vehicle.CommonData.attachLikeCondition;
 import static com.osparking.vehicle.CommonData.copyFileUsingFileChannels;
+import static com.osparking.vehicle.CommonData.prependEscape;
 import static com.osparking.vehicle.CommonData.setHelpDialogLoc;
 import static com.osparking.vehicle.CommonData.vAffiliWidth;
 import static com.osparking.vehicle.CommonData.vBuildingWidth;
@@ -209,7 +211,9 @@ public class VehiclesForm extends javax.swing.JFrame {
 
     private void changeSearchButtonEnabled() {
         currSearchCondition = formSearchCondition();
-        currSearchString = formSearchString();
+        
+        currKeyList = new ArrayList<String>();
+        currSearchString = formSearchString(currKeyList);
         if (currSearchCondition.equals(prevSearchCondition) 
                 && currSearchString.equals(prevSearchString)
                 && currKeyList.equals(prevKeyList)) 
@@ -2151,33 +2155,33 @@ public class VehiclesForm extends javax.swing.JFrame {
         }            
     }
     
-    private String formSearchString() {
+    private String formSearchString(List<String> keyList) {
         StringBuffer cond = new StringBuffer(); 
         String searchStr = searchCarTag.getText().trim();
         
-        currKeyList.clear();
         if (!carTagHintShown && searchStr.length() > 0) {
             attachLikeCondition(cond, "PLATE_NUMBER", searchStr.length());
-            currKeyList.add(searchStr);
+            keyList.add(searchStr);
         }
         
         searchStr = searchDriver.getText().trim();
         if (!driverHintShown && searchStr.length() > 0) {
             attachLikeCondition(cond, "NAME", searchStr.length());
-            currKeyList.add(searchStr);
+            keyList.add(searchStr);
         }   
 
         searchStr = searchETC.getText().trim();
         if (!etcHintShown && searchStr.length() > 0) {
             attachLikeCondition(cond, "OTHER_INFO", searchStr.length());
-            currKeyList.add(searchStr);
+            keyList.add(searchStr);
         }
 
         searchStr = disallowReason.getText().trim();
         if (!reasonHintShown && searchStr.length() > 0) {
             attachLikeCondition(cond, "REMARK", searchStr.length());
-            currKeyList.add(searchStr);
+            keyList.add(searchStr);
         }  
+        
         return cond.toString();
     }
     
@@ -2235,13 +2239,7 @@ public class VehiclesForm extends javax.swing.JFrame {
             fetchVehicles = conn.prepareStatement(sb.toString());
             int index = 1;
             for (String searchKey : currKeyList) {
-                String key = searchKey.replace("!", "!!")
-                        .replace("!", "!!")
-                        .replace("%", "!%")
-                        .replace("_", "!_")
-                        .replace("[", "![");
-                
-                fetchVehicles.setString(index++, "%" + key + "%");                
+                fetchVehicles.setString(index++, "%" + prependEscape(searchKey) + "%");                
             }
             
             rs = fetchVehicles.executeQuery();
@@ -2862,15 +2860,5 @@ public class VehiclesForm extends javax.swing.JFrame {
         disallowReason.setText(DIS_REASON_TF.getContent());
         reasonHintShown = true;
         disallowReason.setForeground(tipColor);
-    }
-
-    private void attachLikeCondition(StringBuffer cond, String column, int strLen) {
-        if (strLen > 0) {
-            if (cond.length() > 0)
-                cond.append(" and ");
-            else 
-                cond.append(" ");
-            cond.append(column + " like ?  ESCAPE '!' ");
-        }  
     }
 }

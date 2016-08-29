@@ -60,6 +60,24 @@ public class CommonData {
     public static final int CABH_NORM = 28; // Car Arrival Box Height Normal
         
     static int count = 0;
+
+    public static String prependEscape(String searchKey) {
+        return searchKey.replace("!", "!!")
+                .replace("!", "!!")
+                .replace("%", "!%")
+                .replace("_", "!_")
+                .replace("[", "![");
+    }
+    
+    public static void attachLikeCondition(StringBuffer cond, String column, int strLen) {
+        if (strLen > 0) {
+            if (cond.length() > 0)
+                cond.append(" and ");
+            else 
+                cond.append(" ");
+            cond.append(column + " like ?  ESCAPE '!' ");
+        }  
+    }    
     
     public static boolean invalidName(String name) {
         if (name.length() <= 1) {
