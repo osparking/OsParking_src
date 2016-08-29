@@ -1609,8 +1609,8 @@ public class AttListForm extends javax.swing.JFrame {
                 multiFuncButton.setMnemonic('m');
                 createButton.setEnabled(true);
                 deleteButton.setEnabled(true);
-                showAttendantDetail(usersTable.getSelectedRow());
             }
+            showAttendantDetail(usersTable.getSelectedRow());
         } catch (Exception ex) {
             String mode = (formMode == FormMode.CreateMode ? "Create" : "Modify");
             logParkingException(Level.SEVERE, ex, "(User action: user cancelled mode " + mode);
