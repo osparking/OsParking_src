@@ -60,7 +60,6 @@ import static com.osparking.global.Globals.*;
 import static javax.swing.JOptionPane.showMessageDialog;
 import static com.osparking.global.names.DB_Access.*;
 import com.osparking.global.Globals;
-import com.osparking.global.names.ControlEnums.ATTLIST_ComboBoxTypes;
 import static com.osparking.global.names.ControlEnums.ButtonTypes.*;
 import static com.osparking.global.names.ControlEnums.DialogMessages.*;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.ATTENDANT_ODS_TITLE;
@@ -83,6 +82,7 @@ import static com.osparking.global.names.ControlEnums.FormMode.UpdateMode;
 import static com.osparking.global.names.ControlEnums.FormModeString.CREATE;
 import static com.osparking.global.names.ControlEnums.FormModeString.MODIFY;
 import static com.osparking.global.names.ControlEnums.FormModeString.SEARCH;
+import com.osparking.global.names.ControlEnums.LabelContent;
 import static com.osparking.global.names.ControlEnums.LabelContent.*;
 import static com.osparking.global.names.ControlEnums.MenuITemTypes.META_KEY_LABEL;
 import static com.osparking.global.names.ControlEnums.TableTypes.CELL_PHONE_HEADER;
@@ -107,6 +107,7 @@ import static com.osparking.global.names.ControlEnums.ToolTipContent.PW_INPUT_TO
 import static com.osparking.global.names.ControlEnums.ToolTipContent.REPEAT_PW_INPUT_TOOLTIP;
 import static com.osparking.global.names.ControlEnums.ToolTipContent.SAVE_AS_TOOLTIP;
 import static com.osparking.global.names.ControlEnums.ToolTipContent.SEARCH_TOOLTIP;
+import com.osparking.global.names.ConvComboBoxItem;
 import com.osparking.global.names.DB_Access;
 import com.osparking.global.names.JDBCMySQL;
 import static com.osparking.global.names.JDBCMySQL.getHashedPW;
@@ -151,8 +152,12 @@ public class AttListForm extends javax.swing.JFrame {
     String usableID = null;
     boolean Email_usable = true;
     String usableEmail = null;
-    String searchCondition = "";
-    String searchString = "";
+    
+    LabelContent prevSearchColumn = LOGIN_ID_LABEL;
+    LabelContent currSearchColumn = LOGIN_ID_LABEL;
+    String prevSearchString = "";
+    String currSearchString = "";
+    
     private static Logger logException = null;
     private static Logger logOperation = null;
     ParentGUI mainGUI;
@@ -175,6 +180,11 @@ public class AttListForm extends javax.swing.JFrame {
             setLocation(0, 0);
             setIconImages(OSPiconList);
             
+            // Reset search column combobox items
+            searchCriteriaComboBox.removeAllItems();
+            searchCriteriaComboBox.addItem(new ConvComboBoxItem(LOGIN_ID_LABEL, LOGIN_ID_LABEL.getContent()));          
+            searchCriteriaComboBox.addItem(new ConvComboBoxItem(NAME_LABEL, NAME_LABEL.getContent()));          
+                
             // Make last 8 digits of the user ID visible on the user password label.
             String id = loginID;
             if (loginID.length() > 8) {
@@ -193,10 +203,9 @@ public class AttListForm extends javax.swing.JFrame {
             ListSelectionModel model = usersTable.getSelectionModel();
             model.addListSelectionListener(new AttendantRowSelectionListener());
             
-//            setSearchEnabled(true);
             setFormMode(FormMode.NormalMode);
+            loadAttendantTable("");
             
-            RefreshTableContents();
             int selectIndex = searchRow(loginID);
 
             if (rowHidden(usersTable, selectIndex)) {
@@ -849,6 +858,7 @@ public class AttListForm extends javax.swing.JFrame {
 
         new1Password.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         new1Password.setToolTipText(showPasswordRequirement());
+        new1Password.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
         new1Password.setEnabled(false);
         new1Password.setMaximumSize(new java.awt.Dimension(32767, 30));
         new1Password.setMinimumSize(new Dimension(carTagWidth, 30));
@@ -1405,13 +1415,24 @@ public class AttListForm extends javax.swing.JFrame {
                         String dialogText = "";
                         
                         if (result == 1) { // 1 record inserted == insertion success.
-                            if (searchCondition.length() > 0) {
-                                /**
-                                 * List newly created user on the list in any case.
-                                 */
-                                searchCondition += " or id like '%" + newUserID + "%'";
-                            }
-                            revokeCreationMode(true);
+                            // <editor-fold defaultstate="collapsed" desc="-- Refresh user list while maintaining sort order">            
+                            List sortKeys = usersTable.getRowSorter().getSortKeys();            
+                            /**
+                             * List newly created user on the list in any case.
+                             */
+                            loadAttendantTable(newUserID); 
+                            usersTable.getRowSorter().setSortKeys(sortKeys);
+
+                            int selectIndex = searchRow(newUserID);
+                            
+                            if(selectIndex < 0)
+                                selectIndex = 0;
+                            usersTable.changeSelection(selectIndex, 0, false, false); 
+                            usersTable.requestFocus();
+                            // </editor-fold>   
+
+                            revokeCreationMode();
+                            
                             switch (language) {
                                 case KOREAN:
                                     dialogText ="사용자(ID: " + newUserID + ") 정보가\n성공적으로 생성되었습니다.";
@@ -1600,7 +1621,7 @@ public class AttListForm extends javax.swing.JFrame {
         try {
             if (formMode == FormMode.CreateMode) {
                 // reverse steps done before the creation
-                revokeCreationMode(false);
+                revokeCreationMode();
             } else if (formMode == FormMode.UpdateMode ) {
                 setModificationState(false);
                 multiFuncButton.setMnemonic('s');
@@ -1754,7 +1775,7 @@ public class AttListForm extends javax.swing.JFrame {
                 List sortKeys = usersTable.getRowSorter().getSortKeys();                
                 
                 int selectIndex = usersTable.getSelectedRow();
-                if (RefreshTableContents() == 0) {
+                if (loadAttendantTable("") == 0) {
                     clearDetailsForEmptyList();
                 } else {
                     usersTable.getRowSorter().setSortKeys(sortKeys);
@@ -1894,16 +1915,9 @@ public class AttListForm extends javax.swing.JFrame {
     
     private void searchButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchButtonActionPerformed
         try {
-            searchCondition = getSearchCondition();
-            
-            if (!hintShown) {
-                searchString = searchText.getText().trim();
-            } else {
-                searchString = "";
-            }
             List sortKeys = usersTable.getRowSorter().getSortKeys();                
             
-            if (RefreshTableContents() == 0) {
+            if (loadAttendantTable("") == 0) {
                 clearDetailsForEmptyList();
                 
                 // Inform user that no user found.
@@ -2241,12 +2255,12 @@ public class AttListForm extends javax.swing.JFrame {
 
     private void searchCriteriaComboBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_searchCriteriaComboBoxItemStateChanged
         if (evt.getStateChange() == SELECTED) {
-            manageSearchButton();
+            changeSearchButtonEnabled();
         }
     }//GEN-LAST:event_searchCriteriaComboBoxItemStateChanged
 
     private void searchTextKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_searchTextKeyReleased
-        manageSearchButton();
+        changeSearchButtonEnabled();
     }//GEN-LAST:event_searchTextKeyReleased
 
     private void clearPasswordFields() {
@@ -2267,7 +2281,7 @@ public class AttListForm extends javax.swing.JFrame {
      * @param created tells whether a new attendant is created or not.
      *          true: created, false: not created.
      */
-    private void revokeCreationMode(boolean created) {
+    private void revokeCreationMode() {
         // Reset properties set for a new user as it was.
         // <editor-fold defaultstate="collapsed" desc="-- Reset Password LabelsText">
         newPW1ReqLabel.setText("");
@@ -2292,21 +2306,6 @@ public class AttListForm extends javax.swing.JFrame {
         PWHelpButton.setEnabled(false);
         new2Password.setEnabled(false);  
         // </editor-fold>   
-
-        if (created) {
-            // <editor-fold defaultstate="collapsed" desc="-- Refresh user list while maintaining sort order">            
-            List sortKeys = usersTable.getRowSorter().getSortKeys();            
-            RefreshTableContents(); 
-            usersTable.getRowSorter().setSortKeys(sortKeys);
-            
-            String newUserID = userIDText.getText().trim();
-            int selectIndex = searchRow(newUserID);
-            if(selectIndex < 0)
-                selectIndex = 0;
-            usersTable.changeSelection(selectIndex, 0, false, false); 
-            usersTable.requestFocus();
-            // </editor-fold>   
-        }
         
         setFormMode(FormMode.NormalMode);
         
@@ -2482,7 +2481,7 @@ public class AttListForm extends javax.swing.JFrame {
     private void doAfterUpdateOperations(int result) {
         if (result == 1) {
             List sortKeys = usersTable.getRowSorter().getSortKeys();
-            RefreshTableContents(); 
+            loadAttendantTable(""); 
             usersTable.getRowSorter().setSortKeys(sortKeys);    
             int selectIndex = searchRow(userIDText.getText());
             usersTable.changeSelection(selectIndex, 0, false, false); 
@@ -2552,12 +2551,8 @@ public class AttListForm extends javax.swing.JFrame {
         usersTable.setEnabled(flag);
         searchText.setEnabled(flag);
         searchCriteriaComboBox.setEnabled(flag);
-        if (flag) {
-            searchTextKeyReleased(null);
-        } else {
-            if (!flag) {
-                searchButton.setEnabled(flag);
-            }
+        if (!flag) {
+            searchButton.setEnabled(flag);
         }
         saveOdsButton.setEnabled(flag && isManager);
         closeFormButton.setEnabled(flag); 
@@ -2668,27 +2663,68 @@ public class AttListForm extends javax.swing.JFrame {
         disableModifiability();    
     }
 
-    private String getSearchCondition() {
-        if (!hintShown && searchText.getText().trim().length() > 0) {
-            if (searchCriteriaComboBox.getSelectedIndex() == ATTLIST_ComboBoxTypes.ID.ordinal()) {
-                return " where id like ?";
-            } else {
-                return " where name like ?";
-            }
-        }
-        return "";
-    }
-
-    private void manageSearchButton() {
-        String searchWhole = getSearchCondition() + searchText.getText().trim();
-        
+    private void changeSearchButtonEnabled() {
         if (hintShown) {
-            searchWhole = "";
-        }
-        if (searchWhole.equals(searchCondition + searchString)) {
+            currSearchString = "";
+        } else {
+            currSearchString = searchText.getText().trim();
+        }        
+        
+        Object selObj = searchCriteriaComboBox.getSelectedItem();
+        currSearchColumn = (LabelContent)((ConvComboBoxItem)selObj).getKeyValue();
+        
+        if (currSearchColumn == prevSearchColumn && currSearchString.equals(prevSearchString))
+        {
             searchButton.setEnabled(false);
         } else {
             searchButton.setEnabled(true);
+        }
+    }
+
+    private void appendSearchString(StringBuilder sb, String currSearchString) {
+        if (currSearchString.length() > 0) {
+            if (currSearchColumn == LOGIN_ID_LABEL) {
+                sb.append("ID like ? ");
+            } else {
+                sb.append("Name like ? ");
+            }
+        }     
+    }
+
+    private boolean newIDnotSatisfySearchCondition(String newID) {
+        if (currSearchString.length() == 0) {
+            return false;
+        } else {
+            Connection conn = null;
+            PreparedStatement pstmt = null;
+            ResultSet rs = null;            
+            StringBuilder sb = new StringBuilder();
+            boolean result = false;
+            
+            sb.append("Select count(*) From users_osp Where ");
+            appendSearchString(sb, currSearchString);    
+            sb.append(" and ID = ?");
+            try {
+                conn = JDBCMySQL.getConnection();
+                pstmt = conn.prepareStatement(sb.toString());                
+                
+                int index = 1;
+
+                pstmt.setString(index++, "%" + currSearchString + "%");
+                pstmt.setString(index++, newID);
+                
+                rs = pstmt.executeQuery();
+                if (rs.next()) {
+                    if (rs.getInt(1) == 0) {
+                        result = true;
+                    }
+                }
+            } catch (SQLException ex) {
+                logParkingException(Level.SEVERE, ex, "(checking to make search button enabled)");
+            } finally {
+                closeDBstuff(conn, pstmt, rs, "(checking to make search button enabled)");
+                return result;
+            }
         }
     }
 
@@ -2827,7 +2863,7 @@ public class AttListForm extends javax.swing.JFrame {
      * It also 
      * @return 
      */
-    private int RefreshTableContents() {
+    private int loadAttendantTable(String newID) {
         DefaultTableModel model =  (DefaultTableModel) usersTable.getModel();
         Connection conn = null;
         PreparedStatement pstmt = null;
@@ -2840,13 +2876,32 @@ public class AttListForm extends javax.swing.JFrame {
         sb.append("date_format(creationTime, '%Y-%m-%d') as 'Created', ");
         sb.append("date_format(lastModiTime, '%Y-%m-%d') as 'Modified' ");
         sb.append("from users_osp");
-        sb.append(searchCondition);
+        
+        prevSearchColumn = currSearchColumn;
+        prevSearchString = currSearchString;
+        if (currSearchString.length() > 0 || newID.length() > 0) {
+            sb.append(" Where ");
+            appendSearchString(sb, currSearchString);
+    
+            if (newID.length() > 0) {
+                if (currSearchString.length() > 0) {
+                    sb.append("or ");
+                }
+                sb.append("ID = ?");
+            }
+        }
         
         try {
             conn = JDBCMySQL.getConnection();
             pstmt = conn.prepareStatement(sb.toString());
-            if (searchCondition.length() > 0) {
-                pstmt.setString(1, "%" + searchString + "%");
+            
+            int index = 1;
+            
+            if (currSearchString.length() > 0) {
+                pstmt.setString(index++, "%" + currSearchString + "%");
+            }
+            if (newID.length() > 0) {
+                pstmt.setString(index++, newID);
             }
             rs = pstmt.executeQuery();
 
@@ -2869,7 +2924,12 @@ public class AttListForm extends javax.swing.JFrame {
             closeDBstuff(conn, pstmt, rs, "(refresh user list displaying table)");
             adjustTableHeight(usersTable);
             countValue.setText(String.valueOf(usersTable.getRowCount()));
-            searchButton.setEnabled(false);
+            if (newID.length() > 0 && newIDnotSatisfySearchCondition(newID)) 
+            {
+                searchButton.setEnabled(true);
+            } else {
+                searchButton.setEnabled(false);
+            }
             
             return model.getRowCount();
         }
@@ -2992,37 +3052,6 @@ public class AttListForm extends javax.swing.JFrame {
             managerCBoxEnabled(false);
         }
     }
-    
-    private void changeFieldButtonUsability(String rowID, boolean rowForManager) {
-        if (loginID == null) {
-            return;
-        }
-        if (rowID.equals(loginID)) { 
-            // Login user self information is under consideration.
-            deleteButton.setEnabled(false);
-            changeUserPasswordEnabled(false);
-            changeTextFieldEnabled(true);
-            multiFuncButton.setEnabled(true);              
-        } else if (loginID.equals(ADMIN_ID) || // non-admin is handled row by admin
-                isManager && !rowForManager) // non-manager is handled row by manager
-        { 
-            deleteButton.setEnabled(true);
-            changeUserPasswordEnabled(true);
-            changeTextFieldEnabled(true);
-            multiFuncButton.setEnabled(true);                
-        } else {
-            disableModifiability();
-        }
-            
-        // Attendant is created by who?
-        if (isManager) {
-            createButton.setEnabled(true);   
-        } else {
-            createButton.setEnabled(false);       
-//            managerCheckBox.setEnabled(false);
-            managerCBoxEnabled(false);
-        }
-    }
 
     private void SetTableColumnWidth() {
         usersTable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
@@ -3105,4 +3134,3 @@ public class AttListForm extends javax.swing.JFrame {
         });
     }
 }
-
