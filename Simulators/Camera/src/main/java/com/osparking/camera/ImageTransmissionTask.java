@@ -56,8 +56,6 @@ public class ImageTransmissionTask implements Runnable {
         try {
             // reads the image file and create a byte array for the image to send
             BufferedImage image = dummyMessages[imageFileNo].getBufferedImg();
-//                    ImageIO.
-//                    read(getClass().getResourceAsStream("/" + filename));
 
             ImageIO.write(image, "jpg", byteArrayOutputStream);
             image = null;
@@ -69,7 +67,6 @@ public class ImageTransmissionTask implements Runnable {
         imgSizeArr = ByteBuffer.allocate(4).putInt(byteArrayOutputStream.size()).array();
         int imageSZ = byteArrayOutputStream.size();
         imageMessageBytes = new byte[9 + imageSZ];
-//        System.out.println("file: " + imageFileNo + ", size: " + imageSZ);
         imageMessageBytes[0] = (byte)CarImage.ordinal();
         System.arraycopy(imgIDarr, 0, imageMessageBytes, 1, 4);
         System.arraycopy(imgSizeArr, 0, imageMessageBytes, 5, 4);

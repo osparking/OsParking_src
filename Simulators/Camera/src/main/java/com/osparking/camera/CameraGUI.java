@@ -111,6 +111,9 @@ public class CameraGUI extends javax.swing.JFrame implements DeviceGUI {
     public CameraGUI(String[] args) {
         initComponents();
         
+        errorCheckBox.setEnabled(DEBUG);
+        showAckTm_Button.setEnabled(DEBUG);
+        
         cameraID = getUniqueCameraID();
         setTitle("Camera #" + cameraID);
         cameraID_TextField.setText(Integer.toString(cameraID));
@@ -121,8 +124,6 @@ public class CameraGUI extends javax.swing.JFrame implements DeviceGUI {
         // put this frme at the top/bottom right corner
         Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
         int gui_height = (screen.height - TASK_BAR_HEIGHT) / 2;
-//        if (this.getSize().height > gui_height)
-//            gui_height = this.getSize().height;
         this.setSize(CAMERA_GUI_WIDTH, gui_height);
         int xPoint = screen.width - this.getSize().width;  
         if (cameraID == 1)
@@ -301,6 +302,7 @@ public class CameraGUI extends javax.swing.JFrame implements DeviceGUI {
 
         showAckTm_Button.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         showAckTm_Button.setText("Statistics");
+        showAckTm_Button.setEnabled(false);
         showAckTm_Button.setMaximumSize(new java.awt.Dimension(100, 40));
         showAckTm_Button.setMinimumSize(new java.awt.Dimension(100, 40));
         showAckTm_Button.setPreferredSize(new java.awt.Dimension(100, 40));
@@ -405,6 +407,8 @@ public class CameraGUI extends javax.swing.JFrame implements DeviceGUI {
         errorCheckBox.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         errorCheckBox.setText("error");
         errorCheckBox.setToolTipText("");
+        errorCheckBox.setEnabled(false);
+        errorCheckBox.setHorizontalTextPosition(javax.swing.SwingConstants.LEADING);
         errorCheckBox.setMaximumSize(new java.awt.Dimension(100, 28));
         errorCheckBox.setMinimumSize(new java.awt.Dimension(100, 28));
         errorCheckBox.setName("errorCheckBox"); // NOI18N
@@ -424,6 +428,7 @@ public class CameraGUI extends javax.swing.JFrame implements DeviceGUI {
         errIncButton.setPreferredSize(new java.awt.Dimension(20, 20));
         errIncButton.setBorderPainted(false);
         errIncButton.setContentAreaFilled(false);
+        errIncButton.setEnabled(false);
         errIncButton.setMargin(new java.awt.Insets(2, 2, 2, 2));
         errIncButton.setMaximumSize(new java.awt.Dimension(20, 20));
         errIncButton.setMinimumSize(new java.awt.Dimension(20, 20));
@@ -456,7 +461,10 @@ public class CameraGUI extends javax.swing.JFrame implements DeviceGUI {
         errDecButton.setBorder(null);
         errDecButton.setBorderPainted(false);
         errDecButton.setContentAreaFilled(false);
+        errDecButton.setEnabled(false);
         errDecButton.setMargin(new java.awt.Insets(2, 2, 2, 14));
+        errDecButton.setMaximumSize(new java.awt.Dimension(20, 20));
+        errDecButton.setMinimumSize(new java.awt.Dimension(20, 20));
         errDecButton.setPreferredSize(new java.awt.Dimension(20, 20));
         error_Panel.add(errDecButton);
         ImageIcon iconMinus = getMinusIcon();
@@ -651,11 +659,15 @@ public class CameraGUI extends javax.swing.JFrame implements DeviceGUI {
     }//GEN-LAST:event_seeLicenseButtonActionPerformed
 
     private void errorCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_errorCheckBoxActionPerformed
-        // TODO add your handling code here:
-        if(!errorCheckBox.isSelected())
-            errorCheckBox.setText("error");
-        else
+        if (errorCheckBox.isSelected()) {
             errorCheckBox.setText("error : " + getFormattedRealNumber(ERROR_RATE, 2));
+            errIncButton.setEnabled(true);
+            errDecButton.setEnabled(true);
+        } else {
+            errorCheckBox.setText("error");
+            errIncButton.setEnabled(false);
+            errDecButton.setEnabled(false);
+        }
     }//GEN-LAST:event_errorCheckBoxActionPerformed
 
     /**
@@ -771,7 +783,7 @@ public class CameraGUI extends javax.swing.JFrame implements DeviceGUI {
     private javax.swing.JPanel settingPanel;
     private javax.swing.JButton showAckTm_Button;
     private javax.swing.JPanel two_ID_Panel;
-    private javax.swing.JPanel wholePanel;
+    public javax.swing.JPanel wholePanel;
     // End of variables declaration//GEN-END:variables
 
     /**

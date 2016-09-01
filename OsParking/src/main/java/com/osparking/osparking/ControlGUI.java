@@ -2656,7 +2656,6 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
             logParkingException(Level.SEVERE, se, 
                     "(select car_recent for seqNo: " + String.valueOf(arrSeqNo));
         } finally {
-            System.out.println("Count : " + count);
             adjustListHeight(getGatePanel().getEntryList(gateNo), listModel.getSize());
             closeDBstuff(conn, pStmt, rs, "(Loading previous car arrival records)");
         }

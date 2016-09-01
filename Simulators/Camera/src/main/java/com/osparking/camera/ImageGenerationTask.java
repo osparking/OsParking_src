@@ -133,7 +133,6 @@ public class ImageGenerationTask extends TimerTask {
                     }
                     // choose a car (image) ID randomly
                     imageFileNo = getNextCarNum(rand, imageFileNo);
-                    imageFileNo = 4;
                     cameraGUI.sendCarImage(imageFileNo, ++cameraGUI.generationSN);
                     if (DEBUG) {
                         Globals.logParkingOperation(OpLogLevel.UserCarChange, 
