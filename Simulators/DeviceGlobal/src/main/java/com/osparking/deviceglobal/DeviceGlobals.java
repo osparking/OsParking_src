@@ -19,6 +19,7 @@ package com.osparking.deviceglobal;
 import com.osparking.global.Globals;
 import static com.osparking.global.Globals.getFormattedRealNumber;
 import java.awt.Image;
+import java.awt.Toolkit;
 import java.net.URL;
 import java.util.List;
 import javax.swing.ImageIcon;
@@ -48,5 +49,16 @@ public class DeviceGlobals {
     
     public static void displayErrorRate(JTextField displayField, float rate) {
         displayField.setText("Artificial error rate : " + getFormattedRealNumber(rate, 2));
+    }    
+
+    static Toolkit toolkit = null;
+    
+    public static void displayRateLimit(JTextField displayField, float rate, boolean isMax) {
+        if (toolkit == null) {
+            toolkit = Toolkit.getDefaultToolkit();
+        }
+        toolkit.beep();
+        displayField.setText("Current error rate(=" + getFormattedRealNumber(rate, 2)
+                + ") is " + (isMax ? "max!" : "min!"));
     }    
 }

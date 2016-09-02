@@ -34,6 +34,7 @@ import com.osparking.camera.stat.CommandPerformance;
 import com.osparking.deviceglobal.AcceptManagerTask;
 import com.osparking.deviceglobal.DeviceGUI;
 import static com.osparking.deviceglobal.DeviceGlobals.displayErrorRate;
+import static com.osparking.deviceglobal.DeviceGlobals.displayRateLimit;
 import static com.osparking.deviceglobal.DeviceGlobals.setIconList;
 import static com.osparking.global.CommonData.dummyMessages;
 import java.awt.Component;
@@ -642,21 +643,19 @@ public class CameraGUI extends javax.swing.JFrame implements DeviceGUI {
     private void errIncButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_errIncButtonActionPerformed
         if (ERROR_RATE < 0.9) {
             ERROR_RATE += 0.1f;
+            displayErrorRate(criticalInfoTextField, ERROR_RATE);
         } else {
-            criticalInfoTextField.setText("Current error rate(=" 
-                    + getFormattedRealNumber(ERROR_RATE, 2) + ") is max!");
+            displayRateLimit(criticalInfoTextField, ERROR_RATE, true);
         }
-        displayErrorRate(criticalInfoTextField, ERROR_RATE);
     }//GEN-LAST:event_errIncButtonActionPerformed
 
     private void errDecButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_errDecButtonActionPerformed
         if (ERROR_RATE > 0.10) {
             ERROR_RATE -= 0.1f;
+            displayErrorRate(criticalInfoTextField, ERROR_RATE);
         } else {
-            criticalInfoTextField.setText("Current error rate(=" 
-                    + getFormattedRealNumber(ERROR_RATE, 2) + ") is min!");
+            displayRateLimit(criticalInfoTextField, ERROR_RATE, false);
         }
-        displayErrorRate(criticalInfoTextField, ERROR_RATE);
     }//GEN-LAST:event_errDecButtonActionPerformed
 
     /**

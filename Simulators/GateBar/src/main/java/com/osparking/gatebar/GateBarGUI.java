@@ -18,8 +18,12 @@ package com.osparking.gatebar;
 
 import com.osparking.deviceglobal.AcceptManagerTask;
 import com.osparking.deviceglobal.DeviceGUI;
+import static com.osparking.deviceglobal.DeviceGlobals.displayErrorRate;
+import static com.osparking.deviceglobal.DeviceGlobals.displayRateLimit;
 import static com.osparking.deviceglobal.DeviceGlobals.setIconList;
 import com.osparking.global.Globals;
+import static com.osparking.global.Globals.DEBUG;
+import static com.osparking.global.Globals.ERROR_RATE;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Point;
@@ -39,7 +43,6 @@ import javax.swing.JTextField;
 import static com.osparking.global.names.DB_Access.gateCount;
 import static com.osparking.global.names.DB_Access.readSettings;
 import com.osparking.global.names.DeviceReader;
-import static com.osparking.global.Globals.ERROR_RATE;
 import static com.osparking.global.Globals.E_BOARD_WIDTH;
 import static com.osparking.global.Globals.GATE_BAR_HEIGHT;
 import static com.osparking.global.Globals.GATE_BAR_WIDTH;
@@ -116,6 +119,8 @@ public class GateBarGUI extends javax.swing.JFrame implements DeviceGUI {
      */
     public GateBarGUI(byte gateBarID) {
         initComponents();
+
+        errorCheckBox.setEnabled(DEBUG);
         this.gateBarID = gateBarID;
         gateID_TextField.setText(Integer.toString(gateBarID));
         
@@ -298,9 +303,10 @@ errorPanel.add(filler4);
 errorCheckBox.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
 errorCheckBox.setText("error");
 errorCheckBox.setToolTipText("");
-errorCheckBox.setMaximumSize(new java.awt.Dimension(100, 23));
-errorCheckBox.setMinimumSize(new java.awt.Dimension(100, 23));
-errorCheckBox.setPreferredSize(new java.awt.Dimension(100, 23));
+errorCheckBox.setEnabled(false);
+errorCheckBox.setMaximumSize(new java.awt.Dimension(60, 23));
+errorCheckBox.setMinimumSize(new java.awt.Dimension(60, 23));
+errorCheckBox.setPreferredSize(new java.awt.Dimension(60, 23));
 errorCheckBox.addActionListener(new java.awt.event.ActionListener() {
     public void actionPerformed(java.awt.event.ActionEvent evt) {
         errorCheckBoxActionPerformed(evt);
@@ -312,29 +318,15 @@ errorCheckBox.addActionListener(new java.awt.event.ActionListener() {
     errIncButton.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
     errIncButton.setBorderPainted(false);
     errIncButton.setContentAreaFilled(false);
+    errIncButton.setEnabled(false);
     errIncButton.setMargin(new java.awt.Insets(2, 2, 2, 2));
     errIncButton.setPreferredSize(new java.awt.Dimension(25, 25));
-    errorPanel.add(errIncButton);
     errIncButton.addActionListener(new java.awt.event.ActionListener() {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            errIncButtonActionPerformed(e);
-        }
-
-        private void errIncButtonActionPerformed(ActionEvent e) {
-            if (errorCheckBox.isSelected()) {
-                if (ERROR_RATE < 0.9) {
-                    ERROR_RATE += 0.1f;
-                } else {
-                    criticalInfoTextField.setText("current error rate(="
-                        + getFormattedRealNumber(ERROR_RATE, 2) + ") is max!");
-                }
-                errorCheckBox.setText("error : " + getFormattedRealNumber(ERROR_RATE, 2));
-            } else {
-                criticalInfoTextField.setText("First, select error check box, OK?");
-            }
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            errIncButtonActionPerformed(evt);
         }
     });
+    errorPanel.add(errIncButton);
     ImageIcon iconPlus = getMinusIcon();
     errIncButton.setBorder(null);
     errIncButton.setPreferredSize(
@@ -344,29 +336,15 @@ errorCheckBox.addActionListener(new java.awt.event.ActionListener() {
     errDecButton.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
     errDecButton.setBorderPainted(false);
     errDecButton.setContentAreaFilled(false);
+    errDecButton.setEnabled(false);
     errDecButton.setMargin(new java.awt.Insets(2, 2, 2, 14));
     errDecButton.setPreferredSize(new java.awt.Dimension(25, 25));
-    errorPanel.add(errDecButton);
     errDecButton.addActionListener(new java.awt.event.ActionListener() {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            errDecButtonActionPerformed(e);
-        }
-
-        private void errDecButtonActionPerformed(ActionEvent e) {
-            if (errorCheckBox.isSelected()) {
-                if (ERROR_RATE > 0.10) {
-                    ERROR_RATE -= 0.1f;
-                } else {
-                    criticalInfoTextField.setText("current error rate(="
-                        + getFormattedRealNumber(ERROR_RATE, 2) + ") is min!");
-                }
-                errorCheckBox.setText("error : " + getFormattedRealNumber(ERROR_RATE, 2));
-            } else {
-                criticalInfoTextField.setText("First, select error check box, OK?");
-            }
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            errDecButtonActionPerformed(evt);
         }
     });
+    errorPanel.add(errDecButton);
 
     ConnectionLED.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
     ConnectionLED.setForeground(new java.awt.Color(255, 0, 0));
@@ -398,8 +376,7 @@ errorCheckBox.addActionListener(new java.awt.event.ActionListener() {
 
     textFieldPanel.setLayout(new javax.swing.BoxLayout(textFieldPanel, javax.swing.BoxLayout.LINE_AXIS));
 
-    criticalInfoTextField.setFont(new java.awt.Font(font_Type, font_Style, font_Size-3));
-    criticalInfoTextField.setText("Press [Connect] to start");
+    criticalInfoTextField.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
     criticalInfoTextField.setAlignmentX(1.0F);
     criticalInfoTextField.setAutoscrolls(false);
     criticalInfoTextField.setMaximumSize(new java.awt.Dimension(32767, 28));
@@ -439,10 +416,20 @@ errorCheckBox.addActionListener(new java.awt.event.ActionListener() {
     }//GEN-LAST:event_gateID_TextFieldFocusLost
 
     private void errorCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_errorCheckBoxActionPerformed
-        if(!errorCheckBox.isSelected())
-            errorCheckBox.setText("error");
-        else
-            errorCheckBox.setText("error : " + getFormattedRealNumber(ERROR_RATE, 2));
+//        if(!errorCheckBox.isSelected())
+//            errorCheckBox.setText("error");
+//        else
+//            errorCheckBox.setText("error : " + getFormattedRealNumber(ERROR_RATE, 2));
+        
+        if (errorCheckBox.isSelected()) {
+            displayErrorRate(criticalInfoTextField, ERROR_RATE);         
+            errIncButton.setEnabled(true);
+            errDecButton.setEnabled(true);
+        } else {
+            criticalInfoTextField.setText("No artificial error.");            
+            errIncButton.setEnabled(false);
+            errDecButton.setEnabled(false);
+        }        
     }//GEN-LAST:event_errorCheckBoxActionPerformed
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
@@ -452,6 +439,24 @@ errorCheckBox.addActionListener(new java.awt.event.ActionListener() {
     private void seeLicenseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_seeLicenseButtonActionPerformed
         showLicensePanel(this, "License Notice on Gate Bar Simulator");
     }//GEN-LAST:event_seeLicenseButtonActionPerformed
+
+    private void errIncButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_errIncButtonActionPerformed
+        if (ERROR_RATE < 0.9) {
+            ERROR_RATE += 0.1f;
+            displayErrorRate(criticalInfoTextField, ERROR_RATE);
+        } else {
+            displayRateLimit(criticalInfoTextField, ERROR_RATE, true);
+        }
+    }//GEN-LAST:event_errIncButtonActionPerformed
+
+    private void errDecButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_errDecButtonActionPerformed
+        if (ERROR_RATE > 0.10) {
+            ERROR_RATE -= 0.1f;
+            displayErrorRate(criticalInfoTextField, ERROR_RATE);
+        } else {
+            displayRateLimit(criticalInfoTextField, ERROR_RATE, false);
+        }
+    }//GEN-LAST:event_errDecButtonActionPerformed
 
     /**
      * @param args the command line arguments
