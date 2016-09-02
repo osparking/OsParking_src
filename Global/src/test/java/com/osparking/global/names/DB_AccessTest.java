@@ -16,6 +16,7 @@
  */
 package com.osparking.global.names;
 
+import static com.osparking.global.names.OSP_enums.EBD_CycleType.EBD_FLOW_CYCLE;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -55,8 +56,6 @@ public class DB_AccessTest {
     public void testMakeSureBasicUserExistance() {
         System.out.println("makeSureBasicUserExistance");
         DB_Access.makeSureBasicUserExistance();
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
@@ -65,28 +64,11 @@ public class DB_AccessTest {
     @Test
     public void testPasswordMatched() {
         System.out.println("passwordMatched");
-        String userID = "";
-        String passwd = "";
-        boolean expResult = false;
+        String userID = "admin";
+        String passwd = "1234";
+        boolean expResult = true;
         boolean result = DB_Access.passwordMatched(userID, passwd);
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of recordPerformance method, of class DB_Access.
-     */
-    @Test
-    public void testRecordPerformance() {
-        System.out.println("recordPerformance");
-        int gateID = 0;
-        long miliSeconds = 0L;
-        String expResult = "";
-        String result = DB_Access.recordPerformance(gateID, miliSeconds);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
@@ -96,35 +78,6 @@ public class DB_AccessTest {
     public void testReadSettings() {
         System.out.println("readSettings");
         DB_Access.readSettings();
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of readEBoardSettings method, of class DB_Access.
-     */
-    @Test
-    public void testReadEBoardSettings() {
-        System.out.println("readEBoardSettings");
-        EBD_DisplaySetting[] expResult = null;
-        EBD_DisplaySetting[] result = DB_Access.readEBoardSettings();
-        assertArrayEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of readEBoardUsageSettings method, of class DB_Access.
-     */
-    @Test
-    public void testReadEBoardUsageSettings() {
-        System.out.println("readEBoardUsageSettings");
-        OSP_enums.EBD_DisplayUsage usageRow = null;
-        EBD_DisplaySetting expResult = null;
-        EBD_DisplaySetting result = DB_Access.readEBoardUsageSettings(usageRow);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
@@ -138,7 +91,6 @@ public class DB_AccessTest {
         boolean expResult = false;
         boolean result = DB_Access.parkingPermitted(tagEnteredAs);
         assertEquals(expResult, result);
-        fail("The test case is a prototype.");
     }
 
     /**
@@ -147,14 +99,12 @@ public class DB_AccessTest {
     @Test
     public void testEnteranceAllowed() {
         System.out.println("enteranceAllowed");
-        String tagRecognized = "";
-        StringBuffer tagEnteredAs = null;
+        String tagRecognized = "26누8648";
+        StringBuffer tagEnteredAs = new StringBuffer();
         StringBuffer remark = null;
-        OSP_enums.PermissionType expResult = null;
+        OSP_enums.PermissionType expResult = OSP_enums.PermissionType.ALLOWED;
         OSP_enums.PermissionType result = DB_Access.enteranceAllowed(tagRecognized, tagEnteredAs, remark);
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
@@ -163,12 +113,10 @@ public class DB_AccessTest {
     @Test
     public void testGetCycleFromDB() {
         System.out.println("getCycleFromDB");
-        OSP_enums.EBD_CycleType cycleType = null;
-        int expResult = 0;
+        OSP_enums.EBD_CycleType cycleType = EBD_FLOW_CYCLE;
+        int expResult = 8000;
         int result = DB_Access.getCycleFromDB(cycleType);
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
@@ -177,13 +125,11 @@ public class DB_AccessTest {
     @Test
     public void testGetRecordCount_String_int() {
         System.out.println("getRecordCount");
-        String tableName = "";
-        int CD_SEQ_NO = 0;
-        int expResult = 0;
+        String tableName = "cardriver";
+        int CD_SEQ_NO = -1;
+        int expResult = 1002;
         int result = DB_Access.getRecordCount(tableName, CD_SEQ_NO);
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
@@ -192,14 +138,12 @@ public class DB_AccessTest {
     @Test
     public void testGetRecordCount_3args() {
         System.out.println("getRecordCount");
-        String tableName = "";
-        String columnName = "";
-        String columnValue = "";
-        int expResult = 0;
+        String tableName = "users_osp";
+        String columnName = "id";
+        String columnValue = "admin";
+        int expResult = 1;
         int result = DB_Access.getRecordCount(tableName, columnName, columnValue);
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
@@ -208,8 +152,8 @@ public class DB_AccessTest {
     @Test
     public void testInsertOneVehicle() {
         System.out.println("insertOneVehicle");
-        String plateNo = "";
-        int seqNo = 0;
+        String plateNo = "12거3456";
+        int seqNo = 541;
         int notification = 0;
         int wholeTag = 0;
         int parkPermit = 0;
@@ -218,8 +162,6 @@ public class DB_AccessTest {
         int expResult = 0;
         int result = DB_Access.insertOneVehicle(plateNo, seqNo, notification, wholeTag, parkPermit, reasonTxt, otherTxt);
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
     
 }
