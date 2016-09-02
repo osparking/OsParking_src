@@ -424,12 +424,9 @@ public class DisAllowedCar extends javax.swing.JDialog {
         if(parent != null){
             parent.raiseGateBar(gateNo, imageSN, delay);
                 
-//            long arrSeqNo = parent.insertDBrecord(gateNo, arrivalTm, tagRecognized, tagEnteredAs,
-//                    bImg, -1, -1, null, BarOperation.MANUAL);
-//            parent.updateMainForm(gateNo, tagRecognized, arrSeqNo, BarOperation.MANUAL);
             long arrSeqNo = parent.insertDBrecord(gateNo, arrivalTm, tagRecognized, tagEnteredAs,
                     bImg, -1, -1, null, BarOperation.MANUAL);
-            parent.updateMainForm(gateNo, tagRecognized, arrSeqNo, BarOperation.STOPPED);
+            parent.updateMainForm(gateNo, tagRecognized, arrSeqNo, BarOperation.OPENED_UP);
             parent.isGateBusy[gateNo] = false;
         }
         timer.cancel();

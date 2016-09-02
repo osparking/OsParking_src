@@ -98,7 +98,7 @@ public class ControlEnums {
     public enum LabelContent {
         EMPTY_REASON("(기록 없음)", "(No Record)"), 
         CLOSED_LABEL("(폐쇄)", "(closed)"), 
-        STOPPED_LABEL("(정지)", "(stopped)"), 
+        STOPPED_LABEL("(일단정지)", "(stopped)"), 
         RATE_LABEL("비율 : ", "Rate : "), 
         COM_PORT_ID_LABEL("COM 포트 ID : ", "COM Port ID : "), 
         LEVEL_LABEL("레벨 : ", "Level : "), 
@@ -1143,6 +1143,12 @@ public class ControlEnums {
          *//**
          * Gate bar opened as a result of an arrival of a vehicle allowed to 
          * park legally.
+         *//**
+         * Gate bar opened as a result of an arrival of a vehicle allowed to 
+         * park legally.
+         *//**
+         * Gate bar opened as a result of an arrival of a vehicle allowed to 
+         * park legally.
          */
         REGISTERED_CAR_OPENED("자격개방", "Legal Open"), 
         /**
@@ -1163,7 +1169,7 @@ public class ControlEnums {
         /**
          * Temporarily stopped for a checkup
          */
-        STOPPED("지속개방", "Remain Opened");
+        OPENED_UP("지속개방", "Remain Opened");
         
         BarOperation(String korean, String english) {
             contents[KOREAN.ordinal()] = korean;

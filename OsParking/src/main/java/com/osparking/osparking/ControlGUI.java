@@ -30,6 +30,8 @@ import com.osparking.global.Globals;
 import static com.osparking.global.Globals.*;
 import com.osparking.global.names.CarAdmission;
 import com.osparking.global.names.ControlEnums.BarOperation;
+import static com.osparking.global.names.ControlEnums.BarOperation.AUTO_OPENED;
+import static com.osparking.global.names.ControlEnums.BarOperation.REGISTERED_CAR_OPENED;
 import static com.osparking.global.names.ControlEnums.ButtonTypes.ARRIVALS_BTN;
 import static com.osparking.global.names.ControlEnums.ButtonTypes.CAR_ARRIVAL_BTN;
 import static com.osparking.global.names.ControlEnums.ButtonTypes.STATISTICS_BTN;
@@ -71,7 +73,6 @@ import static com.osparking.global.names.ControlEnums.MenuITemTypes.QUIT_MENU_IT
 import static com.osparking.global.names.ControlEnums.MenuITemTypes.QUIT_MENU_ITEM_SC;
 import static com.osparking.global.names.ControlEnums.MenuITemTypes.RECORD_MENU;
 import static com.osparking.global.names.ControlEnums.MenuITemTypes.SETTING_MENU_ITEM;
-import static com.osparking.global.names.ControlEnums.MenuITemTypes.SETTING_MENU_ITEM_SC;
 import static com.osparking.global.names.ControlEnums.MenuITemTypes.SYSTEM_MENU;
 import static com.osparking.global.names.ControlEnums.MenuITemTypes.VEHICLE_MANAGE_MENU_ITEM;
 import static com.osparking.global.names.ControlEnums.MenuITemTypes.VEHICLE_MENU;
@@ -216,6 +217,13 @@ import org.bytedeco.javacpp.FlyCapture2;
  * @author Open Source Parking Inc.
  */
 public final class ControlGUI extends javax.swing.JFrame implements ActionListener, ManagerGUI, ParentGUI {
+
+    private static void showBufferedImage(int gateNo, JLabel picLabel, BufferedImage imageRead) {
+        picLabel.setText(null);
+        picLabel.setIcon(createStretchedIcon(picLabel.getSize(), imageRead, false));
+        originalImgWidth[gateNo] = imageRead.getWidth(); 
+        gatePanel.setGateImage((byte)gateNo, imageRead);
+    }
     
     private LoginDialog loginDialog = null;
     AttListForm attendantsListForm = null;
@@ -2071,6 +2079,8 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
             if (carImage == null) {
                 carImage = convertRaw2Buffered(blackFlyImage);
             }
+            showBufferedImage(gateNo, getGatePanel().getCarPicLabels()[gateNo], carImage);
+            
             controlStoppedCar(gateNo, imageID, tagRecognized, carImage,
                     arrivalTime, tagRegistered.toString(),
                     remark.toString(), permission, carPassingDelayMs);
@@ -2678,8 +2688,8 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
             String suffix = "";
             if (barOptn == BarOperation.REMAIN_CLOSED) {
                 suffix = CLOSED_LABEL.getContent();
-            } else if (barOptn == BarOperation.STOPPED) {
-                suffix = STOPPED_LABEL.getContent();
+            } else if (barOptn == BarOperation.OPENED_UP) {
+                suffix =STOPPED_LABEL .getContent();
             }
             // add a row to the recent entry list for the gate
             listModel.add(0, new CarAdmission("-" + tmDisplay + tagRecognized + suffix, 
@@ -2687,7 +2697,9 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
             
             // display entry image on the label for the gate
             listSelectionModel[gateNo].setSelectionInterval(0, 0);
-            showImage(gateNo);
+            if (barOptn == REGISTERED_CAR_OPENED || barOptn == AUTO_OPENED) {
+                showImage(gateNo);
+            }
             
             int lastIdx = listModel.getSize() - 1;
             while (lastIdx >= RECENT_COUNT)
@@ -3245,10 +3257,12 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
                             picLabel.setIcon(null);
                             picLabel.setText("No Image Exists");
                         } else {
-                            picLabel.setText(null);
                             BufferedImage imageRead = ImageIO.read(imageInStream);
-                            picLabel.setIcon(createStretchedIcon(picLabel.getSize(), imageRead, false));
                             closeInputStream(imageInStream, "(image loading from DB)");
+                            
+                            showBufferedImage(gateNo, picLabel, imageRead);
+                            picLabel.setText(null);
+                            picLabel.setIcon(createStretchedIcon(picLabel.getSize(), imageRead, false));
                             originalImgWidth[gateNo] = imageRead.getWidth(); 
                             gatePanel.setGateImage((byte)gateNo, imageRead);
                         }
