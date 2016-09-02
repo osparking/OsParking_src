@@ -18,6 +18,7 @@ package com.osparking.e_board;
 
 import com.osparking.deviceglobal.AcceptManagerTask;
 import com.osparking.deviceglobal.DeviceGUI;
+import static com.osparking.deviceglobal.DeviceGlobals.displayErrorRate;
 import static com.osparking.deviceglobal.DeviceGlobals.setIconList;
 import com.osparking.global.names.EBD_DisplaySetting;
 import java.awt.Dimension;
@@ -96,6 +97,8 @@ public class A_EBD_GUI extends javax.swing.JFrame implements DeviceGUI {
      */
     public A_EBD_GUI(byte displayID) {
         initComponents();
+        
+        errorCheckBox.setEnabled(DEBUG);
         this.ID = displayID;
         
         setResizable(false);
@@ -231,25 +234,47 @@ public class A_EBD_GUI extends javax.swing.JFrame implements DeviceGUI {
 
         errorCheckBox.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         errorCheckBox.setText("error");
+        errorCheckBox.setEnabled(false);
+        errorCheckBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                errorCheckBoxActionPerformed(evt);
+            }
+        });
 
         errIncButton.setIcon(getPlusIcon());
         errIncButton.setBorder(null);
         errIncButton.setBorderPainted(false);
         errIncButton.setContentAreaFilled(false);
+        errIncButton.setEnabled(false);
         errIncButton.setPreferredSize(new java.awt.Dimension(25, 25));
+        errIncButton.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
+        errIncButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                errIncButtonActionPerformed(evt);
+            }
+        });
 
         errDecButton.setIcon(getMinusIcon());
         errDecButton.setBorder(null);
         errDecButton.setBorderPainted(false);
         errDecButton.setContentAreaFilled(false);
+        errDecButton.setEnabled(false);
         errDecButton.setPreferredSize(new java.awt.Dimension(25, 25));
+        errDecButton.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
+        errDecButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                errDecButtonActionPerformed(evt);
+            }
+        });
 
         connectionLED.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         connectionLED.setForeground(new java.awt.Color(255, 0, 0));
         connectionLED.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         connectionLED.setText("X");
         connectionLED.setToolTipText("");
+        connectionLED.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
         connectionLED.setPreferredSize(new java.awt.Dimension(25, 25));
+        connectionLED.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -281,41 +306,7 @@ public class A_EBD_GUI extends javax.swing.JFrame implements DeviceGUI {
         );
 
         errIncButton.setBorder(null);
-        errIncButton.addActionListener(new java.awt.event.ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                errIncButtonActionPerformed(e);
-            }
-
-            private void errIncButtonActionPerformed(ActionEvent e) {
-                if (errorCheckBox.isSelected()) {
-                    if (ERROR_RATE < 0.9)
-                    ERROR_RATE += 0.1f;
-                    criticalInfoTextField.setText("error probability: "
-                        + getFormattedRealNumber(ERROR_RATE, 2));
-                } else {
-                    criticalInfoTextField.setText("First, select error check box, OK?");
-                }
-            }
-        });
         errDecButton.setBorder(null);
-        errDecButton.addActionListener(new java.awt.event.ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                errDecButtonActionPerformed(e);
-            }
-
-            private void errDecButtonActionPerformed(ActionEvent e) {
-                if (errorCheckBox.isSelected()) {
-                    if (ERROR_RATE > 0.10)
-                    ERROR_RATE -= 0.1f;
-                    criticalInfoTextField.setText("error probability: "
-                        + getFormattedRealNumber(ERROR_RATE, 2));
-                } else {
-                    criticalInfoTextField.setText("First, select error check box, OK?");
-                }
-            }
-        });
 
         PID_Label1.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         PID_Label1.setText("ID");
@@ -406,6 +397,38 @@ public class A_EBD_GUI extends javax.swing.JFrame implements DeviceGUI {
     private void seeLicenseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_seeLicenseButtonActionPerformed
         showLicensePanel(this, "License Notice on E-Board Simulator");
     }//GEN-LAST:event_seeLicenseButtonActionPerformed
+
+    private void errorCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_errorCheckBoxActionPerformed
+        if (errorCheckBox.isSelected()) {
+            displayErrorRate(criticalInfoTextField, ERROR_RATE);         
+            errIncButton.setEnabled(true);
+            errDecButton.setEnabled(true);
+        } else {
+            criticalInfoTextField.setText("No artificial error.");            
+            errIncButton.setEnabled(false);
+            errDecButton.setEnabled(false);
+        }
+    }//GEN-LAST:event_errorCheckBoxActionPerformed
+
+    private void errIncButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_errIncButtonActionPerformed
+        if (errorCheckBox.isSelected()) {
+            if (ERROR_RATE < 0.9)
+                ERROR_RATE += 0.1f;
+            displayErrorRate(criticalInfoTextField, ERROR_RATE);
+        } else {
+            criticalInfoTextField.setText("First, select error check box, OK?");   
+        } 
+    }//GEN-LAST:event_errIncButtonActionPerformed
+
+    private void errDecButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_errDecButtonActionPerformed
+        if (errorCheckBox.isSelected()) {
+            if (ERROR_RATE > 0.10)
+                ERROR_RATE -= 0.1f;
+            displayErrorRate(criticalInfoTextField, ERROR_RATE);
+        } else {
+            criticalInfoTextField.setText("First, select error check box, OK?");   
+        }             
+    }//GEN-LAST:event_errDecButtonActionPerformed
     
     public static int getStrHeight(JTextField jTextField){
         int TextHeight;
@@ -651,4 +674,10 @@ public class A_EBD_GUI extends javax.swing.JFrame implements DeviceGUI {
     public JLabel getConnectionLED() {
         return connectionLED;
     }
+//
+//    private void displayErrorRate() {
+//        displayField.setText("Artificial error rate : " + getFormattedRealNumber(rate, 2));
+//        
+//        criticalInfoTextField.setText("Error rate : " + getFormattedRealNumber(ERROR_RATE, 2));
+//    }
 }

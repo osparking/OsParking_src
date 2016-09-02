@@ -639,14 +639,14 @@
                             <Property name="enabled" type="boolean" value="false"/>
                             <Property name="horizontalTextPosition" type="int" value="10"/>
                             <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                              <Dimension value="[100, 28]"/>
+                              <Dimension value="[60, 28]"/>
                             </Property>
                             <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                              <Dimension value="[100, 28]"/>
+                              <Dimension value="[51, 28]"/>
                             </Property>
                             <Property name="name" type="java.lang.String" value="errorCheckBox" noResource="true"/>
                             <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                              <Dimension value="[100, 28]"/>
+                              <Dimension value="[60, 28]"/>
                             </Property>
                           </Properties>
                           <Events>
@@ -699,8 +699,10 @@
                               <Connection code="new Dimension(plusIcon.getIconWidth(), plusIcon.getIconHeight())" type="code"/>
                             </Property>
                           </Properties>
+                          <Events>
+                            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="errIncButtonActionPerformed"/>
+                          </Events>
                           <AuxValues>
-                            <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="errIncButton.addActionListener(new java.awt.event.ActionListener() {&#xa;    @Override&#xa;    public void actionPerformed(ActionEvent e) {&#xa;        errIncButtonActionPerformed(e);                &#xa;    }&#xa;&#xa;    private void errIncButtonActionPerformed(ActionEvent e) {&#xa;        if (errorCheckBox.isSelected()) {&#xa;            if (ERROR_RATE &lt; 0.9) {&#xa;                ERROR_RATE += 0.1f;&#xa;            } else {&#xa;                criticalInfoTextField.setText(&quot;current error rate(=&quot; &#xa;                        + getFormattedRealNumber(ERROR_RATE, 2) + &quot;) is max!&quot;);&#xa;            }&#xa;            errorCheckBox.setText(&quot;error : &quot; + getFormattedRealNumber(ERROR_RATE, 2));&#xa;        } else {&#xa;            criticalInfoTextField.setText(&quot;First, select error check box, OK?&quot;);   &#xa;        }                &#xa;    }&#xa;});"/>
                             <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="ImageIcon plusIcon = getPlusIcon();"/>
                           </AuxValues>
                         </Component>
@@ -747,8 +749,11 @@
                               <Dimension value="[20, 20]"/>
                             </Property>
                           </Properties>
+                          <Events>
+                            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="errDecButtonActionPerformed"/>
+                          </Events>
                           <AuxValues>
-                            <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="ImageIcon iconMinus = getMinusIcon();&#xa;errDecButton.setIcon(iconMinus);&#xa;errDecButton.setBorder(null);        &#xa;errDecButton.setPreferredSize(&#xa;    new Dimension(iconMinus.getIconWidth(), iconMinus.getIconHeight()));&#xa;&#xa;errDecButton.addActionListener(new java.awt.event.ActionListener() {&#xa;    @Override&#xa;    public void actionPerformed(ActionEvent e) {&#xa;        errDecButtonActionPerformed(e);                &#xa;    }&#xa;&#xa;    private void errDecButtonActionPerformed(ActionEvent e) {&#xa;        if (errorCheckBox.isSelected()) {&#xa;            if (ERROR_RATE &gt; 0.10) {&#xa;                ERROR_RATE -= 0.1f;&#xa;            } else {&#xa;                criticalInfoTextField.setText(&quot;current error rate(=&quot; &#xa;                        + getFormattedRealNumber(ERROR_RATE, 2) + &quot;) is min!&quot;);&#xa;            }&#xa;            errorCheckBox.setText(&quot;error : &quot; + getFormattedRealNumber(ERROR_RATE, 2));&#xa;        } else {&#xa;            criticalInfoTextField.setText(&quot;First, select error check box, OK?&quot;);   &#xa;        }             &#xa;    }&#xa;});"/>
+                            <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="ImageIcon iconMinus = getMinusIcon();&#xa;errDecButton.setIcon(iconMinus);&#xa;errDecButton.setBorder(null);        &#xa;errDecButton.setPreferredSize(&#xa;    new Dimension(iconMinus.getIconWidth(), iconMinus.getIconHeight()));"/>
                             <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
                           </AuxValues>
                         </Component>

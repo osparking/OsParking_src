@@ -20,7 +20,6 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Point;
 import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.lang.management.ManagementFactory;
@@ -34,6 +33,7 @@ import static javax.swing.JOptionPane.WARNING_MESSAGE;
 import com.osparking.camera.stat.CommandPerformance;
 import com.osparking.deviceglobal.AcceptManagerTask;
 import com.osparking.deviceglobal.DeviceGUI;
+import static com.osparking.deviceglobal.DeviceGlobals.displayErrorRate;
 import static com.osparking.deviceglobal.DeviceGlobals.setIconList;
 import static com.osparking.global.CommonData.dummyMessages;
 import java.awt.Component;
@@ -409,10 +409,10 @@ public class CameraGUI extends javax.swing.JFrame implements DeviceGUI {
         errorCheckBox.setToolTipText("");
         errorCheckBox.setEnabled(false);
         errorCheckBox.setHorizontalTextPosition(javax.swing.SwingConstants.LEADING);
-        errorCheckBox.setMaximumSize(new java.awt.Dimension(100, 28));
-        errorCheckBox.setMinimumSize(new java.awt.Dimension(100, 28));
+        errorCheckBox.setMaximumSize(new java.awt.Dimension(60, 28));
+        errorCheckBox.setMinimumSize(new java.awt.Dimension(51, 28));
         errorCheckBox.setName("errorCheckBox"); // NOI18N
-        errorCheckBox.setPreferredSize(new java.awt.Dimension(100, 28));
+        errorCheckBox.setPreferredSize(new java.awt.Dimension(60, 28));
         errorCheckBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 errorCheckBoxActionPerformed(evt);
@@ -433,27 +433,12 @@ public class CameraGUI extends javax.swing.JFrame implements DeviceGUI {
         errIncButton.setMaximumSize(new java.awt.Dimension(20, 20));
         errIncButton.setMinimumSize(new java.awt.Dimension(20, 20));
         errIncButton.setPreferredSize(new Dimension(plusIcon.getIconWidth(), plusIcon.getIconHeight()));
-        error_Panel.add(errIncButton);
         errIncButton.addActionListener(new java.awt.event.ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                errIncButtonActionPerformed(e);
-            }
-
-            private void errIncButtonActionPerformed(ActionEvent e) {
-                if (errorCheckBox.isSelected()) {
-                    if (ERROR_RATE < 0.9) {
-                        ERROR_RATE += 0.1f;
-                    } else {
-                        criticalInfoTextField.setText("current error rate(="
-                            + getFormattedRealNumber(ERROR_RATE, 2) + ") is max!");
-                    }
-                    errorCheckBox.setText("error : " + getFormattedRealNumber(ERROR_RATE, 2));
-                } else {
-                    criticalInfoTextField.setText("First, select error check box, OK?");
-                }
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                errIncButtonActionPerformed(evt);
             }
         });
+        error_Panel.add(errIncButton);
         error_Panel.add(filler24);
 
         errDecButton.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
@@ -466,33 +451,17 @@ public class CameraGUI extends javax.swing.JFrame implements DeviceGUI {
         errDecButton.setMaximumSize(new java.awt.Dimension(20, 20));
         errDecButton.setMinimumSize(new java.awt.Dimension(20, 20));
         errDecButton.setPreferredSize(new java.awt.Dimension(20, 20));
+        errDecButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                errDecButtonActionPerformed(evt);
+            }
+        });
         error_Panel.add(errDecButton);
         ImageIcon iconMinus = getMinusIcon();
         errDecButton.setIcon(iconMinus);
         errDecButton.setBorder(null);
         errDecButton.setPreferredSize(
             new Dimension(iconMinus.getIconWidth(), iconMinus.getIconHeight()));
-
-        errDecButton.addActionListener(new java.awt.event.ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                errDecButtonActionPerformed(e);
-            }
-
-            private void errDecButtonActionPerformed(ActionEvent e) {
-                if (errorCheckBox.isSelected()) {
-                    if (ERROR_RATE > 0.10) {
-                        ERROR_RATE -= 0.1f;
-                    } else {
-                        criticalInfoTextField.setText("current error rate(="
-                            + getFormattedRealNumber(ERROR_RATE, 2) + ") is min!");
-                    }
-                    errorCheckBox.setText("error : " + getFormattedRealNumber(ERROR_RATE, 2));
-                } else {
-                    criticalInfoTextField.setText("First, select error check box, OK?");
-                }
-            }
-        });
         error_Panel.add(filler25);
         error_Panel.add(filler16);
 
@@ -660,15 +629,35 @@ public class CameraGUI extends javax.swing.JFrame implements DeviceGUI {
 
     private void errorCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_errorCheckBoxActionPerformed
         if (errorCheckBox.isSelected()) {
-            errorCheckBox.setText("error : " + getFormattedRealNumber(ERROR_RATE, 2));
+            displayErrorRate(criticalInfoTextField, ERROR_RATE);                     
             errIncButton.setEnabled(true);
             errDecButton.setEnabled(true);
         } else {
-            errorCheckBox.setText("error");
+            criticalInfoTextField.setText("No artificial error.");            
             errIncButton.setEnabled(false);
             errDecButton.setEnabled(false);
         }
     }//GEN-LAST:event_errorCheckBoxActionPerformed
+
+    private void errIncButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_errIncButtonActionPerformed
+        if (ERROR_RATE < 0.9) {
+            ERROR_RATE += 0.1f;
+        } else {
+            criticalInfoTextField.setText("Current error rate(=" 
+                    + getFormattedRealNumber(ERROR_RATE, 2) + ") is max!");
+        }
+        displayErrorRate(criticalInfoTextField, ERROR_RATE);
+    }//GEN-LAST:event_errIncButtonActionPerformed
+
+    private void errDecButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_errDecButtonActionPerformed
+        if (ERROR_RATE > 0.10) {
+            ERROR_RATE -= 0.1f;
+        } else {
+            criticalInfoTextField.setText("Current error rate(=" 
+                    + getFormattedRealNumber(ERROR_RATE, 2) + ") is min!");
+        }
+        displayErrorRate(criticalInfoTextField, ERROR_RATE);
+    }//GEN-LAST:event_errDecButtonActionPerformed
 
     /**
      * @param args the command line arguments

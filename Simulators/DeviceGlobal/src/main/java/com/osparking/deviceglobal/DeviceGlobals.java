@@ -17,11 +17,13 @@
 package com.osparking.deviceglobal;
 
 import com.osparking.global.Globals;
+import static com.osparking.global.Globals.getFormattedRealNumber;
 import java.awt.Image;
 import java.net.URL;
 import java.util.List;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
+import javax.swing.JTextField;
 
 /**
  *
@@ -42,5 +44,9 @@ public class DeviceGlobals {
                 iconList.add(new ImageIcon(iconURL).getImage());
             }
         }         
+    }  
+    
+    public static void displayErrorRate(JTextField displayField, float rate) {
+        displayField.setText("Artificial error rate : " + getFormattedRealNumber(rate, 2));
     }    
 }

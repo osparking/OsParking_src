@@ -16,6 +16,7 @@
  */
 package com.osparking.global.names;
 
+import static com.osparking.global.Globals.font_Type;
 import com.osparking.global.names.OSP_enums.EBD_Colors;
 import com.osparking.global.names.OSP_enums.EBD_ContentType;
 import com.osparking.global.names.OSP_enums.EBD_Fonts;
