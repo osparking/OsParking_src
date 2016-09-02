@@ -46,15 +46,16 @@ import static com.osparking.global.names.ControlEnums.DialogTitleTypes.CONFIRM_L
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.ERROR_DIALOGTITLE;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.MAIN_GUI_TITLE;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.SYSTEM_SHUTDOWN_CONFIRM;
+import static com.osparking.global.names.ControlEnums.LabelContent.ARTI_CURR_ERR_LIMIT_1;
+import static com.osparking.global.names.ControlEnums.LabelContent.ARTI_CURR_ERR_LIMIT_2;
+import static com.osparking.global.names.ControlEnums.LabelContent.ARTI_CURR_ERR_LIMIT_b;
 import static com.osparking.global.names.ControlEnums.LabelContent.CAMERA_LABEL;
-import static com.osparking.global.names.ControlEnums.LabelContent.CLOSED_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.E_BOARD_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.GATE_BAR_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.GATE_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.OPEN_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.RATE_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.STATUS_LABEL;
-import static com.osparking.global.names.ControlEnums.LabelContent.STOPPED_LABEL;
 import static com.osparking.global.names.ControlEnums.MenuITemTypes.AFFILIATION_MENU;
 import static com.osparking.global.names.ControlEnums.MenuITemTypes.ARRIVAL_MENU_ITEM;
 import static com.osparking.global.names.ControlEnums.MenuITemTypes.BOOTING_MENU_ITEM;
@@ -96,6 +97,7 @@ import static com.osparking.global.names.DB_Access.deviceType;
 import static com.osparking.global.names.DB_Access.enteranceAllowed;
 import static com.osparking.global.names.DB_Access.gateCount;
 import static com.osparking.global.names.DB_Access.gateNames;
+import static com.osparking.global.names.DB_Access.parkingPermitted;
 import static com.osparking.global.names.DB_Access.readEBoardSettings;
 import static com.osparking.global.names.DB_Access.readSettings;
 import com.osparking.global.names.EBD_DisplaySetting;
@@ -278,6 +280,8 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
         
     final static int gateCSHt = 20;
     final static int gateCSGap = 8;
+    
+    Toolkit toolkit = Toolkit.getDefaultToolkit();
     
     /**
      * @return the shownImageRow
@@ -1792,23 +1796,19 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
     private void errIncButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_errIncButtonActionPerformed
         if (ERROR_RATE < 0.9) {
              ERROR_RATE += 0.1f;
+            errorLabel.setText(RATE_LABEL.getContent() + getFormattedRealNumber(ERROR_RATE, 2));
          } else {
-
-            addMessageLine(MessageTextArea,"current error rate(=" 
-                     + getFormattedRealNumber(ERROR_RATE, 2) + ") is max!");
+            displayRateLimit(ARTI_CURR_ERR_LIMIT_2.getContent());            
          }
-         errorLabel.setText(RATE_LABEL.getContent() + getFormattedRealNumber(ERROR_RATE, 2));
     }//GEN-LAST:event_errIncButtonActionPerformed
 
     private void errDecButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_errDecButtonActionPerformed
         if (ERROR_RATE > 0.10) {
             ERROR_RATE -= 0.1f;
+            errorLabel.setText(RATE_LABEL.getContent() + getFormattedRealNumber(ERROR_RATE, 2));
         } else {
-
-           addMessageLine(MessageTextArea,"current error rate(=" 
-                    + getFormattedRealNumber(ERROR_RATE, 2) + ") is max!");
+            displayRateLimit(ARTI_CURR_ERR_LIMIT_b.getContent());            
         }
-        errorLabel.setText(RATE_LABEL.getContent() + getFormattedRealNumber(ERROR_RATE, 2));
     }//GEN-LAST:event_errDecButtonActionPerformed
 
     private void showStatisticsBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showStatisticsBtnActionPerformed
@@ -1970,11 +1970,11 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
         
         if (autoGateOpenCheckBox.isSelected()) {
             //<editor-fold desc="-- Automatic Gate Open"">
-            if (permission == PermissionType.ALLOWED || permission == PermissionType.DISALLOWED) 
+            if (permission == PermissionType.ALLOWED)
             {
-                // Registered, possibly disallowed to park; door is automatically opened
                 barOptn = BarOperation.REGISTERED_CAR_OPENED;
             } else {
+                // Disallowed or visiting cars
                 barOptn = BarOperation.AUTO_OPENED;
             }
             //</editor-fold>
@@ -1995,7 +1995,7 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
         }
         arrSeqNo = insertDBrecord(cameraID, arrivalTime, tagRecognized, tagRegistered, 
                 image,  -1, -1, null, barOptn);
-        updateMainForm(cameraID, tagRecognized, arrSeqNo, barOptn);
+        updateMainForm(cameraID, tagRecognized, arrSeqNo, permission, barOptn);
     }
 
     private void controlStoppedCar(byte cameraID, int imageSN, String tagRecognized, 
@@ -2140,18 +2140,17 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
         configureSettingsForm.setVisible(true);   
     }
 
-    private void makeQuitVisible() {
-        // Change one top menu command text for guests and no logins
-        Quit.setText(QUIT_MENU_ITEM_SC.getContent());
-        Quit.setMnemonic('Q');
-//        CommandMenu.setText(QUIT_MENU_ITEM_SC.getContent());
-    }
-
     private void adjustListHeight(JList arrivalList, int rowCount) {
         Dimension tableDim = new Dimension(arrivalList.getSize().width, 
                 25 * rowCount); 
         arrivalList.setSize(tableDim);
         arrivalList.setPreferredSize(tableDim);        
+    }
+
+    private void displayRateLimit(String limitDescription) {
+        toolkit.beep();
+        addMessageLine(MessageTextArea, ARTI_CURR_ERR_LIMIT_1.getContent()
+                + getFormattedRealNumber(ERROR_RATE, 2) + limitDescription);
     }
 
     class ManageArrivalList extends Thread {
@@ -2276,7 +2275,6 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
     
     JLabel managerLabel = new JLabel(MANAGER_MANU.getContent()); 
     JLabel ID_Label = new JLabel(ID_LABEL_STR.getContent()); 
-    private javax.swing.JButton SettingsButton;
 
     // JongbumPark's declaration
     private static GatePanel gatePanel;
@@ -2630,11 +2628,8 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
         
         StringBuffer sb = new StringBuffer("Select arrseqno, concat ('-', ");
         sb.append("substr(arrivaltime, 9, 2), ");
-        sb.append("substr(arrivaltime, 11), ' ', ");
-        sb.append("ifnull(TagEnteredAs, TagRecognized)) as msgLine, ");
-        sb.append("If (BarOperation = "); 
-        sb.append(BarOperation.REMAIN_CLOSED.ordinal());
-        sb.append(", '" + CLOSED_LABEL.getContent() + "', '') as BarOptn ");
+        sb.append("substr(arrivaltime, 11), ' ') as tmDisplay, ");
+        sb.append("TagEnteredAs, TagRecognized, BarOperation ");
         sb.append("from car_arrival ");
         sb.append("where gateno = ? ");
         sb.append("order by arrSeqno desc ");
@@ -2644,8 +2639,6 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
         PreparedStatement pStmt = null;    
         ResultSet rs = null;
         long arrSeqNo = 0;
-        
-        int count = 0;
         try {
             // create the java statement
             conn = JDBCMySQL.getConnection();
@@ -2654,13 +2647,35 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
             pStmt.setInt(2, RECENT_COUNT);
             rs = pStmt.executeQuery();
             
-            String msgLine, barOptn ;
+            String timePlusTag = "";
+            String tagEnteredAs = "";
+            String tagRecognized = "";
+            BarOperation barOptn;
+            int barOptnInt;
+            PermissionType perm;
+            
             while (rs.next()) {
-                msgLine = rs.getString("msgLine");
-                barOptn = rs.getString("BarOptn");
+                timePlusTag = "";
+                timePlusTag += rs.getString("tmDisplay");
+                tagEnteredAs = rs.getString("TagEnteredAs");
+                tagRecognized = rs.getString("TagRecognized");
+                if (tagEnteredAs == null) {
+                    timePlusTag += tagRecognized;
+                    perm = UNREGISTERED;
+                } else {
+                    timePlusTag += tagEnteredAs;
+                    if (parkingPermitted(tagEnteredAs)) {
+                        perm = ALLOWED;
+                    } else {
+                        perm = DISALLOWED;
+                    }
+                }
+                
+                barOptnInt = rs.getInt("BarOperation");
+                barOptn = BarOperation.values()[barOptnInt];
                 arrSeqNo = rs.getLong("arrseqno");
-                listModel.addElement(new CarAdmission(msgLine + barOptn, arrSeqNo));
-                count ++;
+                listModel.addElement(new CarAdmission(timePlusTag + "-" + 
+                        perm.getContent() + "-" + barOptn.getContent(), arrSeqNo));
             }
         } catch (SQLException se) {
             logParkingException(Level.SEVERE, se, 
@@ -2672,7 +2687,7 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
     }
 
     public synchronized void updateMainForm(int gateNo, String tagRecognized,  
-            long arrSeqNo, BarOperation barOptn) {
+            long arrSeqNo, PermissionType permission, BarOperation barOptn) {
         try
         {
             Calendar calendar = Calendar.getInstance();
@@ -2685,15 +2700,10 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
             DefaultListModel<CarAdmission> listModel =
                     (DefaultListModel<CarAdmission>) admissionListModel[gateNo];
             
-            String suffix = "";
-            if (barOptn == BarOperation.REMAIN_CLOSED) {
-                suffix = CLOSED_LABEL.getContent();
-            } else if (barOptn == BarOperation.OPENED_UP) {
-                suffix =STOPPED_LABEL .getContent();
-            }
             // add a row to the recent entry list for the gate
-            listModel.add(0, new CarAdmission("-" + tmDisplay + tagRecognized + suffix, 
-                   arrSeqNo));
+            listModel.add(0, new CarAdmission(
+                    "-" + tmDisplay + tagRecognized + "-" + permission.getContent() +
+                            "-" + barOptn.getContent(), arrSeqNo));
             
             // display entry image on the label for the gate
             listSelectionModel[gateNo].setSelectionInterval(0, 0);
@@ -2741,7 +2751,7 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
             stmt.setInt(index++, gateNo);
             stmt.setString(index++, arrivalTmStr);
             stmt.setString(index++, tagRecognized);
-            if (tagEnteredAs.length() == 0) {
+            if (tagEnteredAs == null || tagEnteredAs.length() == 0) {
                 stmt.setString(index++, null);
             } else {
                 stmt.setString(index++, tagEnteredAs);
@@ -2819,7 +2829,8 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
                 getIDLogFile()[GateBar.ordinal()][gateNo].write(openCommandID + System.lineSeparator());
                 getIDLogFile()[GateBar.ordinal()][gateNo].flush();
             } catch (IOException ex) {
-                logParkingExceptionStatus(Level.SEVERE, ex, "saving open ID", getStatusTextField(), GENERAL_DEVICE);
+                logParkingExceptionStatus(Level.SEVERE, ex, "saving open ID", 
+                        getStatusTextField(), GENERAL_DEVICE);
             }
         }
         ParkingTimer openCmdTimer = getOpenGateCmdTimer()[gateNo];
@@ -3071,7 +3082,6 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
                 
             case VEHICLE_TAG:
             case REGISTRATION_STAT:
-                StringBuffer tagEnteredAs = new StringBuffer(); // call-by-reference usage
                 StringBuffer remark = new StringBuffer();               
 
                 // fetch vehicle registration status from DB

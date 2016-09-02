@@ -47,9 +47,12 @@ import static com.osparking.global.names.ControlEnums.LabelContent.RegisteredTag
 import static com.osparking.global.names.ControlEnums.MenuITemTypes.META_KEY_LABEL;
 import com.osparking.global.names.ControlEnums.TitleTypes;
 import static com.osparking.global.names.DB_Access.gateNames;
+import com.osparking.global.names.OSP_enums;
+import com.osparking.global.names.OSP_enums.PermissionType;
 import java.awt.Dimension;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.security.Permission;
 
 /**
  *
@@ -426,7 +429,8 @@ public class DisAllowedCar extends javax.swing.JDialog {
                 
             long arrSeqNo = parent.insertDBrecord(gateNo, arrivalTm, tagRecognized, tagEnteredAs,
                     bImg, -1, -1, null, BarOperation.MANUAL);
-            parent.updateMainForm(gateNo, tagRecognized, arrSeqNo, BarOperation.OPENED_UP);
+            parent.updateMainForm(gateNo, tagRecognized, arrSeqNo, 
+                    OSP_enums.PermissionType.DISALLOWED, BarOperation.OPENED_UP);
             parent.isGateBusy[gateNo] = false;
         }
         timer.cancel();
@@ -440,7 +444,8 @@ public class DisAllowedCar extends javax.swing.JDialog {
             long arrSeqNo = parent.insertDBrecord(gateNo, arrivalTm, tagRecognized, tagEnteredAs,
                     bImg,  -1, -1, null, BarOperation.REMAIN_CLOSED);        
             parent.isGateBusy[gateNo] = false;
-            parent.updateMainForm(gateNo, tagRecognized, arrSeqNo, BarOperation.REMAIN_CLOSED);
+            parent.updateMainForm(gateNo, tagRecognized, arrSeqNo, 
+                    PermissionType.DISALLOWED, BarOperation.REMAIN_CLOSED);
         }
         timer.cancel();
         timer.purge();
@@ -452,7 +457,8 @@ public class DisAllowedCar extends javax.swing.JDialog {
             long arrSeqNo = parent.insertDBrecord(gateNo, arrivalTm, tagRecognized, tagEnteredAs,
                     bImg, -1, -1, null, BarOperation.REMAIN_CLOSED);   
             parent.isGateBusy[gateNo] = false;
-            parent.updateMainForm(gateNo, tagRecognized, arrSeqNo, BarOperation.REMAIN_CLOSED);        
+            parent.updateMainForm(gateNo, tagRecognized, arrSeqNo, 
+                    PermissionType.DISALLOWED, BarOperation.REMAIN_CLOSED);        
         }
         timer.cancel();
         timer.purge();

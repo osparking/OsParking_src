@@ -280,6 +280,9 @@ public class ControlEnums {
         LOGGIND_DIALOG_F(" - 전광판 설정 변경", " - E-Board Settings Change"),
         LIMIT_DESCRIPTION("길이 한계", "Length Limit"),
         
+        ARTI_CURR_ERR_LIMIT_1("현재 인공 오류 비율(=", "Current error rate(="),
+        ARTI_CURR_ERR_LIMIT_2(") 이 최대치임!", ") is max!"),
+        ARTI_CURR_ERR_LIMIT_b(") 이 최소치임!", ") is min!"),
         ODS_SAVE_DIALOG_1("ods 파일이 아래와 같이 생성되었습니다.", "ods file created as follows."),
         ODS_SAVE_DIALOG_2("- 폴더명 : ", "- Folder : "),
         ODS_SAVE_DIALOG_3("- 파일명 : ", "- File name : "),
@@ -1165,11 +1168,11 @@ public class ControlEnums {
         /**
          * Gate remained closed since the attendant disallowed a car to enter.
          */
-        REMAIN_CLOSED("폐쇄", "Remain Closed"),
+        REMAIN_CLOSED("회차조치", "Not allowed"),
         /**
          * Temporarily stopped for a checkup
          */
-        OPENED_UP("지속개방", "Remain Opened");
+        OPENED_UP("일단정지", "Stopped");
         
         BarOperation(String korean, String english) {
             contents[KOREAN.ordinal()] = korean;

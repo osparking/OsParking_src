@@ -520,8 +520,7 @@ public class Globals {
     public static byte getNextCarNum(Random rand, byte imageFileID) {
         byte picNo = 0;
         do {
-//             picNo = (byte)(1 + rand.nextInt(6)); // correct one
-             picNo = (byte)(4 + rand.nextInt(3)); // modified for testing
+             picNo = (byte)(1 + rand.nextInt(6)); // correct one
         } while (picNo == imageFileID);
         return picNo;
     }    

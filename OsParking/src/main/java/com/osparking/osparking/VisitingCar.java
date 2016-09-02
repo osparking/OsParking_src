@@ -65,6 +65,7 @@ import static com.osparking.global.names.OSP_enums.DriverCol.AffiliationL1;
 import static com.osparking.global.names.OSP_enums.DriverCol.AffiliationL2;
 import static com.osparking.global.names.OSP_enums.DriverCol.BuildingNo;
 import static com.osparking.global.names.OSP_enums.DriverCol.UnitNo;
+import com.osparking.global.names.OSP_enums.PermissionType;
 import com.osparking.global.names.PComboBox;
 import static com.osparking.vehicle.driver.ManageDrivers.mayPropagateBackward;
 import java.awt.Dimension;
@@ -840,7 +841,8 @@ public class VisitingCar extends javax.swing.JDialog {
             long arrSeqNo = parent.insertDBrecord(gateNo, arrivalTime, tagRecognized, null,
                 bImg, -1, -1, null, BarOperation.REMAIN_CLOSED);
             parent.isGateBusy[gateNo] = false;        
-            parent.updateMainForm(gateNo, tagRecognized, arrSeqNo, BarOperation.REMAIN_CLOSED);
+            parent.updateMainForm(gateNo, tagRecognized, arrSeqNo, 
+                    PermissionType.UNREGISTERED, BarOperation.REMAIN_CLOSED);
         }
         dispose();        
     }//GEN-LAST:event_formWindowClosing
@@ -1034,13 +1036,15 @@ public class VisitingCar extends javax.swing.JDialog {
                         ((InnoComboBoxItem)visitUnitComboBox.getSelectedItem()).getKeys()[0];
             }
             BarOperation barOperation = BarOperation.MANUAL;
+            
             if (!openGate) {
                 barOperation = BarOperation.REMAIN_CLOSED;
             }
             String reason = visitReasonTextField.getText();
             long arrSeqNo = parent.insertDBrecord(gateNo, arrivalTime, tagRecognized, null,
                     bImg, unitSeqNo, l2No, reason.length() == 0 ? null : reason , barOperation);
-            parent.updateMainForm(gateNo, tagRecognized, arrSeqNo, barOperation);        
+            parent.updateMainForm(gateNo, tagRecognized, arrSeqNo, 
+                    PermissionType.UNREGISTERED, barOperation);        
             parent.isGateBusy[gateNo] = false; 
         }
         dispose();

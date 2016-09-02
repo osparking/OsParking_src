@@ -277,7 +277,20 @@ public class OSP_enums {
          * Car at the entry gate is allowed to park at this parking lot. So, the gate was opened
          * to allow the car to come on in.
          */
-        ALLOWED, DISALLOWED, UNREGISTERED, BADTAGFORMAT       
+        ALLOWED("등록차", "Registered"),
+        DISALLOWED("경고차", "Warned"), 
+        UNREGISTERED("방문차", "Visiting"), 
+        BADTAGFORMAT("식별오류", "LPR Error");
+        PermissionType(String korean, String english) {
+            label[KOREAN.ordinal()] = korean;
+            label[ENGLISH.ordinal()] = english;
+        }
+        
+        private String[] label = new String[Languages.values().length];
+        
+        public String getContent() {
+            return label[language.ordinal()];
+        }          
     }
 
     public enum EBD_DisplayUsage {        

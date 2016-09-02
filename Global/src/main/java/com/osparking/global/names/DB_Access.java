@@ -514,6 +514,34 @@ public class DB_Access {
         return resultSetting;
     }    
     
+
+    public static boolean parkingPermitted(String tagEnteredAs) {
+        boolean result = false;
+        Connection conn = null;
+        Statement stmt = null;
+        ResultSet rs = null;        
+        String sql = "Select permitted From Vehicles Where PLATE_NUMBER = '" + tagEnteredAs + "'";
+
+        try {
+            conn = JDBCMySQL.getConnection();
+            stmt = conn.createStatement();
+            rs = stmt.executeQuery(sql);
+
+            if (rs.next()) {
+                int permissionCode = rs.getInt("permitted");
+                if (permissionCode == 0) {
+                    result =  true;
+                }
+            } 
+        } catch (SQLException ex) {
+            logParkingException(Level.SEVERE, ex, "while checking vehicle park perm");
+        } finally {
+            closeDBstuff(conn, stmt, rs, "check vehicle parking permission");
+            return result;
+        }    
+    }
+    
+    
     public static PermissionType enteranceAllowed(String tagRecognized, 
             StringBuffer tagEnteredAs, StringBuffer remark) {
         
