@@ -219,14 +219,18 @@ public class CameraManager extends Thread implements IDevice.IManager, IDevice.I
                                         saveImageID(currImgSN, mainForm.prevImgSN[cameraID]);
                                     }
                                     mainForm.prevImgSN[cameraID] = currImgSN;
-                                    BufferedImage image = ImageIO.read(new ByteArrayInputStream(
+                                    
+                                    final BufferedImage image = ImageIO.read(new ByteArrayInputStream(
                                             oneMBytes[cameraID - 1], 0, imageSize));
-
-                                    String tagNumber  = getTagNumber(getPictureNo(imageSize)); // LPR_engine
+                                    final String tagNumber  = getTagNumber(getPictureNo(imageSize)); // LPR_engine
 
                                     if (!(mainForm.isGateBusy[cameraID])) {
-//                                        mainForm.processCarArrival(cameraID, currImgSN, tagNumber, image);
-                                        mainForm.processCarEntry(cameraID, currImgSN, tagNumber, image, null);
+                                        Thread imageHandler = new Thread() {
+                                            public void run() {
+                                                mainForm.processCarEntry(cameraID, currImgSN, tagNumber, image, null);
+                                            }
+                                        };
+                                        imageHandler.start();
                                     }
                                 }
                                 //</editor-fold>

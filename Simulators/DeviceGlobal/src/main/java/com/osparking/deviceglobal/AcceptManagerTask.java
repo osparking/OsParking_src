@@ -25,9 +25,7 @@ import java.util.Date;
 import java.util.Timer;
 import java.util.logging.Level;
 import static com.osparking.global.names.DB_Access.gateCount;
-import com.osparking.global.Globals;
 import static com.osparking.global.Globals.*;
-import static com.osparking.global.names.DB_Access.devicePort;
 import com.osparking.global.names.OSP_enums.DeviceType;
 import static com.osparking.global.names.OSP_enums.DeviceType.Camera;
 
@@ -86,7 +84,9 @@ public class AcceptManagerTask implements Runnable {
      */
     public void run() {
         deviceGUI.getCriticalInfoTextField().setText("waiting for manager to request socket connection");
-        System.out.println(devType + "#" + deviceGUI.getID() + " waits manager to connect");
+        if (DEBUG) {
+            System.out.println(devType + "#" + deviceGUI.getID() + " waits manager to connect");
+        }
 
         try {
             while (true) 

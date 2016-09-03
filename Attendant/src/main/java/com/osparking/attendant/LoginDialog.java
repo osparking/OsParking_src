@@ -24,6 +24,7 @@ import static com.osparking.global.CommonData.buttonWidthNorm;
 import static com.osparking.global.CommonData.buttonWidthWide;
 import static com.osparking.global.CommonData.metaKeyLabel;
 import com.osparking.global.Globals;
+import static com.osparking.global.Globals.DEBUG;
 import static com.osparking.global.Globals.OSPiconList;
 import static com.osparking.global.Globals.checkOptions;
 import static com.osparking.global.Globals.font_Size;
@@ -251,7 +252,9 @@ public class LoginDialog extends javax.swing.JDialog {
         boolean checkGood = loginCheckGood(lowerID, new String(getPassword().getPassword()));
 
         if (checkGood) {
-            System.out.println("Login Success");
+            if (DEBUG) {
+                System.out.println("Login Success");
+            }
             disposeAndOptionalExit();
         } else {
             showMessageDialog(this, LOGIN_WRONG_DIALOG.getContent(),

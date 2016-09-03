@@ -210,11 +210,10 @@ public class CameraReader extends Thread implements DeviceReader{
         this.SHUT_DOWN = SHUT_DOWN;
     }
     
-//    public synchronized void disconnectSocket(Exception e, String reason) {
     public void disconnectSocket(Exception e, String reason) {
-        
         if (getManagerSocket() == null)
             return;
+        
         logParkingException(Level.INFO, e, reason, cameraGUI.getID());
         synchronized(cameraGUI.getSocketMUTEX()) {
             addMessageLine(cameraGUI.getMessageTextArea(), 
