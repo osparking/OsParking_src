@@ -29,6 +29,7 @@ import com.osparking.global.Globals;
 import static com.osparking.global.Globals.*;
 import static com.osparking.global.Globals.PULSE_PERIOD;
 import com.osparking.global.names.OSP_enums.OpLogLevel;
+import java.util.logging.Logger;
 
 /**
  * Simulates an LPR(License Plate Recognition) camera shutter.
@@ -131,7 +132,14 @@ public class ImageGenerationTask extends TimerTask {
                         Thread.sleep(1000 * (rand.nextInt(18) + 2)); // 2 to 20 seconds of wait time
                     } catch (InterruptedException ie) {
                     }
+                    while (cameraGUI.isOsBusy()) {
+                        try {
+                            Thread.sleep(100);
+                        } catch (InterruptedException ex) {
+                        }
+                    }
                     // choose a car (image) ID randomly
+                    cameraGUI.setOsBusy(true);
                     imageFileNo = getNextCarNum(rand, imageFileNo);
                     cameraGUI.sendCarImage(imageFileNo, ++cameraGUI.generationSN);
                     if (DEBUG) {

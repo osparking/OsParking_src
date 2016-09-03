@@ -840,7 +840,7 @@ public class VisitingCar extends javax.swing.JDialog {
         if(parent != null){
             long arrSeqNo = parent.insertDBrecord(gateNo, arrivalTime, tagRecognized, null,
                 bImg, -1, -1, null, BarOperation.REMAIN_CLOSED);
-            parent.isGateBusy[gateNo] = false;        
+            parent.setGateBusy(gateNo, false);
             parent.updateMainForm(gateNo, tagRecognized, arrSeqNo, 
                     PermissionType.UNREGISTERED, BarOperation.REMAIN_CLOSED);
         }
@@ -1045,7 +1045,7 @@ public class VisitingCar extends javax.swing.JDialog {
                     bImg, unitSeqNo, l2No, reason.length() == 0 ? null : reason , barOperation);
             parent.updateMainForm(gateNo, tagRecognized, arrSeqNo, 
                     PermissionType.UNREGISTERED, barOperation);        
-            parent.isGateBusy[gateNo] = false; 
+            parent.setGateBusy(gateNo, false);
         }
         dispose();
     }

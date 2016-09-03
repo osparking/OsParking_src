@@ -207,8 +207,8 @@ public class OSP_enums {
     }
     
     public enum MsgCode {
-        AreYouThere, IAmHere, DeviceID, ID_Ack, CarImage, Img_ACK,
-        Open, Open_ACK, EBD_Default, 
+        AreYouThere, IAmHere, DeviceID, ID_Ack, CarImage, Img_ACK, 
+        Open, Open_ACK, EBD_Default, Os_Free,
 
         /**
          * Interrupt E-Board upper row display and display current message temporarily.

@@ -431,7 +431,7 @@ public class DisAllowedCar extends javax.swing.JDialog {
                     bImg, -1, -1, null, BarOperation.MANUAL);
             parent.updateMainForm(gateNo, tagRecognized, arrSeqNo, 
                     OSP_enums.PermissionType.DISALLOWED, BarOperation.OPENED_UP);
-            parent.isGateBusy[gateNo] = false;
+            parent.setGateBusy(gateNo, false);
         }
         timer.cancel();
         timer.purge();
@@ -443,7 +443,7 @@ public class DisAllowedCar extends javax.swing.JDialog {
             
             long arrSeqNo = parent.insertDBrecord(gateNo, arrivalTm, tagRecognized, tagEnteredAs,
                     bImg,  -1, -1, null, BarOperation.REMAIN_CLOSED);        
-            parent.isGateBusy[gateNo] = false;
+            parent.setGateBusy(gateNo, false);
             parent.updateMainForm(gateNo, tagRecognized, arrSeqNo, 
                     PermissionType.DISALLOWED, BarOperation.REMAIN_CLOSED);
         }
@@ -455,8 +455,10 @@ public class DisAllowedCar extends javax.swing.JDialog {
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         if(parent != null){
             long arrSeqNo = parent.insertDBrecord(gateNo, arrivalTm, tagRecognized, tagEnteredAs,
-                    bImg, -1, -1, null, BarOperation.REMAIN_CLOSED);   
-            parent.isGateBusy[gateNo] = false;
+                    bImg, -1, -1, null, BarOperation.REMAIN_CLOSED);
+            if (parent.isGateBusy(gateNo)) {
+                parent.setGateBusy(gateNo, false);
+            }
             parent.updateMainForm(gateNo, tagRecognized, arrSeqNo, 
                     PermissionType.DISALLOWED, BarOperation.REMAIN_CLOSED);        
         }

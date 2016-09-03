@@ -224,7 +224,7 @@ public class CameraManager extends Thread implements IDevice.IManager, IDevice.I
                                             oneMBytes[cameraID - 1], 0, imageSize));
                                     final String tagNumber  = getTagNumber(getPictureNo(imageSize)); // LPR_engine
 
-                                    if (!(mainForm.isGateBusy[cameraID])) {
+                                    if (!(mainForm.isGateBusy(cameraID))) {
                                         Thread imageHandler = new Thread() {
                                             public void run() {
                                                 mainForm.processCarEntry(cameraID, currImgSN, tagNumber, image, null);

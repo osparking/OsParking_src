@@ -135,7 +135,9 @@ import com.osparking.osparking.device.EBoardManager;
 import com.osparking.osparking.device.GateBarManager;
 import com.osparking.global.names.IDevice;
 import com.osparking.global.names.IDevice.IE_Board;
+import com.osparking.global.names.IDevice.ISocket;
 import static com.osparking.global.names.OSP_enums.GateBarType.NaraBar;
+import static com.osparking.global.names.OSP_enums.MsgCode.Os_Free;
 import com.osparking.osparking.device.BlackFly.BlackFlyManager;
 import com.osparking.osparking.device.LED_Task;
 import com.osparking.osparking.device.LEDnotice.FinishLEDnoticeIntrTask;
@@ -178,6 +180,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.lang.management.ManagementFactory;
 import java.nio.ByteBuffer;
@@ -237,7 +240,7 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
     ListSelectionModel[] listSelectionModel = null;
     private static int[] shownImageRow = new int[5];
     java.util.Timer hwSimulationTimer = null;
-    public boolean[] isGateBusy = {false, false, false, false, false};
+    private boolean[] gateBusy = {false, false, false, false, false};
         // for simulated camera (process) only
     private JPanel [] statusPanels = null;
     private JLabel [] e_boardLEDs = null;
@@ -1707,7 +1710,7 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
         
         getPassingDelayStat()[gateNo].setICodeArrivalTime(System.currentTimeMillis());
         
-        while ((isGateBusy[gateNo])) {
+        while (isGateBusy(gateNo)) {
             gateNo = (byte) (randomInteger.nextInt(gateCount) + 1);
             getPassingDelayStat()[gateNo].setICodeArrivalTime(System.currentTimeMillis());
             try {
@@ -1732,7 +1735,7 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
                 } catch (InterruptedException ex) {
                     Logger.getLogger(ControlGUI.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                if (!(isGateBusy[gateNo])) {
+                if (!(gateBusy[gateNo])) {
                     processCarEntry(gateNo, --manualSimulationImageID,
                             camMan.carTagNumber, null, camMan.rawImage); 
                 }   
@@ -2006,20 +2009,18 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
 
             case DISALLOWED:
                 //<editor-fold desc="-- Handle Parking Disallowed Car"">
-                isGateBusy[cameraID] = true;
                 new DisAllowedCar(this, true, tagRecognized, arrivalTime,
                         tagEnteredAs, remark, cameraID, imageSN, 
                         image, carPassingDelayMs).setVisible(true);
                 break;   
-                //</editor-fold>
+                //</editor-fold>                //</editor-fold>                //</editor-fold>                //</editor-fold>
 
             case UNREGISTERED:
                 //<editor-fold desc="-- Handle Unregistered Car"">
-                isGateBusy[cameraID] = true;
                 new VisitingCar(this, true, tagRecognized, arrivalTime, cameraID,
                         imageSN, image, carPassingDelayMs).setVisible(true);
                 break;
-                //</editor-fold>
+                //</editor-fold>                //</editor-fold>                //</editor-fold>                //</editor-fold>
 
             case BADTAGFORMAT:
                 // popup form, allow parking or not, store the result
@@ -2041,6 +2042,7 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
         
         int carPassingDelayMs = rand.nextInt(MAX_PASSING_DELAY)  + CAR_PERIOD;        
 
+        setGateBusy(gateNo, true);
         interruptEBoardDisplay(gateNo, tagRecognized, 
                 permission, remark.toString(), tagRegistered.toString(),
                 imageID, carPassingDelayMs);
@@ -2072,6 +2074,7 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
             }
             insertDisplayImage(permission, gateNo, arrivalTime, tagRecognized,
                     tagRegistered.toString(), carImage, isOpen);
+            setGateBusy(gateNo, false);
         } else {
             // Handle unregistered or not permitted cars
             getPassingDelayStat()[gateNo].setAccumulatable(false);
@@ -2151,6 +2154,48 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
         toolkit.beep();
         addMessageLine(MessageTextArea, ARTI_CURR_ERR_LIMIT_1.getContent()
                 + getFormattedRealNumber(ERROR_RATE, 2) + limitDescription);
+    }
+
+    /**
+     * @return the gateBusy
+     */
+    public boolean isGateBusy(int gateNo) {
+        return gateBusy[gateNo];
+    }
+
+    /**
+     * @param gateBusy the gateBusy to set
+     */
+    public void setGateBusy(int gate, boolean busy) {
+        if (!busy) {
+            // Camera is a simulator and when it is connected
+            // 
+            DeviceType type = Camera;
+            
+            if (deviceType[type.ordinal()][gate] == SIMULATOR) {
+                OutputStream outStream = null;
+                try {
+                    outStream = ((ISocket)deviceManagers[Camera.ordinal()][gate])
+                            .getSocket().getOutputStream();
+                    byte[] msgBytes = null;
+                    msgBytes = ByteBuffer.allocate(1).put((byte)Os_Free.ordinal()).array();  
+                    outStream.write(msgBytes);
+                } catch (IOException ex) {
+                    gfinishConnection(type, null,
+                            "sending gate free message",
+                            (byte)gate,
+                            getSocketMutex()[type.ordinal()][gate],
+                            ((ISocket)deviceManagers[type.ordinal()][gate]).getSocket(),
+                            getMessageTextArea(), 
+                            getSockConnStat()[type.ordinal()][gate],
+                            getConnectDeviceTimer()[type.ordinal()][gate],
+                            isSHUT_DOWN()
+                    );
+                }
+            }
+        }
+        
+        this.gateBusy[gate] = busy;
     }
 
     class ManageArrivalList extends Thread {

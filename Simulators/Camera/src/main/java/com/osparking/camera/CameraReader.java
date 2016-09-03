@@ -154,6 +154,10 @@ public class CameraReader extends Thread implements DeviceReader{
                             //</editor-fold>
                             break;
 
+                        case Os_Free:
+                            cameraGUI.setOsBusy(false);
+                            break;
+                            
                         default:
                             cameraGUI.getCriticalInfoTextField().setText("unexpected message code");
                             throw new Exception ("unexpected message code: " + MsgCode.values()[msgCode]); 

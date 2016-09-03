@@ -75,6 +75,7 @@ public class CameraGUI extends javax.swing.JFrame implements DeviceGUI {
     
     private ParkingTimer acceptManagerTimer = null;
     public FileWriter imageID_logFile = null;    
+    private boolean OsBusy = false;
 
     /**
      * Data relating to Car arrival image transmission.
@@ -986,6 +987,20 @@ public class CameraGUI extends javax.swing.JFrame implements DeviceGUI {
      */
     public ParkingTimer getAcceptManagerTimer() {
         return acceptManagerTimer;
+    }
+
+    /**
+     * @return the OsFree
+     */
+    public boolean isOsBusy() {
+        return OsBusy;
+    }
+
+    /**
+     * @param OsFree the OsFree to set
+     */
+    public void setOsBusy(boolean OsFree) {
+        this.OsBusy = OsFree;
     }
 }
 
