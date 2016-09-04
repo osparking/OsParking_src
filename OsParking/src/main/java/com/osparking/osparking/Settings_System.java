@@ -60,7 +60,6 @@ import static com.osparking.global.names.OSP_enums.OpLogLevel.UserCarChange;
 import org.apache.commons.validator.routines.InetAddressValidator;
 import com.osparking.attendant.PWHelpJDialog;
 import com.osparking.global.ChangedComponentSave;
-import com.osparking.global.CommonData;
 import static com.osparking.global.CommonData.CBOX_HEIGHT;
 import static com.osparking.global.CommonData.SETTINGS_HEIGHT;
 import static com.osparking.global.CommonData.SETTINGS_WIDTH;
@@ -68,6 +67,7 @@ import static com.osparking.global.CommonData.TEXT_FIELD_HEIGHT;
 import static com.osparking.global.CommonData.buttonHeightNorm;
 import static com.osparking.global.CommonData.buttonHeightShort;
 import static com.osparking.global.CommonData.buttonWidthNorm;
+import static com.osparking.global.CommonData.cameraOneIsButton;
 import static com.osparking.global.CommonData.pwValidator;
 import static com.osparking.global.CommonData.rejectNonNumericKeys;
 import static com.osparking.global.CommonData.statCountArr;
@@ -168,7 +168,6 @@ import static com.osparking.global.names.DB_Access.statCountIndex;
 import com.osparking.global.names.EBD_DisplaySetting;
 import com.osparking.global.names.OSP_enums.CameraType;
 import com.osparking.global.names.OSP_enums.ConnectionType;
-import static com.osparking.global.names.OSP_enums.ConnectionType.RS_232;
 import static com.osparking.global.names.OSP_enums.ConnectionType.TCP_IP;
 import com.osparking.global.names.OSP_enums.DeviceType;
 import com.osparking.global.names.OSP_enums.E_BoardType;
@@ -245,7 +244,13 @@ public class Settings_System extends javax.swing.JFrame {
             if (comboBx != null) {
                 comboBx.removeAllItems();
                 for (CameraType type: CameraType.values()) {
-                    comboBx.addItem(type);
+                    if (type == CameraType.CarButton) {
+                        if (gate == 1) {
+                            comboBx.addItem(type);
+                        }
+                    } else {
+                        comboBx.addItem(type);
+                    }
                 }
             }
             
@@ -1102,6 +1107,7 @@ public class Settings_System extends javax.swing.JFrame {
         Camera1_IP_TextField.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         Camera1_IP_TextField.setText("127.0.0.1");
         Camera1_IP_TextField.setToolTipText("");
+        Camera1_IP_TextField.setEnabled(false);
         Camera1_IP_TextField.setMaximumSize(new java.awt.Dimension(32767, 32767));
         Camera1_IP_TextField.setMinimumSize(new java.awt.Dimension(125, 25));
         Camera1_IP_TextField.setName("Camera1_IP_TextField"); // NOI18N
@@ -4285,6 +4291,16 @@ public class Settings_System extends javax.swing.JFrame {
         else {
             changedControls.add(comboBx);            
         }
+        if (devType == Camera) {
+            JTextField ipAddrField =
+                    (JTextField)componentMap.get(devType.toString() + gate + "_IP_TextField");
+            
+            if (gate == 1 && selectedType == CameraType.CarButton.ordinal()) {
+                ipAddrField.setEnabled(false);
+            } else {
+                ipAddrField.setEnabled(true);
+            }
+        }
     }
 
     private void setButtonEnabled_If_ConnTypeChanged(int gate, DeviceType devType) {
@@ -4500,19 +4516,36 @@ public class Settings_System extends javax.swing.JFrame {
 
     private void setPortNumber(DeviceType devType, int subType, byte gateNo, JTextField portField) 
     {
-        JComboBox comboBx = ((JComboBox)getComponentByName(devType.name() +gateNo + "_connTypeCBox"));
+        JComboBox connTyCBox = ((JComboBox)getComponentByName(devType.name() +gateNo + "_connTypeCBox"));
         
         if (subType == SIMULATOR) {
-            comboBx.setSelectedIndex(TCP_IP.ordinal());
-            comboBx.setEnabled(false);
-            
             int portNo = getPort(devType, gateNo, Globals.versionType) + gateNo;
             portField.setText(Integer.toString(portNo));
             portField.setEnabled(false);
+            
+            connTyCBox.setSelectedIndex(TCP_IP.ordinal());
+            connTyCBox.setEnabled(false);
         } else {
-            comboBx.setEnabled(true);
-            portField.setText(devicePort[devType.ordinal()][gateNo]);
-            portField.setEnabled(true);
+            if (devType == Camera && gateNo == 1) {
+                JTextField ipField = ((JTextField)
+                        getComponentByName(devType.name() +gateNo + "_IP_TextField"));
+                
+                if (cameraOneIsButton()) {
+                    ipField.setEnabled(false);
+                } else {
+                    ipField.setEnabled(true);
+                }
+                portField.setEnabled(false);
+                connTyCBox.setEnabled(false);
+            } else {
+                portField.setText(devicePort[devType.ordinal()][gateNo]);
+                portField.setEnabled(true);
+                if (devType == Camera) {
+                    connTyCBox.setEnabled(false);
+                } else {
+                    connTyCBox.setEnabled(true);
+                }
+            }
         }
     }
 

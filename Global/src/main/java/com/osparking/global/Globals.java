@@ -275,6 +275,8 @@ public class Globals {
         
         for (int gateID = 1; gateID <= gateCount; gateID++) {
             gateDeviceTypes[gateID] = new GateDeviceType();
+//            int subTypeOrd = deviceType[Camera.ordinal()][gateID];
+//            gateDeviceTypes[gateID].cameraType = CameraType.values()[(gateID == 1) ? subTypeOrd : subTypeOrd + 1];
             gateDeviceTypes[gateID].cameraType = CameraType.values()[deviceType[Camera.ordinal()][gateID]];
             gateDeviceTypes[gateID].eBoardType = E_BoardType.values()[deviceType[E_Board.ordinal()][gateID]];
             gateDeviceTypes[gateID].gateBarType = GateBarType.values()[deviceType[GateBar.ordinal()][gateID]];

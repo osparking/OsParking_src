@@ -1167,6 +1167,7 @@
                             <Property name="horizontalAlignment" type="int" value="4"/>
                             <Property name="text" type="java.lang.String" value="127.0.0.1"/>
                             <Property name="toolTipText" type="java.lang.String" value=""/>
+                            <Property name="enabled" type="boolean" value="false"/>
                             <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                               <Dimension value="[32767, 32767]"/>
                             </Property>

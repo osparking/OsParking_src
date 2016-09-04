@@ -36,6 +36,7 @@ import com.osparking.deviceglobal.DeviceGUI;
 import static com.osparking.deviceglobal.DeviceGlobals.displayErrorRate;
 import static com.osparking.deviceglobal.DeviceGlobals.displayRateLimit;
 import static com.osparking.deviceglobal.DeviceGlobals.setIconList;
+import static com.osparking.global.CommonData.cameraOneIsButton;
 import static com.osparking.global.CommonData.dummyMessages;
 import java.awt.Component;
 import java.awt.Container;
@@ -171,6 +172,9 @@ public class CameraGUI extends javax.swing.JFrame implements DeviceGUI {
         byte currID = 1; // minimum ID number
         JustOneLock ua;
         
+        if (cameraOneIsButton()) {
+            currID = 2;
+        }
         while (true) {
             if (versionType == VersionType.DEVELOP) 
                 ua = new JustOneLock("No" + currID + "CameraDev");
@@ -863,9 +867,10 @@ public class CameraGUI extends javax.swing.JFrame implements DeviceGUI {
     /**
      * @return the managerIP_TextField
      */
-    public javax.swing.JTextField getManagerIP_TextField() {
-        return getManagerIPaddr();
-    }
+//    public javax.swing.JTextField getManagerIP_TextField() {
+////        return getManagerIPaddr();
+//        return managerIPaddr;
+//    }
 
     /**
      * @param managerIP_TextField the managerIP_TextField to set

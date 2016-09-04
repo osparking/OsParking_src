@@ -23,7 +23,10 @@ import static com.osparking.global.Globals.restAreaImage;
 import static com.osparking.global.Globals.setComponentSize;
 import static com.osparking.global.names.DB_Access.PIC_HEIGHT;
 import static com.osparking.global.names.DB_Access.PIC_WIDTH;
+import static com.osparking.global.names.DB_Access.deviceType;
 import static com.osparking.global.names.DB_Access.gateCount;
+import static com.osparking.global.names.OSP_enums.CameraType.CarButton;
+import static com.osparking.global.names.OSP_enums.DeviceType.Camera;
 import java.awt.Dimension;
 import java.awt.image.BufferedImage;
 import java.util.logging.Level;
@@ -103,5 +106,5 @@ public class Common {
             logParkingException(Level.SEVERE, e, "(Margin area updater)");
         }
         //</editor-fold>
-    }    
+    }     
 }

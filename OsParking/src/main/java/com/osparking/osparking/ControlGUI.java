@@ -23,6 +23,7 @@ import com.osparking.attendant.LoginWindowEvent;
 import com.osparking.global.CommonData;
 import static com.osparking.global.CommonData.ImgHeight;
 import static com.osparking.global.CommonData.ImgWidth;
+import static com.osparking.global.CommonData.cameraOneIsButton;
 import static com.osparking.global.CommonData.dummyMessages;
 import static com.osparking.global.CommonData.metaKeyLabel;
 import static com.osparking.global.CommonData.tipColor;
@@ -92,6 +93,7 @@ import static com.osparking.global.names.ControlEnums.MsgContent.SYSTEM_START;
 import static com.osparking.global.names.ControlEnums.MsgContent.SYSTEM_STOP;
 import static com.osparking.global.names.ControlEnums.TextType.NO_APP_MSG;
 import static com.osparking.global.names.ControlEnums.TextType.ON_ARTIFI_ERROR_MSG;
+import static com.osparking.global.names.ControlEnums.ToolTipContent.CAR_ENTRY_TOOLTIP;
 import com.osparking.global.names.DB_Access;
 import static com.osparking.global.names.DB_Access.deviceType;
 import static com.osparking.global.names.DB_Access.enteranceAllowed;
@@ -136,6 +138,8 @@ import com.osparking.osparking.device.GateBarManager;
 import com.osparking.global.names.IDevice;
 import com.osparking.global.names.IDevice.IE_Board;
 import com.osparking.global.names.IDevice.ISocket;
+import com.osparking.global.names.OSP_enums.CameraType;
+import static com.osparking.global.names.OSP_enums.CameraType.Simulator;
 import static com.osparking.global.names.OSP_enums.GateBarType.NaraBar;
 import static com.osparking.global.names.OSP_enums.MsgCode.Os_Free;
 import com.osparking.osparking.device.BlackFly.BlackFlyManager;
@@ -368,6 +372,13 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
         deviceConnectionLabels[DeviceType.GateBar.ordinal()][2] = labelBar2;
         deviceConnectionLabels[DeviceType.GateBar.ordinal()][3] = labelBar3;
         
+        // Enable car entry button when it is used for #1 gate
+        if (cameraOneIsButton()) {
+            carEntryButton.setEnabled(true);
+            // Change button label to the gate name
+            carEntryButton.setText(gateNames[1] + "(C)");
+            carEntryButton.setToolTipText(CAR_ENTRY_TOOLTIP.getContent());
+        }
         /**
          * Set gate connection status panel row headings to given gate names
          */
@@ -455,9 +466,14 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
             BarConnection[gateNo] = new Object();
             passingDelayStat[gateNo] = new PassingDelayStat();
             
-            for (DeviceType type : DeviceType.values()) {     
-                connectDeviceTimer[type.ordinal()][gateNo] = new ParkingTimer(
-                        "ospConnect_" + type + "_" + gateNo + "_timer", false);            
+            for (DeviceType type : DeviceType.values()) {
+                if (type == Camera && gateNo == 1 && cameraOneIsButton())
+                {
+                    ; // Do nothing.
+                } else {
+                    connectDeviceTimer[type.ordinal()][gateNo] = new ParkingTimer(
+                            "ospConnect_" + type + "_" + gateNo + "_timer", false);
+                }
             }
             
             for (EBD_Row row : EBD_Row.values()) {
@@ -494,9 +510,12 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
                                         = (IDevice.IManager)new BlackFlyManager(this, gateNo);
                                 break;
                                 
-                            default:
+                            case Simulator:
                                 deviceManagers[type.ordinal()][gateNo] 
                                         = (IDevice.IManager)new CameraManager(this, gateNo);
+                                break;
+                                
+                            default:
                                 break;
                         }                        
                         //</editor-fold>
@@ -533,7 +552,10 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
                         break;
                 }
                 // start server socket listeners for all types of devices
-                connectDeviceTimer[type.ordinal()][gateNo].runOnce(new ConnectDeviceTask(this, type, gateNo));
+                ParkingTimer devConnTimer = connectDeviceTimer[type.ordinal()][gateNo];
+                if (devConnTimer != null) {
+                    devConnTimer.runOnce(new ConnectDeviceTask(this, type, gateNo));
+                }
                 
                 if (deviceManagers[type.ordinal()][gateNo] != null) {
                     deviceManagers[type.ordinal()][gateNo].start();
@@ -1116,8 +1138,10 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
         jPanel2.add(filler17);
 
         carEntryButton.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        carEntryButton.setMnemonic('M');
+        carEntryButton.setMnemonic('C');
         carEntryButton.setText(CAR_ARRIVAL_BTN.getContent());
+        carEntryButton.setToolTipText("활성화 : ...");
+        carEntryButton.setEnabled(false);
         carEntryButton.setMaximumSize(new java.awt.Dimension(120, 40));
         carEntryButton.setMinimumSize(new java.awt.Dimension(120, 40));
         carEntryButton.setPreferredSize(new java.awt.Dimension(120, 40));
@@ -1130,6 +1154,7 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
         jPanel2.add(filler7);
 
         showStatisticsBtn.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        showStatisticsBtn.setMnemonic('T');
         showStatisticsBtn.setText(STATISTICS_BTN.getContent());
         showStatisticsBtn.setMaximumSize(new java.awt.Dimension(120, 40));
         showStatisticsBtn.setMinimumSize(new java.awt.Dimension(120, 40));
@@ -1508,7 +1533,6 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
         });
         CommandMenu.add(CloseProgramItem);
 
-        licenseMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_T, java.awt.event.InputEvent.ALT_MASK));
         licenseMenuItem.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         licenseMenuItem.setText("About");
         licenseMenuItem.addActionListener(new java.awt.event.ActionListener() {
@@ -1706,7 +1730,7 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
     public static int manualSimulationImageID = 0;
     private void carEntryButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_carEntryButtonActionPerformed
         Random randomInteger = new Random();
-        byte gateNo = (byte) (randomInteger.nextInt(gateCount) + 1);
+        byte gateNo = (byte) 1;
         
         getPassingDelayStat()[gateNo].setICodeArrivalTime(System.currentTimeMillis());
         
@@ -2170,9 +2194,7 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
         if (!busy) {
             // Camera is a simulator and when it is connected
             // 
-            DeviceType type = Camera;
-            
-            if (deviceType[type.ordinal()][gate] == SIMULATOR) {
+            if (deviceType[Camera.ordinal()][gate] == CameraType.Simulator.ordinal()) {
                 OutputStream outStream = null;
                 try {
                     outStream = ((ISocket)deviceManagers[Camera.ordinal()][gate])
@@ -2181,14 +2203,14 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
                     msgBytes = ByteBuffer.allocate(1).put((byte)Os_Free.ordinal()).array();  
                     outStream.write(msgBytes);
                 } catch (IOException ex) {
-                    gfinishConnection(type, null,
+                    gfinishConnection(Camera, null,
                             "sending gate free message",
                             (byte)gate,
-                            getSocketMutex()[type.ordinal()][gate],
-                            ((ISocket)deviceManagers[type.ordinal()][gate]).getSocket(),
+                            getSocketMutex()[Camera.ordinal()][gate],
+                            ((ISocket)deviceManagers[Camera.ordinal()][gate]).getSocket(),
                             getMessageTextArea(), 
-                            getSockConnStat()[type.ordinal()][gate],
-                            getConnectDeviceTimer()[type.ordinal()][gate],
+                            getSockConnStat()[Camera.ordinal()][gate],
+                            getConnectDeviceTimer()[Camera.ordinal()][gate],
                             isSHUT_DOWN()
                     );
                 }
@@ -2352,6 +2374,9 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
 
         // Cancel timer here
         for (int gateNo = 1; gateNo <= gateCount; gateNo++) { 
+            if (openGateCmdTimer[gateNo] == null) {
+                continue;
+            }
             openGateCmdTimer[gateNo].cancelTask();
             openGateCmdTimer[gateNo].cancel();
             openGateCmdTimer[gateNo].purge();
@@ -2360,11 +2385,12 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
 
         for (DeviceType type: DeviceType.values()) {
             for (byte gateNo = 1; gateNo <= gateCount; gateNo++) {
-                connectDeviceTimer[type.ordinal()][gateNo].cancelTask();
-                connectDeviceTimer[type.ordinal()][gateNo].cancel();
-                connectDeviceTimer[type.ordinal()][gateNo].purge();
-                connectDeviceTimer[type.ordinal()][gateNo] = null;
-                
+                if (connectDeviceTimer[type.ordinal()][gateNo] != null) {
+                    connectDeviceTimer[type.ordinal()][gateNo].cancelTask();
+                    connectDeviceTimer[type.ordinal()][gateNo].cancel();
+                    connectDeviceTimer[type.ordinal()][gateNo].purge();
+                    connectDeviceTimer[type.ordinal()][gateNo] = null;
+                }
                 // Handle some specific real hardware
                 if (type == E_Board &&
                         Globals.gateDeviceTypes[gateNo].eBoardType == E_BoardType.LEDnotice) 
@@ -3041,7 +3067,6 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
             statusTextField.setText("E-Board #" + gateNo + " manager isn't alive");
         } else {
             if (IDevice.isConnected(eManager, E_Board, gateNo))
-//                    || Globals.gateDeviceTypes[gateNo].eBoardType == E_BoardType.LEDnotice)
             {
                 long currTimeMs = System.currentTimeMillis();
 

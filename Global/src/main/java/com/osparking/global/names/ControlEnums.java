@@ -19,9 +19,14 @@ package com.osparking.global.names;
 import static com.osparking.global.Globals.language;
 import static com.osparking.global.names.ControlEnums.ComboBoxItemTypes.RTOL_CB_ITEM;
 import static com.osparking.global.names.ControlEnums.LabelContent.LANGUAGE_LABEL;
+import static com.osparking.global.names.ControlEnums.LabelContent.TYPE_LABEL;
 import static com.osparking.global.names.ControlEnums.Languages.ENGLISH;
 import static com.osparking.global.names.ControlEnums.Languages.KOREAN;
 import static com.osparking.global.names.ControlEnums.TitleTypes.ARRIVAL_TIME_PANEL_TITLE;
+import static com.osparking.global.names.DB_Access.gateNames;
+import static com.osparking.global.names.OSP_enums.CameraType.CarButton;
+import com.osparking.global.names.OSP_enums.DeviceType;
+import static com.osparking.global.names.OSP_enums.DeviceType.Camera;
 
 /**
  *
@@ -330,8 +335,8 @@ public class ControlEnums {
         ARRIVALS_BTN("<HTML>도착기록(<U>A</U>)</HTML>", "<HTML><U>A</U>rrivals</HTML>"),
         VEHICLES_BTN("<HTML>차량관리(<U>V</U>)</HTML>", "<HTML><U>V</U>ehicles</HTML>"),
         USERS_BTN("<HTML>사용자(<U>U</U>)</HTML>", "<HTML><U>U</U>sers</HTML>"),
-        CAR_ARRIVAL_BTN("모의입차(M)", "Sim' Entry"),
-        STATISTICS_BTN("통계", "statistics"),
+        CAR_ARRIVAL_BTN("입차버튼(C)", "CarEntry"),
+        STATISTICS_BTN("통계(T)", "Statistics"),
         GATE_BAR_OPEN_BTN("차단기 열림(O)", "Open Bar"),
         GATE_BAR_CLOSE_BTN("차단기 닫힘(C)", "Close Bar"),
         E_BOARD_SETTINGS_BTN("세부 설정", "Content Settings");
@@ -428,6 +433,11 @@ public class ControlEnums {
     }
     
     public enum ToolTipContent {
+        CAR_ENTRY_TOOLTIP("디버깅 모드에서 " + gateNames[1] + " [" +
+                Camera.getContent() + "]의 [" + TYPE_LABEL.getContent() + "]을 [" + 
+                CarButton + "]으로 설정하여 활성화!", 
+                "Enabled if " + gateNames[1] + "'s [" + Camera.getContent() +
+                        "] [" + TYPE_LABEL.getContent() + "] set to [" + CarButton + "]"),
         ENABLING_CONDITION("활성화하려면 기간을 변경하십시오.", "To enable, change period!"),
         SEARCH_BTN_TOOLTIP("검색 조건 바꾸면 활성화 됨", "To enable, change search condition."),
         CTRL_F_TOOLTIP("(Ctrl+F)", "(Ctrl+F)"),

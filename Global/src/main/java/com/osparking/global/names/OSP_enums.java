@@ -98,7 +98,8 @@ public class OSP_enums {
     
     public enum CameraType {
         Simulator("모의장치", "Simulator"), 
-        Blackfly("블랙플라이", "Blackfly");
+        Blackfly("블랙플라이", "Blackfly"),
+        CarButton("입차버튼", "CarEntry");
         
         CameraType(String korean, String english) {
             label[KOREAN.ordinal()] = korean;

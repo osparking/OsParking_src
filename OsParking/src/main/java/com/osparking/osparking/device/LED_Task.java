@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.util.TimerTask;
 import java.util.logging.Level;
 import static com.osparking.global.Globals.logParkingExceptionStatus;
+import static com.osparking.global.names.DB_Access.deviceType;
 import com.osparking.global.names.OSP_enums.DeviceType;
 import static com.osparking.global.names.OSP_enums.DeviceType.E_Board;
 import com.osparking.osparking.ControlGUI;
@@ -118,6 +119,15 @@ public class LED_Task extends TimerTask {
                         else
                             controlGUI.getDeviceConnectionLEDs()[typeNo][gateNo]
                                     .setForeground(new Color( 0.0f, 1.0f, 0.0f, opaqueDegree));
+                    } else if (devType == DeviceType.Camera && 
+                            deviceType[devType.ordinal()][gateNo] == OSP_enums.CameraType.CarButton.ordinal()) 
+                    {
+                        if (gateNo % 2 == 0 )
+                            controlGUI.getDeviceConnectionLEDs()[typeNo][gateNo]
+                                    .setForeground(new Color( 0.0f, 1.0f, 0.0f, opaqueDegree));
+                        else
+                            controlGUI.getDeviceConnectionLEDs()[typeNo][gateNo]
+                                    .setForeground(new Color( 0.0f, 1.0f, 0.0f, opaqueDegree));                        
                     } else {
                         if (gateNo % 2 == 0 ) // for blinking effect between adjacent rows
                             controlGUI.getDeviceConnectionLEDs()[typeNo][gateNo]

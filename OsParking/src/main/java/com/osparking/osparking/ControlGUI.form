@@ -261,9 +261,6 @@
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="licenseMenuItem">
               <Properties>
-                <Property name="accelerator" type="javax.swing.KeyStroke" editor="org.netbeans.modules.form.editors.KeyStrokeEditor">
-                  <KeyStroke key="Alt+T"/>
-                </Property>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                   <Connection code="new java.awt.Font(font_Type, font_Style, font_Size)" type="code"/>
                 </Property>
@@ -1273,10 +1270,12 @@
                                 <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                                   <Connection code="new java.awt.Font(font_Type, font_Style, font_Size)" type="code"/>
                                 </Property>
-                                <Property name="mnemonic" type="int" value="77"/>
+                                <Property name="mnemonic" type="int" value="67"/>
                                 <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                                   <Connection code="CAR_ARRIVAL_BTN.getContent()" type="code"/>
                                 </Property>
+                                <Property name="toolTipText" type="java.lang.String" value="&#xd65c;&#xc131;&#xd654; : ..."/>
+                                <Property name="enabled" type="boolean" value="false"/>
                                 <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                                   <Dimension value="[120, 40]"/>
                                 </Property>
@@ -1312,6 +1311,7 @@
                                 <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                                   <Connection code="new java.awt.Font(font_Type, font_Style, font_Size)" type="code"/>
                                 </Property>
+                                <Property name="mnemonic" type="int" value="84"/>
                                 <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                                   <Connection code="STATISTICS_BTN.getContent()" type="code"/>
                                 </Property>

@@ -22,8 +22,10 @@ import static com.osparking.global.Globals.font_Type;
 import static com.osparking.global.Globals.getBufferedImage;
 import static com.osparking.global.Globals.getTagNumber;
 import static com.osparking.global.names.ControlEnums.MenuITemTypes.META_KEY_LABEL;
+import static com.osparking.global.names.DB_Access.deviceType;
+import static com.osparking.global.names.OSP_enums.CameraType.CarButton;
+import static com.osparking.global.names.OSP_enums.DeviceType.Camera;
 import com.osparking.global.names.PasswordValidator;
-import static com.sun.javafx.tk.Toolkit.getToolkit;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -176,4 +178,8 @@ public class CommonData { // new Dimension(carTagWidth, 30)
             saveSheet_Button.setEnabled(Globals.isManager);
         }       
     }    
+    
+    public static boolean cameraOneIsButton() {
+        return deviceType[Camera.ordinal()][1] == CarButton.ordinal();
+    }     
 }
