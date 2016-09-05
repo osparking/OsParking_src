@@ -23,10 +23,7 @@ import static com.osparking.global.Globals.restAreaImage;
 import static com.osparking.global.Globals.setComponentSize;
 import static com.osparking.global.names.DB_Access.PIC_HEIGHT;
 import static com.osparking.global.names.DB_Access.PIC_WIDTH;
-import static com.osparking.global.names.DB_Access.deviceType;
 import static com.osparking.global.names.DB_Access.gateCount;
-import static com.osparking.global.names.OSP_enums.CameraType.CarButton;
-import static com.osparking.global.names.OSP_enums.DeviceType.Camera;
 import java.awt.Dimension;
 import java.awt.image.BufferedImage;
 import java.util.logging.Level;
@@ -40,6 +37,7 @@ public class Common {
     public static final int gateInset = 2;
     public static final int imageH_inset = 24;
     public static final int entrySPV_inset = 28; // Car Entry ScrollPane Vertical Insets 
+    public static final int RECENT_ROW_HEIGHT = 27; // Car Entry ScrollPane Vertical Insets 
     
     /**
      * Adjust Dimension of Panel for a specific Gate

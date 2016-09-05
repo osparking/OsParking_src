@@ -108,6 +108,7 @@
             <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
               <Connection code="&#xa;  javax.swing.BorderFactory.createTitledBorder(null, &#xa;  &quot;Gate 1 Title&quot;, javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, &#xa;  javax.swing.border.TitledBorder.DEFAULT_POSITION, &#xa;  new java.awt.Font(font_Type, font_Style, font_Size))" type="code"/>
             </Property>
+            <Property name="horizontalScrollBarPolicy" type="int" value="31"/>
             <Property name="autoscrolls" type="boolean" value="true"/>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
               <Connection code="new java.awt.Font(font_Type, font_Style, font_Size)" type="code"/>
@@ -131,6 +132,9 @@
                 </Property>
                 <Property name="model" type="javax.swing.ListModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                   <Connection code="(DefaultListModel&lt;CarAdmission&gt;)admissionListModel[1]" type="code"/>
+                </Property>
+                <Property name="fixedCellHeight" type="int" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                  <Connection code="RECENT_ROW_HEIGHT" type="code"/>
                 </Property>
                 <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                   <Connection code="new Dimension(Short.MAX_VALUE, Short.MAX_VALUE)" type="code"/>

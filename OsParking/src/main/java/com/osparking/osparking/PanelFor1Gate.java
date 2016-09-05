@@ -26,6 +26,7 @@ import javax.swing.JPanel;
 import com.osparking.global.names.CarAdmission;
 import static com.osparking.global.Globals.*;
 import static com.osparking.global.names.ControlEnums.TitleTypes.CAR_ARRIVALS_TITLE;
+import static com.osparking.osparking.Common.RECENT_ROW_HEIGHT;
 import java.awt.Toolkit;
 import static com.osparking.osparking.Common.fixPanelDimemsion;
 import java.awt.event.ComponentAdapter;
@@ -132,12 +133,14 @@ public class PanelFor1Gate extends GatePanel {
                 "Gate 1 Title", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
                 javax.swing.border.TitledBorder.DEFAULT_POSITION,
                 new java.awt.Font(font_Type, font_Style, font_Size)));
+        ScrollPane_Gate1.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         ScrollPane_Gate1.setAutoscrolls(true);
         ScrollPane_Gate1.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         ScrollPane_Gate1.setPreferredSize(new java.awt.Dimension(302, 155));
 
         List_Gate1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         List_Gate1.setModel((DefaultListModel<CarAdmission>)admissionListModel[1]);
+        List_Gate1.setFixedCellHeight(RECENT_ROW_HEIGHT);
         List_Gate1.setMaximumSize(new Dimension(Short.MAX_VALUE, Short.MAX_VALUE));
         List_Gate1.setMinimumSize(new java.awt.Dimension(45, 240));
         List_Gate1.setName(""); // NOI18N

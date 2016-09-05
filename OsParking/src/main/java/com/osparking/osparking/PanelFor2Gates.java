@@ -26,6 +26,7 @@ import javax.swing.JPanel;
 import com.osparking.global.names.CarAdmission;
 import static com.osparking.global.Globals.*;
 import static com.osparking.global.names.ControlEnums.TitleTypes.CAR_ARRIVALS_TITLE;
+import static com.osparking.osparking.Common.RECENT_ROW_HEIGHT;
 import static com.osparking.osparking.Common.fixPanelDimemsion;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
@@ -138,11 +139,13 @@ public class PanelFor2Gates extends GatePanel {
         Panel_Gate1.add(filler2);
 
         ScrollPane_Gate1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Recent Car Arrivals", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.BELOW_TOP, new java.awt.Font(font_Type, font_Style, font_Size)));
+        ScrollPane_Gate1.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         ScrollPane_Gate1.setPreferredSize(new java.awt.Dimension(302, 155));
 
         List_Gate1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         List_Gate1.setFont(new java.awt.Font(font_Type, font_Style, font_Size_List));
         List_Gate1.setModel((DefaultListModel<CarAdmission>)admissionListModel[1]);
+        List_Gate1.setFixedCellHeight(RECENT_ROW_HEIGHT);
         List_Gate1.setMaximumSize(new Dimension(Short.MAX_VALUE, Short.MAX_VALUE));
         List_Gate1.setMinimumSize(new java.awt.Dimension(45, 240));
         List_Gate1.setName(""); // NOI18N
@@ -183,11 +186,13 @@ public class PanelFor2Gates extends GatePanel {
         Panel_Gate2.add(filler4);
 
         ScrollPane_Gate2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Recent Car Arrivals", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.BELOW_TOP, new java.awt.Font(font_Type, font_Style, font_Size)));
+        ScrollPane_Gate2.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         ScrollPane_Gate2.setPreferredSize(new java.awt.Dimension(302, 155));
 
         List_Gate2.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         List_Gate2.setFont(new java.awt.Font(font_Type, font_Style, font_Size_List));
         List_Gate2.setModel((DefaultListModel<CarAdmission>)admissionListModel[2]);
+        List_Gate2.setFixedCellHeight(RECENT_ROW_HEIGHT);
         List_Gate2.setMaximumSize(new Dimension(Short.MAX_VALUE, Short.MAX_VALUE));
         List_Gate2.setMinimumSize(new java.awt.Dimension(45, 240));
         List_Gate2.setName(""); // NOI18N

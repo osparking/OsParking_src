@@ -144,6 +144,7 @@ import static com.osparking.global.names.OSP_enums.CameraType.Simulator;
 import static com.osparking.global.names.OSP_enums.EBD_DisplayMessage.*;
 import static com.osparking.global.names.OSP_enums.GateBarType.NaraBar;
 import static com.osparking.global.names.OSP_enums.MsgCode.Os_Free;
+import static com.osparking.osparking.Common.RECENT_ROW_HEIGHT;
 import com.osparking.osparking.device.BlackFly.BlackFlyManager;
 import com.osparking.osparking.device.LED_Task;
 import com.osparking.osparking.device.LEDnotice.FinishLEDnoticeIntrTask;
@@ -2225,7 +2226,8 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
     private void adjustListHeight(int gateNo) {
         JList arrivalList = getGatePanel().getEntryList(gateNo);
         int rowCount = ((DefaultListModel<CarAdmission>)admissionListModel[gateNo]).getSize();
-        Dimension tableDim = new Dimension(arrivalList.getSize().width, 25 * rowCount); 
+        Dimension tableDim = new Dimension(arrivalList.getSize().width, RECENT_ROW_HEIGHT * rowCount); 
+        System.out.println("List dim: " + tableDim);
         
         arrivalList.setSize(tableDim);
         arrivalList.setPreferredSize(tableDim);                  
