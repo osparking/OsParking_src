@@ -804,7 +804,11 @@ public class Globals {
     public final static String DEVELOP = "develop";
     public final static String RELEASE = "release";
     public final static String TESTRUN = "testrun";
-    public final static String RANDOM_ATT = "random_attendant";
+    /**
+     * Choose randomly the processing of stopped cars like a visiting car
+     * where precessing include allow parking or disallow parking.
+     */
+    public final static String RANDOM_ATT = "random";
     
     public static void checkOptions(String args[]) {
         if (args.length > 0) {
