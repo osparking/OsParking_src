@@ -99,6 +99,7 @@ import static com.osparking.global.names.DB_Access.deviceType;
 import static com.osparking.global.names.DB_Access.enteranceAllowed;
 import static com.osparking.global.names.DB_Access.gateCount;
 import static com.osparking.global.names.DB_Access.gateNames;
+import static com.osparking.global.names.DB_Access.getDisallowReason;
 import static com.osparking.global.names.DB_Access.parkingPermitted;
 import static com.osparking.global.names.DB_Access.readEBoardSettings;
 import static com.osparking.global.names.DB_Access.readSettings;
@@ -140,6 +141,7 @@ import com.osparking.global.names.IDevice.IE_Board;
 import com.osparking.global.names.IDevice.ISocket;
 import com.osparking.global.names.OSP_enums.CameraType;
 import static com.osparking.global.names.OSP_enums.CameraType.Simulator;
+import static com.osparking.global.names.OSP_enums.EBD_DisplayMessage.*;
 import static com.osparking.global.names.OSP_enums.GateBarType.NaraBar;
 import static com.osparking.global.names.OSP_enums.MsgCode.Os_Free;
 import com.osparking.osparking.device.BlackFly.BlackFlyManager;
@@ -2067,9 +2069,6 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
         int carPassingDelayMs = rand.nextInt(MAX_PASSING_DELAY)  + CAR_PERIOD;        
 
         setGateBusy(gateNo, true);
-        interruptEBoardDisplay(gateNo, tagRecognized, 
-                permission, remark.toString(), tagRegistered.toString(),
-                imageID, carPassingDelayMs);
 
         if (permission == ALLOWED 
                 || autoGateOpenCheckBox.isSelected()
@@ -2093,6 +2092,12 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
                 imageID = -imageID;
             }
             raiseGateBar(gateNo, imageID, carPassingDelayMs);
+            
+            // Moved after bar open command to experdite car processing
+            interruptEBoardDisplay(gateNo, tagRecognized, 
+                    permission, remark.toString(), tagRegistered.toString(),
+                    imageID, carPassingDelayMs);
+            
             if (carImage == null) {
                 carImage = convertRaw2Buffered(blackFlyImage);
             }
@@ -2102,6 +2107,10 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
         } else {
             // Handle unregistered or not permitted cars
             getPassingDelayStat()[gateNo].setAccumulatable(false);
+            
+            interruptEBoardDisplay(gateNo, tagRecognized, 
+                    permission, remark.toString(), tagRegistered.toString(),
+                    imageID, carPassingDelayMs);
             
             if (carImage == null) {
                 carImage = convertRaw2Buffered(blackFlyImage);
@@ -3139,7 +3148,7 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
         }
     }
     
-    byte[] getIntMessage(PermissionType permission, String  tagRecogedAs, 
+    byte[] getIntMessage(PermissionType permission, String tagRecogedAs, 
             byte deviceNo, EBD_Row row, int msgSN, int delay) 
     {
         EBD_DisplaySetting setting = null;
@@ -3156,18 +3165,21 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
                 
             case VEHICLE_TAG:
             case REGISTRATION_STAT:
-                StringBuffer remark = new StringBuffer();               
-
                 // fetch vehicle registration status from DB
                 if (setting.contentType == VEHICLE_TAG) {
                     displayText = tagRecogedAs;
                 } else { // REGISTRATION_STAT
                     if (permission == ALLOWED)
-                        displayText = "Registered Car";
-                    else if (permission == DISALLOWED )
-                        displayText = "Registered Car(" + remark + ")";
-                    else if (permission == UNREGISTERED) {
-                        displayText = "A Visiting Car";
+                        displayText = EDM_REGISTERED.toString();
+                    else if (permission == DISALLOWED ) {
+                        String remark = getDisallowReason(tagRecogedAs);
+                        
+                        if (remark == null || remark.length() == 0) {
+                            remark = NO_DATA.toString();
+                        }
+                        displayText = EDM_DISALLOWED + "(" + remark + ")";
+                    } else if (permission == UNREGISTERED) {
+                        displayText = EDM_VISITOR.toString();
                     }
                 }
                 break;

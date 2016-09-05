@@ -273,6 +273,28 @@ public class OSP_enums {
         EBD_BLINK_CYCLE
     }
     
+    public enum EBD_DisplayMessage {
+        /**
+         * Car at the entry gate is allowed to park at this parking lot. So, the gate was opened
+         * to allow the car to come on in.
+         */
+        EDM_REGISTERED("등록차량", "Registered Car"),
+        EDM_DISALLOWED("경고된 차", "Warned Car"), 
+        EDM_VISITOR("방문차량", "Visiting Car"),
+        NO_DATA("<자료없음>", "<no data>");
+        
+        EBD_DisplayMessage(String korean, String english) {
+            label[KOREAN.ordinal()] = korean;
+            label[ENGLISH.ordinal()] = english;
+        }
+        
+        private String[] label = new String[Languages.values().length];
+        
+        public String toString() {
+            return label[language.ordinal()];
+        }          
+    }
+    
     public enum PermissionType {
         /**
          * Car at the entry gate is allowed to park at this parking lot. So, the gate was opened

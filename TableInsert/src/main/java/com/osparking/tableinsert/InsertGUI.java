@@ -1213,7 +1213,7 @@ public class InsertGUI extends javax.swing.JFrame {
 
             // select reason text at 20%
             String reasonStr = null;
-            if (!parkPermed && rand.nextFloat() > 0.8) {
+            if (!parkPermed) {
                 if (rand.nextInt() % 2 == 0) {
                     reasonStr = "주차위반";
                 } else {

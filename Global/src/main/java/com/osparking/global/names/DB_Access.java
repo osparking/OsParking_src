@@ -204,6 +204,29 @@ public class DB_Access {
                     INFORMATION_MESSAGE);
         }
     } 
+
+    public static String getDisallowReason(String tagRecogedAs) {
+        Connection conn = null;
+        Statement selectStmt = null;
+        ResultSet rs = null;
+        String remark = null;
+        try {
+            conn = JDBCMySQL.getConnection();
+            selectStmt = conn.createStatement();
+            String sql = "SELECT remark FROM Vehicles Where PLATE_NUMBER = '" + tagRecogedAs + "'";
+            rs = selectStmt.executeQuery(sql);
+            if (rs.next()) {
+                remark = rs.getString(1);
+            }
+        } catch (SQLException ex) {
+            logParkingException(Level.SEVERE, ex, 
+                    "while fetching disallow reason(remark) for " + tagRecogedAs);
+        } finally {
+            closeDBstuff(conn, selectStmt, rs, "while fetching disallow reason(remark) for " + tagRecogedAs);
+        }    
+        
+        return remark;        
+    }    
     
     private static int createDefaultUsers(String id, String name, boolean isManager) {
         Connection conn = null;        
