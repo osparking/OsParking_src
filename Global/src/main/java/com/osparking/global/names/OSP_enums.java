@@ -300,7 +300,7 @@ public class OSP_enums {
          * Car at the entry gate is allowed to park at this parking lot. So, the gate was opened
          * to allow the car to come on in.
          */
-        ALLOWED("등록차", "Registered"),
+        ALLOWED("등록된 차량", "Registered"),
         DISALLOWED("경고차", "Warned"), 
         UNREGISTERED("방문차", "Visiting"), 
         BADTAGFORMAT("식별오류", "LPR Error");

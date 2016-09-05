@@ -2196,7 +2196,6 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
     public void setGateBusy(int gate, boolean busy) {
         if (!busy) {
             // Camera is a simulator and when it is connected
-            // 
             if (deviceType[Camera.ordinal()][gate] == CameraType.Simulator.ordinal()) {
                 OutputStream outStream = null;
                 try {
@@ -2219,15 +2218,14 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
                 }
             }
         }
-        
         this.gateBusy[gate] = busy;
     }
 
-    private void adjustListHeight(int gateNo) {
+    private void increaseListHeightBeforehand(int gateNo) {
         JList arrivalList = getGatePanel().getEntryList(gateNo);
         int rowCount = ((DefaultListModel<CarAdmission>)admissionListModel[gateNo]).getSize();
-        Dimension tableDim = new Dimension(arrivalList.getSize().width, RECENT_ROW_HEIGHT * rowCount); 
-        System.out.println("List dim: " + tableDim);
+        Dimension tableDim = new Dimension(arrivalList.getSize().width, 
+                RECENT_ROW_HEIGHT * (rowCount + 1) + 8); 
         
         arrivalList.setSize(tableDim);
         arrivalList.setPreferredSize(tableDim);                  
@@ -2754,10 +2752,10 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
                         perm = DISALLOWED;
                     }
                 }
-                
                 barOptnInt = rs.getInt("BarOperation");
                 barOptn = BarOperation.values()[barOptnInt];
                 arrSeqNo = rs.getLong("arrseqno");
+                increaseListHeightBeforehand(gateNo);
                 listModel.addElement(new CarAdmission(timePlusTag + "-" + 
                         perm.getContent() + "-" + barOptn.getContent(), arrSeqNo));
             }
@@ -2765,8 +2763,6 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
             logParkingException(Level.SEVERE, se, 
                     "(select car_recent for seqNo: " + String.valueOf(arrSeqNo));
         } finally {
-//            adjustListHeight(getGatePanel().getEntryList(gateNo), listModel.getSize());
-            adjustListHeight(gateNo);
             closeDBstuff(conn, pStmt, rs, "(Loading previous car arrival records)");
         }
     }
@@ -2785,11 +2781,13 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
             DefaultListModel<CarAdmission> listModel =
                     (DefaultListModel<CarAdmission>) admissionListModel[gateNo];
             // Increase box height
-            adjustListHeight(gateNo);
+            increaseListHeightBeforehand(gateNo);
             // add a row to the recent entry list for the gate
-            listModel.add(0, new CarAdmission(
-                    "-" + tmDisplay + tagRecognized + "-" + permission.getContent() +
-                            "-" + barOptn.getContent(), arrSeqNo));
+            String entry = "-" + tmDisplay + tagRecognized + "-" + permission.getContent();
+            if (permission != ALLOWED) {
+                entry += "-" + barOptn.getContent();
+            }
+            listModel.add(0, new CarAdmission(entry, arrSeqNo));
             
             // display entry image on the label for the gate
             listSelectionModel[gateNo].setSelectionInterval(0, 0);
