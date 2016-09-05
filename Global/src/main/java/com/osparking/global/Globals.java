@@ -99,6 +99,7 @@ import static com.osparking.global.names.DB_Access.devicePort;
 import static com.osparking.global.names.DB_Access.deviceType;
 import static com.osparking.global.names.DB_Access.gateCount;
 import static com.osparking.global.names.DB_Access.gateNames;
+import static com.osparking.global.names.DB_Access.locale;
 import static com.osparking.global.names.DB_Access.maxMessageLines;
 import static com.osparking.global.names.DB_Access.opLoggingIndex;
 import com.osparking.global.names.InnoComboBoxItem;
@@ -123,11 +124,9 @@ import com.osparking.global.names.PComboBox;
 import com.osparking.global.names.ParkingTimer;
 import com.osparking.global.names.SocketConnStat;
 import java.awt.Container;
+import java.util.Locale;
 import javax.imageio.ImageIO;
 import javax.swing.JComboBox;
-import javax.swing.JTabbedPane;
-import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.TableCellRenderer;
 
 /**
  * Defines names and methods used globally in the Parking Lot manager application developed by 
@@ -861,7 +860,7 @@ public class Globals {
         
         switch (contentType) {
             case CURRENT_DATE:
-                practicalContent = new SimpleDateFormat("yyyy-MM-dd(EEE)").format(new Date());
+                practicalContent = new SimpleDateFormat("yyyy-MM-dd(EEE)", locale).format(new Date());
                 break;
                 
             case CURRENT_TIME:

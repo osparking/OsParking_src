@@ -162,7 +162,7 @@ import static com.osparking.global.names.DB_Access.connectionType;
 import static com.osparking.global.names.DB_Access.deviceComID;
 import static com.osparking.global.names.DB_Access.devicePort;
 import static com.osparking.global.names.DB_Access.deviceType;
-import static com.osparking.global.names.DB_Access.parkingLotLocale;
+import static com.osparking.global.names.DB_Access.locale;
 import static com.osparking.global.names.DB_Access.parkingLotName;
 import static com.osparking.global.names.DB_Access.statCountIndex;
 import com.osparking.global.names.EBD_DisplaySetting;
@@ -326,7 +326,7 @@ public class Settings_System extends javax.swing.JFrame {
         TextFieldPicWidth = new javax.swing.JTextField();
         TextFieldPicHeight = new javax.swing.JTextField();
         LanguageHelpButton = new javax.swing.JButton();
-        DateChooserLangCBox = new com.toedter.components.JLocaleChooser(parkingLotLocale);
+        DateChooserLangCBox = new com.toedter.components.JLocaleChooser(locale);
         pxLabel2 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         PopSizeHelpButton = new javax.swing.JButton();
@@ -508,9 +508,7 @@ public class Settings_System extends javax.swing.JFrame {
         setTitle(SETTINGS_TITLE.getContent());
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         setLocation(new java.awt.Point(0, 0));
-        setMaximumSize(new Dimension(SETTINGS_WIDTH, SETTINGS_HEIGHT));
         setMinimumSize(new Dimension(SETTINGS_WIDTH, SETTINGS_HEIGHT));
-        setPreferredSize(new Dimension(SETTINGS_WIDTH, SETTINGS_HEIGHT));
         setResizable(false);
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
@@ -3789,7 +3787,7 @@ public class Settings_System extends javax.swing.JFrame {
         RecordPassingDelayChkBox.setSelected(storePassingDelay);
         PWStrengthChoiceComboBox.setSelectedIndex(pwStrengthLevel);
         OptnLoggingLevelComboBox.setSelectedIndex(opLoggingIndex);
-        DateChooserLangCBox.setSelectedItem(parkingLotLocale.getDisplayName());
+        DateChooserLangCBox.setSelectedItem(locale.getDisplayName());
         localeIndex = (short) DateChooserLangCBox.getSelectedIndex();
         
         PopSizeCBox.setSelectedIndex(statCountIndex);

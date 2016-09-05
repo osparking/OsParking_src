@@ -39,7 +39,7 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.table.TableCellRenderer;
 import com.osparking.global.names.ConvComboBoxItem;
 import static com.osparking.global.names.DB_Access.SEARCH_PERIOD;
-import static com.osparking.global.names.DB_Access.parkingLotLocale;
+import static com.osparking.global.names.DB_Access.locale;
 import static com.osparking.global.Globals.*;
 import com.osparking.global.names.ControlEnums.BarOperation;
 import static com.osparking.global.names.ControlEnums.ButtonTypes.CLEAR_BTN;
@@ -167,8 +167,8 @@ public class CarArrivals extends javax.swing.JFrame {
         initComponents();
         changedControls = new ChangedComponentClear(clearSearchPropertiesButton);
         changeTableColumnHoriAlignment();
-        BeginDateChooser.setLocale(parkingLotLocale);
-        EndDateChooser.setLocale(parkingLotLocale);    
+        BeginDateChooser.setLocale(locale);
+        EndDateChooser.setLocale(locale);    
         loadSearchControls();
         setIconImages(OSPiconList);
             

@@ -22,10 +22,10 @@ import static com.osparking.global.names.ControlEnums.LabelContent.LANGUAGE_LABE
 import static com.osparking.global.names.ControlEnums.LabelContent.TYPE_LABEL;
 import static com.osparking.global.names.ControlEnums.Languages.ENGLISH;
 import static com.osparking.global.names.ControlEnums.Languages.KOREAN;
+import static com.osparking.global.names.ControlEnums.MsgContent.OS_PARKINGLOT;
 import static com.osparking.global.names.ControlEnums.TitleTypes.ARRIVAL_TIME_PANEL_TITLE;
 import static com.osparking.global.names.DB_Access.gateNames;
 import static com.osparking.global.names.OSP_enums.CameraType.CarButton;
-import com.osparking.global.names.OSP_enums.DeviceType;
 import static com.osparking.global.names.OSP_enums.DeviceType.Camera;
 
 /**
@@ -369,6 +369,7 @@ public class ControlEnums {
     }
         
     public enum MsgContent {
+        OS_PARKINGLOT("오즈 주차장", "OS Parking Lot"), 
         RESEND("재전송율: ", "resend/open: "), 
         NO_STAT("통계 자료 없슴", "No command statistics"), 
         ACK_MAX(", 최대: ", ", max: "), 
@@ -429,6 +430,10 @@ public class ControlEnums {
         
         public String getContent() {
                 return contents[language.ordinal()];
+        }
+        
+        public String toString() {
+            return contents[language.ordinal()];
         }
     }
     
@@ -564,6 +569,9 @@ public class ControlEnums {
     }
 
     public enum DialogMessages {
+        WELCOMING_OS(OS_PARKINGLOT.getContent() + " 방문을 환영합니다.",
+                "Welcome to " + OS_PARKINGLOT.getContent()),
+        FIRST_RUN_MSG("오즈파킹 최초 가동!", "Very First Run of OsParking!"),
         TIMED_OUT(" 시간 초과 ", " timed out "),
         CONN_REFUSED(" 연결 거부 ", " refused connection "),
         CONN_REFUSED_1(" 회", " times"),

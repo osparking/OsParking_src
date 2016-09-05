@@ -83,7 +83,7 @@ public class AcceptManagerTask implements Runnable {
      * If yes, then it listens for a camera request for a conenction. ??
      */
     public void run() {
-        deviceGUI.getCriticalInfoTextField().setText("waiting for manager to request socket connection");
+        deviceGUI.getCriticalInfoTextField().setText("waiting for OsParking to request socket connection");
         if (DEBUG) {
             System.out.println(devType + "#" + deviceGUI.getID() + " waits manager to connect");
         }
@@ -108,7 +108,7 @@ public class AcceptManagerTask implements Runnable {
                     managerSocket.setTcpNoDelay(true);
 
                     synchronized(deviceGUI.getSocketMUTEX()) {
-                        String display = "manager connected";
+                        String display = "OsParking connected";
                         if (devType == Camera) {
                             deviceGUI.getCriticalInfoTextField().setText("");
                             addMessageLine(deviceGUI.getMessageTextArea(), display);

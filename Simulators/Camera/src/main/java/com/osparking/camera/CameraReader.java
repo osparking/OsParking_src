@@ -221,8 +221,8 @@ public class CameraReader extends Thread implements DeviceReader{
         logParkingException(Level.INFO, e, reason, cameraGUI.getID());
         synchronized(cameraGUI.getSocketMUTEX()) {
             addMessageLine(cameraGUI.getMessageTextArea(), 
-                    "manager disconnected" + System.lineSeparator());
-            closeSocket(getManagerSocket(), "manager socket closing");
+                    "OsParking disconnected" + System.lineSeparator());
+            closeSocket(getManagerSocket(), "OsParking socket closing");
             setManagerSocket(null);
         }
         

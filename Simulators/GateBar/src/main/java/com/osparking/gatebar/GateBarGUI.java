@@ -21,20 +21,16 @@ import com.osparking.deviceglobal.DeviceGUI;
 import static com.osparking.deviceglobal.DeviceGlobals.displayErrorRate;
 import static com.osparking.deviceglobal.DeviceGlobals.displayRateLimit;
 import static com.osparking.deviceglobal.DeviceGlobals.setIconList;
-import com.osparking.global.Globals;
-import static com.osparking.global.Globals.DEBUG;
-import static com.osparking.global.Globals.ERROR_RATE;
+import static com.osparking.global.Globals.*;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
 import java.lang.management.ManagementFactory;
 import java.net.Inet4Address;
 import java.net.UnknownHostException;
 import java.util.Random;import java.util.Timer;
 import java.util.TimerTask;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import static javax.swing.JOptionPane.WARNING_MESSAGE;
@@ -52,7 +48,6 @@ import static com.osparking.global.Globals.checkOptions;
 import static com.osparking.global.Globals.font_Size;
 import static com.osparking.global.Globals.font_Style;
 import static com.osparking.global.Globals.font_Type;
-import static com.osparking.global.Globals.getFormattedRealNumber;
 import static com.osparking.global.Globals.getMinusIcon;
 import static com.osparking.global.Globals.getPlusIcon;
 import static com.osparking.global.Globals.getUniqueGateBarID;
@@ -506,7 +501,9 @@ errorCheckBox.addActionListener(new java.awt.event.ActionListener() {
                 
                 GateBarGUI mainGUI = new GateBarGUI(gateBarID);
                 mainGUI.setVisible(true);
-                Globals.shortLicenseDialog(mainGUI, "Gate Bar Simulator", "lower left");
+                if (!DEBUG) {
+                    shortLicenseDialog(mainGUI, "Gate Bar Simulator", "lower left");
+                }
             }
         });
     }

@@ -473,7 +473,7 @@ public class EBoardReader extends Thread implements DeviceReader {
             closeSocket(getManagerSocket(), "manager socket closing");
             setManagerSocket(null);
         }
-        eBoardGUI.getCriticalInfoTextField().setText(timeFormat.format(new Date()) + "--manager disconnected");
+        eBoardGUI.getCriticalInfoTextField().setText(timeFormat.format(new Date()) + "--OsParking disconnected");
         if (! eBoardGUI.isSHUT_DOWN())
             eBoardGUI.getAcceptManagerTimer().reRunOnce();
     }       

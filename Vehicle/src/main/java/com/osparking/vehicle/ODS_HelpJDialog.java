@@ -42,7 +42,7 @@ import static com.osparking.global.Globals.logParkingException;
 import static com.osparking.global.names.ControlEnums.ButtonTypes.CLOSE_BTN;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.ODS_HELP_TITLE;
 import com.osparking.global.names.ControlEnums.TextType;
-import static com.osparking.global.names.DB_Access.parkingLotLocale;
+import static com.osparking.global.names.DB_Access.locale;
 import com.osparking.global.names.ImageDisplay;
 import com.osparking.global.names.OSP_enums.ODS_TYPE;
 import java.awt.Dimension;
@@ -269,7 +269,7 @@ public class ODS_HelpJDialog extends javax.swing.JDialog {
             String title = null;
 
             if (odsType == ODS_TYPE.AFFILIATION) {
-                switch(parkingLotLocale.getLanguage()){
+                switch(locale.getLanguage()){
                     case "ko" :
                         imgFilename = "/affiliation_wrong_Kor.png";
                         title = "잘못된 소속 ods 사례";
@@ -280,7 +280,7 @@ public class ODS_HelpJDialog extends javax.swing.JDialog {
                         break;
                 }
             }  else {
-                switch(parkingLotLocale.getLanguage()){
+                switch(locale.getLanguage()){
                     case "en" :
                     case "ko" :
                         imgFilename = "/building_wrong_Kor.png";
