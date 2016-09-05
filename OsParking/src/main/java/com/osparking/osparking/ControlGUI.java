@@ -2085,7 +2085,7 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
         
         if (autoGateOpenCheckBox.isSelected() || 
                 permission == ALLOWED || 
-                (Globals.RANDOM_ATTENDANT && isOpen))
+                Globals.RANDOM_ATTENDANT)
         {
             getPassingDelayStat()[gateNo].setAccumulatable(true);
             
@@ -2167,13 +2167,6 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
         configureSettingsForm.setVisible(true);   
     }
 
-//    private void adjustListHeight(JList arrivalList, int rowCount) {
-//        Dimension tableDim = new Dimension(arrivalList.getSize().width, 
-//                25 * rowCount); 
-//        arrivalList.setSize(tableDim);
-//        arrivalList.setPreferredSize(tableDim);        
-//    }
-
     private void displayRateLimit(String limitDescription) {
         toolkit.beep();
         addMessageLine(MessageTextArea, ARTI_CURR_ERR_LIMIT_1.getContent()
@@ -2222,9 +2215,6 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
 
     private void adjustListHeight(int gateNo) {
         JList arrivalList = getGatePanel().getEntryList(gateNo);
-        DefaultListModel<CarAdmission> listModel 
-                = (DefaultListModel<CarAdmission>)admissionListModel[gateNo];
-//        int rowCount = listModel.getSize();
         int rowCount = ((DefaultListModel<CarAdmission>)admissionListModel[gateNo]).getSize();
         Dimension tableDim = new Dimension(arrivalList.getSize().width, 25 * rowCount); 
         
