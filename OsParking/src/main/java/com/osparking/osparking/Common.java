@@ -44,7 +44,8 @@ public class Common {
      * @param gatePanel panel for every gates monitored
      * @param gatesPanelSize dimension of the panel containing all gates
      */
-    public static void fixPanelDimemsion(GatePanel gatePanel, Dimension gatesPanelSize) {
+    public static void fixPanelDimemsion(GatePanel gatePanel, Dimension gatesPanelSize, int maxHeight) 
+    {
         int picWidth = 0, picHeight = 0;
 
         // <editor-fold defaultstate="collapsed" desc="-- Adjust sizes of panels for each gate">                          
@@ -82,7 +83,7 @@ public class Common {
         int width = gatesPanelSize.width - gateWidth * gateCount;
         
         try {
-            if (width >= 7) {
+            if (width >= 32) {
                 setComponentSize(gatePanel.getMarginLabel(), 
                         new Dimension(width - 2, gatePanel.getSize().height));
                 BufferedImage marginImage 
@@ -90,10 +91,14 @@ public class Common {
                 int w = gatePanel.getMarginLabel().getSize().width;
                 int h = gatePanel.getMarginLabel().getSize().height;
                 int side = (w > h ? h / 2 : w / 2);
-                
-                gatePanel.getMarginLabel().setIcon(
-                        createStretchedIcon(new Dimension(side, side), marginImage, true));
-                gatePanel.add(gatePanel.getMarginLabel());
+                if (side > maxHeight) {
+                    side = maxHeight;
+                }
+                if (side >= 32) {
+                    gatePanel.getMarginLabel().setIcon(
+                            createStretchedIcon(new Dimension(side, side), marginImage, true));
+                    gatePanel.add(gatePanel.getMarginLabel());
+                }
             } else {
                 setComponentSize(gatePanel.getMarginLabel(), 
                         new Dimension(width, gatePanel.getSize().height));

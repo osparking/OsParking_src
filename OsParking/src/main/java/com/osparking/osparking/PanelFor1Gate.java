@@ -59,7 +59,7 @@ public class PanelFor1Gate extends GatePanel {
         
         addComponentListener(new ComponentAdapter() {
             public void componentResized(ComponentEvent evt) {
-                fixPanelDimemsion((GatePanel)evt.getSource(), getSize());
+                fixPanelDimemsion((GatePanel)evt.getSource(), getSize(), CarPicLabel1.getSize().height/2);
 
                 if (Panel_Gate1.getSize().equals(prevSize)) {
                     return;
