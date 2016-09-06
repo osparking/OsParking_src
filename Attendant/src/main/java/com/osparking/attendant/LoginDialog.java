@@ -102,7 +102,6 @@ public class LoginDialog extends javax.swing.JDialog {
         setResizable(false);
 
         userIDText.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        userIDText.setText("admin");
         userIDText.setPreferredSize(new java.awt.Dimension(80, 30));
         userIDText.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
@@ -158,7 +157,6 @@ public class LoginDialog extends javax.swing.JDialog {
         });
 
         password.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        password.setText(PASSWORD);
         password.setPreferredSize(new java.awt.Dimension(80, 30));
         password.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
