@@ -251,7 +251,7 @@ public class GateBarReader extends Thread implements DeviceReader {
             closeSocket(getManagerSocket(), "manager socket closing");
             setManagerSocket(null);
         }       
-        gateBarGUI.getCriticalInfoTextField().setText(timeFormat.format(new Date()) + "--manager disconnected");
+        gateBarGUI.getCriticalInfoTextField().setText(timeFormat.format(new Date()) + "--OsParking disconnected");
         if (! gateBarGUI.isSHUT_DOWN())
             gateBarGUI.getAcceptManagerTimer().reRunOnce();
     }        

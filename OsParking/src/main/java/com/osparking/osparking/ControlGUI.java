@@ -40,6 +40,7 @@ import static com.osparking.global.names.ControlEnums.ButtonTypes.USERS_BTN;
 import static com.osparking.global.names.ControlEnums.ButtonTypes.VEHICLES_BTN;
 import static com.osparking.global.names.ControlEnums.DialogMessages.ARTIF_ERROR_RATE;
 import static com.osparking.global.names.ControlEnums.DialogMessages.AUTO_LOGOUT;
+import static com.osparking.global.names.ControlEnums.DialogMessages.FIRST_RUN_MSG;
 import static com.osparking.global.names.ControlEnums.DialogMessages.OSPARKING_STOPS;
 import static com.osparking.global.names.ControlEnums.DialogMessages.PASSING_DELAY_AVG;
 import static com.osparking.global.names.ControlEnums.DialogMessages.SHUT_DOWN_CONFIRM_DIALOG;
@@ -57,6 +58,7 @@ import static com.osparking.global.names.ControlEnums.LabelContent.GATE_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.OPEN_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.RATE_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.STATUS_LABEL;
+import static com.osparking.global.names.ControlEnums.Languages.KOREAN;
 import static com.osparking.global.names.ControlEnums.MenuITemTypes.AFFILIATION_MENU;
 import static com.osparking.global.names.ControlEnums.MenuITemTypes.ARRIVAL_MENU_ITEM;
 import static com.osparking.global.names.ControlEnums.MenuITemTypes.BOOTING_MENU_ITEM;
@@ -100,6 +102,8 @@ import static com.osparking.global.names.DB_Access.enteranceAllowed;
 import static com.osparking.global.names.DB_Access.gateCount;
 import static com.osparking.global.names.DB_Access.gateNames;
 import static com.osparking.global.names.DB_Access.getDisallowReason;
+import static com.osparking.global.names.DB_Access.initEBoardSettings;
+import static com.osparking.global.names.DB_Access.initSystemSettings;
 import static com.osparking.global.names.DB_Access.parkingPermitted;
 import static com.osparking.global.names.DB_Access.readEBoardSettings;
 import static com.osparking.global.names.DB_Access.readSettings;
@@ -143,8 +147,8 @@ import com.osparking.global.names.OSP_enums.CameraType;
 import static com.osparking.global.names.OSP_enums.CameraType.Simulator;
 import static com.osparking.global.names.OSP_enums.EBD_DisplayMessage.*;
 import static com.osparking.global.names.OSP_enums.GateBarType.NaraBar;
-import static com.osparking.global.names.OSP_enums.MsgCode.Os_Free;
 import static com.osparking.osparking.Common.RECENT_ROW_HEIGHT;
+import static com.osparking.osparking.Common.os_FreeBytes;
 import com.osparking.osparking.device.BlackFly.BlackFlyManager;
 import com.osparking.osparking.device.LED_Task;
 import com.osparking.osparking.device.LEDnotice.FinishLEDnoticeIntrTask;
@@ -230,6 +234,19 @@ import org.bytedeco.javacpp.FlyCapture2;
  */
 public final class ControlGUI extends javax.swing.JFrame implements ActionListener, ManagerGUI, ParentGUI {
 
+    private static boolean listFileNotFound() {
+        String listFilePath = "log" + File.separator + "MessageList.txt";
+        File listFile = new File(listFilePath);
+        
+        if (!listFile.exists() || listFile.isDirectory()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    static boolean IS_FIRST_FUN = false;
+    
     private static void showBufferedImage(int gateNo, JLabel picLabel, BufferedImage imageRead) {
         picLabel.setText(null);
         picLabel.setIcon(createStretchedIcon(picLabel.getSize(), imageRead, false));
@@ -428,7 +445,9 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
         
         // Info' make below lines comments after ths camera-less simulation phase completes
         addMessageLine(MessageTextArea, "" );
-        addMessageLine(MessageTextArea, SYSTEM_START.getContent());
+        if (!IS_FIRST_FUN) {
+            addMessageLine(MessageTextArea, SYSTEM_START.getContent());
+        }
         logParkingOperation(OpLogLevel.LogAlways, SYSTEM_START.getContent());
         
         int deviceCount = DeviceType.values().length; // dc: Device (type)  Count
@@ -2201,9 +2220,10 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
                 try {
                     outStream = ((ISocket)deviceManagers[Camera.ordinal()][gate])
                             .getSocket().getOutputStream();
-                    byte[] msgBytes = null;
-                    msgBytes = ByteBuffer.allocate(1).put((byte)Os_Free.ordinal()).array();  
-                    outStream.write(msgBytes);
+//                    byte[] msgBytes = null;
+//                    msgBytes = ByteBuffer.allocate(1).put((byte)Os_Free.ordinal()).array();  
+//                    outStream.write(msgBytes);
+                    outStream.write(os_FreeBytes);
                 } catch (IOException ex) {
                     gfinishConnection(Camera, null,
                             "sending gate free message",
@@ -2643,8 +2663,8 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
             getMessageTextArea().setCaretPosition(len); // places the caret at the bottom of the display area
             
         }  catch (FileNotFoundException fe) {
-            addMessageLine(MessageTextArea, "Very First Run of OsParking!");
-            logParkingException(Level.SEVERE, fe, "First Run of Parking Lot Manager");
+            addMessageLine(MessageTextArea, FIRST_RUN_MSG.getContent());
+            logParkingException(Level.SEVERE, fe, "First Run of Parking Lot Manager");            
         }  catch (IOException ie) {
             logParkingException(Level.SEVERE, ie, "(message list file IO exception)");
         }
@@ -3468,6 +3488,14 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
 
         initializeLoggers();
         checkOptions(args);
+        
+        if (listFileNotFound()) {
+            language = KOREAN;
+            IS_FIRST_FUN = true;            
+            initSystemSettings();
+            initEBoardSettings();
+        }
+
         readSettings();
         EBD_DisplaySettings = readEBoardSettings();
         Thread.currentThread().setPriority((Thread.MAX_PRIORITY));

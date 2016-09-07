@@ -42,7 +42,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
-import static com.osparking.global.names.DB_Access.parkingLotLocale;
+import static com.osparking.global.names.DB_Access.locale;
 import static com.osparking.global.names.DB_Access.readSettings;
 import static com.osparking.global.Globals.*;
 import static com.osparking.global.names.ControlEnums.ButtonTypes.CLOSE_BTN;
@@ -81,8 +81,8 @@ public class LoginRecordList extends javax.swing.JFrame {
         initComponents();
         setIconImages(OSPiconList);
         
-        BeginDateChooser.setLocale(parkingLotLocale);
-        EndDateChooser.setLocale(parkingLotLocale);
+        BeginDateChooser.setLocale(locale);
+        EndDateChooser.setLocale(locale);
         Date today = new Date();
         BeginDateChooser.setDate(getDateFromGivenDate(today, -7));
         EndDateChooser.setDate(today);

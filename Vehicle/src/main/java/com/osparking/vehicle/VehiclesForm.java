@@ -2028,7 +2028,9 @@ public class VehiclesForm extends javax.swing.JFrame {
                 public void run() {
                     VehiclesForm mainForm = new VehiclesForm();
                     mainForm.setVisible(true);
-                    shortLicenseDialog(mainForm, "Vehicle Manager Program", "upper left");                
+                    if (!DEBUG) {
+                        shortLicenseDialog(mainForm, "Vehicle Manager Program", "upper left");
+                    }
                 }
             });
         }

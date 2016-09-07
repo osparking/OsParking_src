@@ -134,7 +134,7 @@ import static com.osparking.global.names.ControlEnums.TitleTypes.AFFILI_BUILD_FR
 import static com.osparking.global.names.ControlEnums.ToolTipContent.DRIVER_ODS_UPLOAD_SAMPLE_DOWNLOAD;
 import static com.osparking.global.names.ControlEnums.ToolTipContent.INSERT_TOOLTIP;
 import static com.osparking.global.names.ControlEnums.ToolTipContent.NUMBER_FORMAT_ERROR_MSG;
-import static com.osparking.global.names.DB_Access.parkingLotLocale;
+import static com.osparking.global.names.DB_Access.locale;
 import static com.osparking.global.names.DB_Access.readSettings;
 import static com.osparking.global.names.JDBCMySQL.getConnection;
 import com.osparking.global.names.OSP_enums.ODS_TYPE;
@@ -1759,7 +1759,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
         
         String dialogMessage = "";
                 
-        switch (parkingLotLocale.getLanguage()) {
+        switch (locale.getLanguage()) {
             case "ko":
                 dialogMessage = "다음 하위 소속을 삭제합니까?" + System.getProperty("line.separator") 
                 + " -하위 소속명: " + BelongName;
@@ -1801,7 +1801,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
                     
                     String dialog = "";
 
-                    switch (parkingLotLocale.getLanguage()) {
+                    switch (locale.getLanguage()) {
                         case "ko":
                             dialog = "하위 소속 '" + BelongName + 
                                 "'이 성공적으로 삭제되었습니다";
@@ -2115,7 +2115,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
                         JOptionPane.PLAIN_MESSAGE, INFORMATION_MESSAGE);
             } else {
                 
-                switch (parkingLotLocale.getLanguage()) {
+                switch (locale.getLanguage()) {
                     case "ko":
                         dialog = "호실번호 '" + unitNo + 
                         "' 삭제에 실패하였습니다";

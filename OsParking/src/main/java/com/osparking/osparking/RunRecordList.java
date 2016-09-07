@@ -52,7 +52,7 @@ import static com.osparking.global.names.ControlEnums.LabelContent.SEARCH_PERIOD
 import static com.osparking.global.names.ControlEnums.MenuITemTypes.META_KEY_LABEL;
 import static com.osparking.global.names.ControlEnums.TitleTypes.RUN_RECORD_FRAME_TITLE;
 import static com.osparking.global.names.ControlEnums.ToolTipContent.ENABLING_CONDITION;
-import static com.osparking.global.names.DB_Access.parkingLotLocale;
+import static com.osparking.global.names.DB_Access.locale;
 import static com.osparking.global.names.DB_Access.readSettings;
 import com.osparking.global.names.JDBCMySQL;
 import com.osparking.global.names.OdsFileOnly;
@@ -91,8 +91,8 @@ public class RunRecordList extends javax.swing.JFrame {
         setIconImages(OSPiconList);
         detailTuneTableProperties();
         
-        BeginDateChooser.setLocale(parkingLotLocale);
-        EndDateChooser.setLocale(parkingLotLocale);
+        BeginDateChooser.setLocale(locale);
+        EndDateChooser.setLocale(locale);
         Date today = new Date();
         BeginDateChooser.setDate(getDateFromGivenDate(today, -7));
         EndDateChooser.setDate(today);

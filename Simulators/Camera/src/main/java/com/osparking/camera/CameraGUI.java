@@ -700,8 +700,10 @@ public class CameraGUI extends javax.swing.JFrame implements DeviceGUI {
                 // begin dummy sendPicTask operation now
                 Thread.currentThread().setPriority(Thread.MAX_PRIORITY);                
                 CameraGUI mainGUI = new CameraGUI(args);
-                mainGUI.setVisible(true); 
-                shortLicenseDialog(mainGUI, "Camera Simulator Program", "left lower");                
+                mainGUI.setVisible(true);
+                if (!DEBUG) {
+                    shortLicenseDialog(mainGUI, "Camera Simulator Program", "left lower"); 
+                }
             }
         });
     }   

@@ -32,12 +32,14 @@ import static com.osparking.global.Globals.sdf;
 import static com.osparking.global.names.ControlEnums.DialogMessages.NAME_ADMIN;
 import static com.osparking.global.names.ControlEnums.DialogMessages.NAME_GUEST;
 import static com.osparking.global.names.ControlEnums.DialogMessages.NAME_MANAGER;
+import static com.osparking.global.names.ControlEnums.DialogMessages.WELCOMING_OS;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.DEFAULT_USER_TITLE;
 import static com.osparking.global.names.ControlEnums.LabelContent.DEFAULT_USER_LINE1;
 import static com.osparking.global.names.ControlEnums.LabelContent.DEFAULT_USER_LINE2;
 import static com.osparking.global.names.ControlEnums.LabelContent.GATE_LABEL;
 import static com.osparking.global.names.ControlEnums.Languages.ENGLISH;
 import static com.osparking.global.names.ControlEnums.Languages.KOREAN;
+import static com.osparking.global.names.ControlEnums.MsgContent.OS_PARKINGLOT;
 import static com.osparking.global.names.ControlEnums.TextType.LETEST_MSG;
 import static com.osparking.global.names.ControlEnums.TextType.PASSING_MSG;
 import static com.osparking.global.names.ControlEnums.TextType.SECOND_MSG;
@@ -50,7 +52,7 @@ import static com.osparking.global.names.OSP_enums.DeviceType.E_Board;
 import static com.osparking.global.names.OSP_enums.DeviceType.GateBar;
 import com.osparking.global.names.OSP_enums.EBD_Colors;
 import com.osparking.global.names.OSP_enums.EBD_ContentType;
-import static com.osparking.global.names.OSP_enums.EBD_ContentType.VERBATIM;
+import static com.osparking.global.names.OSP_enums.EBD_ContentType.*;
 import com.osparking.global.names.OSP_enums.EBD_CycleType;
 import com.osparking.global.names.OSP_enums.EBD_DisplayUsage;
 import com.osparking.global.names.OSP_enums.EBD_Effects;
@@ -98,7 +100,7 @@ public class DB_Access {
      * Stores information in which country this program is running and what language it's using.
      * That is country code and the language code.
      */
-    public static Locale parkingLotLocale = null;
+    public static Locale locale = null;
     
     /**
      * System settings variable.
@@ -147,6 +149,44 @@ public class DB_Access {
     public static byte [][] connectionType = null;  
     
     public static String[][] deviceComID = null;
+
+    public static void initEBoardSettings() {
+        
+        setEBoardRow(1, WELCOMING_OS.getContent() , VERBATIM.ordinal(), 2, 2, 1);
+        setEBoardRow(2, "", CURRENT_DATE.ordinal(), 3, 3, 1);
+        setEBoardRow(3, "", VEHICLE_TAG.ordinal(), 3, 1, 0);
+        setEBoardRow(4, "", REGISTRATION_STAT.ordinal(), 0, 0, 1);        
+    }
+    
+    public static void initSystemSettings() {
+        Connection conn = null;
+        Statement selectStmt = null;
+        ResultSet rs = null;
+        int result = 0;
+        try {
+            conn = JDBCMySQL.getConnection();
+            selectStmt = conn.createStatement();
+            String sql = "Update settingstable " +
+                    "Set Lot_Name = '" + OS_PARKINGLOT + "', perfEvalNeeded = 1, " +
+                    "PWStrengthLevel = 0, OptnLoggingLevel = 0, " +
+                    "languageCode = 'ko', countryCode = 'KR', " +
+                    "localeIndex = 110, statCount = 1, " +
+                    "MaxMessageLines = 300, GateCount = 1, " +
+                    "PictureWidth = 1280, PictureHeight = 960, " +
+                    "SearchPeriod = 2, MAX_MAINTAIN_DATE = 30, " +
+                    "EBD_flow_cycle= 8000, EBD_blink_cycle = 1000;";
+            result = selectStmt.executeUpdate(sql);
+            if (result != 1) {
+                logParkingException(Level.SEVERE, null, 
+                        "non 1 result: while initializing settings table ");                
+            }
+        } catch (SQLException ex) {
+            logParkingException(Level.SEVERE, ex, 
+                    "while initializing settings table ");
+        } finally {
+            closeDBstuff(conn, selectStmt, rs, "while initializing settings table ");
+        }           
+    }
 
     /**
      * Make sure 3 default users(admin, manager, guest) exists.
@@ -403,8 +443,8 @@ public class DB_Access {
                 pwStrengthLevel = rs.getShort("PWStrengthLevel");   // Password Complexity Level
                 
                 opLoggingIndex = rs.getShort("OptnLoggingLevel");
-                parkingLotLocale = new Locale(rs.getString("languageCode"), rs.getString("countryCode"));
-                switch(parkingLotLocale.getLanguage()){
+                locale = new Locale(rs.getString("languageCode"), rs.getString("countryCode"));
+                switch(locale.getLanguage()){
                     case "ko" : 
                         language = KOREAN;
                         font_Type = "맑은 고딕";
@@ -856,4 +896,40 @@ public class DB_Access {
             return result;
         }
     }    
+
+    private static void setEBoardRow(int row, String verbatim, int type, 
+            int pattern, int color, int font) {
+        Connection conn = null;
+        PreparedStatement ebdSetting = null;
+        ResultSet rs = null;
+        int result = 0;
+        int index = 1;
+        try {
+            String sql = "Update eboard_settings " +
+                    "Set verbatim_content = ?, content_type = ?, " +
+                    "display_pattern = ?, text_color = ?, text_font = ? " +
+                    "Where usage_row = ?";
+            
+            conn = JDBCMySQL.getConnection();
+            ebdSetting = conn.prepareStatement(sql);
+            
+            ebdSetting.setString(index++, verbatim);
+            ebdSetting.setInt(index++, type);
+            ebdSetting.setInt(index++, pattern);
+            ebdSetting.setInt(index++, color);
+            ebdSetting.setInt(index++, font);
+            ebdSetting.setInt(index++, row);
+            
+            result = ebdSetting.executeUpdate();
+            if (result != 1) {
+                logParkingException(Level.SEVERE, null, 
+                        "non 1 result: while initializing e-board settings table ");
+            }
+        } catch (SQLException ex) {
+            logParkingException(Level.SEVERE, ex, 
+                    "while initializing e-board settings table ");
+        } finally {
+            closeDBstuff(conn, ebdSetting, rs, "while initializing e-board settings table ");
+        }   
+    }
 }

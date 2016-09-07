@@ -1010,16 +1010,12 @@ public class DataGUI extends javax.swing.JFrame {
         //</editor-fold>
         //</editor-fold>
 
-        System.out.println("A");
         readSettings();        
-        System.out.println("B");
                 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-        System.out.println("C");
                 new DataGUI().setVisible(true);
-        System.out.println("D");
             }
         });
     }

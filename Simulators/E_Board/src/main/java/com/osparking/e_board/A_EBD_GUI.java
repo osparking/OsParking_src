@@ -484,7 +484,9 @@ public class A_EBD_GUI extends javax.swing.JFrame implements DeviceGUI {
                 Thread.currentThread().setPriority(Thread.MAX_PRIORITY);                
                 A_EBD_GUI mainGUI = new A_EBD_GUI(displayID);
                 mainGUI.setVisible(true);
-                shortLicenseDialog(mainGUI, "E-Board Simulator Program", "upper left");                
+                if (!DEBUG) {
+                    shortLicenseDialog(mainGUI, "E-Board Simulator Program", "upper left");
+                }
             }
         });
     }

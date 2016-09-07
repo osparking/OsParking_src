@@ -24,8 +24,10 @@ import static com.osparking.global.Globals.setComponentSize;
 import static com.osparking.global.names.DB_Access.PIC_HEIGHT;
 import static com.osparking.global.names.DB_Access.PIC_WIDTH;
 import static com.osparking.global.names.DB_Access.gateCount;
+import static com.osparking.global.names.OSP_enums.MsgCode.Os_Free;
 import java.awt.Dimension;
 import java.awt.image.BufferedImage;
+import java.nio.ByteBuffer;
 import java.util.logging.Level;
 import javax.imageio.ImageIO;
 
@@ -38,6 +40,8 @@ public class Common {
     public static final int imageH_inset = 24;
     public static final int entrySPV_inset = 28; // Car Entry ScrollPane Vertical Insets 
     public static final int RECENT_ROW_HEIGHT = 27; // Car Entry ScrollPane Vertical Insets 
+    
+    public static final byte[] os_FreeBytes = ByteBuffer.allocate(1).put((byte)Os_Free.ordinal()).array();
     
     /**
      * Adjust Dimension of Panel for a specific Gate
