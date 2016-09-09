@@ -16,6 +16,8 @@
  */
 package com.osparking.e_board;
 
+import static com.osparking.deviceglobal.DeviceGlobals.sayIamHere;
+import static com.osparking.deviceglobal.DeviceGlobals.showCheckDeviceTypeDialog;
 import java.io.File;
 import com.osparking.global.names.EBD_DisplaySetting;
 import java.io.FileNotFoundException;
@@ -43,6 +45,7 @@ import static com.osparking.global.Globals.logParkingExceptionStatus;
 import static com.osparking.global.Globals.noArtificialErrorInserted;
 import static com.osparking.global.Globals.stringLengthInPixels;
 import static com.osparking.global.Globals.timeFormat;
+import static com.osparking.global.names.ControlEnums.LabelContent.E_BOARD_LABEL;
 import static com.osparking.global.names.OSP_enums.DeviceType.*;
 import static com.osparking.global.names.OSP_enums.DisplayArea.BOTTOM_ROW;
 import static com.osparking.global.names.OSP_enums.DisplayArea.TOP_ROW;
@@ -67,10 +70,12 @@ public class EBoardReader extends Thread implements DeviceReader {
     int seq = 0;
     public FileWriter logFileWriter = null; 
     static boolean justBooted = true;
+    int ebdID;
 
-    public EBoardReader(A_EBD_GUI gateBarGUI) {
-        super("E_Board" + gateBarGUI.getID() + "_Reader");
-        this.eBoardGUI = gateBarGUI;
+    public EBoardReader(A_EBD_GUI eBoardGUI) {
+        super("E_Board" + eBoardGUI.getID() + "_Reader");
+        this.eBoardGUI = eBoardGUI;
+        ebdID = eBoardGUI.getID();
         
         if (DEBUG) {
             //<editor-fold desc="-- Prepare log file to store 'E-Board display interrupt' message Sequence Number">
@@ -81,10 +86,10 @@ public class EBoardReader extends Thread implements DeviceReader {
 
             // full path name of the today's text file for display interrupt command SN logging
             String operationLogFilePathname = pathname + File.separator 
-                    + daySB.toString() + "_E_Board_" + eBoardGUI.getID() + ".txt";
+                    + daySB.toString() + "_E_Board_" + ebdID + ".txt";
             try {
                 logFileWriter = new FileWriter(operationLogFilePathname, false); 
-                logFileWriter.write("#" + eBoardGUI.getID() + " Electronic Display Received Interrupt IDs" 
+                logFileWriter.write("#" + ebdID + " Electronic Display Received Interrupt IDs" 
                         + System.lineSeparator());
                 logFileWriter.write("<current> <previous>" + System.lineSeparator());
                 logFileWriter.flush();
@@ -117,17 +122,15 @@ public class EBoardReader extends Thread implements DeviceReader {
                 {
                     if (! isConnected(getManagerSocket())) {
                         eBoardGUI.getSocketMUTEX().wait();
-                        System.out.println("B1. EBD reader woke up");
                     }
                 }
                 
                 if (justBooted) {
-                    managerSocket.getOutputStream().write(JustBooted.ordinal());
+                    getManagerSocket().getOutputStream().write(JustBooted.ordinal());
                     justBooted = false;
                 }
                 
                 msgCode = getManagerSocket().getInputStream().read(); // waits for PULSE_PERIOD miliseconds
-
                 if (msgCode == -1) {
                     disconnectSocket(null, "End of stream reached");
                     continue;
@@ -149,6 +152,10 @@ public class EBoardReader extends Thread implements DeviceReader {
                     //<editor-fold desc="-- Read and process rest bytes of the arrived message">
                     switch (MsgCode.values()[msgCode]) 
                     {
+                        case AreYouThere:
+                            sayIamHere(eBoardGUI);
+                            break;
+                            
                         case EBD_GetID:
                             //<editor-fold desc="-- Handle heartbeat: respond with ACK message">
                             if (noArtificialErrorInserted(eBoardGUI.errorCheckBox)) 
@@ -161,7 +168,7 @@ public class EBoardReader extends Thread implements DeviceReader {
 
                         case EBD_DEFAULT1:
                         case EBD_DEFAULT2:
-                            //<editor-fold defaultstate="collapsed" desc="-- Change E-Board display temporarily">  
+                            //<editor-fold defaultstate="collapsed" desc="-- Change E-Board default display">  
                             if (isConnected(getManagerSocket()))
                                 getManagerSocket().getInputStream().read(lenByteArr);
                             else 
@@ -183,8 +190,6 @@ public class EBoardReader extends Thread implements DeviceReader {
                             len = restOfMessage.length;
                             coreBytes = Arrays.copyOfRange(restOfMessage, 0,  len - 2);
                             
-                            System.out.println("code: " + MsgCode.values()[msgCode]);
-
                             addUpBytes((byte)msgCode, lenByteArr, coreBytes, checkShort);
                             if (checkShort[1] == restOfMessage[len - 1] 
                                     && checkShort[0] == restOfMessage[len - 2]
@@ -192,7 +197,7 @@ public class EBoardReader extends Thread implements DeviceReader {
                             {
                                 // Check if this message isn't a duplicate one.
                                 int msgSN = ByteBuffer.wrap(Arrays.copyOfRange(restOfMessage, 1, 5)).getInt();
-                                System.out.println("curr SN: " + msgSN + ", prev: " + eBoardGUI.prevMsgSN[coreBytes[0]]);
+
                                 if (msgSN != eBoardGUI.prevMsgSN[coreBytes[0]]) {
                                     //<editor-fold desc="-- Decode message, update settings, change display">
                                     // decode message field by field, and apply the result to global variables(Settings)
@@ -221,9 +226,7 @@ public class EBoardReader extends Thread implements DeviceReader {
                                 ackMessage[3] = (byte)(checkACK & 0xff);   
     
                                 while (! isConnected(getManagerSocket())) {
-                                    System.out.println("before defa ack");
                                     eBoardGUI.getSocketMUTEX().wait();
-                                    System.out.println("after defa ack");
                                 }
                                 getManagerSocket().getOutputStream().write(ackMessage);  
                                 //</editor-fold>
@@ -234,30 +237,44 @@ public class EBoardReader extends Thread implements DeviceReader {
                         case EBD_INTERRUPT1:
                         case EBD_INTERRUPT2:
                             //<editor-fold defaultstate="collapsed" desc="-- Change E-Board display temporarily">  
+                            logParkingException(Level.INFO, null, "P 1", 1);
+
                             if (isConnected(getManagerSocket()))
                                 getManagerSocket().getInputStream().read(lenByteArr);
                             else
                                 continue;
+                            logParkingException(Level.INFO, null, "P 2", 1);
+                            
                             msgLength = ByteBuffer.wrap(lenByteArr).getShort();
+                            String msgs = "P 3, len: " + msgLength;
+                            logParkingException(Level.INFO, null, msgs, 1);
 
                             // read rest of the whole message
                             //  : <row:1><msgSN:4><text:?><type:1><color:1><font:1><pattern:1><cycle:4>
                             //    <delay:4><check:2>
-                            restOfMessage = new byte[msgLength - 2]; // subtract 2 from whole length
-                                // since it was already read just above when length was needed first hand.
-                            if (isConnected(getManagerSocket()))
-                                getManagerSocket().getInputStream().read(restOfMessage);
-                            else
+                            if (msgLength - 2 <= 0) {
                                 continue;
+                            }
+                            restOfMessage = new byte[msgLength - 2]; // subtract 2 from whole length
+                            logParkingException(Level.INFO, null, "P 3-1", 1);
+                                // since it was already read just above when length was needed first hand.
+                            if (isConnected(getManagerSocket())) {
+                                logParkingException(Level.INFO, null, "P 3-2", 1);
+                                getManagerSocket().getInputStream().read(restOfMessage);
+                                logParkingException(Level.INFO, null, "P 3-3", 1);
+                            } else {
+                                continue;
+                            }
+                            logParkingException(Level.INFO, null, "P 4", 1);
 
-                            System.out.println("3-2. message body delivered at: " + System.currentTimeMillis() % 10000);
-                            
                             // verify check bytes
                             checkShort = new byte[2]; // function: checking, size: short(2 bytes)
                             len = restOfMessage.length;
+                            logParkingException(Level.INFO, null, "P 5", 1);
                             coreBytes = Arrays.copyOfRange(restOfMessage, 0,  len - 2);
 
                             addUpBytes((byte)msgCode, lenByteArr, coreBytes, checkShort);
+                            logParkingException(Level.INFO, null, "P 6", 1);
                             if (checkShort[1] == restOfMessage[len - 1] 
                                     && checkShort[0] == restOfMessage[len - 2]
                                     && noArtificialErrorInserted(eBoardGUI.errorCheckBox)) 
@@ -265,9 +282,9 @@ public class EBoardReader extends Thread implements DeviceReader {
                                 //<editor-fold desc="-- Process a valid message from the manager">
                                 // check if this message has already been processed(not a duplicate one?)
                                 int msgSN = ByteBuffer.wrap(Arrays.copyOfRange(restOfMessage, 1, 5)).getInt();
+                            logParkingException(Level.INFO, null, "P 7", 1);
                                 if (msgSN != eBoardGUI.prevMsgSN[coreBytes[0]]) {
                                     // decode message field by field and apply the result to display
-                                    System.out.println("display Intr msg ID: " + msgSN);
                                     interruptCurrentDisplay(coreBytes);
                                     if (DEBUG) {
                                         saveMsgSN(msgSN, eBoardGUI.prevMsgSN[coreBytes[0]]);
@@ -276,17 +293,16 @@ public class EBoardReader extends Thread implements DeviceReader {
                                 }
                                 // build ack message and send it to the manager
                                 byte[] ackMessage = {(byte)EBD_ACK.ordinal(), (byte)msgCode, 0, 0};
+                            logParkingException(Level.INFO, null, "P 8", 1);
                                 checkACK = (short)(ackMessage[0] + ackMessage[1]);
                                 ackMessage[2] = (byte)((checkACK >> 8) & 0xff);
                                 ackMessage[3] = (byte)(checkACK & 0xff);   
-                                
+                            logParkingException(Level.INFO, null, "P 9", 1);                                
                                 while (! isConnected(getManagerSocket())) {
-                                    System.out.println("before intr ack");
                                     eBoardGUI.getSocketMUTEX().wait();
-                                    System.out.println("after intr ack");
                                 }                                
+                            logParkingException(Level.INFO, null, "P 10", 1);
                                 getManagerSocket().getOutputStream().write(ackMessage); 
-                                System.out.println("3-3. wrote ack at: " + System.currentTimeMillis() % 10000);
                                 
                                 //</editor-fold>
                             }
@@ -294,9 +310,8 @@ public class EBoardReader extends Thread implements DeviceReader {
                             break;
 
                         default:
-                            eBoardGUI.criticalInfoTextField.setText("good but un-planned code");
-                            throw new Exception ("unplanned message code: " + MsgCode.values()[msgCode]); 
-                            //break;
+                            showCheckDeviceTypeDialog(E_BOARD_LABEL.getContent(), ebdID, msgCode);
+                            throw new Exception ("unexpected message code: " + MsgCode.values()[msgCode]);                             
                     }
                     //</editor-fold>
                 }
@@ -306,12 +321,12 @@ public class EBoardReader extends Thread implements DeviceReader {
             } catch(IOException e) {
                 disconnectSocket(e, "reader processing message code");
             } catch(Exception e) {                  
-                disconnectSocket(e, "reader handling message code: " + msgCode);
+                disconnectSocket(e, "Unexpected message code: " + msgCode);
             }
             //</editor-fold>
 
             if (isConnected(getManagerSocket()) && eBoardGUI.getTolerance().getLevel() < 0 ) {
-                disconnectSocket(null, "Manager isn't reaching at " + E_Board + " #" + eBoardGUI.getID());
+                disconnectSocket(null, "Manager isn't reaching at " + E_Board + " #" + ebdID);
             }
         }
     }
@@ -395,7 +410,6 @@ public class EBoardReader extends Thread implements DeviceReader {
         if (stringLengthInPixels(displayText, eBoardGUI.topTextField) > eBoardGUI.topTextField.getWidth()) {
             /// do smthing
             patternIndex = (byte) (EBD_Effects.RTOL_FLOW.ordinal());
-            System.out.println("adjust cycle: " + cycle);
             cycle = EBD_flowCycle;
         }        
         
@@ -438,7 +452,7 @@ public class EBoardReader extends Thread implements DeviceReader {
                         delay
                 );
             } catch (Exception e) {
-                logParkingException(Level.SEVERE, e, "Return to default display for row #" + rowNo, eBoardGUI.getID());  
+                logParkingException(Level.SEVERE, e, "Return to default display for row #" + rowNo, ebdID);  
             }  
         }
         //</editor-fold>
@@ -447,26 +461,26 @@ public class EBoardReader extends Thread implements DeviceReader {
     private synchronized void saveMsgSN(int currMsgSN, int prevMsgSN) {
         String message = currMsgSN + " " + prevMsgSN + System.lineSeparator();
         
-        Globals.logParkingOperation(OpLogLevel.LogAlways, message, eBoardGUI.getID());
+        Globals.logParkingOperation(OpLogLevel.LogAlways, message, ebdID);
         
         try {
             logFileWriter.write(message);
             logFileWriter.flush();
         } catch (FileNotFoundException ex) {
             logParkingExceptionStatus(Level.SEVERE, ex, "display msg SN logging module", 
-                    eBoardGUI.getCriticalInfoTextField(), eBoardGUI.getID());
+                    eBoardGUI.getCriticalInfoTextField(), ebdID);
         } catch (IOException ex) {
             logParkingExceptionStatus(Level.SEVERE, ex, "EBD msg SN logging module", 
-                    eBoardGUI.getCriticalInfoTextField(), eBoardGUI.getID());
+                    eBoardGUI.getCriticalInfoTextField(), ebdID);
         }             
     }
 
     public void disconnectSocket(Exception e, String reason) {
         
-        logParkingException(Level.INFO, e, reason, eBoardGUI.getID());
+        logParkingException(Level.INFO, e, reason, ebdID);
         
         if (DEBUG) {
-            System.out.println("B1. E-Board #" + eBoardGUI.getID() + " close socket at: " +
+            System.out.println("B1. E-Board #" + ebdID + " close socket at: " +
                     System.currentTimeMillis());
         }
         synchronized(eBoardGUI.getSocketMUTEX()) {

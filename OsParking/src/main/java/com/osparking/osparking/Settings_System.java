@@ -102,10 +102,14 @@ import static com.osparking.global.names.ControlEnums.DialogTitleTypes.OVERLAPPE
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.SETTINGS_SAVE_RESULT;
 import static com.osparking.global.names.ControlEnums.LabelContent.BLINGKING_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.CAMERA_LABEL;
+import static com.osparking.global.names.ControlEnums.LabelContent.CHECK_IP_DIALOG_1;
+import static com.osparking.global.names.ControlEnums.LabelContent.CHECK_IP_DIALOG_4;
 import static com.osparking.global.names.ControlEnums.LabelContent.COM_PORT_ID_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.CONN_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.CYCLE_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.DEVICE_LABEL;
+import static com.osparking.global.names.ControlEnums.LabelContent.DEV_CONN_ERROR_2;
+import static com.osparking.global.names.ControlEnums.LabelContent.DEV_CONN_ERROR_3;
 import static com.osparking.global.names.ControlEnums.LabelContent.E_BOARD_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.FLOWING_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.GATE_BAR_LABEL;
@@ -153,6 +157,7 @@ import static com.osparking.global.names.ControlEnums.LabelContent.VEHICLE_IMG_W
 import static com.osparking.global.names.ControlEnums.MenuITemTypes.META_KEY_LABEL;
 import static com.osparking.global.names.ControlEnums.MsgContent.AVERAGE_WORDS;
 import static com.osparking.global.names.ControlEnums.MsgContent.RECENT_WORD;
+import static com.osparking.global.names.ControlEnums.TitleTypes.CHECK_IP_TITLE;
 import static com.osparking.global.names.ControlEnums.TitleTypes.E_BOARD_SETTINGS_FRAME_TITLE;
 import static com.osparking.global.names.ControlEnums.TitleTypes.REBOOT_POPUP;
 import static com.osparking.global.names.ControlEnums.TitleTypes.SETTINGS_TITLE;
@@ -167,6 +172,8 @@ import static com.osparking.global.names.DB_Access.parkingLotName;
 import static com.osparking.global.names.DB_Access.statCountIndex;
 import com.osparking.global.names.EBD_DisplaySetting;
 import com.osparking.global.names.OSP_enums.CameraType;
+import static com.osparking.global.names.OSP_enums.CameraType.Blackfly;
+import static com.osparking.global.names.OSP_enums.CameraType.CarButton;
 import com.osparking.global.names.OSP_enums.ConnectionType;
 import static com.osparking.global.names.OSP_enums.ConnectionType.TCP_IP;
 import com.osparking.global.names.OSP_enums.DeviceType;
@@ -3138,6 +3145,12 @@ public class Settings_System extends javax.swing.JFrame {
     private void Camera1_TypeCBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_Camera1_TypeCBoxItemStateChanged
         if (evt.getStateChange() == ItemEvent.SELECTED) {
             setButtonEnabled_If_DeviceTypeChanged(1, Camera);
+            if (((CameraType)(Camera1_TypeCBox.getSelectedItem())) == CarButton) {
+                Camera1_IP_TextField.setEnabled(false);
+            } else {
+                Camera1_IP_TextField.setEnabled(true);
+            }
+            
             java.awt.EventQueue.invokeLater(new Runnable() {
                 public void run() {
                     setPortNumber(Camera, Camera1_TypeCBox.getSelectedIndex(), (byte)1, 
@@ -4004,6 +4017,7 @@ public class Settings_System extends javax.swing.JFrame {
         
         //<editor-fold desc="-- Create update statement">
         StringBuffer sb = new StringBuffer("Update gatedevices SET ");
+        
         sb.append("  gatename = ? ");
         
         sb.append("  , cameraType = ?");
@@ -4031,7 +4045,7 @@ public class Settings_System extends javax.swing.JFrame {
             try 
             {
                 conn = JDBCMySQL.getConnection();
-                updateSettings = conn.prepareStatement (sb.toString());
+                updateSettings = conn.prepareStatement(sb.toString());
 
                 int pIndex = 1;
                 JComboBox cBox;
@@ -4042,7 +4056,9 @@ public class Settings_System extends javax.swing.JFrame {
                 
                 for (DeviceType type : DeviceType.values()) {
                     cBox = (JComboBox)componentMap.get(type.toString() + gateID + "_TypeCBox");
+                    
                     int newSubType = cBox.getSelectedIndex();
+                    Object newSubTypeObj = cBox.getSelectedItem();
                     
                     if (newSubType != deviceType[type.ordinal()][gateID]) {
                         majorChange[0] = true;
@@ -4057,8 +4073,11 @@ public class Settings_System extends javax.swing.JFrame {
                         cBox = (JComboBox)componentMap.get(type.toString() + gateID + "_comID_CBox");
                         updateSettings.setString(pIndex++, cBox == null ? "" : (String)cBox.getSelectedItem());
                     }
-                    updateSettings.setString(pIndex++, 
-                            ((JTextField) componentMap.get(type.toString() + gateID + "_IP_TextField")).getText().trim());
+                    String ipAddrStr = ((JTextField) 
+                            componentMap.get(type.toString() + gateID + "_IP_TextField")).getText().trim();
+                    updateSettings.setString(pIndex++, ipAddrStr);
+                    
+                    giveWarningForRealDevice(gateID, type, newSubTypeObj, ipAddrStr);
                     
                     String portStr = "";
                     if (newSubType == SIMULATOR) {
@@ -4289,16 +4308,6 @@ public class Settings_System extends javax.swing.JFrame {
         else {
             changedControls.add(comboBx);            
         }
-        if (devType == Camera) {
-            JTextField ipAddrField =
-                    (JTextField)componentMap.get(devType.toString() + gate + "_IP_TextField");
-            
-            if (gate == 1 && selectedType == CameraType.CarButton.ordinal()) {
-                ipAddrField.setEnabled(false);
-            } else {
-                ipAddrField.setEnabled(true);
-            }
-        }
     }
 
     private void setButtonEnabled_If_ConnTypeChanged(int gate, DeviceType devType) {
@@ -4525,14 +4534,6 @@ public class Settings_System extends javax.swing.JFrame {
             connTyCBox.setEnabled(false);
         } else {
             if (devType == Camera && gateNo == 1) {
-                JTextField ipField = ((JTextField)
-                        getComponentByName(devType.name() +gateNo + "_IP_TextField"));
-                
-                if (cameraOneIsButton()) {
-                    ipField.setEnabled(false);
-                } else {
-                    ipField.setEnabled(true);
-                }
                 portField.setEnabled(false);
                 connTyCBox.setEnabled(false);
             } else {
@@ -4545,6 +4546,57 @@ public class Settings_System extends javax.swing.JFrame {
                 }
             }
         }
+    }
+
+    private void giveWarningForRealDevice(int gateID, DeviceType type, Object newSubTypeObj, String ipAddrStr) {
+        switch (type) {
+            case Camera:
+                CameraType camType = (CameraType)newSubTypeObj;
+                
+                if (camType != CameraType.Simulator 
+                        && camType != CameraType.CarButton
+                        && ipAddrStr.equals("127.0.0.1")) 
+                {
+                    showWarningReallyHere(gateID, type);
+                }
+                break;
+            
+            case E_Board:
+                E_BoardType ebdType = (E_BoardType)newSubTypeObj;
+                
+                if (ebdType != E_BoardType.Simulator 
+                        && ipAddrStr.equals("127.0.0.1")) 
+                {
+                    showWarningReallyHere(gateID, type);
+                }
+                break;
+                
+            case GateBar:
+                GateBarType barType = (GateBarType)newSubTypeObj;
+                
+                if (barType != GateBarType.Simulator 
+                        && ipAddrStr.equals("127.0.0.1")) 
+                {
+                    showWarningReallyHere(gateID, type);
+                }
+                break;
+                
+            default:
+                break;
+        }
+    }
+
+    private void showWarningReallyHere(int gateID, DeviceType type) {
+        String msg = CHECK_IP_DIALOG_1.getContent() + System.lineSeparator() +
+                System.lineSeparator() + 
+                " -" + DEV_CONN_ERROR_2.getContent() + GATE_NAME_LABEL.getContent() +
+                gateID + System.lineSeparator() +
+                " -" + DEV_CONN_ERROR_3.getContent() + type.getContent() + "#" + 
+                gateID + System.lineSeparator() + System.lineSeparator() +
+                CHECK_IP_DIALOG_4.getContent();
+        
+        JOptionPane.showMessageDialog(this, msg,
+                Blackfly + " " + CHECK_IP_TITLE.getContent(), JOptionPane.WARNING_MESSAGE);
     }
 
     private static class COM_ID_Usage {

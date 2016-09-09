@@ -22,10 +22,19 @@ import static com.osparking.global.Globals.DEBUG;
 import static com.osparking.global.Globals.gfinishConnection;
 import static com.osparking.global.Globals.logParkingException;
 import static com.osparking.global.Globals.logParkingOperation;
+import static com.osparking.global.names.ControlEnums.DialogTitleTypes.CONN_ERROR_TITLE;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.ERROR_DIALOGTITLE;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.MISSING_FILE_DIALOGTITLE;
+import static com.osparking.global.names.ControlEnums.LabelContent.CAMERA_LABEL;
+import static com.osparking.global.names.ControlEnums.LabelContent.DEV_CONN_ERROR_1;
+import static com.osparking.global.names.ControlEnums.LabelContent.DEV_CONN_ERROR_2;
+import static com.osparking.global.names.ControlEnums.LabelContent.DEV_CONN_ERROR_3;
+import static com.osparking.global.names.ControlEnums.LabelContent.DEV_CONN_ERROR_4;
+import static com.osparking.global.names.ControlEnums.LabelContent.GATE_NAME_LABEL;
 import static com.osparking.global.names.ControlEnums.MsgContent.FILE_PATH;
 import com.osparking.global.names.IDevice;
+import com.osparking.global.names.OSP_enums;
+import static com.osparking.global.names.OSP_enums.CameraType.Blackfly;
 import static com.osparking.global.names.OSP_enums.DeviceType.Camera;
 import com.osparking.global.names.OSP_enums.OpLogLevel;
 import com.osparking.osparking.ControlGUI;
@@ -144,24 +153,28 @@ public class BlackFlyManager extends Thread implements
                     System.setProperty("jna.debug_load", "true");
                     System.setProperty("jna.debug_load.jna", "true");
                 }
-//                System.setProperty("jna.platform.library.path", LPR_FOLDER);
                 System.setProperty("jna.library.path", LPR_FOLDER);
                 if (DEBUG) {
                     System.setProperty("java.library.path", LPR_FOLDER);
-//                    System.loadLibrary(dllName);
                 }
                 recognizer = (LPR_DLL) Native.loadLibrary(dllName, LPR_DLL.class);
-                if (this.cameraID <= numCameras[0]) {
+                if (cameraID <= numCameras[0]) {
                     if (findCamera() > 0) {
                         initBusanANPR();
                     }
                 } else {
                     logParkingException(Level.WARNING, null, 
                             "Connected camera is not enough", cameraID);
-                    String msg = "Connected camera is not enough" + System.lineSeparator() +
-                            System.lineSeparator() + "※OsParking has trouble in starting";
+                    String msg = DEV_CONN_ERROR_1.getContent() + System.lineSeparator() +
+                            System.lineSeparator() + 
+                            " -" + DEV_CONN_ERROR_2.getContent() + GATE_NAME_LABEL.getContent() +
+                            cameraID + System.lineSeparator() +
+                            " -" + DEV_CONN_ERROR_3.getContent() + Blackfly + " " +
+                            CAMERA_LABEL.getContent() + "#" + cameraID + 
+                            System.lineSeparator() + System.lineSeparator() +
+                            DEV_CONN_ERROR_4.getContent();
                     JOptionPane.showMessageDialog(mainForm, msg,
-                            ERROR_DIALOGTITLE.getContent(), JOptionPane.WARNING_MESSAGE);                    
+                            Blackfly + " " + CONN_ERROR_TITLE.getContent(), JOptionPane.WARNING_MESSAGE);                    
                 }
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(mainForm, "LPR, excep: " + ex.getMessage());
@@ -386,7 +399,8 @@ public class BlackFlyManager extends Thread implements
         int numOfCameras = numCameras[0];
 
         if (numOfCameras == 0) {
-            logParkingException(Level.WARNING, null, "카메라가 보이지 않습니다.", cameraID);
+            logParkingException(Level.WARNING, null, 
+                    Blackfly + "#" + cameraID + " Camera is not found", cameraID);
         } else {
             for (int i = 0; i < numCameras[0]; i++) {
                 connectCamera(cameraID);
@@ -437,6 +451,11 @@ public class BlackFlyManager extends Thread implements
      */
     public void setCarTagNumber(String carTagNumber) {
         this.carTagNumber = carTagNumber;
+    }
+
+    @Override
+    public void writeMessage(OSP_enums.MsgCode code, byte[] msgBytes) {
+        
     }
 
     public interface LPR_DLL extends Library {

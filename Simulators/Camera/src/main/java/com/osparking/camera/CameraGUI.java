@@ -56,6 +56,7 @@ import java.net.Inet4Address;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.JCheckBox;
 
 /**
  * Camera Simulator GUI -- Part of OsParking simulator package which is developed by Open Source 
@@ -1008,6 +1009,11 @@ public class CameraGUI extends javax.swing.JFrame implements DeviceGUI {
      */
     public void setOsBusy(boolean OsFree) {
         this.OsBusy = OsFree;
+    }
+
+    @Override
+    public JCheckBox getErrorCheckBox() {
+        return errorCheckBox;
     }
 }
 

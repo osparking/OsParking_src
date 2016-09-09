@@ -16,6 +16,8 @@
  */
 package com.osparking.camera;
 
+import static com.osparking.deviceglobal.DeviceGlobals.sayIamHere;
+import static com.osparking.deviceglobal.DeviceGlobals.showCheckDeviceTypeDialog;
 import static com.osparking.global.Globals.addMessageLine;
 import static com.osparking.global.Globals.closeSocket;
 import java.io.IOException;
@@ -26,13 +28,25 @@ import com.osparking.global.names.DeviceReader;
 import static com.osparking.global.Globals.isConnected;
 import static com.osparking.global.Globals.logParkingException;
 import static com.osparking.global.Globals.noArtificialErrorInserted;
+import static com.osparking.global.names.ControlEnums.DialogMessages.DEV_TYPE_ERROR_MSG1;
+import static com.osparking.global.names.ControlEnums.DialogMessages.DEV_TYPE_ERROR_MSG2;
+import static com.osparking.global.names.ControlEnums.DialogMessages.DEV_TYPE_ERROR_MSG3;
+import static com.osparking.global.names.ControlEnums.DialogMessages.DEV_TYPE_ERROR_MSG4;
+import static com.osparking.global.names.ControlEnums.DialogTitleTypes.ERROR_DIALOGTITLE;
+import static com.osparking.global.names.ControlEnums.LabelContent.CAMERA_LABEL;
+import static com.osparking.global.names.ControlEnums.LabelContent.GATE_LABEL;
+import static com.osparking.global.names.ControlEnums.LabelContent.TYPE_LABEL;
+import static com.osparking.global.names.ControlEnums.MenuITemTypes.SETTING_MENU_ITEM;
+import static com.osparking.global.names.ControlEnums.MenuITemTypes.SYSTEM_MENU;
 import static com.osparking.global.names.OSP_enums.DeviceType.Camera;
 import com.osparking.global.names.OSP_enums.MsgCode;
 import static com.osparking.global.names.OSP_enums.MsgCode.AreYouThere;
-import static com.osparking.global.names.OSP_enums.MsgCode.IAmHere;
 import static com.osparking.global.names.OSP_enums.MsgCode.Img_ACK;
 import static com.osparking.global.names.OSP_enums.MsgCode.JustBooted;
 import java.util.logging.Level;
+import javax.swing.JOptionPane;
+import static javax.swing.JOptionPane.WARNING_MESSAGE;
+import org.jsoup.Jsoup;
 
 /**
  * thread dedicated to read the socket input stream from the manager.
@@ -49,9 +63,11 @@ public class CameraReader extends Thread implements DeviceReader{
     int prevCommandID = 0;
     int seq = 0;
     static boolean justBooted = true;
+    int camID;
     
     public CameraReader(CameraGUI cameraGUI) {
-        setName("Camera" + cameraGUI.getID()+ "_Reader");
+        camID = cameraGUI.getID();
+        setName("Camera" + camID+ "_Reader");
         this.cameraGUI = cameraGUI;     
     }
 
@@ -104,15 +120,7 @@ public class CameraReader extends Thread implements DeviceReader{
                     switch (MsgCode.values()[msgCode]) 
                     {
                         case AreYouThere:
-                            //<editor-fold defaultstate="collapsed" desc="--Handle by sending IamHere">                        
-                            if (noArtificialErrorInserted(cameraGUI.errorCheckBox)) 
-                            {
-                                cameraGUI.getTolerance().assignMAX();
-                                if (isConnected(getManagerSocket())) {
-                                    getManagerSocket().getOutputStream().write(IAmHere.ordinal());
-                                } 
-                            }
-                            //</editor-fold>
+                            sayIamHere(cameraGUI);
                             break;
 
                         case Img_ACK:
@@ -159,7 +167,7 @@ public class CameraReader extends Thread implements DeviceReader{
                             break;
                             
                         default:
-                            cameraGUI.getCriticalInfoTextField().setText("unexpected message code");
+                            showCheckDeviceTypeDialog(CAMERA_LABEL.getContent(), camID, msgCode);
                             throw new Exception ("unexpected message code: " + MsgCode.values()[msgCode]); 
                     }
                     //</editor-fold>
@@ -175,7 +183,7 @@ public class CameraReader extends Thread implements DeviceReader{
             //</editor-fold>
                     
             if (isConnected(getManagerSocket()) && cameraGUI.getTolerance().getLevel() < 0 ) {
-                disconnectSocket(null, "Manager isn't reaching at " + Camera + " #" + cameraGUI.getID());
+                disconnectSocket(null, "Manager isn't reaching at " + Camera + " #" + camID);
             }
         }
     }
@@ -218,7 +226,7 @@ public class CameraReader extends Thread implements DeviceReader{
         if (getManagerSocket() == null)
             return;
         
-        logParkingException(Level.INFO, e, reason, cameraGUI.getID());
+        logParkingException(Level.INFO, e, reason, camID);
         synchronized(cameraGUI.getSocketMUTEX()) {
             addMessageLine(cameraGUI.getMessageTextArea(), 
                     "OsParking disconnected" + System.lineSeparator());

@@ -26,6 +26,7 @@ import static com.osparking.global.names.OSP_enums.DeviceType.GateBar;
 import com.osparking.global.names.OSP_enums.MsgCode;
 import static com.osparking.global.names.OSP_enums.MsgCode.Open;
 import com.osparking.osparking.ControlGUI;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 //import parking.device.CameraReader.WriteMUTEX;
 
@@ -44,7 +45,7 @@ public class SendGateOpenTask implements Runnable {
     
     byte[] integerArr = null;
     private int[] resendCount = new int[4];
-    byte[] messageArr = new byte[9]; // code(1 byte), cmd ID(4 bytes), delay(4 bytes)
+    byte[] openMsgArr = new byte[9]; // code(1 byte), cmd ID(4 bytes), delay(4 bytes)
     
     /**
      * Open Command Sender Task constructor.
@@ -60,13 +61,13 @@ public class SendGateOpenTask implements Runnable {
         this.gateID = gateID;
         this.openCmd_ID = openCmd_ID;
 
-        messageArr[0] = (byte)Open.ordinal();
+        openMsgArr[0] = (byte)Open.ordinal();
         
         integerArr = ByteBuffer.allocate(4).putInt(openCmd_ID).array();
-        System.arraycopy(integerArr, 0, messageArr, 1, 4);
+        System.arraycopy(integerArr, 0, openMsgArr, 1, 4);
         
         integerArr = ByteBuffer.allocate(4).putInt(passingDelay).array();
-        System.arraycopy(integerArr, 0, messageArr, 5, 4);
+        System.arraycopy(integerArr, 0, openMsgArr, 5, 4);
     }
 
     /**
@@ -74,40 +75,21 @@ public class SendGateOpenTask implements Runnable {
      */
     @Override
     public synchronized void run() {
-        
-        try 
+        synchronized(mainForm.getSocketMutex()[GateBar.ordinal()][gateID]) 
         {
-            synchronized(mainForm.getSocketMutex()[GateBar.ordinal()][gateID]) 
+            if (! IDevice.isConnected(
+                    mainForm.getDeviceManagers()[GateBar.ordinal()][gateID], GateBar, gateID))
             {
-                if (! IDevice.isConnected(
-                        mainForm.getDeviceManagers()[GateBar.ordinal()][gateID], GateBar, gateID))
-                {
-                    System.out.println("before opentask");
+                try {
                     mainForm.getSocketMutex()[GateBar.ordinal()][gateID].wait();
-                    System.out.println("after opentask");
+                } catch (InterruptedException ex) {
+                    logParkingException(Level.INFO, ex, "GateBar #" + gateID + " waits socket conn'");
                 }
-                ++resendCount[gateID];
-                IDevice.ISocket gateMan = 
-                        (IDevice.ISocket) mainForm.getDeviceManagers()[GateBar.ordinal()][gateID];
-                gateMan.getSocket().getOutputStream().write(messageArr);
             }
-        } catch (IOException e) {
-            IDevice.ISocket gateMan = 
-                    (IDevice.ISocket) mainForm.getDeviceManagers()[GateBar.ordinal()][gateID];            
-            gfinishConnection(GateBar, null,  
-                    "writing open cmd #" + openCmd_ID + " to bar#" + gateID, 
-                    gateID,
-                    mainForm.getSocketMutex()[GateBar.ordinal()][gateID],
-                    gateMan.getSocket(),
-                    mainForm.getMessageTextArea(), 
-                    mainForm.getSockConnStat()[GateBar.ordinal()][gateID],
-                    mainForm.getConnectDeviceTimer()[GateBar.ordinal()][gateID],
-                    mainForm.isSHUT_DOWN()
-                    );                 
-            
-        } catch (InterruptedException ex) {
-            logParkingException(Level.SEVERE, ex, "gate #" + gateID + " open sender wait socket conn'");
-        }    
+            ++resendCount[gateID];
+            IDevice.IManager gateMan = mainForm.getDeviceManagers()[GateBar.ordinal()][gateID];
+            gateMan.writeMessage(Open, openMsgArr);
+        }
     }
 
     /**

@@ -1188,4 +1188,9 @@ public class LEDnoticeManager extends Thread implements
         getLedNoticeMessages().add(new MsgItem(DEL_GROUP, ledNoticeProtocol.delGroup(TEXT_GROUP)));
         showDefaultMessage();
     }
+
+    @Override
+    public void writeMessage(OSP_enums.MsgCode code, byte[] msgBytes) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }

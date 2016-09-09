@@ -34,13 +34,13 @@ import java.net.Socket;
 public class IDevice {
     
     public static interface IManager {
-//        void finishConnection(Exception e, String description, byte deviceNo);
         void setPriority(int newPriority);
         void start();
         public void stopOperation(String reason);
         boolean isNeverConnected();
 
         public boolean isConnected();
+        public void writeMessage(OSP_enums.MsgCode code, byte[] msgBytes);
     }
     
     public static interface IE_Board {

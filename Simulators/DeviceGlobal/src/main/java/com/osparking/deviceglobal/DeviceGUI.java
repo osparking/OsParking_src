@@ -22,6 +22,7 @@ import javax.swing.JTextField;
 import com.osparking.global.names.DeviceReader;
 import com.osparking.global.names.ParkingTimer;
 import com.osparking.global.names.ToleranceLevel;
+import javax.swing.JCheckBox;
 
 /**
  *
@@ -42,6 +43,8 @@ public interface DeviceGUI {
     boolean isSHUT_DOWN();    
 
     public ParkingTimer getAcceptManagerTimer();
+    public JCheckBox getErrorCheckBox();
+    
 }
 
     

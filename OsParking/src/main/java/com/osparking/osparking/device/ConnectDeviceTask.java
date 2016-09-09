@@ -86,11 +86,12 @@ public class ConnectDeviceTask implements Runnable {
                 synchronized (managerGUI.getSocketMutex()[deviceType.ordinal()][deviceID]) 
                 {
                     IDevice.IManager manager = managerGUI.getDeviceManagers()[deviceType.ordinal()][deviceID];
+                    boolean isCamera = (deviceType == DeviceType.Camera);
+                    boolean isBlkFlyCam = gateDeviceTypes[deviceID].cameraType == OSP_enums.CameraType.Blackfly;
                     
                     if (connectionType[deviceType.ordinal()][deviceID] == TCP_IP.ordinal()) 
                     {
-                        if (deviceType == DeviceType.Camera &&
-                                gateDeviceTypes[deviceID].cameraType == OSP_enums.CameraType.Blackfly) 
+                        if (isCamera && isBlkFlyCam) 
                         {
                             ; // do nothing- connection re-establishment is done by LED_Task
                         } else {
@@ -140,8 +141,6 @@ public class ConnectDeviceTask implements Runnable {
                             managerGUI.getStatusTextField().getFont().getFontName(), Font.PLAIN, 
                             managerGUI.getStatusTextField().getFont().getSize()));  
 
-                    boolean isCamera = deviceType == DeviceType.Camera;
-                    boolean isBlkFlyCam = gateDeviceTypes[deviceID].cameraType == OSP_enums.CameraType.Blackfly;
                     if (!isCamera || !isBlkFlyCam)
                     {
                         managerGUI.tolerance[deviceType.ordinal()][deviceID].assignMAX();  
@@ -152,23 +151,21 @@ public class ConnectDeviceTask implements Runnable {
                 return;
             } catch (IOException e) {
                 //<editor-fold desc="--handle ioexception">
-                if (e.getMessage().indexOf("refused") >= 0) {
+                if (e.getMessage().contains( "refused")) {
                     String msg = timeFormat.format(new Date()) + "-- " + deviceType.getContent() +
                             " #"  + deviceID + CONN_REFUSED.getContent() + 
                             (++seq) + CONN_REFUSED_1.getContent();
 
                     managerGUI.displayStatus(msg);
-//                    managerGUI.getStatusTextField().setText(msg); 
                     if (seq % 20 == 1) {
                         logParkingException(Level.INFO, null, msg + System.lineSeparator(), deviceID);
                     }
                 } else {
-                    if (e.getMessage().indexOf("timed out") >= 0) {
+                    if (e.getMessage().contains("timed out")) {
                         String msg = timeFormat.format(new Date()) + "-- " + deviceType.getContent() +
                                 " #"  + deviceID + TIMED_OUT.getContent() + 
                                 (++seq) + CONN_REFUSED_1.getContent();
                         managerGUI.displayStatus(msg);
-//                        managerGUI.getStatusTextField().setText(msg); 
                     } else {
                         logParkingException(Level.SEVERE, e, "IOEx during socket connection", deviceID);
                     }

@@ -66,11 +66,7 @@ import no.geosoft.cc.graphics.*;
 import no.geosoft.cc.geometry.Matrix4x4;
 
 /**
-<<<<<<< HEAD
  * Gate Bar Simulator GUI -- Part of OsParking simulator package which is developed by Open Source 
-=======
- * Gate Bar Simulator GUI -- Part of OSParking simulator package which is developed by Open Source 
->>>>>>> osparking/master
  * Parking Inc.
  * <p>Company Web Site : <a href="http://www.osparking.com">http://www.osparking.com</a><p>
  * <p>(Company logo: <img src ="doc-files/64px.png"/>)</p>
@@ -411,12 +407,7 @@ errorCheckBox.addActionListener(new java.awt.event.ActionListener() {
     }//GEN-LAST:event_gateID_TextFieldFocusLost
 
     private void errorCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_errorCheckBoxActionPerformed
-//        if(!errorCheckBox.isSelected())
-//            errorCheckBox.setText("error");
-//        else
-//            errorCheckBox.setText("error : " + getFormattedRealNumber(ERROR_RATE, 2));
-        
-        if (errorCheckBox.isSelected()) {
+        if (getErrorCheckBox().isSelected()) {
             displayErrorRate(criticalInfoTextField, ERROR_RATE);         
             errIncButton.setEnabled(true);
             errDecButton.setEnabled(true);
@@ -591,6 +582,13 @@ errorCheckBox.addActionListener(new java.awt.event.ActionListener() {
      */
     public void setSHUT_DOWN(boolean SHUT_DOWN) {
         this.SHUT_DOWN = SHUT_DOWN;
+    }
+
+    /**
+     * @return the errorCheckBox
+     */
+    public javax.swing.JCheckBox getErrorCheckBox() {
+        return errorCheckBox;
     }
 
     private class BarRotator extends TimerTask

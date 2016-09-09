@@ -18,13 +18,28 @@ package com.osparking.deviceglobal;
 
 import com.osparking.global.Globals;
 import static com.osparking.global.Globals.getFormattedRealNumber;
+import static com.osparking.global.Globals.noArtificialErrorInserted;
+import static com.osparking.global.names.ControlEnums.DialogMessages.DEV_TYPE_ERROR_MSG1;
+import static com.osparking.global.names.ControlEnums.DialogMessages.DEV_TYPE_ERROR_MSG2;
+import static com.osparking.global.names.ControlEnums.DialogMessages.DEV_TYPE_ERROR_MSG3;
+import static com.osparking.global.names.ControlEnums.DialogMessages.DEV_TYPE_ERROR_MSG4;
+import static com.osparking.global.names.ControlEnums.DialogTitleTypes.ERROR_DIALOGTITLE;
+import static com.osparking.global.names.ControlEnums.LabelContent.CAMERA_LABEL;
+import static com.osparking.global.names.ControlEnums.LabelContent.GATE_LABEL;
+import static com.osparking.global.names.ControlEnums.LabelContent.TYPE_LABEL;
+import static com.osparking.global.names.ControlEnums.MenuITemTypes.SETTING_MENU_ITEM;
+import static com.osparking.global.names.ControlEnums.MenuITemTypes.SYSTEM_MENU;
+import static com.osparking.global.names.OSP_enums.MsgCode.IAmHere;
 import java.awt.Image;
 import java.awt.Toolkit;
+import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
+import static javax.swing.JOptionPane.WARNING_MESSAGE;
 import javax.swing.JTextField;
+import org.jsoup.Jsoup;
 
 /**
  *
@@ -33,6 +48,25 @@ import javax.swing.JTextField;
 
 
 public class DeviceGlobals {
+    
+    public static void showCheckDeviceTypeDialog(String device, int ebdID, int msgCode) {
+        JOptionPane.showConfirmDialog(null, 
+                DEV_TYPE_ERROR_MSG1.getContent() + System.lineSeparator() 
+                        + System.lineSeparator() + 
+                        (DEV_TYPE_ERROR_MSG2.getContent() + msgCode) + 
+                        System.lineSeparator() + System.lineSeparator() +
+                        GATE_LABEL.getContent() + ebdID + " " +
+                        device + " " + TYPE_LABEL.getContent() + 
+                        DEV_TYPE_ERROR_MSG3.getContent() + System.lineSeparator() +
+                        DEV_TYPE_ERROR_MSG4.getContent() + 
+                        Jsoup.parse(SYSTEM_MENU.getContent()).text() + " > " +
+                        SETTING_MENU_ITEM.getContent() + " > " + 
+                        GATE_LABEL.getContent() + ebdID,
+                device + ebdID +" " + ERROR_DIALOGTITLE.getContent(), 
+                JOptionPane.PLAIN_MESSAGE, 
+                WARNING_MESSAGE);        
+    }
+    
     public static void setIconList(String[] iconFilenames, List<Image> iconList) {
          
         for (String iconPath: iconFilenames) {
@@ -60,5 +94,17 @@ public class DeviceGlobals {
         toolkit.beep();
         displayField.setText("Current error rate(=" + getFormattedRealNumber(rate, 2)
                 + ") is " + (isMax ? "max!" : "min!"));
+    } 
+    
+    public static void sayIamHere(DeviceGUI deviceGUI) {
+        if (noArtificialErrorInserted(deviceGUI.getErrorCheckBox())) 
+        {
+            try {
+                deviceGUI.getReader().getManagerSocket().getOutputStream().write(IAmHere.ordinal());
+            } catch (IOException ex) {
+                deviceGUI.getReader().disconnectSocket(ex,  "while saying I'am here.");                 
+            }
+            deviceGUI.getTolerance().assignMAX();
+        }
     }    
 }

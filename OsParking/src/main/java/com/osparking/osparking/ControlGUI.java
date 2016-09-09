@@ -148,6 +148,7 @@ import static com.osparking.global.names.OSP_enums.CameraType.Simulator;
 import static com.osparking.global.names.OSP_enums.EBD_DisplayMessage.*;
 import static com.osparking.global.names.OSP_enums.GateBarType.NaraBar;
 import static com.osparking.osparking.Common.RECENT_ROW_HEIGHT;
+import static com.osparking.osparking.Common.formMessageExceptCheckShort;
 import static com.osparking.osparking.Common.os_FreeBytes;
 import com.osparking.osparking.device.BlackFly.BlackFlyManager;
 import com.osparking.osparking.device.LED_Task;
@@ -1782,7 +1783,7 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
                     Logger.getLogger(ControlGUI.class.getName()).log(Level.SEVERE, null, ex);
                 }
                 if (!(gateBusy[gateNo])) {
-                    processCarEntry(gateNo, --manualSimulationImageID,
+                    processCarArrival(gateNo, --manualSimulationImageID,
                             camMan.carTagNumber, null, camMan.rawImage); 
                 }   
             } else {
@@ -1794,7 +1795,7 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
             String tagNumber = dummyMessages[imageNo].getCarNumber();
             BufferedImage carImage = dummyMessages[imageNo].getBufferedImg();
             
-            processCarEntry(gateNo, --manualSimulationImageID, tagNumber, carImage, null);
+            processCarArrival(gateNo, --manualSimulationImageID, tagNumber, carImage, null);
         }
     }//GEN-LAST:event_carEntryButtonActionPerformed
 
@@ -2077,7 +2078,7 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
             }
     }
 
-    public void processCarEntry(byte gateNo, int imageID, String tagRecognized, BufferedImage carImage, 
+    public void processCarArrival(byte gateNo, int imageID, String tagRecognized, BufferedImage carImage, 
             FlyCapture2.Image blackFlyImage) 
     {
         Date arrivalTime = Calendar.getInstance().getTime();
@@ -2220,9 +2221,6 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
                 try {
                     outStream = ((ISocket)deviceManagers[Camera.ordinal()][gate])
                             .getSocket().getOutputStream();
-//                    byte[] msgBytes = null;
-//                    msgBytes = ByteBuffer.allocate(1).put((byte)Os_Free.ordinal()).array();  
-//                    outStream.write(msgBytes);
                     outStream.write(os_FreeBytes);
                 } catch (IOException ex) {
                     gfinishConnection(Camera, null,
@@ -3127,7 +3125,7 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
                         //<editor-fold desc="-- Car arrival interrupt message for the e-board simulator">
                         getSendEBDmsgTimer()[gateNo][EBD_Row.TOP.ordinal()].reschedule(
                                 new SendEBDMessageTask(
-                                        this, gateNo, EBD_Row.TOP, 
+                                        this, gateNo, EBD_INTERRUPT1, 
                                         getIntMessage(permission, tagNumber, gateNo, EBD_Row.TOP, 
                                                 imageSN * 2 + EBD_Row.TOP.ordinal(), carPassingDelayMs), 
                                         imageSN * 2 + EBD_Row.TOP.ordinal()
@@ -3136,7 +3134,7 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
 
                         getSendEBDmsgTimer()[gateNo][EBD_Row.BOTTOM.ordinal()].reschedule(
                                 new SendEBDMessageTask(
-                                        this, gateNo, EBD_Row.BOTTOM, 
+                                        this, gateNo, EBD_INTERRUPT2, 
                                         getIntMessage(permission, tagNumber, gateNo, EBD_Row.BOTTOM, 
                                                 imageSN * 2 + EBD_Row.BOTTOM.ordinal(), carPassingDelayMs), 
                                         imageSN * 2 + EBD_Row.BOTTOM.ordinal()
@@ -3226,6 +3224,9 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
         byte code = (byte) (row == EBD_Row.TOP ? EBD_INTERRUPT1.ordinal() : EBD_INTERRUPT2.ordinal());
         short wholeMessageLen // length of 10 fields from <length> to <check>
                 = (short)(displayTextLength + 21); // 21 == sum of 10 fields == 11 fields except <text>
+        
+        logParkingException(Level.SEVERE, null, "C wholeMessageLen: " + wholeMessageLen);
+        
         byte[] lenBytes //  {--Len[1], --Len[0]}
                 = {(byte)((wholeMessageLen >> 8) & 0xff), (byte)(wholeMessageLen & 0xff)}; 
         byte[] wholeMessageBytes = new byte[wholeMessageLen + 1];
@@ -3394,41 +3395,6 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
             finally {
                 closeDBstuff(conn, pStmt, rs, "(in car arrival image resource )");
             }
-        }
-    }
-    
-    private void formMessageExceptCheckShort(byte code, byte[] lenBytes, EBD_Row row, int msgSN, 
-            byte[] coreMsg, EBD_DisplaySetting setting, int delay, byte[] wholeMessageBytes) 
-    {
-        int idx = 0;
-        
-        wholeMessageBytes[idx++] = code;
-        wholeMessageBytes[idx++] = lenBytes[0];
-        wholeMessageBytes[idx++] = lenBytes[1];
-        wholeMessageBytes[idx++] = (byte)row.ordinal();
-
-        for (byte dByte : ByteBuffer.allocate(4).putInt(msgSN).array()) {
-            wholeMessageBytes[idx++] = dByte;
-        }        
-        
-        if (coreMsg != null) {
-            for (byte aByte: coreMsg) {
-                wholeMessageBytes[idx++] = aByte;
-            }
-        }
-        wholeMessageBytes[idx++] = (byte)setting.contentType.ordinal();
-        wholeMessageBytes[idx++] = (byte)setting.textColor.ordinal();
-        wholeMessageBytes[idx++] = (byte)setting.textFont.ordinal();
-        wholeMessageBytes[idx++] = (byte)setting.displayPattern.ordinal();
-
-        if (code == EBD_INTERRUPT1.ordinal() || code == EBD_INTERRUPT2.ordinal()) {
-            for (byte cByte : ByteBuffer.allocate(4).putInt(setting.displayCycle).array()) {
-                wholeMessageBytes[idx++] = cByte;
-            }
-        }
-        
-        for (byte dByte : ByteBuffer.allocate(4).putInt(delay).array()) {
-            wholeMessageBytes[idx++] = dByte;
         }
     }
 

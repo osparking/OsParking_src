@@ -522,6 +522,11 @@ public class NaraBarMan extends Thread implements IDevice.IManager, IDevice.ISer
     public boolean isConnected() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
+
+    @Override
+    public void writeMessage(OSP_enums.MsgCode code, byte[] msgBytes) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     
     private class GateCloser extends TimerTask
     {

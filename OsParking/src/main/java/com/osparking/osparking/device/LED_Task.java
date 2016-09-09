@@ -183,47 +183,32 @@ public class LED_Task extends TimerTask {
             }
         }
         
-        try {
-            if (type == DeviceType.E_Board && 
-                    gateDeviceTypes[gateNo].eBoardType == OSP_enums.E_BoardType.LEDnotice) 
+        if (type == DeviceType.E_Board && 
+                gateDeviceTypes[gateNo].eBoardType == OSP_enums.E_BoardType.LEDnotice) 
+        {
+            LEDnoticeManager manager = (LEDnoticeManager)deviceManagers[type.ordinal()][gateNo];
+            if (manager.getLedNoticeMessages().size() == 0) 
             {
-                LEDnoticeManager manager = (LEDnoticeManager)deviceManagers[type.ordinal()][gateNo];
-                if (manager.getLedNoticeMessages().size() == 0) 
-                {
-                    manager.getLedNoticeMessages().add(new MsgItem(LED_MsgType.GET_ID, getID_HexString));
-                }
-            } else if (type == DeviceType.GateBar &&
-                    gateDeviceTypes[gateNo].gateBarType == OSP_enums.GateBarType.NaraBar) 
-            {
-                // send status message to the gate bar firmware
-                NaraBarMan manager = (NaraBarMan)deviceManagers[type.ordinal()][gateNo];
-                if (manager.getNaraBarMessages().size() == 0) 
-                {
-                    manager.getNaraBarMessages().add(new NaraMsgItem(Nara_MsgType.Status));
-                }
-            } else {
-                if (type == DeviceType.Camera && 
-                        gateDeviceTypes[gateNo].cameraType == OSP_enums.CameraType.Blackfly) 
-                {       
-                    ; // Do not send heartbeat in case of Blackfly camera.
-                } else {     
-                    // send to simulators
-                    outStream = ((ISocket)deviceManagers[type.ordinal()][gateNo])
-                            .getSocket().getOutputStream();
-                    outStream.write(msgBytes);
-                }
+                manager.getLedNoticeMessages().add(new MsgItem(LED_MsgType.GET_ID, getID_HexString));
             }
-        } catch (IOException e) {
-            gfinishConnection(type, null,  
-                    "while sending heartbeat", 
-                    gateNo,
-                    controlGUI.getSocketMutex()[type.ordinal()][gateNo],
-                    ((ISocket)deviceManagers[type.ordinal()][gateNo]).getSocket(),
-                    controlGUI.getMessageTextArea(), 
-                    controlGUI.getSockConnStat()[type.ordinal()][gateNo],
-                    controlGUI.getConnectDeviceTimer()[type.ordinal()][gateNo],
-                    controlGUI.isSHUT_DOWN()
-                    );                 
+        } else if (type == DeviceType.GateBar &&
+                gateDeviceTypes[gateNo].gateBarType == OSP_enums.GateBarType.NaraBar) 
+        {
+            // send status message to the gate bar firmware
+            NaraBarMan manager = (NaraBarMan)deviceManagers[type.ordinal()][gateNo];
+            if (manager.getNaraBarMessages().size() == 0) 
+            {
+                manager.getNaraBarMessages().add(new NaraMsgItem(Nara_MsgType.Status));
+            }
+        } else {
+            if (type == DeviceType.Camera && 
+                    gateDeviceTypes[gateNo].cameraType == OSP_enums.CameraType.Blackfly) 
+            {       
+                ; // Do not send heartbeat in case of Blackfly camera.
+            } else {     
+                // send simulators "Are you there" heartbeat
+                deviceManagers[type.ordinal()][gateNo].writeMessage(AreYouThere, msgBytes);
+            }
         }
     }
 }

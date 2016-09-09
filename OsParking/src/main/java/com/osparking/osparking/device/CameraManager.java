@@ -211,7 +211,8 @@ public class CameraManager extends Thread implements IDevice.IManager, IDevice.I
                                 while (! Globals.isConnected(socket)) {
                                     mainForm.getSocketMutex()[Camera.ordinal()][cameraID].wait();
                                 }
-                                socket.getOutputStream().write(messageImg_ACK);
+                                writeMessage(MsgCode.Img_ACK, messageImg_ACK);
+//                                socket.getOutputStream().write(messageImg_ACK);
 
                                 if (currImgSN != mainForm.prevImgSN[cameraID]) {
                                     // handle a brand new image sent from the camera
@@ -227,7 +228,7 @@ public class CameraManager extends Thread implements IDevice.IManager, IDevice.I
                                     if (!(mainForm.isGateBusy(cameraID))) {
                                         Thread imageHandler = new Thread() {
                                             public void run() {
-                                                mainForm.processCarEntry(cameraID, currImgSN, tagNumber, image, null);
+                                                mainForm.processCarArrival(cameraID, currImgSN, tagNumber, image, null);
                                             }
                                         };
                                         imageHandler.start();
@@ -393,5 +394,26 @@ public class CameraManager extends Thread implements IDevice.IManager, IDevice.I
     @Override
     public boolean isConnected() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void writeMessage(MsgCode code, byte[] msgBytes) {
+        try {
+            if (DEBUG) {
+                System.out.println("From OsParking to Cam #" + cameraID + ": " + code);
+            }
+            socket.getOutputStream().write(msgBytes);
+        } catch (IOException ex) {
+            gfinishConnection(Camera, null,  
+                    "while sending heartbeat", 
+                    cameraID,
+                    mainForm.getSocketMutex()[Camera.ordinal()][cameraID],
+                    socket,
+                    mainForm.getMessageTextArea(), 
+                    mainForm.getSockConnStat()[Camera.ordinal()][cameraID],
+                    mainForm.getConnectDeviceTimer()[Camera.ordinal()][cameraID],
+                    mainForm.isSHUT_DOWN()
+            );
+        }
     }
 }

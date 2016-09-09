@@ -60,6 +60,7 @@ import com.osparking.global.names.ParkingTimer;
 import java.awt.Image;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.JCheckBox;
 
 /**
  * E-Board Simulator GUI -- Part of OsParking simulator package which is developed by Open Source 
@@ -675,10 +676,9 @@ public class A_EBD_GUI extends javax.swing.JFrame implements DeviceGUI {
     public JLabel getConnectionLED() {
         return connectionLED;
     }
-//
-//    private void displayErrorRate() {
-//        displayField.setText("Artificial error rate : " + getFormattedRealNumber(rate, 2));
-//        
-//        criticalInfoTextField.setText("Error rate : " + getFormattedRealNumber(ERROR_RATE, 2));
-//    }
+
+    @Override
+    public JCheckBox getErrorCheckBox() {
+        return errorCheckBox;
+    }
 }

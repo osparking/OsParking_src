@@ -1641,9 +1641,12 @@ public class Globals {
 
     public static final Object MUTEX_DEBUG_SEQ_VALUE = new Object();
     public static boolean isConnected(Socket socket) {
+//        logParkingException(Level.INFO, null, "P a", 1);
         if (socket == null || socket.isClosed() || !socket.isConnected()) {
+//            logParkingException(Level.INFO, null, "P b", 1);
             return false;
         } else {
+//            logParkingException(Level.INFO, null, "P c", 1);
             return true;
         }
     }

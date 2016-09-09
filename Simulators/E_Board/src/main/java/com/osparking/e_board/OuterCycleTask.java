@@ -78,23 +78,17 @@ public class OuterCycleTask implements Runnable{
         if (rowSetting.displayPattern == BLINKING) {
             if (isTextShowing) {
                 if(row == TOP_ROW) {
-//                    mainform.topTextField.setText("");
                     if (mainform == null) {
-                        System.out.println("mainform is null");
                     } else {
                         if (mainform.topTextField == null) {
-                            System.out.println("mainform.topTextField is null");
                         } else {
                             mainform.topTextField.setText("");
                         }
                     }                    
                 } else {
-//                    mainform.botTextField.setText("");
                     if (mainform == null) {
-                        System.out.println("mainform is null");
                     } else {
                         if (mainform.botTextField == null) {
-                            System.out.println("mainform.botTextField is null");
                         } else {
                             mainform.botTextField.setText("");
                         }

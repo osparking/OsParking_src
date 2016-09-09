@@ -16,6 +16,8 @@
  */
 package com.osparking.gatebar;
 
+import static com.osparking.deviceglobal.DeviceGlobals.sayIamHere;
+import static com.osparking.deviceglobal.DeviceGlobals.showCheckDeviceTypeDialog;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
@@ -37,10 +39,10 @@ import static com.osparking.global.Globals.logParkingException;
 import static com.osparking.global.Globals.logParkingExceptionStatus;
 import static com.osparking.global.Globals.noArtificialErrorInserted;
 import static com.osparking.global.Globals.timeFormat;
+import static com.osparking.global.names.ControlEnums.LabelContent.GATE_BAR_LABEL;
 import static com.osparking.global.names.OSP_enums.DeviceType.GateBar;
 import com.osparking.global.names.OSP_enums.MsgCode;
 import static com.osparking.global.names.OSP_enums.MsgCode.AreYouThere;
-import static com.osparking.global.names.OSP_enums.MsgCode.IAmHere;
 import static com.osparking.global.names.OSP_enums.MsgCode.JustBooted;
 import static com.osparking.global.names.OSP_enums.MsgCode.Open;
 import static com.osparking.global.names.OSP_enums.MsgCode.Open_ACK;
@@ -59,10 +61,12 @@ public class GateBarReader extends Thread implements DeviceReader {
     int seq = 0;
     public FileWriter logFileWriter = null; 
     static boolean justBooted = true;
+    int barID;
 
     public GateBarReader(GateBarGUI gateBarGUI) {
         this.gateBarGUI = gateBarGUI;
-
+        barID = gateBarGUI.getID();
+        
         if (DEBUG) {
             //<editor-fold desc="-- Create file for 'E-Board display interrupt' message Sequence Number logging">
             StringBuilder pathname = new StringBuilder();
@@ -72,10 +76,10 @@ public class GateBarReader extends Thread implements DeviceReader {
 
             // full path name of the today's text file for gate Open command ID logging
             String operationLogFilePathname = pathname + File.separator 
-                    + daySB.toString() + "_GateOpen_" + gateBarGUI.getID() + ".txt";
+                    + daySB.toString() + "_GateOpen_" + barID + ".txt";
             try {
                 logFileWriter = new FileWriter(operationLogFilePathname, false); 
-                logFileWriter.write("#" + gateBarGUI.getID() + " Gate Bar Received Open Command IDs"
+                logFileWriter.write("#" + barID + " Gate Bar Received Open Command IDs"
                         + System.lineSeparator());
                 logFileWriter.write("<current> < previous>" + System.lineSeparator());
                 logFileWriter.flush();
@@ -142,11 +146,7 @@ public class GateBarReader extends Thread implements DeviceReader {
                     switch (MsgCode.values()[msgCode]) 
                     {
                         case AreYouThere:
-                            if (noArtificialErrorInserted(gateBarGUI.errorCheckBox)) 
-                            {
-                                getManagerSocket().getOutputStream().write(IAmHere.ordinal());
-                                gateBarGUI.tolerance.assignMAX();
-                            }
+                            sayIamHere(gateBarGUI);
                             break;
 
                         case Open:
@@ -154,7 +154,7 @@ public class GateBarReader extends Thread implements DeviceReader {
                             byte[] messageOpenAck = new byte[5];
 
                             getManagerSocket().getInputStream().read(restMsg);
-                            if (noArtificialErrorInserted(gateBarGUI.errorCheckBox)) {
+                            if (noArtificialErrorInserted(gateBarGUI.getErrorCheckBox())) {
                                 //<editor-fold desc="-- write Open_ack on the socket">
                                 int cmdID = ByteBuffer.wrap(Arrays.copyOfRange(restMsg, 0, 4)).getInt();
                                 int delayMS = ByteBuffer.wrap(Arrays.copyOfRange(restMsg, 4, 8)).getInt();
@@ -181,8 +181,8 @@ public class GateBarReader extends Thread implements DeviceReader {
                             break;
 
                         default:
-                            gateBarGUI.criticalInfoTextField.setText("no planned message code");
-                            throw new Exception ("unplanned message code: " + MsgCode.values()[msgCode]); 
+                            showCheckDeviceTypeDialog(GATE_BAR_LABEL.getContent(), barID, msgCode);
+                            throw new Exception ("unexpected message code: " + MsgCode.values()[msgCode]); 
                     }
                 }
                 //</editor-fold>
@@ -197,7 +197,7 @@ public class GateBarReader extends Thread implements DeviceReader {
             //</editor-fold>
 
             if (isConnected(managerSocket) && gateBarGUI.getTolerance().getLevel() < 0 ) {
-                disconnectSocket(null, "Manager isn't reaching at " + GateBar + " #" + gateBarGUI.getID());
+                disconnectSocket(null, "Manager isn't reaching at " + GateBar + " #" + barID);
             }
         }
     }        
@@ -233,7 +233,7 @@ public class GateBarReader extends Thread implements DeviceReader {
     private void saveOpenCommandID(int cmdID, int prevCommandID) throws IOException {
 
         String message = cmdID + " " + prevCommandID + System.lineSeparator();
-        Globals.logParkingOperation(OpLogLevel.LogAlways, message, gateBarGUI.getID());
+        Globals.logParkingOperation(OpLogLevel.LogAlways, message, barID);
         
         try 
         {
@@ -241,12 +241,12 @@ public class GateBarReader extends Thread implements DeviceReader {
             logFileWriter.flush();
         } catch (FileNotFoundException ex) {
             logParkingExceptionStatus(Level.SEVERE, ex, "while saving open command ID", 
-                    gateBarGUI.criticalInfoTextField, gateBarGUI.getID());
+                    gateBarGUI.criticalInfoTextField, barID);
         }
     }
 
     public void disconnectSocket(Exception e, String reason) {
-        logParkingException(Level.INFO, e, reason, gateBarGUI.getID());
+        logParkingException(Level.INFO, e, reason, barID);
         synchronized(gateBarGUI.getSocketMUTEX()) {
             closeSocket(getManagerSocket(), "manager socket closing");
             setManagerSocket(null);
@@ -261,4 +261,16 @@ public class GateBarReader extends Thread implements DeviceReader {
         disconnectSocket(null, cause);
         setSHUT_DOWN(true);        
     }
+
+//    private void sayIamHere(DeviceGUI deviceGUI) {
+//        if (noArtificialErrorInserted(deviceGUI.getErrorCheckBox())) 
+//        {
+//            try {
+//                getManagerSocket().getOutputStream().write(IAmHere.ordinal());
+//            } catch (IOException ex) {
+//                disconnectSocket(ex,  "while saying I'am here.");                 
+//            }
+//            deviceGUI.getTolerance().assignMAX();
+//        }
+//    }
 }

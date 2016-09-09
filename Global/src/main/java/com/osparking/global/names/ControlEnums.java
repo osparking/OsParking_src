@@ -56,6 +56,7 @@ public class ControlEnums {
     }    
     
     public enum TitleTypes {
+        CHECK_IP_TITLE("장치 IP 주소 확인 필요", "Check Device IP Address"),
         CAR_ARRIVALS_TITLE("최근 차량 도착(시간 역순)", "Recent Car Arrivals(Recent First)"),
         SETTINGS_TITLE("시스템 설정", "System Settings"),
         LOGIN_DIALOG_TITLE("오즈파킹 로그인", "OsParking Login"),
@@ -246,6 +247,15 @@ public class ControlEnums {
                 RTOL_CB_ITEM.getContent() + "'으로 바꾸시겠습니까?", 
                 "Want to change '" + EFFECT_LABEL.getContent() + "' to '" + RTOL_CB_ITEM.getContent() + "'?"),
 
+        CHECK_IP_DIALOG_1("아래 실제 장치의 IP 주소가 127.0.0.1 입니다.", 
+                "Following real hardware device IP is 127.0.0.1"),
+        CHECK_IP_DIALOG_4("이는 설정 오류일 수 있으니 확인하십시오.", 
+                "It could be an error, so ckeck it again."),
+        DEV_CONN_ERROR_1("다음 장치가 연결되지 않았습니다.", "Below device is not connected"),
+        DEV_CONN_ERROR_2("위치 : ", "Location : "),
+        DEV_CONN_ERROR_3("장치 : ", "Device : "),
+        DEV_CONN_ERROR_4("따라서, 이 장치에 대한 검검이 필요합니다.", "So, you need to check this device."),
+        
         CHOOSE_PANEL_DIALOG("사용할 패널(제목, 목록, 분홍 버튼)을 선택하세요!", 
                 "Click the panel(title, table, pink button) to use!"),
         SELECT_DRIVER_HELP("운전자 행 클릭 후 [선택(T)] 버튼 사용",
@@ -612,6 +622,11 @@ public class ControlEnums {
         DRIVER_ODS_READ_RESULT3(" - 중복으로 제외된 운전자: ", " - Rejected duplicates: "),
         DRIVER_ODS_READ_RESULT4(" - 총 거부된 운전자 수: ", " - Total rejected drivers: "),
         
+        DEV_TYPE_ERROR_MSG1("예상 밖 메시지 코드입니다.", "Unexpected message code arrived."),
+        DEV_TYPE_ERROR_MSG2("메시지 코드 : ", "Message code : "),
+        DEV_TYPE_ERROR_MSG3("을 확인하십시오.", " needs to be checked."),
+        DEV_TYPE_ERROR_MSG4("확인 위치 : ", "Checking Steps : "),
+                
         READ_DRIVER_ODS_CONF_1("ods 파일에서 다음 운전자 정보가 식별되었습니다.",
                 "Following drivers exists in the ods file."),
         READ_DRIVER_ODS_CONF_2(" - 운전자 항목 수 : ", " - Driver count : "),
@@ -983,6 +998,7 @@ public class ControlEnums {
         LOW_AFFILI_MISSING("하위 소속 부재 ", "Lower Affiliation "),
         LOW_UNIT_MISSING("호실 비 선택 ", "Missing Unit "),
         ERROR_DIALOGTITLE("오류", "Error"),
+        CONN_ERROR_TITLE("연결 오류", "Connection Error"),
         WORK_MODE_DIALOGTITLE("작업 모드 환기", "Current Work Mode"),
         CREATION_RESULT_DIALOGTITLE("생성 결과", "Creation Result"),
         USER_FIELD_CHECK_RESULT("항목 검사 결과", "Field Check Result"),

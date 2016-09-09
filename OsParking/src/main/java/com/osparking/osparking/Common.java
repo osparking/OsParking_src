@@ -24,6 +24,10 @@ import static com.osparking.global.Globals.setComponentSize;
 import static com.osparking.global.names.DB_Access.PIC_HEIGHT;
 import static com.osparking.global.names.DB_Access.PIC_WIDTH;
 import static com.osparking.global.names.DB_Access.gateCount;
+import com.osparking.global.names.EBD_DisplaySetting;
+import com.osparking.global.names.OSP_enums;
+import static com.osparking.global.names.OSP_enums.MsgCode.EBD_INTERRUPT1;
+import static com.osparking.global.names.OSP_enums.MsgCode.EBD_INTERRUPT2;
 import static com.osparking.global.names.OSP_enums.MsgCode.Os_Free;
 import java.awt.Dimension;
 import java.awt.image.BufferedImage;
@@ -113,5 +117,40 @@ public class Common {
             logParkingException(Level.SEVERE, e, "(Margin area updater)");
         }
         //</editor-fold>
-    }     
+    }  
+    
+    public static void formMessageExceptCheckShort(byte code, byte[] lenBytes, OSP_enums.EBD_Row row, int msgSN, 
+            byte[] coreMsg, EBD_DisplaySetting setting, int delay, byte[] wholeMessageBytes) 
+    {
+        int idx = 0;
+        
+        wholeMessageBytes[idx++] = code;
+        wholeMessageBytes[idx++] = lenBytes[0];
+        wholeMessageBytes[idx++] = lenBytes[1];
+        wholeMessageBytes[idx++] = (byte)row.ordinal();
+
+        for (byte dByte : ByteBuffer.allocate(4).putInt(msgSN).array()) {
+            wholeMessageBytes[idx++] = dByte;
+        }        
+        
+        if (coreMsg != null) {
+            for (byte aByte: coreMsg) {
+                wholeMessageBytes[idx++] = aByte;
+            }
+        }
+        wholeMessageBytes[idx++] = (byte)setting.contentType.ordinal();
+        wholeMessageBytes[idx++] = (byte)setting.textColor.ordinal();
+        wholeMessageBytes[idx++] = (byte)setting.textFont.ordinal();
+        wholeMessageBytes[idx++] = (byte)setting.displayPattern.ordinal();
+
+        if (code == EBD_INTERRUPT1.ordinal() || code == EBD_INTERRUPT2.ordinal()) {
+            for (byte cByte : ByteBuffer.allocate(4).putInt(setting.displayCycle).array()) {
+                wholeMessageBytes[idx++] = cByte;
+            }
+        }
+        
+        for (byte dByte : ByteBuffer.allocate(4).putInt(delay).array()) {
+            wholeMessageBytes[idx++] = dByte;
+        }
+    }        
 }

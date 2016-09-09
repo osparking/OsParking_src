@@ -131,8 +131,6 @@ public class GateBarManager extends Thread implements IDevice.IManager, IDevice.
                 } 
                 //</editor-fold>
                 
-//                System.out.println("msg code: " + MsgCode.values()[barMessageCode]);
-
                 //<editor-fold defaultstate="collapsed" desc="-- Process message from gate bar">
                 synchronized(mainForm.getSocketMutex()[GateBar.ordinal()][gateID]) 
                 {                
@@ -201,7 +199,6 @@ public class GateBarManager extends Thread implements IDevice.IManager, IDevice.
                         case JustBooted:
                             //<editor-fold defaultstate="collapsed" desc="-- First connection after device booting">
                             // reset recent device disconnection time 
-//                            System.out.println("just booted arrived");
                             mainForm.getSockConnStat()[GateBar.ordinal()][gateID].resetStatChangeTm();
                             break;
                             //</editor-fold>
@@ -303,44 +300,6 @@ public class GateBarManager extends Thread implements IDevice.IManager, IDevice.
     }
 
     /**
-     * closes socket connection to a gate bar.
-     * 
-     * before closing the socket, it cancels any existing relevant tasks.
-     */
-//    @Override
-//    public void finishConnection(Exception e, String description, byte gateNo) {
-//
-//        synchronized(mainForm.getSocketMutex()[GateBar.ordinal()][gateNo]) 
-//        {
-//            if (isConnected(socket)) 
-//            {
-//                String msg =  "Gate bar #" + gateNo;
-//
-//                addMessageLine(mainForm.getMessageTextArea(), "  ------" + msg + " disconnected");
-//                logParkingException(Level.INFO, e, description + " " + msg);
-//
-//                long closeTm = System.currentTimeMillis();
-//
-//                mainForm.getSockConnStat()[GateBar.ordinal()][gateNo].recordSocketDisconnection(closeTm);
-//                
-//                if (DEBUG) {
-//                    System.out.println("M9. Gate bar #" + gateNo + " disconnected at: " + closeTm);                        
-//                }
-//                closeSocket(getSocket(), "while gate bar socket closing");
-//                socket = null;
-//            }                
-//        } 
-//        
-//        if (mainForm.getConnectDeviceTimer()[GateBar.ordinal()][gateNo] != null) {
-//            if (!mainForm.isSHUT_DOWN()) {
-////                getCommPort().close();
-//                mainForm.getConnectDeviceTimer()[GateBar.ordinal()][gateNo].reRunOnce();
-//                addMessageLine(mainForm.getMessageTextArea(), "Trying to connect to Gate bar #" + gateNo);
-//            }
-//        }        
-//    }
-
-    /**
      * @return the everConnected
      */
     public boolean isNeverConnected() {
@@ -350,5 +309,26 @@ public class GateBarManager extends Thread implements IDevice.IManager, IDevice.
     @Override
     public boolean isConnected() {
         throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public void writeMessage(MsgCode code, byte[] msgBytes) {
+        try {
+            if (DEBUG) {
+                System.out.println("From OsParking to Gate #" + gateID + ": " + code);
+            }
+            socket.getOutputStream().write(msgBytes);
+        } catch (IOException ex) {
+            gfinishConnection(GateBar, null,  
+                    "while sending heartbeat", 
+                    gateID,
+                    mainForm.getSocketMutex()[GateBar.ordinal()][gateID],
+                    socket,
+                    mainForm.getMessageTextArea(), 
+                    mainForm.getSockConnStat()[GateBar.ordinal()][gateID],
+                    mainForm.getConnectDeviceTimer()[GateBar.ordinal()][gateID],
+                    mainForm.isSHUT_DOWN()
+            );
+        }
     }
 }

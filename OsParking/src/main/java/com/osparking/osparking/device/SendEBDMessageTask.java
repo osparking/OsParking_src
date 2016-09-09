@@ -16,14 +16,14 @@
  */
 package com.osparking.osparking.device;
 
-import static com.osparking.global.Globals.gfinishConnection;
-import java.io.IOException;
 import java.util.logging.Level;
 import static com.osparking.global.Globals.isConnected;
 import static com.osparking.global.Globals.logParkingException;
 import com.osparking.global.names.IDevice;
 import com.osparking.global.names.OSP_enums;
 import static com.osparking.global.names.OSP_enums.DeviceType.E_Board;
+import com.osparking.global.names.OSP_enums.MsgCode;
+import static com.osparking.global.names.OSP_enums.MsgCode.*;
 import com.osparking.osparking.ControlGUI;
 import javax.swing.JOptionPane;
 
@@ -34,48 +34,36 @@ import javax.swing.JOptionPane;
 public class SendEBDMessageTask implements Runnable {
     ControlGUI mainGUI;
     byte deviceNo;
+    MsgCode msgCode;
     byte[] message;
-    OSP_enums.EBD_Row rowNo;
     private int sendCount = 0;
     int msgSN = 0; // message sequence number
 
     public SendEBDMessageTask(ControlGUI mainGUI, 
-            int deviceNo, OSP_enums.EBD_Row row, byte[] message, int msgSN) 
+            int deviceNo, MsgCode msgCode, byte[] message, int msgSN) 
     {
         this.mainGUI = mainGUI;
         this.deviceNo = (byte) deviceNo;
+        this.msgCode = msgCode;
         this.message = message;
-        this.rowNo = row;
         this.msgSN = msgSN;
     }
 
     @Override
     public synchronized void run() {
-        IDevice.ISocket ebdMan = (IDevice.ISocket) mainGUI.getDeviceManagers()[E_Board.ordinal()][deviceNo];
+        IDevice.IManager devMan = mainGUI.getDeviceManagers()[E_Board.ordinal()][deviceNo];
+        IDevice.ISocket devSock = (IDevice.ISocket) devMan;
         
         try {
             synchronized(mainGUI.getSocketMutex()[E_Board.ordinal()][deviceNo]) 
             {
-                if (! isConnected(ebdMan.getSocket())) 
+                if (! isConnected(devSock.getSocket())) 
                 {
                     mainGUI.getSocketMutex()[E_Board.ordinal()][deviceNo].wait();
                 }
             }
             ++sendCount;
-            ebdMan.getSocket().getOutputStream()
-                    .write(message);
-            
-        } catch (IOException e) {
-            gfinishConnection(E_Board, null,  
-                    "EBD message sent", 
-                    deviceNo,
-                    mainGUI.getSocketMutex()[E_Board.ordinal()][deviceNo],
-                    ebdMan.getSocket(),
-                    mainGUI.getMessageTextArea(), 
-                    mainGUI.getSockConnStat()[E_Board.ordinal()][deviceNo],
-                    mainGUI.getConnectDeviceTimer()[E_Board.ordinal()][deviceNo],
-                    mainGUI.isSHUT_DOWN()
-            );
+            devMan.writeMessage(msgCode, message);
         } catch (InterruptedException ex) {
             logParkingException(Level.SEVERE, ex, "E-Board #" + deviceNo + " message sender wait socket conn'");
         }          
