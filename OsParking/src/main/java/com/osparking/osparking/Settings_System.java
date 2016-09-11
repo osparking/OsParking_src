@@ -3441,7 +3441,9 @@ public class Settings_System extends javax.swing.JFrame {
 
     private void ImageDurationCBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_ImageDurationCBoxItemStateChanged
         if (evt.getStateChange() == ItemEvent.SELECTED) {
-            if (ImageDurationCBox.getSelectedIndex() == maxArrivalCBoxIndex) {
+            ConvComboBoxItem item = (ConvComboBoxItem)ImageDurationCBox.getSelectedItem();
+            
+            if ((Integer)(item.getKeyValue()) == maxMaintainDate) {
                 changedControls.remove(ImageDurationCBox);            
             } else {
                 changedControls.add(ImageDurationCBox);
