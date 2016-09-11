@@ -29,13 +29,16 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
+import static java.util.Locale.ENGLISH;
+import static java.util.Locale.KOREAN;
 
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 
 /*
-The part changed by OsParking(www.osparking.com) is commented by OsParking in line.
+The part changed by OsParking(www.osparking.com) is commented with "OsParking" 
+string at the end of each line.
 Example: by OsParking on 2016. 6. 17.
 */
 
@@ -49,8 +52,8 @@ Example: by OsParking on 2016. 6. 17.
 public class JLocaleChooser extends JComboBox implements ItemListener {
 	private static final long serialVersionUID = 8152430789764877431L;
 	protected JComponent component;
-//        static Locale defaultLocale = new Locale("en", "US"); // OsParking on 2016. 6. 18.
-        static Locale defaultLocale = new Locale("ko", "KR"); // OsParking on 2016. 6. 18.
+        public static Locale enUS_Locale = new Locale("en", "US"); // OsParking on 2016. 6. 18.
+        public static Locale defaultLocale = new Locale("ko", "KR"); // OsParking on 2016. 6. 18.
 
 	/**
 	 * Default JLocaleChooser constructor.
@@ -97,7 +100,10 @@ public class JLocaleChooser extends JComboBox implements ItemListener {
 
 		for (int i = 0; i < localeCount; i++) {
                     if (locales[i].getCountry().length() > 0) {
+//                        if (locales[i] == KOREAN || locales[i] == ENGLISH) // OsParking on 2016. 9. 11
+                        {
                             addItem(locales[i].getDisplayName());
+                        }
                     }
 		}
 

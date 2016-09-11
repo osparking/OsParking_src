@@ -247,6 +247,13 @@ public class ControlEnums {
                 RTOL_CB_ITEM.getContent() + "'으로 바꾸시겠습니까?", 
                 "Want to change '" + EFFECT_LABEL.getContent() + "' to '" + RTOL_CB_ITEM.getContent() + "'?"),
 
+        WRONG_LANG_DIALOG_1("현재 선택된 언어는 아직 지원되지 않습니다.",
+                "New language selection is not supported yet."),
+        WRONG_LANG_DIALOG_2("- 현 선택 언어 : ", "- Current selection : "),
+        WRONG_LANG_DIALOG_3("아래 지원되는 언어 중에서 선택하십시오!",
+                "Select among from the supported languages!"),
+        WRONG_LANG_DIALOG_4("※지원되는 언어 : ", "- Supported language : "),
+        
         CHECK_IP_DIALOG_1("아래 실제 장치의 IP 주소가 127.0.0.1 입니다.", 
                 "Following real hardware device IP is 127.0.0.1"),
         CHECK_IP_DIALOG_4("이는 설정 오류일 수 있으니 확인하십시오.", 
@@ -960,6 +967,7 @@ public class ControlEnums {
     }
     
     public static enum DialogTitleTypes {
+        LANGUAGE_ERROR_TITLE("언어 선택 오류", "Language Selection Error"),
         EFFECT_TITLE("효과" + " 변경 확인", "Effect" + " Change Confirm"),
         ODS_HELP_TITLE("ods 파일 도움말", "ods File Help"),
         ODS_SAVE_TITLE("ods 파일 생성 위치", "ods File Location"),

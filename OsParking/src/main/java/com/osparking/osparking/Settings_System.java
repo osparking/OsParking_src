@@ -67,7 +67,6 @@ import static com.osparking.global.CommonData.TEXT_FIELD_HEIGHT;
 import static com.osparking.global.CommonData.buttonHeightNorm;
 import static com.osparking.global.CommonData.buttonHeightShort;
 import static com.osparking.global.CommonData.buttonWidthNorm;
-import static com.osparking.global.CommonData.cameraOneIsButton;
 import static com.osparking.global.CommonData.pwValidator;
 import static com.osparking.global.CommonData.rejectNonNumericKeys;
 import static com.osparking.global.CommonData.statCountArr;
@@ -96,6 +95,7 @@ import static com.osparking.global.names.ControlEnums.DialogMessages.SAVE_SETTIN
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.ATT_HELP_DIALOGTITLE;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.ERROR_DIALOGTITLE;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.IP_ERROR_TITLE;
+import static com.osparking.global.names.ControlEnums.DialogTitleTypes.LANGUAGE_ERROR_TITLE;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.LANGUAGE_SELECT_DIALOGTITLE;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.LOGGING_DIALOGTITLE;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.OVERLAPPED_PORT_TITLE;
@@ -154,6 +154,10 @@ import static com.osparking.global.names.ControlEnums.LabelContent.TYPE_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.VEHICLE_IMG_HEIGHT_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.VEHICLE_IMG_SIZE_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.VEHICLE_IMG_WIDTH_LABEL;
+import static com.osparking.global.names.ControlEnums.LabelContent.WRONG_LANG_DIALOG_1;
+import static com.osparking.global.names.ControlEnums.LabelContent.WRONG_LANG_DIALOG_2;
+import static com.osparking.global.names.ControlEnums.LabelContent.WRONG_LANG_DIALOG_3;
+import static com.osparking.global.names.ControlEnums.LabelContent.WRONG_LANG_DIALOG_4;
 import static com.osparking.global.names.ControlEnums.MenuITemTypes.META_KEY_LABEL;
 import static com.osparking.global.names.ControlEnums.MsgContent.AVERAGE_WORDS;
 import static com.osparking.global.names.ControlEnums.MsgContent.RECENT_WORD;
@@ -182,6 +186,8 @@ import com.osparking.global.names.OSP_enums.GateBarType;
 import com.osparking.global.names.OSP_enums.PWStrengthLevel;
 import com.osparking.osparking.device.LEDnotice.LEDnoticeManager;
 import com.osparking.osparking.device.LEDnotice.Settings_LEDnotice;
+import static com.toedter.components.JLocaleChooser.defaultLocale;
+import static com.toedter.components.JLocaleChooser.enUS_Locale;
 import java.awt.Dimension;
 import java.awt.KeyboardFocusManager;
 import java.awt.Toolkit;
@@ -333,7 +339,7 @@ public class Settings_System extends javax.swing.JFrame {
         TextFieldPicWidth = new javax.swing.JTextField();
         TextFieldPicHeight = new javax.swing.JTextField();
         LanguageHelpButton = new javax.swing.JButton();
-        DateChooserLangCBox = new com.toedter.components.JLocaleChooser(locale);
+        LanguageBox = new com.toedter.components.JLocaleChooser(locale);
         pxLabel2 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         PopSizeHelpButton = new javax.swing.JButton();
@@ -893,14 +899,14 @@ public class Settings_System extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(10, 0, 0, 0);
         parkinglotOptionPanel.add(LanguageHelpButton, gridBagConstraints);
 
-        DateChooserLangCBox.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        DateChooserLangCBox.setMaximumSize(new java.awt.Dimension(32767, 28));
-        DateChooserLangCBox.setMinimumSize(new java.awt.Dimension(294, 23));
-        DateChooserLangCBox.setName("DateChooserLangCBox"); // NOI18N
-        DateChooserLangCBox.setPreferredSize(new java.awt.Dimension(280, 23));
-        DateChooserLangCBox.addItemListener(new java.awt.event.ItemListener() {
+        LanguageBox.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        LanguageBox.setMaximumSize(new java.awt.Dimension(32767, 28));
+        LanguageBox.setMinimumSize(new java.awt.Dimension(294, 23));
+        LanguageBox.setName("LanguageBox"); // NOI18N
+        LanguageBox.setPreferredSize(new java.awt.Dimension(280, 23));
+        LanguageBox.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
-                DateChooserLangCBoxItemStateChanged(evt);
+                LanguageBoxItemStateChanged(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -910,7 +916,7 @@ public class Settings_System extends javax.swing.JFrame {
         gridBagConstraints.ipady = 5;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 0, 0);
-        parkinglotOptionPanel.add(DateChooserLangCBox, gridBagConstraints);
+        parkinglotOptionPanel.add(LanguageBox, gridBagConstraints);
 
         pxLabel2.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         pxLabel2.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
@@ -2623,7 +2629,24 @@ public class Settings_System extends javax.swing.JFrame {
         PreparedStatement updateSettings = null;
         int result = -1;
         boolean newStorePassingDelay = RecordPassingDelayChkBox.isSelected();
-
+        Locale locale = LanguageBox.getLocale();
+        boolean langNotSupported = (!locale.equals(defaultLocale) && !locale.equals(enUS_Locale));
+        
+        if (langNotSupported) {
+            String message = WRONG_LANG_DIALOG_1.getContent() +
+                    System.lineSeparator();
+            message += WRONG_LANG_DIALOG_2.getContent() + locale.getDisplayName() +
+                    System.lineSeparator() + System.lineSeparator();
+            message += WRONG_LANG_DIALOG_3.getContent() + System.lineSeparator();
+            message += WRONG_LANG_DIALOG_4.getContent() + defaultLocale.getDisplayName() + 
+                    ", " + enUS_Locale.getDisplayName() + System.lineSeparator();
+            
+            JOptionPane.showConfirmDialog(this, message,
+                    LANGUAGE_ERROR_TITLE.getContent(), JOptionPane.PLAIN_MESSAGE, 
+                    WARNING_MESSAGE);            
+            return;
+        }
+        
         //<editor-fold desc="--check setting input errors">
         if (!TextFieldNumericValueOK(TextFieldPicWidth, "Photo Extent Typing Errors")) {
             return;
@@ -2633,14 +2656,18 @@ public class Settings_System extends javax.swing.JFrame {
             return;
         }
 
-        if(Integer.parseInt(TextFieldPicHeight.getText().trim().replace(",","")) < 100){
+        if (Integer.parseInt(
+                removeNonNumeric(TextFieldPicHeight.getText().trim())
+        ) < 100){
             TextFieldPicHeight.requestFocusInWindow();
             JOptionPane.showConfirmDialog(this, "Please enter a height value of 100 or more",
                     "Picture Height Input Error", JOptionPane.PLAIN_MESSAGE, WARNING_MESSAGE);
             return;
         }
         
-        if(Integer.parseInt(TextFieldPicWidth.getText().trim().replace(",","")) < 100){
+        if (Integer.parseInt(
+                removeNonNumeric(TextFieldPicWidth.getText().trim())
+        ) < 100){
             TextFieldPicWidth.requestFocusInWindow();
             JOptionPane.showConfirmDialog(this, "Please enter a width value of 100 or more",
                     "Picture Width Input Error", JOptionPane.PLAIN_MESSAGE, WARNING_MESSAGE);
@@ -2661,10 +2688,10 @@ public class Settings_System extends javax.swing.JFrame {
         short optnLogLevel = -1;
         String maxLineStr = "";
         int imageKeepDuration = 0;
-        int picWidth = Integer.parseInt(((String) TextFieldPicWidth.getText()).replace(",", ""));
-        int picHeight = Integer.parseInt(((String) TextFieldPicHeight.getText()).replace(",", ""));
-        int flowCycle = Integer.parseInt(((String) FlowingComboBox.getSelectedItem()).replace(",", ""));
-        int blinkCycle = Integer.parseInt(((String) BlinkingComboBox.getSelectedItem()).replace(",", ""));
+        int picWidth = Integer.parseInt(removeNonNumeric(TextFieldPicWidth.getText()));
+        int picHeight = Integer.parseInt(removeNonNumeric(TextFieldPicHeight.getText()));
+        int flowCycle = Integer.parseInt(removeNonNumeric((String) FlowingComboBox.getSelectedItem()));
+        int blinkCycle = Integer.parseInt(removeNonNumeric(TextFieldPicWidth.getText()));
         boolean gateCountChanged = false;
 
         try {
@@ -2709,9 +2736,9 @@ public class Settings_System extends javax.swing.JFrame {
             optnLogLevel = (short)(OptnLoggingLevelComboBox.getSelectedIndex());
             updateSettings.setShort(pIndex++, optnLogLevel);
 
-            updateSettings.setString(pIndex++, DateChooserLangCBox.getLocale().getLanguage());
-            updateSettings.setString(pIndex++, DateChooserLangCBox.getLocale().getCountry());
-            updateSettings.setShort(pIndex++, (short)DateChooserLangCBox.getSelectedIndex());
+            updateSettings.setString(pIndex++, LanguageBox.getLocale().getLanguage());
+            updateSettings.setString(pIndex++, LanguageBox.getLocale().getCountry());
+            updateSettings.setShort(pIndex++, (short)LanguageBox.getSelectedIndex());
             updateSettings.setInt(pIndex++, PopSizeCBox.getSelectedIndex());
             
             maxLineStr = (String)MessageMaxLineComboBox.getSelectedItem();
@@ -2762,21 +2789,24 @@ public class Settings_System extends javax.swing.JFrame {
                 
                 if (opLoggingIndex != optnLogLevel)
                 {
-                    logParkingOperation(OpLogLevel.LogAlways, "Settings Change, Gen' Operation Log Level: " 
+                    logParkingOperation(OpLogLevel.LogAlways, 
+                            "Settings Change, Gen' Operation Log Level: " 
                             + OptnLoggingLevelComboBox.getItemAt(opLoggingIndex) + " => " 
                             + OptnLoggingLevelComboBox.getItemAt(optnLogLevel));
                 }
                 
-                if (localeIndex != (short)DateChooserLangCBox.getSelectedIndex())
+                if (localeIndex != (short)LanguageBox.getSelectedIndex())
                 {
-                    logParkingOperation(OpLogLevel.SettingsChange, "Settings Change, Date Chooser Lang': " 
-                            + DateChooserLangCBox.getItemAt(localeIndex) + " => " 
-                            + DateChooserLangCBox.getItemAt((short)DateChooserLangCBox.getSelectedIndex()));
+                    logParkingOperation(OpLogLevel.SettingsChange, 
+                            "Settings Change, Date Chooser Lang': " 
+                            + LanguageBox.getItemAt(localeIndex) + " => " 
+                            + LanguageBox.getItemAt((short)LanguageBox.getSelectedIndex()));
                 }
                 
                 if (maxMessageLines != new Short(maxLineStr))
                 {
-                    logParkingOperation(OpLogLevel.SettingsChange, "Settings Change, Recent Event Line Max: " 
+                    logParkingOperation(OpLogLevel.SettingsChange, 
+                            "Settings Change, Recent Event Line Max: " 
                             + maxMessageLines + " => " + new Short(maxLineStr));
                 }
                 
@@ -3405,15 +3435,15 @@ public class Settings_System extends javax.swing.JFrame {
         }        
     }//GEN-LAST:event_OptnLoggingLevelComboBoxItemStateChanged
 
-    private void DateChooserLangCBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_DateChooserLangCBoxItemStateChanged
+    private void LanguageBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_LanguageBoxItemStateChanged
         if (evt.getStateChange() == ItemEvent.SELECTED) {
-            if (DateChooserLangCBox.getSelectedIndex() == localeIndex) {
-                changedControls.remove(DateChooserLangCBox);            
+            if (LanguageBox.getSelectedIndex() == localeIndex) {
+                changedControls.remove(LanguageBox);            
             } else {
-                changedControls.add(DateChooserLangCBox);
+                changedControls.add(LanguageBox);
             }
         }       
-    }//GEN-LAST:event_DateChooserLangCBoxItemStateChanged
+    }//GEN-LAST:event_LanguageBoxItemStateChanged
 
     private void MessageMaxLineComboBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_MessageMaxLineComboBoxItemStateChanged
         if (evt.getStateChange() == ItemEvent.SELECTED) {
@@ -3582,7 +3612,6 @@ public class Settings_System extends javax.swing.JFrame {
     private javax.swing.JTextField Camera4_Port_TextField;
     private javax.swing.JComboBox Camera4_TypeCBox;
     private javax.swing.JComboBox Camera4_connTypeCBox;
-    private com.toedter.components.JLocaleChooser DateChooserLangCBox;
     private javax.swing.JPanel EBD_settings;
     private javax.swing.JPanel EBD_settings_label;
     private javax.swing.JButton EBoardSettingsButton;
@@ -3632,6 +3661,7 @@ public class Settings_System extends javax.swing.JFrame {
     public javax.swing.JTabbedPane GatesTabbedPane;
     private javax.swing.JComboBox ImageDurationCBox;
     private javax.swing.JLabel ImageDurationLabel;
+    private com.toedter.components.JLocaleChooser LanguageBox;
     private javax.swing.JButton LanguageHelpButton;
     private javax.swing.JButton LoggingLevelHelpButton;
     private javax.swing.JComboBox MessageMaxLineComboBox;
@@ -3802,8 +3832,8 @@ public class Settings_System extends javax.swing.JFrame {
         RecordPassingDelayChkBox.setSelected(storePassingDelay);
         PWStrengthChoiceComboBox.setSelectedIndex(pwStrengthLevel);
         OptnLoggingLevelComboBox.setSelectedIndex(opLoggingIndex);
-        DateChooserLangCBox.setSelectedItem(locale.getDisplayName());
-        localeIndex = (short) DateChooserLangCBox.getSelectedIndex();
+        LanguageBox.setSelectedItem(locale.getDisplayName());
+        localeIndex = (short) LanguageBox.getSelectedIndex();
         
         PopSizeCBox.setSelectedIndex(statCountIndex);
         MessageMaxLineComboBox.setSelectedItem(String.valueOf(maxMessageLines));
@@ -3911,7 +3941,7 @@ public class Settings_System extends javax.swing.JFrame {
         // Check if empty string or numeric 0 were entered. 
         String input = textField.getText().trim();
         
-        input = input.replace(",", "");
+        input = removeNonNumeric(input);
         
         if (input.length() == 0 || Integer.parseInt(input) == 0) {
             JOptionPane.showConfirmDialog(this, "Enter a value of 1 or more ..",
@@ -4268,7 +4298,7 @@ public class Settings_System extends javax.swing.JFrame {
          */
         changeComponentHeight(PWStrengthChoiceComboBox, CBOX_HEIGHT);
         changeComponentHeight(OptnLoggingLevelComboBox, CBOX_HEIGHT);
-        changeComponentHeight(DateChooserLangCBox, CBOX_HEIGHT);
+        changeComponentHeight(LanguageBox, CBOX_HEIGHT);
         changeComponentHeight(MessageMaxLineComboBox, CBOX_HEIGHT);
         changeComponentHeight(GateCountComboBox, CBOX_HEIGHT);
         changeComponentHeight(PopSizeCBox, CBOX_HEIGHT);
@@ -4599,6 +4629,10 @@ public class Settings_System extends javax.swing.JFrame {
         
         JOptionPane.showMessageDialog(this, msg,
                 Blackfly + " " + CHECK_IP_TITLE.getContent(), JOptionPane.WARNING_MESSAGE);
+    }
+
+    private String removeNonNumeric(String input) {
+        return input.replaceAll("[^\\d.]", "");
     }
 
     private static class COM_ID_Usage {
