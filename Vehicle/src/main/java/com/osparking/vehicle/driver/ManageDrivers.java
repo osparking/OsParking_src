@@ -1625,7 +1625,11 @@ public class ManageDrivers extends javax.swing.JFrame {
     }//GEN-LAST:event_searchButtonActionPerformed
 
     private void saveSheet_ButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveSheet_ButtonActionPerformed
+        TableColumnModel NumberTableModel = driverTable.getColumnModel();
+        NumberTableModel.addColumn(hiddenSN);   
+        
         saveODSfile(this, driverTable, saveFileChooser, DRIVER_SAVE_ODS_FAIL_DIALOG.getContent());
+        NumberTableModel.removeColumn(hiddenSN);   
     }//GEN-LAST:event_saveSheet_ButtonActionPerformed
 
     private void closeFormButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_closeFormButtonActionPerformed
@@ -2486,6 +2490,8 @@ public class ManageDrivers extends javax.swing.JFrame {
         }     
         return result;
     }
+    
+    TableColumn hiddenSN;
 
     private void changeTableSizeEtc() {
         Object[][] data = { /*{1, "Henry Ford", "452-1234-5678", "567-1111-2222", {"Engineering", 2},
@@ -2519,8 +2525,9 @@ public class ManageDrivers extends javax.swing.JFrame {
         
         // Hide drivers table sequence number which is used by only inside the code
         TableColumnModel NumberTableModel = driverTable.getColumnModel();
-        NumberTableModel.removeColumn(NumberTableModel.getColumn(
-                DriverCol.SEQ_NO.getNumVal()));        
+        hiddenSN = NumberTableModel.getColumn(DriverCol.SEQ_NO.getNumVal());
+        
+        NumberTableModel.removeColumn(hiddenSN);        
         
         driverTable.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);        
         
