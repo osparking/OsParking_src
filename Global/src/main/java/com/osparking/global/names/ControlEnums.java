@@ -1119,7 +1119,7 @@ public class ControlEnums {
         HIGHER_CB_ITEM("(상위 소속)", "(Higher Group)"),
         LOWER_CB_ITEM("(하위 소속)", "(Lower Group)"),
         BUILDING_CB_ITEM("(건물 번호)", "(Building No,)"),
-        ROOM_CB_ITEM("(호실)", "(Room No.)"),
+        ROOM_CB_ITEM("(호실 번호)", "(Unit No.)"),
         GATE_CB_ITEM("(입구)", "(Gate)"),
         ATTENDANT_CB_ITEM("(관리원)", "(Attendant)"),
         BAR_CB_ITEM("(차단기)", "(Unselected)"),
