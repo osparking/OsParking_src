@@ -325,7 +325,7 @@ public class ControlEnums {
     
     public enum ButtonTypes {
         LOGIN_BTN("로그인(L)", "Login"),
-        SAMPLE_BTN("샘플(M)", "SaMple"),
+        SAMPLE_BTN("샘플(P)", "Sample"),
         SAMPLE2_BTN("샘플(S)", "Sample"),
         CLOSE_BTN("닫기(C)", "Close"),
         SAVE_BTN("저장(S)", "Save"),
