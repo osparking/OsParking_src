@@ -412,6 +412,17 @@ public class ControlEnums {
         AFFILI_DEL_L1("다음 소속 및 그 하위 소속을 삭제합니까?", 
                 "Want to delete below higher and lower affiliations?"),
         
+        AFFILI_ODS_DIAG_1("소속 자료 식별 건수입니다. 로딩을 계속합니까?", 
+                "Recognized Affiliation Names Count. Continue to Load?"),
+        AFFILI_ODS_DIAG_2(" -상위 소속 건수 : ", " -Higher Affiliation count : "),
+        AFFILI_ODS_DIAG_3(" -하위 소속 건수 : ", " -Lower Affiliation count : "),
+        
+        
+        BLDG_ODS_DIAG_1("건물과 호실 식별 건수입니다. 로딩을 계속합니까?", 
+                "Recognized Building/Unit Count. Continue to Load?"),
+        BLDG_ODS_DIAG_2(" -건물 번호 건수 : ", " -Building number count : "),
+        BLDG_ODS_DIAG_3(" -호실 번호 건수 : ", " -Unit number count : "),
+        
         BLDG_DIAG_L1("다음 건물 번호를 변경합니까?", "Want to change below building number?"),
         BLDG_DIAG_L2("건물 번호 : ", "Building No.: "),
         BLDG_DIAG_L3("(소속 호실 수: ", "(Number of rooms : "),

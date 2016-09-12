@@ -63,7 +63,6 @@ import static com.osparking.global.names.ControlEnums.DialogMessages.AFFILIATION
 import static com.osparking.global.names.ControlEnums.DialogMessages.AFFILIATION_DELETE_ALL_RESULT_DAILOG;
 import static com.osparking.global.names.ControlEnums.DialogMessages.BUILDING_DELETE_ALL_DAILOG;
 import static com.osparking.global.names.ControlEnums.DialogMessages.BUILDING_DELETE_ALL_RESULT_DAILOG;
-import static com.osparking.global.names.ControlEnums.DialogMessages.BUILDING_IN_DIALOG;
 import static com.osparking.global.names.ControlEnums.DialogMessages.DUPLICATE_BUILDING;
 import static com.osparking.global.names.ControlEnums.DialogMessages.DUPLICATE_HIGH_AFFILI;
 import static com.osparking.global.names.ControlEnums.DialogMessages.DUPLICATE_LOW_AFFILI;
@@ -111,12 +110,18 @@ import static com.osparking.global.names.ControlEnums.MsgContent.AFFILI_DEL_RESU
 import static com.osparking.global.names.ControlEnums.MsgContent.AFFILI_DIAG_L1;
 import static com.osparking.global.names.ControlEnums.MsgContent.AFFILI_DIAG_L2;
 import static com.osparking.global.names.ControlEnums.MsgContent.AFFILI_DIAG_L3;
+import static com.osparking.global.names.ControlEnums.MsgContent.AFFILI_ODS_DIAG_1;
+import static com.osparking.global.names.ControlEnums.MsgContent.AFFILI_ODS_DIAG_2;
+import static com.osparking.global.names.ControlEnums.MsgContent.AFFILI_ODS_DIAG_3;
 import static com.osparking.global.names.ControlEnums.MsgContent.BLDG_DELETE_L1;
 import static com.osparking.global.names.ControlEnums.MsgContent.BLDG_DELETE_L3;
 import static com.osparking.global.names.ControlEnums.MsgContent.BLDG_DEL_RESULT;
 import static com.osparking.global.names.ControlEnums.MsgContent.BLDG_DIAG_L1;
 import static com.osparking.global.names.ControlEnums.MsgContent.BLDG_DIAG_L2;
 import static com.osparking.global.names.ControlEnums.MsgContent.BLDG_DIAG_L3;
+import static com.osparking.global.names.ControlEnums.MsgContent.BLDG_ODS_DIAG_1;
+import static com.osparking.global.names.ControlEnums.MsgContent.BLDG_ODS_DIAG_2;
+import static com.osparking.global.names.ControlEnums.MsgContent.BLDG_ODS_DIAG_3;
 import static com.osparking.global.names.ControlEnums.MsgContent.UNIT_DIAG_L1;
 import static com.osparking.global.names.ControlEnums.MsgContent.UNIT_DIAG_L2;
 import static com.osparking.global.names.ControlEnums.MsgContent.UNIT_DIAG_L3;
@@ -3694,24 +3699,12 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
                     {
                         StringBuilder sb = new StringBuilder();
 
-                        switch (language) {
-                            case KOREAN:
-                                sb.append("아래 자료가 식별되었습니다. 로딩을 계속합니까?");
-                                sb.append(System.getProperty("line.separator"));
-                                sb.append(" -자료: 상위소속 " + level1_total.getValue());
-                                sb.append("건, 하위소속 " + level2_total.getValue() + "건");
-                                break;
-                                
-                            case ENGLISH:
-                                sb.append("Below Data Recognized. Want to continue loading?");
-                                sb.append(System.getProperty("line.separator"));
-                                sb.append(" -Data: Higher Affiliation count: " + level1_total.getValue());
-                                sb.append(", Lower Affiliation count: " + level2_total.getValue());
-                                break;
-                                
-                            default:
-                                break;
-                        }
+                        sb.append(AFFILI_ODS_DIAG_1.getContent());
+                        sb.append(System.getProperty("line.separator"));
+                        sb.append(System.getProperty("line.separator"));
+                        sb.append(AFFILI_ODS_DIAG_2.getContent() + level1_total.getValue());
+                        sb.append(System.getProperty("line.separator"));
+                        sb.append(AFFILI_ODS_DIAG_3.getContent() + level2_total.getValue());
                         
                         int result = JOptionPane.showConfirmDialog(null, sb.toString(),
                                 ODS_CHECK_RESULT_TITLE.getContent(), 
@@ -3752,24 +3745,12 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
                     {
                         StringBuilder sb = new StringBuilder();
 
-                        switch (language) {
-                            case KOREAN:
-                                sb.append("아래 자료가 식별되었습니다. 로딩을 계속합니까?");
-                                sb.append(System.getProperty("line.separator"));
-                                sb.append(" -자료: 건물 번호 " + buildingTotal.getValue());
-                                sb.append("건, 호실 번호 " + unitTotal.getValue() + "건");
-                                break;
-                                
-                            case ENGLISH:
-                                sb.append("Below Data Recognized. Want to continue loading?");
-                                sb.append(System.getProperty("line.separator"));
-                                sb.append(" - Data: Buildings count: " + buildingTotal.getValue());
-                                sb.append(", Room count: " + unitTotal.getValue());
-                                break;
-                                
-                            default:
-                                break;
-                        }
+                        sb.append(BLDG_ODS_DIAG_1.getContent());
+                        sb.append(System.getProperty("line.separator"));
+                        sb.append(System.getProperty("line.separator"));
+                        sb.append(BLDG_ODS_DIAG_2.getContent() + buildingTotal.getValue());
+                        sb.append(System.getProperty("line.separator"));
+                        sb.append(BLDG_ODS_DIAG_3.getContent() + unitTotal.getValue());                        
                         
                         int result = JOptionPane.showConfirmDialog(null, sb.toString(),
                                 ODS_CHECK_RESULT_TITLE.getContent(), 
