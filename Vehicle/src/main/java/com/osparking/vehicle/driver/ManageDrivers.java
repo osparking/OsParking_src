@@ -26,6 +26,8 @@ import static com.osparking.global.CommonData.ODS_DIRECTORY;
 import static com.osparking.global.CommonData.PROMPTER_KEY;
 import static com.osparking.global.CommonData.buttonHeightNorm;
 import static com.osparking.global.CommonData.buttonWidthNorm;
+import static com.osparking.global.CommonData.downloadSample;
+import static com.osparking.global.CommonData.downloadSample;
 import static com.osparking.global.CommonData.normGUIheight;
 import static com.osparking.global.CommonData.normGUIwidth;
 import static com.osparking.global.CommonData.pointColor;
@@ -2045,7 +2047,7 @@ public class ManageDrivers extends javax.swing.JFrame {
         
         switch(language){
             case ENGLISH:
-                sampleFile = "driversEng";
+                sampleFile = "/driversEng";
                 break;
 
             default:
@@ -2059,13 +2061,21 @@ public class ManageDrivers extends javax.swing.JFrame {
         if (wantToSaveFile(this, saveFileChooser, odsFullPath, sampleFile)) {
             // Read sample ods resource file
             String extension = saveFileChooser.getFileFilter().getDescription();
-            String destPath;
 
             if (extension.indexOf("*.ods") >= 0 && !odsFullPath.toString().endsWith(".ods")) {
                 odsFullPath.append(".ods");
             }
-            destPath = odsFullPath.toString();
-            downloadSample(destPath, sampleFile);
+            
+            InputStream sampleIn = getClass().getResourceAsStream(sampleFile + ".ods");
+            
+            downloadSample(odsFullPath.toString(), sampleIn, sampleFile);
+            if (sampleIn != null) {
+                try {
+                    sampleIn.close();
+                } catch (IOException e) {
+                    logParkingException(Level.SEVERE, e, sampleFile + " istrm close error");
+                }
+            }             
         }
     }//GEN-LAST:event_sampleButtonActionPerformed
 
@@ -3116,47 +3126,5 @@ public class ManageDrivers extends javax.swing.JFrame {
         }
         
         return cond.toString();
-    }
-
-    private void downloadSample(String destPath, String sampleFile) {
-        InputStream in = null;
-        OutputStream outStream = null;
-
-        try {
-            // Write resource into the file chosen by the user
-            File destFile = new File(destPath);
-            if (!noOverwritePossibleExistingSameFile(destFile, destPath)) 
-            {
-                in = getClass().getResourceAsStream(sampleFile + ".ods");
-                outStream = new FileOutputStream(destFile);
-
-                int read = 0;
-                byte[] bytes = new byte[4096];
-
-                while ((read = in.read(bytes)) != -1) {
-                    outStream.write(bytes, 0, read);
-                }
-                Desktop.getDesktop().open(destFile);
-            }
-        } catch (IOException ex) {
-            logParkingException(Level.SEVERE, ex, sampleFile + " downloading error");
-        } finally {
-            if (in != null) {
-                try {
-                    in.close();
-                } catch (IOException e) {
-                    logParkingException(Level.SEVERE, e, 
-                            sampleFile + " downloading error");
-                }
-            }
-            if (outStream != null) {
-                try {
-                    outStream.close();
-                } catch (IOException e) {
-                    logParkingException(Level.SEVERE, e, 
-                            sampleFile + " downloading error");
-                }
-            }                
-        }
     }
 }

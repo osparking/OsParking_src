@@ -26,13 +26,13 @@ import static com.osparking.global.CommonData.buttonHeightNorm;
 import static com.osparking.global.CommonData.buttonHeightShort;
 import static com.osparking.global.CommonData.buttonWidthNorm;
 import static com.osparking.global.CommonData.carTagWidth;
+import static com.osparking.global.CommonData.downloadSample;
 import static com.osparking.global.CommonData.normGUIheight;
 import static com.osparking.global.CommonData.normGUIwidth;
 import static com.osparking.global.CommonData.pointColor;
 import static com.osparking.global.CommonData.putCellCenter;
 import static com.osparking.global.CommonData.tableRowHeight;
 import static com.osparking.global.CommonData.tipColor;
-import static com.osparking.global.DataSheet.noOverwritePossibleExistingSameFile;
 import static com.osparking.global.DataSheet.saveODSfile;
 import com.osparking.vehicle.driver.DriverSelection;
 import java.awt.event.ActionEvent;
@@ -117,7 +117,6 @@ import com.osparking.global.names.OdsFileOnly;
 import com.osparking.global.names.PComboBox;
 import com.osparking.global.names.WrappedInt;
 import static com.osparking.vehicle.CommonData.attachLikeCondition;
-import static com.osparking.vehicle.CommonData.copyFileUsingFileChannels;
 import static com.osparking.vehicle.CommonData.prependEscape;
 import static com.osparking.vehicle.CommonData.setHelpDialogLoc;
 import static com.osparking.vehicle.CommonData.vAffiliWidth;
@@ -134,6 +133,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Point;
 import static java.awt.event.ItemEvent.SELECTED;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
@@ -1883,40 +1883,40 @@ public class VehiclesForm extends javax.swing.JFrame {
     }//GEN-LAST:event_odsHelpButtonActionPerformed
 
     private void sampleButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sampleButtonActionPerformed
-        String sampleFilenameCore = "";
+        String sampleFile = "";
 
         switch(language){
             case ENGLISH:
-            sampleFilenameCore = "vehiclesEng";
+            sampleFile = "/vehiclesEng";
             break;
 
             default:
-            sampleFilenameCore = "vehiclesKor";
+            sampleFile = "/vehiclesKor";
             break;
         }
 
+        // Read sample ods resource file
         // Ask user the name and location for the ods file to save
         StringBuffer odsFullPath = new StringBuffer();
 
-        if (wantToSaveFile(this, saveFileChooser, odsFullPath, sampleFilenameCore)) {
+        if (wantToSaveFile(this, saveFileChooser, odsFullPath, sampleFile)) {
             // Read sample ods resource file
-            ClassLoader classLoader = getClass().getClassLoader();
-            File source = new File(classLoader.getResource(sampleFilenameCore + ".ods").getFile());
             String extension = saveFileChooser.getFileFilter().getDescription();
 
             if (extension.indexOf("*.ods") >= 0 && !odsFullPath.toString().endsWith(".ods")) {
                 odsFullPath.append(".ods");
             }
-
-            File destin = new File(odsFullPath.toString());
-            try {
-                // Write resource into the file chosen by the user
-                if (!noOverwritePossibleExistingSameFile(destin, odsFullPath.toString())) {
-                    copyFileUsingFileChannels(source, destin);
+            
+            InputStream sampleIn = getClass().getResourceAsStream(sampleFile + ".ods");
+            
+            downloadSample(odsFullPath.toString(), sampleIn, sampleFile);
+            if (sampleIn != null) {
+                try {
+                    sampleIn.close();
+                } catch (IOException e) {
+                    logParkingException(Level.SEVERE, e, sampleFile + " istrm close error");
                 }
-            } catch (IOException ex) {
-                logParkingException(Level.SEVERE, ex, sampleFilenameCore + " downloading error");
-            }
+            }            
         }
     }//GEN-LAST:event_sampleButtonActionPerformed
 

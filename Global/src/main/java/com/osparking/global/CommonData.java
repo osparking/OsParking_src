@@ -16,11 +16,13 @@
  */
 package com.osparking.global;
 
+import static com.osparking.global.DataSheet.noOverwritePossibleExistingSameFile;
 import static com.osparking.global.Globals.font_Size;
 import static com.osparking.global.Globals.font_Style;
 import static com.osparking.global.Globals.font_Type;
 import static com.osparking.global.Globals.getBufferedImage;
 import static com.osparking.global.Globals.getTagNumber;
+import static com.osparking.global.Globals.logParkingException;
 import static com.osparking.global.names.ControlEnums.MenuITemTypes.META_KEY_LABEL;
 import static com.osparking.global.names.DB_Access.deviceType;
 import static com.osparking.global.names.OSP_enums.CameraType.CarButton;
@@ -28,10 +30,16 @@ import static com.osparking.global.names.OSP_enums.DeviceType.Camera;
 import com.osparking.global.names.PasswordValidator;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.logging.Level;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -98,6 +106,38 @@ public class CommonData { // new Dimension(carTagWidth, 30)
     static {
         putCellCenter.setHorizontalAlignment(JLabel.CENTER);    
     }
+    
+    public static void downloadSample(String destPath, InputStream sampleIn, String sampleFile) {
+        // = null;
+        OutputStream outStream = null;
+
+        try {
+            // Write resource into the file chosen by the user
+            File destFile = new File(destPath);
+            if (!noOverwritePossibleExistingSameFile(destFile, destPath)) 
+            {
+                outStream = new FileOutputStream(destFile);
+
+                int read = 0;
+                byte[] bytes = new byte[4096];
+
+                while ((read = sampleIn.read(bytes)) != -1) {
+                    outStream.write(bytes, 0, read);
+                }
+                Desktop.getDesktop().open(destFile);
+            }
+        } catch (IOException ex) {
+            logParkingException(Level.SEVERE, ex, sampleFile + " read error");
+        } finally {
+            if (outStream != null) {
+                try {
+                    outStream.close();
+                } catch (IOException e) {
+                    logParkingException(Level.SEVERE, e, destPath + " ostrm close error");
+                }
+            }                
+        }
+    }    
     
     public static void adminOperationEnabled(boolean flag,
             JButton deleteAllVehicles, JButton readSheet_Button) 
