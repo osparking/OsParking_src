@@ -1094,7 +1094,7 @@ public class ControlEnums {
         DELETE_FILE_MSG(", 파일: ", "files: "),
         
         HELP_TA( 
-                "\u203B 오픈오피스 스프레드시트(OpenOffice Calc) 를 사용하여 만들 수 있습니다"
+                "\u203B 리브레오피스 캘크 스프레드시트(LibreOffice Calc)로 만들 수 있습니다"
                         + System.getProperty("line.separator")
                         + "\u203B MS엑셀에서 엑셀파일을 다음 절차로 'ods' 파일로 저장할 수 있습니다"
                         + System.getProperty("line.separator")

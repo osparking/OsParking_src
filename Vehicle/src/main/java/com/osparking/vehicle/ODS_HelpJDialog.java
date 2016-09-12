@@ -375,10 +375,10 @@ public class ODS_HelpJDialog extends javax.swing.JDialog {
             case DRIVER:
                 switch(language){
                     case ENGLISH:
-                        filename = "/read_driver_ods_sampleEng.png";
+                        filename = "/driversEng.png";
                         break;
                     default:
-                        filename = "/read_driver_ods_sample.png";
+                        filename = "/drivers.png";
                         break;
                 }
                 break;

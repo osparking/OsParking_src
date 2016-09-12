@@ -154,10 +154,19 @@ import com.osparking.vehicle.LabelBlinker;
 import com.osparking.vehicle.ODS_HelpJDialog;
 import java.awt.AWTEvent;
 import java.awt.Color;
+import java.awt.Desktop;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import static java.awt.event.ItemEvent.SELECTED;
 import java.awt.event.ItemListener;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.util.List;
 import java.util.Locale;
 import javax.swing.JDialog;
@@ -2032,40 +2041,31 @@ public class ManageDrivers extends javax.swing.JFrame {
     }//GEN-LAST:event_odsHelpButtonActionPerformed
 
     private void sampleButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sampleButtonActionPerformed
-        String sampleFilenameCore = "";
+        String sampleFile = "";
         
         switch(language){
             case ENGLISH:
-                sampleFilenameCore = "driversEng";
+                sampleFile = "driversEng";
                 break;
 
             default:
-                sampleFilenameCore = "drivers";
+                sampleFile = "/drivers";
                 break;
         }          
             
         // Ask user the name and location for the ods file to save
         StringBuffer odsFullPath = new StringBuffer();
         
-        if (wantToSaveFile(this, saveFileChooser, odsFullPath, sampleFilenameCore)) {
+        if (wantToSaveFile(this, saveFileChooser, odsFullPath, sampleFile)) {
             // Read sample ods resource file
-            ClassLoader classLoader = getClass().getClassLoader();
-            File source = new File(classLoader.getResource(sampleFilenameCore + ".ods").getFile());        
             String extension = saveFileChooser.getFileFilter().getDescription();
+            String destPath;
 
             if (extension.indexOf("*.ods") >= 0 && !odsFullPath.toString().endsWith(".ods")) {
                 odsFullPath.append(".ods");
             }
-
-            File destin = new File(odsFullPath.toString());
-            try {
-                // Write resource into the file chosen by the user
-                if (!noOverwritePossibleExistingSameFile(destin, odsFullPath.toString())) {
-                    copyFileUsingFileChannels(source, destin);
-                }
-            } catch (IOException ex) {
-                logParkingException(Level.SEVERE, ex, sampleFilenameCore + " downloading error");
-            }
+            destPath = odsFullPath.toString();
+            downloadSample(destPath, sampleFile);
         }
     }//GEN-LAST:event_sampleButtonActionPerformed
 
@@ -3116,5 +3116,47 @@ public class ManageDrivers extends javax.swing.JFrame {
         }
         
         return cond.toString();
+    }
+
+    private void downloadSample(String destPath, String sampleFile) {
+        InputStream in = null;
+        OutputStream outStream = null;
+
+        try {
+            // Write resource into the file chosen by the user
+            File destFile = new File(destPath);
+            if (!noOverwritePossibleExistingSameFile(destFile, destPath)) 
+            {
+                in = getClass().getResourceAsStream(sampleFile + ".ods");
+                outStream = new FileOutputStream(destFile);
+
+                int read = 0;
+                byte[] bytes = new byte[4096];
+
+                while ((read = in.read(bytes)) != -1) {
+                    outStream.write(bytes, 0, read);
+                }
+                Desktop.getDesktop().open(destFile);
+            }
+        } catch (IOException ex) {
+            logParkingException(Level.SEVERE, ex, sampleFile + " downloading error");
+        } finally {
+            if (in != null) {
+                try {
+                    in.close();
+                } catch (IOException e) {
+                    logParkingException(Level.SEVERE, e, 
+                            sampleFile + " downloading error");
+                }
+            }
+            if (outStream != null) {
+                try {
+                    outStream.close();
+                } catch (IOException e) {
+                    logParkingException(Level.SEVERE, e, 
+                            sampleFile + " downloading error");
+                }
+            }                
+        }
     }
 }
