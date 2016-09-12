@@ -378,7 +378,7 @@ public class ODSReader {
                 } else {
                     rowDataStarted = true;
                     if (nColIndex == 0) {
-                        if (cellStr.equals(DATA_END_MARKER)) {
+                        if (cellStr.toUpperCase().equals(DATA_END_MARKER)) {
                             break loops;
                         } else {
                             level1_Total.setValue(level1_Total.getValue() + 1);
