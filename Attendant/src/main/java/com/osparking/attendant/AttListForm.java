@@ -2681,16 +2681,6 @@ public class AttListForm extends javax.swing.JFrame {
         }
     }
 
-    private void appendSearchString(StringBuilder sb, String currSearchString) {
-        if (currSearchString.length() > 0) {
-            if (currSearchColumn == LOGIN_ID_LABEL) {
-                sb.append("ID like ? ");
-            } else {
-                sb.append("Name like ? ");
-            }
-        }     
-    }
-
     private boolean newIDnotSatisfySearchCondition(String newID) {
         if (currSearchString.length() == 0) {
             return false;
@@ -2702,7 +2692,12 @@ public class AttListForm extends javax.swing.JFrame {
             boolean result = false;
             
             sb.append("Select count(*) From users_osp Where ");
-            appendSearchString(sb, currSearchString);    
+            
+            if (currSearchColumn == LOGIN_ID_LABEL) {
+                sb.append("ID like ? ");
+            } else {
+                sb.append("Name like ? ");
+            }               
             sb.append(" and ID = ?");
             try {
                 conn = JDBCMySQL.getConnection();
@@ -2879,15 +2874,14 @@ public class AttListForm extends javax.swing.JFrame {
         
         prevSearchColumn = currSearchColumn;
         prevSearchString = currSearchString;
-        if (currSearchString.length() > 0 || newID.length() > 0) {
-            sb.append(" Where ");
-            appendSearchString(sb, currSearchString);
-    
+        if (currSearchString.length() > 0) {
+            if (currSearchColumn == LOGIN_ID_LABEL) {
+                sb.append(" Where ID like ? ");
+            } else {
+                sb.append(" Where Name like ? ");
+            }            
             if (newID.length() > 0) {
-                if (currSearchString.length() > 0) {
-                    sb.append("or ");
-                }
-                sb.append("ID = ?");
+                sb.append("or (ID = ?)");
             }
         }
         
@@ -2899,9 +2893,9 @@ public class AttListForm extends javax.swing.JFrame {
             
             if (currSearchString.length() > 0) {
                 pstmt.setString(index++, "%" + currSearchString + "%");
-            }
-            if (newID.length() > 0) {
-                pstmt.setString(index++, newID);
+                if (newID.length() > 0) {
+                    pstmt.setString(index++, newID);
+                }
             }
             rs = pstmt.executeQuery();
 
