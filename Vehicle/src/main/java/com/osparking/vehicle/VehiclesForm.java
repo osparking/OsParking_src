@@ -1406,7 +1406,7 @@ public class VehiclesForm extends javax.swing.JFrame {
         HelpPanel.add(filler6);
 
         sampleButton.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        sampleButton.setMnemonic('M');
+        sampleButton.setMnemonic('P');
         sampleButton.setText(SAMPLE_BTN.getContent());
         sampleButton.setToolTipText(DRIVER_ODS_UPLOAD_SAMPLE_DOWNLOAD.getContent());
         sampleButton.setEnabled(false);

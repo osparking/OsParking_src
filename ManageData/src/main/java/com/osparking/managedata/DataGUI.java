@@ -6,6 +6,7 @@
 package com.osparking.managedata;
 
 import static com.mysql.jdbc.MysqlErrorNumbers.ER_DUP_ENTRY;
+import static com.osparking.global.CommonData.deleteTable;
 import com.osparking.global.Globals;
 import static com.osparking.global.Globals.OSPiconList;
 import static com.osparking.global.Globals.closeDBstuff;
@@ -521,9 +522,9 @@ public class DataGUI extends javax.swing.JFrame {
         if (response != OK_OPTION) {
             return;
         } else {
-            deleteTable("delete from loginrecord  where userID <> 'admin'", "Log in");
-            deleteTable("delete from car_arrival where AttendantID <> 'admin';", "Arrival");
-            deleteTable("delete from users_osp where id <> 'admin'", "User");
+            deleteTable("loginrecord", "userID <> 'admin'", "Log in");
+            deleteTable("car_arrival", "AttendantID <> 'admin';", "Arrival");
+            deleteTable("users_osp", "id <> 'admin'", "User");
 
             updateAttendantCount();
         }
@@ -834,30 +835,10 @@ public class DataGUI extends javax.swing.JFrame {
         result = insertDriver2DB(driverName, cellPhone, phoneNumber, L2_noStr, unitSNstr);
 
         return result;                    
-    }
-    
-    private void deleteAllrecords(String sqlDelete) {
-        Connection conn = null;
-        Statement deleteStmt = null;
-        
-        int resultCount = 0;
-        try {
-            conn = JDBCMySQL.getConnection();
-            deleteStmt = conn.createStatement();
-            resultCount = deleteStmt.executeUpdate(sqlDelete);
-
-            JOptionPane.showMessageDialog(this, 
-                    "Deleted record count: " + resultCount,
-                    "Mass delete result", JOptionPane.PLAIN_MESSAGE);
-        } catch (Exception se) {
-            System.out.println("mass deletion exception");
-        }  finally {
-            closeDBstuff(conn, deleteStmt, null, "delete except 'admin'");
-        }      
-    }    
+    }  
     
     private void deleteDriversActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteDriversActionPerformed
-        deleteAllrecords("delete from cardriver");
+        deleteTable("cardriver", null, "Driver");
         updateDriverCount();
     }//GEN-LAST:event_deleteDriversActionPerformed
 
@@ -898,7 +879,7 @@ public class DataGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_insertVehiclesActionPerformed
 
     private void deleteVehiclesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteVehiclesActionPerformed
-        deleteAllrecords("delete from vehicles");
+        deleteTable("vehicles", null, "Vehicle");
         vehicleCount.setText(String.valueOf(getRecordCount("vehicles", -1)));                
     }//GEN-LAST:event_deleteVehiclesActionPerformed
 
@@ -913,23 +894,23 @@ public class DataGUI extends javax.swing.JFrame {
     }
     
     private void deleteAffiliationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteAffiliationActionPerformed
-        deleteAllrecords("Delete From L1_Affiliation");
+        deleteTable("L1_Affiliation", null, "L1 Affiliation");
         updateAffiliCount();
         
-        deleteAllrecords("Delete From BUILDING_TABLE");
+        deleteTable("BUILDING_TABLE", null, "Building");
         updateBuildingCount();
     }//GEN-LAST:event_deleteAffiliationActionPerformed
 
     private void deleteLoginsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteLoginsActionPerformed
-        deleteAllrecords("Delete From LoginRecord");
+        deleteTable("LoginRecord", null, "Login");
     }//GEN-LAST:event_deleteLoginsActionPerformed
 
     private void deleteSysRunActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteSysRunActionPerformed
-        deleteAllrecords("Delete From SystemRun");
+        deleteTable("SystemRun", null, "System Run");
     }//GEN-LAST:event_deleteSysRunActionPerformed
 
     private void deleteArrivalsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteArrivalsActionPerformed
-        deleteAllrecords("Delete From Car_Arrival");
+        deleteTable("Car_Arrival", null, "Arrival");
     }//GEN-LAST:event_deleteArrivalsActionPerformed
 
     private int createUser(String idCore, int suffix, boolean isManager) {
@@ -1165,26 +1146,6 @@ public class DataGUI extends javax.swing.JFrame {
 
     private void updateVehicleCount() {
         vehicleCount.setText(String.valueOf(getRecordCount("vehicles", -1)));
-    }
-
-    private void deleteTable(String sqlDelete, String infoType) {
-        Connection conn = null;
-        Statement deleteStmt = null;
-        int resultCount = 0;
-        
-        try {
-            conn = JDBCMySQL.getConnection();
-            deleteStmt = conn.createStatement();
-            resultCount = deleteStmt.executeUpdate(sqlDelete);
-
-            JOptionPane.showMessageDialog(this, 
-                    "Deleted " + infoType + " Count: " + resultCount,
-                    "Table Deletion Result", JOptionPane.PLAIN_MESSAGE);
-        } catch (Exception se) {
-            System.out.println("mass deletion exception");
-        }  finally {
-            closeDBstuff(conn, deleteStmt, null, "delete except 'admin'");
-        } 
     }
 
     /**

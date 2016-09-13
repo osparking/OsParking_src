@@ -27,13 +27,11 @@ import static com.osparking.global.CommonData.PROMPTER_KEY;
 import static com.osparking.global.CommonData.buttonHeightNorm;
 import static com.osparking.global.CommonData.buttonWidthNorm;
 import static com.osparking.global.CommonData.downloadSample;
-import static com.osparking.global.CommonData.downloadSample;
 import static com.osparking.global.CommonData.normGUIheight;
 import static com.osparking.global.CommonData.normGUIwidth;
 import static com.osparking.global.CommonData.pointColor;
 import static com.osparking.global.CommonData.tableRowHeight;
 import static com.osparking.global.CommonData.tipColor;
-import static com.osparking.global.DataSheet.noOverwritePossibleExistingSameFile;
 import static com.osparking.global.DataSheet.saveODSfile;
 import com.osparking.global.Globals;
 import static com.osparking.vehicle.driver.DriverTable.updateRow;
@@ -71,7 +69,6 @@ import com.osparking.global.names.ConvComboBoxItem;
 import static com.osparking.global.names.DB_Access.getRecordCount;
 import static com.osparking.global.names.DB_Access.readSettings;
 import static com.osparking.global.Globals.SetAColumnWidth;
-import static com.osparking.global.Globals.attachCondition;
 import static com.osparking.global.Globals.checkOptions;
 import static com.osparking.global.Globals.font_Size;
 import static com.osparking.global.Globals.font_Style;
@@ -145,7 +142,6 @@ import static com.osparking.vehicle.CommonData.DTCW_RN;
 import static com.osparking.vehicle.CommonData.DTCW_UN;
 import static com.osparking.vehicle.CommonData.DTC_MARGIN;
 import static com.osparking.vehicle.CommonData.attachLikeCondition;
-import static com.osparking.vehicle.CommonData.copyFileUsingFileChannels;
 import static com.osparking.vehicle.CommonData.wantToSaveFile;
 import static com.osparking.vehicle.CommonData.invalidCell;
 import static com.osparking.vehicle.CommonData.invalidName;
@@ -156,19 +152,11 @@ import com.osparking.vehicle.LabelBlinker;
 import com.osparking.vehicle.ODS_HelpJDialog;
 import java.awt.AWTEvent;
 import java.awt.Color;
-import java.awt.Desktop;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import static java.awt.event.ItemEvent.SELECTED;
 import java.awt.event.ItemListener;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.util.List;
 import java.util.Locale;
 import javax.swing.JDialog;
@@ -2075,7 +2063,7 @@ public class ManageDrivers extends javax.swing.JFrame {
                 } catch (IOException e) {
                     logParkingException(Level.SEVERE, e, sampleFile + " istrm close error");
                 }
-            }             
+            }
         }
     }//GEN-LAST:event_sampleButtonActionPerformed
 

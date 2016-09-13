@@ -28,11 +28,12 @@ import static com.osparking.global.CommonData.adminOperationEnabled;
 import static com.osparking.global.CommonData.buttonHeightNorm;
 import static com.osparking.global.CommonData.buttonWidthNorm;
 import static com.osparking.global.CommonData.buttonWidthWide;
+import static com.osparking.global.CommonData.deleteTable;
+import static com.osparking.global.CommonData.downloadSample;
 import static com.osparking.global.CommonData.normGUIheight;
 import static com.osparking.global.CommonData.numberCellRenderer;
 import static com.osparking.global.CommonData.pointColor;
 import static com.osparking.global.CommonData.tableRowHeight;
-import static com.osparking.global.DataSheet.noOverwritePossibleExistingSameFile;
 import static com.osparking.global.DataSheet.saveODSfileName;
 import static com.osparking.global.Globals.BLDG_TAB_WIDTH;
 import static com.osparking.global.Globals.PopUpBackground;
@@ -60,9 +61,7 @@ import static com.osparking.global.Globals.rejectEmptyInput;
 import static com.osparking.global.Globals.removeEmptyRow;
 import static com.osparking.global.names.ControlEnums.ButtonTypes.*;
 import static com.osparking.global.names.ControlEnums.DialogMessages.AFFILIATION_DELETE_ALL_DAILOG;
-import static com.osparking.global.names.ControlEnums.DialogMessages.AFFILIATION_DELETE_ALL_RESULT_DAILOG;
 import static com.osparking.global.names.ControlEnums.DialogMessages.BUILDING_DELETE_ALL_DAILOG;
-import static com.osparking.global.names.ControlEnums.DialogMessages.BUILDING_DELETE_ALL_RESULT_DAILOG;
 import static com.osparking.global.names.ControlEnums.DialogMessages.DUPLICATE_BUILDING;
 import static com.osparking.global.names.ControlEnums.DialogMessages.DUPLICATE_HIGH_AFFILI;
 import static com.osparking.global.names.ControlEnums.DialogMessages.DUPLICATE_LOW_AFFILI;
@@ -136,6 +135,7 @@ import static com.osparking.global.names.ControlEnums.TableTypes.LOWER_HEADER;
 import static com.osparking.global.names.ControlEnums.TableTypes.ORDER_HEADER;
 import static com.osparking.global.names.ControlEnums.TableTypes.ROOM_HEADER;
 import static com.osparking.global.names.ControlEnums.TitleTypes.AFFILI_BUILD_FRAME_TITLE;
+import static com.osparking.global.names.ControlEnums.TitleTypes.L1_AFFILI_ROW;
 import static com.osparking.global.names.ControlEnums.ToolTipContent.DRIVER_ODS_UPLOAD_SAMPLE_DOWNLOAD;
 import static com.osparking.global.names.ControlEnums.ToolTipContent.INSERT_TOOLTIP;
 import static com.osparking.global.names.ControlEnums.ToolTipContent.NUMBER_FORMAT_ERROR_MSG;
@@ -147,7 +147,6 @@ import static com.osparking.global.names.OSP_enums.ODS_TYPE.AFFILIATION;
 import static com.osparking.global.names.OSP_enums.ODS_TYPE.BUILDING;
 import com.osparking.global.names.OdsFileOnly;
 import com.osparking.global.names.WrappedInt;
-import static com.osparking.vehicle.CommonData.copyFileUsingFileChannels;
 import static com.osparking.vehicle.CommonData.setHelpDialogLoc;
 import static com.osparking.vehicle.CommonData.wantToSaveFile;
 import com.osparking.vehicle.driver.ODSReader;
@@ -163,6 +162,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -332,7 +332,6 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
         setTitle(AFFILI_BUILD_FRAME_TITLE.getContent());
         setBackground(PopUpBackground);
         setMinimumSize(new Dimension(750, normGUIheight + 30));
-        setPreferredSize(new java.awt.Dimension(750, 750));
 
         northPanel.setPreferredSize(new java.awt.Dimension(729, 40));
 
@@ -1279,6 +1278,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     leftButtons.setLayout(leftButtonsLayout);
 
     deleteAll_Affiliation.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+    deleteAll_Affiliation.setMnemonic('E');
     deleteAll_Affiliation.setText(DELETE_ALL_BTN.getContent());
     deleteAll_Affiliation.setEnabled(false);
     deleteAll_Affiliation.setMaximumSize(new Dimension(buttonWidthWide, buttonHeightNorm));
@@ -1313,6 +1313,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     leftButtons.add(readSheet, gridBagConstraints);
 
     saveSheet_Button.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+    saveSheet_Button.setMnemonic('A');
     saveSheet_Button.setText(SAVE_ODS_BTN.getContent());
     saveSheet_Button.setEnabled(false);
     saveSheet_Button.setMaximumSize(new Dimension(buttonWidthWide, buttonHeightNorm));
@@ -2197,69 +2198,25 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     }//GEN-LAST:event_saveSheet_ButtonActionPerformed
 
     private void deleteAll_AffiliationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteAll_AffiliationActionPerformed
-
         if (chosenPanelFor() == AFFILIATION) {
-            int result = JOptionPane.showConfirmDialog(this, AFFILIATION_DELETE_ALL_DAILOG.getContent(),
+            int result = JOptionPane.showConfirmDialog(this, 
+                    AFFILIATION_DELETE_ALL_DAILOG.getContent(),
                     DELETE_ALL_DAILOGTITLE.getContent(), 
                     JOptionPane.YES_NO_OPTION); 
-
+            
             if (result == JOptionPane.YES_OPTION) {
-                //<editor-fold desc="-- Delete every affiliation information">
-                Connection conn = null;
-                PreparedStatement deleteAffiliation = null;
-                String excepMsg = "(All Affiliation Deletion)";
-
-                result = 0;
-                try {
-                    String sql = "Delete From L1_Affiliation";
-
-                    conn = getConnection();
-                    deleteAffiliation = conn.prepareStatement(sql);
-                    result = deleteAffiliation.executeUpdate();
-                } catch (SQLException ex) {
-                    logParkingException(Level.SEVERE, ex, excepMsg);
-                } finally {
-                    closeDBstuff(conn, deleteAffiliation, null, excepMsg);
-                }    
-
-                if (result >= 1) {
-                    loadL1_Affiliation(0, "");
-                    JOptionPane.showConfirmDialog(this, AFFILIATION_DELETE_ALL_RESULT_DAILOG.getContent(),
-                            DELETE_ALL_RESULT_DIALOGTITLE.getContent(), 
-                            JOptionPane.PLAIN_MESSAGE, INFORMATION_MESSAGE);
-                }  
-                //</editor-fold>
+                deleteTable("L1_Affiliation", null, L1_AFFILI_ROW.getContent());
+                loadL1_Affiliation(0, "");
             }
         } else {
-            int result = JOptionPane.showConfirmDialog(this, BUILDING_DELETE_ALL_DAILOG.getContent(), 
+            int result = JOptionPane.showConfirmDialog(this, 
+                    BUILDING_DELETE_ALL_DAILOG.getContent(), 
                     DELETE_ALL_RESULT_DIALOGTITLE.getContent(), 
                     JOptionPane.YES_NO_OPTION); 
-
+            
             if (result == JOptionPane.YES_OPTION) {
-                //<editor-fold desc="-- Delete every affiliation information">
-                Connection conn = null;
-                PreparedStatement createBuilding = null;
-                String excepMsg = "(Deletion of whole building";
-                result = 0;
-
-                try {
-                    String sql = "Delete From BUILDING_TABLE";
-                    conn = getConnection();
-                    createBuilding = conn.prepareStatement(sql);
-                    result = createBuilding.executeUpdate();
-                } catch (SQLException ex) {
-                    logParkingException(Level.SEVERE, ex, excepMsg);
-                } finally {
-                    closeDBstuff(conn, createBuilding, null, excepMsg);
-                }
-
-                if (result >= 1) {
-                    loadBuilding(0, 0); 
-                    JOptionPane.showConfirmDialog(this, BUILDING_DELETE_ALL_RESULT_DAILOG.getContent(),
-                            DELETE_RESULT_DIALOGTITLE.getContent(),
-                           JOptionPane.PLAIN_MESSAGE, INFORMATION_MESSAGE);
-                }
-                //</editor-fold>
+                deleteTable("BUILDING_TABLE", null, Building.getContent());
+                loadBuilding(0, 0); 
             }            
         }
     }//GEN-LAST:event_deleteAll_AffiliationActionPerformed
@@ -2581,46 +2538,35 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     }//GEN-LAST:event_botRightMouseClicked
 
     private void sampleButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sampleButtonActionPerformed
-        String sampleFilenameCore = "";
-
-        switch(language) {
-            case ENGLISH:
-                sampleFilenameCore = "driversEng";
-                break;
-
-            default:
-                sampleFilenameCore = "drivers";
-                break;
-        }
+        String sampleFile = "";
         
         if (chosenPanelFor() == AFFILIATION) {
-            sampleFilenameCore = "Affiliations";
+            sampleFile = "/affiliations";
         } else {
-            sampleFilenameCore = "buildings";
+            sampleFile = "/buildings";
         }        
 
         // Ask user the name and location for the ods file to save
         StringBuffer odsFullPath = new StringBuffer();
 
-        if (wantToSaveFile(this, saveFileChooser, odsFullPath, sampleFilenameCore)) {
+        if (wantToSaveFile(this, saveFileChooser, odsFullPath, sampleFile)) {
             // Read sample ods resource file
-            ClassLoader classLoader = getClass().getClassLoader();
-            File source = new File(classLoader.getResource(sampleFilenameCore + ".ods").getFile());
             String extension = saveFileChooser.getFileFilter().getDescription();
 
             if (extension.indexOf("*.ods") >= 0 && !odsFullPath.toString().endsWith(".ods")) {
                 odsFullPath.append(".ods");
             }
-
-            File destin = new File(odsFullPath.toString());
-            try {
-                // Write resource into the file chosen by the user
-                if (!noOverwritePossibleExistingSameFile(destin, odsFullPath.toString())) {
-                    copyFileUsingFileChannels(source, destin);
+            
+            InputStream sampleIn = getClass().getResourceAsStream(sampleFile + ".ods");
+            
+            downloadSample(odsFullPath.toString(), sampleIn, sampleFile);
+            if (sampleIn != null) {
+                try {
+                    sampleIn.close();
+                } catch (IOException e) {
+                    logParkingException(Level.SEVERE, e, sampleFile + " istrm close error");
                 }
-            } catch (IOException ex) {
-                logParkingException(Level.SEVERE, ex, sampleFilenameCore + " downloading error");
-            }
+            }            
         }
     }//GEN-LAST:event_sampleButtonActionPerformed
 
@@ -3808,6 +3754,10 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
         } else {
             table.setSelectionBackground(LIGHT_BLUE);
         }
+    }
+
+    private void downloadSampleNew2(String toString, Class<? extends AffiliationBuildingForm> aClass, String sampleFile) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     private class HdrMouseListener extends MouseAdapter {

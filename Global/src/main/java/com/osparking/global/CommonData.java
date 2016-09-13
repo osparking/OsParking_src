@@ -17,14 +17,19 @@
 package com.osparking.global;
 
 import static com.osparking.global.DataSheet.noOverwritePossibleExistingSameFile;
+import static com.osparking.global.Globals.closeDBstuff;
 import static com.osparking.global.Globals.font_Size;
 import static com.osparking.global.Globals.font_Style;
 import static com.osparking.global.Globals.font_Type;
 import static com.osparking.global.Globals.getBufferedImage;
 import static com.osparking.global.Globals.getTagNumber;
 import static com.osparking.global.Globals.logParkingException;
+import static com.osparking.global.names.ControlEnums.DialogTitleTypes.DELETE_RESULT_DIALOGTITLE;
+import static com.osparking.global.names.ControlEnums.LabelContent.TABLE_DEL_DIALOG_1;
+import static com.osparking.global.names.ControlEnums.LabelContent.TABLE_DEL_DIALOG_2;
 import static com.osparking.global.names.ControlEnums.MenuITemTypes.META_KEY_LABEL;
 import static com.osparking.global.names.DB_Access.deviceType;
+import com.osparking.global.names.JDBCMySQL;
 import static com.osparking.global.names.OSP_enums.CameraType.CarButton;
 import static com.osparking.global.names.OSP_enums.DeviceType.Camera;
 import com.osparking.global.names.PasswordValidator;
@@ -39,10 +44,13 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.sql.Connection;
+import java.sql.Statement;
 import java.util.logging.Level;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.border.Border;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -107,8 +115,32 @@ public class CommonData { // new Dimension(carTagWidth, 30)
         putCellCenter.setHorizontalAlignment(JLabel.CENTER);    
     }
     
+    public static void deleteTable(String tableName, String condition, String unitName) {
+        String sqlDelete = "Delete From " + tableName;
+        Connection conn = null;
+        Statement deleteStmt = null; 
+        int resultCount = 0;
+        
+        if (condition != null) {
+            sqlDelete += " Where " + condition;
+        }
+        try {
+            conn = JDBCMySQL.getConnection();
+            deleteStmt = conn.createStatement();
+            resultCount = deleteStmt.executeUpdate(sqlDelete);
+
+            JOptionPane.showMessageDialog(null, 
+                    TABLE_DEL_DIALOG_1.getContent() + unitName + 
+                            TABLE_DEL_DIALOG_2.getContent() + resultCount,
+                    DELETE_RESULT_DIALOGTITLE.getContent(), JOptionPane.PLAIN_MESSAGE);
+        } catch (Exception se) {
+            logParkingException(Level.SEVERE, se, "(" + sqlDelete + ")");
+        }  finally {
+            closeDBstuff(conn, deleteStmt, null, "(" + sqlDelete + ")");
+        } 
+    }    
+    
     public static void downloadSample(String destPath, InputStream sampleIn, String sampleFile) {
-        // = null;
         OutputStream outStream = null;
 
         try {

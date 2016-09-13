@@ -39,7 +39,7 @@ public class ControlEnums {
     }
 
     public enum TableType {  
-        L1_TABLE("상위 소속 ", "High Affili'"),
+        L1_TABLE("상위 소속", "High Affili'"),
         L2_TABLE("부서 목록", "Low Affili'"),
         Building("건물(동)", "Building"),
         UnitTab("호실 목록", "Unit(Rm)"),
@@ -56,6 +56,7 @@ public class ControlEnums {
     }    
     
     public enum TitleTypes {
+        L1_AFFILI_ROW("상위 소속", "L1 Affiliation"),
         CHECK_IP_TITLE("장치 IP 주소 확인 필요", "Check Device IP Address"),
         CAR_ARRIVALS_TITLE("최근 차량 도착(시간 역순)", "Recent Car Arrivals(Recent First)"),
         SETTINGS_TITLE("시스템 설정", "System Settings"),
@@ -288,6 +289,8 @@ public class ControlEnums {
         OVERLAPPED_PORT_DIALOG_3("그래도 설정을 저장하겠습니까?", "Do you still want to save the settings?"),
         OVERLAPPED_PORT_DIALOG_4("사용 포트 : ", "Used Port : "),
         
+        TABLE_DEL_DIALOG_1("삭제된 ", "Deleted "),
+        TABLE_DEL_DIALOG_2(" 기록 건수 : ", " Record Count : "),
         LOGGIND_DIALOG_1("다음 '필수 항목'만 기록됨 :", "Following 'Mandatory Items' are logged :"),
         LOGGIND_DIALOG_2(" - 오즈파킹 가동 및 정지 시각", " - System start and stop time"),
         LOGGIND_DIALOG_3(" - 오래되어 삭제된 레코드 수", " - Number of deleted old records"),
