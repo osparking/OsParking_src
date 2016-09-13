@@ -60,6 +60,7 @@ import static com.osparking.global.names.OSP_enums.OpLogLevel.UserCarChange;
 import org.apache.commons.validator.routines.InetAddressValidator;
 import com.osparking.attendant.PWHelpJDialog;
 import com.osparking.global.ChangedComponentSave;
+import static com.osparking.global.CommonData.ADMIN_ID;
 import static com.osparking.global.CommonData.CBOX_HEIGHT;
 import static com.osparking.global.CommonData.SETTINGS_HEIGHT;
 import static com.osparking.global.CommonData.SETTINGS_WIDTH;
@@ -75,6 +76,7 @@ import static com.osparking.global.names.ControlEnums.ButtonTypes.CANCEL_BTN;
 import static com.osparking.global.names.ControlEnums.ButtonTypes.CLOSE_BTN;
 import static com.osparking.global.names.ControlEnums.ButtonTypes.SAVE_BTN;
 import static com.osparking.global.names.ControlEnums.ButtonTypes.SET_BUTTON;
+import static com.osparking.global.names.ControlEnums.ButtonTypes.manageDataLabel;
 import static com.osparking.global.names.ControlEnums.ComboBoxItemTypes.COMPLEX_CB_ITEM;
 import static com.osparking.global.names.ControlEnums.ComboBoxItemTypes.DAY_SUFFIX;
 import static com.osparking.global.names.ControlEnums.ComboBoxItemTypes.E_BOARD_LOGGING_CB_ITEM;
@@ -175,6 +177,7 @@ import static com.osparking.global.names.DB_Access.locale;
 import static com.osparking.global.names.DB_Access.parkingLotName;
 import static com.osparking.global.names.DB_Access.statCountIndex;
 import com.osparking.global.names.EBD_DisplaySetting;
+import com.osparking.global.names.IDevice.IDataMan;
 import com.osparking.global.names.OSP_enums.CameraType;
 import static com.osparking.global.names.OSP_enums.CameraType.Blackfly;
 import static com.osparking.global.names.OSP_enums.CameraType.CarButton;
@@ -184,6 +187,7 @@ import com.osparking.global.names.OSP_enums.DeviceType;
 import com.osparking.global.names.OSP_enums.E_BoardType;
 import com.osparking.global.names.OSP_enums.GateBarType;
 import com.osparking.global.names.OSP_enums.PWStrengthLevel;
+import com.osparking.managedata.DataGUI;
 import com.osparking.osparking.device.LEDnotice.LEDnoticeManager;
 import com.osparking.osparking.device.LEDnotice.Settings_LEDnotice;
 import static com.toedter.components.JLocaleChooser.defaultLocale;
@@ -211,7 +215,7 @@ import javax.swing.WindowConstants;
  * For a stable operation, it is recommended to reboot this system(OS.Parking program) after any setting change.
  * @author Open Source Parking Inc.
  */
-public class Settings_System extends javax.swing.JFrame {
+public class Settings_System extends javax.swing.JFrame implements IDataMan {
     private boolean isStand_Alone = false;
     private static Logger logException = null;
     private static Logger logOperation = null;
@@ -219,6 +223,7 @@ public class Settings_System extends javax.swing.JFrame {
     private HashMap<String, Component> componentMap = new HashMap<String,Component>();
     public short maxArrivalCBoxIndex = 0;
     private JDialog eBoardDialog = null;
+    private JDialog dataManDialog = null;
     static EBD_DisplaySetting[] EBD_DisplaySettings = null;
     static private ChangedComponentSave changedControls; 
     
@@ -300,6 +305,10 @@ public class Settings_System extends javax.swing.JFrame {
         loadComponentValues();
         makeEnterActAsTab();
         setLocation(0, 0);
+        // Enable data manager button for the admin
+        if (loginID.equals(ADMIN_ID)) {
+            manageData.setEnabled(true);
+        }
     }
 
     /**
@@ -319,6 +328,7 @@ public class Settings_System extends javax.swing.JFrame {
         parkinglotOptionPanel = new javax.swing.JPanel();
         jLabel42 = new javax.swing.JLabel();
         lotNameTextField = new javax.swing.JTextField();
+        manageData = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         PWHelpButton = new javax.swing.JButton();
         PWStrengthChoiceComboBox = new javax.swing.JComboBox<ConvComboBoxItem>();
@@ -600,6 +610,26 @@ public class Settings_System extends javax.swing.JFrame {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 0, 10);
         parkinglotOptionPanel.add(lotNameTextField, gridBagConstraints);
+
+        manageData.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        manageData.setMnemonic('D');
+        manageData.setText(manageDataLabel.getContent());
+        manageData.setToolTipText("");
+        manageData.setEnabled(false);
+        manageData.setMaximumSize(new java.awt.Dimension(110, 40));
+        manageData.setMinimumSize(new java.awt.Dimension(110, 40));
+        manageData.setPreferredSize(new java.awt.Dimension(110, 40));
+        manageData.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                manageDataActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.gridheight = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHEAST;
+        gridBagConstraints.insets = new java.awt.Insets(0, 70, 0, 0);
+        parkinglotOptionPanel.add(manageData, gridBagConstraints);
 
         jLabel1.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
@@ -3170,6 +3200,10 @@ public class Settings_System extends javax.swing.JFrame {
 
     private void SettingsCloseButtonStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_SettingsCloseButtonStateChanged
         EBoardSettingsButton.setEnabled(SettingsCloseButton.isEnabled());
+        /**
+         * Synchronize enabled property of close button and managedata buttons
+         */
+//        manageData.setEnabled(SettingsCloseButton.isEnabled());
     }//GEN-LAST:event_SettingsCloseButtonStateChanged
 
     private void Camera1_TypeCBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_Camera1_TypeCBoxItemStateChanged
@@ -3533,6 +3567,18 @@ public class Settings_System extends javax.swing.JFrame {
             evt.consume();
         }
     }//GEN-LAST:event_lotNameTextFieldKeyTyped
+
+    private void manageDataActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_manageDataActionPerformed
+        dataManDialog = new JDialog(this, "OsParking Data Management", true);
+        dataManDialog.getContentPane().add((new DataGUI(this)).getContentPane());
+        dataManDialog.setResizable(false);
+        dataManDialog.pack();
+        dataManDialog.setVisible(true);
+    }//GEN-LAST:event_manageDataActionPerformed
+    
+    public void closeDialog() {
+        dataManDialog.dispose();
+    }
     
     void closeSettingsForm() {
         if(mainForm != null)
@@ -3790,6 +3836,7 @@ public class Settings_System extends javax.swing.JFrame {
     private javax.swing.JPanel labelBlink;
     private javax.swing.JPanel labelFlow;
     private javax.swing.JTextField lotNameTextField;
+    private javax.swing.JButton manageData;
     private javax.swing.JLabel myMetaKeyLabel;
     private javax.swing.JPanel parkinglotOptionPanel;
     private javax.swing.JLabel pxLabel1;
@@ -4174,7 +4221,6 @@ public class Settings_System extends javax.swing.JFrame {
         SettingsCloseButton.setEnabled(!enable);
         EBoardSettingsButton.setEnabled(!enable);
         if (!enable) {
-//            changedControls.clear();
             changedControls.clear();
         }
     } 

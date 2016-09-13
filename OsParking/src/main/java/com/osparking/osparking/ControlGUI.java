@@ -2991,8 +2991,8 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
      */
     public LoginDialog getLoginDialog() {
         if (loginDialog != null) {
-//            loginDialog.getPassword().setText("1234");
 //            loginDialog.getUserIDText().setText("admin");
+            loginDialog.getPassword().setText("");
         }
         return loginDialog;
     }
@@ -3280,6 +3280,10 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
                 if (attendantsListForm != null) {
                     attendantsListForm.dispose();
                     attendantsListForm = null;
+                }
+                if (configureSettingsForm != null) {
+                    configureSettingsForm.dispose();
+                    configureSettingsForm = null;
                 }
             }
         } catch (Exception ex) {

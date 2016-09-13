@@ -32,6 +32,9 @@ import java.net.Socket;
  * @author Open Source Parking Inc.
  */
 public class IDevice {
+    public static interface IDataMan {
+        public void closeDialog();
+    }
     
     public static interface IManager {
         void setPriority(int newPriority);

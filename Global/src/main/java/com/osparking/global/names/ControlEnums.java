@@ -327,6 +327,7 @@ public class ControlEnums {
     }
     
     public enum ButtonTypes {
+        manageDataLabel("자료관리(D)", "Data Man"),
         LOGIN_BTN("로그인(L)", "Login"),
         SAMPLE_BTN("샘플(P)", "Sample"),
         SAMPLE2_BTN("샘플(S)", "Sample"),

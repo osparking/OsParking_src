@@ -392,6 +392,7 @@ public class CameraGUI extends javax.swing.JFrame implements DeviceGUI {
         connStatPanel.add(filler19);
 
         exitButton.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        exitButton.setMnemonic('X');
         exitButton.setText("Exit");
         exitButton.setMaximumSize(new java.awt.Dimension(100, 40));
         exitButton.setMinimumSize(new java.awt.Dimension(100, 40));

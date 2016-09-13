@@ -237,17 +237,13 @@ public class EBoardReader extends Thread implements DeviceReader {
                         case EBD_INTERRUPT1:
                         case EBD_INTERRUPT2:
                             //<editor-fold defaultstate="collapsed" desc="-- Change E-Board display temporarily">  
-                            logParkingException(Level.INFO, null, "P 1", 1);
-
                             if (isConnected(getManagerSocket()))
                                 getManagerSocket().getInputStream().read(lenByteArr);
                             else
                                 continue;
-                            logParkingException(Level.INFO, null, "P 2", 1);
                             
                             msgLength = ByteBuffer.wrap(lenByteArr).getShort();
                             String msgs = "P 3, len: " + msgLength;
-                            logParkingException(Level.INFO, null, msgs, 1);
 
                             // read rest of the whole message
                             //  : <row:1><msgSN:4><text:?><type:1><color:1><font:1><pattern:1><cycle:4>
@@ -256,25 +252,19 @@ public class EBoardReader extends Thread implements DeviceReader {
                                 continue;
                             }
                             restOfMessage = new byte[msgLength - 2]; // subtract 2 from whole length
-                            logParkingException(Level.INFO, null, "P 3-1", 1);
                                 // since it was already read just above when length was needed first hand.
                             if (isConnected(getManagerSocket())) {
-                                logParkingException(Level.INFO, null, "P 3-2", 1);
                                 getManagerSocket().getInputStream().read(restOfMessage);
-                                logParkingException(Level.INFO, null, "P 3-3", 1);
                             } else {
                                 continue;
                             }
-                            logParkingException(Level.INFO, null, "P 4", 1);
 
                             // verify check bytes
                             checkShort = new byte[2]; // function: checking, size: short(2 bytes)
                             len = restOfMessage.length;
-                            logParkingException(Level.INFO, null, "P 5", 1);
                             coreBytes = Arrays.copyOfRange(restOfMessage, 0,  len - 2);
 
                             addUpBytes((byte)msgCode, lenByteArr, coreBytes, checkShort);
-                            logParkingException(Level.INFO, null, "P 6", 1);
                             if (checkShort[1] == restOfMessage[len - 1] 
                                     && checkShort[0] == restOfMessage[len - 2]
                                     && noArtificialErrorInserted(eBoardGUI.errorCheckBox)) 
@@ -282,7 +272,6 @@ public class EBoardReader extends Thread implements DeviceReader {
                                 //<editor-fold desc="-- Process a valid message from the manager">
                                 // check if this message has already been processed(not a duplicate one?)
                                 int msgSN = ByteBuffer.wrap(Arrays.copyOfRange(restOfMessage, 1, 5)).getInt();
-                            logParkingException(Level.INFO, null, "P 7", 1);
                                 if (msgSN != eBoardGUI.prevMsgSN[coreBytes[0]]) {
                                     // decode message field by field and apply the result to display
                                     interruptCurrentDisplay(coreBytes);
@@ -293,15 +282,12 @@ public class EBoardReader extends Thread implements DeviceReader {
                                 }
                                 // build ack message and send it to the manager
                                 byte[] ackMessage = {(byte)EBD_ACK.ordinal(), (byte)msgCode, 0, 0};
-                            logParkingException(Level.INFO, null, "P 8", 1);
                                 checkACK = (short)(ackMessage[0] + ackMessage[1]);
                                 ackMessage[2] = (byte)((checkACK >> 8) & 0xff);
                                 ackMessage[3] = (byte)(checkACK & 0xff);   
-                            logParkingException(Level.INFO, null, "P 9", 1);                                
                                 while (! isConnected(getManagerSocket())) {
                                     eBoardGUI.getSocketMUTEX().wait();
                                 }                                
-                            logParkingException(Level.INFO, null, "P 10", 1);
                                 getManagerSocket().getOutputStream().write(ackMessage); 
                                 
                                 //</editor-fold>

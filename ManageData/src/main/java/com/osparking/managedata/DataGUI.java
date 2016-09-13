@@ -17,6 +17,7 @@ import static com.osparking.global.names.ControlEnums.DialogMessages.USER_DELETE
 import com.osparking.global.names.DB_Access;
 import static com.osparking.global.names.DB_Access.getRecordCount;
 import static com.osparking.global.names.DB_Access.readSettings;
+import com.osparking.global.names.IDevice.IDataMan;
 import com.osparking.global.names.JDBCMySQL;
 import static com.osparking.global.names.JDBCMySQL.PASSWORD;
 import static com.osparking.global.names.JDBCMySQL.getConnection;
@@ -28,6 +29,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Random;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import static javax.swing.JOptionPane.OK_CANCEL_OPTION;
 import static javax.swing.JOptionPane.OK_OPTION;
@@ -42,10 +44,11 @@ public class DataGUI extends javax.swing.JFrame {
     Object[] L2_sn_arr = null;
     Object[] unit_sn_arr = null;
     Object[] driver_sn_arr = null;
+    JFrame settingsForm = null;
     /**
      * Creates new form InsertGUI
      */
-    public DataGUI() {
+    public DataGUI(JFrame settingsForm) {
         initComponents();
         setIconImages(OSPiconList);   
         
@@ -54,6 +57,7 @@ public class DataGUI extends javax.swing.JFrame {
         updateAffiliCount();
         updateDriverCount();
         updateVehicleCount();
+        this.settingsForm = settingsForm;
     }
 
     /**
@@ -531,7 +535,13 @@ public class DataGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_deleteAll_no_adminActionPerformed
 
     private void quitProgramActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_quitProgramActionPerformed
-        System.exit(0);
+        this.setVisible(false);
+        if (settingsForm == null) {
+            System.exit(0);
+        } else {
+            dispose();
+            ((IDataMan)settingsForm).closeDialog();
+        }
     }//GEN-LAST:event_quitProgramActionPerformed
 
     private void affiliationsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_affiliationsButtonActionPerformed
@@ -996,7 +1006,7 @@ public class DataGUI extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new DataGUI().setVisible(true);
+                new DataGUI(null).setVisible(true);
             }
         });
     }
