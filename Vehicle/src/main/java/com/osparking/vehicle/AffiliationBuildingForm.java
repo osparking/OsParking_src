@@ -2205,7 +2205,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
                     JOptionPane.YES_NO_OPTION); 
             
             if (result == JOptionPane.YES_OPTION) {
-                deleteTable("L1_Affiliation", null, L1_AFFILI_ROW.getContent());
+                deleteTable(this, "L1_Affiliation", null, L1_AFFILI_ROW.getContent());
                 loadL1_Affiliation(0, "");
             }
         } else {
@@ -2215,7 +2215,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
                     JOptionPane.YES_NO_OPTION); 
             
             if (result == JOptionPane.YES_OPTION) {
-                deleteTable("BUILDING_TABLE", null, Building.getContent());
+                deleteTable(this, "BUILDING_TABLE", null, Building.getContent());
                 loadBuilding(0, 0); 
             }            
         }
