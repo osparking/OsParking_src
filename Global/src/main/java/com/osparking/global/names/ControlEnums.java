@@ -290,7 +290,7 @@ public class ControlEnums {
         OVERLAPPED_PORT_DIALOG_4("사용 포트 : ", "Used Port : "),
         
         TABLE_DEL_DIALOG_1("삭제된 ", "Deleted "),
-        TABLE_DEL_DIALOG_2(" 기록 건수 : ", " Record Count : "),
+        TABLE_DEL_DIALOG_2(" 건수 : ", " Count : "),
         LOGGIND_DIALOG_1("다음 '필수 항목'만 기록됨 :", "Following 'Mandatory Items' are logged :"),
         LOGGIND_DIALOG_2(" - 오즈파킹 가동 및 정지 시각", " - System start and stop time"),
         LOGGIND_DIALOG_3(" - 오래되어 삭제된 레코드 수", " - Number of deleted old records"),
@@ -1241,6 +1241,28 @@ public class ControlEnums {
         public String getContent() {
                 return contents[language.ordinal()];
         }
+    }
+    
+    public enum RowName{
+        LOG_IN("로그인 기록", "Log in record"),
+        ARRIVAL("도착 기록", "Arrival"),
+        USER("사용자", "User"),
+        DRIVER("운전자", "Driver"),
+        VEHICLE("차량", "Vehicle"),
+        L1_AFFILI("상위 소속", "L1 affiliation"),
+        BUILDING("건물", "Building"),
+        SYS_RUN("가동 기록", "Run record");
+        
+        RowName(String korean, String english) {
+            contents[KOREAN.ordinal()] = korean;
+            contents[ENGLISH.ordinal()] = english;
+        }
+        
+        private String[] contents = new String[Languages.values().length];
+        
+        public String getContent() {
+            return contents[language.ordinal()];
+        }            
     }
     
     public enum MenuITemTypes{

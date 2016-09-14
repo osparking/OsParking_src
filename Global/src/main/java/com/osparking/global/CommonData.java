@@ -115,7 +115,8 @@ public class CommonData { // new Dimension(carTagWidth, 30)
         putCellCenter.setHorizontalAlignment(JLabel.CENTER);    
     }
     
-    public static void deleteTable(String tableName, String condition, String unitName) {
+    public static void deleteTable(Component parent, 
+            String tableName, String condition, String unitName) {
         String sqlDelete = "Delete From " + tableName;
         Connection conn = null;
         Statement deleteStmt = null; 
@@ -129,7 +130,7 @@ public class CommonData { // new Dimension(carTagWidth, 30)
             deleteStmt = conn.createStatement();
             resultCount = deleteStmt.executeUpdate(sqlDelete);
 
-            JOptionPane.showMessageDialog(null, 
+            JOptionPane.showMessageDialog(parent, 
                     TABLE_DEL_DIALOG_1.getContent() + unitName + 
                             TABLE_DEL_DIALOG_2.getContent() + resultCount,
                     DELETE_RESULT_DIALOGTITLE.getContent(), JOptionPane.PLAIN_MESSAGE);

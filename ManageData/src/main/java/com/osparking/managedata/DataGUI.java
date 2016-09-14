@@ -10,10 +10,12 @@ import static com.osparking.global.CommonData.deleteTable;
 import com.osparking.global.Globals;
 import static com.osparking.global.Globals.OSPiconList;
 import static com.osparking.global.Globals.closeDBstuff;
+import com.osparking.global.names.ControlEnums;
 import static com.osparking.global.names.ControlEnums.DialogMessages.USER_DELETE_CONF_1;
 import static com.osparking.global.names.ControlEnums.DialogMessages.USER_DELETE_CONF_2;
 import static com.osparking.global.names.ControlEnums.DialogMessages.USER_DELETE_CONF_3;
 import static com.osparking.global.names.ControlEnums.DialogMessages.USER_DELETE_CONF_TITLE;
+import static com.osparking.global.names.ControlEnums.RowName.*;
 import com.osparking.global.names.DB_Access;
 import static com.osparking.global.names.DB_Access.getRecordCount;
 import static com.osparking.global.names.DB_Access.readSettings;
@@ -22,6 +24,10 @@ import com.osparking.global.names.JDBCMySQL;
 import static com.osparking.global.names.JDBCMySQL.PASSWORD;
 import static com.osparking.global.names.JDBCMySQL.getConnection;
 import com.osparking.global.names.OSP_enums.DriverCol;
+import java.awt.Cursor;
+import java.awt.event.MouseAdapter;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -29,22 +35,25 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Random;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import static javax.swing.JOptionPane.OK_CANCEL_OPTION;
 import static javax.swing.JOptionPane.OK_OPTION;
 import static javax.swing.JOptionPane.QUESTION_MESSAGE;
+import javax.swing.RootPaneContainer;
+import javax.swing.SwingUtilities;
 
 /**
  *
  * @author Open Source Parking, Inc.(www.osparking.com)
  */
 public class DataGUI extends javax.swing.JFrame {
-
     Object[] L2_sn_arr = null;
     Object[] unit_sn_arr = null;
     Object[] driver_sn_arr = null;
     JFrame settingsForm = null;
+    ProgressBarMan progressBarMan;
     /**
      * Creates new form InsertGUI
      */
@@ -58,6 +67,7 @@ public class DataGUI extends javax.swing.JFrame {
         updateDriverCount();
         updateVehicleCount();
         this.settingsForm = settingsForm;
+        progressBarMan = new ProgressBarMan(this);
     }
 
     /**
@@ -451,18 +461,21 @@ public class DataGUI extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(40, 40, 40)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(quitProgram))
                     .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(progressBar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 0, Short.MAX_VALUE)
-                            .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(18, 18, 18)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                                    .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addGap(128, 128, 128)
+                                .addComponent(quitProgram)))))
                 .addGap(40, 40, 40))
         );
         layout.setVerticalGroup(
@@ -479,7 +492,9 @@ public class DataGUI extends javax.swing.JFrame {
                     .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(24, 24, 24)
-                .addComponent(quitProgram, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(quitProgram, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(progressBar, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(40, 40, 40))
         );
 
@@ -526,9 +541,9 @@ public class DataGUI extends javax.swing.JFrame {
         if (response != OK_OPTION) {
             return;
         } else {
-            deleteTable("loginrecord", "userID <> 'admin'", "Log in");
-            deleteTable("car_arrival", "AttendantID <> 'admin';", "Arrival");
-            deleteTable("users_osp", "id <> 'admin'", "User");
+            deleteTable(this, "loginrecord", "userID <> 'admin'", LOG_IN.getContent());
+            deleteTable(this, "car_arrival", "AttendantID <> 'admin';", ARRIVAL.getContent());
+            deleteTable(this, "users_osp", "id <> 'admin'", USER.getContent());
 
             updateAttendantCount();
         }
@@ -727,8 +742,6 @@ public class DataGUI extends javax.swing.JFrame {
         return randMid;
     }
     
-    
-    
     Random rand = new Random();
     
     private String digitStr(int n) {
@@ -804,16 +817,30 @@ public class DataGUI extends javax.swing.JFrame {
         unit_sn_arr = init_int_key_arr("select seq_no from building_unit");
         
         // create driver name randomly
-        int createdDriverNumber = 0;
-        while (createdDriverNumber < 1000) {
-            createdDriverNumber += createNewDriver();
-        }   
-        JOptionPane.showMessageDialog(this, 
-                "Created record count: " + createdDriverNumber,
-                "Insertion result", JOptionPane.PLAIN_MESSAGE);  
-        updateDriverCount();
+        insertTableRows(DRIVER, 1000, 0);
     }//GEN-LAST:event_insertDriversActionPerformed
 
+    private int createNewVehicle() {
+        String tagNumber = getTagNumber();
+        boolean wholeCmp = false; // Car number comparison using whole characters.
+        boolean parkPermed = false; // Parking is permitted at the moment.
+
+        if (rand.nextFloat() > 0.99) {
+            wholeCmp = true;
+        } else {
+            wholeCmp = false;
+        }
+
+        // select permitted at 90%
+        if (rand.nextFloat() > 0.05) {
+            parkPermed = true;
+        } else {
+            parkPermed = false;
+        }
+        
+        return createAndInsertOneCar(tagNumber, wholeCmp, parkPermed);
+    }
+    
     private int createNewDriver() {
         int result = 0;
         String driverName = getRandomLastName() + getRandomFirstName();
@@ -848,48 +875,21 @@ public class DataGUI extends javax.swing.JFrame {
     }  
     
     private void deleteDriversActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteDriversActionPerformed
-        deleteTable("cardriver", null, "Driver");
+        deleteTable(this, "cardriver", null, DRIVER.getContent());
         updateDriverCount();
+        updateVehicleCount();
     }//GEN-LAST:event_deleteDriversActionPerformed
 
     private void insertVehiclesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_insertVehiclesActionPerformed
         // Init a kind of database for the random driver selection.
         driver_sn_arr = init_int_key_arr("select seq_no from cardriver");
         
-        int createdVehicles = 0;
-        
-        createdVehicles = insertFourVehiclesWithImage();
-        
-        boolean parkPermed = false; // Parking is permitted at the moment.
-        boolean wholeCmp = false; // Car number comparison using whole characters.
-        
-        while (createdVehicles < 1000) {
-            // select whole at 10%
-            String tagNumber = getTagNumber();
-            
-            if (rand.nextFloat() > 0.99) {
-                wholeCmp = true;
-            } else {
-                wholeCmp = false;
-            }
-
-            // select permitted at 90%
-            if (rand.nextFloat() > 0.05) {
-                parkPermed = true;
-            } else {
-                parkPermed = false;
-            }       
-            createdVehicles += createAndInsertOneCar(tagNumber, wholeCmp, parkPermed);
-        }
-
-        JOptionPane.showMessageDialog(this, 
-                "Created record count: " + createdVehicles,
-                "Insertion result", JOptionPane.PLAIN_MESSAGE);
-        vehicleCount.setText(String.valueOf(getRecordCount("vehicles", -1)));        
+        int createdVehicles = insertFourVehiclesWithImage();
+        insertTableRows(VEHICLE, 1000 - createdVehicles, createdVehicles);
     }//GEN-LAST:event_insertVehiclesActionPerformed
 
     private void deleteVehiclesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteVehiclesActionPerformed
-        deleteTable("vehicles", null, "Vehicle");
+        deleteTable(this, "vehicles", null, VEHICLE.getContent());
         vehicleCount.setText(String.valueOf(getRecordCount("vehicles", -1)));                
     }//GEN-LAST:event_deleteVehiclesActionPerformed
 
@@ -904,23 +904,26 @@ public class DataGUI extends javax.swing.JFrame {
     }
     
     private void deleteAffiliationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteAffiliationActionPerformed
-        deleteTable("L1_Affiliation", null, "L1 Affiliation");
+        deleteTable(this, "L1_Affiliation", null, L1_AFFILI.getContent());
         updateAffiliCount();
         
-        deleteTable("BUILDING_TABLE", null, "Building");
+        deleteTable(this, "BUILDING_TABLE", null, BUILDING.getContent());
         updateBuildingCount();
+        
+        updateDriverCount();
+        updateVehicleCount();
     }//GEN-LAST:event_deleteAffiliationActionPerformed
 
     private void deleteLoginsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteLoginsActionPerformed
-        deleteTable("LoginRecord", null, "Login");
+        deleteTable(this, "LoginRecord", null, LOG_IN.getContent());
     }//GEN-LAST:event_deleteLoginsActionPerformed
 
     private void deleteSysRunActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteSysRunActionPerformed
-        deleteTable("SystemRun", null, "System Run");
+        deleteTable(this, "SystemRun", null, SYS_RUN.getContent());
     }//GEN-LAST:event_deleteSysRunActionPerformed
 
     private void deleteArrivalsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteArrivalsActionPerformed
-        deleteTable("Car_Arrival", null, "Arrival");
+        deleteTable(this, "Car_Arrival", null, ARRIVAL.getContent());
     }//GEN-LAST:event_deleteArrivalsActionPerformed
 
     private int createUser(String idCore, int suffix, boolean isManager) {
@@ -1042,6 +1045,7 @@ public class DataGUI extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JButton manager5;
+    private final javax.swing.JProgressBar progressBar = new javax.swing.JProgressBar();
     private javax.swing.JButton quitProgram;
     private javax.swing.JLabel unitCount;
     private javax.swing.JLabel vehicleCount;
@@ -1225,6 +1229,68 @@ public class DataGUI extends javax.swing.JFrame {
         count += createAndInsertOneCar(Globals.getTagNumber((byte)4), true, false);
         
         return count;
+    }
+
+    /**
+     * @return the insertProgress
+     */
+    public javax.swing.JProgressBar getProgressBar() {
+        return progressBar;
+    }
+
+    private final static MouseAdapter mouseAdapter = new MouseAdapter(){};
+    private void insertTableRows(final ControlEnums.RowName table, final int target,
+            final int preInsert) 
+    {
+        final DataGUI parentThis = this;
+        
+        JComponent jComp = (JComponent)parentThis.getContentPane();
+        final RootPaneContainer root = (RootPaneContainer)jComp.getTopLevelAncestor();
+        
+        setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+        root.getGlassPane().addMouseListener(mouseAdapter);
+        root.getGlassPane().setVisible(true);        
+        
+        Thread t = new Thread(){
+            public void run(){
+                int previous = 0, progress;
+                int creationCount = 0;
+                
+                while (creationCount < target) {
+                    if (table == DRIVER) {
+                        creationCount += createNewDriver();
+                    } else if (table == VEHICLE) {
+                        creationCount += createNewVehicle();
+                    }
+                    progress = (int)(creationCount/(float)target * 100);
+                    if (progress > previous) {
+                        final int percent = progress;
+                        progressBar.setValue(progress);
+                        SwingUtilities.invokeLater(new Runnable() {
+                            public void run() {
+                                progressBar.setValue(percent);
+                            }
+                        });
+                        previous = progress;
+                    }
+                }
+                if (table == DRIVER) {
+                    updateDriverCount();
+                } else if (table == VEHICLE) {
+                    updateVehicleCount();
+                }                
+
+                JOptionPane.showMessageDialog(parentThis, 
+                        table + " creation count: " + (creationCount + preInsert),
+                        "Insertion Result", JOptionPane.PLAIN_MESSAGE);  
+                setCursor(null);
+                root.getGlassPane().addMouseListener(mouseAdapter);
+                root.getGlassPane().setVisible(false);        
+                
+                progressBar.setValue(0);
+            }
+        };    
+        t.start();
     }
 
     public enum PhoneType {
