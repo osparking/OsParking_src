@@ -1,3 +1,4 @@
+
 /* 
  * Copyright (C) 2015, 2016  Open Source Parking, Inc.(www.osparking.com)
  *
@@ -19,11 +20,11 @@ package com.osparking.vehicle.driver;
 import static com.mysql.jdbc.MysqlErrorNumbers.ER_DUP_ENTRY;
 import com.osparking.global.ChangedComponentClear;
 import com.osparking.global.CommonData;
-import static com.osparking.global.CommonData.ADMIN_ID;
 import static com.osparking.global.CommonData.FIRST_ROW;
 import static com.osparking.global.CommonData.NOT_LISTED;
 import static com.osparking.global.CommonData.ODS_DIRECTORY;
 import static com.osparking.global.CommonData.PROMPTER_KEY;
+import static com.osparking.global.CommonData.adminOperationEnabled;
 import static com.osparking.global.CommonData.buttonHeightNorm;
 import static com.osparking.global.CommonData.buttonWidthNorm;
 import static com.osparking.global.CommonData.downloadSample;
@@ -254,7 +255,7 @@ public class ManageDrivers extends javax.swing.JFrame {
             sorter.setSortable(i, false);
         }
         driverTable.setRowSorter(sorter);  
-        adminOperationEnabled(true);
+        adminOperationEnabled(true, deleteAll_button, odsHelpButton, sampleButton, readSheet_Button);
 
         /**
          * Initialize table with real driver information
@@ -262,10 +263,6 @@ public class ManageDrivers extends javax.swing.JFrame {
         loadDriverData(FIRST_ROW, "", "");
         setFormMode(FormMode.NormalMode);
         setSearchEnabled(true);
-        
-        if (isManager) {
-            sampleButton.setEnabled(true);
-        }
     }
     
     /** 
@@ -368,7 +365,7 @@ public class ManageDrivers extends javax.swing.JFrame {
                 modiSave_Button.setEnabled(false);
                 deleteButton.setEnabled(false);
                 deleteAll_button.setEnabled(false);
-                adminOperationEnabled(false);
+                adminOperationEnabled(false, deleteAll_button, odsHelpButton, sampleButton, readSheet_Button);
                 tipLabel.setVisible(true);
                 break;
                 
@@ -379,7 +376,7 @@ public class ManageDrivers extends javax.swing.JFrame {
                 modiSave_Button.setText(SAVE_BTN.getContent());
                 modiSave_Button.setMnemonic('s');
                 deleteButton.setEnabled(false);
-                adminOperationEnabled(false);
+                adminOperationEnabled(false, deleteAll_button, odsHelpButton, sampleButton, readSheet_Button);
                 tipLabel.setVisible(true);                
                 break;
                 
@@ -399,7 +396,7 @@ public class ManageDrivers extends javax.swing.JFrame {
                     modiSave_Button.setEnabled(isManager);
                     deleteButton.setEnabled(isManager);
                 }
-                adminOperationEnabled(true);
+                adminOperationEnabled(true, deleteAll_button, odsHelpButton, sampleButton, readSheet_Button);
                 tipLabel.setVisible(false);
                 break;
             default:
@@ -3023,16 +3020,6 @@ public class ManageDrivers extends javax.swing.JFrame {
                 restoreDriverList(updateRow);                  
             }
         }         
-    }
-
-    private void adminOperationEnabled(boolean flag) {
-        if (flag && Globals.loginID != null && Globals.loginID.equals(ADMIN_ID)) {
-            deleteAll_button.setEnabled(true);
-            readSheet_Button.setEnabled(true);
-        } else {
-            deleteAll_button.setEnabled(false);
-            readSheet_Button.setEnabled(false);
-        }
     }
 
     /**

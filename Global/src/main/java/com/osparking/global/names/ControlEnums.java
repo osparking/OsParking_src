@@ -1273,7 +1273,7 @@ public class ControlEnums {
         VEHICLE_MENU("<HTML>차량\u22C5차주</HTML>", "<HTML>Car\u22C5Owner</HTML>"),
         VEHICLE_MANAGE_MENU_ITEM("차량관리", "Vehicle"),
         DRIVERS_MENU_ITEM("차주관리", "Driver"),
-        AFFILIATION_MENU("건물소속", "Affiliation"),
+        AFFILIATION_MENU("<HTML>소속\u22C5건물</HTML>", "<HTML>Affili\u22C5Bldg</HTML>"),
         AFFILIATION_ITEM("목록관리", "Manage List"),
         USERS_ITEM("사용자", "Users"),
         SYSTEM_MENU("시스템", "System"),

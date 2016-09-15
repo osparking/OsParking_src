@@ -172,15 +172,19 @@ public class CommonData { // new Dimension(carTagWidth, 30)
         }
     }    
     
-    public static void adminOperationEnabled(boolean flag,
-            JButton deleteAllVehicles, JButton readSheet_Button) 
+    public static void adminOperationEnabled(boolean flag, JButton deleteAllVehicles, 
+            JButton odsHelpButton, JButton sampleButton, JButton readSheet_Button) 
     {
         if (flag && Globals.loginID != null && Globals.loginID.equals(ADMIN_ID)) 
         {
             deleteAllVehicles.setEnabled(true);
+            odsHelpButton.setEnabled(true);
+            sampleButton.setEnabled(true);
             readSheet_Button.setEnabled(true);
         } else {
             deleteAllVehicles.setEnabled(false);
+            odsHelpButton.setEnabled(false);
+            sampleButton.setEnabled(false);
             readSheet_Button.setEnabled(false);
         }
     }    
