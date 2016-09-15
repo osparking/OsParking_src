@@ -215,15 +215,11 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
         setIconImages(OSPiconList);
         this.getContentPane().setBackground(PopUpBackground);       
         adjustTables();
-        adminOperationEnabled(true, deleteAll_Affiliation, readSheet);                
+        adminOperationEnabled(true, deleteAll_Affiliation, ODSAffiliHelp, sampleButton, readSheet);                
         loadL1_Affiliation(0, "");
         loadBuilding(0, 0);
         BuildingTable.setSelectionBackground(LIGHT_BLUE);
         setFormMode(NormalMode);
-        
-        if (isManager) {
-            sampleButton.setEnabled(true);
-        }        
     }    
 
     /**
@@ -3416,7 +3412,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
                 (new LabelBlinker()).displayHelpMessage(csHelpLabel, 
                         CREATE_SAVE_HELP.getContent(), !createBlinked);  
                 createBlinked = true;
-                adminOperationEnabled(false, deleteAll_Affiliation, readSheet);                
+                adminOperationEnabled(false, deleteAll_Affiliation, ODSAffiliHelp, sampleButton, readSheet);                
                 break;   
                 
             case NormalMode:
@@ -3426,7 +3422,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
                 (new LabelBlinker()).displayHelpMessage(csHelpLabel, 
                         CHOOSE_PANEL_DIALOG.getContent(), !normalBlinked); 
                 normalBlinked = true;
-                adminOperationEnabled(true, deleteAll_Affiliation, readSheet);                
+                adminOperationEnabled(true, deleteAll_Affiliation, ODSAffiliHelp, sampleButton, readSheet);                
                 break;
                 
             case UpdateMode:
@@ -3436,7 +3432,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
                 (new LabelBlinker()).displayHelpMessage(csHelpLabel, 
                         UPDATE_SAVE_HELP.getContent(), !updateBlinked);                  
                 updateBlinked = true;
-                adminOperationEnabled(false, deleteAll_Affiliation, readSheet);                
+                adminOperationEnabled(false, deleteAll_Affiliation, ODSAffiliHelp, sampleButton, readSheet);                
                 break;
                 
             default:

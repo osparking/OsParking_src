@@ -186,7 +186,7 @@ public class VehiclesForm extends javax.swing.JFrame {
         loadSearchBox();
         attachEventListenerToVehicleTable();
         
-        adminOperationEnabled(true, deleteAllVehicles, readSheet_Button);
+        adminOperationEnabled(true, deleteAllVehicles, odsHelpButton, sampleButton, readSheet_Button);
         loadVehicleTable(FIRST_ROW, "");
         driverTextField.addActionListener(new ActionListener(){
             @Override
@@ -202,11 +202,7 @@ public class VehiclesForm extends javax.swing.JFrame {
         mySelf = this;
         
         // limit the number of characters that can be entered to the (dis)allow reason field
-        reasonTextField.setDocument(new JTextFieldLimit(20));
-        
-        if (isManager) {
-            sampleButton.setEnabled(true);
-        }        
+        reasonTextField.setDocument(new JTextFieldLimit(20));    
     }
 
     private void changeSearchButtonEnabled() {
@@ -2432,7 +2428,7 @@ public class VehiclesForm extends javax.swing.JFrame {
                 insertSave_Button.setText(SAVE_BTN.getContent());
                 insertSave_Button.setMnemonic('s');
                 makeVehicleInfoFieldsEditable(true);
-                adminOperationEnabled(false, deleteAllVehicles, readSheet_Button);
+                adminOperationEnabled(false, deleteAllVehicles, odsHelpButton, sampleButton, readSheet_Button);
                 break;
                 
             case UpdateMode:
@@ -2443,7 +2439,7 @@ public class VehiclesForm extends javax.swing.JFrame {
                 modiSave_Button.setMnemonic('s');
                 deleteButton.setEnabled(false);
                 makeVehicleInfoFieldsEditable(true);
-                adminOperationEnabled(false, deleteAllVehicles, readSheet_Button);
+                adminOperationEnabled(false, deleteAllVehicles, odsHelpButton, sampleButton, readSheet_Button);
                 break;
                 
             case NormalMode:
@@ -2463,7 +2459,7 @@ public class VehiclesForm extends javax.swing.JFrame {
                     deleteButton.setEnabled(isManager);
                 }                
                 makeVehicleInfoFieldsEditable(false);
-                adminOperationEnabled(true, deleteAllVehicles, readSheet_Button);                
+                adminOperationEnabled(true, deleteAllVehicles, odsHelpButton, sampleButton, readSheet_Button);                
                 break;
             default:
                 formModeLabel.setText("");
