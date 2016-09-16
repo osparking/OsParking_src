@@ -180,9 +180,14 @@ public class Globals {
         
         loginID = (String)selectedValue;
         if (loginID != null) {
-            if (loginID.equals(ADMIN_ID) || loginID.equals(managerID)) {
+            if (loginID.equals(ADMIN_ID)) {
+                Globals.isAdmin = true;
+                Globals.isManager = true;
+            } else if (loginID.equals(managerID)) {
+                Globals.isAdmin = false;
                 Globals.isManager = true;
             } else if (loginID.equals(guestID)) {
+                Globals.isAdmin = false;
                 Globals.isManager = false;                 
             }
         }
@@ -596,6 +601,7 @@ public class Globals {
      * to the current user.
      */
     public static boolean isManager = false;
+    public static boolean isAdmin = false;
     
     /**
      *  Records the fact that the operation logging level has changed from a logging level 

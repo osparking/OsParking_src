@@ -21,6 +21,7 @@ import com.osparking.attendant.LoginDialog;
 import com.osparking.attendant.LoginEventListener;
 import com.osparking.attendant.LoginWindowEvent;
 import com.osparking.global.CommonData;
+import static com.osparking.global.CommonData.ADMIN_ID;
 import static com.osparking.global.CommonData.ImgHeight;
 import static com.osparking.global.CommonData.ImgWidth;
 import static com.osparking.global.CommonData.cameraOneIsButton;
@@ -1669,6 +1670,7 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
                         Globals.loginID = e.getUID();
                         Globals.loginPW = e.getPW();
                         Globals.isManager = e.getIsManager();
+                        Globals.isAdmin = loginID.equals(ADMIN_ID);
 
                         changeUserID_etc();
                         recordLogin();
@@ -2463,7 +2465,7 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
         LogoutUser.setEnabled(loggedIn);
         VehiclesButton.setEnabled(loggedIn);  
         UsersButton.setEnabled(loggedIn);  
-        SettingsItem.setEnabled(isManager);
+        SettingsItem.setEnabled(isAdmin);
     }
     
     private int recordSystemStart() {

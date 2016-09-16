@@ -288,6 +288,7 @@ public class LoginDialog extends javax.swing.JDialog {
                     LoginWindowEvent loginEvent = new LoginWindowEvent
                         (this, 0, userID, hashedPW, (isManager == 1 ? true : false));
                     fireLoginEvent(loginEvent);
+                    
                     result = true;
                 }
                 //</editor-fold>                
