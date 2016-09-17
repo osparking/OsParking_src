@@ -29,7 +29,7 @@ import static com.osparking.global.Globals.OSPiconList;
 import static com.osparking.global.Globals.SetAColumnWidth;
 import static com.osparking.global.Globals.checkOptions;
 import static com.osparking.global.Globals.closeDBstuff;
-import static com.osparking.global.Globals.determineLoginID;
+import static com.osparking.global.Globals.findLoginIdentity;
 import static com.osparking.global.Globals.font_Size;
 import static com.osparking.global.Globals.font_Style;
 import static com.osparking.global.Globals.font_Type;
@@ -480,7 +480,7 @@ public class RunRecordList extends javax.swing.JFrame {
         checkOptions(args);
         readSettings();
         
-        if (determineLoginID() != null) {
+        if (findLoginIdentity() != null) {
             /* Create and display the form */
             java.awt.EventQueue.invokeLater(new Runnable() {
                 public void run() {

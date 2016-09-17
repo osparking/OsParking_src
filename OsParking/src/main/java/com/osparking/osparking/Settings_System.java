@@ -3627,7 +3627,7 @@ public class Settings_System extends javax.swing.JFrame implements IDataMan {
         checkOptions(args);
         readSettings();
         
-        if (determineLoginID() != null) {
+        if (findLoginIdentity() != null) {
             if (isAdmin) {
                 EBD_DisplaySettings = DB_Access.readEBoardSettings();
                 /* Create and display the form */

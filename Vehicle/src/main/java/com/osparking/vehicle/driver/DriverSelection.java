@@ -41,7 +41,7 @@ import static com.osparking.global.Globals.OSPiconList;
 import static com.osparking.global.Globals.SetAColumnWidth;
 import static com.osparking.global.Globals.checkOptions;
 import static com.osparking.global.Globals.closeDBstuff;
-import static com.osparking.global.Globals.determineLoginID;
+import static com.osparking.global.Globals.findLoginIdentity;
 import static com.osparking.global.Globals.font_Size;
 import static com.osparking.global.Globals.font_Style;
 import static com.osparking.global.Globals.font_Type;
@@ -465,7 +465,7 @@ public class DriverSelection extends javax.swing.JFrame {
 
     private void manageDriversButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_manageDriversButtonActionPerformed
         if (loginID != null ||
-                loginID == null && determineLoginID() != null) 
+                loginID == null && findLoginIdentity() != null) 
         {
             ManageDrivers driverManageForm = new ManageDrivers(this);
             driverManageForm.setVisible(true);

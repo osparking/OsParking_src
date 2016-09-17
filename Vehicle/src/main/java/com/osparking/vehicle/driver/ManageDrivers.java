@@ -78,7 +78,7 @@ import static com.osparking.global.Globals.highlightTableRow;
 import static com.osparking.global.Globals.OSPiconList;
 import static com.osparking.global.Globals.attachNumberCondition;
 import static com.osparking.global.Globals.closeDBstuff;
-import static com.osparking.global.Globals.determineLoginID;
+import static com.osparking.global.Globals.findLoginIdentity;
 import static com.osparking.global.Globals.getPrompter;
 import static com.osparking.global.Globals.getQuest20_Icon;
 import static com.osparking.global.Globals.head_font_Size;
@@ -2164,7 +2164,7 @@ public class ManageDrivers extends javax.swing.JFrame {
         initializeLoggers();
         checkOptions(args);
         readSettings();
-        if (determineLoginID() != null) {
+        if (findLoginIdentity() != null) {
             /* Create and display the form */
             java.awt.EventQueue.invokeLater(new Runnable() {
                 public void run() {

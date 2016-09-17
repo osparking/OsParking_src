@@ -20,7 +20,6 @@ import com.osparking.attendant.AttListForm;
 import com.osparking.attendant.LoginDialog;
 import com.osparking.attendant.LoginEventListener;
 import com.osparking.attendant.LoginWindowEvent;
-import com.osparking.global.CommonData;
 import static com.osparking.global.CommonData.ADMIN_ID;
 import static com.osparking.global.CommonData.ImgHeight;
 import static com.osparking.global.CommonData.ImgWidth;
@@ -196,7 +195,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.lang.management.ManagementFactory;
-import java.nio.ByteBuffer;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -472,8 +470,6 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
         deviceManagers = new IDevice.IManager[DeviceType.values().length][gateCount + 1]; 
         sendEBDmsgTimer = new ParkingTimer[gateCount + 1][4]; // 2: for two rows of each elec' board.
         
-        errorCheckBox.setEnabled(DEBUG);
-
         openCommandIDs = new int[gateCount + 1];        
         openCommAcked = new boolean[gateCount + 1];        
         BarConnection = new Object[gateCount + 1];
@@ -511,9 +507,6 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
         //<editor-fold desc="-- Create device managers for each gate.">
         for (DeviceType type : DeviceType.values()) {     
             for (int gNo = 1; gNo <= gateCount; gNo++) {
-                if (DEBUG) {
-                    prepareIDLogFile(type, gNo); // Camera image ID log file.
-                }
                 String command = null;
                 if (type == GateBar)
                     command = OPEN_CMD.getContent();
@@ -718,7 +711,7 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
     public void actionPerformed(ActionEvent e) {
     }
     
-    private void enableAdminOnlyItem(boolean flag) {
+    private void enableManagerItem(boolean flag) {
         RunRecordItem.setEnabled(flag);
         LoginRecordItem.setEnabled(flag);
     }
@@ -1671,9 +1664,32 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
                         Globals.loginPW = e.getPW();
                         Globals.isManager = e.getIsManager();
                         Globals.isAdmin = loginID.equals(ADMIN_ID);
+                        
+                        if (Globals.isAdmin) {
+                            if (DEBUG_FLAG) {
+                                DEBUG = true;
+                            }
+                            if (RANDOM_FLAG) {
+                                RANDOM_ATTENDANT = true;
+                            }
+                        }                        
+                        if (DEBUG) {
+                            insertDebugPanel();
+                            errorCheckBox.setEnabled(DEBUG);
 
+                            for (DeviceType type : DeviceType.values()) {     
+                                for (int gNo = 1; gNo <= gateCount; gNo++) {
+                                    prepareIDLogFile(type, gNo); // Camera image ID log file.
+                                }
+                            }
+                        } else {
+                            removeDebugPanel();
+                        }                        
                         changeUserID_etc();
                         recordLogin();
+                        if (Globals.isManager) {
+                            enableManagerItem(true);
+                        }
                         addMessageLine(MessageTextArea, Globals.loginID + " " + LOG_IN.getContent());
                     }
                 });
@@ -1682,16 +1698,6 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
             }
         }
         getLoginDialog().setVisible(true); // Pop open login window
-      
-        if (Globals.isManager) {
-            enableAdminOnlyItem(true);
-        }
-        
-        if (DEBUG && loginID != null && loginID.equals(CommonData.ADMIN_ID)) {
-            insertDebugPanel();
-        } else {
-            removeDebugPanel();
-        }
     }//GEN-LAST:event_processLogIn
     
     private void processCloseProgram(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_processCloseProgram
@@ -2619,6 +2625,8 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
         Globals.loginID = null;
         Globals.loginPW = null;
         Globals.isManager = false;
+        Globals.DEBUG = false;
+        Globals.RANDOM_ATTENDANT = false;
         changeUserID_etc();
         AttendantTask_setEnabled(false);
     }
@@ -3226,9 +3234,6 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
         byte code = (byte) (row == EBD_Row.TOP ? EBD_INTERRUPT1.ordinal() : EBD_INTERRUPT2.ordinal());
         short wholeMessageLen // length of 10 fields from <length> to <check>
                 = (short)(displayTextLength + 21); // 21 == sum of 10 fields == 11 fields except <text>
-        
-        logParkingException(Level.SEVERE, null, "C wholeMessageLen: " + wholeMessageLen);
-        
         byte[] lenBytes //  {--Len[1], --Len[0]}
                 = {(byte)((wholeMessageLen >> 8) & 0xff), (byte)(wholeMessageLen & 0xff)}; 
         byte[] wholeMessageBytes = new byte[wholeMessageLen + 1];
@@ -3270,7 +3275,7 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
             }
             if (result == JOptionPane.YES_OPTION) {
                 processLogoutReally();
-                enableAdminOnlyItem(false);
+                enableManagerItem(false);
                 isLoggedOut = true;
                 if (debugPanel.isVisible()) {
                     removeDebugPanel();

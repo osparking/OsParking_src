@@ -448,7 +448,7 @@ public class LoginRecordList extends javax.swing.JFrame {
         checkOptions(args);
         readSettings();
         
-        if (determineLoginID() != null) {
+        if (findLoginIdentity() != null) {
             /* Create and display the form */
             java.awt.EventQueue.invokeLater(new Runnable() {
                 public void run() {

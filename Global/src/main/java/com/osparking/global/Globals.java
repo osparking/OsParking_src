@@ -168,7 +168,7 @@ public class Globals {
         driverTable.setColumnSelectionInterval(colIdx, colIdx);     
     }    
     
-    public static String determineLoginID() {
+    public static String findLoginIdentity() {
         String managerID = "manager";
         String guestID = "guest";
         Object[] possibleValues = { ADMIN_ID, managerID, guestID};
@@ -183,6 +183,12 @@ public class Globals {
             if (loginID.equals(ADMIN_ID)) {
                 Globals.isAdmin = true;
                 Globals.isManager = true;
+                if (DEBUG_FLAG) {
+                    DEBUG = true;
+                }
+                if (RANDOM_FLAG) {
+                    RANDOM_ATTENDANT = true;
+                }
             } else if (loginID.equals(managerID)) {
                 Globals.isAdmin = false;
                 Globals.isManager = true;
@@ -773,8 +779,10 @@ public class Globals {
      * Determines if this run of the program is to collect data for program debugging or not.
      */
     public static boolean DEBUG = false;
+    public static boolean DEBUG_FLAG = false;
     
     public static boolean RANDOM_ATTENDANT = false;    
+    public static boolean RANDOM_FLAG = false;    
     
     /**
      * Signifies the version type of the program which is used to differenciate port numbers for each device type.
@@ -821,7 +829,7 @@ public class Globals {
                 String oneArg = argument.toLowerCase();
 
                 if (oneArg.indexOf(DEBUG_OPTION) == 0) {
-                    DEBUG = true;
+                    DEBUG_FLAG = true;
                 } else if (oneArg.indexOf(VERSION_TYPE) == 0) {
                     String version = oneArg.substring(9);
 
@@ -833,7 +841,7 @@ public class Globals {
                         versionType = VersionType.RELEASE;
 
                 } else if (oneArg.indexOf(RANDOM_ATT) >= 0) {
-                    RANDOM_ATTENDANT = true;
+                    RANDOM_FLAG = true;
                 }
             }
         }   

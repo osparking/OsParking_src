@@ -88,10 +88,9 @@ public class CameraManager extends Thread implements IDevice.IManager, IDevice.I
         super("osp_Camera_" + cameraID + "_Manager");
         this.mainForm = mainForm;
         this.cameraID = cameraID;
-        fw = mainForm.getIDLogFile()[Camera.ordinal()][cameraID];
     }    
     
-    /**
+    /**.
      * Sends out heartbeats('Are You There') regularly to the camera by employing a formClockTimer task
      */
     public void run()
@@ -212,7 +211,6 @@ public class CameraManager extends Thread implements IDevice.IManager, IDevice.I
                                     mainForm.getSocketMutex()[Camera.ordinal()][cameraID].wait();
                                 }
                                 writeMessage(MsgCode.Img_ACK, messageImg_ACK);
-//                                socket.getOutputStream().write(messageImg_ACK);
 
                                 if (currImgSN != mainForm.prevImgSN[cameraID]) {
                                     // handle a brand new image sent from the camera
@@ -244,7 +242,6 @@ public class CameraManager extends Thread implements IDevice.IManager, IDevice.I
                         case JustBooted:
                             //<editor-fold defaultstate="collapsed" desc="-- First connection after device booting">
                             // reset recent device disconnection time 
-//                            System.out.println("just booted arrived");
                             mainForm.getSockConnStat()[Camera.ordinal()][cameraID].resetStatChangeTm();
                             break;
                             //</editor-fold>
@@ -292,7 +289,8 @@ public class CameraManager extends Thread implements IDevice.IManager, IDevice.I
                 //</editor-fold>                
             } catch (Exception e2) {
                 //<editor-fold defaultstate="collapsed" desc="-- Process Exception">
-                logParkingExceptionStatus(Level.SEVERE, e2, "server- closed socket for camera #" + cameraID,
+                logParkingExceptionStatus(Level.SEVERE, e2, 
+                        "server- closed socket for camera #" + cameraID,
                         mainForm.getStatusTextField(), cameraID);
                 gfinishConnection(Camera, null,  
                         "camera manager Excp  ", 
@@ -351,6 +349,7 @@ public class CameraManager extends Thread implements IDevice.IManager, IDevice.I
         String message = currentID + " " + previousID + System.lineSeparator();
 
         try {
+            fw = mainForm.getIDLogFile()[Camera.ordinal()][cameraID];
             fw.write(message);
             fw.flush();
         } catch (FileNotFoundException ex) {

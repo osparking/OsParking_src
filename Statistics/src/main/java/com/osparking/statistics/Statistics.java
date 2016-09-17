@@ -17,7 +17,7 @@
 package com.osparking.statistics;
 
 import static com.osparking.global.Globals.checkOptions;
-import static com.osparking.global.Globals.determineLoginID;
+import static com.osparking.global.Globals.findLoginIdentity;
 import static com.osparking.global.Globals.initializeLoggers;
 import static com.osparking.global.names.DB_Access.readSettings;
 
@@ -58,7 +58,7 @@ public class Statistics {
         checkOptions(args);
         readSettings();
         
-        if (determineLoginID() != null) {
+        if (findLoginIdentity() != null) {
             /* Create and display the form */
             java.awt.EventQueue.invokeLater(new Runnable() {
                 public void run() {
