@@ -1196,6 +1196,7 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
         jPanel2.getAccessibleContext().setAccessibleName("");
 
         Status_Panel.add(debugPanel);
+        removeDebugPanel();
 
         connStatusPanel.setBackground(MainBackground);
         connStatusPanel.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
