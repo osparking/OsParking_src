@@ -43,8 +43,8 @@ import static com.osparking.global.Globals.font_Type;
 import static com.osparking.global.Globals.OSPiconList;
 import static com.osparking.global.Globals.checkOptions;
 import static com.osparking.global.Globals.closeDBstuff;
-import static com.osparking.global.Globals.determineLoginID;
 import static com.osparking.global.Globals.emptyLastRowPossible;
+import static com.osparking.global.Globals.findLoginIdentity;
 import static com.osparking.global.Globals.getQuest20_Icon;
 import static com.osparking.global.Globals.head_font_Size;
 import static com.osparking.global.Globals.highlightTableRow;
@@ -3339,7 +3339,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 if (loginID != null ||
-                        loginID == null && determineLoginID() != null) 
+                        loginID == null && findLoginIdentity() != null) 
                 {
                     AffiliationBuildingForm runForm = new AffiliationBuildingForm();
                     runForm.setVisible(true);

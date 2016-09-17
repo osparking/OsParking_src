@@ -2018,7 +2018,7 @@ public class VehiclesForm extends javax.swing.JFrame {
         initializeLoggers();
         checkOptions(args);
         readSettings();
-        if (determineLoginID() != null) {
+        if (findLoginIdentity() != null) {
             /* Create and display the form */
             java.awt.EventQueue.invokeLater(new Runnable() {
                 public void run() {
