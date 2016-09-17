@@ -2645,7 +2645,6 @@ public class Settings_System extends javax.swing.JFrame implements IDataMan {
     }//GEN-LAST:event_LoggingLevelHelpButtonActionPerformed
 
     private void PWHelpButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PWHelpButtonActionPerformed
-//        PasswordValidator pwValidator = new PasswordValidator();
         short pwPowerLevel = (short)PWStrengthChoiceComboBox.getSelectedIndex();
         String helpText = pwValidator.getWrongPWFormatMsg(pwPowerLevel);
 
@@ -2794,25 +2793,29 @@ public class Settings_System extends javax.swing.JFrame implements IDataMan {
                     "(Save settings: " + (newStorePassingDelay ? "Y" : "N") + ")");
         } finally {
             // <editor-fold defaultstate="collapsed" desc="--Return resources and display the save result">
-            closeDBstuff(conn, updateSettings, null, "(Save settings: " + (newStorePassingDelay ? "Y" : "N") + ")");
+            closeDBstuff(conn, updateSettings, null,
+                    "(Save settings: " + (newStorePassingDelay ? "Y" : "N") + ")");
             
             if (result == 1) {
                 //<editor-fold desc="-- Log system settings change if set to do so">
                 if (statCount != newStatCount) 
                 {
-                    logParkingOperation(OpLogLevel.SettingsChange, "Settings Change, Statistics Population Size: " 
+                    logParkingOperation(OpLogLevel.SettingsChange, 
+                            "Settings Change, Statistics Population Size: " 
                             + statCount + " => " + newStatCount);
                 }
                
                 if (storePassingDelay != newStorePassingDelay)
                 {
-                    logParkingOperation(OpLogLevel.SettingsChange, "Settings Change, Average Passing Delay: " 
+                    logParkingOperation(OpLogLevel.SettingsChange, 
+                            "Settings Change, Average Passing Delay: " 
                             + storePassingDelay + " => " + newStorePassingDelay);
                 }
                 
                 if (pwStrengthLevel != pwLevel)
                 {
-                    logParkingOperation(OpLogLevel.SettingsChange, "Settings Change, Password Strength Level: " 
+                    logParkingOperation(OpLogLevel.SettingsChange, 
+                            "Settings Change, Password Strength Level: " 
                             + PWStrengthChoiceComboBox.getItemAt(pwStrengthLevel) + " => " 
                             + PWStrengthChoiceComboBox.getItemAt(pwLevel));
                 }
@@ -2845,34 +2848,40 @@ public class Settings_System extends javax.swing.JFrame implements IDataMan {
                 gateCountChanged = gateCount != newGateCount;
                 if (gateCountChanged)
                 {
-                    logParkingOperation(OpLogLevel.SettingsChange, "Settings Change, Number of Gates: " 
+                    logParkingOperation(OpLogLevel.SettingsChange, 
+                            "Settings Change, Number of Gates: " 
                             + gateCount + " => " + newGateCount);
                 }
                 
                 if (maxMaintainDate != imageKeepDuration) {
-                    logParkingOperation(OpLogLevel.SettingsChange, "Settings Change, Image Keep Duration: " 
+                    logParkingOperation(OpLogLevel.SettingsChange, 
+                            "Settings Change, Image Keep Duration: " 
                             + maxMaintainDate + " => " + imageKeepDuration);
                 }
                 
                 if (PIC_WIDTH != picWidth) {
-                    logParkingOperation(OpLogLevel.SettingsChange, "Settings Change, Image width: " 
+                    logParkingOperation(OpLogLevel.SettingsChange, 
+                            "Settings Change, Image width: " 
                             + PIC_WIDTH + " => " + picWidth);
                 }
                 
                 if (PIC_HEIGHT != picHeight) {
-                    logParkingOperation(OpLogLevel.SettingsChange, "Settings Change, Image Height: " 
+                    logParkingOperation(OpLogLevel.SettingsChange, 
+                            "Settings Change, Image Height: " 
                             + PIC_HEIGHT + " => " + picHeight);
                 }
                 
                 if (EBD_flowCycle != flowCycle)
                 {
-                    logParkingOperation(OpLogLevel.UserCarChange, "E-Board Settings Change, Cycles--flowing: " 
+                    logParkingOperation(OpLogLevel.UserCarChange, 
+                            "E-Board Settings Change, Cycles--flowing: " 
                             + EBD_flowCycle + " => " + flowCycle);
                 }                
                 
                 if (EBD_blinkCycle != blinkCycle)
                 {
-                    logParkingOperation(OpLogLevel.UserCarChange, "E-Board Settings Change, Cycles--blinking: " 
+                    logParkingOperation(OpLogLevel.UserCarChange, 
+                            "E-Board Settings Change, Cycles--blinking: " 
                             + EBD_blinkCycle + " => " + blinkCycle);
                 }    
                 
@@ -3200,34 +3209,28 @@ public class Settings_System extends javax.swing.JFrame implements IDataMan {
 
     private void SettingsCloseButtonStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_SettingsCloseButtonStateChanged
         EBoardSettingsButton.setEnabled(SettingsCloseButton.isEnabled());
-        /**
-         * Synchronize enabled property of close button and managedata buttons
-         */
-//        manageData.setEnabled(SettingsCloseButton.isEnabled());
     }//GEN-LAST:event_SettingsCloseButtonStateChanged
 
     private void Camera1_TypeCBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_Camera1_TypeCBoxItemStateChanged
         if (evt.getStateChange() == ItemEvent.SELECTED) {
             setButtonEnabled_If_DeviceTypeChanged(1, Camera);
-            if (((CameraType)(Camera1_TypeCBox.getSelectedItem())) == CarButton) {
+            CameraType camType = (CameraType)(Camera1_TypeCBox.getSelectedItem());
+            
+            if (camType == CarButton) {
                 Camera1_IP_TextField.setEnabled(false);
+                Camera1_Port_TextField.setEnabled(false);
             } else {
                 Camera1_IP_TextField.setEnabled(true);
+                Camera1_Port_TextField.setEnabled(true);
             }
-            
-            java.awt.EventQueue.invokeLater(new Runnable() {
-                public void run() {
-                    setPortNumber(Camera, Camera1_TypeCBox.getSelectedIndex(), (byte)1, 
-                            Camera1_Port_TextField);
-                }
-            });             
+            setPortNumber(Camera, camType, (byte)1, Camera1_Port_TextField);
         }
     }//GEN-LAST:event_Camera1_TypeCBoxItemStateChanged
 
     private void Camera2_TypeCBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_Camera2_TypeCBoxItemStateChanged
         if (evt.getStateChange() == ItemEvent.SELECTED) {
             setButtonEnabled_If_DeviceTypeChanged(2, Camera);
-            setPortNumber(Camera, Camera2_TypeCBox.getSelectedIndex(), (byte)2, 
+            setPortNumber(Camera, Camera2_TypeCBox.getSelectedItem(), (byte)2, 
                     Camera2_Port_TextField);
         }
     }//GEN-LAST:event_Camera2_TypeCBoxItemStateChanged
@@ -3235,7 +3238,7 @@ public class Settings_System extends javax.swing.JFrame implements IDataMan {
     private void Camera3_TypeCBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_Camera3_TypeCBoxItemStateChanged
         if (evt.getStateChange() == ItemEvent.SELECTED) {
             setButtonEnabled_If_DeviceTypeChanged(3, Camera);
-            setPortNumber(Camera, Camera3_TypeCBox.getSelectedIndex(), (byte)3, 
+            setPortNumber(Camera, Camera3_TypeCBox.getSelectedItem(), (byte)3, 
                     Camera3_Port_TextField);
         }
     }//GEN-LAST:event_Camera3_TypeCBoxItemStateChanged
@@ -3243,7 +3246,7 @@ public class Settings_System extends javax.swing.JFrame implements IDataMan {
     private void Camera4_TypeCBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_Camera4_TypeCBoxItemStateChanged
         if (evt.getStateChange() == ItemEvent.SELECTED) {
             setButtonEnabled_If_DeviceTypeChanged(4, Camera);
-            setPortNumber(Camera, Camera4_TypeCBox.getSelectedIndex(), (byte)4, 
+            setPortNumber(Camera, Camera4_TypeCBox.getSelectedItem(), (byte)4, 
                     Camera4_Port_TextField);
         }
     }//GEN-LAST:event_Camera4_TypeCBoxItemStateChanged
@@ -3251,7 +3254,7 @@ public class Settings_System extends javax.swing.JFrame implements IDataMan {
     private void E_Board2_TypeCBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_E_Board2_TypeCBoxItemStateChanged
         if (evt.getStateChange() == ItemEvent.SELECTED) {
             setButtonEnabled_If_DeviceTypeChanged(2, E_Board);
-            setPortNumber(E_Board, E_Board2_TypeCBox.getSelectedIndex(), (byte)2, 
+            setPortNumber(E_Board, E_Board2_TypeCBox.getSelectedItem(), (byte)2, 
                     E_Board2_Port_TextField);
         }
     }//GEN-LAST:event_E_Board2_TypeCBoxItemStateChanged
@@ -3259,7 +3262,7 @@ public class Settings_System extends javax.swing.JFrame implements IDataMan {
     private void E_Board1_TypeCBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_E_Board1_TypeCBoxItemStateChanged
         if (evt.getStateChange() == ItemEvent.SELECTED) {
             setButtonEnabled_If_DeviceTypeChanged(1, E_Board);
-            setPortNumber(E_Board, E_Board1_TypeCBox.getSelectedIndex(), (byte)1, 
+            setPortNumber(E_Board, E_Board1_TypeCBox.getSelectedItem(), (byte)1, 
                     E_Board1_Port_TextField);
         }
     }//GEN-LAST:event_E_Board1_TypeCBoxItemStateChanged
@@ -3267,7 +3270,7 @@ public class Settings_System extends javax.swing.JFrame implements IDataMan {
     private void E_Board3_TypeCBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_E_Board3_TypeCBoxItemStateChanged
         if (evt.getStateChange() == ItemEvent.SELECTED) {
             setButtonEnabled_If_DeviceTypeChanged(3, E_Board);
-            setPortNumber(E_Board, E_Board3_TypeCBox.getSelectedIndex(), (byte)3, 
+            setPortNumber(E_Board, E_Board3_TypeCBox.getSelectedItem(), (byte)3, 
                     E_Board3_Port_TextField);
         }
     }//GEN-LAST:event_E_Board3_TypeCBoxItemStateChanged
@@ -3275,7 +3278,7 @@ public class Settings_System extends javax.swing.JFrame implements IDataMan {
     private void E_Board4_TypeCBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_E_Board4_TypeCBoxItemStateChanged
         if (evt.getStateChange() == ItemEvent.SELECTED) {
             setButtonEnabled_If_DeviceTypeChanged(4, E_Board);
-            setPortNumber(E_Board, E_Board4_TypeCBox.getSelectedIndex(), (byte)4, 
+            setPortNumber(E_Board, E_Board4_TypeCBox.getSelectedItem(), (byte)4, 
                     E_Board4_Port_TextField);
         }
     }//GEN-LAST:event_E_Board4_TypeCBoxItemStateChanged
@@ -3283,7 +3286,7 @@ public class Settings_System extends javax.swing.JFrame implements IDataMan {
     private void GateBar1_TypeCBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_GateBar1_TypeCBoxItemStateChanged
         if (evt.getStateChange() == ItemEvent.SELECTED) {
             setButtonEnabled_If_DeviceTypeChanged(1, GateBar);
-            setPortNumber(GateBar, GateBar1_TypeCBox.getSelectedIndex(), (byte)1, 
+            setPortNumber(GateBar, GateBar1_TypeCBox.getSelectedItem(), (byte)1, 
                     GateBar1_Port_TextField);
         }
     }//GEN-LAST:event_GateBar1_TypeCBoxItemStateChanged
@@ -3291,7 +3294,7 @@ public class Settings_System extends javax.swing.JFrame implements IDataMan {
     private void GateBar2_TypeCBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_GateBar2_TypeCBoxItemStateChanged
         if (evt.getStateChange() == ItemEvent.SELECTED) {
             setButtonEnabled_If_DeviceTypeChanged(2, GateBar);
-            setPortNumber(GateBar, GateBar2_TypeCBox.getSelectedIndex(), (byte)2, 
+            setPortNumber(GateBar, GateBar2_TypeCBox.getSelectedItem(), (byte)2, 
                     GateBar2_Port_TextField);
         }
     }//GEN-LAST:event_GateBar2_TypeCBoxItemStateChanged
@@ -3299,7 +3302,7 @@ public class Settings_System extends javax.swing.JFrame implements IDataMan {
     private void GateBar3_TypeCBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_GateBar3_TypeCBoxItemStateChanged
         if (evt.getStateChange() == ItemEvent.SELECTED) {
             setButtonEnabled_If_DeviceTypeChanged(3, GateBar);
-            setPortNumber(GateBar, GateBar3_TypeCBox.getSelectedIndex(), (byte)3, 
+            setPortNumber(GateBar, GateBar3_TypeCBox.getSelectedItem(), (byte)3, 
                     GateBar3_Port_TextField);
         }
     }//GEN-LAST:event_GateBar3_TypeCBoxItemStateChanged
@@ -3307,7 +3310,7 @@ public class Settings_System extends javax.swing.JFrame implements IDataMan {
     private void GateBar4_TypeCBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_GateBar4_TypeCBoxItemStateChanged
         if (evt.getStateChange() == ItemEvent.SELECTED) {
             setButtonEnabled_If_DeviceTypeChanged(4, GateBar);
-            setPortNumber(GateBar, GateBar4_TypeCBox.getSelectedIndex(), (byte)4, 
+            setPortNumber(GateBar, GateBar4_TypeCBox.getSelectedItem(), (byte)4, 
                     GateBar4_Port_TextField);
         }
     }//GEN-LAST:event_GateBar4_TypeCBoxItemStateChanged
@@ -3625,7 +3628,7 @@ public class Settings_System extends javax.swing.JFrame implements IDataMan {
         readSettings();
         
         if (determineLoginID() != null) {
-            if (isManager) {
+            if (isAdmin) {
                 EBD_DisplaySettings = DB_Access.readEBoardSettings();
                 /* Create and display the form */
                 java.awt.EventQueue.invokeLater(new Runnable() {
@@ -3861,7 +3864,6 @@ public class Settings_System extends javax.swing.JFrame implements IDataMan {
     private javax.swing.JLabel GateBar3_comLabel;
     private javax.swing.JLabel GateBar4_comLabel;
     
-//    private javax.swing.JLabel comPortIDLabel2;
     private javax.swing.JComboBox E_Board1_comID_CBox;
     private javax.swing.JComboBox E_Board2_comID_CBox;
     private javax.swing.JComboBox E_Board3_comID_CBox;
@@ -3923,7 +3925,8 @@ public class Settings_System extends javax.swing.JFrame implements IDataMan {
                 JTextField portField = (JTextField)
                         getComponentByName(devType.toString() + gateNo + "_Port_TextField");
                 
-                setPortNumber(devType, subTypeIdx, gateNo, portField);
+                Object subType = getSubType(devType, subTypeIdx);
+                setPortNumber(devType, subType, gateNo, portField);
             }
             //</editor-fold>
         }
@@ -4098,25 +4101,19 @@ public class Settings_System extends javax.swing.JFrame implements IDataMan {
         StringBuffer sb = new StringBuffer("Update gatedevices SET ");
         
         sb.append("  gatename = ? ");
-        
         sb.append("  , cameraType = ?");
         sb.append("  , cameraIP = ? ");
         sb.append("  , cameraPort = ?");   
-        
         sb.append("  , e_boardType = ? ");
         sb.append("  , e_boardConnType = ? ");
         sb.append("  , e_boardCOM_ID = ? ");
-        
         sb.append("  , e_boardIP = ? ");
         sb.append("  , e_boardPort = ? ");
-        
         sb.append("  , gatebarType = ? ");
         sb.append("  , gatebarConnType = ? ");
         sb.append("  , gatebarCOM_ID = ? ");
-        
         sb.append("  , gatebarIP = ? ");
         sb.append("  , gatebarPort = ? ");
-        
         sb.append("WHERE GateID = ?");
         //</editor-fold>
 
@@ -4163,7 +4160,8 @@ public class Settings_System extends javax.swing.JFrame implements IDataMan {
                         // Simulator port number is determined programmatically. So, leave the original value alone.
                         portStr = devicePort[type.ordinal()][gateID]; 
                     } else {
-                        portStr = ((JTextField) componentMap.get(type.toString() + gateID + "_Port_TextField")).getText().trim();
+                        portStr = ((JTextField) 
+                                componentMap.get(type.toString() + gateID + "_Port_TextField")).getText().trim();
                     }
                     updateSettings.setString(pIndex++, portStr);
                 }
@@ -4209,7 +4207,8 @@ public class Settings_System extends javax.swing.JFrame implements IDataMan {
             logParkingException(Level.SEVERE, e, "(init passing delay statistics)");
         } finally {
             if (result != 1)
-                logParkingException(Level.SEVERE, null, "(failed initialization of passing delay statistics)");
+                logParkingException(Level.SEVERE, null, 
+                        "(failed initialization of passing delay statistics)");
                 
             closeDBstuff(conn, pStmt, null, "(init passing delay statistics)");
         }  
@@ -4281,7 +4280,8 @@ public class Settings_System extends javax.swing.JFrame implements IDataMan {
     private boolean someCOMportIDsame
         (int gateNo, DeviceType deviceType, ArrayList<COM_ID_Usage> com_ID_usageList) 
     {
-        JComboBox cBox = (JComboBox)componentMap.get(deviceType.toString() + gateNo + "_connTypeCBox");
+        JComboBox cBox = (JComboBox)
+                componentMap.get(deviceType.toString() + gateNo + "_connTypeCBox");
         String connType = (String)cBox.getSelectedItem();
         if (!connType.equals(ConnectionType.RS_232.getLabel())) {
             return false;
@@ -4300,8 +4300,10 @@ public class Settings_System extends javax.swing.JFrame implements IDataMan {
                         " " + usage.gateNo + ", " + usage.deviceType + System.lineSeparator() +
                         DEVICE_LABEL.getContent() + " 2 : " + GATE_LABEL.getContent() + 
                         " " + gateNo + ", " + deviceType + System.lineSeparator() +
-                        OVERLAPPED_PORT_DIALOG_4.getContent() + "COM"+ usage.COM_ID + System.lineSeparator();
-                int response = JOptionPane.showConfirmDialog(this, msg, OVERLAPPED_PORT_TITLE.getContent(), 
+                        OVERLAPPED_PORT_DIALOG_4.getContent() + "COM"+ usage.COM_ID + 
+                        System.lineSeparator();
+                int response = JOptionPane.showConfirmDialog(this, msg, 
+                        OVERLAPPED_PORT_TITLE.getContent(), 
                         YES_NO_OPTION, ERROR_MESSAGE);
                 
                 if (response == YES_OPTION) {
@@ -4377,7 +4379,8 @@ public class Settings_System extends javax.swing.JFrame implements IDataMan {
     }
 
     private void setButtonEnabled_If_DeviceTypeChanged(int gate, DeviceType devType) {
-        JComboBox comboBx = ((JComboBox)getComponentByName(devType.toString() +gate + "_TypeCBox"));
+        JComboBox comboBx = ((JComboBox)
+                getComponentByName(devType.toString() +gate + "_TypeCBox"));
         int selectedType = comboBx.getSelectedIndex();
 
         if (selectedType == deviceType[devType.ordinal()][gate]) {
@@ -4389,7 +4392,8 @@ public class Settings_System extends javax.swing.JFrame implements IDataMan {
     }
 
     private void setButtonEnabled_If_ConnTypeChanged(int gate, DeviceType devType) {
-        JComboBox comboBx = ((JComboBox)getComponentByName(devType.toString() + gate + "_connTypeCBox"));
+        JComboBox comboBx = ((JComboBox)
+                getComponentByName(devType.toString() + gate + "_connTypeCBox"));
         int connType = comboBx.getSelectedIndex();
 
         if (connType == connectionType[devType.ordinal()][gate]) {
@@ -4424,8 +4428,8 @@ public class Settings_System extends javax.swing.JFrame implements IDataMan {
     }
 
     private void setButtonEnabled_If_PortChanged(int gateNo, DeviceType devType) {
-        JTextField portField =
-                (JTextField)componentMap.get(devType.toString() + gateNo + "_Port_TextField");
+        JTextField portField = (JTextField)
+                componentMap.get(devType.toString() + gateNo + "_Port_TextField");
 
         if (portField.getText().trim().equals(devicePort[devType.ordinal()][gateNo])) {
             changedControls.remove(portField);
@@ -4436,15 +4440,16 @@ public class Settings_System extends javax.swing.JFrame implements IDataMan {
     }
 
     private void rejectLongPortNumber(KeyEvent evt, DeviceType devType, int gateNo) {
-        JTextField portField =
-                (JTextField)componentMap.get(devType.toString() + gateNo + "_Port_TextField");
+        JTextField portField = (JTextField)
+                componentMap.get(devType.toString() + gateNo + "_Port_TextField");
         
         if (portField.getText().trim().length() >= PORT_NUMBER_LENGTH_MAX) 
         {
             getToolkit().beep();
             JOptionPane.showConfirmDialog(this, PORT_LABEL.getContent() + " " +
                     NUMBER_LIMIT_DESCRIPTION.getContent() + " : " + PORT_NUMBER_LENGTH_MAX,
-                    ERROR_DIALOGTITLE.getContent(), JOptionPane.PLAIN_MESSAGE, WARNING_MESSAGE);            
+                    ERROR_DIALOGTITLE.getContent(), JOptionPane.PLAIN_MESSAGE, 
+                    WARNING_MESSAGE);            
             evt.consume();
         } else {
             // check if portField input is in the available range of port number.
@@ -4599,19 +4604,21 @@ public class Settings_System extends javax.swing.JFrame implements IDataMan {
         return eBoardDialog;
     }
 
-    private void setPortNumber(DeviceType devType, int subType, byte gateNo, JTextField portField) 
+    private void setPortNumber(DeviceType devType, Object subType, byte gateNo, 
+            JTextField portField) 
     {
-        JComboBox connTyCBox = ((JComboBox)getComponentByName(devType.name() +gateNo + "_connTypeCBox"));
+        JComboBox connTyCBox = ((JComboBox)
+                getComponentByName(devType.name() +gateNo + "_connTypeCBox"));
         
-        if (subType == SIMULATOR) {
+        if (isSimulator(devType, subType)) {
             int portNo = getPort(devType, gateNo, Globals.versionType) + gateNo;
             portField.setText(Integer.toString(portNo));
             portField.setEnabled(false);
             
             connTyCBox.setSelectedIndex(TCP_IP.ordinal());
             connTyCBox.setEnabled(false);
-        } else {
-            if (devType == Camera && gateNo == 1) {
+        } else {            
+            if (isCarButton(devType, subType, gateNo)) {
                 portField.setEnabled(false);
                 connTyCBox.setEnabled(false);
             } else {
@@ -4626,7 +4633,9 @@ public class Settings_System extends javax.swing.JFrame implements IDataMan {
         }
     }
 
-    private void giveWarningForRealDevice(int gateID, DeviceType type, Object newSubTypeObj, String ipAddrStr) {
+    private void giveWarningForRealDevice(int gateID, DeviceType type, 
+            Object newSubTypeObj, String ipAddrStr) 
+    {
         switch (type) {
             case Camera:
                 CameraType camType = (CameraType)newSubTypeObj;
@@ -4674,11 +4683,80 @@ public class Settings_System extends javax.swing.JFrame implements IDataMan {
                 CHECK_IP_DIALOG_4.getContent();
         
         JOptionPane.showMessageDialog(this, msg,
-                Blackfly + " " + CHECK_IP_TITLE.getContent(), JOptionPane.WARNING_MESSAGE);
+                Blackfly + " " + CHECK_IP_TITLE.getContent(), 
+                JOptionPane.WARNING_MESSAGE);
     }
 
     private String removeNonNumeric(String input) {
         return input.replaceAll("[^\\d.]", "");
+    }
+
+    private boolean isSimulator(DeviceType devType, Object subType) {
+        boolean result = false;
+        
+        switch (devType) {
+            case Camera : 
+                CameraType camType = (CameraType)subType;
+                if (camType == CameraType.Simulator) {
+                    result = true;
+                } else {
+                    result = false;
+                }
+                break;
+            
+            case E_Board:
+                E_BoardType ebdType = (E_BoardType)subType;
+                if (ebdType == E_BoardType.Simulator) {
+                    result = true;
+                } else {
+                    result = false;
+                }
+                break;
+                
+            case GateBar:
+                GateBarType barType = (GateBarType)subType;
+                if (barType == GateBarType.Simulator) {
+                    result = true;
+                } else {
+                    result = false;
+                }
+                break;
+                
+            default:
+                break;
+        }
+        return result;
+    }
+
+    private boolean isCarButton(DeviceType devType, Object subType, byte gateNo) {
+        boolean result = false;
+        
+        if (devType == Camera && gateNo == 1) {
+            CameraType camType = (CameraType)subType;
+            if (camType == CameraType.CarButton) {
+                result = true;
+            }            
+        }
+        return result;
+    }
+
+    private Object getSubType(DeviceType devType, int subTypeIdx) {
+        Object subType = null;
+        
+        switch (devType) {
+            case Camera: 
+                subType = CameraType.values()[subTypeIdx];
+                break;
+            case E_Board: 
+                subType = E_BoardType.values()[subTypeIdx];
+                break;
+            case GateBar: 
+                subType = GateBarType.values()[subTypeIdx];
+                break;
+            default:
+                break;
+        }
+        return subType;
     }
 
     private static class COM_ID_Usage {
