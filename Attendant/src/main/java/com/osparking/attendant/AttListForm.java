@@ -2090,7 +2090,9 @@ public class AttListForm extends javax.swing.JFrame {
                 userIDText.requestFocusInWindow();
             } else {
                 String checkResult = IDSyntaxCheckResult(idEntered);
-                if (checkResult.length() == 0) {
+                
+                if (checkResult.length() == 0) 
+                {
                     ID_usable = true;
                     usableID = idEntered;
                     checkIDButton.setEnabled(false);
@@ -2352,7 +2354,11 @@ public class AttListForm extends javax.swing.JFrame {
         for (int i = 1; i < idLen - 1; i++) {
             ch = idEntered.charAt(i);
             
-            if (! isEnglish(ch) && !(Character.isDigit(ch)) && ch != ' ' && ch != '.')
+            if (! isEnglish(ch) 
+                    && !(Character.isDigit(ch)) 
+                    && ch != ' ' 
+                    && ch != '.'
+                    && ch != '_')
             {
                 if (tempStr.length() > 0)
                     tempStr.append(System.lineSeparator());                
