@@ -24,6 +24,7 @@ import static com.osparking.global.names.ControlEnums.Languages.ENGLISH;
 import static com.osparking.global.names.ControlEnums.Languages.KOREAN;
 import static com.osparking.global.names.ControlEnums.MsgContent.OS_PARKINGLOT;
 import static com.osparking.global.names.ControlEnums.TitleTypes.ARRIVAL_TIME_PANEL_TITLE;
+import static com.osparking.global.names.ControlEnums.TitleTypes.SELECT_BTN;
 import static com.osparking.global.names.DB_Access.gateNames;
 import static com.osparking.global.names.OSP_enums.CameraType.CarButton;
 import static com.osparking.global.names.OSP_enums.DeviceType.Camera;
@@ -34,6 +35,10 @@ import static com.osparking.global.names.OSP_enums.DeviceType.Camera;
  */
 public class ControlEnums {
   
+    public enum TopForms {
+        Vehicle, CarOwner, AffiBldg, Attendant, Settings
+    }
+   
     public enum Languages{
         KOREAN, ENGLISH
     }
@@ -53,7 +58,7 @@ public class ControlEnums {
         public String getContent() {
                 return contents[language.ordinal()];
         }
-    }    
+    }
     
     public enum TitleTypes {
         L1_AFFILI_ROW("상위 소속", "L1 Affiliation"),
@@ -65,8 +70,8 @@ public class ControlEnums {
         ATTLIST_FRAME_TITLE("사용자 정보관리", "Login ID Management"),
         AFFILI_BUILD_FRAME_TITLE("소속 및 건물", "Affiliation and Building"),
         VEHICLESFORM_FRAME_TITLE("차량 등록 관리", "Vehicle Registration"),
-        DRIVER_SELECTION_FRAME_TITLE("운전자 선택", "Select Driver"),
-        DRIVER_LIST_FRAME_TITLE("운전자 목록", "Driver List"),
+        DRIVER_SELECTION_FRAME_TITLE("차주 선택", "Select Driver"),
+        DRIVER_LIST_FRAME_TITLE("차주 목록", "Driver List"),
         CAR_ARRIVALS_FRAME_TITLE("차량 도착 목록", "Vehicle Arrival List"),
         SEARCH_CRITERIA_PANEL_TITLE("검색 기준", "Search Criteria"),
         SEARCH_RESULT_TITLE("검색 결과", "Search Result"),
@@ -154,7 +159,7 @@ public class ControlEnums {
         ROOM_LIST_LABEL("호실 목록",  "Rooms of Building"), 
         HELP_AFFIL_LABEL("소속 명칭 ods 파일 형식",  "Affiliation name list ods file content"), 
         HELP_BUILDING_LABEL("건물 호실 ods 파일 형식", "Building room number list ods file content"), 
-        HELP_DRIVER_TITLE("운전자 ods 파일 형식", "Driver list ods file content"), 
+        HELP_DRIVER_TITLE("차주 ods 파일 형식", "Driver list ods file content"), 
         HELP_VEHICLE_ODS("등록차량 ods 파일 형식", "Vehicle list ods file format"), 
         AFFILI_MODE_STRING("소속, 부서", "Affiliations"), 
         BUILDING_MODE_STRING("건물, 호실", "Building, Units"), 
@@ -266,7 +271,7 @@ public class ControlEnums {
         
         CHOOSE_PANEL_DIALOG("사용할 패널(제목, 목록, 분홍 버튼)을 선택하세요!", 
                 "Click the panel(title, table, pink button) to use!"),
-        SELECT_DRIVER_HELP("운전자 행 클릭 후 [선택(T)] 버튼 사용",
+        SELECT_DRIVER_HELP("차주 행 클릭 후 [선택(T)] 버튼 사용",
                 "Click a driver row, then use [Select] button!"), 
         CREATE_SAVE_HELP("자료 생성 후 [엔터] 키로 마감(=저장)할 것!",
                 "Press enter after the data creation!"),
@@ -300,11 +305,12 @@ public class ControlEnums {
         LOGGIND_DIALOG_A("추가적으로 기록되는 항목 : ", "Additionally logged items : "),
         LOGGIND_DIALOG_B(" - 시스템 설정 변경", " - System Settings Change"),
         LOGGIND_DIALOG_C(" - 사용자 정보 변경", " - Attendant/User Info Change"),
-        LOGGIND_DIALOG_D(" - 운전자 정보 변경", " - Drivers Info Change"),
+        LOGGIND_DIALOG_D(" - 차주 정보 변경", " - Drivers Info Change"),
         LOGGIND_DIALOG_E(" - 등록차량 정보 변경", " - Vehicles Info Change"),
         LOGGIND_DIALOG_F(" - 전광판 설정 변경", " - E-Board Settings Change"),
         LIMIT_DESCRIPTION("길이 한계", "Length Limit"),
-        
+        OWNER_SELECTION_HELP_MSG("차주 행 클릭 후 [" + SELECT_BTN.getContent() + "] 버튼 사용", 
+                "Select a Row and click [" + SELECT_BTN.getContent() + "] button"),
         ARTI_CURR_ERR_LIMIT_1("현재 인공 오류 비율(=", "Current error rate(="),
         ARTI_CURR_ERR_LIMIT_2(") 이 최대치임!", ") is max!"),
         ARTI_CURR_ERR_LIMIT_b(") 이 최소치임!", ") is min!"),
@@ -349,8 +355,8 @@ public class ControlEnums {
         READ_ODS_NO_SHORT_BTN("시트읽기", "Read ods"),
         SAVE_NO_SHORT_BTN("저장", "Save"),
         CANCEL_NO_SHORT_BTN("취소", "Cancel"),
-        OWNER_BTN("운전자(D)", "Driver"),
-        MANAGE_BTN("운전자 관리(M)", "Manage Drivers"),
+        OWNER_BTN("차주(D)", "Driver"),
+        MANAGE_BTN("차주 관리(M)", "Manage Drivers"),
         FIX_IT_BTN("설정(F)", "Fix It"),
         SET_BUTTON("설정(S)", "Settings"),
         ARRIVALS_BTN("<HTML>도착기록(<U>A</U>)</HTML>", "<HTML><U>A</U>rrivals</HTML>"),
@@ -505,7 +511,7 @@ public class ControlEnums {
         PW_COMPLEX_TOOLTIP("8 자리 이상 영자, 숫자 및 특수문자 입력 (자세한 내용: ? 클릭)", 
                 "Enter 8 or more digits of alphabet, number, and special character(for details click '?')"),
         CAR_TAG_INPUT_TOOLTIP("챠량번호로 검색", "Search CarTag"),
-        DRIVER_INPUT_TOOLTIP("운전자로 검색", "Search Driver"),
+        DRIVER_INPUT_TOOLTIP("차주로 검색", "Search Driver"),
         AFFILIATION_TOOLTIP("소속으로 검색", "Search Affiliation"),
         BUILDING_TOOLTIP("건물로 검색", "Search Building"),
         OTHER_TOOLTIP("기타정보로 검색", "Search Other Info"),
@@ -571,7 +577,7 @@ public class ControlEnums {
         BUILDING_HEADER_SC("<html>건물 번호(<u>B</u>)</html>", "Building"),
         ROOM_HEADER_SC("<html>호실 번호(<u>R</u>)</html>", "Room No."),
         CAR_TAG_HEADER("차량번호", "Tag No."),
-        DRIVER_HEADER("운전자", "Driver"),
+        DRIVER_HEADER("차주", "Driver"),
         HIGH_LOW_HEADER("상위-하위 소속", "Higher-Lower"),
         BUILD_ROOM_HEADER("건물-호실", "Building-Room"),
         OTHER_INFO_HEDER("기타정보", "Other Info'"),
@@ -639,19 +645,19 @@ public class ControlEnums {
         
         PERIOD_ERROR_DIALOG1("시작일이 종료일보다 늦을 수 없습니다. ", "End date can't precede start date!"),
         PERIOD_ERROR_DIALOG2("검색 기간을 수정하십시오!", "Please correct search range!"),
-        DRIVER_ODS_READ_RESULT1("운전자 읽어들인 결과", "Driver Upload Result"),
-        DRIVER_ODS_READ_RESULT2(" - 성공적으로 읽힌 운전자: ", " - Uploaded drivers: "),
-        DRIVER_ODS_READ_RESULT3(" - 중복으로 제외된 운전자: ", " - Rejected duplicates: "),
-        DRIVER_ODS_READ_RESULT4(" - 총 거부된 운전자 수: ", " - Total rejected drivers: "),
+        DRIVER_ODS_READ_RESULT1("차주 읽어들인 결과", "Driver Upload Result"),
+        DRIVER_ODS_READ_RESULT2(" - 성공적으로 읽힌 차주: ", " - Uploaded drivers: "),
+        DRIVER_ODS_READ_RESULT3(" - 중복으로 제외된 차주: ", " - Rejected duplicates: "),
+        DRIVER_ODS_READ_RESULT4(" - 총 거부된 차주 수: ", " - Total rejected drivers: "),
         
         DEV_TYPE_ERROR_MSG1("예상 밖 메시지 코드입니다.", "Unexpected message code arrived."),
         DEV_TYPE_ERROR_MSG2("메시지 코드 : ", "Message code : "),
         DEV_TYPE_ERROR_MSG3("을 확인하십시오.", " needs to be checked."),
         DEV_TYPE_ERROR_MSG4("확인 위치 : ", "Checking Steps : "),
                 
-        READ_DRIVER_ODS_CONF_1("ods 파일에서 다음 운전자 정보가 식별되었습니다.",
+        READ_DRIVER_ODS_CONF_1("ods 파일에서 다음 차주 정보가 식별되었습니다.",
                 "Following drivers exists in the ods file."),
-        READ_DRIVER_ODS_CONF_2(" - 운전자 항목 수 : ", " - Driver count : "),
+        READ_DRIVER_ODS_CONF_2(" - 차주 항목 수 : ", " - Driver count : "),
         READ_DRIVER_ODS_CONF_3("이들 정보를 읽어 옵니까?",
                 "Want to read this information?"),
         
@@ -660,11 +666,11 @@ public class ControlEnums {
         ATT_CREATE_DIAG_1 ("성공적으로 생성된 사용자", "Successful creation of a user"),
         ATT_CREATE_DIAG_2 (" - 사용자 아이디 : ", " - User ID : "),
         
-        DELETE_ALL_DRIVER_P1 ("아래 운전자 및 차량 정보를 삭제합니까?", "Want to delete below drivers and vehicles?"),
-        DELETE_ALL_DRIVER_P2 (" - 운전자 정보 건수 : ", " - Driver record count : "),
+        DELETE_ALL_DRIVER_P1 ("아래 차주 및 차량 정보를 삭제합니까?", "Want to delete below drivers and vehicles?"),
+        DELETE_ALL_DRIVER_P2 (" - 차주 정보 건수 : ", " - Driver record count : "),
         DELETE_ALL_DRIVER_P3 (" - 소유 차량 건수 : ",    " - Owned vehicle count : "),
-        DRIVER_UPDATE_QUEST_P1 ("이 운전자를 수정하시겠습니까?", "Do you want to modify this driver?"),
-        DRIVER_UPDATE_QUEST_P2 (" - 운전자 이름 : ", " - Driver name: "),
+        DRIVER_UPDATE_QUEST_P1 ("이 차주를 수정하시겠습니까?", "Do you want to modify this driver?"),
+        DRIVER_UPDATE_QUEST_P2 (" - 차주 이름 : ", " - Driver name: "),
         DRIVER_UPDATE_QUEST_P3 ("(소유 차량 대수 : ", "(owning car count : "),
         HOWTO_CLOSE_WINDOW_DIALOG ("(창단기: 엔터키)", "(To close window: Enter Key)."),
         ID_CHECK_DIALOG ("아이디 중복검사가 필요합니다.", "Need to check if 'id' is usable(unoccupied)."),
@@ -697,7 +703,7 @@ public class ControlEnums {
         BUILDING_DELETE_ALL_RESULT_DAILOG(
                 "모든 건물 및 소속 호실들이 성공적으로 삭제되었습니다", "Every Buildings and Rooms are deleted."),
         CAR_TAG_DIALOG("차량번호가 누락되었습니다.", "Car Tag Number is missing."),
-        DRIVER_DIALOG("운전자 정보가 누락되었습니다.", "Car Owner/Driver is missing."),
+        DRIVER_DIALOG("차주 정보가 누락되었습니다.", "Car Owner/Driver is missing."),
         VEHICLE_CREATION_FAIL_DIALOG("차량 등록을 실패하였습니다.", "failed vehicle creation "),
         VEHICLE_CREATE_CANCEL_DIALOG(
                 "작성 중인 차량정보를 포기하겠습니까?", "Want to desert car information created so far?"),
@@ -710,26 +716,26 @@ public class ControlEnums {
         VEHICLE_SAVE_ODS_FAIL_DIALOG(
                 "저장할 차량 목록이 없습니다.", "No vehicle list to save!"),
         DRIVER_SAVE_ODS_FAIL_DIALOG(
-                "저장할 운전자 목록이 없습니다.", "Empty driver list can't be saved!"),
+                "저장할 차주 목록이 없습니다.", "Empty driver list can't be saved!"),
         ARRIVAL_SAVE_ODS_FAIL_DIALOG(
                 "저장할 도착 목록이 없습니다.", "Empty arrival list can't be saved!"),
         USER_SAVE_ODS_FAIL_DIALOG(
                 "저장할 사용자 목록이 없습니다!", "No user list to save!"),
-        DRIVER_CREATRION_FAIL_DIALOG("운전자 정보 생성 실패.", "Failed to create a owner/driver record."), 
-        DRIVER_DELETE_ALL_RESULT_DAILOG("모든 운전자가 삭제되었고" + System.getProperty("line.separator")
+        DRIVER_CREATRION_FAIL_DIALOG("차주 정보 생성 실패.", "Failed to create a owner/driver record."), 
+        DRIVER_DELETE_ALL_RESULT_DAILOG("모든 차주가 삭제되었고" + System.getProperty("line.separator")
                 + "그들에게 등록된 모든 차량도 삭제되었습니다.", 
                 "All drivers are deleted" + System.getProperty("line.separator")
                 + "and all vehicles registered are deleted, too."),
         DRIVER_MODIFY_FAIL_DAILOG(
-                "하나의 운전자만 선택하여 변경하십시오.", "Please narrow down to a single driver to update!"),
-        DRIVER_CREATE_CANCEL_DIALOG("정말 운전자 생성을 취소합니까?", "Really cancel driver creation?"),
-        DRIVER_MODIFY_CANCEL_DAILOG("정말 운전자 변경을 취소합니까?", "Really cancel driver update?"),
+                "하나의 차주만 선택하여 변경하십시오.", "Please narrow down to a single driver to update!"),
+        DRIVER_CREATE_CANCEL_DIALOG("정말 차주 생성을 취소합니까?", "Really cancel driver creation?"),
+        DRIVER_MODIFY_CANCEL_DAILOG("정말 차주 변경을 취소합니까?", "Really cancel driver update?"),
         
         MISSING_CELL_HANDLING("\"휴대전화\" 번호는 최소 10 자리입니다." 
                             + System.getProperty("line.separator") 
                             + "[예] => 바른 휴대전화 번호 입력" 
                             + System.getProperty("line.separator") 
-                            + "[아니오] => 운전자 ", 
+                            + "[아니오] => 차주 ", 
                 "\"Cell phone number\" is at least 10 digits." 
                             + System.getProperty("line.separator") 
                             + "[Yes] => to edit cell phone number" 
@@ -740,16 +746,16 @@ public class ControlEnums {
                             + System.getProperty("line.separator") 
                             + "[예] => 바른 전화번호 입력" 
                             + System.getProperty("line.separator") 
-                            + "[아니오] => 운전자 ", 
+                            + "[아니오] => 차주 ", 
                 "\"Phone number\" is at least 4 digits." 
                             + System.getProperty("line.separator") 
                             + "[Yes] => to edit phone number" 
                             + System.getProperty("line.separator") 
                             + "[No] => to give up driver "),
 
-        MISSING_NAME_HANDLING("\"운전자 이름\"은 두 자를 넘어야 합니다." + System.getProperty("line.separator") 
+        MISSING_NAME_HANDLING("\"차주 이름\"은 두 자를 넘어야 합니다." + System.getProperty("line.separator") 
                             + "[예] => 바른 이름 입력" + System.getProperty("line.separator") 
-                            + "[아니오] => 운전자 ", 
+                            + "[아니오] => 차주 ", 
                 "\"Name\" should be longer than 1 character." + System.getProperty("line.separator") 
                             + "[Yes] => to enter right name" + System.getProperty("line.separator") 
                             + "[No] => to give up driver "),
@@ -787,7 +793,7 @@ public class ControlEnums {
                 "    -  Can not delete own account" + System.getProperty("line.separator")
         ),
         DRIVER_CLOSE_FORM_DIALOG(
-                " 중인 운전자 정보를 버리겠습니까?", " will be discarded, is it OK?"),
+                " 중인 차주 정보를 버리겠습니까?", " will be discarded, is it OK?"),
         
         DATE_INPUT_CHECK_DIALOG("시작일과 종료일을 모두 입력하십시오", "Enter starting and ending date both"),
         
@@ -822,7 +828,7 @@ public class ControlEnums {
                 + "   추가" + System.lineSeparator()
                 + " - 시스템 설정 변경"+ System.lineSeparator() 
                 + " - 관리원/사용자 정보 변경"+ System.lineSeparator() 
-                + " - 운전자 정보 변경"+ System.lineSeparator() 
+                + " - 차주 정보 변경"+ System.lineSeparator() 
                 + " - 차량정보 변경", 
                 "'System Settings' Level Logged Items:" + System.lineSeparator() 
                 + System.lineSeparator() 
@@ -920,17 +926,17 @@ public class ControlEnums {
         READ_ODS_FAIL_DIALOG("잘못된 형식의 자료가 포함되어 있습니다.", "Cells that include wrong formatted data"),
         
         CREATION_SUCCESS_DIALOG(
-                "운전자 생성 성공" + System.getProperty("line.separator") + "운전자 이름: ", 
+                "차주 생성 성공" + System.getProperty("line.separator") + "차주 이름: ", 
                 "Driver Creation Succeeded" + System.getProperty("line.separator") + "Driver Name: "),
         
         USER_UPDATE_SUCCESS_DIALOG(
-                "수정 중인 운전자 정보를 저장하겠습니까?" + System.getProperty("line.separator") + " - 운전자 이름: ",
+                "수정 중인 차주 정보를 저장하겠습니까?" + System.getProperty("line.separator") + " - 차주 이름: ",
                 "Do you want to save the modified driver?" +  System.getProperty("line.separator") + " - Driver Name: "
         ),
         
         USER_CREATE_SUCCESS_DIALOG(
-                "생성하신 운전자 정보를 저장하시겠습니까?" 
-                        + System.getProperty("line.separator") + " - 운전자 이름: ",
+                "생성하신 차주 정보를 저장하시겠습니까?" 
+                        + System.getProperty("line.separator") + " - 차주 이름: ",
                 "Do you want to save created driver?" 
                         +  System.getProperty("line.separator") + " - Driver Name: "
         ),
@@ -1067,7 +1073,7 @@ public class ControlEnums {
     
     public enum TextType{
         CAR_TAG_TF("(차량번호)", "(Tag No.)"),
-        DRIVER_TF("(운전자)", "(Driver)"),
+        DRIVER_TF("(차주)", "(Driver)"),
         OTHER_INFO_TF("(기타정보)", "(Other Info)"),
         DIS_REASON_TF("(불허 사유)", "(Why disallowed)"),
         CELL_PHONE_TF("(휴대전화)", "(Cell Phone)"),
@@ -1252,7 +1258,7 @@ public class ControlEnums {
         LOG_IN("로그인 기록", "Log in record"),
         ARRIVAL("도착 기록", "Arrival"),
         USER("사용자", "User"),
-        DRIVER("운전자", "Driver"),
+        DRIVER("차주", "Driver"),
         VEHICLE("차량", "Vehicle"),
         L1_AFFILI("상위 소속", "L1 affiliation"),
         BUILDING("건물", "Building"),

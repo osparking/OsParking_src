@@ -90,6 +90,8 @@ import static com.osparking.global.Globals.logParkingOperation;
 import static com.osparking.global.Globals.refreshComboBox;
 import static com.osparking.global.Globals.rejectUserInput;
 import static com.osparking.global.Globals.showLicensePanel;
+import com.osparking.global.IMainGUI;
+import com.osparking.global.names.ControlEnums;
 import static com.osparking.global.names.ControlEnums.ButtonTypes.*;
 import static com.osparking.global.names.ControlEnums.ComboBoxItemTypes.*;
 import static com.osparking.global.names.ControlEnums.DialogMessages.*;
@@ -187,7 +189,8 @@ public class ManageDrivers extends javax.swing.JFrame {
     private List<String> prevKeyList = new ArrayList<String>();
     private List<String> currKeyList = new ArrayList<String>();
     static private ChangedComponentClear changedControls; 
-    
+    IMainGUI mainForm = null;
+    boolean isStandalone = false;    
     /**
      * Key of parent combobox item for which (this) child combobox item 
      * list is formed.
@@ -203,9 +206,13 @@ public class ManageDrivers extends javax.swing.JFrame {
     /**
      * Creates new form ManageDrivers
      */
-    public ManageDrivers(DriverSelection driverSelectionForm) {
-        this.driverSelectionForm = driverSelectionForm;
+    public ManageDrivers(IMainGUI mainForm, DriverSelection driverSelectionForm) {
         initComponents();
+        this.mainForm = mainForm;
+        if (mainForm == null) {
+            isStandalone = true;
+        }        
+        this.driverSelectionForm = driverSelectionForm;
         changedControls = new ChangedComponentClear(clearButton);
         
         setIconImages(OSPiconList);      
@@ -1464,8 +1471,8 @@ public class ManageDrivers extends javax.swing.JFrame {
 
             switch(language){
                 case KOREAN:
-                    dialogMessage = "운전자 정보와 운전자 차량에 대한 정보를 삭제하시겠습니까?" + System.getProperty("line.separator") +
-                            "운전자 이름 : '" + driverName + "' (소유차량 " + count + "대)";
+                    dialogMessage = "차주 정보와 소유 차량에 대한 정보를 삭제하시겠습니까?" + System.getProperty("line.separator") +
+                            "차주 이름 : '" + driverName + "' (소유차량 " + count + "대)";
                     break;
 
                 case ENGLISH:
@@ -1485,9 +1492,9 @@ public class ManageDrivers extends javax.swing.JFrame {
 
             switch(language){
                 case KOREAN:
-                    dialogMessage = "선택 된 " + deleteIndice.length + "명의 운전자정보와 차량 정보를 삭제하시겠습니까?"
+                    dialogMessage = "선택 된 " + deleteIndice.length + "명의 차주 정보와 차량 정보를 삭제하시겠습니까?"
                                 + System.getProperty("line.separator")
-                                + "첫번째 운전자 : '" + driverName + "' (소유차량" + count + "대)";
+                                + "첫번째 차주 : '" + driverName + "' (소유차량" + count + "대)";
                     break;
 
                 case ENGLISH:
@@ -1538,7 +1545,7 @@ public class ManageDrivers extends javax.swing.JFrame {
                     switch(language){
                         case KOREAN: 
                             dialogMessage = 
-                                driverName +"을 포함한 총 " + totalDeletion + "명의 운전자 정보가 삭제되었습니다.";  
+                                driverName +"을 포함한 총 " + totalDeletion + "명의 차주 정보가 삭제되었습니다.";  
                             break;
 
                         case ENGLISH: 
@@ -1790,8 +1797,8 @@ public class ManageDrivers extends javax.swing.JFrame {
                 
                 switch(language){
                     case KOREAN:
-                        dialogMessage = "운전자 정보와 운전자 차량에 대한 정보를 삭제하시겠습니까?" + System.getProperty("line.separator") +
-                                "운전자 이름 : '" + driverName + "' (소유차량 " + count + "대)";
+                        dialogMessage = "차주 정보와 소유 차량에 대한 정보를 삭제하시겠습니까?" + System.getProperty("line.separator") +
+                                "차주 이름 : '" + driverName + "' (소유차량 " + count + "대)";
                         break;
                         
                     case ENGLISH:
@@ -1811,9 +1818,9 @@ public class ManageDrivers extends javax.swing.JFrame {
                 
                 switch(language){
                     case KOREAN:
-                        dialogMessage = "선택 된 " + deleteIndice.length + "명의 운전자정보와 차량 정보를 삭제하시겠습니까?"
+                        dialogMessage = "선택 된 " + deleteIndice.length + "명의 차주 정보와 차량 정보를 삭제하시겠습니까?"
                                     + System.getProperty("line.separator")
-                                    + "첫번째 운전자 : '" + driverName + "' (소유차량" + count + "대)";
+                                    + "첫번째 차주 : '" + driverName + "' (소유차량" + count + "대)";
                         break;
 
                     case ENGLISH:
@@ -1864,7 +1871,7 @@ public class ManageDrivers extends javax.swing.JFrame {
                         switch(language){
                             case KOREAN: 
                                 dialogMessage = 
-                                    driverName +"을 포함한 총 " + totalDeletion + "명의 운전자 정보가 삭제되었습니다.";  
+                                    driverName +"을 포함한 총 " + totalDeletion + "명의 차주 정보가 삭제되었습니다.";  
                                 break;
                                 
                             case ENGLISH: 
@@ -2168,7 +2175,7 @@ public class ManageDrivers extends javax.swing.JFrame {
             /* Create and display the form */
             java.awt.EventQueue.invokeLater(new Runnable() {
                 public void run() {
-                    ManageDrivers mainForm = new ManageDrivers(null);
+                    ManageDrivers mainForm = new ManageDrivers(null, null);
                     mainForm.setLocation(0, 0);
                     mainForm.setVisible(true);
                 }
@@ -2744,7 +2751,7 @@ public class ManageDrivers extends javax.swing.JFrame {
 
     private void closeFrameGracefully() {
         if (formMode == FormMode.NormalMode) {
-            dispose();
+            disposeExit();
         } else {
             int response = JOptionPane.showConfirmDialog(null,  
                     CREATE_MODE_LABEL.getContent() + DRIVER_CLOSE_FORM_DIALOG.getContent(),
@@ -2754,7 +2761,7 @@ public class ManageDrivers extends javax.swing.JFrame {
         
             if (response == JOptionPane.YES_OPTION) 
             {
-                dispose();
+                disposeExit();
             } else {
                 // do nothing on NO_OPTION
             }            
@@ -3101,5 +3108,15 @@ public class ManageDrivers extends javax.swing.JFrame {
         }
         
         return cond.toString();
+    }
+
+    private void disposeExit() {
+        if (mainForm != null) {
+            mainForm.getTopForms()[ControlEnums.TopForms.CarOwner.ordinal()] = null;
+        }
+        dispose();
+        if (isStandalone) {
+            System.exit(0);
+        } 
     }
 }

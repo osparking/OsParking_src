@@ -29,7 +29,9 @@ import static com.osparking.global.CommonData.metaKeyLabel;
 import static com.osparking.global.CommonData.tipColor;
 import com.osparking.global.Globals;
 import static com.osparking.global.Globals.*;
+import com.osparking.global.IMainGUI;
 import com.osparking.global.names.CarAdmission;
+import com.osparking.global.names.ControlEnums;
 import com.osparking.global.names.ControlEnums.BarOperation;
 import static com.osparking.global.names.ControlEnums.BarOperation.AUTO_OPENED;
 import static com.osparking.global.names.ControlEnums.BarOperation.REGISTERED_CAR_OPENED;
@@ -96,6 +98,9 @@ import static com.osparking.global.names.ControlEnums.MsgContent.SYSTEM_STOP;
 import static com.osparking.global.names.ControlEnums.TextType.NO_APP_MSG;
 import static com.osparking.global.names.ControlEnums.TextType.ON_ARTIFI_ERROR_MSG;
 import static com.osparking.global.names.ControlEnums.ToolTipContent.CAR_ENTRY_TOOLTIP;
+import com.osparking.global.names.ControlEnums.TopForms;
+import static com.osparking.global.names.ControlEnums.TopForms.Attendant;
+import static com.osparking.global.names.ControlEnums.TopForms.Settings;
 import com.osparking.global.names.DB_Access;
 import static com.osparking.global.names.DB_Access.deviceType;
 import static com.osparking.global.names.DB_Access.enteranceAllowed;
@@ -166,6 +171,7 @@ import com.osparking.osparking.statistics.PassingDelayStat;
 import com.osparking.statistics.CarArrivals;
 import com.osparking.vehicle.AffiliationBuildingForm;
 import com.osparking.vehicle.VehiclesForm;
+import com.osparking.vehicle.driver.DriverSelection;
 import com.osparking.vehicle.driver.ManageDrivers;
 import java.awt.Component;
 import java.awt.Container;
@@ -232,7 +238,7 @@ import org.bytedeco.javacpp.FlyCapture2;
  * 
  * @author Open Source Parking Inc.
  */
-public final class ControlGUI extends javax.swing.JFrame implements ActionListener, ManagerGUI, ParentGUI {
+public final class ControlGUI extends javax.swing.JFrame implements ActionListener, ManagerGUI, IMainGUI {
 
     private static boolean listFileNotFound() {
         String listFilePath = "log" + File.separator + "MessageList.txt";
@@ -247,18 +253,34 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
 
     static boolean IS_FIRST_FUN = false;
     
+    private static JFrame[] topForms = new JFrame[ControlEnums.TopForms.values().length]; 
+    static {
+        for (int i = 0; i < ControlEnums.TopForms.values().length; i++) {
+            topForms[i] = null;
+        }
+    }
+    
     private static void showBufferedImage(int gateNo, JLabel picLabel, BufferedImage imageRead) {
         picLabel.setText(null);
         picLabel.setIcon(createStretchedIcon(picLabel.getSize(), imageRead, false));
         originalImgWidth[gateNo] = imageRead.getWidth(); 
         gatePanel.setGateImage((byte)gateNo, imageRead);
     }
+
+    /**
+     * @return the topForms
+     */
+    public JFrame[] getTopForms() {
+        return topForms;
+    }
     
     private LoginDialog loginDialog = null;
-    AttListForm attendantsListForm = null;
-    AffiliationBuildingForm affiliationBuildingForm = null;
     Rectangle rect = new Rectangle();
-    private Settings_System configureSettingsForm = null;
+    
+    private VehiclesForm vehiclesForm = null;
+    private DriverSelection driverSelection = null;
+    private AffiliationBuildingForm affiliationBuildingForm = null;
+    
     RunRecordList showRunRecordForm = null;
     LoginRecordList showLoginRecordForm = null;
     ListSelectionModel[] listSelectionModel = null;
@@ -1643,15 +1665,8 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
         askUserIntentionOnProgramStop(false);
     }//GEN-LAST:event_closeButtonClicked
 
-    static ParentGUI parentGUI ;
     private void processAttendantList(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_processAttendantList
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                if (attendantsListForm == null)
-                    attendantsListForm = new AttListForm(parentGUI, loginID, loginPW, isManager);
-                attendantsListForm.setVisible(true);
-            }
-        });
+        displayTopForm(Attendant);
     }//GEN-LAST:event_processAttendantList
 
     private void processLogIn(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_processLogIn
@@ -1727,11 +1742,12 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
     }
     
     private void processVehicleList(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_processVehicleList
-        (new VehiclesForm()).setVisible(true);                
+//        (new VehiclesForm()).setVisible(true);      
+        displayTopForm(TopForms.Vehicle);
     }//GEN-LAST:event_processVehicleList
 
     private void VehiclesButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_VehiclesButtonActionPerformed
-        (new VehiclesForm()).setVisible(true);                
+        (new VehiclesForm(this)).setVisible(true);                
     }//GEN-LAST:event_VehiclesButtonActionPerformed
 
     private void UsersButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_UsersButtonActionPerformed
@@ -1739,7 +1755,8 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
     }//GEN-LAST:event_UsersButtonActionPerformed
 
     private void SettingsItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SettingsItemActionPerformed
-        displaySystemSettings();
+//        displaySystemSettings();
+        displayTopForm(Settings);
     }//GEN-LAST:event_SettingsItemActionPerformed
 
     private void RunRecordItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RunRecordItemActionPerformed
@@ -1809,8 +1826,9 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
     }//GEN-LAST:event_carEntryButtonActionPerformed
 
     private void DriverListItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DriverListItemActionPerformed
-        ManageDrivers driversForm = new ManageDrivers(null);
-        driversForm.setVisible(true);    
+//        ManageDrivers driversForm = new ManageDrivers(null);
+//        driversForm.setVisible(true);    
+        displayTopForm(TopForms.CarOwner);
     }//GEN-LAST:event_DriverListItemActionPerformed
 
     private void EntryRecordItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EntryRecordItemActionPerformed
@@ -1956,14 +1974,15 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
     }//GEN-LAST:event_QuitActionPerformed
 
     private void AffiliBldgItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AffiliBldgItemActionPerformed
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                if (affiliationBuildingForm == null) {
-                    affiliationBuildingForm = new AffiliationBuildingForm();
-                }
-                affiliationBuildingForm.setVisible(true);
-            }
-        });
+//        java.awt.EventQueue.invokeLater(new Runnable() {
+//            public void run() {
+//                if (affiliationBuildingForm == null) {
+//                    affiliationBuildingForm = 
+//                }
+//                affiliationBuildingForm.setVisible(true);
+//            }
+//        });
+        displayTopForm(TopForms.AffiBldg);
     }//GEN-LAST:event_AffiliBldgItemActionPerformed
 
     LedProtocol ledNoticeProtocol = new LedProtocol(); 
@@ -2069,14 +2088,14 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
                         tagEnteredAs, remark, cameraID, imageSN, 
                         image, carPassingDelayMs).setVisible(true);
                 break;   
-                //</editor-fold>                //</editor-fold>                //</editor-fold>                //</editor-fold>
+                //</editor-fold> 
 
             case UNREGISTERED:
                 //<editor-fold desc="-- Handle Unregistered Car"">
                 new VisitingCar(this, true, tagRecognized, arrivalTime, cameraID,
                         imageSN, image, carPassingDelayMs).setVisible(true);
                 break;
-                //</editor-fold>                //</editor-fold>                //</editor-fold>                //</editor-fold>
+                //</editor-fold> 
 
             case BADTAGFORMAT:
                 // popup form, allow parking or not, store the result
@@ -2198,13 +2217,12 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
         return new Dimension(panel1.width, panel1.height + panel2.height);
     }    
 
-    private void displaySystemSettings() {
-        if (configureSettingsForm == null) 
-        { 
-            setConfigureSettingsForm(new Settings_System(this));
+    private void displayTopForm(ControlEnums.TopForms form) {
+        if (getTopForms()[form.ordinal()] == null) {
+            topForms[form.ordinal()] = createTopForm(form);
         }
-        configureSettingsForm.setVisible(true);   
-    }
+        getTopForms()[form.ordinal()].setVisible(true);     
+    }    
 
     private void displayRateLimit(String limitDescription) {
         toolkit.beep();
@@ -2256,6 +2274,38 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
         
         arrivalList.setSize(tableDim);
         arrivalList.setPreferredSize(tableDim);                  
+    }
+
+    private JFrame createTopForm(ControlEnums.TopForms form) {
+        JFrame topForm = null;
+        
+        switch (form) {
+                
+            case Vehicle:
+                topForm = new VehiclesForm(this);
+                break;
+                
+            case CarOwner:
+                topForm = new ManageDrivers(this, null);
+                break;
+                
+            case AffiBldg:
+                topForm = new AffiliationBuildingForm(this);
+                break;
+                
+            case Attendant:
+                topForm = new AttListForm(this, loginID, loginPW, isManager);
+                break;
+                
+            case Settings:
+                topForm = new Settings_System(this);
+                break;
+                
+            default:
+                break;
+        }
+        
+        return topForm;
     }
 
     class ManageArrivalList extends Thread {
@@ -3281,18 +3331,13 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
                 if (debugPanel.isVisible()) {
                     removeDebugPanel();
                 }
-                if (affiliationBuildingForm != null) {
-                    affiliationBuildingForm.dispose();
-                    affiliationBuildingForm = null;
-                }
-                if (attendantsListForm != null) {
-                    attendantsListForm.dispose();
-                    attendantsListForm = null;
-                }
-                if (configureSettingsForm != null) {
-                    configureSettingsForm.dispose();
-                    configureSettingsForm = null;
-                }
+                
+                for (int i = 0; i < ControlEnums.TopForms.values().length; i++) {
+                    if (getTopForms()[i] != null) {
+                        getTopForms()[i].dispose();
+                        topForms[i] = null;
+                    }
+                }                
             }
         } catch (Exception ex) {
             com.osparking.global.Globals.logParkingException(Level.SEVERE, ex, "(Process User Logout)");
@@ -3333,14 +3378,14 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
     /**
      * @param configureSettingsForm the configureSettingsForm to set
      */
-    public void setConfigureSettingsForm(Settings_System configureSettingsForm) {
-        this.configureSettingsForm = configureSettingsForm;
-    }
-
-    @Override
-    public void clearAttendantManageForm() {
-        attendantsListForm = null;
-    }
+//    public void setConfigureSettingsForm(Settings_System configureSettingsForm) {
+//        this.configureSettingsForm = configureSettingsForm;
+//    }
+//
+//    @Override
+//    public void clearAttendantManageForm() {
+//        attendantsListForm = null;
+//    }
 
     private static class ListSelectionChangeHandler implements ListSelectionListener {
         int gateNo = 0;
@@ -3486,7 +3531,7 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
                 }
                 DB_Access.makeSureBasicUserExistance();
                 ControlGUI mainForm = new ControlGUI(false);
-                parentGUI = mainForm;
+//                parentGUI = mainForm;
                 mainForm.recordSystemStart();
                 mainForm.setVisible(true);
             }

@@ -168,6 +168,7 @@ import static com.osparking.global.names.ControlEnums.TitleTypes.E_BOARD_SETTING
 import static com.osparking.global.names.ControlEnums.TitleTypes.REBOOT_POPUP;
 import static com.osparking.global.names.ControlEnums.TitleTypes.SETTINGS_TITLE;
 import static com.osparking.global.names.ControlEnums.ToolTipContent.*;
+import com.osparking.global.names.ControlEnums.TopForms;
 import com.osparking.global.names.DB_Access;
 import static com.osparking.global.names.DB_Access.connectionType;
 import static com.osparking.global.names.DB_Access.deviceComID;
@@ -3583,18 +3584,6 @@ public class Settings_System extends javax.swing.JFrame implements IDataMan {
         dataManDialog.dispose();
     }
     
-    void closeSettingsForm() {
-        if(mainForm != null)
-            mainForm.setConfigureSettingsForm(null);
-        
-        if (isStand_Alone) {
-            this.setVisible(false);
-            System.exit(0);
-        } else {
-            dispose();
-        }
-    }    
-    
     /**
      * Initiate the configuration settings form of OS.Parking Program by itself.
      * @param args the command line arguments
@@ -4231,7 +4220,16 @@ public class Settings_System extends javax.swing.JFrame implements IDataMan {
                 "Confirm Request", JOptionPane.WARNING_MESSAGE);
             this.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
         } else {
-            closeSettingsForm();
+            if (mainForm != null) {
+                mainForm.getTopForms()[TopForms.Settings.ordinal()] = null;
+            }
+
+            if (isStand_Alone) {
+                this.setVisible(false);
+                System.exit(0);
+            } else {
+                dispose();
+            }            
         }     
     }
 

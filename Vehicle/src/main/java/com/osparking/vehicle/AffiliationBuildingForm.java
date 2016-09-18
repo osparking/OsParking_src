@@ -59,6 +59,8 @@ import static com.osparking.global.Globals.logParkingException;
 import static com.osparking.global.Globals.loginID;
 import static com.osparking.global.Globals.rejectEmptyInput;
 import static com.osparking.global.Globals.removeEmptyRow;
+import com.osparking.global.IMainGUI;
+import com.osparking.global.names.ControlEnums;
 import static com.osparking.global.names.ControlEnums.ButtonTypes.*;
 import static com.osparking.global.names.ControlEnums.DialogMessages.AFFILIATION_DELETE_ALL_DAILOG;
 import static com.osparking.global.names.ControlEnums.DialogMessages.BUILDING_DELETE_ALL_DAILOG;
@@ -200,13 +202,19 @@ import org.jopendocument.dom.spreadsheet.SpreadSheet;
  * @author Open Source Parking Inc.
  */
 public class AffiliationBuildingForm extends javax.swing.JFrame {
+    private boolean isStand_Alone = false;
     private FormMode formMode = NormalMode;
     private int[] prevSelection = new int[4];
+    IMainGUI mainForm = null;
     /**
      * Creates new form BuildingManageFrame
      */
-    public AffiliationBuildingForm() {
+    public AffiliationBuildingForm(IMainGUI mainForm) {
         initComponents();
+        this.mainForm = mainForm;
+        if (mainForm == null) {
+            isStand_Alone = true;
+        }
         affiL1_Control.setSelected(true);
         
         /**
@@ -328,6 +336,11 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
         setTitle(AFFILI_BUILD_FRAME_TITLE.getContent());
         setBackground(PopUpBackground);
         setMinimumSize(new Dimension(750, normGUIheight + 30));
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
         northPanel.setPreferredSize(new java.awt.Dimension(729, 40));
 
@@ -2243,7 +2256,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     }//GEN-LAST:event_ODSAffiliHelpActionPerformed
 
     private void closeFormButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_closeFormButtonActionPerformed
-        dispose();
+        tryToCloseSettingsForm();
     }//GEN-LAST:event_closeFormButtonActionPerformed
 
     private boolean firstRowIsDummy(JTable table) {
@@ -2566,6 +2579,10 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_sampleButtonActionPerformed
 
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        tryToCloseSettingsForm();        
+    }//GEN-LAST:event_formWindowClosing
+
     private void adjustTables() {
         adjustAffiliationTable(L1_Affiliation);
         adjustAffiliationTable(L2_Affiliation);
@@ -2673,7 +2690,6 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
             loadL2_Affiliation(null, 0, "");
         }
         //</editor-fold>
-
     }
 
     private int getL2RecordCount(int L1_no) {
@@ -3341,7 +3357,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
                 if (loginID != null ||
                         loginID == null && findLoginIdentity() != null) 
                 {
-                    AffiliationBuildingForm runForm = new AffiliationBuildingForm();
+                    AffiliationBuildingForm runForm = new AffiliationBuildingForm(null);
                     runForm.setVisible(true);
                     runForm.setDefaultCloseOperation(
                             javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -3752,8 +3768,17 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
         }
     }
 
-    private void downloadSampleNew2(String toString, Class<? extends AffiliationBuildingForm> aClass, String sampleFile) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    private void tryToCloseSettingsForm() {
+        if (mainForm != null) {
+            mainForm.getTopForms()[ControlEnums.TopForms.Settings.ordinal()] = null;
+        }
+
+        if (isStand_Alone) {
+            this.setVisible(false);
+            System.exit(0);
+        } else {
+            dispose();
+        }  
     }
 
     private class HdrMouseListener extends MouseAdapter {

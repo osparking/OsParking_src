@@ -166,7 +166,7 @@ public class OSP_enums {
     public enum ODS_TYPE {
         AFFILIATION("소속", "AFFILI'"),
         BUILDING("건물", "Bldg"),
-        DRIVER("운전자", "Driver"),
+        DRIVER("차주", "Driver"),
         VEHICLE("등록차량", "Vehicle");
         
         ODS_TYPE(String korean, String english) {

@@ -56,7 +56,6 @@ import com.osparking.global.names.DB_Access;
 import static com.osparking.global.names.DB_Access.insertOneVehicle;
 import static com.osparking.global.names.JDBCMySQL.getConnection;
 import com.osparking.global.names.OSP_enums.DriverCol;
-import com.osparking.global.names.OSP_enums.VehicleCol;
 import com.osparking.global.names.OSP_enums.VehicleOds;
 import com.osparking.global.names.WrappedInt;
 import static com.osparking.vehicle.CommonData.invalidCell;
@@ -72,7 +71,7 @@ import org.jopendocument.dom.spreadsheet.SpreadSheet;
  * @author Open Source Parking Inc.
  */
 public class ODSReader {
-    VehiclesForm vehicle = new VehiclesForm();
+    VehiclesForm vehicle = new VehiclesForm(null);
     
     public static String getWrongCellPointString(ArrayList<Point> wrongCells) {
         // make point list string in the following format

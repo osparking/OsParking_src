@@ -159,9 +159,7 @@ public class DriverSelection extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle(DRIVER_SELECTION_FRAME_TITLE.getContent());
-        setMaximumSize(new java.awt.Dimension(400, 535));
         setMinimumSize(new java.awt.Dimension(400, 535));
-        setPreferredSize(new java.awt.Dimension(400, 535));
         setResizable(false);
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
@@ -200,7 +198,7 @@ public class DriverSelection extends javax.swing.JFrame {
         csHelpText.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         csHelpText.setForeground(Color.gray);
         csHelpText.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        csHelpText.setText("운전자 행 클릭 후 [선택] 버튼 사용");
+        csHelpText.setText("OWNER_SELECTION_HELP_MSG.getContent()");
         csHelpText.setPreferredSize(new java.awt.Dimension(46, 28));
 
         javax.swing.GroupLayout csHelpPanelLayout = new javax.swing.GroupLayout(csHelpPanel);
@@ -467,7 +465,7 @@ public class DriverSelection extends javax.swing.JFrame {
         if (loginID != null ||
                 loginID == null && findLoginIdentity() != null) 
         {
-            ManageDrivers driverManageForm = new ManageDrivers(this);
+            ManageDrivers driverManageForm = new ManageDrivers(null, this);
             driverManageForm.setVisible(true);
         }
     }//GEN-LAST:event_manageDriversButtonActionPerformed
@@ -487,7 +485,7 @@ public class DriverSelection extends javax.swing.JFrame {
     private void manageDriversButtonKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_manageDriversButtonKeyReleased
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) 
         {
-            ManageDrivers driverManageForm = new ManageDrivers(this);
+            ManageDrivers driverManageForm = new ManageDrivers(null, this);
             driverManageForm.setVisible(true);
         }
     }//GEN-LAST:event_manageDriversButtonKeyReleased

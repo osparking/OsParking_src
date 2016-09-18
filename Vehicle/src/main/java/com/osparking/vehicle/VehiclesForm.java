@@ -64,6 +64,8 @@ import javax.swing.table.TableModel;
 import com.osparking.global.names.ConvComboBoxItem;
 import static com.osparking.global.names.DB_Access.readSettings;
 import static com.osparking.global.Globals.*;
+import com.osparking.global.IMainGUI;
+import com.osparking.global.names.ControlEnums;
 import static com.osparking.global.names.ControlEnums.ButtonTypes.*;
 import static com.osparking.global.names.ControlEnums.ComboBoxItemTypes.*;
 import static com.osparking.global.names.ControlEnums.DialogMessages.*;
@@ -161,12 +163,18 @@ public class VehiclesForm extends javax.swing.JFrame {
     private List<String> prevKeyList = new ArrayList<String>();
     private List<String> currKeyList = new ArrayList<String>();
     static private ChangedComponentClear changedControls; 
+    IMainGUI mainForm = null;
+    boolean isStandalone = false;
     
     /**
      * Creates new form Vehicles
      */
-    public VehiclesForm() {
+    public VehiclesForm(IMainGUI mainForm) {
         initComponents();
+        this.mainForm = mainForm;
+        if (mainForm == null) {
+            isStandalone = true;
+        }
         changedControls = new ChangedComponentClear(clearButton);
         
         setIconImages(OSPiconList);
@@ -2022,7 +2030,7 @@ public class VehiclesForm extends javax.swing.JFrame {
             /* Create and display the form */
             java.awt.EventQueue.invokeLater(new Runnable() {
                 public void run() {
-                    VehiclesForm mainForm = new VehiclesForm();
+                    VehiclesForm mainForm = new VehiclesForm(null);
                     mainForm.setVisible(true);
                     if (!DEBUG) {
                         shortLicenseDialog(mainForm, "Vehicle Manager Program", "upper left");
@@ -2524,7 +2532,7 @@ public class VehiclesForm extends javax.swing.JFrame {
 
     private void closeFrameGracefully() {
         if (formMode == FormMode.NormalMode) {
-            dispose();
+            disposeExit();
         } else {
             
             String dialogMessage = "";
@@ -2549,9 +2557,8 @@ public class VehiclesForm extends javax.swing.JFrame {
                                 WARING_DIALOGTITLE.getContent(), 
                                 JOptionPane.YES_NO_OPTION);
         
-            if (response == JOptionPane.YES_OPTION) 
-            {
-                dispose();
+            if (response == JOptionPane.YES_OPTION) {
+                disposeExit();
             }             
         }      
     }
@@ -2858,5 +2865,15 @@ public class VehiclesForm extends javax.swing.JFrame {
         disallowReason.setText(DIS_REASON_TF.getContent());
         reasonHintShown = true;
         disallowReason.setForeground(tipColor);
+    }
+
+    private void disposeExit() {
+        if (mainForm != null) {
+            mainForm.getTopForms()[ControlEnums.TopForms.Vehicle.ordinal()] = null;
+        }
+        dispose();
+        if (isStandalone) {
+            System.exit(0);
+        } 
     }
 }

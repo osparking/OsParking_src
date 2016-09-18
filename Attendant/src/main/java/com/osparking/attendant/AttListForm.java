@@ -60,6 +60,8 @@ import static com.osparking.global.Globals.*;
 import static javax.swing.JOptionPane.showMessageDialog;
 import static com.osparking.global.names.DB_Access.*;
 import com.osparking.global.Globals;
+import com.osparking.global.IMainGUI;
+import com.osparking.global.names.ControlEnums;
 import static com.osparking.global.names.ControlEnums.ButtonTypes.*;
 import static com.osparking.global.names.ControlEnums.DialogMessages.*;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.ATTENDANT_ODS_TITLE;
@@ -114,7 +116,6 @@ import static com.osparking.global.names.JDBCMySQL.getHashedPW;
 import com.osparking.global.names.JTextFieldLimit;
 import com.osparking.global.names.OSP_enums.OpLogLevel;
 import com.osparking.global.names.OdsFileOnly;
-import com.osparking.global.names.ParentGUI;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -130,6 +131,7 @@ import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.JButton;
 import javax.swing.JComponent;
+import javax.swing.JFrame;
 import javax.swing.JRootPane;
 import javax.swing.JTextField;
 import javax.swing.KeyStroke;
@@ -160,7 +162,7 @@ public class AttListForm extends javax.swing.JFrame {
     
     private static Logger logException = null;
     private static Logger logOperation = null;
-    ParentGUI mainGUI;
+    IMainGUI mainGUI;
     boolean isStandalone = false;
     private HashSet<Component> changedControls = new HashSet<Component>();    
     /**
@@ -171,7 +173,7 @@ public class AttListForm extends javax.swing.JFrame {
     /**
      * Creates new form AttListForm
      */
-    public AttListForm(ParentGUI mainGUI, String loginID, String loginPW, boolean isManager) {
+    public AttListForm(IMainGUI mainGUI, String loginID, String loginPW, boolean isManager) {
         // Mark the first row as selected in default
         this.mainGUI = mainGUI;
         
@@ -1618,12 +1620,13 @@ public class AttListForm extends javax.swing.JFrame {
     }//GEN-LAST:event_cancelButtonActionPerformed
 
     private void closeFormButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_closeFormButtonActionPerformed
-        if (mainGUI != null)
-            mainGUI.clearAttendantManageForm();
         disposeAndOptionalExit();
     }//GEN-LAST:event_closeFormButtonActionPerformed
 
     private void disposeAndOptionalExit() {
+        if (mainGUI != null) {
+            mainGUI.getTopForms()[ControlEnums.TopForms.Attendant.ordinal()] = null;
+        }
         dispose();
         if (isStandalone) {
             System.exit(0);
@@ -2147,8 +2150,6 @@ public class AttListForm extends javax.swing.JFrame {
     }//GEN-LAST:event_newIDtyped
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-        if (mainGUI != null)
-            mainGUI.clearAttendantManageForm();
         disposeAndOptionalExit();        
     }//GEN-LAST:event_formWindowClosing
 
