@@ -1429,40 +1429,19 @@ public class AttListForm extends javax.swing.JFrame {
                                 selectIndex = 0;
                             usersTable.changeSelection(selectIndex, 0, false, false); 
                             usersTable.requestFocus();
+                            changeFieldButtonUsability(selectIndex);                            
                             // </editor-fold>   
-
                             revokeCreationMode();
-                            
-                            switch (language) {
-                                case KOREAN:
-                                    dialogText ="사용자(ID: " + newUserID + ") 정보가\n성공적으로 생성되었습니다.";
-                                    break;
-                                    
-                                case ENGLISH:
-                                    dialogText = "Successful Creation of a user" + System.lineSeparator() 
-                                            + "User ID: " + newUserID + "";
-                                    break;
-                                default:
-                                    break;
-                            }
+                            dialogText = ATT_CREATE_DIAG_1.getContent() + System.lineSeparator() +
+                                    ATT_CREATE_DIAG_1.getContent() + newUserID;
                             
                             JOptionPane.showMessageDialog(this, 
                                     dialogText,
                                     CREATION_RESULT_DIALOGTITLE.getContent(),
                                     JOptionPane.PLAIN_MESSAGE);  
                         } else {
-                            switch (language) {
-                                case KOREAN:
-                                    dialogText = "정보 생성에 실패하였습니다!\n  ID: " +   newUserID;
-                                    break;
-                                    
-                                case ENGLISH:
-                                    dialogText = "User Creation Failure!" + System.lineSeparator() 
-                                            + " Failed ID: " + newUserID + "";
-                                    break;
-                                default:
-                                    break;
-                            }                            
+                            dialogText = ATT_FAILED_DIAG_1.getContent() + System.lineSeparator() +
+                                    ATT_CREATE_DIAG_1.getContent() + newUserID;                            
                             
                             showMessageDialog(this, 
                                     dialogText,
@@ -1933,7 +1912,7 @@ public class AttListForm extends javax.swing.JFrame {
             if (usersTable.getRowCount()==0){
                 multiFuncButton.setEnabled(false);
                 deleteButton.setEnabled(false);
-            }else{
+            } else {
                 int selRow = usersTable.getSelectedRow();
                 changeFieldButtonUsability(selRow);
             }

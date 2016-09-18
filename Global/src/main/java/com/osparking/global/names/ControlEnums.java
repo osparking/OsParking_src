@@ -655,6 +655,11 @@ public class ControlEnums {
         READ_DRIVER_ODS_CONF_3("이들 정보를 읽어 옵니까?",
                 "Want to read this information?"),
         
+        ATT_FAILED_DIAG_1 ("사용자 생성 실패 보고", "Failed user creation"),
+        
+        ATT_CREATE_DIAG_1 ("성공적으로 생성된 사용자", "Successful creation of a user"),
+        ATT_CREATE_DIAG_2 (" - 사용자 아이디 : ", " - User ID : "),
+        
         DELETE_ALL_DRIVER_P1 ("아래 운전자 및 차량 정보를 삭제합니까?", "Want to delete below drivers and vehicles?"),
         DELETE_ALL_DRIVER_P2 (" - 운전자 정보 건수 : ", " - Driver record count : "),
         DELETE_ALL_DRIVER_P3 (" - 소유 차량 건수 : ",    " - Owned vehicle count : "),
