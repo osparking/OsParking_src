@@ -380,6 +380,27 @@ public class ControlEnums {
         }        
     }
 
+    public enum OsPaTable {  
+        Building_table("Building_table"),
+        Building_unit("Building_unit"),
+        CarDriver("CarDriver"),
+        Car_arrival("Car_arrival"),
+        L1_affiliation("L1_affiliation"),
+        L2_affiliation("L2_affiliation"),
+        LoginRecord("LoginRecord"),
+        SystemRun("SystemRun"),
+        Users_osp("Users_osp"),
+        Vehicles("vehicles");
+        
+        OsPaTable(String tabName) {
+            this.tabName = tabName;
+        }
+        private String tabName;
+        public String toString() {
+                return tabName;
+        }
+    }
+
     public enum FormModeString {  
         SEARCH("검색 ", "Searching"),
         MODIFY("수정", "Modifying"),
@@ -1261,7 +1282,9 @@ public class ControlEnums {
         DRIVER("차주", "Driver"),
         VEHICLE("차량", "Vehicle"),
         L1_AFFILI("상위 소속", "L1 affiliation"),
+        L2_AFFILI("하위 소속", "L2 affiliation"),
         BUILDING("건물", "Building"),
+        UNIT("호실", "Unit"),
         SYS_RUN("가동 기록", "Run record");
         
         RowName(String korean, String english) {

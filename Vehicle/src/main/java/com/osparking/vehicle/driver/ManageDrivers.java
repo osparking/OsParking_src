@@ -109,6 +109,9 @@ import static com.osparking.global.names.ControlEnums.LabelContent.SEARCH_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.SEARCH_MODE_LABEL;
 import static com.osparking.global.names.ControlEnums.Languages.ENGLISH;
 import static com.osparking.global.names.ControlEnums.MenuITemTypes.META_KEY_LABEL;
+import com.osparking.global.names.ControlEnums.OsPaTable;
+import static com.osparking.global.names.ControlEnums.OsPaTable.CarDriver;
+import static com.osparking.global.names.ControlEnums.TableType.Vehicles;
 import static com.osparking.global.names.ControlEnums.TitleTypes.DRIVER_LIST_FRAME_TITLE;
 import static com.osparking.global.names.ControlEnums.TableTypes.*;
 import static com.osparking.global.names.ControlEnums.TextType.*;
@@ -1366,8 +1369,8 @@ public class ManageDrivers extends javax.swing.JFrame {
     static int creatingRowM = -1;    
     
     private void deleteAll_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteAll_buttonActionPerformed
-        int driverCount = getRecordCount("cardriver", -1);
-        int vehiclecount = getRecordCount("vehicles", -1);
+        int driverCount = getRecordCount(CarDriver, -1);
+        int vehiclecount = getRecordCount(OsPaTable.Vehicles, -1);
         
         String dialogMessage = DELETE_ALL_DRIVER_P1.getContent() + System.lineSeparator() +
                 DELETE_ALL_DRIVER_P2.getContent() + driverCount + System.lineSeparator() +
@@ -1431,7 +1434,7 @@ public class ManageDrivers extends javax.swing.JFrame {
 
             int response = driverTable.askUserOnUpdate((String)
                     driverTable.getModel().getValueAt(rowM, DriverCol.DriverName.getNumVal()),
-                    getRecordCount("vehicles", driverSeqNo));
+                    getRecordCount(OsPaTable.Vehicles, driverSeqNo));
 
             if (response == JOptionPane.YES_OPTION) {        
                 updateRow = rowM;
@@ -1464,7 +1467,7 @@ public class ManageDrivers extends javax.swing.JFrame {
         int modal_Index = driverTable.convertRowIndexToModel(deleteIndice[0]);
         int CD_SEQ_NO = (int)driverTable.getModel().getValueAt(modal_Index, 
                 DriverCol.SEQ_NO.getNumVal());
-        int count = getRecordCount("vehicles", CD_SEQ_NO);
+        int count = getRecordCount(OsPaTable.Vehicles, CD_SEQ_NO);
 
         if (deleteIndice.length == 1) {
             String dialogMessage = "";
@@ -1790,7 +1793,7 @@ public class ManageDrivers extends javax.swing.JFrame {
             int modal_Index = driverTable.convertRowIndexToModel(deleteIndice[0]);
             int CD_SEQ_NO = (int)driverTable.getModel().getValueAt(modal_Index, 
                     DriverCol.SEQ_NO.getNumVal());
-            int count = getRecordCount("vehicles", CD_SEQ_NO);
+            int count = getRecordCount(OsPaTable.Vehicles, CD_SEQ_NO);
 
             if (deleteIndice.length == 1) {
                 String dialogMessage = "";

@@ -28,7 +28,11 @@ import static com.osparking.global.names.ControlEnums.DialogTitleTypes.DELETE_RE
 import static com.osparking.global.names.ControlEnums.LabelContent.TABLE_DEL_DIALOG_1;
 import static com.osparking.global.names.ControlEnums.LabelContent.TABLE_DEL_DIALOG_2;
 import static com.osparking.global.names.ControlEnums.MenuITemTypes.META_KEY_LABEL;
+import com.osparking.global.names.ControlEnums.OsPaTable;
+import com.osparking.global.names.ControlEnums.RowName;
+import static com.osparking.global.names.ControlEnums.TableType.Vehicles;
 import static com.osparking.global.names.DB_Access.deviceType;
+import static com.osparking.global.names.DB_Access.getRecordCount;
 import com.osparking.global.names.JDBCMySQL;
 import static com.osparking.global.names.OSP_enums.CameraType.CarButton;
 import static com.osparking.global.names.OSP_enums.DeviceType.Camera;
@@ -115,8 +119,9 @@ public class CommonData { // new Dimension(carTagWidth, 30)
         putCellCenter.setHorizontalAlignment(JLabel.CENTER);    
     }
     
-    public static void deleteTable(Component parent, 
-            String tableName, String condition, String unitName) {
+    public static void deleteTable(Component parent, OsPaTable tableName, 
+            String condition, String unitName) 
+    {
         String sqlDelete = "Delete From " + tableName;
         Connection conn = null;
         Statement deleteStmt = null; 
@@ -125,14 +130,75 @@ public class CommonData { // new Dimension(carTagWidth, 30)
         if (condition != null) {
             sqlDelete += " Where " + condition;
         }
+        String appendStr = null;
+        int[] preCount = new int[OsPaTable.values().length];
+        
+        //<editor-fold desc="-- Save row count of cascading delete victim tables">
+        switch (tableName) {
+            case CarDriver:
+                preCount[OsPaTable.Vehicles.ordinal()] = getRecordCount(OsPaTable.Vehicles, -1);
+                break;
+                
+            case L1_affiliation:
+            case Building_table:
+                if (tableName == OsPaTable.L1_affiliation) {
+                    preCount[OsPaTable.L2_affiliation.ordinal()] = getRecordCount(OsPaTable.L2_affiliation, -1);
+                } else {
+                    preCount[OsPaTable.Building_unit.ordinal()] = getRecordCount(OsPaTable.Building_unit, -1);
+                }
+                preCount[OsPaTable.CarDriver.ordinal()] = getRecordCount(OsPaTable.CarDriver, -1);
+                preCount[OsPaTable.Vehicles.ordinal()] = getRecordCount(OsPaTable.Vehicles, -1);
+                break;
+                
+            default:
+                break;
+        }
+        //</editor-fold>
         try {
             conn = JDBCMySQL.getConnection();
             deleteStmt = conn.createStatement();
             resultCount = deleteStmt.executeUpdate(sqlDelete);
 
-            JOptionPane.showMessageDialog(parent, 
-                    TABLE_DEL_DIALOG_1.getContent() + unitName + 
-                            TABLE_DEL_DIALOG_2.getContent() + resultCount,
+            String delDesc = null;
+            
+            delDesc = " -" + TABLE_DEL_DIALOG_1.getContent() + unitName + 
+                            TABLE_DEL_DIALOG_2.getContent() + resultCount;
+            //<editor-fold desc="-- Append stat' of deleted rows from cascading delete">
+            switch (tableName) {
+                case CarDriver:
+                    appendStr = appStr(RowName.VEHICLE.getContent(), 
+                            preCount[OsPaTable.Vehicles.ordinal()] -
+                                    getRecordCount(OsPaTable.Vehicles, -1));
+                      
+                    break;
+                    
+                case L1_affiliation:
+                case Building_table:
+                    if (tableName == OsPaTable.L1_affiliation) {
+                        appendStr = appStr(RowName.L2_AFFILI.getContent(), 
+                                preCount[OsPaTable.L2_affiliation.ordinal()] - 
+                                        getRecordCount(OsPaTable.L2_affiliation, -1));
+                    } else {
+                        appendStr = appStr(RowName.UNIT.getContent(),
+                                preCount[OsPaTable.Building_unit.ordinal()] -
+                                        getRecordCount(OsPaTable.Building_unit, -1));
+                    }
+                    appendStr += System.lineSeparator() + appStr(RowName.DRIVER.getContent(), 
+                            preCount[OsPaTable.CarDriver.ordinal()] - 
+                                    getRecordCount(OsPaTable.CarDriver, -1));
+                    appendStr += System.lineSeparator() + appStr(RowName.VEHICLE.getContent(), 
+                            preCount[OsPaTable.Vehicles.ordinal()] -
+                                    getRecordCount(OsPaTable.Vehicles, -1));
+                    break;
+                    
+                default:
+                    break;
+            }
+            //</editor-fold>
+            if (appendStr != null) {
+                delDesc += System.lineSeparator() + appendStr;
+            }
+            JOptionPane.showMessageDialog(parent, delDesc,
                     DELETE_RESULT_DIALOGTITLE.getContent(), JOptionPane.PLAIN_MESSAGE);
         } catch (Exception se) {
             logParkingException(Level.SEVERE, se, "(" + sqlDelete + ")");
@@ -259,4 +325,9 @@ public class CommonData { // new Dimension(carTagWidth, 30)
     public static boolean cameraOneIsButton() {
         return deviceType[Camera.ordinal()][1] == CarButton.ordinal();
     }     
+
+    private static String appStr(String content, int recordCount) {
+      return " -" + TABLE_DEL_DIALOG_1.getContent() + content + 
+              TABLE_DEL_DIALOG_2.getContent() + recordCount;
+    }
 }

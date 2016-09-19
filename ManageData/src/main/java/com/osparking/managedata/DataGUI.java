@@ -15,6 +15,17 @@ import static com.osparking.global.names.ControlEnums.DialogMessages.USER_DELETE
 import static com.osparking.global.names.ControlEnums.DialogMessages.USER_DELETE_CONF_2;
 import static com.osparking.global.names.ControlEnums.DialogMessages.USER_DELETE_CONF_3;
 import static com.osparking.global.names.ControlEnums.DialogMessages.USER_DELETE_CONF_TITLE;
+import static com.osparking.global.names.ControlEnums.DialogTitleTypes.DELETE_ALL_DAILOGTITLE;
+import static com.osparking.global.names.ControlEnums.OsPaTable.Building_table;
+import static com.osparking.global.names.ControlEnums.OsPaTable.Building_unit;
+import static com.osparking.global.names.ControlEnums.OsPaTable.CarDriver;
+import static com.osparking.global.names.ControlEnums.OsPaTable.Car_arrival;
+import static com.osparking.global.names.ControlEnums.OsPaTable.L1_affiliation;
+import static com.osparking.global.names.ControlEnums.OsPaTable.L2_affiliation;
+import static com.osparking.global.names.ControlEnums.OsPaTable.LoginRecord;
+import static com.osparking.global.names.ControlEnums.OsPaTable.SystemRun;
+import static com.osparking.global.names.ControlEnums.OsPaTable.Users_osp;
+import static com.osparking.global.names.ControlEnums.OsPaTable.Vehicles;
 import static com.osparking.global.names.ControlEnums.RowName.*;
 import com.osparking.global.names.DB_Access;
 import static com.osparking.global.names.DB_Access.getRecordCount;
@@ -26,8 +37,6 @@ import static com.osparking.global.names.JDBCMySQL.getConnection;
 import com.osparking.global.names.OSP_enums.DriverCol;
 import java.awt.Cursor;
 import java.awt.event.MouseAdapter;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -41,6 +50,7 @@ import javax.swing.JOptionPane;
 import static javax.swing.JOptionPane.OK_CANCEL_OPTION;
 import static javax.swing.JOptionPane.OK_OPTION;
 import static javax.swing.JOptionPane.QUESTION_MESSAGE;
+import static javax.swing.JOptionPane.WARNING_MESSAGE;
 import javax.swing.RootPaneContainer;
 import javax.swing.SwingUtilities;
 
@@ -454,6 +464,8 @@ public class DataGUI extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
+        progressBar.setPreferredSize(new java.awt.Dimension(150, 30));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -494,7 +506,7 @@ public class DataGUI extends javax.swing.JFrame {
                 .addGap(24, 24, 24)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(quitProgram, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(progressBar, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(progressBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(40, 40, 40))
         );
 
@@ -512,7 +524,7 @@ public class DataGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_manager5ActionPerformed
 
     private void updateAttendantCount() {
-        attendantCount.setText(String.valueOf(getRecordCount("users_osp", -1)));    
+        attendantCount.setText(String.valueOf(getRecordCount(Users_osp, -1)));    
     }
     
     private void general100ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_general100ActionPerformed
@@ -541,9 +553,9 @@ public class DataGUI extends javax.swing.JFrame {
         if (response != OK_OPTION) {
             return;
         } else {
-            deleteTable(this, "loginrecord", "userID <> 'admin'", LOG_IN.getContent());
-            deleteTable(this, "car_arrival", "AttendantID <> 'admin';", ARRIVAL.getContent());
-            deleteTable(this, "users_osp", "id <> 'admin'", USER.getContent());
+            deleteTable(this, LoginRecord, "userID <> 'admin'", LOG_IN.getContent());
+            deleteTable(this, Car_arrival, "AttendantID <> 'admin';", ARRIVAL.getContent());
+            deleteTable(this, Users_osp, "id <> 'admin'", USER.getContent());
 
             updateAttendantCount();
         }
@@ -695,11 +707,10 @@ public class DataGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_buildingsButtonActionPerformed
 
     private Object getRandomElement(Object[] objects) {
-        Object object = null;
-        
         int len = objects.length;
         Random r = new Random();
         int i = r.nextInt(len);
+        
         return objects[i];
     }
     
@@ -816,8 +827,15 @@ public class DataGUI extends javax.swing.JFrame {
         L2_sn_arr = init_int_key_arr("select L2_No from l2_affiliation");
         unit_sn_arr = init_int_key_arr("select seq_no from building_unit");
         
-        // create driver name randomly
-        insertTableRows(DRIVER, 1000, 0);
+        if (L2_sn_arr.length > 0 && unit_sn_arr.length > 0) {
+
+            // create driver name randomly
+            insertTableRows(DRIVER, 1000, 0);
+        } else {
+            JOptionPane.showMessageDialog(this, 
+                    "Insert affiliation and building/unit first",
+                    "Status Report", JOptionPane.PLAIN_MESSAGE);            
+        }
     }//GEN-LAST:event_insertDriversActionPerformed
 
     private int createNewVehicle() {
@@ -875,39 +893,54 @@ public class DataGUI extends javax.swing.JFrame {
     }  
     
     private void deleteDriversActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteDriversActionPerformed
-        deleteTable(this, "cardriver", null, DRIVER.getContent());
-        updateDriverCount();
-        updateVehicleCount();
+        String msg = "This operation deletes all car owners" + System.lineSeparator()
+                + "and owned cars(vehicles).";
+        
+        if (getConfirmCode(msg) == JOptionPane.YES_OPTION) {
+            deleteTable(this, CarDriver, null, DRIVER.getContent());
+            updateDriverCount();
+            updateVehicleCount();
+        }
     }//GEN-LAST:event_deleteDriversActionPerformed
 
     private void insertVehiclesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_insertVehiclesActionPerformed
         // Init a kind of database for the random driver selection.
         driver_sn_arr = init_int_key_arr("select seq_no from cardriver");
         
-        int createdVehicles = insertFourVehiclesWithImage();
-        insertTableRows(VEHICLE, 1000 - createdVehicles, createdVehicles);
+        if (driver_sn_arr.length > 0) {
+            int createdVehicles = insertFourVehiclesWithImage();
+            insertTableRows(VEHICLE, 1000 - createdVehicles, createdVehicles);
+        } else {
+            JOptionPane.showMessageDialog(this, 
+                    "Insert car owner records first",
+                    "Status Report", JOptionPane.PLAIN_MESSAGE);              
+        }
     }//GEN-LAST:event_insertVehiclesActionPerformed
 
     private void deleteVehiclesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteVehiclesActionPerformed
-        deleteTable(this, "vehicles", null, VEHICLE.getContent());
-        vehicleCount.setText(String.valueOf(getRecordCount("vehicles", -1)));                
+        String msg = "This operation deletes all vehicles.";
+        
+        if (getConfirmCode(msg) == JOptionPane.YES_OPTION) {
+            deleteTable(this, Vehicles, null, VEHICLE.getContent());
+            vehicleCount.setText(String.valueOf(getRecordCount(Vehicles, -1)));
+        }
     }//GEN-LAST:event_deleteVehiclesActionPerformed
 
     private void updateBuildingCount() {
-        buildCount.setText(String.valueOf(getRecordCount("BUILDING_TABLE", -1)));    
-        unitCount.setText(String.valueOf(getRecordCount("building_unit", -1)));    
+        buildCount.setText(String.valueOf(getRecordCount(Building_table, -1)));    
+        unitCount.setText(String.valueOf(getRecordCount(Building_unit, -1)));    
     }
     
     private void updateAffiliCount() {
-        L1_Count.setText(String.valueOf(getRecordCount("L1_Affiliation", -1)));    
-        L2_Count.setText(String.valueOf(getRecordCount("L2_Affiliation", -1)));            
+        L1_Count.setText(String.valueOf(getRecordCount(L1_affiliation, -1)));    
+        L2_Count.setText(String.valueOf(getRecordCount(L2_affiliation, -1)));            
     }
     
     private void deleteAffiliationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteAffiliationActionPerformed
-        deleteTable(this, "L1_Affiliation", null, L1_AFFILI.getContent());
+        deleteTable(this, L1_affiliation, null, L1_AFFILI.getContent());
         updateAffiliCount();
         
-        deleteTable(this, "BUILDING_TABLE", null, BUILDING.getContent());
+        deleteTable(this, Building_table, null, BUILDING.getContent());
         updateBuildingCount();
         
         updateDriverCount();
@@ -915,15 +948,15 @@ public class DataGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_deleteAffiliationActionPerformed
 
     private void deleteLoginsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteLoginsActionPerformed
-        deleteTable(this, "LoginRecord", null, LOG_IN.getContent());
+        deleteTable(this, LoginRecord, null, LOG_IN.getContent());
     }//GEN-LAST:event_deleteLoginsActionPerformed
 
     private void deleteSysRunActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteSysRunActionPerformed
-        deleteTable(this, "SystemRun", null, SYS_RUN.getContent());
+        deleteTable(this, SystemRun, null, SYS_RUN.getContent());
     }//GEN-LAST:event_deleteSysRunActionPerformed
 
     private void deleteArrivalsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteArrivalsActionPerformed
-        deleteTable(this, "Car_Arrival", null, ARRIVAL.getContent());
+        deleteTable(this, Car_arrival, null, ARRIVAL.getContent());
     }//GEN-LAST:event_deleteArrivalsActionPerformed
 
     private int createUser(String idCore, int suffix, boolean isManager) {
@@ -1097,6 +1130,7 @@ public class DataGUI extends javax.swing.JFrame {
         } catch (SQLException ex) {
         } finally {
             closeDBstuff(conn, selectStmt, rs, "(Loading passing delay records)");
+            
             return (numList.toArray());
         }
     }
@@ -1155,11 +1189,11 @@ public class DataGUI extends javax.swing.JFrame {
     }
 
     private void updateDriverCount() {
-        driverCount.setText(String.valueOf(getRecordCount("cardriver", -1)));        
+        driverCount.setText(String.valueOf(getRecordCount(CarDriver, -1)));        
     }
 
     private void updateVehicleCount() {
-        vehicleCount.setText(String.valueOf(getRecordCount("vehicles", -1)));
+        vehicleCount.setText(String.valueOf(getRecordCount(Vehicles, -1)));
     }
 
     /**
@@ -1291,6 +1325,14 @@ public class DataGUI extends javax.swing.JFrame {
             }
         };    
         t.start();
+    }
+
+    private int getConfirmCode(String msg) {
+        return (JOptionPane.showConfirmDialog(this, 
+                msg + System.lineSeparator() +
+                        "Do you want to continue(delete)?",
+                DELETE_ALL_DAILOGTITLE.getContent(), 
+                JOptionPane.YES_NO_OPTION, WARNING_MESSAGE));
     }
 
     public enum PhoneType {

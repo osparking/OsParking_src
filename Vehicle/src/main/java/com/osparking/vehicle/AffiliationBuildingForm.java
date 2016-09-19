@@ -126,6 +126,8 @@ import static com.osparking.global.names.ControlEnums.MsgContent.BLDG_ODS_DIAG_3
 import static com.osparking.global.names.ControlEnums.MsgContent.UNIT_DIAG_L1;
 import static com.osparking.global.names.ControlEnums.MsgContent.UNIT_DIAG_L2;
 import static com.osparking.global.names.ControlEnums.MsgContent.UNIT_DIAG_L3;
+import static com.osparking.global.names.ControlEnums.OsPaTable.Building_table;
+import static com.osparking.global.names.ControlEnums.OsPaTable.L1_affiliation;
 import com.osparking.global.names.ControlEnums.TableType;
 import static com.osparking.global.names.ControlEnums.TableType.Building;
 import static com.osparking.global.names.ControlEnums.TableType.L1_TABLE;
@@ -2214,7 +2216,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
                     JOptionPane.YES_NO_OPTION); 
             
             if (result == JOptionPane.YES_OPTION) {
-                deleteTable(this, "L1_Affiliation", null, L1_AFFILI_ROW.getContent());
+                deleteTable(this, L1_affiliation, null, L1_AFFILI_ROW.getContent());
                 loadL1_Affiliation(0, "");
             }
         } else {
@@ -2224,7 +2226,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
                     JOptionPane.YES_NO_OPTION); 
             
             if (result == JOptionPane.YES_OPTION) {
-                deleteTable(this, "BUILDING_TABLE", null, Building.getContent());
+                deleteTable(this, Building_table, null, Building.getContent());
                 loadBuilding(0, 0); 
             }            
         }

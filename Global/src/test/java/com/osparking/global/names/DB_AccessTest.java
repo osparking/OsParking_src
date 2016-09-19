@@ -16,6 +16,7 @@
  */
 package com.osparking.global.names;
 
+import static com.osparking.global.names.ControlEnums.OsPaTable.CarDriver;
 import static com.osparking.global.names.OSP_enums.EBD_CycleType.EBD_FLOW_CYCLE;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -121,9 +122,8 @@ public class DB_AccessTest {
     @Test
     public void testGetRecordCount_String_int() {
         System.out.println("getRecordCount");
-        String tableName = "cardriver";
         int CD_SEQ_NO = -1;
-        int result = DB_Access.getRecordCount(tableName, CD_SEQ_NO);
+        int result = DB_Access.getRecordCount(CarDriver, CD_SEQ_NO);
         assertTrue(result>=0);
     }
 

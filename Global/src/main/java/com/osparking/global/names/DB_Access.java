@@ -40,6 +40,7 @@ import static com.osparking.global.names.ControlEnums.LabelContent.GATE_LABEL;
 import static com.osparking.global.names.ControlEnums.Languages.ENGLISH;
 import static com.osparking.global.names.ControlEnums.Languages.KOREAN;
 import static com.osparking.global.names.ControlEnums.MsgContent.OS_PARKINGLOT;
+import com.osparking.global.names.ControlEnums.OsPaTable;
 import static com.osparking.global.names.ControlEnums.TextType.LETEST_MSG;
 import static com.osparking.global.names.ControlEnums.TextType.PASSING_MSG;
 import static com.osparking.global.names.ControlEnums.TextType.SECOND_MSG;
@@ -682,7 +683,7 @@ public class DB_Access {
         return cycle;
     }
 
-    public static int getRecordCount(String tableName, int CD_SEQ_NO) {
+    public static int getRecordCount(OsPaTable tableName, int CD_SEQ_NO) {
         Connection conn = null;
         Statement selectStmt = null;
         ResultSet rs = null;
@@ -690,7 +691,7 @@ public class DB_Access {
         try {
             conn = JDBCMySQL.getConnection();
             selectStmt = conn.createStatement();
-            String sql = "SELECT count(*) FROM " + tableName; // vehicles";
+            String sql = "SELECT count(*) FROM " + tableName;
             if (CD_SEQ_NO >= 0) {
                 sql += " WHERE DRIVER_SEQ_NO = " + CD_SEQ_NO;
             }
