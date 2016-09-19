@@ -27,37 +27,30 @@
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" attributes="0">
               <EmptySpace min="-2" pref="40" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                  <Component id="jPanel5" max="32767" attributes="0"/>
+              <Group type="103" groupAlignment="1" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
-                      <Group type="103" groupAlignment="1" max="-2" attributes="0">
-                          <Component id="progressBar" max="32767" attributes="0"/>
+                      <Group type="103" groupAlignment="1" attributes="0">
+                          <Component id="progressBar" min="-2" pref="183" max="-2" attributes="0"/>
                           <Component id="jPanel1" max="32767" attributes="0"/>
                           <Component id="jPanel3" max="32767" attributes="0"/>
                       </Group>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" alignment="0" attributes="0">
-                              <EmptySpace type="separate" max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="jPanel2" pref="0" max="32767" attributes="0"/>
-                                  <Component id="jPanel4" min="-2" max="-2" attributes="0"/>
-                              </Group>
-                          </Group>
-                          <Group type="102" alignment="1" attributes="0">
-                              <EmptySpace min="-2" pref="128" max="-2" attributes="0"/>
-                              <Component id="quitProgram" min="-2" max="-2" attributes="0"/>
-                          </Group>
+                      <EmptySpace type="separate" min="-2" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="1" attributes="0">
+                          <Component id="jPanel4" alignment="0" max="32767" attributes="0"/>
+                          <Component id="jPanel2" alignment="0" max="32767" attributes="0"/>
+                          <Component id="quitProgram" min="-2" max="-2" attributes="0"/>
                       </Group>
                   </Group>
+                  <Component id="jPanel5" alignment="0" max="32767" attributes="0"/>
               </Group>
-              <EmptySpace min="40" pref="40" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="40" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
-              <EmptySpace min="-2" pref="38" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="40" max="-2" attributes="0"/>
               <Component id="jPanel5" min="-2" max="-2" attributes="0"/>
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" max="-2" attributes="0">
@@ -69,10 +62,15 @@
                   <Component id="jPanel3" max="-2" attributes="0"/>
                   <Component id="jPanel4" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace min="-2" pref="24" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="quitProgram" min="-2" pref="36" max="-2" attributes="0"/>
-                  <Component id="progressBar" min="-2" max="-2" attributes="0"/>
+                  <Group type="102" attributes="0">
+                      <EmptySpace min="-2" pref="24" max="-2" attributes="0"/>
+                      <Component id="progressBar" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <Group type="102" alignment="0" attributes="0">
+                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                      <Component id="quitProgram" min="-2" pref="36" max="-2" attributes="0"/>
+                  </Group>
               </Group>
               <EmptySpace min="-2" pref="40" max="-2" attributes="0"/>
           </Group>
@@ -144,7 +142,7 @@
       <SubComponents>
         <Component class="javax.swing.JButton" name="general100">
           <Properties>
-            <Property name="text" type="java.lang.String" value="100 guests"/>
+            <Property name="text" type="java.lang.String" value="100 Low Levels"/>
             <Property name="toolTipText" type="java.lang.String" value="Creates oguest1 to oguest100"/>
           </Properties>
           <Events>
@@ -153,7 +151,7 @@
         </Component>
         <Component class="javax.swing.JButton" name="manager5">
           <Properties>
-            <Property name="text" type="java.lang.String" value="5 managers"/>
+            <Property name="text" type="java.lang.String" value="5 Middle Levels"/>
             <Property name="toolTipText" type="java.lang.String" value="Creates manager1 to manager5"/>
           </Properties>
           <Events>
@@ -185,7 +183,7 @@
       <Properties>
         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
           <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
-            <TitledBorder title="Affili &amp; Building"/>
+            <TitledBorder title="Affili&apos; &amp; Building"/>
           </Border>
         </Property>
       </Properties>
@@ -223,7 +221,7 @@
                           <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                       </Group>
                   </Group>
-                  <EmptySpace max="-2" attributes="0"/>
+                  <EmptySpace min="10" pref="10" max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -278,7 +276,7 @@
         </Component>
         <Component class="javax.swing.JButton" name="deleteAffiliation">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Delete affili/build"/>
+            <Property name="text" type="java.lang.String" value="Delete Affili&apos;/Build&apos;"/>
             <Property name="toolTipText" type="java.lang.String" value="Deletes affiliations and buildings and units."/>
           </Properties>
           <Events>
@@ -403,7 +401,7 @@
         </Component>
         <Component class="javax.swing.JButton" name="deleteDrivers">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Delete all drivers"/>
+            <Property name="text" type="java.lang.String" value="Delete all Drivers"/>
             <Property name="toolTipText" type="java.lang.String" value="Deletes all driver records."/>
           </Properties>
           <Events>
@@ -463,7 +461,7 @@
       <SubComponents>
         <Component class="javax.swing.JButton" name="insertVehicles">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Insert 1K cars"/>
+            <Property name="text" type="java.lang.String" value="Insert 1K Cars"/>
             <Property name="toolTipText" type="java.lang.String" value="Inserts 1000 cars with many random properties. 4 of them are with images."/>
           </Properties>
           <Events>
@@ -482,7 +480,7 @@
         </Component>
         <Component class="javax.swing.JButton" name="deleteVehicles">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Delete all cars"/>
+            <Property name="text" type="java.lang.String" value="Delete all Cars"/>
             <Property name="toolTipText" type="java.lang.String" value="Deletes every registered cars."/>
           </Properties>
           <Events>
@@ -504,13 +502,13 @@
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="1" attributes="0">
-                  <EmptySpace max="-2" attributes="0"/>
-                  <Component id="deleteLogins" linkSize="1" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace type="separate" max="32767" attributes="0"/>
-                  <Component id="deleteSysRun" linkSize="1" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace type="separate" max="32767" attributes="0"/>
+                  <EmptySpace max="32767" attributes="0"/>
                   <Component id="deleteArrivals" linkSize="1" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace min="-2" pref="15" max="-2" attributes="0"/>
+                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                  <Component id="deleteSysRun" linkSize="1" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                  <Component id="deleteLogins" linkSize="1" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>

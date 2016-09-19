@@ -277,10 +277,6 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
     private LoginDialog loginDialog = null;
     Rectangle rect = new Rectangle();
     
-    private VehiclesForm vehiclesForm = null;
-    private DriverSelection driverSelection = null;
-    private AffiliationBuildingForm affiliationBuildingForm = null;
-    
     RunRecordList showRunRecordForm = null;
     LoginRecordList showLoginRecordForm = null;
     ListSelectionModel[] listSelectionModel = null;

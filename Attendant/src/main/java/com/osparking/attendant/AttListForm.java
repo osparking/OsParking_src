@@ -1435,7 +1435,7 @@ public class AttListForm extends javax.swing.JFrame {
                             // </editor-fold>   
                             revokeCreationMode();
                             dialogText = ATT_CREATE_DIAG_1.getContent() + System.lineSeparator() +
-                                    ATT_CREATE_DIAG_1.getContent() + newUserID;
+                                    ATT_CREATE_DIAG_2.getContent() + newUserID;
                             
                             JOptionPane.showMessageDialog(this, 
                                     dialogText,
@@ -1443,7 +1443,7 @@ public class AttListForm extends javax.swing.JFrame {
                                     JOptionPane.PLAIN_MESSAGE);  
                         } else {
                             dialogText = ATT_FAILED_DIAG_1.getContent() + System.lineSeparator() +
-                                    ATT_CREATE_DIAG_1.getContent() + newUserID;                            
+                                    ATT_CREATE_DIAG_2.getContent() + newUserID;                            
                             
                             showMessageDialog(this, 
                                     dialogText,

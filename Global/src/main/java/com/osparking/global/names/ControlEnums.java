@@ -781,15 +781,15 @@ public class ControlEnums {
                             + "[Yes] => to enter right name" + System.getProperty("line.separator") 
                             + "[No] => to give up driver "),
         MISSING_NAME_2(" 포기!", ""),
-        USER_RIGHTS_DESCRIPTION("1. 관리자(ID: admin) : 상위" + System.getProperty("line.separator") +
+        USER_RIGHTS_DESCRIPTION("1. 관리자(ID: admin) : 상급" + System.getProperty("line.separator") +
                 "    - 매니저 및 일반에 대한 모든 권한" + System.getProperty("line.separator") +
                 "      (모든 권한: 삽입, 갱신, 삭제)" + System.getProperty("line.separator") +
                 System.getProperty("line.separator") +
-                "2. 매니저(첵크된 계정) : 중위" + System.getProperty("line.separator") +
+                "2. 매니저(첵크된 계정) : 중급" + System.getProperty("line.separator") +
                 "    - 일반에 대한 모든 권한" + System.getProperty("line.separator") +
                 "      (일반에 매니저 권한 부여 불가)" + System.getProperty("line.separator") +
                 System.getProperty("line.separator") +
-                "3. 일반 : 하위" +System.getProperty("line.separator") +
+                "3. 일반 : 하급" +System.getProperty("line.separator") +
                 "    - 자기 계정에 대한 갱신 권한" + System.getProperty("line.separator") +
                 System.getProperty("line.separator") +
                 "4. 사용자 전체" +System.getProperty("line.separator") +

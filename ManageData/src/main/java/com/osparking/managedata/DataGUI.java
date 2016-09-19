@@ -137,7 +137,7 @@ public class DataGUI extends javax.swing.JFrame {
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Attendants"));
 
-        general100.setText("100 guests");
+        general100.setText("100 Low Levels");
         general100.setToolTipText("Creates oguest1 to oguest100");
         general100.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -145,7 +145,7 @@ public class DataGUI extends javax.swing.JFrame {
             }
         });
 
-        manager5.setText("5 managers");
+        manager5.setText("5 Middle Levels");
         manager5.setToolTipText("Creates manager1 to manager5");
         manager5.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -200,7 +200,7 @@ public class DataGUI extends javax.swing.JFrame {
                 .addGap(18, 18, 18))
         );
 
-        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Affili & Building"));
+        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Affili' & Building"));
 
         affiliationsButton.setText("Insert Affiliations");
         affiliationsButton.setToolTipText("Inserts higher and lower affiliations.");
@@ -218,7 +218,7 @@ public class DataGUI extends javax.swing.JFrame {
             }
         });
 
-        deleteAffiliation.setText("Delete affili/build");
+        deleteAffiliation.setText("Delete Affili'/Build'");
         deleteAffiliation.setToolTipText("Deletes affiliations and buildings and units.");
         deleteAffiliation.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -275,7 +275,7 @@ public class DataGUI extends javax.swing.JFrame {
                             .addComponent(buildingsButton, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(affiliationsButton, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap())
+                .addGap(10, 10, 10))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -316,7 +316,7 @@ public class DataGUI extends javax.swing.JFrame {
 
         driverCount.setText("0");
 
-        deleteDrivers.setText("Delete all drivers");
+        deleteDrivers.setText("Delete all Drivers");
         deleteDrivers.setToolTipText("Deletes all driver records.");
         deleteDrivers.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -359,7 +359,7 @@ public class DataGUI extends javax.swing.JFrame {
 
         jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder("Vehicles"));
 
-        insertVehicles.setText("Insert 1K cars");
+        insertVehicles.setText("Insert 1K Cars");
         insertVehicles.setToolTipText("Inserts 1000 cars with many random properties. 4 of them are with images.");
         insertVehicles.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -371,7 +371,7 @@ public class DataGUI extends javax.swing.JFrame {
 
         vehicleCount.setText("0");
 
-        deleteVehicles.setText("Delete all cars");
+        deleteVehicles.setText("Delete all Cars");
         deleteVehicles.setToolTipText("Deletes every registered cars.");
         deleteVehicles.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -442,13 +442,13 @@ public class DataGUI extends javax.swing.JFrame {
         jPanel5Layout.setHorizontalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(deleteLogins)
-                .addGap(18, 18, Short.MAX_VALUE)
-                .addComponent(deleteSysRun)
-                .addGap(18, 18, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(deleteArrivals)
-                .addGap(15, 15, 15))
+                .addGap(18, 18, 18)
+                .addComponent(deleteSysRun)
+                .addGap(18, 18, 18)
+                .addComponent(deleteLogins)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jPanel5Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {deleteArrivals, deleteLogins, deleteSysRun});
@@ -472,28 +472,24 @@ public class DataGUI extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(40, 40, 40)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(progressBar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(progressBar, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(18, 18, 18)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                                    .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addGap(128, 128, 128)
-                                .addComponent(quitProgram)))))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jPanel4, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(quitProgram)))
+                    .addComponent(jPanel5, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(40, 40, 40))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(38, 38, 38)
+                .addGap(40, 40, 40)
                 .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -503,10 +499,13 @@ public class DataGUI extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(24, 24, 24)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(quitProgram, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(progressBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(24, 24, 24)
+                        .addComponent(progressBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addComponent(quitProgram, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(40, 40, 40))
         );
 
@@ -530,11 +529,13 @@ public class DataGUI extends javax.swing.JFrame {
     private void general100ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_general100ActionPerformed
         DB_Access.makeSureBasicUserExistance();
 
-        int result = 0; 
-        for (int idx = 1; idx <= 100; idx++) {
-            result += createUser("oguest", idx, false);
-        }
-        updateAttendantCount();
+//        int result = 0; 
+//        for (int idx = 1; idx <= 100; idx++) {
+//            result += createUser("oguest", idx, false);
+//        }
+        
+        insertTableRows(USER, 100, 0);
+//        updateAttendantCount();
     }//GEN-LAST:event_general100ActionPerformed
 
     private void deleteAll_no_adminActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteAll_no_adminActionPerformed
@@ -578,7 +579,7 @@ public class DataGUI extends javax.swing.JFrame {
         String insertSQL = "INSERT INTO `l1_affiliation` VALUES "
                 + "(51,'A사업본부'),(52,'B사업본부'),(54,'사장'),(53,'사장실');";
         
-        int result = insertRedords(insertSQL);
+        int result = insertRecords(insertSQL);
         
         /**
          * Next, insert low level affiliation names.
@@ -587,123 +588,159 @@ public class DataGUI extends javax.swing.JFrame {
             insertSQL = "INSERT INTO `l2_affiliation` VALUES (67,53,'기획실'),(60,51,'마케팅과'),"
                     + "(64,52,'마케팅과'),(59,51,'생산과'),(63,52,'생산과'),(62,51,'인사과'),"
                     + "(66,52,'인사과'),(61,51,'재무과'),(65,52,'재무과'), (68,54,'사장')";
-            insertRedords(insertSQL);
+            insertRecords(insertSQL);
         }
         updateAffiliCount();        
     }//GEN-LAST:event_affiliationsButtonActionPerformed
 
     private void buildingsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buildingsButtonActionPerformed
-   
         /**
          * First, insert building numbers.
          */
         String insertSQL = "INSERT INTO `building_table` VALUES (192,1),(193,2),(194,3),"
                 + "(195,4),(196,5),(197,6)";
-        
-        int result = insertRedords(insertSQL);
+        int result = insertRecords(insertSQL);
         
         /**
          * Next, insert unit numbers per building numbers.
          */        
         if (result == 6) {
-            insertSQL = "INSERT INTO `building_unit` VALUES (5439,101,192),(5440,102,192),"
-                    + "(5441,103,192),(5442,105,192),(5443,106,192),(5444,201,192),(5445,202,192),"
-                    + "(5446,203,192),(5447,205,192),(5448,206,192),(5449,301,192),(5450,302,192),"
-                    + "(5451,303,192),(5452,305,192),(5453,306,192),(5454,401,192),(5455,402,192),"
-                    + "(5456,403,192),(5457,405,192),(5458,406,192),(5459,501,192),(5460,502,192),"
-                    + "(5461,503,192),(5462,505,192),(5463,506,192),(5464,601,192),(5465,602,192),"
-                    + "(5466,603,192),(5467,605,192),(5468,606,192),(5469,701,192),(5470,702,192),"
-                    + "(5471,703,192),(5472,705,192),(5473,706,192),(5474,801,192),(5475,802,192),"
-                    + "(5476,803,192),(5477,805,192),(5478,806,192),(5479,901,192),(5480,902,192),"
-                    + "(5481,903,192),(5482,905,192),(5483,906,192),(5484,1001,192),"
-                    + "(5485,1002,192),(5486,1003,192),(5487,1005,192),(5488,1006,192),"
-                    + "(5489,1101,192),(5490,1102,192),(5491,1103,192),(5492,1105,192),"
-                    + "(5493,1106,192),(5494,1201,192),(5495,1202,192),(5496,1203,192),"
-                    + "(5497,1205,192),(5498,1206,192),(5499,101,193),(5500,102,193),"
-                    + "(5501,103,193),(5502,105,193),(5503,106,193),(5504,201,193),"
-                    + "(5505,202,193),(5506,203,193),(5507,205,193),(5508,206,193),"
-                    + "(5509,301,193),(5510,302,193),(5511,303,193),(5512,305,193),"
-                    + "(5513,306,193),(5514,401,193),(5515,402,193),(5516,403,193),"
-                    + "(5517,405,193),(5518,406,193),(5519,501,193),(5520,502,193),"
-                    + "(5521,503,193),(5522,505,193),(5523,506,193),(5524,601,193),"
-                    + "(5525,602,193),(5526,603,193),(5527,605,193),(5528,606,193),"
-                    + "(5529,701,193),(5530,702,193),(5531,703,193),(5532,705,193),"
-                    + "(5533,706,193),(5534,801,193),(5535,802,193),(5536,803,193),"
-                    + "(5537,805,193),(5538,806,193),(5539,901,193),(5540,902,193),"
-                    + "(5541,903,193),(5542,905,193),(5543,906,193),(5544,1001,193),"
-                    + "(5545,1002,193),(5546,1003,193),(5547,1005,193),(5548,1006,193),"
-                    + "(5549,1101,193),(5550,1102,193),(5551,1103,193),(5552,1105,193),"
-                    + "(5553,1106,193),(5554,1201,193),(5555,1202,193),(5556,1203,193),"
-                    + "(5557,1205,193),(5558,1206,193),(5559,101,194),(5560,102,194),"
-                    + "(5561,103,194),(5562,105,194),(5563,201,194),(5564,202,194),"
-                    + "(5565,203,194),(5566,205,194),(5567,301,194),(5568,302,194),"
-                    + "(5569,303,194),(5570,305,194),(5571,401,194),(5572,402,194),"
-                    + "(5573,403,194),(5574,405,194),(5575,501,194),(5576,502,194),"
-                    + "(5577,503,194),(5578,505,194),(5579,601,194),(5580,602,194),"
-                    + "(5581,603,194),(5582,605,194),(5583,701,194),(5584,702,194),"
-                    + "(5585,703,194),(5586,705,194),(5587,801,194),(5588,802,194),"
-                    + "(5589,803,194),(5590,805,194),(5591,901,194),(5592,902,194),"
-                    + "(5593,903,194),(5594,905,194),(5595,1001,194),(5596,1002,194),"
-                    + "(5597,1003,194),(5598,1005,194),(5599,1101,194),(5600,1102,194),"
-                    + "(5601,1103,194),(5602,1105,194),(5603,1201,194),(5604,1202,194),"
-                    + "(5605,1203,194),(5606,1205,194),(5607,101,195),(5608,102,195),"
-                    + "(5609,103,195),(5610,105,195),(5611,106,195),(5612,201,195),"
-                    + "(5613,202,195),(5614,203,195),(5615,205,195),(5616,206,195),"
-                    + "(5617,301,195),(5618,302,195),(5619,303,195),(5620,305,195),"
-                    + "(5621,306,195),(5622,401,195),(5623,402,195),(5624,403,195),"
-                    + "(5625,405,195),(5626,406,195),(5627,501,195),(5628,502,195),"
-                    + "(5629,503,195),(5630,505,195),(5631,506,195),(5632,601,195),"
-                    + "(5633,602,195),(5634,603,195),(5635,605,195),(5636,606,195),"
-                    + "(5637,701,195),(5638,702,195),(5639,703,195),(5640,705,195),"
-                    + "(5641,706,195),(5642,801,195),(5643,802,195),(5644,803,195),"
-                    + "(5645,805,195),(5646,806,195),(5647,901,195),(5648,902,195),"
-                    + "(5649,903,195),(5650,905,195),(5651,906,195),(5652,1001,195),"
-                    + "(5653,1002,195),(5654,1003,195),(5655,1005,195),(5656,1006,195),"
-                    + "(5657,1101,195),(5658,1102,195),(5659,1103,195),(5660,1105,195),"
-                    + "(5661,1106,195),(5662,1201,195),(5663,1202,195),(5664,1203,195),"
-                    + "(5665,1205,195),(5666,1206,195),(5667,101,196),(5668,102,196),"
-                    + "(5669,103,196),(5670,105,196),(5671,106,196),(5672,201,196),"
-                    + "(5673,202,196),(5674,203,196),(5675,205,196),(5676,206,196),"
-                    + "(5677,301,196),(5678,302,196),(5679,303,196),(5680,305,196),"
-                    + "(5681,306,196),(5682,401,196),(5683,402,196),(5684,403,196),"
-                    + "(5685,405,196),(5686,406,196),(5687,501,196),(5688,502,196),"
-                    + "(5689,503,196),(5690,505,196),(5691,506,196),(5692,601,196),"
-                    + "(5693,602,196),(5694,603,196),(5695,605,196),(5696,606,196),"
-                    + "(5697,701,196),(5698,702,196),(5699,703,196),(5700,705,196),"
-                    + "(5701,706,196),(5702,801,196),(5703,802,196),(5704,803,196),"
-                    + "(5705,805,196),(5706,806,196),(5707,901,196),(5708,902,196),"
-                    + "(5709,903,196),(5710,905,196),(5711,906,196),(5712,1001,196),"
-                    + "(5713,1002,196),(5714,1003,196),(5715,1005,196),(5716,1006,196),"
-                    + "(5717,1101,196),(5718,1102,196),(5719,1103,196),(5720,1105,196),"
-                    + "(5721,1106,196),(5722,1201,196),(5723,1202,196),(5724,1203,196),"
-                    + "(5725,1205,196),(5726,1206,196),(5727,101,197),(5728,102,197),"
-                    + "(5729,103,197),(5730,105,197),(5731,106,197),(5732,107,197),"
-                    + "(5733,108,197),(5734,109,197),(5735,201,197),(5736,202,197),"
-                    + "(5737,203,197),(5738,205,197),(5739,206,197),(5740,207,197),"
-                    + "(5741,208,197),(5742,209,197),(5743,301,197),(5744,302,197),"
-                    + "(5745,303,197),(5746,305,197),(5747,306,197),(5748,307,197),"
-                    + "(5749,308,197),(5750,309,197),(5751,401,197),(5752,402,197),"
-                    + "(5753,403,197),(5754,405,197),(5755,406,197),(5756,407,197),"
-                    + "(5757,408,197),(5758,409,197),(5759,501,197),(5760,502,197),"
-                    + "(5761,503,197),(5762,505,197),(5763,506,197),(5764,507,197),"
-                    + "(5765,508,197),(5766,509,197),(5767,601,197),(5768,602,197),"
-                    + "(5769,603,197),(5770,605,197),(5771,606,197),(5772,607,197),"
-                    + "(5773,608,197),(5774,609,197),(5775,701,197),(5776,702,197),"
-                    + "(5777,703,197),(5778,705,197),(5779,706,197),(5780,707,197),"
-                    + "(5781,708,197),(5782,709,197),(5783,801,197),(5784,802,197),"
-                    + "(5785,803,197),(5786,805,197),(5787,806,197),(5788,807,197),"
-                    + "(5789,808,197),(5790,809,197),(5791,901,197),(5792,902,197),"
-                    + "(5793,903,197),(5794,905,197),(5795,906,197),(5796,907,197),"
-                    + "(5797,908,197),(5798,909,197),(5799,1001,197),(5800,1002,197),"
-                    + "(5801,1003,197),(5802,1005,197),(5803,1006,197),(5804,1007,197),"
-                    + "(5805,1008,197),(5806,1009,197),(5807,1101,197),(5808,1102,197),"
-                    + "(5809,1103,197),(5810,1105,197),(5811,1106,197),(5812,1107,197),"
-                    + "(5813,1108,197),(5814,1109,197),(5815,1201,197),(5816,1202,197),"
-                    + "(5817,1203,197),(5818,1205,197),(5819,1206,197),(5820,1207,197),"
-                    + "(5821,1208,197),(5822,1209,197);";
-            insertRedords(insertSQL);
+            final DataGUI parentThis = this;
+            JComponent jComp = (JComponent)parentThis.getContentPane();
+            final RootPaneContainer root = (RootPaneContainer)jComp.getTopLevelAncestor();
+            
+            mouseDisable(root);
+            Thread t = new Thread() {
+                public void run(){
+                    //<editor-fold desc="-- Building unit record data">
+                    String[] buildingData = {"(5439,101,192)", "(5440,102,192)", 
+                        "(5441,103,192)", "(5442,105,192)", "(5443,106,192)", "(5444,201,192)", 
+                        "(5445,202,192)", "(5446,203,192)", "(5447,205,192)", "(5448,206,192)", 
+                        "(5449,301,192)", "(5450,302,192)", "(5451,303,192)", "(5452,305,192)", 
+                        "(5453,306,192)", "(5454,401,192)", "(5455,402,192)", "(5456,403,192)", 
+                        "(5457,405,192)", "(5458,406,192)", "(5459,501,192)", "(5460,502,192)",
+                        "(5461,503,192)", "(5462,505,192)", "(5463,506,192)", "(5464,601,192)", 
+                        "(5465,602,192)", "(5466,603,192)", "(5467,605,192)", "(5468,606,192)", 
+                        "(5469,701,192)", "(5470,702,192)", "(5471,703,192)", "(5472,705,192)", 
+                        "(5473,706,192)", "(5474,801,192)", "(5475,802,192)", "(5476,803,192)", 
+                        "(5477,805,192)", "(5478,806,192)", "(5479,901,192)", "(5480,902,192)",
+                        "(5481,903,192)", "(5482,905,192)", "(5483,906,192)", "(5484,1001,192)",
+                        "(5485,1002,192)", "(5486,1003,192)", "(5487,1005,192)", "(5488,1006,192)",
+                        "(5489,1101,192)", "(5490,1102,192)", "(5491,1103,192)", "(5492,1105,192)",
+                        "(5493,1106,192)", "(5494,1201,192)", "(5495,1202,192)", "(5496,1203,192)",
+                        "(5497,1205,192)", "(5498,1206,192)", "(5499,101,193)", "(5500,102,193)",
+                        "(5501,103,193)", "(5502,105,193)", "(5503,106,193)", "(5504,201,193)",
+                        "(5505,202,193)", "(5506,203,193)", "(5507,205,193)", "(5508,206,193)",
+                        "(5509,301,193)", "(5510,302,193)", "(5511,303,193)", "(5512,305,193)",
+                        "(5513,306,193)", "(5514,401,193)", "(5515,402,193)", "(5516,403,193)",
+                        "(5517,405,193)", "(5518,406,193)", "(5519,501,193)", "(5520,502,193)",
+                        "(5521,503,193)", "(5522,505,193)", "(5523,506,193)", "(5524,601,193)",
+                        "(5525,602,193)", "(5526,603,193)", "(5527,605,193)", "(5528,606,193)",
+                        "(5529,701,193)", "(5530,702,193)", "(5531,703,193)", "(5532,705,193)",
+                        "(5533,706,193)", "(5534,801,193)", "(5535,802,193)", "(5536,803,193)",
+                        "(5537,805,193)", "(5538,806,193)", "(5539,901,193)", "(5540,902,193)",
+                        "(5541,903,193)", "(5542,905,193)", "(5543,906,193)", "(5544,1001,193)",
+                        "(5545,1002,193)", "(5546,1003,193)", "(5547,1005,193)", "(5548,1006,193)",
+                        "(5549,1101,193)", "(5550,1102,193)", "(5551,1103,193)", "(5552,1105,193)",
+                        "(5553,1106,193)", "(5554,1201,193)", "(5555,1202,193)", "(5556,1203,193)",
+                        "(5557,1205,193)", "(5558,1206,193)", "(5559,101,194)", "(5560,102,194)",
+                        "(5561,103,194)", "(5562,105,194)", "(5563,201,194)", "(5564,202,194)",
+                        "(5565,203,194)", "(5566,205,194)", "(5567,301,194)", "(5568,302,194)",
+                        "(5569,303,194)", "(5570,305,194)", "(5571,401,194)", "(5572,402,194)",
+                        "(5573,403,194)", "(5574,405,194)", "(5575,501,194)", "(5576,502,194)",
+                        "(5577,503,194)", "(5578,505,194)", "(5579,601,194)", "(5580,602,194)",
+                        "(5581,603,194)", "(5582,605,194)", "(5583,701,194)", "(5584,702,194)",
+                        "(5585,703,194)", "(5586,705,194)", "(5587,801,194)", "(5588,802,194)",
+                        "(5589,803,194)", "(5590,805,194)", "(5591,901,194)", "(5592,902,194)",
+                        "(5593,903,194)", "(5594,905,194)", "(5595,1001,194)", "(5596,1002,194)",
+                        "(5597,1003,194)", "(5598,1005,194)", "(5599,1101,194)", "(5600,1102,194)",
+                        "(5601,1103,194)", "(5602,1105,194)", "(5603,1201,194)", "(5604,1202,194)",
+                        "(5605,1203,194)", "(5606,1205,194)", "(5607,101,195)", "(5608,102,195)",
+                        "(5609,103,195)", "(5610,105,195)", "(5611,106,195)", "(5612,201,195)",
+                        "(5613,202,195)", "(5614,203,195)", "(5615,205,195)", "(5616,206,195)",
+                        "(5617,301,195)", "(5618,302,195)", "(5619,303,195)", "(5620,305,195)",
+                        "(5621,306,195)", "(5622,401,195)", "(5623,402,195)", "(5624,403,195)",
+                        "(5625,405,195)", "(5626,406,195)", "(5627,501,195)", "(5628,502,195)",
+                        "(5629,503,195)", "(5630,505,195)", "(5631,506,195)", "(5632,601,195)",
+                        "(5633,602,195)", "(5634,603,195)", "(5635,605,195)", "(5636,606,195)",
+                        "(5637,701,195)", "(5638,702,195)", "(5639,703,195)", "(5640,705,195)",
+                        "(5641,706,195)", "(5642,801,195)", "(5643,802,195)", "(5644,803,195)",
+                        "(5645,805,195)", "(5646,806,195)", "(5647,901,195)", "(5648,902,195)",
+                        "(5649,903,195)", "(5650,905,195)", "(5651,906,195)", "(5652,1001,195)",
+                        "(5653,1002,195)", "(5654,1003,195)", "(5655,1005,195)", "(5656,1006,195)",
+                        "(5657,1101,195)", "(5658,1102,195)", "(5659,1103,195)", "(5660,1105,195)",
+                        "(5661,1106,195)", "(5662,1201,195)", "(5663,1202,195)", "(5664,1203,195)",
+                        "(5665,1205,195)", "(5666,1206,195)", "(5667,101,196)", "(5668,102,196)",
+                        "(5669,103,196)", "(5670,105,196)", "(5671,106,196)", "(5672,201,196)",
+                        "(5673,202,196)", "(5674,203,196)", "(5675,205,196)", "(5676,206,196)",
+                        "(5677,301,196)", "(5678,302,196)", "(5679,303,196)", "(5680,305,196)",
+                        "(5681,306,196)", "(5682,401,196)", "(5683,402,196)", "(5684,403,196)",
+                        "(5685,405,196)", "(5686,406,196)", "(5687,501,196)", "(5688,502,196)",
+                        "(5689,503,196)", "(5690,505,196)", "(5691,506,196)", "(5692,601,196)",
+                        "(5693,602,196)", "(5694,603,196)", "(5695,605,196)", "(5696,606,196)",
+                        "(5697,701,196)", "(5698,702,196)", "(5699,703,196)", "(5700,705,196)",
+                        "(5701,706,196)", "(5702,801,196)", "(5703,802,196)", "(5704,803,196)",
+                        "(5705,805,196)", "(5706,806,196)", "(5707,901,196)", "(5708,902,196)",
+                        "(5709,903,196)", "(5710,905,196)", "(5711,906,196)", "(5712,1001,196)",
+                        "(5713,1002,196)", "(5714,1003,196)", "(5715,1005,196)", "(5716,1006,196)",
+                        "(5717,1101,196)", "(5718,1102,196)", "(5719,1103,196)", "(5720,1105,196)",
+                        "(5721,1106,196)", "(5722,1201,196)", "(5723,1202,196)", "(5724,1203,196)",
+                        "(5725,1205,196)", "(5726,1206,196)", "(5727,101,197)", "(5728,102,197)",
+                        "(5729,103,197)", "(5730,105,197)", "(5731,106,197)", "(5732,107,197)",
+                        "(5733,108,197)", "(5734,109,197)", "(5735,201,197)", "(5736,202,197)",
+                        "(5737,203,197)", "(5738,205,197)", "(5739,206,197)", "(5740,207,197)",
+                        "(5741,208,197)", "(5742,209,197)", "(5743,301,197)", "(5744,302,197)",
+                        "(5745,303,197)", "(5746,305,197)", "(5747,306,197)", "(5748,307,197)",
+                        "(5749,308,197)", "(5750,309,197)", "(5751,401,197)", "(5752,402,197)",
+                        "(5753,403,197)", "(5754,405,197)", "(5755,406,197)", "(5756,407,197)",
+                        "(5757,408,197)", "(5758,409,197)", "(5759,501,197)", "(5760,502,197)",
+                        "(5761,503,197)", "(5762,505,197)", "(5763,506,197)", "(5764,507,197)",
+                        "(5765,508,197)", "(5766,509,197)", "(5767,601,197)", "(5768,602,197)",
+                        "(5769,603,197)", "(5770,605,197)", "(5771,606,197)", "(5772,607,197)",
+                        "(5773,608,197)", "(5774,609,197)", "(5775,701,197)", "(5776,702,197)",
+                        "(5777,703,197)", "(5778,705,197)", "(5779,706,197)", "(5780,707,197)",
+                        "(5781,708,197)", "(5782,709,197)", "(5783,801,197)", "(5784,802,197)",
+                        "(5785,803,197)", "(5786,805,197)", "(5787,806,197)", "(5788,807,197)",
+                        "(5789,808,197)", "(5790,809,197)", "(5791,901,197)", "(5792,902,197)",
+                        "(5793,903,197)", "(5794,905,197)", "(5795,906,197)", "(5796,907,197)",
+                        "(5797,908,197)", "(5798,909,197)", "(5799,1001,197)", "(5800,1002,197)",
+                        "(5801,1003,197)", "(5802,1005,197)", "(5803,1006,197)", "(5804,1007,197)",
+                        "(5805,1008,197)", "(5806,1009,197)", "(5807,1101,197)", "(5808,1102,197)",
+                        "(5809,1103,197)", "(5810,1105,197)", "(5811,1106,197)", "(5812,1107,197)",
+                        "(5813,1108,197)", "(5814,1109,197)", "(5815,1201,197)", "(5816,1202,197)",
+                        "(5817,1203,197)", "(5818,1205,197)", "(5819,1206,197)", "(5820,1207,197)",
+                        "(5821,1208,197)", "(5822,1209,197)"
+                    };
+                    //</editor-fold>
+
+                    int previous = 0, progress;
+                    int creationCount = 0;
+
+                    for (String building : buildingData) {
+                        creationCount += insertBuilding(Building_unit, building);
+                        progress = (int)(creationCount/(float)buildingData.length * 100);
+                        if (progress > previous) {
+                            final int percent = progress;
+                            progressBar.setValue(progress);
+                            SwingUtilities.invokeLater(new Runnable() {
+                                public void run() {
+                                    progressBar.setValue(percent);
+                                }
+                            });
+                            previous = progress;                    
+                        }
+                    }
+                    updateBuildingCount();
+                    
+                    JOptionPane.showMessageDialog(parentThis, 
+                            "Inserted record count : " + creationCount,
+                            "Creation result", JOptionPane.PLAIN_MESSAGE);
+                    mouseEnable(root);
+                    progressBar.setValue(0);
+                }
+            };
+            t.start();
         }
-        updateBuildingCount();
     }//GEN-LAST:event_buildingsButtonActionPerformed
 
     private Object getRandomElement(Object[] objects) {
@@ -828,7 +865,6 @@ public class DataGUI extends javax.swing.JFrame {
         unit_sn_arr = init_int_key_arr("select seq_no from building_unit");
         
         if (L2_sn_arr.length > 0 && unit_sn_arr.length > 0) {
-
             // create driver name randomly
             insertTableRows(DRIVER, 1000, 0);
         } else {
@@ -1084,7 +1120,7 @@ public class DataGUI extends javax.swing.JFrame {
     private javax.swing.JLabel vehicleCount;
     // End of variables declaration//GEN-END:variables
 
-    private int insertRedords(String insertSQL) {
+    private int insertRecords(String insertSQL) {
         Connection conn = null;
         Statement insertStmt = null;
         int resultCount = 0;
@@ -1273,17 +1309,16 @@ public class DataGUI extends javax.swing.JFrame {
     }
 
     private final static MouseAdapter mouseAdapter = new MouseAdapter(){};
+    
     private void insertTableRows(final ControlEnums.RowName table, final int target,
             final int preInsert) 
     {
         final DataGUI parentThis = this;
-        
         JComponent jComp = (JComponent)parentThis.getContentPane();
         final RootPaneContainer root = (RootPaneContainer)jComp.getTopLevelAncestor();
         
+        mouseDisable(root);
         setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-        root.getGlassPane().addMouseListener(mouseAdapter);
-        root.getGlassPane().setVisible(true);        
         
         Thread t = new Thread(){
             public void run(){
@@ -1295,6 +1330,8 @@ public class DataGUI extends javax.swing.JFrame {
                         creationCount += createNewDriver();
                     } else if (table == VEHICLE) {
                         creationCount += createNewVehicle();
+                    } else if (table == USER) {
+                        creationCount += createUser("oguest", creationCount + 1, false);
                     }
                     progress = (int)(creationCount/(float)target * 100);
                     if (progress > previous) {
@@ -1312,18 +1349,16 @@ public class DataGUI extends javax.swing.JFrame {
                     updateDriverCount();
                 } else if (table == VEHICLE) {
                     updateVehicleCount();
+                } else if (table == USER) {
+                    updateAttendantCount();
                 }                
-
                 JOptionPane.showMessageDialog(parentThis, 
                         table + " creation count: " + (creationCount + preInsert),
                         "Insertion Result", JOptionPane.PLAIN_MESSAGE);  
-                setCursor(null);
-                root.getGlassPane().addMouseListener(mouseAdapter);
-                root.getGlassPane().setVisible(false);        
-                
+                mouseEnable(root);
                 progressBar.setValue(0);
             }
-        };    
+        };
         t.start();
     }
 
@@ -1335,6 +1370,38 @@ public class DataGUI extends javax.swing.JFrame {
                 JOptionPane.YES_NO_OPTION, WARNING_MESSAGE));
     }
 
+    private int insertBuilding(ControlEnums.OsPaTable osPaTable, String building) {
+        String insertSQL = "INSERT INTO `" + osPaTable + "` VALUES " + building + ";";
+    
+        Connection conn = null;
+        Statement insertStmt = null;
+        int resultCount = 0;
+        try {
+            conn = JDBCMySQL.getConnection();
+            insertStmt = conn.createStatement();
+            resultCount = insertStmt.executeUpdate(insertSQL);
+        } catch (Exception se) {
+            JOptionPane.showMessageDialog(this, 
+                    "Inserted record count : " + resultCount,
+                    "Creation Error", JOptionPane.ERROR_MESSAGE);
+        }  finally {
+            closeDBstuff(conn, insertStmt, null, "Record Insertion via GUI");
+            return resultCount;
+        }       
+    }
+
+    private void mouseDisable(RootPaneContainer root) {
+        root.getGlassPane().addMouseListener(mouseAdapter);
+        root.getGlassPane().setVisible(true);        
+        setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+    }
+
+    private void mouseEnable(RootPaneContainer root) {
+        root.getGlassPane().addMouseListener(mouseAdapter);
+        root.getGlassPane().setVisible(false);   
+        setCursor(null);
+    }    
+    
     public enum PhoneType {
         cellPhone,
         landLine
