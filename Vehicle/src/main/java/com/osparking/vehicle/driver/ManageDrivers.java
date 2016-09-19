@@ -166,6 +166,7 @@ import java.io.InputStream;
 import java.util.List;
 import java.util.Locale;
 import javax.swing.JDialog;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.SwingUtilities;
 import javax.swing.table.TableCellEditor;
@@ -2062,7 +2063,6 @@ public class ManageDrivers extends javax.swing.JFrame {
             }
             
             InputStream sampleIn = getClass().getResourceAsStream(sampleFile + ".ods");
-            
             downloadSample(odsFullPath.toString(), sampleIn, sampleFile);
             if (sampleIn != null) {
                 try {

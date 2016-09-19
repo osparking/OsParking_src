@@ -1912,7 +1912,7 @@ public class VehiclesForm extends javax.swing.JFrame {
             }
             
             InputStream sampleIn = getClass().getResourceAsStream(sampleFile + ".ods");
-            
+
             downloadSample(odsFullPath.toString(), sampleIn, sampleFile);
             if (sampleIn != null) {
                 try {

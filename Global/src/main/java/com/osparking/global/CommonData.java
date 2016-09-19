@@ -51,14 +51,17 @@ import java.io.OutputStream;
 import java.sql.Connection;
 import java.sql.Statement;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.border.Border;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import org.jopendocument.dom.OOUtils;
 
 /** new Dimension(CommonData.bigButtonWidth, bigButtonHeight)
  *
@@ -213,6 +216,7 @@ public class CommonData { // new Dimension(carTagWidth, 30)
         try {
             // Write resource into the file chosen by the user
             File destFile = new File(destPath);
+            
             if (!noOverwritePossibleExistingSameFile(destFile, destPath)) 
             {
                 outStream = new FileOutputStream(destFile);
@@ -223,7 +227,6 @@ public class CommonData { // new Dimension(carTagWidth, 30)
                 while ((read = sampleIn.read(bytes)) != -1) {
                     outStream.write(bytes, 0, read);
                 }
-                Desktop.getDesktop().open(destFile);
             }
         } catch (IOException ex) {
             logParkingException(Level.SEVERE, ex, sampleFile + " read error");
@@ -234,7 +237,13 @@ public class CommonData { // new Dimension(carTagWidth, 30)
                 } catch (IOException e) {
                     logParkingException(Level.SEVERE, e, destPath + " ostrm close error");
                 }
-            }                
+            }       
+        }
+        
+        try {
+            OOUtils.open(new File(destPath));
+        } catch (IOException ex) {
+            logParkingException(Level.SEVERE, ex, destPath + " file open error");
         }
     }    
     

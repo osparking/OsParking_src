@@ -16,6 +16,9 @@
  */
 package com.osparking.global.names;
 
+import static com.osparking.global.Globals.logParkingException;
+import java.util.logging.Level;
+
 /**
  * This class is defined for the items of combo boxes when that have different 
  * face values(of a String type) from their associated value(of an Object type).
@@ -41,11 +44,14 @@ public class ConvComboBoxItem { // Conv stands for Conventional
     public boolean equals(Object rhs) {
         boolean result = false;
         try {
-            if (rhs != null && getLabel().equals(((ConvComboBoxItem)rhs).getLabel())) {
+            if (rhs.getClass() == String.class && ((String)rhs).length() == 0) {
+                ;
+            } else if (rhs != null && 
+                    getLabel().equals(((ConvComboBoxItem)rhs).getLabel())) {
                 result = true;
             }
         } catch (Exception e) {
-            System.out.println("exception occurred");
+            logParkingException(Level.SEVERE, e, " error, rhs: " + rhs);
         } finally {
             return result;
         }
