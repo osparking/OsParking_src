@@ -2831,8 +2831,13 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
                 barOptn = BarOperation.values()[barOptnInt];
                 arrSeqNo = rs.getLong("arrseqno");
                 increaseListHeightBeforehand(gateNo);
+                
+                String barOpSuffix = "";
+                if (barOptn != REGISTERED_CAR_OPENED) {
+                    barOpSuffix =  "-" + barOptn.getContent();
+                }
                 listModel.addElement(new CarAdmission(timePlusTag + "-" + 
-                        perm.getContent() + "-" + barOptn.getContent(), arrSeqNo));
+                        perm.getContent() + barOpSuffix, arrSeqNo));
             }
         } catch (SQLException se) {
             logParkingException(Level.SEVERE, se, 

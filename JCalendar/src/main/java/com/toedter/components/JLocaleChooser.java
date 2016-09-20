@@ -23,14 +23,13 @@ package com.toedter.components;
 
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
-import static java.util.Locale.ENGLISH;
-import static java.util.Locale.KOREAN;
 
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
@@ -54,6 +53,13 @@ public class JLocaleChooser extends JComboBox implements ItemListener {
 	protected JComponent component;
         public static Locale enUS_Locale = new Locale("en", "US"); // OsParking on 2016. 6. 18.
         public static Locale defaultLocale = new Locale("ko", "KR"); // OsParking on 2016. 6. 18.
+        
+        public static ArrayList<Locale> supLangList = null; // OsParking on 2016. 9. 20
+        static { // OsParking on 2016. 9. 20
+            supLangList = new ArrayList<Locale>();
+            supLangList.add(defaultLocale);
+            supLangList.add(enUS_Locale);
+        }
 
 	/**
 	 * Default JLocaleChooser constructor.
@@ -100,7 +106,7 @@ public class JLocaleChooser extends JComboBox implements ItemListener {
 
 		for (int i = 0; i < localeCount; i++) {
                     if (locales[i].getCountry().length() > 0) {
-//                        if (locales[i] == KOREAN || locales[i] == ENGLISH) // OsParking on 2016. 9. 11
+                        if (supportedLanguage(locales[i])) // OsParking on 2016. 9. 20
                         {
                             addItem(locales[i].getDisplayName());
                         }
@@ -198,6 +204,16 @@ public class JLocaleChooser extends JComboBox implements ItemListener {
         });
         
         caList.toArray(locales);
+    }
+
+    private boolean supportedLanguage(Locale locale) { // OsParking on 2016. 9. 20
+        for (Locale supLoc : supLangList) {
+            if (supLoc.getLanguage().equals(locale.getLanguage()) 
+                    && supLoc.getCountry().equals(locale.getCountry())) {
+                return true;
+            }
+        }
+        return false;
     }
 }
 

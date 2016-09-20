@@ -10,6 +10,7 @@ import static com.osparking.global.CommonData.deleteTable;
 import com.osparking.global.Globals;
 import static com.osparking.global.Globals.OSPiconList;
 import static com.osparking.global.Globals.closeDBstuff;
+import static com.osparking.global.Globals.logParkingException;
 import com.osparking.global.names.ControlEnums;
 import static com.osparking.global.names.ControlEnums.DialogMessages.USER_DELETE_CONF_1;
 import static com.osparking.global.names.ControlEnums.DialogMessages.USER_DELETE_CONF_2;
@@ -26,6 +27,7 @@ import static com.osparking.global.names.ControlEnums.OsPaTable.LoginRecord;
 import static com.osparking.global.names.ControlEnums.OsPaTable.SystemRun;
 import static com.osparking.global.names.ControlEnums.OsPaTable.Users_osp;
 import static com.osparking.global.names.ControlEnums.OsPaTable.Vehicles;
+import com.osparking.global.names.ControlEnums.RowName;
 import static com.osparking.global.names.ControlEnums.RowName.*;
 import com.osparking.global.names.DB_Access;
 import static com.osparking.global.names.DB_Access.getRecordCount;
@@ -44,6 +46,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Random;
+import static java.util.logging.Level.SEVERE;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -528,14 +531,7 @@ public class DataGUI extends javax.swing.JFrame {
     
     private void general100ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_general100ActionPerformed
         DB_Access.makeSureBasicUserExistance();
-
-//        int result = 0; 
-//        for (int idx = 1; idx <= 100; idx++) {
-//            result += createUser("oguest", idx, false);
-//        }
-        
         insertTableRows(USER, 100, 0);
-//        updateAttendantCount();
     }//GEN-LAST:event_general100ActionPerformed
 
     private void deleteAll_no_adminActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteAll_no_adminActionPerformed
@@ -579,7 +575,7 @@ public class DataGUI extends javax.swing.JFrame {
         String insertSQL = "INSERT INTO `l1_affiliation` VALUES "
                 + "(51,'A사업본부'),(52,'B사업본부'),(54,'사장'),(53,'사장실');";
         
-        int result = insertRecords(insertSQL);
+        int result = insertRecords(insertSQL, L1_AFFILI);
         
         /**
          * Next, insert low level affiliation names.
@@ -588,7 +584,7 @@ public class DataGUI extends javax.swing.JFrame {
             insertSQL = "INSERT INTO `l2_affiliation` VALUES (67,53,'기획실'),(60,51,'마케팅과'),"
                     + "(64,52,'마케팅과'),(59,51,'생산과'),(63,52,'생산과'),(62,51,'인사과'),"
                     + "(66,52,'인사과'),(61,51,'재무과'),(65,52,'재무과'), (68,54,'사장')";
-            insertRecords(insertSQL);
+            insertRecords(insertSQL, L2_AFFILI);
         }
         updateAffiliCount();        
     }//GEN-LAST:event_affiliationsButtonActionPerformed
@@ -599,7 +595,7 @@ public class DataGUI extends javax.swing.JFrame {
          */
         String insertSQL = "INSERT INTO `building_table` VALUES (192,1),(193,2),(194,3),"
                 + "(195,4),(196,5),(197,6)";
-        int result = insertRecords(insertSQL);
+        int result = insertRecords(insertSQL, BUILDING);
         
         /**
          * Next, insert unit numbers per building numbers.
@@ -731,10 +727,8 @@ public class DataGUI extends javax.swing.JFrame {
                         }
                     }
                     updateBuildingCount();
-                    
-                    JOptionPane.showMessageDialog(parentThis, 
-                            "Inserted record count : " + creationCount,
-                            "Creation result", JOptionPane.PLAIN_MESSAGE);
+                    showInsertionResult(parentThis, UNIT, creationCount);
+
                     mouseEnable(root);
                     progressBar.setValue(0);
                 }
@@ -743,6 +737,14 @@ public class DataGUI extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_buildingsButtonActionPerformed
 
+    private void showInsertionResult(DataGUI parentThis, ControlEnums.RowName rowName, 
+            int creationCount) 
+    {
+        JOptionPane.showMessageDialog(parentThis, 
+                "Inserted '" + rowName.getContent() + "' count : " + creationCount,
+                "Creation Result", JOptionPane.PLAIN_MESSAGE);
+    }
+    
     private Object getRandomElement(Object[] objects) {
         int len = objects.length;
         Random r = new Random();
@@ -867,7 +869,7 @@ public class DataGUI extends javax.swing.JFrame {
         if (L2_sn_arr.length > 0 && unit_sn_arr.length > 0) {
             // create driver name randomly
             insertTableRows(DRIVER, 1000, 0);
-        } else {
+        } else {            
             JOptionPane.showMessageDialog(this, 
                     "Insert affiliation and building/unit first",
                     "Status Report", JOptionPane.PLAIN_MESSAGE);            
@@ -1120,7 +1122,7 @@ public class DataGUI extends javax.swing.JFrame {
     private javax.swing.JLabel vehicleCount;
     // End of variables declaration//GEN-END:variables
 
-    private int insertRecords(String insertSQL) {
+    private int insertRecords(String insertSQL, RowName rowName) {
         Connection conn = null;
         Statement insertStmt = null;
         int resultCount = 0;
@@ -1128,14 +1130,9 @@ public class DataGUI extends javax.swing.JFrame {
             conn = JDBCMySQL.getConnection();
             insertStmt = conn.createStatement();
             resultCount = insertStmt.executeUpdate(insertSQL);
-
-            JOptionPane.showMessageDialog(this, 
-                    "Inserted record count : " + resultCount,
-                    "Creation result", JOptionPane.PLAIN_MESSAGE);
+            showInsertionResult(this, rowName, resultCount);
         } catch (Exception se) {
-            JOptionPane.showMessageDialog(this, 
-                    "Inserted record count : " + resultCount,
-                    "Creation Error", JOptionPane.ERROR_MESSAGE);
+            logParkingException(SEVERE, se, "Exec error of : " + insertSQL);
         }  finally {
             closeDBstuff(conn, insertStmt, null, "Record Insertion via GUI");
             return resultCount;
@@ -1316,9 +1313,7 @@ public class DataGUI extends javax.swing.JFrame {
         final DataGUI parentThis = this;
         JComponent jComp = (JComponent)parentThis.getContentPane();
         final RootPaneContainer root = (RootPaneContainer)jComp.getTopLevelAncestor();
-        
         mouseDisable(root);
-        setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         
         Thread t = new Thread(){
             public void run(){
@@ -1351,10 +1346,11 @@ public class DataGUI extends javax.swing.JFrame {
                     updateVehicleCount();
                 } else if (table == USER) {
                     updateAttendantCount();
-                }                
-                JOptionPane.showMessageDialog(parentThis, 
-                        table + " creation count: " + (creationCount + preInsert),
-                        "Insertion Result", JOptionPane.PLAIN_MESSAGE);  
+                }   
+                showInsertionResult(parentThis, table, creationCount + preInsert);
+//                JOptionPane.showMessageDialog(parentThis, 
+//                        table + " creation count: " + (creationCount + preInsert),
+//                        "Insertion Result", JOptionPane.PLAIN_MESSAGE);  
                 mouseEnable(root);
                 progressBar.setValue(0);
             }
@@ -1381,9 +1377,7 @@ public class DataGUI extends javax.swing.JFrame {
             insertStmt = conn.createStatement();
             resultCount = insertStmt.executeUpdate(insertSQL);
         } catch (Exception se) {
-            JOptionPane.showMessageDialog(this, 
-                    "Inserted record count : " + resultCount,
-                    "Creation Error", JOptionPane.ERROR_MESSAGE);
+            logParkingException(SEVERE, se, "Exec error of : " + insertSQL);
         }  finally {
             closeDBstuff(conn, insertStmt, null, "Record Insertion via GUI");
             return resultCount;
