@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.osparking</groupId>
     <version>2.1.0</version>
-    <artifactId>OSParkingMan</artifactId>
+    <artifactId>BuildAll</artifactId>
     <packaging>pom</packaging>
     <modules>
         <module>JCalendar</module>
@@ -12,6 +12,11 @@
         <module>Vehicle</module>
         <module>ManageData</module>
         <module>Statistics</module>
+        <module>simulators/DeviceGlobal</module>
+        <module>simulators/Camera</module>
+        <module>simulators/E_Board</module>
+        <module>simulators/GateBar</module>
+        <module>OsParking</module>
     </modules> 
-    <name>OsParking</name>
+    <name>BuildAll</name>
 </project>

@@ -24,7 +24,6 @@ import static com.osparking.global.names.ControlEnums.DialogMessages.DEV_TYPE_ER
 import static com.osparking.global.names.ControlEnums.DialogMessages.DEV_TYPE_ERROR_MSG3;
 import static com.osparking.global.names.ControlEnums.DialogMessages.DEV_TYPE_ERROR_MSG4;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.ERROR_DIALOGTITLE;
-import static com.osparking.global.names.ControlEnums.LabelContent.CAMERA_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.GATE_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.TYPE_LABEL;
 import static com.osparking.global.names.ControlEnums.MenuITemTypes.SETTING_MENU_ITEM;
