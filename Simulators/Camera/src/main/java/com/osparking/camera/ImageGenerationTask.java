@@ -80,7 +80,7 @@ public class ImageGenerationTask extends TimerTask {
         rand = new Random(seed + 157 + cameraID);
         
         // prepare a text file to log normal operation like uniquely creationed image ID
-        if (DEBUG) {
+        if (DEBUG_FLAG) {
             //<editor-fold desc="--prepare logger file to save car image ID">
             StringBuilder pathname = new StringBuilder();
             StringBuilder daySB = new StringBuilder();
@@ -142,7 +142,7 @@ public class ImageGenerationTask extends TimerTask {
                     cameraGUI.setOsBusy(true);
                     imageFileNo = getNextCarNum(rand, imageFileNo);
                     cameraGUI.sendCarImage(imageFileNo, ++cameraGUI.generationSN);
-                    if (DEBUG) {
+                    if (DEBUG_FLAG) {
                         Globals.logParkingOperation(OpLogLevel.UserCarChange, 
                             "Generated image ID : " + Integer.toString(cameraGUI.generationSN), cameraGUI.getID());
                         saveImageIDsent(cameraGUI.generationSN);

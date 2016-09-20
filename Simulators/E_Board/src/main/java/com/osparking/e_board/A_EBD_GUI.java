@@ -100,7 +100,7 @@ public class A_EBD_GUI extends javax.swing.JFrame implements DeviceGUI {
     public A_EBD_GUI(byte displayID) {
         initComponents();
         
-        errorCheckBox.setEnabled(DEBUG);
+        errorCheckBox.setEnabled(DEBUG_FLAG);
         this.ID = displayID;
         
         setResizable(false);
@@ -165,7 +165,7 @@ public class A_EBD_GUI extends javax.swing.JFrame implements DeviceGUI {
         changeE_BoardDisplay(TOP_ROW, defaultDisplaySettings[TOP_ROW.ordinal()]);
         changeE_BoardDisplay(BOTTOM_ROW, defaultDisplaySettings[BOTTOM_ROW.ordinal()]);
         
-        if (DEBUG)
+        if (DEBUG_FLAG)
             System.out.println("E Board #" + ID + " started");
         
         reader = new EBoardReader(this);
@@ -485,7 +485,7 @@ public class A_EBD_GUI extends javax.swing.JFrame implements DeviceGUI {
                 Thread.currentThread().setPriority(Thread.MAX_PRIORITY);                
                 A_EBD_GUI mainGUI = new A_EBD_GUI(displayID);
                 mainGUI.setVisible(true);
-                if (!DEBUG) {
+                if (!DEBUG_FLAG) {
                     shortLicenseDialog(mainGUI, "E-Board Simulator Program", "upper left");
                 }
             }

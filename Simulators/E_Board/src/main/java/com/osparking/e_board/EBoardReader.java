@@ -35,7 +35,7 @@ import static com.osparking.global.names.DB_Access.readEBoardUsageSettings;
 import com.osparking.global.names.DeviceReader;
 import com.osparking.global.Globals;
 import com.osparking.global.names.OSP_enums.*;
-import static com.osparking.global.Globals.DEBUG;
+import static com.osparking.global.Globals.DEBUG_FLAG;
 import static com.osparking.global.Globals.GENERAL_DEVICE;
 import static com.osparking.global.Globals.closeSocket;
 import static com.osparking.global.Globals.getPathAndDay;
@@ -77,7 +77,7 @@ public class EBoardReader extends Thread implements DeviceReader {
         this.eBoardGUI = eBoardGUI;
         ebdID = eBoardGUI.getID();
         
-        if (DEBUG) {
+        if (DEBUG_FLAG) {
             //<editor-fold desc="-- Prepare log file to store 'E-Board display interrupt' message Sequence Number">
             StringBuilder pathname = new StringBuilder();
             StringBuilder daySB = new StringBuilder();
@@ -275,7 +275,7 @@ public class EBoardReader extends Thread implements DeviceReader {
                                 if (msgSN != eBoardGUI.prevMsgSN[coreBytes[0]]) {
                                     // decode message field by field and apply the result to display
                                     interruptCurrentDisplay(coreBytes);
-                                    if (DEBUG) {
+                                    if (DEBUG_FLAG) {
                                         saveMsgSN(msgSN, eBoardGUI.prevMsgSN[coreBytes[0]]);
                                     }
                                     eBoardGUI.prevMsgSN[coreBytes[0]] = msgSN;
@@ -407,7 +407,7 @@ public class EBoardReader extends Thread implements DeviceReader {
                         EBD_Fonts.values()[fontIndex], cycle));
         
         //<editor-fold desc="-- print debug message">
-        if (DEBUG) {
+        if (DEBUG_FLAG) {
             System.out.println("msg : " + displayText);
             if (displayText.length() == 0)
                 System.out.println("msg length is zero : ");
@@ -465,7 +465,7 @@ public class EBoardReader extends Thread implements DeviceReader {
         
         logParkingException(Level.INFO, e, reason, ebdID);
         
-        if (DEBUG) {
+        if (DEBUG_FLAG) {
             System.out.println("B1. E-Board #" + ebdID + " close socket at: " +
                     System.currentTimeMillis());
         }

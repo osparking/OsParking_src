@@ -111,7 +111,7 @@ public class GateBarGUI extends javax.swing.JFrame implements DeviceGUI {
     public GateBarGUI(byte gateBarID) {
         initComponents();
 
-        errorCheckBox.setEnabled(DEBUG);
+        errorCheckBox.setEnabled(DEBUG_FLAG);
         this.gateBarID = gateBarID;
         gateID_TextField.setText(Integer.toString(gateBarID));
         
@@ -492,7 +492,7 @@ errorCheckBox.addActionListener(new java.awt.event.ActionListener() {
                 
                 GateBarGUI mainGUI = new GateBarGUI(gateBarID);
                 mainGUI.setVisible(true);
-                if (!DEBUG) {
+                if (!DEBUG_FLAG) {
                     shortLicenseDialog(mainGUI, "Gate Bar Simulator", "lower left");
                 }
             }

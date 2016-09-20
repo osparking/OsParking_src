@@ -30,7 +30,7 @@ import java.util.Date;
 import java.util.logging.Level;
 import com.osparking.global.names.DeviceReader;
 import com.osparking.global.Globals;
-import static com.osparking.global.Globals.DEBUG;
+import static com.osparking.global.Globals.DEBUG_FLAG;
 import static com.osparking.global.Globals.GENERAL_DEVICE;
 import static com.osparking.global.Globals.closeSocket;
 import static com.osparking.global.Globals.getPathAndDay;
@@ -67,7 +67,7 @@ public class GateBarReader extends Thread implements DeviceReader {
         this.gateBarGUI = gateBarGUI;
         barID = gateBarGUI.getID();
         
-        if (DEBUG) {
+        if (DEBUG_FLAG) {
             //<editor-fold desc="-- Create file for 'E-Board display interrupt' message Sequence Number logging">
             StringBuilder pathname = new StringBuilder();
             StringBuilder daySB = new StringBuilder();
@@ -169,7 +169,7 @@ public class GateBarReader extends Thread implements DeviceReader {
 
                                 if (cmdID != gateBarGUI.prevCommandID) {
                                     gateBarGUI.orderOpenGate(delayMS);
-                                    if (DEBUG) {
+                                    if (DEBUG_FLAG) {
                                         System.out.println("open gate cmd ID: " + cmdID);
                                         saveOpenCommandID(cmdID, gateBarGUI.prevCommandID);
                                     }

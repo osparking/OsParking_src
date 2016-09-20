@@ -115,8 +115,8 @@ public class CameraGUI extends javax.swing.JFrame implements DeviceGUI {
     public CameraGUI(String[] args) {
         initComponents();
         
-        errorCheckBox.setEnabled(DEBUG);
-        showAckTm_Button.setEnabled(DEBUG);
+        errorCheckBox.setEnabled(DEBUG_FLAG);
+        showAckTm_Button.setEnabled(DEBUG_FLAG);
         
         cameraID = getUniqueCameraID();
         setTitle("Camera #" + cameraID);
@@ -703,7 +703,7 @@ public class CameraGUI extends javax.swing.JFrame implements DeviceGUI {
                 Thread.currentThread().setPriority(Thread.MAX_PRIORITY);                
                 CameraGUI mainGUI = new CameraGUI(args);
                 mainGUI.setVisible(true);
-                if (!DEBUG) {
+                if (!DEBUG_FLAG) {
                     shortLicenseDialog(mainGUI, "Camera Simulator Program", "left lower"); 
                 }
             }
