@@ -65,7 +65,7 @@ public class ControlEnums {
         CHECK_IP_TITLE("장치 IP 주소 확인 필요", "Check Device IP Address"),
         CAR_ARRIVALS_TITLE("최근 차량 도착(시간 역순)", "Recent Car Arrivals(Recent First)"),
         SETTINGS_TITLE("시스템 설정", "System Settings"),
-        LOGIN_DIALOG_TITLE("오즈파킹 로그인", "OsParking Login"),
+        LOGIN_DIALOG_TITLE("오즈파킹 사용자", "OsParking Login"),
         LOGIN_FRAME_TITLE("주차관리 로그인", "Attendant Login"),
         ATTLIST_FRAME_TITLE("사용자 정보관리", "Login ID Management"),
         AFFILI_BUILD_FRAME_TITLE("소속 및 건물", "Affiliation and Building"),
@@ -628,7 +628,7 @@ public class ControlEnums {
     }
 
     public enum DialogMessages {
-        WELCOMING_OS(OS_PARKINGLOT.getContent() + " 방문을 환영합니다.",
+        WELCOMING_OS(OS_PARKINGLOT.getContent() + " 방문을 환영합니당",
                 "Welcome to " + OS_PARKINGLOT.getContent()),
         FIRST_RUN_MSG("오즈파킹 최초 가동!", "Very First Run of OsParking!"),
         TIMED_OUT(" 시간 초과 ", " timed out "),
