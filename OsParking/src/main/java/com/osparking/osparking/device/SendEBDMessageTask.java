@@ -65,7 +65,8 @@ public class SendEBDMessageTask implements Runnable {
             ++sendCount;
             devMan.writeMessage(msgCode, message);
         } catch (InterruptedException ex) {
-            logParkingException(Level.SEVERE, ex, "E-Board #" + deviceNo + " message sender wait socket conn'");
+            logParkingException(Level.SEVERE, ex, 
+                    "E-Board #" + deviceNo + " message sender wait socket conn'");
         }          
     }
     
@@ -77,7 +78,7 @@ public class SendEBDMessageTask implements Runnable {
      */
     public int getResendCount() {
         if (sendCount - 1 < 0) {
-            JOptionPane.showMessageDialog(null, "negative resend count");
+            JOptionPane.showMessageDialog(null, "negative resend count-EBD");
         }        
         return sendCount - 1;  // first send shouldn't be counted
     }        

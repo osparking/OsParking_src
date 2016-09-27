@@ -236,7 +236,7 @@ public class EBoardManager extends Thread implements
                                 continue;
 
                             int codeAcked = restOfMessage[0];
-                            short checkTSC = (short)(msgCode + codeAcked); // TCS: This Site Calculation
+                            short checkTSC = (short)(msgCode + codeAcked); // TSC: This Site Calculation
 
                             if (restOfMessage[1] == (byte)((checkTSC >> 8) & 0xff)
                                     && restOfMessage[2] == (byte)(checkTSC & 0xff))
