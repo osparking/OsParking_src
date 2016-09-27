@@ -149,6 +149,7 @@ import com.osparking.global.names.IDevice;
 import com.osparking.global.names.IDevice.IE_Board;
 import com.osparking.global.names.IDevice.ISocket;
 import com.osparking.global.names.OSP_enums.CameraType;
+import static com.osparking.global.names.OSP_enums.CameraType.CarButton;
 import static com.osparking.global.names.OSP_enums.CameraType.Simulator;
 import static com.osparking.global.names.OSP_enums.EBD_DisplayMessage.*;
 import static com.osparking.global.names.OSP_enums.GateBarType.NaraBar;
@@ -222,6 +223,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
+import static javax.swing.JOptionPane.WARNING_MESSAGE;
 import javax.swing.JPanel;
 import javax.swing.ListSelectionModel;
 import javax.swing.border.TitledBorder;
@@ -3531,8 +3533,24 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
                 
                 if (!DEBUG) {
                     Globals.shortLicenseDialog(null);
+                    /**
+                     * If single gate and car entry button is being used but 
+                     * debug mode is not on, then give warning that something 
+                     * must be wrong!
+                     */
+                    if (gateCount == 1) {
+                        int camTypeIdx = DB_Access.deviceType[Camera.ordinal()][1];
+                        if (camTypeIdx == CarButton.ordinal()) {
+                            JOptionPane.showMessageDialog(null, 
+                                    "To enable ["+ CAR_ARRIVAL_BTN.getContent() + "], use" +
+                                            System.lineSeparator() +
+                                            "'-debug' command line option and login as" +
+                                            System.lineSeparator() +
+                                            "'admin'.  Otherwise, no camera simulator!",
+                                    "Debug Mode Needed", WARNING_MESSAGE);                            
+                        }
+                    }
                 }                
-//                parentGUI = mainForm;
                 mainForm.recordSystemStart();
                 mainForm.setVisible(true);
             }
