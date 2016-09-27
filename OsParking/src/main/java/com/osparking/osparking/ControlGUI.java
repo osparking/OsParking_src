@@ -3526,11 +3526,12 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 testUniqueness("ParkingLotManager", "OsParking");
-                if (!DEBUG) {
-                    Globals.shortLicenseDialog(null);
-                }
                 DB_Access.makeSureBasicUserExistance();
                 ControlGUI mainForm = new ControlGUI(false);
+                
+                if (!DEBUG) {
+                    Globals.shortLicenseDialog(null);
+                }                
 //                parentGUI = mainForm;
                 mainForm.recordSystemStart();
                 mainForm.setVisible(true);
