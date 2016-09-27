@@ -46,6 +46,7 @@ import java.util.HashMap;
 import com.osparking.global.names.DeviceReader;
 import static com.osparking.global.Globals.*;
 import static com.osparking.global.names.ControlEnums.ButtonTypes.LicenseButton;
+import com.osparking.global.names.DB_Access;
 import static com.osparking.global.names.DB_Access.readSettings;
 import com.osparking.global.names.JustOneLock;
 import static com.osparking.global.names.OSP_enums.DeviceType.*;
@@ -113,13 +114,16 @@ public class CameraGUI extends javax.swing.JFrame implements DeviceGUI {
     /**
      * Creates new form CameraGUI
      */
-    public CameraGUI(String[] args) {
+    public CameraGUI(String[] args, int cameraID) {
         initComponents();
         
         errorCheckBox.setEnabled(DEBUG_FLAG);
         showAckTm_Button.setEnabled(DEBUG_FLAG);
         
-        cameraID = getUniqueCameraID();
+        this.cameraID = (byte)cameraID;
+        if (cameraID > DB_Access.gateCount) {
+            
+        }
         setTitle("Camera #" + cameraID);
         cameraID_TextField.setText(Integer.toString(cameraID));
         
@@ -170,7 +174,8 @@ public class CameraGUI extends javax.swing.JFrame implements DeviceGUI {
      * Determine the ID of sendPicTask being created considering the IDs of cameras already generated.
      * @return a proper ID number for a sendPicTask
      */
-    private byte getUniqueCameraID() {
+//    private byte getUniqueCameraID() {
+    public static byte getUniqueCameraID() {
         byte currID = 1; // minimum ID number
         JustOneLock ua;
         
@@ -697,18 +702,24 @@ public class CameraGUI extends javax.swing.JFrame implements DeviceGUI {
         initializeLoggers();
         checkOptions(args);  
 
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                // begin dummy sendPicTask operation now
-                Thread.currentThread().setPriority(Thread.MAX_PRIORITY);                
-                CameraGUI mainGUI = new CameraGUI(args);
-                mainGUI.setVisible(true);
-                if (!DEBUG_FLAG) {
-                    shortLicenseDialog(mainGUI, "Camera Simulator Program", "left lower"); 
+        final int cameraID = getUniqueCameraID();
+        if (cameraID > DB_Access.gateCount) {
+            JOptionPane.showMessageDialog(null, "Camera #" + cameraID + " is not needed!",
+                "Check Camera Count", WARNING_MESSAGE);
+        } else {
+            /* Create and display the form */
+            java.awt.EventQueue.invokeLater(new Runnable() {
+                public void run() {
+                    // begin dummy sendPicTask operation now
+                    Thread.currentThread().setPriority(Thread.MAX_PRIORITY);                
+                    CameraGUI mainGUI = new CameraGUI(args, cameraID);
+                    mainGUI.setVisible(true);
+                    if (!DEBUG_FLAG) {
+                        shortLicenseDialog(mainGUI, "Camera Simulator Program", "left lower"); 
+                    }
                 }
-            }
-        });
+            });
+        }
     }   
     
     public void displayCarEntry(JLabel imageLabel, String filename) {
