@@ -77,7 +77,7 @@ import static com.osparking.global.names.ControlEnums.LabelContent.COUNT_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.CREATE_MODE_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.DATA_REQUIRED;
 import static com.osparking.global.names.ControlEnums.LabelContent.EXACT_COMP_LABEL;
-import static com.osparking.global.names.ControlEnums.LabelContent.HELP_DRIVER_TITLE;
+import static com.osparking.global.names.ControlEnums.LabelContent.HELP_VEHICLE_ODS;
 import static com.osparking.global.names.ControlEnums.LabelContent.MODE_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.MODIFY_MODE_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.MODI_DATE_LABEL;
@@ -1880,7 +1880,7 @@ public class VehiclesForm extends javax.swing.JFrame {
 
     private void odsHelpButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_odsHelpButtonActionPerformed
         JDialog helpDialog = new ODS_HelpJDialog(this, false,
-            HELP_DRIVER_TITLE.getContent(), ODS_TYPE.VEHICLE);
+            HELP_VEHICLE_ODS.getContent(), ODS_TYPE.VEHICLE);
 
         setHelpDialogLoc(odsHelpButton, helpDialog);
         helpDialog.setVisible(true);
