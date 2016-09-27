@@ -53,6 +53,7 @@ import static com.osparking.global.Globals.getPlusIcon;
 import static com.osparking.global.Globals.getUniqueGateBarID;
 import static com.osparking.global.Globals.initializeLoggers;
 import static com.osparking.global.Globals.showLicensePanel;
+import static com.osparking.global.names.ControlEnums.ButtonTypes.LicenseButton;
 import com.osparking.global.names.OSP_enums.DeviceType;
 import static com.osparking.global.names.OSP_enums.DeviceType.GateBar;
 import com.osparking.global.names.ParkingTimer;
@@ -354,7 +355,7 @@ errorCheckBox.addActionListener(new java.awt.event.ActionListener() {
     aboutPanel.add(filler2);
 
     seeLicenseButton.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-    seeLicenseButton.setText("About");
+    seeLicenseButton.setText(LicenseButton.getContent());
     seeLicenseButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent evt) {
             seeLicenseButtonActionPerformed(evt);

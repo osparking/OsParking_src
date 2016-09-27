@@ -45,6 +45,7 @@ import com.osparking.global.names.ControlEnums.BarOperation;
 import static com.osparking.global.names.ControlEnums.ButtonTypes.CLEAR_BTN;
 import static com.osparking.global.names.ControlEnums.ButtonTypes.CLOSE_BTN;
 import static com.osparking.global.names.ControlEnums.ButtonTypes.FIX_IT_BTN;
+import static com.osparking.global.names.ControlEnums.ButtonTypes.LicenseButton;
 import static com.osparking.global.names.ControlEnums.ButtonTypes.SEARCH_BTN;
 import static com.osparking.global.names.ControlEnums.ComboBoxItemTypes.*;
 import static com.osparking.global.names.ControlEnums.DialogMessages.DATE_INPUT_CHECK_DIALOG;
@@ -391,7 +392,7 @@ public class CarArrivals extends javax.swing.JFrame {
         titlePanel.setLayout(new javax.swing.BoxLayout(titlePanel, javax.swing.BoxLayout.LINE_AXIS));
 
         seeLicenseButton.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        seeLicenseButton.setText("About");
+        seeLicenseButton.setText(LicenseButton.getContent());
         seeLicenseButton.setMargin(new java.awt.Insets(2, 0, 2, 0));
         seeLicenseButton.setMaximumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
         seeLicenseButton.setMinimumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));

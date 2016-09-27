@@ -333,6 +333,7 @@ public class ControlEnums {
     }
     
     public enum ButtonTypes {
+        LicenseButton("라이센스", "License"),
         manageDataLabel("자료관리(D)", "Data Man"),
         LOGIN_BTN("로그인(L)", "Login"),
         SAMPLE_BTN("샘플(P)", "Sample"),

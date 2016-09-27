@@ -37,6 +37,7 @@ import static com.osparking.global.names.ControlEnums.BarOperation.AUTO_OPENED;
 import static com.osparking.global.names.ControlEnums.BarOperation.REGISTERED_CAR_OPENED;
 import static com.osparking.global.names.ControlEnums.ButtonTypes.ARRIVALS_BTN;
 import static com.osparking.global.names.ControlEnums.ButtonTypes.CAR_ARRIVAL_BTN;
+import static com.osparking.global.names.ControlEnums.ButtonTypes.LicenseButton;
 import static com.osparking.global.names.ControlEnums.ButtonTypes.STATISTICS_BTN;
 import static com.osparking.global.names.ControlEnums.ButtonTypes.USERS_BTN;
 import static com.osparking.global.names.ControlEnums.ButtonTypes.VEHICLES_BTN;
@@ -1568,7 +1569,7 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
         CommandMenu.add(CloseProgramItem);
 
         licenseMenuItem.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        licenseMenuItem.setText("About");
+        licenseMenuItem.setText(LicenseButton.getContent());
         licenseMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 licenseMenuItemActionPerformed(evt);

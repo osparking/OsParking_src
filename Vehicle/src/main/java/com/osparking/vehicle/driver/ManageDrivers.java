@@ -693,7 +693,7 @@ public class ManageDrivers extends javax.swing.JFrame {
         titlePanel.setLayout(new javax.swing.BoxLayout(titlePanel, javax.swing.BoxLayout.LINE_AXIS));
 
         seeLicenseButton.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        seeLicenseButton.setText("About");
+        seeLicenseButton.setText(LicenseButton.getContent());
         seeLicenseButton.setMargin(new java.awt.Insets(2, 0, 2, 0));
         seeLicenseButton.setMaximumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
         seeLicenseButton.setMinimumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));

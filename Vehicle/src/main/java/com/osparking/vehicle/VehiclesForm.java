@@ -431,7 +431,7 @@ public class VehiclesForm extends javax.swing.JFrame {
         aboutjPanel.setPreferredSize(new java.awt.Dimension(300, 40));
 
         seeLicenseButton.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        seeLicenseButton.setText("About");
+        seeLicenseButton.setText(LicenseButton.getContent());
         seeLicenseButton.setMaximumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
         seeLicenseButton.setMinimumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
         seeLicenseButton.setPreferredSize(new Dimension(buttonWidthNorm, buttonHeightNorm));

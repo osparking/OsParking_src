@@ -45,6 +45,7 @@ import java.io.FileWriter;
 import java.util.HashMap;
 import com.osparking.global.names.DeviceReader;
 import static com.osparking.global.Globals.*;
+import static com.osparking.global.names.ControlEnums.ButtonTypes.LicenseButton;
 import static com.osparking.global.names.DB_Access.readSettings;
 import com.osparking.global.names.JustOneLock;
 import static com.osparking.global.names.OSP_enums.DeviceType.*;
@@ -483,7 +484,7 @@ public class CameraGUI extends javax.swing.JFrame implements DeviceGUI {
         left_Third_Panel.setLayout(new javax.swing.BoxLayout(left_Third_Panel, javax.swing.BoxLayout.LINE_AXIS));
 
         seeLicenseButton.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        seeLicenseButton.setText("About");
+        seeLicenseButton.setText(LicenseButton.getContent());
         seeLicenseButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 seeLicenseButtonActionPerformed(evt);

@@ -21,6 +21,7 @@ import static com.mysql.jdbc.MysqlErrorNumbers.ER_NO;
 import static com.mysql.jdbc.MysqlErrorNumbers.ER_YES;
 import static com.osparking.global.CommonData.ADMIN_ID;
 import static com.osparking.global.CommonData.PROMPTER_KEY;
+import static com.osparking.global.names.ControlEnums.ButtonTypes.LicenseButton;
 import static com.osparking.global.names.ControlEnums.ComboBoxItemTypes.BUILDING_CB_ITEM;
 import static com.osparking.global.names.ControlEnums.ComboBoxItemTypes.HIGHER_CB_ITEM;
 import static com.osparking.global.names.ControlEnums.ComboBoxItemTypes.LOWER_CB_ITEM;
@@ -124,7 +125,6 @@ import com.osparking.global.names.PComboBox;
 import com.osparking.global.names.ParkingTimer;
 import com.osparking.global.names.SocketConnStat;
 import java.awt.Container;
-import java.util.Locale;
 import javax.imageio.ImageIO;
 import javax.swing.JComboBox;
 
@@ -442,10 +442,12 @@ public class Globals {
                 name + "," + System.lineSeparator() +
                 "Copyright (C) 2015, 2016  Open Source Parking, Inc." + System.lineSeparator() +
                 "This program comes with ABSOLUTELY NO WARRANTY;" + System.lineSeparator() +
-                "for details click [About] button which is at the " + location + " corner." 
+                "for details click [" + LicenseButton.getContent() +"] button which is at the " +
+                location + " corner." 
                 + System.lineSeparator() +
                 "This is free software, and you are welcome to redistribute it" + System.lineSeparator() +
-                "under certain conditions; use [About] button for more details.";
+                "under certain conditions; use [" + LicenseButton.getContent() 
+                +"] button for more details.";
         JOptionPane.showMessageDialog(null, message, "License Notice", 
                 JOptionPane.PLAIN_MESSAGE, getLGPN30_Icon());    
     }
@@ -455,9 +457,11 @@ public class Globals {
                 "OsParking, a parking lot management program," + System.lineSeparator() +
                 "Copyright (C) 2015, 2016  Open Source Parking, Inc." + System.lineSeparator() +
                 "This program comes with ABSOLUTELY NO WARRANTY;" + System.lineSeparator() +
-                "for details use top menu [System] > [About] command." + System.lineSeparator() +
+                "for details use top menu [System] > [" + LicenseButton.getContent() 
+                +"] command." + System.lineSeparator() +
                 "This is free software, and you are welcome to redistribute it" + System.lineSeparator() +
-                "under certain conditions; use [About] command for more details.";
+                "under certain conditions; use [" + LicenseButton.getContent()
+                +"] command for more details.";
         JOptionPane.showMessageDialog(null, message, "License Notice", 
                 JOptionPane.PLAIN_MESSAGE, getLGPN30_Icon());    
     }

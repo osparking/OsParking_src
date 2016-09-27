@@ -27,7 +27,6 @@ import java.awt.Font;
 import java.awt.Insets;
 import java.awt.Point;
 import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
 import java.lang.management.ManagementFactory;
 import java.net.Inet4Address;
 import java.net.UnknownHostException;
@@ -40,6 +39,7 @@ import javax.swing.JTextField;
 import com.osparking.global.names.Blink_Task;
 import com.osparking.global.names.DeviceReader;
 import static com.osparking.global.Globals.*;
+import static com.osparking.global.names.ControlEnums.ButtonTypes.LicenseButton;
 
 import com.osparking.global.names.ToleranceLevel;
 import static com.osparking.global.names.OSP_enums.EBD_Colors.*;
@@ -319,7 +319,7 @@ public class A_EBD_GUI extends javax.swing.JFrame implements DeviceGUI {
         IDtextField.setText("1");
 
         seeLicenseButton.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        seeLicenseButton.setText("About");
+        seeLicenseButton.setText(LicenseButton.getContent());
         seeLicenseButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 seeLicenseButtonActionPerformed(evt);
