@@ -305,9 +305,9 @@ public class DataGUI extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder("Drivers"));
+        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder("Car Owners"));
 
-        insertDrivers.setText("Insert Drivers");
+        insertDrivers.setText("Insert 1K Owners");
         insertDrivers.setToolTipText("Inserts 1000 drivers with random affiliation.");
         insertDrivers.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -319,7 +319,7 @@ public class DataGUI extends javax.swing.JFrame {
 
         driverCount.setText("0");
 
-        deleteDrivers.setText("Delete all Drivers");
+        deleteDrivers.setText("Delete Car Owners");
         deleteDrivers.setToolTipText("Deletes all driver records.");
         deleteDrivers.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -950,7 +950,7 @@ public class DataGUI extends javax.swing.JFrame {
             insertTableRows(VEHICLE, 1000 - createdVehicles, createdVehicles);
         } else {
             JOptionPane.showMessageDialog(this, 
-                    "Insert car owner records first",
+                    "Insert car owners first",
                     "Status Report", JOptionPane.PLAIN_MESSAGE);              
         }
     }//GEN-LAST:event_insertVehiclesActionPerformed

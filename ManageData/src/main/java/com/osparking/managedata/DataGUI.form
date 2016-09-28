@@ -333,7 +333,7 @@
       <Properties>
         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
           <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
-            <TitledBorder title="Drivers"/>
+            <TitledBorder title="Car Owners"/>
           </Border>
         </Property>
       </Properties>
@@ -382,7 +382,7 @@
       <SubComponents>
         <Component class="javax.swing.JButton" name="insertDrivers">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Insert Drivers"/>
+            <Property name="text" type="java.lang.String" value="Insert 1K Owners"/>
             <Property name="toolTipText" type="java.lang.String" value="Inserts 1000 drivers with random affiliation."/>
           </Properties>
           <Events>
@@ -401,7 +401,7 @@
         </Component>
         <Component class="javax.swing.JButton" name="deleteDrivers">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Delete all Drivers"/>
+            <Property name="text" type="java.lang.String" value="Delete Car Owners"/>
             <Property name="toolTipText" type="java.lang.String" value="Deletes all driver records."/>
           </Properties>
           <Events>
