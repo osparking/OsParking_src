@@ -792,7 +792,7 @@ public class Globals {
      * Signifies the version type of the program which is used to differenciate port numbers for each device type.
      * <p>This variable allows programmers to run multiple copies of the same program simultaneously.</p>
      */
-    public static VersionType versionType = VersionType.DEVELOP;    
+    public static VersionType versionType = VersionType.RELEASE;    
       
     /**
      * Strings used to check the program command line argument option types.
