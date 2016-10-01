@@ -172,7 +172,7 @@ public class DB_Access {
                     "PWStrengthLevel = 0, OptnLoggingLevel = 0, " +
                     "languageCode = 'ko', countryCode = 'KR', " +
                     "localeIndex = 110, statCount = 1, " +
-                    "MaxMessageLines = 300, GateCount = 1, " +
+                    "MaxMessageLines = 300, GateCount = 2, " +
                     "PictureWidth = 1280, PictureHeight = 960, " +
                     "SearchPeriod = 2, MAX_MAINTAIN_DATE = 30, " +
                     "EBD_flow_cycle= 8000, EBD_blink_cycle = 1000;";
