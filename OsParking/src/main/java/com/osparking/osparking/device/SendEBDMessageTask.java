@@ -78,7 +78,8 @@ public class SendEBDMessageTask implements Runnable {
      */
     public int getResendCount() {
         if (sendCount - 1 < 0) {
-            JOptionPane.showMessageDialog(null, "negative resend count-EBD");
+//            JOptionPane.showMessageDialog(null, "negative resend count-EBD");
+            return 0;
         }        
         return sendCount - 1;  // first send shouldn't be counted
     }        

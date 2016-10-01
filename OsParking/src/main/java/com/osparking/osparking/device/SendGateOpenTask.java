@@ -100,7 +100,8 @@ public class SendGateOpenTask implements Runnable {
      */
     public int getResendCount() {
         if (resendCount[gateID] - 1 < 0) {
-            JOptionPane.showMessageDialog(null, "negative resend count-Gate");
+//            JOptionPane.showMessageDialog(null, "negative resend count-Gate");
+            return 0;
         }
         return resendCount[gateID] - 1;  // first send shouldn't be counted
     }
