@@ -17,11 +17,12 @@
 package com.osparking.global.names;
 
 /**
- * Patent Requested Technology Implementing Class Data Type for Combo Box Items.
- * Patent Request Details:
+ * Korea(ROK) Patent Registered(No: 1016595460000)Technology Implementing 
+ * Class Data Type for Combo Box Items.
+ * Patent Registration Details:
  *      -Name: User Apparatus for displaying item using combobox and item display method
- *      -Submission Date: 2015. 04. 21
- *      -Submission no.: 10-2015-0055743 (South Korea)
+ *      -Registration Date: 2016. 09. 19
+ *      -Patent no.: 1016595460000 (South Korea)
  * 
  * It can have multiple keys and labels in two arrays which are of same length.
  * @author Open Source Parking Inc.

@@ -1966,7 +1966,7 @@ public class Globals {
                     
                 case AffiliationL2: 
                     if (keyValue == PROMPTER_KEY) {
-                        // Patent Requested SQL select statement
+                        // Korea(ROK) Patent Registered(No: 1016595460000) SQL select statement
                         sb.append("SELECT L2.L2_NO, L2.PARTY_NAME AS L2_NAME, "
                                 + "L1.L1_NO, L1.PARTY_NAME AS L1_NAME ");
                         sb.append("FROM L2_affiliation L2, L1_affiliation L1 "); 
@@ -1981,7 +1981,7 @@ public class Globals {
                     
                 case UnitNo: 
                     if (keyValue == PROMPTER_KEY) {
-                        // Patent Requested SQL select statement                        
+                        // Korea(ROK) Patent Registered(No: 1016595460000) SQL select statement                        
                         sb.append("SELECT U.SEQ_NO AS UNIT_SN, U.UNIT_NO, ");
                         sb.append("  T.SEQ_NO BLDG_SN, T.BLDG_NO ");
                         sb.append("FROM building_unit U, building_table T ");
@@ -2066,7 +2066,8 @@ public class Globals {
     public static void mayChangeLowerCBoxPrompt(JComboBox parentCBox, JComboBox childCBox, 
             OSP_enums.DriverCol childCol, int[] prevItemParentKey) {
         /**
-         * Check if parent combo box is opened by the user -- Patent Requested technology
+         * Check if parent combo box is opened by the user 
+         * -- Korea(ROK) Patent Registered(No: 1016595460000) technology
          */
         int currKey = (Integer)(((ConvComboBoxItem)parentCBox.getSelectedItem()).getKeyValue()); 
         
@@ -2082,7 +2083,8 @@ public class Globals {
     }    
     
     /**
-     * Finds appropriate prompter for a combo box -- Patent Requested Technology Implementing method.
+     * Finds appropriate prompter for a combo box
+     * -- Korea(ROK) Patent Registered(No: 1016595460000) Technology Implementing method.
      * 
      * @param column table ComboBox column for which the prompter is sought for
      * @param parentObj 1st level affiliation ComboBox, should be not null when 
