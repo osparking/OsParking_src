@@ -516,7 +516,7 @@ public class DataGUI extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void manager5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_manager5ActionPerformed
-        DB_Access.makeSureBasicUserExistance();
+        DB_Access.makeSureBasicUserExistance(this);
 
         int result = 0; 
         for (int idx = 1; idx <= 5; idx++) {
@@ -530,7 +530,7 @@ public class DataGUI extends javax.swing.JFrame {
     }
     
     private void general100ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_general100ActionPerformed
-        DB_Access.makeSureBasicUserExistance();
+        DB_Access.makeSureBasicUserExistance(this);
         insertTableRows(USER, 100, 0);
     }//GEN-LAST:event_general100ActionPerformed
 
@@ -1348,9 +1348,6 @@ public class DataGUI extends javax.swing.JFrame {
                     updateAttendantCount();
                 }   
                 showInsertionResult(parentThis, table, creationCount + preInsert);
-//                JOptionPane.showMessageDialog(parentThis, 
-//                        table + " creation count: " + (creationCount + preInsert),
-//                        "Insertion Result", JOptionPane.PLAIN_MESSAGE);  
                 mouseEnable(root);
                 progressBar.setValue(0);
             }

@@ -625,6 +625,8 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
         LED_Timer = new Timer("ospLEDtimer", true);
         LED_Timer.schedule(new LED_Task(this, getDeviceManagers()), 0, LED_PERIOD);
         
+        DB_Access.makeSureBasicUserExistance(this);
+        
         if (!eBoardTest) {
             processLogIn(null);
         }        
@@ -3528,7 +3530,7 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 testUniqueness("ParkingLotManager", "OsParking");
-                DB_Access.makeSureBasicUserExistance();
+                
                 ControlGUI mainForm = new ControlGUI(false);
                 
                 if (!DEBUG) {

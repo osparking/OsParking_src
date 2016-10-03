@@ -64,6 +64,7 @@ import com.osparking.global.names.OSP_enums.EBD_Fonts;
 import com.osparking.global.names.OSP_enums.OpLogLevel;
 import com.osparking.global.names.OSP_enums.PWStrengthLevel;
 import com.osparking.global.names.OSP_enums.PermissionType;
+import java.awt.Component;
 import java.util.Date;
 import javax.swing.JOptionPane;
 import static javax.swing.JOptionPane.INFORMATION_MESSAGE;
@@ -192,7 +193,7 @@ public class DB_Access {
     /**
      * Make sure 3 default users(admin, manager, guest) exists.
      */
-    public static void makeSureBasicUserExistance() {
+    public static void makeSureBasicUserExistance(Component parent) {
         /**
          * Check if admin, manager and guest user accounts exists and create it not.
          */
@@ -241,7 +242,7 @@ public class DB_Access {
              */
             String message = DEFAULT_USER_LINE1.getContent() + System.lineSeparator() 
                     + DEFAULT_USER_LINE2.getContent() + cuIDstr;
-            JOptionPane.showMessageDialog(null, message, DEFAULT_USER_TITLE.getContent(), 
+            JOptionPane.showMessageDialog(parent, message, DEFAULT_USER_TITLE.getContent(), 
                     INFORMATION_MESSAGE);
         }
     } 
