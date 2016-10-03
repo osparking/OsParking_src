@@ -54,6 +54,7 @@ import com.osparking.global.names.OSP_enums.VersionType;
 import com.osparking.global.names.ParkingTimer;
 import com.osparking.global.names.ToleranceLevel;
 import java.awt.Image;
+import static java.lang.Math.min;
 import java.net.Inet4Address;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
@@ -138,7 +139,10 @@ public class CameraGUI extends javax.swing.JFrame implements DeviceGUI {
         if (cameraID == 1)
             setLocation(new Point(xPoint, 0));
         else {
-            setLocation(new Point(xPoint, this.getSize().height));
+            int myHeight = this.getSize().height;
+            
+            setLocation(new Point(xPoint, 
+                    min(myHeight, screen.height - myHeight - TASK_BAR_HEIGHT)));
         }
         
         try {
