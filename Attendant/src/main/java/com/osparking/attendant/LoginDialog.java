@@ -23,6 +23,7 @@ import static com.osparking.global.CommonData.buttonHeightNorm;
 import static com.osparking.global.CommonData.buttonWidthNorm;
 import static com.osparking.global.CommonData.buttonWidthWide;
 import static com.osparking.global.CommonData.metaKeyLabel;
+import static com.osparking.global.CommonData.setKeyboardLanguage;
 import com.osparking.global.Globals;
 import static com.osparking.global.Globals.DEBUG;
 import static com.osparking.global.Globals.OSPiconList;
@@ -45,10 +46,10 @@ import static com.osparking.global.names.ControlEnums.MsgContent.MISSING_ADMIN;
 import static com.osparking.global.names.ControlEnums.TitleTypes.LOGIN_DIALOG_TITLE;
 import static com.osparking.global.names.DB_Access.readSettings;
 import com.osparking.global.names.JDBCMySQL;
-import static com.osparking.global.names.JDBCMySQL.PASSWORD;
 import java.awt.Dimension;
 import java.awt.event.KeyEvent;
 import static java.awt.event.KeyEvent.VK_ENTER;
+import java.awt.im.InputContext;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -74,7 +75,7 @@ public class LoginDialog extends javax.swing.JDialog {
         setTitle(LOGIN_DIALOG_TITLE.getContent());
         initComponents();
         setIconImages(OSPiconList); 
-        checkAdminExistance();
+        checkAdminExistance();     
     }
 
     public void addLoginEventListener(LoginEventListener listener) {
@@ -100,6 +101,11 @@ public class LoginDialog extends javax.swing.JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setResizable(false);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosed(java.awt.event.WindowEvent evt) {
+                formWindowClosed(evt);
+            }
+        });
 
         userIDText.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         userIDText.setText("admin");
@@ -160,6 +166,11 @@ public class LoginDialog extends javax.swing.JDialog {
         password.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         password.setText("1234");
         password.setPreferredSize(new java.awt.Dimension(80, 30));
+        password.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                passwordFocusGained(evt);
+            }
+        });
         password.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 passwordKeyPressed(evt);
@@ -334,7 +345,23 @@ public class LoginDialog extends javax.swing.JDialog {
         if (userIDText.getText().length() > 0) {
             userIDText.selectAll();
         }
+        setKeyboardLanguage(userIDText, null);
     }//GEN-LAST:event_userIDTextFocusGained
+
+    private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
+        try {
+            InputContext inCtx2  =  password.getInputContext();
+            Character.Subset[] subset2  = { Character.UnicodeBlock.HANGUL_SYLLABLES };
+
+            inCtx2.setCharacterSubsets(subset2);
+        } catch(Exception ee) {
+            logParkingException(Level.SEVERE, null, "Keyboard language to Korean failed");
+        }
+    }//GEN-LAST:event_formWindowClosed
+
+    private void passwordFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_passwordFocusGained
+        setKeyboardLanguage(password, null);
+    }//GEN-LAST:event_passwordFocusGained
 
     /**
      * @param args the command line arguments

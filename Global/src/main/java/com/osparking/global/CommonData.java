@@ -24,13 +24,14 @@ import static com.osparking.global.Globals.font_Type;
 import static com.osparking.global.Globals.getBufferedImage;
 import static com.osparking.global.Globals.getTagNumber;
 import static com.osparking.global.Globals.logParkingException;
+import com.osparking.global.names.ControlEnums;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.DELETE_RESULT_DIALOGTITLE;
 import static com.osparking.global.names.ControlEnums.LabelContent.TABLE_DEL_DIALOG_1;
 import static com.osparking.global.names.ControlEnums.LabelContent.TABLE_DEL_DIALOG_2;
+import static com.osparking.global.names.ControlEnums.Languages.KOREAN;
 import static com.osparking.global.names.ControlEnums.MenuITemTypes.META_KEY_LABEL;
 import com.osparking.global.names.ControlEnums.OsPaTable;
 import com.osparking.global.names.ControlEnums.RowName;
-import static com.osparking.global.names.ControlEnums.TableType.Vehicles;
 import static com.osparking.global.names.DB_Access.deviceType;
 import static com.osparking.global.names.DB_Access.getRecordCount;
 import com.osparking.global.names.JDBCMySQL;
@@ -39,10 +40,10 @@ import static com.osparking.global.names.OSP_enums.DeviceType.Camera;
 import com.osparking.global.names.PasswordValidator;
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
+import java.awt.im.InputContext;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -51,10 +52,8 @@ import java.io.OutputStream;
 import java.sql.Connection;
 import java.sql.Statement;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
@@ -120,6 +119,22 @@ public class CommonData { // new Dimension(carTagWidth, 30)
     public static final DefaultTableCellRenderer putCellCenter = new DefaultTableCellRenderer();
     static {
         putCellCenter.setHorizontalAlignment(JLabel.CENTER);    
+    }
+    
+    public static void setKeyboardLanguage(Component comp, ControlEnums.Languages language) {
+        try {
+            InputContext inCtx  =  comp.getInputContext();
+            Character.Subset[] subset = new Character.Subset[1];
+            
+            if (language == KOREAN) {
+                subset[0] = Character.UnicodeBlock.HANGUL_SYLLABLES;
+            } else {
+                subset = null;
+            }
+            inCtx.setCharacterSubsets(subset);
+        } catch(Exception e) {
+            logParkingException(Level.SEVERE, null, "Keyboard language to English error");
+        }
     }
     
     public static void deleteTable(Component parent, OsPaTable tableName, 

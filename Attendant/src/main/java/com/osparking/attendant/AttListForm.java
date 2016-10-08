@@ -30,6 +30,7 @@ import static com.osparking.global.CommonData.normGUIwidth;
 import static com.osparking.global.CommonData.pointColor;
 import static com.osparking.global.CommonData.putCellCenter;
 import static com.osparking.global.CommonData.pwValidator;
+import static com.osparking.global.CommonData.setKeyboardLanguage;
 import static com.osparking.global.CommonData.tableRowHeight;
 import static com.osparking.global.CommonData.tipColor;
 import static com.osparking.global.DataSheet.saveODSfileName;
@@ -86,6 +87,7 @@ import static com.osparking.global.names.ControlEnums.FormModeString.MODIFY;
 import static com.osparking.global.names.ControlEnums.FormModeString.SEARCH;
 import com.osparking.global.names.ControlEnums.LabelContent;
 import static com.osparking.global.names.ControlEnums.LabelContent.*;
+import static com.osparking.global.names.ControlEnums.Languages.KOREAN;
 import static com.osparking.global.names.ControlEnums.MenuITemTypes.META_KEY_LABEL;
 import static com.osparking.global.names.ControlEnums.TableTypes.CELL_PHONE_HEADER;
 import static com.osparking.global.names.ControlEnums.TableTypes.CREATED_HEADER;
@@ -2220,6 +2222,12 @@ public class AttListForm extends javax.swing.JFrame {
     }//GEN-LAST:event_managerHelpButtonActionPerformed
 
     private void searchTextFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_searchTextFocusGained
+        Object selObj = searchCriteriaComboBox.getSelectedItem();
+        if (((ConvComboBoxItem)selObj).getKeyValue() == NAME_LABEL) {
+            setKeyboardLanguage(searchText, KOREAN);
+        } else {
+            setKeyboardLanguage(searchText, null);
+        }
         if (hintShown) {
             searchText.setText("");
             hintShown = false;            
