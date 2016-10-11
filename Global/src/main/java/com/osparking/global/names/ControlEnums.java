@@ -16,12 +16,11 @@
  */
 package com.osparking.global.names;
 
-import static com.osparking.global.Globals.language;
 import static com.osparking.global.names.ControlEnums.ComboBoxItemTypes.RTOL_CB_ITEM;
 import static com.osparking.global.names.ControlEnums.LabelContent.LANGUAGE_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.TYPE_LABEL;
-import static com.osparking.global.names.ControlEnums.Languages.ENGLISH;
-import static com.osparking.global.names.ControlEnums.Languages.KOREAN;
+import static com.osparking.global.names.ControlEnums.OsPaLang.ENGLISH;
+import static com.osparking.global.names.ControlEnums.OsPaLang.KOREAN;
 import static com.osparking.global.names.ControlEnums.MsgContent.OS_PARKINGLOT;
 import static com.osparking.global.names.ControlEnums.TitleTypes.ARRIVAL_TIME_PANEL_TITLE;
 import static com.osparking.global.names.ControlEnums.TitleTypes.SELECT_BTN;
@@ -34,12 +33,13 @@ import static com.osparking.global.names.OSP_enums.DeviceType.Camera;
  * @author Open Source Parking Inc.
  */
 public class ControlEnums {
-  
+    public static OsPaLang osPaLang;
+    
     public enum TopForms {
         Vehicle, CarOwner, AffiBldg, Attendant, Settings
     }
    
-    public enum Languages{
+    public enum OsPaLang{
         KOREAN, ENGLISH
     }
 
@@ -54,10 +54,116 @@ public class ControlEnums {
             contents[KOREAN.ordinal()] = korean;
             contents[ENGLISH.ordinal()] = english;
         }
-        private String[] contents = new String[Languages.values().length];
+        private String[] contents = new String[OsPaLang.values().length];
         public String getContent() {
-                return contents[language.ordinal()];
+                return contents[osPaLang.ordinal()];
         }
+    }
+    
+    public enum DialogMsg {
+        ATT_CANT_DEL_1("다음 사용자는 삭제할 수 없습니다", "Following user can't be deleted"),
+        ATT_CANT_DEL_2(" - 아이디: ", " - User ID: "),
+        ATT_CANT_DEL_3(" - 이  유: 차량 도착 기록이 존재합니다.(", " - Reason: has nonzero("),
+        ATT_CANT_DEL_4(")", ") Car Arrival Records"),
+        ATT_CANT_DEL_5(" * 자동차 도착 기록은 1 년간 저장됩니다.", 
+                " * Car Arrival Records are stored for 1 year."),
+        ATT_CANT_DEL_3L(" - 이  유: 로그인 기록이 존재합니다.(", " - Reason: has nonzero("),
+        ATT_CANT_DEL_4L(")", ") Login Records"),
+        ATT_CANT_DEL_5L(" * 사용자 로그인 기록은 1 년간 저장됩니다.", 
+                " * User Login Records are stored for 1 year."),
+        ATT_DEL_SUCC_1("사용자(아이디: ", "User(ID: "),
+        ATT_DEL_SUCC_2(") 기록이", ") record"),
+        ATT_DEL_SUCC_3("성공적으로 삭제되었습니다.", "deleted successfully."),
+        ATT_DEL_FAIL_1("사용자 삭제에 실패하였습니다!", "Failed Deletion of a User Account!"),
+        ATT_EMAIL_TAKEN_1("이메일 '", "E-mail '"),
+        ATT_EMAIL_TAKEN_2("' 는 사용 중 입니다.", "' is in use"),
+        ATT_EMAIL_TAKEN_3("다른 이메일을 입력하십시오.", "Choose a different one."),
+        ATT_EMAIL_GOOD_2("' 는 사용가능합니다.", "' could be used."),
+        EMAIL_SYNTAX_1("이메일 주소 '", "E-mail address '"),
+        EMAIL_SYNTAX_2("'는 구문이 바르지 않습니다.", "' has bad syntax."),
+        ID_INUSE_1("아이디 '", "ID '"),
+        ID_INUSE_2("' 는 사용 중 입니다.", "' is preoccupied by somebody"),
+        ID_INUSE_3("다른 아이디를 입력하십시오.", "Choose a different ID"),
+        OWNER_DEL_CONF_1("차주 정보와 소유 차량에 대한 정보를 삭제하시겠습니까?",
+                "Want to delete a driver and his/her cars?"),
+        OWNER_DEL_CONF_2("차주 이름 : '", "Driver Name: '"),
+        OWNER_DEL_CONF_3("' (소유차량 ", "' ("),
+        OWNER_DEL_CONF_4("대)", " owned cars)"),
+        M_OWNER_DEL_CONF_1("선택 된 ", "Want to delete records of "),
+        M_OWNER_DEL_CONF_2("명의 차주 정보와 차량 정보를 삭제하시겠습니까?",
+                " drivers and their car records?"),
+        M_OWNER_DEL_CONF_3("첫번째 차주 : '", "First Driver Name: '"),
+        M_OWNER_DEL_CONF_4("' (소유차량", "' ("),
+        M_OWNER_DEL_CONF_5("대)", " owned cars)"),
+        OWNER_DEL_RESU_1("'", "Including '"),
+        OWNER_DEL_RESU_2("'를 포함해서,", "',"),
+        OWNER_DEL_RESU_3("총 ", "total "),
+        OWNER_DEL_RESU_4("명의 차주 정보가 삭제되었습니다.", " car owner records deleted."),
+        DRIVER_ODS_SAMPLE_FILE("/drivers", "/driversEng"),
+        VEHICLE_UPLOAD_1("차량 자료가 인식되었습니다. 자료를 업로드할까요?", 
+                "Following vehicles recognized. Want to upload these?"),
+        VEHICLE_UPLOAD_2(" -자료 건수: 차량 기록", " -Data amount: vehicle records "),
+        VEHICLE_UPLOAD_3(" 개", " rows"),
+        VEHICLE_ODS_SAMPLE_FILE("/vehiclesKor", "/vehiclesEng"),
+        VEHICLE_TIP_1("차량정보 ", "Car information is being "),
+        VEHICLE_TIP_2("생성 중입니다.", "created."),
+        VEHICLE_TIP_3("변경 중입니다.", "modified."),
+        VEHICLE_GIVEUP_1("", "Do you want to give up "),
+        VEHICLE_GIVEUP_2("생성", "registering"),
+        VEHICLE_GIVEUP_3("변경", "modifying"),
+        VEHICLE_GIVEUP_4(" 중인 차량정보를 포기하겠습니까?", " a car?"),
+        VEHICLE_DELETE_1("다음 등록 차량을 삭제합니까?", 
+                "Want to unregister following vehicle?"),
+        VEHICLE_DELETE_2("차량번호: ", "Tag Number: "),
+        VEHICLES_DELETE_1("다음 차량 및 총 ", "Want to unregister "),
+        VEHICLES_DELETE_2(" 대 차량의 정보를 삭제합니까?", " vehicles including following?"),
+        VEHICLES_DEL_RES_1("차량 '", "Record of car '"),
+        VEHICLES_DEL_RES_2("'의 기록이", "'"),
+        VEHICLES_DEL_RES_3("삭제되었습니다", "has been removed"),
+        PERFORM_DESC_1(": 재연결 횟수: ", ": connection count: "),
+        PERFORM_DESC_2("      단절 시간(ms)--평균: ", "      disconnection(ms)--avg: "),
+        PERFORM_DESC_3(", 최대: ", ", max: "),
+        BLDG_ODS_RES_1("자료 요약", "Loaded Data Summary"),
+        BLDG_ODS_RES_2(" - 불러온 건물 수: ", " - Loaded Buildings: "),
+        BLDG_ODS_RES_3(" - 거부된 건물 수: ", " - Rejected Buildings: "),
+        BLDG_ODS_RES_4(" - 불러온 호실 수: ", " - Loaded Rooms: "),
+        BLDG_ODS_RES_5(" - 거부된 호실 수: ", " - Rejected Rooms: "),
+        UNKNOWN_UNIT_1("호실이 정확하지 않습니다.", "It's unknown where this unit belongs"),
+        UNKNOWN_UNIT_2(" - 호실 ID#: ", " - Unit ID#: "),
+        MISSING_END_1("상위 및 하위 소속 조직명칭 종료마크(아래)가 누락됨",
+                "Higher and Lower Affiliation Name End Mark Missing"),
+        MISSING_END_2("종료마크: 첫 열이 '", "End Mark: a row that begins with '"),
+        MISSING_END_3("'인 행(따옴표 제외)", "'(except quotation mark)"),
+        AFFI_ODS_RES_1("ods파일 불러오기 결과", "Result of ods file loading"),
+        AFFI_ODS_RES_2(" - 불러온 상위 소속 수: ", " - Higher Affiliation Loaded: "),
+        AFFI_ODS_RES_3(" - 거부된 상위 소속 수: ", " - Higher Affiliation Rejected: "),
+        AFFI_ODS_RES_4(" - 불러온 하위 소속 수: ", " - Lower Affiliation Loaded: "),
+        AFFI_ODS_RES_5(" - 거부된 하위 소속 수: ", " - Lower Affiliation Rejected: "),
+        VEHICLE_ODS_1("자료 불러오기 결과", "Sheet Loading Result"),
+        VEHICLE_ODS_2(" - 불러온 차량: ", " - Loaded vehicle: "),
+        VEHICLE_ODS_3(" - 거부된 중복 자료: ", " - Rejected duplicates: "),
+        VEHICLE_ODS_4(" - 총 거부 자료: ", " - Total rejected: "),
+        HELP_AFFILIATION("/affiliation_Kor.png", "/affiliation_Eng.png"),
+        HELP_BUILDING("/building_Kor.png", "/building_Eng.png"),
+        HELP_DRIVER("/drivers.png", "/driversEng.png"),
+        HELP_VEHICLE("/vehicle_Kor.png", "/vehicle_Eng.png"),
+        UNIT_DEL_1("다음 호실(번호)을 삭제합니까?", "Want to delete the following unit?"),
+        UNIT_DEL_2(" -호실 번호: ", " -Unit No.: "),
+        UNIT_DEL_RES_1("다음 호실이 삭제되었습니다.", "Following unit has been deleted."),
+        UNIT_DEL_FAIL("다음 호실 삭제에 실패하였습니다", "Unit Deletion Trial Failed."),
+        NON_NUMERIC_DATA("다음 셀에서 숫자 이외의 자료가 탐지됨.",
+                "Cells containing non-numeric data.");
+        
+        DialogMsg(String korean, String english) {
+            contents[KOREAN.ordinal()] = korean;
+            contents[ENGLISH.ordinal()] = english;
+        }
+        
+        private String[] contents = new String[OsPaLang.values().length];
+        
+        public String getContent() {
+            return contents[osPaLang.ordinal()];
+        }        
     }
     
     public enum TitleTypes {
@@ -100,10 +206,10 @@ public class ControlEnums {
             contents[ENGLISH.ordinal()] = english;
         }
         
-        private String[] contents = new String[Languages.values().length];
+        private String[] contents = new String[OsPaLang.values().length];
         
         public String getContent() {
-            return contents[language.ordinal()];
+            return contents[osPaLang.ordinal()];
         }        
     }
     
@@ -241,6 +347,7 @@ public class ControlEnums {
         VEHICLES_LABEL (" 대",  " vehicles"),
         LOT_NAME_LABEL("주차장 이름",  "Parking Lot Name"),
         LOWER_LABEL(" 부서 목록", "Lower affiliations of"),
+        UNIT_LABEL("동 호실 목록", "Units of Building "),
         IP_ADDR_ERROR_1("[" + IP_ADDR_LABEL.getContent() + "] 값 오류",
                 "[" + IP_ADDR_LABEL.getContent() + "] format error"),
         IP_ADDR_ERROR_2("바른 형식 : ", "Right format : "),
@@ -325,10 +432,10 @@ public class ControlEnums {
             contents[ENGLISH.ordinal()] = english;
         }
         
-        private String[] contents = new String[Languages.values().length];
+        private String[] contents = new String[OsPaLang.values().length];
         
         public String getContent() {
-            return contents[language.ordinal()];
+            return contents[osPaLang.ordinal()];
         }
     }
     
@@ -374,10 +481,10 @@ public class ControlEnums {
             contents[ENGLISH.ordinal()] = english;
         }
         
-        private String[] contents = new String[Languages.values().length];
+        private String[] contents = new String[OsPaLang.values().length];
         
         public String getContent() {
-                return contents[language.ordinal()];
+                return contents[osPaLang.ordinal()];
         }        
     }
 
@@ -411,9 +518,9 @@ public class ControlEnums {
             contents[KOREAN.ordinal()] = korean;
             contents[ENGLISH.ordinal()] = english;
         }
-        private String[] contents = new String[Languages.values().length];
+        private String[] contents = new String[OsPaLang.values().length];
         public String getContent() {
-                return contents[language.ordinal()];
+                return contents[osPaLang.ordinal()];
         }
     }
         
@@ -486,14 +593,14 @@ public class ControlEnums {
             contents[ENGLISH.ordinal()] = english;
         }
         
-        private String[] contents = new String[Languages.values().length];
+        private String[] contents = new String[OsPaLang.values().length];
         
         public String getContent() {
-                return contents[language.ordinal()];
+                return contents[osPaLang.ordinal()];
         }
         
         public String toString() {
-            return contents[language.ordinal()];
+            return contents[osPaLang.ordinal()];
         }
     }
     
@@ -555,10 +662,10 @@ public class ControlEnums {
             contents[ENGLISH.ordinal()] = english;
         }
         
-        private String[] contents = new String[Languages.values().length];
+        private String[] contents = new String[OsPaLang.values().length];
         
         public String getContent() {
-                return contents[language.ordinal()];
+                return contents[osPaLang.ordinal()];
         }
     }
     
@@ -572,10 +679,10 @@ public class ControlEnums {
             contents[ENGLISH.ordinal()] = english;
         }
         
-        private String[] contents = new String[Languages.values().length];
+        private String[] contents = new String[OsPaLang.values().length];
         
         public String getContent() {
-                return contents[language.ordinal()];
+                return contents[osPaLang.ordinal()];
         }        
     }
     
@@ -617,10 +724,10 @@ public class ControlEnums {
             contents[ENGLISH.ordinal()] = english;
         }
         
-        private String[] contents = new String[Languages.values().length];
+        private String[] contents = new String[OsPaLang.values().length];
         
         public String getContent() {
-                return contents[language.ordinal()];
+                return contents[osPaLang.ordinal()];
         }        
     }
     
@@ -1007,10 +1114,10 @@ public class ControlEnums {
             contents[ENGLISH.ordinal()] = english;
         }
         
-        private String[] contents = new String[Languages.values().length];
+        private String[] contents = new String[OsPaLang.values().length];
         
         public String getContent() {
-                return contents[language.ordinal()];
+                return contents[osPaLang.ordinal()];
         }        
     }
     
@@ -1085,10 +1192,10 @@ public class ControlEnums {
             contents[ENGLISH.ordinal()] = english;
         }
         
-        private String[] contents = new String[Languages.values().length];
+        private String[] contents = new String[OsPaLang.values().length];
         
         public String getContent() {
-                return contents[language.ordinal()];
+                return contents[osPaLang.ordinal()];
         }          
         
     }
@@ -1149,10 +1256,10 @@ public class ControlEnums {
             contents[ENGLISH.ordinal()] = english;
         }
         
-        private String[] contents = new String[Languages.values().length];
+        private String[] contents = new String[OsPaLang.values().length];
         
         public String getContent() {
-            return contents[language.ordinal()];
+            return contents[osPaLang.ordinal()];
         }
     }
     
@@ -1203,10 +1310,10 @@ public class ControlEnums {
             contents[ENGLISH.ordinal()] = english;
         }
         
-        private String[] contents = new String[Languages.values().length];
+        private String[] contents = new String[OsPaLang.values().length];
         
         public String getContent() {
-                return contents[language.ordinal()];
+                return contents[osPaLang.ordinal()];
         }          
     }
     
@@ -1221,10 +1328,10 @@ public class ControlEnums {
             contents[ENGLISH.ordinal()] = english;
         }
         
-        private String[] contents = new String[Languages.values().length];
+        private String[] contents = new String[OsPaLang.values().length];
         
         public String getContent() {
-                return contents[language.ordinal()];
+                return contents[osPaLang.ordinal()];
         }          
     }
     
@@ -1269,10 +1376,10 @@ public class ControlEnums {
             contents[ENGLISH.ordinal()] = english;
         }
         
-        private String[] contents = new String[Languages.values().length];
+        private String[] contents = new String[OsPaLang.values().length];
         
         public String getContent() {
-                return contents[language.ordinal()];
+                return contents[osPaLang.ordinal()];
         }
     }
     
@@ -1293,10 +1400,10 @@ public class ControlEnums {
             contents[ENGLISH.ordinal()] = english;
         }
         
-        private String[] contents = new String[Languages.values().length];
+        private String[] contents = new String[OsPaLang.values().length];
         
         public String getContent() {
-            return contents[language.ordinal()];
+            return contents[osPaLang.ordinal()];
         }            
     }
     
@@ -1330,10 +1437,10 @@ public class ControlEnums {
             contents[ENGLISH.ordinal()] = english;
         }
         
-        private String[] contents = new String[Languages.values().length];
+        private String[] contents = new String[OsPaLang.values().length];
         
         public String getContent() {
-            return contents[language.ordinal()];
+            return contents[osPaLang.ordinal()];
         }            
     }
     

@@ -37,9 +37,10 @@ import static com.osparking.global.names.ControlEnums.DialogTitleTypes.DEFAULT_U
 import static com.osparking.global.names.ControlEnums.LabelContent.DEFAULT_USER_LINE1;
 import static com.osparking.global.names.ControlEnums.LabelContent.DEFAULT_USER_LINE2;
 import static com.osparking.global.names.ControlEnums.LabelContent.GATE_LABEL;
-import static com.osparking.global.names.ControlEnums.Languages.ENGLISH;
-import static com.osparking.global.names.ControlEnums.Languages.KOREAN;
+//import static com.osparking.global.names.ControlEnums.Languages.ENGLISH;
+//import static com.osparking.global.names.ControlEnums.Languages.KOREAN;
 import static com.osparking.global.names.ControlEnums.MsgContent.OS_PARKINGLOT;
+import com.osparking.global.names.ControlEnums.OsPaLang;
 import com.osparking.global.names.ControlEnums.OsPaTable;
 import static com.osparking.global.names.ControlEnums.TextType.LETEST_MSG;
 import static com.osparking.global.names.ControlEnums.TextType.PASSING_MSG;
@@ -66,6 +67,8 @@ import com.osparking.global.names.OSP_enums.PWStrengthLevel;
 import com.osparking.global.names.OSP_enums.PermissionType;
 import java.awt.Component;
 import java.util.Date;
+import static java.util.Locale.ENGLISH;
+import static java.util.Locale.KOREAN;
 import javax.swing.JOptionPane;
 import static javax.swing.JOptionPane.INFORMATION_MESSAGE;
 
@@ -448,11 +451,15 @@ public class DB_Access {
                 locale = new Locale(rs.getString("languageCode"), rs.getString("countryCode"));
                 switch(locale.getLanguage()){
                     case "ko" : 
-                        language = KOREAN;
+                        language = Locale.KOREAN;
+                        ControlEnums.osPaLang = OsPaLang.KOREAN;
+                        OSP_enums.osPaLang = OsPaLang.KOREAN;
                         font_Type = "맑은 고딕";
                         break;
                     default:
-                        language = ENGLISH;
+                        language = Locale.ENGLISH;
+                        ControlEnums.osPaLang = OsPaLang.ENGLISH;
+                        OSP_enums.osPaLang = OsPaLang.ENGLISH;
                         break;
                 }
                 localeIndex = rs.getShort("localeIndex");

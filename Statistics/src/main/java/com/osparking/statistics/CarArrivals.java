@@ -72,7 +72,7 @@ import static com.osparking.global.names.ControlEnums.LabelContent.VISIT_BUILDIN
 import static com.osparking.global.names.ControlEnums.LabelContent.VISIT_PURPOSE_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.VISIT_UNIT;
 import static com.osparking.global.names.ControlEnums.LabelContent.WHERE_TO_LABEL;
-import static com.osparking.global.names.ControlEnums.Languages.KOREAN;
+import static com.osparking.global.names.ControlEnums.OsPaLang.KOREAN;
 import static com.osparking.global.names.ControlEnums.MenuITemTypes.META_KEY_LABEL;
 import static com.osparking.global.names.ControlEnums.TitleTypes.*;
 import static com.osparking.global.names.ControlEnums.TableTypes.ARRIVAL_TIME_HEADER;

@@ -53,7 +53,7 @@ import static com.osparking.global.Globals.loginID;
 import static com.osparking.global.names.ControlEnums.ButtonTypes.*;
 import static com.osparking.global.names.ControlEnums.LabelContent.SEARCH_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.SELECT_DRIVER_HELP;
-import static com.osparking.global.names.ControlEnums.Languages.KOREAN;
+import static com.osparking.global.names.ControlEnums.OsPaLang.KOREAN;
 import static com.osparking.global.names.ControlEnums.TitleTypes.DRIVER_SELECTION_FRAME_TITLE;
 import static com.osparking.global.names.ControlEnums.TableTypes.*;
 import static com.osparking.global.names.ControlEnums.TextType.*;

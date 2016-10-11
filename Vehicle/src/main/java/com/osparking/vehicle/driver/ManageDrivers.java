@@ -85,7 +85,6 @@ import static com.osparking.global.Globals.getQuest20_Icon;
 import static com.osparking.global.Globals.head_font_Size;
 import static com.osparking.global.Globals.initializeLoggers;
 import static com.osparking.global.Globals.isManager;
-import static com.osparking.global.Globals.language;
 import static com.osparking.global.Globals.logParkingException;
 import static com.osparking.global.Globals.logParkingOperation;
 import static com.osparking.global.Globals.refreshComboBox;
@@ -96,6 +95,20 @@ import com.osparking.global.names.ControlEnums;
 import static com.osparking.global.names.ControlEnums.ButtonTypes.*;
 import static com.osparking.global.names.ControlEnums.ComboBoxItemTypes.*;
 import static com.osparking.global.names.ControlEnums.DialogMessages.*;
+import static com.osparking.global.names.ControlEnums.DialogMsg.DRIVER_ODS_SAMPLE_FILE;
+import static com.osparking.global.names.ControlEnums.DialogMsg.M_OWNER_DEL_CONF_1;
+import static com.osparking.global.names.ControlEnums.DialogMsg.M_OWNER_DEL_CONF_2;
+import static com.osparking.global.names.ControlEnums.DialogMsg.M_OWNER_DEL_CONF_3;
+import static com.osparking.global.names.ControlEnums.DialogMsg.M_OWNER_DEL_CONF_4;
+import static com.osparking.global.names.ControlEnums.DialogMsg.M_OWNER_DEL_CONF_5;
+import static com.osparking.global.names.ControlEnums.DialogMsg.OWNER_DEL_CONF_1;
+import static com.osparking.global.names.ControlEnums.DialogMsg.OWNER_DEL_CONF_2;
+import static com.osparking.global.names.ControlEnums.DialogMsg.OWNER_DEL_CONF_3;
+import static com.osparking.global.names.ControlEnums.DialogMsg.OWNER_DEL_CONF_4;
+import static com.osparking.global.names.ControlEnums.DialogMsg.OWNER_DEL_RESU_1;
+import static com.osparking.global.names.ControlEnums.DialogMsg.OWNER_DEL_RESU_2;
+import static com.osparking.global.names.ControlEnums.DialogMsg.OWNER_DEL_RESU_3;
+import static com.osparking.global.names.ControlEnums.DialogMsg.OWNER_DEL_RESU_4;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.*;
 import com.osparking.global.names.ControlEnums.FormMode;
 import static com.osparking.global.names.ControlEnums.FormModeString.SEARCH;
@@ -108,12 +121,10 @@ import static com.osparking.global.names.ControlEnums.LabelContent.MODIFY_MODE_L
 import static com.osparking.global.names.ControlEnums.LabelContent.REQUIRE_FIELD_NOTE;
 import static com.osparking.global.names.ControlEnums.LabelContent.SEARCH_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.SEARCH_MODE_LABEL;
-import static com.osparking.global.names.ControlEnums.Languages.ENGLISH;
-import static com.osparking.global.names.ControlEnums.Languages.KOREAN;
+import static com.osparking.global.names.ControlEnums.OsPaLang.KOREAN;
 import static com.osparking.global.names.ControlEnums.MenuITemTypes.META_KEY_LABEL;
 import com.osparking.global.names.ControlEnums.OsPaTable;
 import static com.osparking.global.names.ControlEnums.OsPaTable.CarDriver;
-import static com.osparking.global.names.ControlEnums.TableType.Vehicles;
 import static com.osparking.global.names.ControlEnums.TitleTypes.DRIVER_LIST_FRAME_TITLE;
 import static com.osparking.global.names.ControlEnums.TableTypes.*;
 import static com.osparking.global.names.ControlEnums.TextType.*;
@@ -166,9 +177,7 @@ import static java.awt.event.ItemEvent.SELECTED;
 import java.awt.event.ItemListener;
 import java.io.InputStream;
 import java.util.List;
-import java.util.Locale;
 import javax.swing.JDialog;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.SwingUtilities;
 import javax.swing.table.TableCellEditor;
@@ -1474,45 +1483,18 @@ public class ManageDrivers extends javax.swing.JFrame {
         int count = getRecordCount(OsPaTable.Vehicles, CD_SEQ_NO);
 
         if (deleteIndice.length == 1) {
-            String dialogMessage = "";
-
-            switch(language){
-                case KOREAN:
-                    dialogMessage = "차주 정보와 소유 차량에 대한 정보를 삭제하시겠습니까?" + System.getProperty("line.separator") +
-                            "차주 이름 : '" + driverName + "' (소유차량 " + count + "대)";
-                    break;
-
-                case ENGLISH:
-                    dialogMessage = "Want to delete a driver and every owned cars?" + System.getProperty("line.separator")
-                        + "Driver Name: '" + driverName + "' (" + count + " owned cars)";
-                    break;
-
-                default:
-                    break;
-            }                
+            String dialogMessage = OWNER_DEL_CONF_1.getContent() + System.getProperty("line.separator") +
+                            OWNER_DEL_CONF_2.getContent() + driverName + OWNER_DEL_CONF_3.getContent() + 
+                    count + OWNER_DEL_CONF_4.getContent();
 
             result = JOptionPane.showConfirmDialog(this, dialogMessage,
                         DELETE_DIALOGTITLE.getContent(), 
                         JOptionPane.YES_NO_OPTION);
         } else {
-            String dialogMessage = "";
-
-            switch(language){
-                case KOREAN:
-                    dialogMessage = "선택 된 " + deleteIndice.length + "명의 차주 정보와 차량 정보를 삭제하시겠습니까?"
-                                + System.getProperty("line.separator")
-                                + "첫번째 차주 : '" + driverName + "' (소유차량" + count + "대)";
-                    break;
-
-                case ENGLISH:
-                    dialogMessage = "Want to delete records of " + deleteIndice.length + " drivers and their car records?"
-                                + System.getProperty("line.separator")
-                                + "First Driver Name: '" + driverName + "' (" + count + " owned cars)";
-                    break;
-
-                default:
-                    break;
-            }                
+            String dialogMessage = M_OWNER_DEL_CONF_1.getContent() + deleteIndice.length + 
+                    M_OWNER_DEL_CONF_2.getContent() + System.getProperty("line.separator") + 
+                    M_OWNER_DEL_CONF_3.getContent() + driverName + 
+                    M_OWNER_DEL_CONF_4.getContent() + count + M_OWNER_DEL_CONF_5.getContent();
 
             result = JOptionPane.showConfirmDialog(this, dialogMessage, 
                         DELETE_DIALOGTITLE.getContent(), 
@@ -1547,23 +1529,9 @@ public class ManageDrivers extends javax.swing.JFrame {
                 if (result == 1) {
                     loadDriverData(deleteIndice[0], "", ""); // passes index of the deleted row
 
-                    String dialogMessage = "";
-
-                    switch(language){
-                        case KOREAN: 
-                            dialogMessage = 
-                                driverName +"을 포함한 총 " + totalDeletion + "명의 차주 정보가 삭제되었습니다.";  
-                            break;
-
-                        case ENGLISH: 
-                            dialogMessage = "Total " + totalDeletion + " driver(s)" + System.lineSeparator() +
-                                            "(including '" + driverName + "') " + System.lineSeparator() +
-                                            "deleted successfully.";
-                            break;
-
-                        default:
-                            break;
-                    }                        
+                    String dialogMessage = OWNER_DEL_RESU_1.getContent() + driverName + 
+                            OWNER_DEL_RESU_2.getContent() + System.lineSeparator() + 
+                            OWNER_DEL_RESU_3.getContent() + totalDeletion + OWNER_DEL_RESU_4.getContent();  
 
                     JOptionPane.showConfirmDialog(this, dialogMessage,
                             DELETE_RESULT_DIALOGTITLE.getContent(),
@@ -1800,45 +1768,19 @@ public class ManageDrivers extends javax.swing.JFrame {
             int count = getRecordCount(OsPaTable.Vehicles, CD_SEQ_NO);
 
             if (deleteIndice.length == 1) {
-                String dialogMessage = "";
                 
-                switch(language){
-                    case KOREAN:
-                        dialogMessage = "차주 정보와 소유 차량에 대한 정보를 삭제하시겠습니까?" + System.getProperty("line.separator") +
-                                "차주 이름 : '" + driverName + "' (소유차량 " + count + "대)";
-                        break;
-                        
-                    case ENGLISH:
-                        dialogMessage = "Want to delete a driver and every owned cars?" + System.getProperty("line.separator")
-                            + "Driver Name: '" + driverName + "' (" + count + " owned cars)";
-                        break;
-                        
-                    default:
-                        break;
-                }                
+                String dialogMessage = OWNER_DEL_CONF_1.getContent() + System.getProperty("line.separator") +
+                        OWNER_DEL_CONF_2.getContent() + driverName + OWNER_DEL_CONF_3.getContent() + count + 
+                        OWNER_DEL_CONF_4.getContent();
                 
                 result = JOptionPane.showConfirmDialog(this, dialogMessage,
                             DELETE_DIALOGTITLE.getContent(), 
                             JOptionPane.YES_NO_OPTION);
             } else {
-                String dialogMessage = "";
-                
-                switch(language){
-                    case KOREAN:
-                        dialogMessage = "선택 된 " + deleteIndice.length + "명의 차주 정보와 차량 정보를 삭제하시겠습니까?"
-                                    + System.getProperty("line.separator")
-                                    + "첫번째 차주 : '" + driverName + "' (소유차량" + count + "대)";
-                        break;
-
-                    case ENGLISH:
-                        dialogMessage = "Want to delete records of " + deleteIndice.length + " drivers and their car records?"
-                                    + System.getProperty("line.separator")
-                                    + "First Driver Name: '" + driverName + "' (" + count + " owned cars)";
-                        break;
-                        
-                    default:
-                        break;
-                }                
+                String dialogMessage = M_OWNER_DEL_CONF_1.getContent() + deleteIndice.length + 
+                        M_OWNER_DEL_CONF_2.getContent() + System.getProperty("line.separator") + 
+                        M_OWNER_DEL_CONF_3.getContent() + driverName + 
+                        M_OWNER_DEL_CONF_4.getContent() + count + M_OWNER_DEL_CONF_5.getContent();                
                 
                 result = JOptionPane.showConfirmDialog(this, dialogMessage, 
                             DELETE_DIALOGTITLE.getContent(), 
@@ -1873,23 +1815,9 @@ public class ManageDrivers extends javax.swing.JFrame {
                     if (result == 1) {
                         loadDriverData(deleteIndice[0], "", ""); // passes index of the deleted row
 
-                        String dialogMessage = "";
-                        
-                        switch(language){
-                            case KOREAN: 
-                                dialogMessage = 
-                                    driverName +"을 포함한 총 " + totalDeletion + "명의 차주 정보가 삭제되었습니다.";  
-                                break;
-                                
-                            case ENGLISH: 
-                                dialogMessage = "Total " + totalDeletion + " driver(s)" + System.lineSeparator() +
-                                                "(including '" + driverName + "') " + System.lineSeparator() +
-                                                "deleted successfully.";
-                                break;
-                                
-                            default:
-                                break;
-                        }                        
+                        String dialogMessage = 
+                                OWNER_DEL_RESU_1.getContent() + driverName + OWNER_DEL_RESU_2.getContent() + 
+                                System.lineSeparator() + OWNER_DEL_RESU_3.getContent() + totalDeletion + OWNER_DEL_RESU_4.getContent();                          
                         
                         JOptionPane.showConfirmDialog(this, dialogMessage,
                                 DELETE_RESULT_DIALOGTITLE.getContent(),
@@ -2042,17 +1970,7 @@ public class ManageDrivers extends javax.swing.JFrame {
     }//GEN-LAST:event_odsHelpButtonActionPerformed
 
     private void sampleButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sampleButtonActionPerformed
-        String sampleFile = "";
-        
-        switch(language){
-            case ENGLISH:
-                sampleFile = "/driversEng";
-                break;
-
-            default:
-                sampleFile = "/drivers";
-                break;
-        }          
+        String sampleFile = DRIVER_ODS_SAMPLE_FILE.getContent();
             
         // Ask user the name and location for the ods file to save
         StringBuffer odsFullPath = new StringBuffer();

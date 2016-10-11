@@ -19,8 +19,10 @@ package com.osparking.global.names;
 import java.util.logging.Level;
 import static com.osparking.global.Globals.addMessageLine;
 import static com.osparking.global.Globals.getFormattedRealNumber;
-import static com.osparking.global.Globals.language;
 import static com.osparking.global.Globals.logParkingException;
+import static com.osparking.global.names.ControlEnums.DialogMsg.PERFORM_DESC_1;
+import static com.osparking.global.names.ControlEnums.DialogMsg.PERFORM_DESC_2;
+import static com.osparking.global.names.ControlEnums.DialogMsg.PERFORM_DESC_3;
 import static com.osparking.global.names.ControlEnums.LabelContent.CAMERA_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.E_BOARD_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.GATE_BAR_LABEL;
@@ -69,46 +71,26 @@ public class SocketConnStat {
         if (disconnectionCount == 0) {
             sb.append(NO_SOCKET_DISCON_MSG.getContent());
         } else {
-            switch(language){
-                case KOREAN :
-                    sb.append(": 재연결 횟수: ");
-                    sb.append(disconnectionCount);
-                    sb.append(System.lineSeparator());            
-                    sb.append("      단절 시간(ms)--평균: ");
-                    sb.append(getFormattedRealNumber(disconnectionTotalMs/(float)disconnectionCount, 1));
-                    sb.append(", 최대: ");
-                    sb.append(getFormattedRealNumber(disconnPeriodMax, 0));
-                    break;
-                    
-                case ENGLISH:
-                    sb.append(": connection count: ");
-                    sb.append(disconnectionCount);
-                    sb.append(System.lineSeparator());            
-                    sb.append("      disconnection(ms)--avg: ");
-                    sb.append(getFormattedRealNumber(disconnectionTotalMs/(float)disconnectionCount, 1));
-                    sb.append(", max: ");
-                    sb.append(getFormattedRealNumber(disconnPeriodMax, 0));
-                    break;
-                    
-                default :
-                    break;
-            }            
+            sb.append(PERFORM_DESC_1.getContent());
+            sb.append(disconnectionCount);
+            sb.append(System.lineSeparator());            
+            sb.append(PERFORM_DESC_2.getContent());
+            sb.append(getFormattedRealNumber(disconnectionTotalMs/(float)disconnectionCount, 1));
+            sb.append(PERFORM_DESC_3.getContent());
+            sb.append(getFormattedRealNumber(disconnPeriodMax, 0));
         }
         sb.append(System.lineSeparator());
         return sb.toString();
-    }  
+    }
     
     public synchronized void recordSocketConnection(long connectionTm) {
         if (statChangeTm <= connectionTm) {
             
             if (! isConnected()) {
-//                System.out.println("change(use): " + statChangeTm);
                 if (statChangeTm == 0 || rejectOneLatest_D_P_Ms) { 
                     rejectOneLatest_D_P_Ms = false;
-//                    System.out.println("Rejected: " + latest_D_P_Ms);
                 } else {
                     disconnectionCount++;
-//                    System.out.println("added--: " + latest_D_P_Ms);
                     disconnectionTotalMs += latest_D_P_Ms;
                     if (disconnPeriodMax < latest_D_P_Ms)
                         disconnPeriodMax = latest_D_P_Ms;

@@ -161,7 +161,7 @@ import static com.osparking.global.names.ControlEnums.LabelContent.WRONG_LANG_DI
 import static com.osparking.global.names.ControlEnums.LabelContent.WRONG_LANG_DIALOG_2;
 import static com.osparking.global.names.ControlEnums.LabelContent.WRONG_LANG_DIALOG_3;
 import static com.osparking.global.names.ControlEnums.LabelContent.WRONG_LANG_DIALOG_4;
-import static com.osparking.global.names.ControlEnums.Languages.KOREAN;
+import static com.osparking.global.names.ControlEnums.OsPaLang.KOREAN;
 import static com.osparking.global.names.ControlEnums.MenuITemTypes.META_KEY_LABEL;
 import static com.osparking.global.names.ControlEnums.MsgContent.AVERAGE_WORDS;
 import static com.osparking.global.names.ControlEnums.MsgContent.RECENT_WORD;

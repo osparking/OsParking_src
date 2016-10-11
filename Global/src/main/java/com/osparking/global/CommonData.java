@@ -28,7 +28,7 @@ import com.osparking.global.names.ControlEnums;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.DELETE_RESULT_DIALOGTITLE;
 import static com.osparking.global.names.ControlEnums.LabelContent.TABLE_DEL_DIALOG_1;
 import static com.osparking.global.names.ControlEnums.LabelContent.TABLE_DEL_DIALOG_2;
-import static com.osparking.global.names.ControlEnums.Languages.KOREAN;
+import static com.osparking.global.names.ControlEnums.OsPaLang.KOREAN;
 import static com.osparking.global.names.ControlEnums.MenuITemTypes.META_KEY_LABEL;
 import com.osparking.global.names.ControlEnums.OsPaTable;
 import com.osparking.global.names.ControlEnums.RowName;
@@ -126,7 +126,7 @@ public class CommonData { // new Dimension(carTagWidth, 30)
      * @param comp component for which keyboard language to set
      * @param language keyboard language to set for the component
      */
-    public static void setKeyboardLanguage(Component comp, ControlEnums.Languages language) {
+    public static void setKeyboardLanguage(Component comp, ControlEnums.OsPaLang language) {
         try {
             InputContext inCtx  =  comp.getInputContext();
             if (inCtx != null) {

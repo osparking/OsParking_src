@@ -35,7 +35,7 @@ import static com.osparking.global.names.ControlEnums.DialogTitleTypes.DEFAULT_T
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.TOP_TAB_TITLE;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.VEHICLE_TAB_TITLE;
 import com.osparking.global.names.ControlEnums.FormMode;
-import static com.osparking.global.names.ControlEnums.Languages.KOREAN;
+import static com.osparking.global.names.ControlEnums.OsPaLang.KOREAN;
 import static com.osparking.global.names.ControlEnums.MenuITemTypes.META_KEY_LABEL;
 import static com.osparking.global.names.DB_Access.connectionType;
 import static com.osparking.global.names.DB_Access.gateCount;

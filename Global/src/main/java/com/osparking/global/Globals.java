@@ -29,8 +29,8 @@ import static com.osparking.global.names.ControlEnums.ComboBoxItemTypes.LOWER_HI
 import static com.osparking.global.names.ControlEnums.ComboBoxItemTypes.ROOM_BUILDING_CB_ITEM;
 import static com.osparking.global.names.ControlEnums.ComboBoxItemTypes.ROOM_CB_ITEM;
 import static com.osparking.global.names.ControlEnums.DialogMessages.CONN_TRIAL;
-import com.osparking.global.names.ControlEnums.Languages;
-import static com.osparking.global.names.ControlEnums.Languages.KOREAN;
+import com.osparking.global.names.ControlEnums.OsPaLang;
+import static com.osparking.global.names.ControlEnums.OsPaLang.KOREAN;
 import static com.osparking.global.names.ControlEnums.TextType.DISCONN_MSG;
 import com.osparking.global.names.ConvComboBoxItem;
 import static com.osparking.global.names.DB_Access.PIC_HEIGHT;
@@ -125,6 +125,7 @@ import com.osparking.global.names.PComboBox;
 import com.osparking.global.names.ParkingTimer;
 import com.osparking.global.names.SocketConnStat;
 import java.awt.Container;
+import java.util.Locale;
 import javax.imageio.ImageIO;
 import javax.swing.JComboBox;
 
@@ -482,7 +483,7 @@ public class Globals {
     public static String getTagNumber(byte picNo) {
         String tagNumber = null;
         
-        if (language == KOREAN) {
+        if (language == Locale.KOREAN) {
             switch (picNo) {
                 case 1:
                     tagNumber = "26누8648"; // parking permitted
@@ -2141,5 +2142,5 @@ public class Globals {
     
     static int count = 0;
     
-    public static Languages language;
+    public static Locale language;
 }

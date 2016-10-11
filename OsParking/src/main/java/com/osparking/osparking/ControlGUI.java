@@ -61,7 +61,7 @@ import static com.osparking.global.names.ControlEnums.LabelContent.GATE_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.OPEN_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.RATE_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.STATUS_LABEL;
-import static com.osparking.global.names.ControlEnums.Languages.KOREAN;
+import static com.osparking.global.names.ControlEnums.OsPaLang.KOREAN;
 import static com.osparking.global.names.ControlEnums.MenuITemTypes.AFFILIATION_MENU;
 import static com.osparking.global.names.ControlEnums.MenuITemTypes.ARRIVAL_MENU_ITEM;
 import static com.osparking.global.names.ControlEnums.MenuITemTypes.BOOTING_MENU_ITEM;
@@ -210,6 +210,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Properties;
 import java.util.Random;
 import java.util.Timer;
@@ -3517,7 +3518,7 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
         checkOptions(args);
         
         if (listFileNotFound()) {
-            language = KOREAN;
+            language = Locale.KOREAN; // KOREAN;
             IS_FIRST_FUN = true;            
             initSystemSettings();
             initEBoardSettings();

@@ -65,6 +65,27 @@ import com.osparking.global.IMainGUI;
 import com.osparking.global.names.ControlEnums;
 import static com.osparking.global.names.ControlEnums.ButtonTypes.*;
 import static com.osparking.global.names.ControlEnums.DialogMessages.*;
+import static com.osparking.global.names.ControlEnums.DialogMsg.ATT_CANT_DEL_1;
+import static com.osparking.global.names.ControlEnums.DialogMsg.ATT_CANT_DEL_2;
+import static com.osparking.global.names.ControlEnums.DialogMsg.ATT_CANT_DEL_3;
+import static com.osparking.global.names.ControlEnums.DialogMsg.ATT_CANT_DEL_3L;
+import static com.osparking.global.names.ControlEnums.DialogMsg.ATT_CANT_DEL_4;
+import static com.osparking.global.names.ControlEnums.DialogMsg.ATT_CANT_DEL_4L;
+import static com.osparking.global.names.ControlEnums.DialogMsg.ATT_CANT_DEL_5;
+import static com.osparking.global.names.ControlEnums.DialogMsg.ATT_CANT_DEL_5L;
+import static com.osparking.global.names.ControlEnums.DialogMsg.ATT_DEL_FAIL_1;
+import static com.osparking.global.names.ControlEnums.DialogMsg.ATT_DEL_SUCC_1;
+import static com.osparking.global.names.ControlEnums.DialogMsg.ATT_DEL_SUCC_2;
+import static com.osparking.global.names.ControlEnums.DialogMsg.ATT_DEL_SUCC_3;
+import static com.osparking.global.names.ControlEnums.DialogMsg.ATT_EMAIL_GOOD_2;
+import static com.osparking.global.names.ControlEnums.DialogMsg.ATT_EMAIL_TAKEN_1;
+import static com.osparking.global.names.ControlEnums.DialogMsg.ATT_EMAIL_TAKEN_2;
+import static com.osparking.global.names.ControlEnums.DialogMsg.ATT_EMAIL_TAKEN_3;
+import static com.osparking.global.names.ControlEnums.DialogMsg.EMAIL_SYNTAX_1;
+import static com.osparking.global.names.ControlEnums.DialogMsg.EMAIL_SYNTAX_2;
+import static com.osparking.global.names.ControlEnums.DialogMsg.ID_INUSE_1;
+import static com.osparking.global.names.ControlEnums.DialogMsg.ID_INUSE_2;
+import static com.osparking.global.names.ControlEnums.DialogMsg.ID_INUSE_3;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.ATTENDANT_ODS_TITLE;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.ATT_EMAIL_DUP_DIALOGTITLE;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.ATT_EMAIL_SYNTAX_CHECK_DIALOG;
@@ -87,8 +108,9 @@ import static com.osparking.global.names.ControlEnums.FormModeString.MODIFY;
 import static com.osparking.global.names.ControlEnums.FormModeString.SEARCH;
 import com.osparking.global.names.ControlEnums.LabelContent;
 import static com.osparking.global.names.ControlEnums.LabelContent.*;
-import static com.osparking.global.names.ControlEnums.Languages.KOREAN;
+import static com.osparking.global.names.ControlEnums.OsPaLang.KOREAN;
 import static com.osparking.global.names.ControlEnums.MenuITemTypes.META_KEY_LABEL;
+import static com.osparking.global.names.ControlEnums.OsPaLang.ENGLISH;
 import static com.osparking.global.names.ControlEnums.TableTypes.CELL_PHONE_HEADER;
 import static com.osparking.global.names.ControlEnums.TableTypes.CREATED_HEADER;
 import static com.osparking.global.names.ControlEnums.TableTypes.EMAIL_HEADER;
@@ -133,7 +155,6 @@ import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.JButton;
 import javax.swing.JComponent;
-import javax.swing.JFrame;
 import javax.swing.JRootPane;
 import javax.swing.JTextField;
 import javax.swing.KeyStroke;
@@ -1725,24 +1746,10 @@ public class AttListForm extends javax.swing.JFrame {
         
         int relatedRecordCount = DB_Access.getRecordCount("car_arrival", "AttendantID", deleteID);
         if (relatedRecordCount > 0) {
-            String dialogMessage = "";
-            
-            switch (language) {
-                case KOREAN:
-                    dialogMessage = "다음 사용자는 삭제할 수 없습니다" + System.lineSeparator() +
-                    " - 아이디: " + userIDText.getText() + System.lineSeparator() + 
-                    " - 이  유: 차량 도착기록이 존재합니다.(" + relatedRecordCount + ")" +
-                    System.lineSeparator() + " * 자동차 도착 기록은 1 년간 저장됩니다.";
-                    break;
-                case ENGLISH:
-                    dialogMessage = "Following user can't be deleted" + System.lineSeparator() +
-                    " - User ID: " + userIDText.getText() + System.lineSeparator() + 
-                    " - Reason: has nonzero(" + relatedRecordCount + ") Car Arrival Records" +
-                    System.lineSeparator() + " * Car Arrival Records are stored for 1 year.";
-                    break;
-                default:
-                    break;
-            }
+            String dialogMessage = ATT_CANT_DEL_1.getContent() + System.lineSeparator() +
+                    ATT_CANT_DEL_2.getContent() + userIDText.getText() + System.lineSeparator() + 
+                    ATT_CANT_DEL_3.getContent() + relatedRecordCount + ATT_CANT_DEL_4.getContent() +
+                    System.lineSeparator() + ATT_CANT_DEL_5.getContent();
             
             JOptionPane.showMessageDialog(this, dialogMessage,
                             DELETE_RESULT_DIALOGTITLE.getContent(), 
@@ -1752,26 +1759,10 @@ public class AttListForm extends javax.swing.JFrame {
         
         relatedRecordCount = DB_Access.getRecordCount("loginrecord", "UserID", deleteID);
         if (relatedRecordCount > 0) {
-            String dialogMessage = "";
-
-            switch (language) {
-                case KOREAN:
-                    dialogMessage = "다음 사용자는 삭제할 수 없습니다" + System.lineSeparator() +
-                    " - 아이디 : " + userIDText.getText() + System.lineSeparator() + 
-                    " - 이  유 : 로그인기록이 존재합니다.(" + relatedRecordCount + ") " +
-                    System.lineSeparator() + " * 사용자 로그인 기록은 1 년간 저장됩니다.";
-                    break;
-                    
-                case ENGLISH:
-                    dialogMessage = "Following user can't be deleted" + System.lineSeparator() +
-                    " - User ID: " + userIDText.getText() + System.lineSeparator() + 
-                    " - Reason: has nonzero(" + relatedRecordCount + ") Login Records" +
-                    System.lineSeparator() + " * User Login Records are stored for 1 year.";
-                    break;
-                    
-                default:
-                    break;
-            }
+            String dialogMessage = ATT_CANT_DEL_1.getContent() + System.lineSeparator() +
+                    ATT_CANT_DEL_2.getContent() + userIDText.getText() + System.lineSeparator() + 
+                    ATT_CANT_DEL_3L.getContent() + relatedRecordCount + ATT_CANT_DEL_4L.getContent() +
+                    System.lineSeparator() + ATT_CANT_DEL_5L.getContent();
             
             JOptionPane.showMessageDialog(this, dialogMessage,
                             DELETE_RESULT_DIALOGTITLE.getContent(), 
@@ -1803,44 +1794,17 @@ public class AttListForm extends javax.swing.JFrame {
                 logParkingOperation(OpLogLevel.UserCarChange, 
                         ("* User deleted (ID:" + deleteID + ")"));
                 
-                String dialogMessage = "";
-                
-                switch (language) {
-                    case KOREAN:
-                        dialogMessage = "사용자(아이디: " + deleteID + ") 기록이" + 
-                                System.lineSeparator() + "성공적으로 삭제되었습니다.";
-                        break;
-                        
-                    case ENGLISH:
-                        dialogMessage = "User(ID: " + deleteID + ") record" + 
-                                System.lineSeparator() + "deleted successfully.";
-                        break;
-                        
-                    default:
-                        break;
-                }                
+                String dialogMessage = ATT_DEL_SUCC_1.getContent() + deleteID + ATT_DEL_SUCC_2.getContent() + 
+                                System.lineSeparator() + ATT_DEL_SUCC_3.getContent();
                 
                 JOptionPane.showMessageDialog(this, dialogMessage,
                         DELETE_RESULT_DIALOGTITLE.getContent(), 
                         JOptionPane.PLAIN_MESSAGE);  
                 clearPasswordFields();
             } else {
-                String dialogMessage = "";
-                
-                switch (language) {
-                    case KOREAN:
-                        dialogMessage = "사용자 삭제에 실패하였습니다!\n  아이디 : " + userIDText.getText();
-                        break;
-                        
-                    case ENGLISH:
-                        dialogMessage = "Failed Deletion of a User Account!" + 
-                                System.lineSeparator() + " ID : " + userIDText.getText();
-                        break;
-                        
-                    default:
-                        break;
-                }                
-                
+                String dialogMessage = ATT_DEL_FAIL_1.getContent() + System.lineSeparator() +
+                                ATT_CANT_DEL_2.getContent() + userIDText.getText();
+
                 JOptionPane.showMessageDialog(this, dialogMessage,
                         DELETE_RESULT_DIALOGTITLE.getContent(), 
                         JOptionPane.PLAIN_MESSAGE);            
@@ -1981,22 +1945,9 @@ public class AttListForm extends javax.swing.JFrame {
                 String sql = "Select count(*) as dataCount From users_osp Where email = ?";
                 if (dataExistsInDB(sql, emailEntered)) {
                     // Access DB and find if entered e-mail is already registered to the system.
-                    String dialogMessage = "";
-                    
-                    switch (language) {
-                        case KOREAN:
-                            dialogMessage = "이메일 '" + emailAddrText.getText().trim() + "' 는 사용 중 입니다.\n"
-                                + "다른 이메일을 입력하십시오.";
-                            break;
-                            
-                        case ENGLISH:
-                            dialogMessage = "E-mail '" + emailAddrText.getText().trim() + "' is in use"
-                            + System.lineSeparator() + "Choose a different one.";
-                            break;
-                            
-                        default:
-                            break;
-                    }                    
+                    String dialogMessage = ATT_EMAIL_TAKEN_1.getContent() + emailAddrText.getText().trim() + 
+                            ATT_EMAIL_TAKEN_2.getContent() + System.lineSeparator() + 
+                            ATT_EMAIL_TAKEN_3.getContent();
                     
                     JOptionPane.showConfirmDialog(this, dialogMessage,
                             ATT_EMAIL_DUP_DIALOGTITLE.getContent(),
@@ -2007,44 +1958,16 @@ public class AttListForm extends javax.swing.JFrame {
                     usableEmail = emailEntered;
                     checkEmailButton.setEnabled(false);
                     
-                    String dialogMessage = "";
-                    
-                    switch (language) {
-                        case KOREAN:
-                            dialogMessage = "이메일 '" + emailAddrText.getText().trim() + 
-                                    "' 는 사용가능합니다." + System.lineSeparator();
-                            break;
-                            
-                        case ENGLISH:
-                            dialogMessage = "E-mail '" + emailAddrText.getText().trim() + 
-                                    "' could be used." ;
-                            break;
-                            
-                        default:
-                            break;
-                    }                    
+                    String dialogMessage = ATT_EMAIL_TAKEN_1.getContent() + 
+                            emailAddrText.getText().trim() + ATT_EMAIL_GOOD_2.getContent();
                     
                     JOptionPane.showConfirmDialog(this, dialogMessage,
                             ATT_EMAIL_DUP_DIALOGTITLE.getContent(),
                             JOptionPane.PLAIN_MESSAGE, INFORMATION_MESSAGE);
                 }
             } else {
-                String dialogMessage = "";
-                
-                switch (language) {
-                    case KOREAN:
-                        dialogMessage = "이메일 주소 '" + emailAddrText.getText().trim() + 
-                                "'는 구문이 바르지 않습니다.\n";
-                        break;
-                        
-                    case ENGLISH:
-                        dialogMessage = "E-mail address '" + emailAddrText.getText().trim() + 
-                                "' has wrong syntax." + System.lineSeparator();
-                        break;
-                        
-                    default:
-                        break;
-                }
+                String dialogMessage = EMAIL_SYNTAX_1.getContent() +
+                        emailAddrText.getText().trim() + EMAIL_SYNTAX_2.getContent();
                 
                 JOptionPane.showConfirmDialog(this, dialogMessage, 
                         ATT_EMAIL_SYNTAX_CHECK_DIALOG.getContent(),
@@ -2100,24 +2023,9 @@ public class AttListForm extends javax.swing.JFrame {
             } else if (dataExistsInDB(sql, idEntered)) {
                 // Same ID is being used by other user, let the user know about this.
                 
-                String dialogMessage = "";
-                
-                switch (language) {
-                    case KOREAN:
-                        dialogMessage = "아이디 '" + userIDText.getText().trim() + 
-                            "' 는 사용 중 입니다." + System.lineSeparator() 
-                            + "다른 아이디를 입력하십시오.";
-                        break;
-                        
-                    case ENGLISH:
-                        dialogMessage = "ID '" + userIDText.getText().trim() + 
-                            "' is preoccupied by someone else." + System.lineSeparator() 
-                            + "Choose a different ID";
-                        break;
-                        
-                    default:
-                        break;
-                }                
+                String dialogMessage = ID_INUSE_1.getContent() + userIDText.getText().trim() + 
+                        ID_INUSE_2.getContent() + System.lineSeparator() + 
+                        ID_INUSE_3.getContent();
                 
                 JOptionPane.showConfirmDialog(this, dialogMessage,
                         ATT_ID_DUP_CHCEK_DIALOGTITLE.getContent(), 
@@ -2132,22 +2040,8 @@ public class AttListForm extends javax.swing.JFrame {
                     usableID = idEntered;
                     checkIDButton.setEnabled(false);
                     
-                    String dialogMessage = "";
-                    
-                    switch (language) {
-                        case KOREAN:
-                            dialogMessage = "아이디 '" + userIDText.getText().trim() + 
-                                    "' 는 사용가능합니다." + System.lineSeparator() ;
-                            break;
-                            
-                        case ENGLISH:
-                            dialogMessage = "ID '" + userIDText.getText().trim() + 
-                                    "' is usable." + System.lineSeparator() ;
-                            break;
-                            
-                        default:
-                            break;
-                    }                    
+                    String dialogMessage = ID_INUSE_1.getContent() + userIDText.getText().trim() + 
+                            ATT_EMAIL_GOOD_2.getContent() + System.lineSeparator() ;
                     
                     JOptionPane.showConfirmDialog(this, dialogMessage,
                             ATT_ID_DUP_CHCEK_DIALOGTITLE.getContent(), 

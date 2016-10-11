@@ -43,7 +43,6 @@ import static com.osparking.global.Globals.insertBuilding;
 import static com.osparking.global.Globals.insertBuildingUnit;
 import static com.osparking.global.Globals.insertLevel1Affiliation;
 import static com.osparking.global.Globals.insertLevel2Affiliation;
-import static com.osparking.global.Globals.language;
 import static com.osparking.global.Globals.logParkingException;
 import static com.osparking.global.names.ControlEnums.DialogMessages.CHECK_BUILDING_ODS_DIALOG;
 import static com.osparking.global.names.ControlEnums.DialogMessages.DRIVER_ODS_READ_RESULT1;
@@ -51,6 +50,25 @@ import static com.osparking.global.names.ControlEnums.DialogMessages.DRIVER_ODS_
 import static com.osparking.global.names.ControlEnums.DialogMessages.DRIVER_ODS_READ_RESULT3;
 import static com.osparking.global.names.ControlEnums.DialogMessages.DRIVER_ODS_READ_RESULT4;
 import static com.osparking.global.names.ControlEnums.DialogMessages.READ_FAIL_AFFILIATION_ODS_DIALOG;
+import static com.osparking.global.names.ControlEnums.DialogMsg.AFFI_ODS_RES_1;
+import static com.osparking.global.names.ControlEnums.DialogMsg.AFFI_ODS_RES_2;
+import static com.osparking.global.names.ControlEnums.DialogMsg.AFFI_ODS_RES_3;
+import static com.osparking.global.names.ControlEnums.DialogMsg.AFFI_ODS_RES_4;
+import static com.osparking.global.names.ControlEnums.DialogMsg.AFFI_ODS_RES_5;
+import static com.osparking.global.names.ControlEnums.DialogMsg.BLDG_ODS_RES_1;
+import static com.osparking.global.names.ControlEnums.DialogMsg.BLDG_ODS_RES_2;
+import static com.osparking.global.names.ControlEnums.DialogMsg.BLDG_ODS_RES_3;
+import static com.osparking.global.names.ControlEnums.DialogMsg.BLDG_ODS_RES_4;
+import static com.osparking.global.names.ControlEnums.DialogMsg.BLDG_ODS_RES_5;
+import static com.osparking.global.names.ControlEnums.DialogMsg.MISSING_END_1;
+import static com.osparking.global.names.ControlEnums.DialogMsg.MISSING_END_2;
+import static com.osparking.global.names.ControlEnums.DialogMsg.MISSING_END_3;
+import static com.osparking.global.names.ControlEnums.DialogMsg.UNKNOWN_UNIT_1;
+import static com.osparking.global.names.ControlEnums.DialogMsg.UNKNOWN_UNIT_2;
+import static com.osparking.global.names.ControlEnums.DialogMsg.VEHICLE_ODS_1;
+import static com.osparking.global.names.ControlEnums.DialogMsg.VEHICLE_ODS_2;
+import static com.osparking.global.names.ControlEnums.DialogMsg.VEHICLE_ODS_3;
+import static com.osparking.global.names.ControlEnums.DialogMsg.VEHICLE_ODS_4;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.*;
 import com.osparking.global.names.DB_Access;
 import static com.osparking.global.names.DB_Access.insertOneVehicle;
@@ -199,34 +217,15 @@ public class ODSReader {
                             
                             StringBuilder sb = new StringBuilder();
                             
-                            switch (language) {
-                                case KOREAN:
-                                    sb.append("자료 요약");
-                                    sb.append(System.getProperty("line.separator"));
-                                    sb.append(" - 불러온 건물 수: " + buildingCount);
-                                    sb.append(System.getProperty("line.separator"));
-                                    sb.append(" - 거부된 건물 수: " + buildingReject);
-                                    sb.append(System.getProperty("line.separator"));
-                                    sb.append(" - 불러온 호실 수: " + unitCount);
-                                    sb.append(System.getProperty("line.separator"));
-                                    sb.append(" - 거부된 호실 수: " + unitReject);
-                                    break;
-
-                                case ENGLISH:
-                                    sb.append("Loaded Data Summary");
-                                    sb.append(System.getProperty("line.separator"));
-                                    sb.append(" - Loaded Buildings: " + buildingCount);
-                                    sb.append(System.getProperty("line.separator"));
-                                    sb.append(" - Rejected Buildings: " + buildingReject);
-                                    sb.append(System.getProperty("line.separator"));
-                                    sb.append(" - Loaded Rooms: " + unitCount);
-                                    sb.append(System.getProperty("line.separator"));
-                                    sb.append(" - Rejected Rooms: " + unitReject);
-                                    break;
-
-                                default:
-                                    break;
-                            }
+                            sb.append(BLDG_ODS_RES_1.getContent());
+                            sb.append(System.getProperty("line.separator"));
+                            sb.append(BLDG_ODS_RES_2.getContent() + buildingCount);
+                            sb.append(System.getProperty("line.separator"));
+                            sb.append(BLDG_ODS_RES_3.getContent() + buildingReject);
+                            sb.append(System.getProperty("line.separator"));
+                            sb.append(BLDG_ODS_RES_4.getContent() + unitCount);
+                            sb.append(System.getProperty("line.separator"));
+                            sb.append(BLDG_ODS_RES_5.getContent() + unitReject);
                             
                             JOptionPane.showConfirmDialog(null, sb.toString(),
                                     ODS_CHECK_RESULT_TITLE.getContent(), 
@@ -265,28 +264,12 @@ public class ODSReader {
                             } 
                         } else {
                             unitReject++;
-                            if (upperLevelMissingWarningNotGiven)
-                            {
+                            if (upperLevelMissingWarningNotGiven) {
                                 upperLevelMissingWarningNotGiven = false;
                                 
-                                String dialogMessage = "";
-                                
-                                switch (language) {
-                                    case KOREAN:
-                                        dialogMessage = "호실이 정확하지 않습니다." 
-                                                    + System.getProperty("line.separator") 
-                                                    + " - 호실 ID#: " + cellValue.getValue();
-                                        break;
-
-                                    case ENGLISH:
-                                        dialogMessage = "It's unknown where this room belongs" 
-                                                    + System.getProperty("line.separator") 
-                                                    + " - room ID#: " + cellValue.getValue();
-                                        break;
-
-                                    default:
-                                        break;
-                                }                                
+                                String dialogMessage = UNKNOWN_UNIT_1.getContent()
+                                        + System.getProperty("line.separator") 
+                                        + UNKNOWN_UNIT_2.getContent() + cellValue.getValue();
                                 
                                 JOptionPane.showConfirmDialog(null, dialogMessage,
                                         READ_ODS_FAIL_DIALOGTITLE.getContent(), 
@@ -391,24 +374,8 @@ public class ODSReader {
         }
         if (numBlankRow > MAX_BLANK_ROW) {
             // Give warning that data end(building number '-1') mark is missing
-            String dialogMessage = "";
-            
-            switch(language){
-                case KOREAN :
-                    dialogMessage ="상위 및 하위 소속 조직명칭 종료마크(아래)가 누락됨" + 
-                                System.getProperty("line.separator") +  
-                                "종료마크: 첫 열이 " + DATA_END_MARKER + "인 행";
-                    break;
-                    
-                case ENGLISH:                    
-                    dialogMessage = "Higher and Lower Affiliation Name End Mark Missing" + 
-                                System.getProperty("line.separator") +  
-                                "End Mark: a row that begins with '" + DATA_END_MARKER + "' (except quit mark)";
-                    break;
-                    
-                default:
-                    break;
-            }            
+            String dialogMessage = MISSING_END_1.getContent() + System.getProperty("line.separator") +  
+                    MISSING_END_2.getContent() + DATA_END_MARKER + MISSING_END_3.getContent();
             
             JOptionPane.showConfirmDialog(null, dialogMessage,
                             READ_ODS_FAIL_DIALOGTITLE.getContent(),
@@ -571,36 +538,18 @@ public class ODSReader {
 
                             StringBuilder sb = new StringBuilder();
                             
-                            switch (language) {
-                                case KOREAN:
-                                    sb.append("ods파일 불러오기 결과");
-                                    sb.append(System.getProperty("line.separator"));
-                                    sb.append(" - 불러온 상위 소속 수: " + level1Count);
-                                    sb.append(System.getProperty("line.separator"));
-                                    sb.append(" - 거부된 상위 소속 수: " + level1Reject);
-                                    sb.append(System.getProperty("line.separator"));
-                                    sb.append(" - 불러온 하위 소속 수: " + level2Count);
-                                    sb.append(System.getProperty("line.separator"));
-                                    sb.append(" - 거부된 하위 소속 수: " + level2Reject);
-                                    break;
+                            sb.append(AFFI_ODS_RES_1.getContent());
+                            sb.append(System.getProperty("line.separator"));
+                            sb.append(AFFI_ODS_RES_2.getContent() + level1Count);
+                            sb.append(System.getProperty("line.separator"));
+                            sb.append(AFFI_ODS_RES_3.getContent() + level1Reject);
+                            sb.append(System.getProperty("line.separator"));
+                            sb.append(AFFI_ODS_RES_4.getContent() + level2Count);
+                            sb.append(System.getProperty("line.separator"));
+                            sb.append(AFFI_ODS_RES_5.getContent() + level2Reject);
 
-                                case ENGLISH:
-                                    sb.append("Result of ods file loading");
-                                    sb.append(System.getProperty("line.separator"));
-                                    sb.append(" - Higher Affiliation Loaded: " + level1Count);
-                                    sb.append(System.getProperty("line.separator"));
-                                    sb.append(" - Higher Affiliation Rejected: " + level1Reject);
-                                    sb.append(System.getProperty("line.separator"));
-                                    sb.append(" - Lower Affiliation Loaded: " + level2Count);
-                                    sb.append(System.getProperty("line.separator"));
-                                    sb.append(" - Lower Affiliation Rejected: " + level2Reject);
-                                    break;
-
-                                default:
-                                    break;
-                            }
                             JOptionPane.showConfirmDialog(null, sb.toString(),
-                                     ODS_CHECK_RESULT_TITLE.getContent(), 
+                                    ODS_CHECK_RESULT_TITLE.getContent(), 
                                     JOptionPane.PLAIN_MESSAGE, INFORMATION_MESSAGE);                               
                             //</editor-fold>
                             return;
@@ -764,32 +713,15 @@ public class ODSReader {
                     }
                     
                     StringBuilder sb = new StringBuilder();
-                    
-                    switch (language) {
-                        case KOREAN:
-                            sb.append("자료 불러오기 결과");
-                            sb.append(System.getProperty("line.separator"));
-                            sb.append(" - 불러온 차량: " + vehicleCount);
-                            sb.append(System.getProperty("line.separator"));
-                            sb.append(" - 중복 자료: " + duplicateCount);
-                            sb.append(System.getProperty("line.separator"));
-                            sb.append(" - 총 거부 자료: " + vehicleReject);
-                            break;
 
-                        case ENGLISH:
-                            sb.append("Sheet Loading Result");
-                            sb.append(System.getProperty("line.separator"));
-                            sb.append(" - Loaded vehicle: " + vehicleCount);
-                            sb.append(System.getProperty("line.separator"));
-                            sb.append(" - Duplicates rejected: " + duplicateCount);
-                            sb.append(System.getProperty("line.separator"));
-                            sb.append(" - Total rejected: " + vehicleReject);
-                            break;
-
-                        default:
-                            break;
-                    }
-                    
+                    sb.append(VEHICLE_ODS_1.getContent());
+                    sb.append(System.getProperty("line.separator"));
+                    sb.append(VEHICLE_ODS_2.getContent() + vehicleCount);
+                    sb.append(System.getProperty("line.separator"));
+                    sb.append(VEHICLE_ODS_3.getContent() + duplicateCount);
+                    sb.append(System.getProperty("line.separator"));
+                    sb.append(VEHICLE_ODS_4.getContent() + vehicleReject);
+                     
                     JOptionPane.showConfirmDialog(null, sb.toString(),
                             ODS_CHECK_RESULT_TITLE.getContent(), 
                             JOptionPane.PLAIN_MESSAGE, INFORMATION_MESSAGE);                               

@@ -37,9 +37,12 @@ import static com.osparking.global.Globals.createStretchedIcon;
 import static com.osparking.global.Globals.font_Size;
 import static com.osparking.global.Globals.font_Style;
 import static com.osparking.global.Globals.font_Type;
-import static com.osparking.global.Globals.language;
 import static com.osparking.global.Globals.logParkingException;
 import static com.osparking.global.names.ControlEnums.ButtonTypes.CLOSE_BTN;
+import static com.osparking.global.names.ControlEnums.DialogMsg.HELP_AFFILIATION;
+import static com.osparking.global.names.ControlEnums.DialogMsg.HELP_BUILDING;
+import static com.osparking.global.names.ControlEnums.DialogMsg.HELP_DRIVER;
+import static com.osparking.global.names.ControlEnums.DialogMsg.HELP_VEHICLE;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.ODS_HELP_TITLE;
 import com.osparking.global.names.ControlEnums.TextType;
 import static com.osparking.global.names.DB_Access.locale;
@@ -353,45 +356,21 @@ public class ODS_HelpJDialog extends javax.swing.JDialog {
         
         switch (odsType) {
             case AFFILIATION:
-                switch(language){
-                    case ENGLISH:
-                        filename = "/affiliation_Eng.png";
-                        break;
-                    default:
-                       filename = "/affiliation_Kor.png";
-                       break;
-                }
+                filename = HELP_AFFILIATION.getContent();
                 break;
+                
             case BUILDING:
-                switch(language){
-                    case ENGLISH:
-                        filename = "/building_Eng.png";
-                        break;
-                    default:
-                        filename = "/building_Kor.png";
-                        break;
-                }
+                filename = HELP_BUILDING.getContent();
                 break;
+                
             case DRIVER:
-                switch(language){
-                    case ENGLISH:
-                        filename = "/driversEng.png";
-                        break;
-                    default:
-                        filename = "/drivers.png";
-                        break;
-                }
+                filename = HELP_DRIVER.getContent();
                 break;
+                
             case VEHICLE:
-                switch(language){
-                    case ENGLISH:
-                        filename = "/vehicle_Eng.png";
-                        break;
-                    default:
-                        filename = "/vehicle_Kor.png";
-                        break;
-                }
+                filename = HELP_VEHICLE.getContent();
                 break;
+                
             default:
                 break;
         }

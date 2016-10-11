@@ -60,7 +60,7 @@ import static com.osparking.global.names.ControlEnums.LabelContent.FONT_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.LIMIT_DESCRIPTION;
 import static com.osparking.global.names.ControlEnums.LabelContent.MESSAGE_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.PANEL_LABEL;
-import static com.osparking.global.names.ControlEnums.Languages.KOREAN;
+import static com.osparking.global.names.ControlEnums.OsPaLang.KOREAN;
 import static com.osparking.global.names.ControlEnums.MenuITemTypes.META_KEY_LABEL;
 import static com.osparking.global.names.ControlEnums.ToolTipContent.CLOSE_BTN_TOOLTIP;
 import com.osparking.global.names.ConvComboBoxItem;

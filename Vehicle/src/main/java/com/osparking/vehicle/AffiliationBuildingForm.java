@@ -72,6 +72,11 @@ import static com.osparking.global.names.ControlEnums.DialogMessages.DUPLICATE_U
 import static com.osparking.global.names.ControlEnums.DialogMessages.EMPTY_HIGH_AFFILI;
 import static com.osparking.global.names.ControlEnums.DialogMessages.EMPTY_LOW_AFFILI;
 import static com.osparking.global.names.ControlEnums.DialogMessages.USER_SAVE_ODS_FAIL_DIALOG;
+import static com.osparking.global.names.ControlEnums.DialogMsg.NON_NUMERIC_DATA;
+import static com.osparking.global.names.ControlEnums.DialogMsg.UNIT_DEL_1;
+import static com.osparking.global.names.ControlEnums.DialogMsg.UNIT_DEL_2;
+import static com.osparking.global.names.ControlEnums.DialogMsg.UNIT_DEL_FAIL;
+import static com.osparking.global.names.ControlEnums.DialogMsg.UNIT_DEL_RES_1;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.AFFILIATION_MODIFY_DIALOGTITLE;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.BUILDING_MODIFY_DIALOGTITLE;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.DELETE_ALL_DAILOGTITLE;
@@ -82,7 +87,6 @@ import static com.osparking.global.names.ControlEnums.DialogTitleTypes.ERROR_DIA
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.LOWER_MODIFY_DIALOGTITLE;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.ODS_CHECK_RESULT_TITLE;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.READ_ODS_FAIL_DIALOGTITLE;
-import static com.osparking.global.names.ControlEnums.DialogTitleTypes.REJECT_USER_DIALOGTITLE;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.UNIT_MODIFY_DIALOGTITLE;
 import com.osparking.global.names.ControlEnums.FormMode;
 import static com.osparking.global.names.ControlEnums.FormMode.CreateMode;
@@ -102,9 +106,10 @@ import static com.osparking.global.names.ControlEnums.LabelContent.LOWER_LIST_LA
 import static com.osparking.global.names.ControlEnums.LabelContent.MODE_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.NONE_EXIST;
 import static com.osparking.global.names.ControlEnums.LabelContent.ROOM_LIST_LABEL;
+import static com.osparking.global.names.ControlEnums.LabelContent.UNIT_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.UPDATE_SAVE_HELP;
 import static com.osparking.global.names.ControlEnums.LabelContent.WORK_PANEL_LABEL;
-import static com.osparking.global.names.ControlEnums.Languages.KOREAN;
+import static com.osparking.global.names.ControlEnums.OsPaLang.KOREAN;
 import static com.osparking.global.names.ControlEnums.MsgContent.AFFILI2_DIAG_L1;
 import static com.osparking.global.names.ControlEnums.MsgContent.AFFILI2_DIAG_L2;
 import static com.osparking.global.names.ControlEnums.MsgContent.AFFILI2_DIAG_L3;
@@ -159,7 +164,6 @@ import com.osparking.vehicle.driver.ODSReader;
 import static com.osparking.vehicle.driver.ODSReader.getWrongCellPointString;
 import java.awt.Color;
 import static java.awt.Color.black;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Rectangle;
@@ -176,6 +180,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Locale;
+import static java.util.Locale.ENGLISH;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JButton;
@@ -185,7 +191,6 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import static javax.swing.JOptionPane.INFORMATION_MESSAGE;
 import static javax.swing.JOptionPane.WARNING_MESSAGE;
-import static javax.swing.JOptionPane.showMessageDialog;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.border.BevelBorder;
@@ -2062,22 +2067,8 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
         int modal_Index = UnitTable.convertRowIndexToModel(uIndex);                
         int seqNo = (Integer)UnitTable.getModel().getValueAt(modal_Index, 2);
         
-        String dialog = "";
-        
-        switch (language) {
-            case KOREAN:
-                dialog = "다음 호실(번호)을 삭제합니까?" + System.getProperty("line.separator") 
-                + " -호실번호: " + unitNo;
-                break;
-                
-            case ENGLISH:
-                dialog = "Want to delete the following roon number?" + System.getProperty("line.separator") 
-                + " -Room No.: " + unitNo;
-                break;
-                
-            default:
-                break;
-        }        
+        String dialog = UNIT_DEL_1.getContent() + System.getProperty("line.separator") + 
+                UNIT_DEL_2.getContent() + unitNo;
         
         int result = JOptionPane.showConfirmDialog(this, dialog,
                 DELETE_DIALOGTITLE.getContent(), 
@@ -2116,37 +2107,16 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
                  * Refresh room number list after a room has been deleted.
                  */
                 loadUnitNumberTable(bldgNo, bldgSeqNo, uIndex, unitNo); 
-                
-                switch (language) {
-                    case KOREAN:
-                        dialog = "다음 호실이 삭제되었습니다" 
-                        + System.getProperty("line.separator") + " -호실번호: " + unitNo;
-                        break;
-                        
-                    case ENGLISH:
-                        dialog = "Followind Data Item Has Been Deleted" 
-                        + System.getProperty("line.separator") + " - Room No.: " + unitNo;
-                        break;
-                        
-                    default:
-                        break;
-                }
+
+                dialog = UNIT_DEL_RES_1.getContent() + System.getProperty("line.separator") + 
+                        UNIT_DEL_2.getContent() + unitNo;
                 
                 JOptionPane.showConfirmDialog(this, dialog,
                         DELETE_RESULT_DIALOGTITLE.getContent(), 
                         JOptionPane.PLAIN_MESSAGE, INFORMATION_MESSAGE);
             } else {
-                
-                switch (locale.getLanguage()) {
-                    case "ko":
-                        dialog = "호실번호 '" + unitNo + 
-                        "' 삭제에 실패하였습니다";
-                        break;
-                    default:
-                        dialog = "Room No.: '" + unitNo + 
-                        "' Deletion Failure";
-                        break;
-                }                
+                dialog = UNIT_DEL_FAIL.getContent() +  System.getProperty("line.separator") + 
+                        UNIT_DEL_2.getContent() + unitNo;
                 
                 JOptionPane.showConfirmDialog(this, dialog, 
                         DELETE_RESULT_DIALOGTITLE.getContent(), 
@@ -2737,15 +2707,12 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
             String L1_Affil = L1_Affiliation.getModel().getValueAt(L1_index, 1).toString();
             
             String label = "";
-            switch (language) {
-                case KOREAN:
-                    label = L1_Affil + LOWER_LABEL.getContent();
-                    break;
-                case ENGLISH:
-                    label = LOWER_LABEL.getContent() + L1_Affil; 
-                    break;
-                default:
-                    break;
+            
+            if (language == Locale.KOREAN) {
+                label = L1_Affil + LOWER_LABEL.getContent();
+            } else if (language == Locale.ENGLISH) {
+                label = LOWER_LABEL.getContent() + L1_Affil; 
+            } else {
             }  
             affiBotTitle.setText(label);
             
@@ -2976,18 +2943,12 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
         {
             String label = "";
             
-            switch (language) {
-                case KOREAN:
-                    label = bldgNo + "동 호실 목록";
-                    break;
-                    
-                case ENGLISH:
-                    label = "Rooms of Building" + bldgNo;
-                    break;
-                    
-                default:
-                    break;
-            }   
+            if (language == Locale.KOREAN) {
+                label = bldgNo + UNIT_LABEL.getContent();
+            } else if (language == Locale.ENGLISH) {
+                label = UNIT_LABEL.getContent() + bldgNo; 
+            } else {
+            }              
             
             UnitLabel.setText(label); 
             
@@ -3229,50 +3190,50 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     static Object prevL1Name = null;
     static Object prevL2Name = null;
     
-    private void processL1NameChangeTrial(int rowIndex) {
-        int model_index = L1_Affiliation.convertRowIndexToModel(rowIndex);
-        TableModel model1 = L1_Affiliation.getModel();
-        
-        prevL1Name = model1.getValueAt(model_index, 1);    
-        if (model1.getValueAt(model_index, 0) != null) 
-        {
-            int L1_no = (int)model1.getValueAt(model_index, 2);
-            String dialog = "";
-            
-            //<editor-fold desc="-- Make confirm message.">
-            switch (language) {
-                case KOREAN:
-                    dialog = "다음 상위 소속 이름을 변경합니까?" 
-                            + System.getProperty("line.separator") 
-                            + " - 상위 소속: " + prevL1Name 
-                            + " (관련 하위 소속: " + getL2RecordCount(L1_no) + " 개)"; 
-                    break;
-                    
-                case ENGLISH:
-                    dialog =  "Want to change the following higher affiliation?"
-                            + System.getProperty("line.separator") 
-                            + " - Higher Affiliation: " + prevL1Name 
-                            + " (number of lower affiliations: " + getL2RecordCount(L1_no) + ")";
-                    break;
-                    
-                default:
-                    break;
-            }
-            //</editor-fold>
-            
-            int result = JOptionPane.showConfirmDialog(this, dialog,
-                    AFFILIATION_MODIFY_DIALOGTITLE.getContent(),
-                    JOptionPane.YES_NO_OPTION); 
-
-            if (result == JOptionPane.NO_OPTION) { 
-                L1_Affiliation.getCellEditor().stopCellEditing();
-            } else {
-                setFormMode(FormMode.UpdateMode);
-                modifyL1_Button.setEnabled(false);
-                cancelL1_Button.setEnabled(true);
-            }
-        }
-    }
+//    private void processL1NameChangeTrial(int rowIndex) {
+//        int model_index = L1_Affiliation.convertRowIndexToModel(rowIndex);
+//        TableModel model1 = L1_Affiliation.getModel();
+//        
+//        prevL1Name = model1.getValueAt(model_index, 1);    
+//        if (model1.getValueAt(model_index, 0) != null) 
+//        {
+//            int L1_no = (int)model1.getValueAt(model_index, 2);
+//            String dialog = "";
+//            
+//            //<editor-fold desc="-- Make confirm message.">
+//            switch (language) {
+//                case KOREAN:
+//                    dialog = "다음 상위 소속 이름을 변경합니까?" 
+//                            + System.getProperty("line.separator") 
+//                            + " - 상위 소속: " + prevL1Name 
+//                            + " (관련 하위 소속: " + getL2RecordCount(L1_no) + " 개)"; 
+//                    break;
+//                    
+//                case ENGLISH:
+//                    dialog =  "Want to change the following higher affiliation?"
+//                            + System.getProperty("line.separator") 
+//                            + " - Higher Affiliation: " + prevL1Name 
+//                            + " (number of lower affiliations: " + getL2RecordCount(L1_no) + ")";
+//                    break;
+//                    
+//                default:
+//                    break;
+//            }
+//            //</editor-fold>
+//            
+//            int result = JOptionPane.showConfirmDialog(this, dialog,
+//                    AFFILIATION_MODIFY_DIALOGTITLE.getContent(),
+//                    JOptionPane.YES_NO_OPTION); 
+//
+//            if (result == JOptionPane.NO_OPTION) { 
+//                L1_Affiliation.getCellEditor().stopCellEditing();
+//            } else {
+//                setFormMode(FormMode.UpdateMode);
+//                modifyL1_Button.setEnabled(false);
+//                cancelL1_Button.setEnabled(true);
+//            }
+//        }
+//    }
 
     private void prepareInsertion(JTable listTable, 
             JButton insertButton, JButton cancelButton) 
@@ -3301,31 +3262,31 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
         cancelButton.setEnabled(true);
     }
 
-    private void rejectUserInput(JTable thisTable, int rowIndex, String groupName) {
-        if (thisTable.editCellAt(rowIndex, 1))
-        {
-            thisTable.getEditorComponent().requestFocus();
-        }
-        
-        String dialog = "";
-        
-        switch (language) {
-            case KOREAN:
-                dialog = "이미 존재하는 " + groupName + "입니다";
-                break;
-                
-            case ENGLISH:
-                dialog =  "It already exists in " + groupName + " table";
-                break;
-                
-            default:
-                break;
-        }
-        
-        showMessageDialog(null, dialog,
-                REJECT_USER_DIALOGTITLE.getContent(),
-                JOptionPane.INFORMATION_MESSAGE);     
-    }   
+//    private void rejectUserInput(JTable thisTable, int rowIndex, String groupName) {
+//        if (thisTable.editCellAt(rowIndex, 1))
+//        {
+//            thisTable.getEditorComponent().requestFocus();
+//        }
+//        
+//        String dialog = "";
+//        
+//        switch (language) {
+//            case KOREAN:
+//                dialog = "이미 존재하는 " + groupName + "입니다";
+//                break;
+//                
+//            case ENGLISH:
+//                dialog =  "It already exists in " + groupName + " table";
+//                break;
+//                
+//            default:
+//                break;
+//        }
+//        
+//        showMessageDialog(null, dialog,
+//                REJECT_USER_DIALOGTITLE.getContent(),
+//                JOptionPane.INFORMATION_MESSAGE);     
+//    }   
     
     /**
      * @param args the command line arguments
@@ -3728,24 +3689,9 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
                     } else {
                         // display wrong cell points if existed
                         if (wrongCells.size() > 0) {
-                            String dialog = "";
-                            
-                            switch (language) {
-                                case KOREAN:
-                                    dialog = "다음 셀에서 숫자 이외의 자료가 탐지됨" 
-                                                + System.getProperty("line.separator") 
-                                                + getWrongCellPointString(wrongCells);
-                                    break;
-                                    
-                                case ENGLISH:
-                                    dialog = "Cells containing data other than numbers" 
-                                                + System.getProperty("line.separator") 
-                                                + getWrongCellPointString(wrongCells);
-                                    break;
-                                    
-                                default:
-                                    break;
-                            } 
+                            String dialog = NON_NUMERIC_DATA.getContent()
+                                    + System.getProperty("line.separator") 
+                                    + getWrongCellPointString(wrongCells);
                             
                             JOptionPane.showConfirmDialog(null, dialog,
                                     READ_ODS_FAIL_DIALOGTITLE.getContent(), 

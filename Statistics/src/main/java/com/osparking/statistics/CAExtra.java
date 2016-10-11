@@ -24,11 +24,12 @@ import static com.osparking.global.names.ControlEnums.LabelContent.REGISTERED_LA
 import static com.osparking.global.names.ControlEnums.LabelContent.VISIT_BUILDING;
 import static com.osparking.global.names.ControlEnums.LabelContent.VISIT_PURPOSE_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.VISIT_UNIT;
-import com.osparking.global.names.ControlEnums.Languages;
-import static com.osparking.global.names.ControlEnums.Languages.ENGLISH;
-import static com.osparking.global.names.ControlEnums.Languages.KOREAN;
+import com.osparking.global.names.ControlEnums.OsPaLang;
+import static com.osparking.global.names.ControlEnums.OsPaLang.ENGLISH;
+import static com.osparking.global.names.ControlEnums.OsPaLang.KOREAN;
 import static com.osparking.global.names.ControlEnums.TableTypes.HIGHER_HEADER;
 import static com.osparking.global.names.ControlEnums.TableTypes.LOWER_HEADER;
+import java.util.Locale;
 
 /**
  *Extra (=additionally detailed) information on each car arrival.
@@ -49,9 +50,15 @@ public enum CAExtra {
         contents[ENGLISH.ordinal()] = english;
     }
 
-    private String[] contents = new String[Languages.values().length];
+    private String[] contents = new String[OsPaLang.values().length];
 
     public String getContent() {
-        return contents[language.ordinal()];
+        if (language == Locale.KOREAN) {
+            return contents[KOREAN.ordinal()];
+        } else if (language == Locale.ENGLISH) {
+            return contents[ENGLISH.ordinal()];
+        } else {
+            return "";
+        }
     }    
 }

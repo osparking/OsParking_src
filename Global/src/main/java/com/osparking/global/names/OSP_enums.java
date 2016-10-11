@@ -23,15 +23,16 @@ import static com.osparking.global.names.ControlEnums.DialogTitleTypes.DEFAULT_T
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.TOP_TAB_TITLE;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.VEHICLE_TAB_TITLE;
 import static com.osparking.global.names.ControlEnums.LabelContent.TAB_LABEL;
-import com.osparking.global.names.ControlEnums.Languages;
-import static com.osparking.global.names.ControlEnums.Languages.ENGLISH;
-import static com.osparking.global.names.ControlEnums.Languages.KOREAN;
+import com.osparking.global.names.ControlEnums.OsPaLang;
+import static com.osparking.global.names.ControlEnums.OsPaLang.ENGLISH;
+import static com.osparking.global.names.ControlEnums.OsPaLang.KOREAN;
 
 /**
  *
  * @author Open Source Parking Inc.S
  */
 public class OSP_enums {
+    public static OsPaLang osPaLang;
     
     public enum ConnectionType {
         TCP_IP("TCP/IP"), 
@@ -68,7 +69,7 @@ public class OSP_enums {
         Simulator("모의장치", "Simulator"), 
         LEDnotice("LED노티스", "LEDnotice");
         
-        private String[] label = new String[Languages.values().length];        
+        private String[] label = new String[OsPaLang.values().length];        
         
         E_BoardType(String korean, String english) {
             label[KOREAN.ordinal()] = korean;
@@ -76,7 +77,7 @@ public class OSP_enums {
         }
 
         public String toString() {
-            return label[language.ordinal()];
+            return label[osPaLang.ordinal()];
         }          
     }
     
@@ -84,7 +85,7 @@ public class OSP_enums {
         Simulator("모의장치", "Simulator"), 
         NaraBar("나라바", "LEDnotice");
         
-        private String[] label = new String[Languages.values().length];        
+        private String[] label = new String[OsPaLang.values().length];        
         
         GateBarType(String korean, String english) {
             label[KOREAN.ordinal()] = korean;
@@ -92,7 +93,7 @@ public class OSP_enums {
         }
 
         public String toString() {
-            return label[language.ordinal()];
+            return label[osPaLang.ordinal()];
         }         
     }
     
@@ -106,10 +107,10 @@ public class OSP_enums {
             label[ENGLISH.ordinal()] = english;
         }
         
-        private String[] label = new String[Languages.values().length];        
+        private String[] label = new String[OsPaLang.values().length];        
 
         public String toString() {
-            return label[language.ordinal()];
+            return label[osPaLang.ordinal()];
         }    
     }
 
@@ -174,10 +175,10 @@ public class OSP_enums {
             label[ENGLISH.ordinal()] = english;
         }
 
-        private String[] label = new String[Languages.values().length];
+        private String[] label = new String[OsPaLang.values().length];
         
         public String toString() {
-            return label[language.ordinal()];
+            return label[osPaLang.ordinal()];
         }        
     }    
     
@@ -261,10 +262,10 @@ public class OSP_enums {
             label[ENGLISH.ordinal()] = english;
         }
         
-        private String[] label = new String[Languages.values().length];
+        private String[] label = new String[OsPaLang.values().length];
         
         public String getContent() {
-            return label[language.ordinal()];
+            return label[osPaLang.ordinal()];
         }        
     }    
     
@@ -288,10 +289,10 @@ public class OSP_enums {
             label[ENGLISH.ordinal()] = english;
         }
         
-        private String[] label = new String[Languages.values().length];
+        private String[] label = new String[OsPaLang.values().length];
         
         public String toString() {
-            return label[language.ordinal()];
+            return label[osPaLang.ordinal()];
         }          
     }
     
@@ -309,10 +310,10 @@ public class OSP_enums {
             label[ENGLISH.ordinal()] = english;
         }
         
-        private String[] label = new String[Languages.values().length];
+        private String[] label = new String[OsPaLang.values().length];
         
         public String getContent() {
-            return label[language.ordinal()];
+            return label[osPaLang.ordinal()];
         }          
     }
 
