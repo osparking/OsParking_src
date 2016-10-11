@@ -70,6 +70,7 @@ import static com.osparking.global.CommonData.buttonHeightShort;
 import static com.osparking.global.CommonData.buttonWidthNorm;
 import static com.osparking.global.CommonData.pwValidator;
 import static com.osparking.global.CommonData.rejectNonNumericKeys;
+import static com.osparking.global.CommonData.setKeyboardLanguage;
 import static com.osparking.global.CommonData.statCountArr;
 import static com.osparking.global.CommonData.tipColor;
 import static com.osparking.global.names.ControlEnums.ButtonTypes.CANCEL_BTN;
@@ -160,6 +161,7 @@ import static com.osparking.global.names.ControlEnums.LabelContent.WRONG_LANG_DI
 import static com.osparking.global.names.ControlEnums.LabelContent.WRONG_LANG_DIALOG_2;
 import static com.osparking.global.names.ControlEnums.LabelContent.WRONG_LANG_DIALOG_3;
 import static com.osparking.global.names.ControlEnums.LabelContent.WRONG_LANG_DIALOG_4;
+import static com.osparking.global.names.ControlEnums.Languages.KOREAN;
 import static com.osparking.global.names.ControlEnums.MenuITemTypes.META_KEY_LABEL;
 import static com.osparking.global.names.ControlEnums.MsgContent.AVERAGE_WORDS;
 import static com.osparking.global.names.ControlEnums.MsgContent.RECENT_WORD;
@@ -596,6 +598,11 @@ public class Settings_System extends javax.swing.JFrame implements IDataMan {
         lotNameTextField.setMinimumSize(new java.awt.Dimension(250, 25));
         lotNameTextField.setName("lotNameTextField"); // NOI18N
         lotNameTextField.setPreferredSize(new java.awt.Dimension(250, 28));
+        lotNameTextField.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                lotNameTextFieldFocusGained(evt);
+            }
+        });
         lotNameTextField.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 lotNameTextFieldKeyReleased(evt);
@@ -1062,6 +1069,11 @@ public class Settings_System extends javax.swing.JFrame implements IDataMan {
         TextFieldGateName1.setMinimumSize(new java.awt.Dimension(120, 30));
         TextFieldGateName1.setName("TextFieldGateName1"); // NOI18N
         TextFieldGateName1.setPreferredSize(new java.awt.Dimension(120, 30));
+        TextFieldGateName1.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                TextFieldGateName1FocusGained(evt);
+            }
+        });
         TextFieldGateName1.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 TextFieldGateName1KeyReleased(evt);
@@ -1366,6 +1378,11 @@ public class Settings_System extends javax.swing.JFrame implements IDataMan {
         TextFieldGateName2.setMinimumSize(new java.awt.Dimension(120, 30));
         TextFieldGateName2.setName("TextFieldGateName2"); // NOI18N
         TextFieldGateName2.setPreferredSize(new java.awt.Dimension(120, 30));
+        TextFieldGateName2.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                TextFieldGateName2FocusGained(evt);
+            }
+        });
         TextFieldGateName2.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 TextFieldGateName2KeyReleased(evt);
@@ -1673,6 +1690,11 @@ public class Settings_System extends javax.swing.JFrame implements IDataMan {
         TextFieldGateName3.setMinimumSize(new java.awt.Dimension(120, 30));
         TextFieldGateName3.setName("TextFieldGateName3"); // NOI18N
         TextFieldGateName3.setPreferredSize(new java.awt.Dimension(120, 30));
+        TextFieldGateName3.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                TextFieldGateName3FocusGained(evt);
+            }
+        });
         TextFieldGateName3.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 TextFieldGateName3KeyReleased(evt);
@@ -1980,6 +2002,11 @@ public class Settings_System extends javax.swing.JFrame implements IDataMan {
         TextFieldGateName4.setMinimumSize(new java.awt.Dimension(120, 30));
         TextFieldGateName4.setName("TextFieldGateName4"); // NOI18N
         TextFieldGateName4.setPreferredSize(new java.awt.Dimension(120, 30));
+        TextFieldGateName4.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                TextFieldGateName4FocusGained(evt);
+            }
+        });
         TextFieldGateName4.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 TextFieldGateName4KeyReleased(evt);
@@ -3579,6 +3606,26 @@ public class Settings_System extends javax.swing.JFrame implements IDataMan {
         dataManDialog.pack();
         dataManDialog.setVisible(true);
     }//GEN-LAST:event_manageDataActionPerformed
+
+    private void lotNameTextFieldFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_lotNameTextFieldFocusGained
+        setKeyboardLanguage(lotNameTextField, KOREAN);
+    }//GEN-LAST:event_lotNameTextFieldFocusGained
+
+    private void TextFieldGateName1FocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_TextFieldGateName1FocusGained
+        setKeyboardLanguage(TextFieldGateName1, KOREAN);
+    }//GEN-LAST:event_TextFieldGateName1FocusGained
+
+    private void TextFieldGateName2FocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_TextFieldGateName2FocusGained
+        setKeyboardLanguage(TextFieldGateName2, KOREAN);
+    }//GEN-LAST:event_TextFieldGateName2FocusGained
+
+    private void TextFieldGateName3FocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_TextFieldGateName3FocusGained
+        setKeyboardLanguage(TextFieldGateName3, KOREAN);
+    }//GEN-LAST:event_TextFieldGateName3FocusGained
+
+    private void TextFieldGateName4FocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_TextFieldGateName4FocusGained
+        setKeyboardLanguage(TextFieldGateName4, KOREAN);
+    }//GEN-LAST:event_TextFieldGateName4FocusGained
     
     public void closeDialog() {
         dataManDialog.dispose();

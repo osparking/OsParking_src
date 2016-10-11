@@ -18,6 +18,7 @@ package com.osparking.osparking.device.LEDnotice;
 
 import com.osparking.global.ChangedComponentSave;
 import static com.osparking.global.CommonData.TEXT_FIELD_HEIGHT;
+import static com.osparking.global.CommonData.setKeyboardLanguage;
 import static com.osparking.global.CommonData.tipColor;
 import com.osparking.global.Globals;
 import static com.osparking.global.Globals.OSPiconList;
@@ -34,6 +35,7 @@ import static com.osparking.global.names.ControlEnums.DialogTitleTypes.DEFAULT_T
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.TOP_TAB_TITLE;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.VEHICLE_TAB_TITLE;
 import com.osparking.global.names.ControlEnums.FormMode;
+import static com.osparking.global.names.ControlEnums.Languages.KOREAN;
 import static com.osparking.global.names.ControlEnums.MenuITemTypes.META_KEY_LABEL;
 import static com.osparking.global.names.DB_Access.connectionType;
 import static com.osparking.global.names.DB_Access.gateCount;
@@ -530,6 +532,11 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
         tf_VerbatimContent0.setMinimumSize(new Dimension(250, TEXT_FIELD_HEIGHT));
         tf_VerbatimContent0.setName("tf_VerbatimContent0"); // NOI18N
         tf_VerbatimContent0.setPreferredSize(new Dimension(250, TEXT_FIELD_HEIGHT));
+        tf_VerbatimContent0.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                tf_VerbatimContent0FocusGained(evt);
+            }
+        });
         tf_VerbatimContent0.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 tf_VerbatimContent0KeyReleased(evt);
@@ -918,6 +925,11 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
         tf_VerbatimContent1.setMinimumSize(new Dimension(250, TEXT_FIELD_HEIGHT));
         tf_VerbatimContent1.setName("tf_VerbatimContent1"); // NOI18N
         tf_VerbatimContent1.setPreferredSize(new Dimension(250, TEXT_FIELD_HEIGHT));
+        tf_VerbatimContent1.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                tf_VerbatimContent1FocusGained(evt);
+            }
+        });
         tf_VerbatimContent1.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 tf_VerbatimContent1KeyReleased(evt);
@@ -1281,6 +1293,11 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
         tf_VerbatimContent2.setMinimumSize(new Dimension(250, TEXT_FIELD_HEIGHT));
         tf_VerbatimContent2.setName("tf_VerbatimContent2"); // NOI18N
         tf_VerbatimContent2.setPreferredSize(new Dimension(250, TEXT_FIELD_HEIGHT));
+        tf_VerbatimContent2.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                tf_VerbatimContent2FocusGained(evt);
+            }
+        });
         tf_VerbatimContent2.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 tf_VerbatimContent2KeyReleased(evt);
@@ -1632,6 +1649,11 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
         tf_VerbatimContent3.setMinimumSize(new Dimension(250, TEXT_FIELD_HEIGHT));
         tf_VerbatimContent3.setName("tf_VerbatimContent3"); // NOI18N
         tf_VerbatimContent3.setPreferredSize(new Dimension(250, TEXT_FIELD_HEIGHT));
+        tf_VerbatimContent3.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                tf_VerbatimContent3FocusGained(evt);
+            }
+        });
         tf_VerbatimContent3.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 tf_VerbatimContent3KeyReleased(evt);
@@ -2377,6 +2399,22 @@ public class Settings_LEDnotice extends javax.swing.JFrame {
     private void ledNoticePanel2ComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_ledNoticePanel2ComponentShown
         changeOtherComponentEnabled(CAR_ENTRY_TOP_ROW, useLEDnoticeCkBox2.isSelected());
     }//GEN-LAST:event_ledNoticePanel2ComponentShown
+
+    private void tf_VerbatimContent0FocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tf_VerbatimContent0FocusGained
+        setKeyboardLanguage(tf_VerbatimContent0, KOREAN);
+    }//GEN-LAST:event_tf_VerbatimContent0FocusGained
+
+    private void tf_VerbatimContent1FocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tf_VerbatimContent1FocusGained
+        setKeyboardLanguage(tf_VerbatimContent1, KOREAN);
+    }//GEN-LAST:event_tf_VerbatimContent1FocusGained
+
+    private void tf_VerbatimContent2FocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tf_VerbatimContent2FocusGained
+        setKeyboardLanguage(tf_VerbatimContent2, KOREAN);
+    }//GEN-LAST:event_tf_VerbatimContent2FocusGained
+
+    private void tf_VerbatimContent3FocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tf_VerbatimContent3FocusGained
+        setKeyboardLanguage(tf_VerbatimContent3, KOREAN);
+    }//GEN-LAST:event_tf_VerbatimContent3FocusGained
 
     /**
      *  Decide whether to use the verbatim text field after checking the content type.

@@ -121,19 +121,28 @@ public class CommonData { // new Dimension(carTagWidth, 30)
         putCellCenter.setHorizontalAlignment(JLabel.CENTER);    
     }
     
+    /**
+     * Set keyboard input language for a component.
+     * @param comp component for which keyboard language to set
+     * @param language keyboard language to set for the component
+     */
     public static void setKeyboardLanguage(Component comp, ControlEnums.Languages language) {
         try {
             InputContext inCtx  =  comp.getInputContext();
-            Character.Subset[] subset = new Character.Subset[1];
-            
-            if (language == KOREAN) {
-                subset[0] = Character.UnicodeBlock.HANGUL_SYLLABLES;
-            } else {
-                subset = null;
+            if (inCtx != null) {
+                Character.Subset[] subset = new Character.Subset[1];
+
+                if (language == KOREAN) {
+                    subset[0] = Character.UnicodeBlock.HANGUL_SYLLABLES;
+                } else {
+                    subset = null;
+                }
+                inCtx.setCharacterSubsets(subset);
             }
-            inCtx.setCharacterSubsets(subset);
         } catch(Exception e) {
-            logParkingException(Level.SEVERE, null, "Keyboard language to English error");
+            String lang = (language == KOREAN ? "KOREAN" : "English");
+            
+            logParkingException(Level.SEVERE, null, "Keyboard language to " + lang + " error");
         }
     }
     

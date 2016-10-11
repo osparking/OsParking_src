@@ -18,6 +18,7 @@ package com.osparking.osparking;
 
 import com.osparking.global.ChangedComponentSave;
 import static com.osparking.global.CommonData.TEXT_FIELD_HEIGHT;
+import static com.osparking.global.CommonData.setKeyboardLanguage;
 import static com.osparking.global.CommonData.tipColor;
 import java.awt.Component;
 import java.sql.Connection;
@@ -59,6 +60,7 @@ import static com.osparking.global.names.ControlEnums.LabelContent.FONT_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.LIMIT_DESCRIPTION;
 import static com.osparking.global.names.ControlEnums.LabelContent.MESSAGE_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.PANEL_LABEL;
+import static com.osparking.global.names.ControlEnums.Languages.KOREAN;
 import static com.osparking.global.names.ControlEnums.MenuITemTypes.META_KEY_LABEL;
 import static com.osparking.global.names.ControlEnums.ToolTipContent.CLOSE_BTN_TOOLTIP;
 import com.osparking.global.names.ConvComboBoxItem;
@@ -306,6 +308,11 @@ public class Settings_EBoard extends javax.swing.JFrame {
         tf_VerbatimContent0.setMinimumSize(new Dimension(250, TEXT_FIELD_HEIGHT));
         tf_VerbatimContent0.setName("tf_VerbatimContent" + EBD_DisplayUsage.DEFAULT_TOP_ROW.ordinal());
         tf_VerbatimContent0.setPreferredSize(new Dimension(250, TEXT_FIELD_HEIGHT));
+        tf_VerbatimContent0.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                tf_VerbatimContent0FocusGained(evt);
+            }
+        });
         tf_VerbatimContent0.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 tf_VerbatimContent0KeyReleased(evt);
@@ -476,6 +483,11 @@ public class Settings_EBoard extends javax.swing.JFrame {
         tf_VerbatimContent1.setMinimumSize(new Dimension(250, TEXT_FIELD_HEIGHT));
         tf_VerbatimContent1.setName("tf_VerbatimContent" + EBD_DisplayUsage.DEFAULT_BOTTOM_ROW.ordinal());
         tf_VerbatimContent1.setPreferredSize(new Dimension(250, TEXT_FIELD_HEIGHT));
+        tf_VerbatimContent1.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                tf_VerbatimContent1FocusGained(evt);
+            }
+        });
         tf_VerbatimContent1.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 tf_VerbatimContent1KeyReleased(evt);
@@ -653,6 +665,11 @@ public class Settings_EBoard extends javax.swing.JFrame {
         tf_VerbatimContent2.setMinimumSize(new Dimension(250, TEXT_FIELD_HEIGHT));
         tf_VerbatimContent2.setName("tf_VerbatimContent" + EBD_DisplayUsage.CAR_ENTRY_TOP_ROW.ordinal());
         tf_VerbatimContent2.setPreferredSize(new Dimension(250, TEXT_FIELD_HEIGHT));
+        tf_VerbatimContent2.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                tf_VerbatimContent2FocusGained(evt);
+            }
+        });
         tf_VerbatimContent2.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 tf_VerbatimContent2KeyReleased(evt);
@@ -823,6 +840,11 @@ public class Settings_EBoard extends javax.swing.JFrame {
         tf_VerbatimContent3.setMinimumSize(new Dimension(250, TEXT_FIELD_HEIGHT));
         tf_VerbatimContent3.setName("tf_VerbatimContent" + EBD_DisplayUsage.CAR_ENTRY_BOTTOM_ROW.ordinal());
         tf_VerbatimContent3.setPreferredSize(new Dimension(250, TEXT_FIELD_HEIGHT));
+        tf_VerbatimContent3.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                tf_VerbatimContent3FocusGained(evt);
+            }
+        });
         tf_VerbatimContent3.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 tf_VerbatimContent3KeyReleased(evt);
@@ -1239,6 +1261,22 @@ public class Settings_EBoard extends javax.swing.JFrame {
     private void tf_VerbatimContent3KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tf_VerbatimContent3KeyTyped
         checkVerbatimContentLength(3, evt);
     }//GEN-LAST:event_tf_VerbatimContent3KeyTyped
+
+    private void tf_VerbatimContent0FocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tf_VerbatimContent0FocusGained
+        setKeyboardLanguage(tf_VerbatimContent0, KOREAN);
+    }//GEN-LAST:event_tf_VerbatimContent0FocusGained
+
+    private void tf_VerbatimContent1FocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tf_VerbatimContent1FocusGained
+        setKeyboardLanguage(tf_VerbatimContent1, KOREAN);
+    }//GEN-LAST:event_tf_VerbatimContent1FocusGained
+
+    private void tf_VerbatimContent2FocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tf_VerbatimContent2FocusGained
+        setKeyboardLanguage(tf_VerbatimContent2, KOREAN);
+    }//GEN-LAST:event_tf_VerbatimContent2FocusGained
+
+    private void tf_VerbatimContent3FocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tf_VerbatimContent3FocusGained
+        setKeyboardLanguage(tf_VerbatimContent3, KOREAN);
+    }//GEN-LAST:event_tf_VerbatimContent3FocusGained
 
      // <editor-fold defaultstate="collapsed" desc="Generated Code">  
     // Variables declaration - do not modify//GEN-BEGIN:variables

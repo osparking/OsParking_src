@@ -31,6 +31,7 @@ import static com.osparking.global.CommonData.downloadSample;
 import static com.osparking.global.CommonData.normGUIheight;
 import static com.osparking.global.CommonData.normGUIwidth;
 import static com.osparking.global.CommonData.pointColor;
+import static com.osparking.global.CommonData.setKeyboardLanguage;
 import static com.osparking.global.CommonData.tableRowHeight;
 import static com.osparking.global.CommonData.tipColor;
 import static com.osparking.global.DataSheet.saveODSfile;
@@ -108,6 +109,7 @@ import static com.osparking.global.names.ControlEnums.LabelContent.REQUIRE_FIELD
 import static com.osparking.global.names.ControlEnums.LabelContent.SEARCH_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.SEARCH_MODE_LABEL;
 import static com.osparking.global.names.ControlEnums.Languages.ENGLISH;
+import static com.osparking.global.names.ControlEnums.Languages.KOREAN;
 import static com.osparking.global.names.ControlEnums.MenuITemTypes.META_KEY_LABEL;
 import com.osparking.global.names.ControlEnums.OsPaTable;
 import static com.osparking.global.names.ControlEnums.OsPaTable.CarDriver;
@@ -1328,6 +1330,7 @@ public class ManageDrivers extends javax.swing.JFrame {
     private void insertSave_ButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_insertSave_ButtonActionPerformed
         int rowV = driverTable.getSelectedRow();
         
+        setKeyboardLanguage(driverTable, KOREAN);
         if (getFormMode() == FormMode.CreateMode) {
             if (driverTable.getCellEditor() != null) {
                 driverTable.getCellEditor().stopCellEditing(); // store user input
@@ -1956,12 +1959,12 @@ public class ManageDrivers extends javax.swing.JFrame {
     }//GEN-LAST:event_seeLicenseButtonActionPerformed
 
     private void searchNameFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_searchNameFocusGained
+        setKeyboardLanguage(searchName, KOREAN);
         if (searchName.getText().equals(DRIVER_TF.getContent())) {
             searchName.setText("");
             nameHintShown = false;
             searchName.setForeground(new Color(0, 0, 0));
         }
-        searchName.getInputContext().selectInputMethod(Locale.KOREA);
     }//GEN-LAST:event_searchNameFocusGained
 
     private void searchNameKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_searchNameKeyReleased

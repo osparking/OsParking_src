@@ -31,6 +31,7 @@ import static com.osparking.global.CommonData.normGUIheight;
 import static com.osparking.global.CommonData.normGUIwidth;
 import static com.osparking.global.CommonData.pointColor;
 import static com.osparking.global.CommonData.putCellCenter;
+import static com.osparking.global.CommonData.setKeyboardLanguage;
 import static com.osparking.global.CommonData.tableRowHeight;
 import static com.osparking.global.CommonData.tipColor;
 import static com.osparking.global.DataSheet.saveODSfile;
@@ -91,6 +92,7 @@ import static com.osparking.global.names.ControlEnums.LabelContent.REGI_DATE_LAB
 import static com.osparking.global.names.ControlEnums.LabelContent.REQUIRED1_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.SEARCH_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.SEARCH_MODE_LABEL;
+import static com.osparking.global.names.ControlEnums.Languages.KOREAN;
 import com.osparking.global.names.ControlEnums.MenuITemTypes;
 import static com.osparking.global.names.ControlEnums.TableType.Vehicles;
 import static com.osparking.global.names.ControlEnums.TableTypes.BUILD_ROOM_HEADER;
@@ -583,6 +585,11 @@ public class VehiclesForm extends javax.swing.JFrame {
         carTagTextField.setMinimumSize(new java.awt.Dimension(125, 30));
         carTagTextField.setName(""); // NOI18N
         carTagTextField.setPreferredSize(new java.awt.Dimension(125, 30));
+        carTagTextField.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                carTagTextFieldFocusGained(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 2;
@@ -799,6 +806,11 @@ public class VehiclesForm extends javax.swing.JFrame {
         reasonTextField.setMinimumSize(new Dimension(carTagWidth, 30));
         reasonTextField.setName(""); // NOI18N
         reasonTextField.setPreferredSize(new Dimension(carTagWidth, 30));
+        reasonTextField.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                reasonTextFieldFocusGained(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 18;
@@ -822,6 +834,11 @@ public class VehiclesForm extends javax.swing.JFrame {
         otherInfoTextField.setMinimumSize(new Dimension(carTagWidth, 30));
         otherInfoTextField.setName(""); // NOI18N
         otherInfoTextField.setPreferredSize(new Dimension(carTagWidth, 30));
+        otherInfoTextField.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                otherInfoTextFieldFocusGained(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 20;
@@ -1925,6 +1942,7 @@ public class VehiclesForm extends javax.swing.JFrame {
     }//GEN-LAST:event_sampleButtonActionPerformed
 
     private void searchCarTagFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_searchCarTagFocusGained
+        setKeyboardLanguage(searchCarTag, KOREAN);        
         if (carTagHintShown) {
             searchCarTag.setText("");
             carTagHintShown = false;
@@ -1933,6 +1951,7 @@ public class VehiclesForm extends javax.swing.JFrame {
     }//GEN-LAST:event_searchCarTagFocusGained
 
     private void searchDriverFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_searchDriverFocusGained
+        setKeyboardLanguage(searchCarTag, KOREAN);        
         if (driverHintShown) {
             searchDriver.setText("");
             driverHintShown = false;
@@ -1941,6 +1960,7 @@ public class VehiclesForm extends javax.swing.JFrame {
     }//GEN-LAST:event_searchDriverFocusGained
 
     private void searchETCFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_searchETCFocusGained
+        setKeyboardLanguage(searchCarTag, KOREAN);        
         if (etcHintShown) {
             searchETC.setText("");
             etcHintShown = false;
@@ -1949,6 +1969,7 @@ public class VehiclesForm extends javax.swing.JFrame {
     }//GEN-LAST:event_searchETCFocusGained
 
     private void disallowReasonFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_disallowReasonFocusGained
+        setKeyboardLanguage(searchCarTag, KOREAN);        
         if (reasonHintShown) {
             disallowReason.setText("");
             reasonHintShown = false;
@@ -1995,6 +2016,18 @@ public class VehiclesForm extends javax.swing.JFrame {
             changedControls.remove(disallowReason);
         }
     }//GEN-LAST:event_disallowReasonKeyReleased
+
+    private void carTagTextFieldFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_carTagTextFieldFocusGained
+        setKeyboardLanguage(carTagTextField, KOREAN);
+    }//GEN-LAST:event_carTagTextFieldFocusGained
+
+    private void reasonTextFieldFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_reasonTextFieldFocusGained
+        setKeyboardLanguage(reasonTextField, KOREAN);
+    }//GEN-LAST:event_reasonTextFieldFocusGained
+
+    private void otherInfoTextFieldFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_otherInfoTextFieldFocusGained
+        setKeyboardLanguage(reasonTextField, KOREAN);
+    }//GEN-LAST:event_otherInfoTextFieldFocusGained
     
     /**
      * @param args the command line arguments

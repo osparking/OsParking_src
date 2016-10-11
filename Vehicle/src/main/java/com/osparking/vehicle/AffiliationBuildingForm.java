@@ -33,6 +33,7 @@ import static com.osparking.global.CommonData.downloadSample;
 import static com.osparking.global.CommonData.normGUIheight;
 import static com.osparking.global.CommonData.numberCellRenderer;
 import static com.osparking.global.CommonData.pointColor;
+import static com.osparking.global.CommonData.setKeyboardLanguage;
 import static com.osparking.global.CommonData.tableRowHeight;
 import static com.osparking.global.DataSheet.saveODSfileName;
 import static com.osparking.global.Globals.BLDG_TAB_WIDTH;
@@ -103,6 +104,7 @@ import static com.osparking.global.names.ControlEnums.LabelContent.NONE_EXIST;
 import static com.osparking.global.names.ControlEnums.LabelContent.ROOM_LIST_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.UPDATE_SAVE_HELP;
 import static com.osparking.global.names.ControlEnums.LabelContent.WORK_PANEL_LABEL;
+import static com.osparking.global.names.ControlEnums.Languages.KOREAN;
 import static com.osparking.global.names.ControlEnums.MsgContent.AFFILI2_DIAG_L1;
 import static com.osparking.global.names.ControlEnums.MsgContent.AFFILI2_DIAG_L2;
 import static com.osparking.global.names.ControlEnums.MsgContent.AFFILI2_DIAG_L3;
@@ -157,6 +159,7 @@ import com.osparking.vehicle.driver.ODSReader;
 import static com.osparking.vehicle.driver.ODSReader.getWrongCellPointString;
 import java.awt.Color;
 import static java.awt.Color.black;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Rectangle;
@@ -1671,6 +1674,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     }//GEN-LAST:event_deleteL1_ButtonActionPerformed
 
     private void insertL1_ButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_insertL1_ButtonActionPerformed
+        setKeyboardLanguage(L1_Affiliation, KOREAN);
         prepareInsertion(L1_Affiliation, insertL1_Button, cancelL1_Button);
     }//GEN-LAST:event_insertL1_ButtonActionPerformed
 
@@ -1760,6 +1764,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     }//GEN-LAST:event_L2_AffiliationKeyReleased
 
     private void insertL2_ButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_insertL2_ButtonActionPerformed
+        setKeyboardLanguage(L2_Affiliation, KOREAN);
         prepareInsertion(L2_Affiliation, insertL2_Button, cancelL2_Button);      
     }//GEN-LAST:event_insertL2_ButtonActionPerformed
 
@@ -3496,7 +3501,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
         
         if (table.editCellAt(rowIndex, 1))
         {
-            table.getEditorComponent().requestFocus();        
+            table.getEditorComponent().requestFocus();
             
             int model_index = table.convertRowIndexToModel(rowIndex);
             TableModel model = table.getModel();
@@ -3575,7 +3580,8 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
                 }
                 //</editor-fold>
                 
-                int result = JOptionPane.showConfirmDialog(this, dialog,
+                int result = //JOptionPane.YES_OPTION;
+                        JOptionPane.showConfirmDialog(this, dialog,
                         dialogTitle, JOptionPane.YES_NO_OPTION); 
 
                 if (result == JOptionPane.NO_OPTION) { 

@@ -345,7 +345,7 @@ public class LoginDialog extends javax.swing.JDialog {
         if (userIDText.getText().length() > 0) {
             userIDText.selectAll();
         }
-        setKeyboardLanguage(userIDText, null);
+        setKeyboardLanguage(userIDText, null);     
     }//GEN-LAST:event_userIDTextFocusGained
 
     private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed

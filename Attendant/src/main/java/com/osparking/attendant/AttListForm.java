@@ -552,6 +552,11 @@ public class AttListForm extends javax.swing.JFrame {
         userIDText.setMaximumSize(new java.awt.Dimension(32767, 30));
         userIDText.setMinimumSize(new Dimension(carTagWidth, 30));
         userIDText.setPreferredSize(new Dimension(carTagWidth, 30));
+        userIDText.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                userIDTextFocusGained(evt);
+            }
+        });
         userIDText.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 newIDtyped(evt);
@@ -661,6 +666,11 @@ public class AttListForm extends javax.swing.JFrame {
         userNameText.setMinimumSize(new Dimension(carTagWidth, 30));
         userNameText.setName(""); // NOI18N
         userNameText.setPreferredSize(new Dimension(carTagWidth, 30));
+        userNameText.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                userNameTextFocusGained(evt);
+            }
+        });
         userNameText.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 userNameTextKeyReleased(evt);
@@ -776,6 +786,11 @@ public class AttListForm extends javax.swing.JFrame {
         emailAddrText.setMaximumSize(new java.awt.Dimension(32767, 30));
         emailAddrText.setMinimumSize(new java.awt.Dimension(140, 30));
         emailAddrText.setPreferredSize(new java.awt.Dimension(140, 30));
+        emailAddrText.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                emailAddrTextFocusGained(evt);
+            }
+        });
         emailAddrText.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 emailAddrTextKeyReleased(evt);
@@ -868,6 +883,11 @@ public class AttListForm extends javax.swing.JFrame {
         new1Password.setMinimumSize(new Dimension(carTagWidth, 30));
         new1Password.setNextFocusableComponent(new2Password);
         new1Password.setPreferredSize(new Dimension(carTagWidth, 30));
+        new1Password.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                new1PasswordFocusGained(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 18;
@@ -927,6 +947,11 @@ public class AttListForm extends javax.swing.JFrame {
         new2Password.setMaximumSize(new java.awt.Dimension(32767, 30));
         new2Password.setMinimumSize(new Dimension(carTagWidth, 30));
         new2Password.setPreferredSize(new Dimension(carTagWidth, 30));
+        new2Password.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                new2PasswordFocusGained(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 20;
@@ -963,6 +988,11 @@ public class AttListForm extends javax.swing.JFrame {
         userPassword.setMaximumSize(new java.awt.Dimension(32767, 30));
         userPassword.setMinimumSize(new Dimension(carTagWidth, 30));
         userPassword.setPreferredSize(new Dimension(carTagWidth, 30));
+        userPassword.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                userPasswordFocusGained(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 22;
@@ -2252,6 +2282,30 @@ public class AttListForm extends javax.swing.JFrame {
     private void searchTextKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_searchTextKeyReleased
         changeSearchButtonEnabled();
     }//GEN-LAST:event_searchTextKeyReleased
+
+    private void userIDTextFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_userIDTextFocusGained
+        setKeyboardLanguage(searchText, null);
+    }//GEN-LAST:event_userIDTextFocusGained
+
+    private void userNameTextFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_userNameTextFocusGained
+        setKeyboardLanguage(searchText, KOREAN);
+    }//GEN-LAST:event_userNameTextFocusGained
+
+    private void emailAddrTextFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_emailAddrTextFocusGained
+        setKeyboardLanguage(searchText, null);
+    }//GEN-LAST:event_emailAddrTextFocusGained
+
+    private void new1PasswordFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_new1PasswordFocusGained
+        setKeyboardLanguage(searchText, null);
+    }//GEN-LAST:event_new1PasswordFocusGained
+
+    private void new2PasswordFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_new2PasswordFocusGained
+        setKeyboardLanguage(searchText, null);
+    }//GEN-LAST:event_new2PasswordFocusGained
+
+    private void userPasswordFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_userPasswordFocusGained
+        setKeyboardLanguage(searchText, null);
+    }//GEN-LAST:event_userPasswordFocusGained
 
     private void clearPasswordFields() {
         userPassword.setText("");

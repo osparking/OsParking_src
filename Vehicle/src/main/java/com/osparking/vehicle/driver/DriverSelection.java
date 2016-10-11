@@ -20,6 +20,7 @@ import static com.osparking.global.CommonData.buttonHeightNorm;
 import static com.osparking.global.CommonData.buttonWidthNorm;
 import static com.osparking.global.CommonData.putCellCenter;
 import static com.osparking.global.CommonData.rejectNonNumericKeys;
+import static com.osparking.global.CommonData.setKeyboardLanguage;
 import static com.osparking.global.CommonData.tableRowHeight;
 import static com.osparking.global.CommonData.tipColor;
 import com.osparking.vehicle.VehiclesForm;
@@ -52,6 +53,7 @@ import static com.osparking.global.Globals.loginID;
 import static com.osparking.global.names.ControlEnums.ButtonTypes.*;
 import static com.osparking.global.names.ControlEnums.LabelContent.SEARCH_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.SELECT_DRIVER_HELP;
+import static com.osparking.global.names.ControlEnums.Languages.KOREAN;
 import static com.osparking.global.names.ControlEnums.TitleTypes.DRIVER_SELECTION_FRAME_TITLE;
 import static com.osparking.global.names.ControlEnums.TableTypes.*;
 import static com.osparking.global.names.ControlEnums.TextType.*;
@@ -539,12 +541,13 @@ public class DriverSelection extends javax.swing.JFrame {
     }//GEN-LAST:event_searchCellMousePressed
 
     private void searchNameFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_searchNameFocusGained
+        setKeyboardLanguage(searchName, KOREAN);
+
         if (nameHintShown) {
             searchName.setText("");
             nameHintShown = false;            
             searchName.setForeground(new Color(0, 0, 0));
         }
-        searchName.getInputContext().selectInputMethod(Locale.KOREA);        
     }//GEN-LAST:event_searchNameFocusGained
 
     private void searchCellFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_searchCellFocusGained
