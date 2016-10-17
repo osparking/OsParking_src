@@ -63,6 +63,7 @@ import static com.osparking.global.Globals.removeEmptyRow;
 import com.osparking.global.IMainGUI;
 import com.osparking.global.names.ControlEnums;
 import static com.osparking.global.names.ControlEnums.ButtonTypes.*;
+import com.osparking.global.names.ControlEnums.DialogMessages;
 import static com.osparking.global.names.ControlEnums.DialogMessages.AFFILIATION_DELETE_ALL_DAILOG;
 import static com.osparking.global.names.ControlEnums.DialogMessages.BUILDING_DELETE_ALL_DAILOG;
 import static com.osparking.global.names.ControlEnums.DialogMessages.DUPLICATE_BUILDING;
@@ -78,7 +79,6 @@ import static com.osparking.global.names.ControlEnums.DialogMsg.UNIT_DEL_2;
 import static com.osparking.global.names.ControlEnums.DialogMsg.UNIT_DEL_FAIL;
 import static com.osparking.global.names.ControlEnums.DialogMsg.UNIT_DEL_RES_1;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.AFFILIATION_MODIFY_DIALOGTITLE;
-import static com.osparking.global.names.ControlEnums.DialogTitleTypes.BUILDING_MODIFY_DIALOGTITLE;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.DELETE_ALL_DAILOGTITLE;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.DELETE_ALL_RESULT_DIALOGTITLE;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.DELETE_DIALOGTITLE;
@@ -87,7 +87,6 @@ import static com.osparking.global.names.ControlEnums.DialogTitleTypes.ERROR_DIA
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.LOWER_MODIFY_DIALOGTITLE;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.ODS_CHECK_RESULT_TITLE;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.READ_ODS_FAIL_DIALOGTITLE;
-import static com.osparking.global.names.ControlEnums.DialogTitleTypes.UNIT_MODIFY_DIALOGTITLE;
 import com.osparking.global.names.ControlEnums.FormMode;
 import static com.osparking.global.names.ControlEnums.FormMode.CreateMode;
 import static com.osparking.global.names.ControlEnums.FormMode.NormalMode;
@@ -109,10 +108,10 @@ import static com.osparking.global.names.ControlEnums.LabelContent.ROOM_LIST_LAB
 import static com.osparking.global.names.ControlEnums.LabelContent.UNIT_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.UPDATE_SAVE_HELP;
 import static com.osparking.global.names.ControlEnums.LabelContent.WORK_PANEL_LABEL;
-import static com.osparking.global.names.ControlEnums.OsPaLang.KOREAN;
 import static com.osparking.global.names.ControlEnums.MsgContent.AFFILI2_DIAG_L1;
 import static com.osparking.global.names.ControlEnums.MsgContent.AFFILI2_DIAG_L2;
 import static com.osparking.global.names.ControlEnums.MsgContent.AFFILI2_DIAG_L3;
+import static com.osparking.global.names.ControlEnums.OsPaLang.KOREAN;
 import static com.osparking.global.names.ControlEnums.MsgContent.AFFILI_DEL_L1;
 import static com.osparking.global.names.ControlEnums.MsgContent.AFFILI_DEL_RESULT;
 import static com.osparking.global.names.ControlEnums.MsgContent.AFFILI_DIAG_L1;
@@ -124,15 +123,10 @@ import static com.osparking.global.names.ControlEnums.MsgContent.AFFILI_ODS_DIAG
 import static com.osparking.global.names.ControlEnums.MsgContent.BLDG_DELETE_L1;
 import static com.osparking.global.names.ControlEnums.MsgContent.BLDG_DELETE_L3;
 import static com.osparking.global.names.ControlEnums.MsgContent.BLDG_DEL_RESULT;
-import static com.osparking.global.names.ControlEnums.MsgContent.BLDG_DIAG_L1;
 import static com.osparking.global.names.ControlEnums.MsgContent.BLDG_DIAG_L2;
-import static com.osparking.global.names.ControlEnums.MsgContent.BLDG_DIAG_L3;
 import static com.osparking.global.names.ControlEnums.MsgContent.BLDG_ODS_DIAG_1;
 import static com.osparking.global.names.ControlEnums.MsgContent.BLDG_ODS_DIAG_2;
 import static com.osparking.global.names.ControlEnums.MsgContent.BLDG_ODS_DIAG_3;
-import static com.osparking.global.names.ControlEnums.MsgContent.UNIT_DIAG_L1;
-import static com.osparking.global.names.ControlEnums.MsgContent.UNIT_DIAG_L2;
-import static com.osparking.global.names.ControlEnums.MsgContent.UNIT_DIAG_L3;
 import static com.osparking.global.names.ControlEnums.OsPaTable.Building_table;
 import static com.osparking.global.names.ControlEnums.OsPaTable.L1_affiliation;
 import com.osparking.global.names.ControlEnums.TableType;
@@ -181,7 +175,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Locale;
-import static java.util.Locale.ENGLISH;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JButton;
@@ -233,13 +226,161 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
         setIconImages(OSPiconList);
         this.getContentPane().setBackground(PopUpBackground);       
         adjustTables();
-        adminOperationEnabled(true, deleteAll_Affiliation, ODSAffiliHelp, sampleButton, readSheet);                
+        adminOperationEnabled(true, deleteAll_Affiliation, ODSAffiliHelp, sampleButton, readSheet);
+        
+        /**
+         * Add table model listener to process 'enter key' for affiliation tables.
+         */
+        L1_Affiliation.getModel().addTableModelListener(new TableModelListener() {
+           @Override
+            public void tableChanged(TableModelEvent e) {
+                if (formMode == UpdateMode) {
+                    updateAffiliation(L1_Affiliation, prevL1Name, "L1_NO", cancelL1_Button, 
+                            DUPLICATE_HIGH_AFFILI, L1_TABLE);
+                } else if (formMode == CreateMode) {
+                    // <editor-fold defaultstate="collapsed" desc="-- Create a high affiliation">  
+                    int rowIndex = L1_Affiliation.convertRowIndexToModel (L1_Affiliation.getSelectedRow());
+                    TableModel model = L1_Affiliation.getModel();
+                    String L1Name = ((String)model.getValueAt(rowIndex, 1)).trim();
+
+                    // Conditions to make this a new higher affiliation: Cond 1 and cond 2
+                    if (model.getValueAt(rowIndex, 0) == null) // Cond 1. Row number field is null
+                    {                     
+                        if (L1Name == null 
+                                || L1Name.isEmpty()
+                                || L1Name.equals(INSERT_TOOLTIP.getContent())) 
+                        {
+                            abortCreation(L1_TABLE);
+                            return;
+                        } else {
+                            // Cond 2. Name field has string of meaningful affiliation name
+                            // <editor-fold defaultstate="collapsed" desc="-- Insert New Higher name and Refresh the List">               
+                            int result = insertLevel1Affiliation(L1Name);
+
+                            if (result == ER_NO) {
+                                L1_Affiliation.getColumnModel().getColumn(1).setCellEditor(null);
+                                cancelL1_Button.setEnabled(false);
+                                setFormMode(FormMode.NormalMode);
+                                changeControlEnabledForTable(L1_TABLE);                                
+                                loadL1_Affiliation(-1, L1Name); // Refresh the list
+                            } else if (result == ER_DUP_ENTRY) {
+                                String msg = DUPLICATE_HIGH_AFFILI.getContent() + L1Name;
+                                JOptionPane.showConfirmDialog(null, msg,
+                                        ERROR_DIALOGTITLE.getContent(),
+                                        JOptionPane.WARNING_MESSAGE, WARNING_MESSAGE);
+                                abortCreation(L1_TABLE);
+                            }
+                            // </editor-fold>
+                        }
+                    }
+                    //</editor-fold>                    
+                }
+            }            
+        });
+        L2_Affiliation.getModel().addTableModelListener(new TableModelListener() {
+           @Override
+            public void tableChanged(TableModelEvent e) {
+                if (!affiL2_Control.isSelected()) {
+                    return;
+                }
+                if (formMode == UpdateMode) {
+                    updateAffiliation(L2_Affiliation, prevL2Name, "L2_NO", cancelL2_Button, 
+                            DUPLICATE_LOW_AFFILI, L2_TABLE);
+                } else if (formMode == CreateMode) {
+                    // <editor-fold defaultstate="collapsed" desc="-- Create a high affiliation">  
+                    int rowIndex = L1_Affiliation.convertRowIndexToModel (L1_Affiliation.getSelectedRow());
+                    TableModel model = L1_Affiliation.getModel();
+                    String L1Name = ((String)model.getValueAt(rowIndex, 1)).trim();
+
+                    // Conditions to make this a new higher affiliation: Cond 1 and cond 2
+                    if (model.getValueAt(rowIndex, 0) == null) // Cond 1. Row number field is null
+                    {                     
+                        if (L1Name == null 
+                                || L1Name.isEmpty()
+                                || L1Name.equals(INSERT_TOOLTIP.getContent())) 
+                        {
+                            abortCreation(L1_TABLE);
+                            return;
+                        } else {
+                            // Cond 2. Name field has string of meaningful affiliation name
+                            // <editor-fold defaultstate="collapsed" desc="-- Insert New Higher name and Refresh the List">               
+                            int result = insertLevel1Affiliation(L1Name);
+
+                            if (result == ER_NO) {
+                                L1_Affiliation.getColumnModel().getColumn(1).setCellEditor(null);
+                                cancelL1_Button.setEnabled(false);
+                                setFormMode(FormMode.NormalMode);
+                                changeControlEnabledForTable(L1_TABLE);                                
+                                loadL1_Affiliation(-1, L1Name); // Refresh the list
+                            } else if (result == ER_DUP_ENTRY) {
+                                String msg = DUPLICATE_HIGH_AFFILI.getContent() + L1Name;
+                                JOptionPane.showConfirmDialog(null, msg,
+                                        ERROR_DIALOGTITLE.getContent(),
+                                        JOptionPane.WARNING_MESSAGE, WARNING_MESSAGE);
+                                abortCreation(L1_TABLE);
+                            }
+                            // </editor-fold>
+                        }
+                    }
+                    //</editor-fold>                    
+                }
+            }            
+        });
+        
         loadL1_Affiliation(0, "");
         loadBuilding(0, 0);
         BuildingTable.setSelectionBackground(LIGHT_BLUE);
         setFormMode(NormalMode);
     }    
 
+    private void updateAffiliation(JTable affiliTable, Object prevAffiliName, String keyCol, JButton cancelButton, 
+            ControlEnums.DialogMessages msgForDuplicate, TableType tableType) 
+    {
+        // <editor-fold defaultstate="collapsed" desc="-- Update high affiliation name">
+        int rowIndex = affiliTable.convertRowIndexToModel (affiliTable.getSelectedRow());
+        TableModel model = affiliTable.getModel();
+        String affiliName = ((String)model.getValueAt(rowIndex, 1)).trim();                        
+        
+        if (affiliName.isEmpty()) {
+            abortModification(
+                    affiliTable == L1_Affiliation ? EMPTY_HIGH_AFFILI : EMPTY_LOW_AFFILI, 
+                    rowIndex, affiliTable);                      
+            return;            
+        } 
+        Object keyVal = model.getValueAt(rowIndex, 2);
+        int result = 0;
+        Connection conn = null;
+        PreparedStatement pUpdateStmt = null;
+        
+        try {
+            String sql = "Update " + affiliTable.getName() + " Set PARTY_NAME = ? Where " + 
+                    keyCol + " = ?";
+
+            conn = getConnection();
+            pUpdateStmt = conn.prepareStatement(sql);
+            pUpdateStmt.setString(1, affiliName);
+            pUpdateStmt.setInt(2, (Integer)keyVal);
+            result = pUpdateStmt.executeUpdate();
+        } catch (SQLException ex) {
+            if (ex.getErrorCode() == ER_DUP_ENTRY) {
+                abortModification(msgForDuplicate, affiliName, rowIndex, affiliTable);                      
+                return;
+            }
+        } finally {
+            closeDBstuff(conn, pUpdateStmt, null, 
+                    "(Original " + affiliTable.getName() + "name : " + prevAffiliName + ")");
+        }    
+        if (result == 1) {
+            backToNormal(affiliTable, cancelButton, tableType);
+
+            if (affiliTable == L1_Affiliation) {
+                loadL1_Affiliation(-1, affiliName); // Refresh higher affiliation list
+            } else if (affiliTable == L2_Affiliation) {
+                
+            }
+        }         
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -536,17 +677,13 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     ((DefaultTableCellRenderer)L1_Affiliation.getTableHeader().getDefaultRenderer())
     .setHorizontalAlignment(JLabel.CENTER);
     L1_Affiliation.setDoubleBuffered(true);
+    L1_Affiliation.setName("L1_Affiliation"); // NOI18N
     L1_Affiliation.setRowHeight(tableRowHeight);
     L1_Affiliation.setSelectionBackground(DARK_BLUE);
     L1_Affiliation.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     L1_Affiliation.addFocusListener(new java.awt.event.FocusAdapter() {
         public void focusLost(java.awt.event.FocusEvent evt) {
             L1_AffiliationFocusLost(evt);
-        }
-    });
-    L1_Affiliation.addKeyListener(new java.awt.event.KeyAdapter() {
-        public void keyReleased(java.awt.event.KeyEvent evt) {
-            L1_AffiliationKeyReleased(evt);
         }
     });
     scrollTopLeft.setViewportView(L1_Affiliation);
@@ -737,6 +874,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     .setHorizontalAlignment(JLabel.CENTER);
     L2_Affiliation.setDoubleBuffered(true);
     L2_Affiliation.setEnabled(false);
+    L2_Affiliation.setName("L2_Affiliation"); // NOI18N
     L2_Affiliation.setRowHeight(tableRowHeight);
     L2_Affiliation.setSelectionBackground(DARK_BLUE);
     L2_Affiliation.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -940,6 +1078,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     BuildingTable.getColumnModel().getColumn(1).setCellRenderer(numberCellRenderer);
     BuildingTable.setDoubleBuffered(true);
     BuildingTable.setEnabled(false);
+    BuildingTable.setName("BuildingTable"); // NOI18N
     BuildingTable.setRowHeight(tableRowHeight);
     BuildingTable.setSelectionBackground(DARK_BLUE);
     L1_Affiliation.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -1131,6 +1270,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     .setHorizontalAlignment(JLabel.CENTER);
     UnitTable.getColumnModel().getColumn(1).setCellRenderer(numberCellRenderer);
     UnitTable.setDoubleBuffered(true);
+    UnitTable.setName("UnitTable"); // NOI18N
     UnitTable.setRowHeight(tableRowHeight);
     UnitTable.setSelectionBackground(DARK_BLUE);
     L2_Affiliation.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -1536,83 +1676,6 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
             return theTable.convertRowIndexToModel(theTable.getSelectedRow());                
     }
     
-    private void L1_AffiliationKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_L1_AffiliationKeyReleased
-        int rowIndex = L1_Affiliation.convertRowIndexToModel (L1_Affiliation.getSelectedRow());
-        TableModel model = L1_Affiliation.getModel();
-        String L1Name = ((String)model.getValueAt(rowIndex, 1)).trim();
-        
-        // Conditions to make this a new higher affiliation: Cond 1 and cond 2
-        if (model.getValueAt(rowIndex, 0) == null) // Cond 1. Row number field is null
-        { 
-            // <editor-fold defaultstate="collapsed" desc="-- Create a high affiliation">                  
-            if (L1Name == null 
-                    || L1Name.isEmpty()
-                    || L1Name.equals(INSERT_TOOLTIP.getContent())) 
-            {
-                abortCreation(L1_TABLE);
-                return;
-            } else {
-                // Cond 2. Name field has string of meaningful affiliation name
-                // <editor-fold defaultstate="collapsed" desc="-- Insert New Higher name and Refresh the List">               
-                int result = insertLevel1Affiliation(L1Name);
-                
-                if (result == ER_NO) {
-                    loadL1_Affiliation(-1, L1Name); // Refresh the list
-                } else if (result == ER_DUP_ENTRY) {
-                    String msg = DUPLICATE_HIGH_AFFILI.getContent() + L1Name;
-                    JOptionPane.showConfirmDialog(null, msg,
-                            ERROR_DIALOGTITLE.getContent(),
-                            JOptionPane.WARNING_MESSAGE, WARNING_MESSAGE);
-                    abortCreation(L1_TABLE);
-                }
-                // </editor-fold>
-            }
-            //</editor-fold>
-        }
-        else 
-        {
-            // <editor-fold defaultstate="collapsed" desc="-- Handle higher affiliation name update">
-            if (L1Name.isEmpty()) {
-                String msg = EMPTY_HIGH_AFFILI.getContent() + L1Name;  
-                abortModification(msg, rowIndex, L1_Affiliation);                      
-                return;                
-            } else {
-                // <editor-fold defaultstate="collapsed" desc="-- Update high affiliation name">
-                Object L1No = model.getValueAt(rowIndex, 2);
-                int result = 0;
-                Connection conn = null;
-                PreparedStatement modifyAffiliation = null;
-                String excepMsg = "(Original L1 Affili': " + prevL1Name + ")";
-
-                try {
-                    String sql = "Update L1_affiliation Set PARTY_NAME = ? Where L1_NO = ?";
-                    
-                    conn = getConnection();
-                    modifyAffiliation = conn.prepareStatement(sql);
-                    modifyAffiliation.setString(1, L1Name);
-                    modifyAffiliation.setInt(2, (Integer)L1No);
-                    result = modifyAffiliation.executeUpdate();
-                } catch (SQLException ex) {
-                    if (ex.getErrorCode() == ER_DUP_ENTRY) {
-                        String msg = DUPLICATE_HIGH_AFFILI.getContent() + L1Name;  
-                        abortModification(msg, rowIndex, L1_Affiliation);                      
-                        return;
-                    }
-                } finally {
-                    closeDBstuff(conn, modifyAffiliation, null, excepMsg);
-                }    
-                if (result == 1) {
-                    loadL1_Affiliation(-1, L1Name); // Refresh higher affiliation list
-                } 
-                //</editor-fold>   
-            } 
-            //</editor-fold>                             
-        }
-        cancelL1_Button.setEnabled(false);
-        setFormMode(FormMode.NormalMode);
-        changeControlEnabledForTable(L1_TABLE);            
-    }//GEN-LAST:event_L1_AffiliationKeyReleased
-
     // Delete currently selected table row
     private int deleteHigherRow(String excepMsg, String sql, int bldg_seq_no) 
     {
@@ -1723,9 +1786,8 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
         {
             //<editor-fold desc="-- Handle building number update">
             if (L2Name.trim().isEmpty()) {
-                String msg = EMPTY_LOW_AFFILI.getContent();
-                abortModification(msg, rowIndex, L2_Affiliation);                      
-                return;                   
+                abortModification(EMPTY_LOW_AFFILI, rowIndex, L2_Affiliation);                      
+                return;
             } else {
                 int index1 = L1_Affiliation.convertRowIndexToView(
                         L1_Affiliation.getSelectedRow());
@@ -1748,8 +1810,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
                     result = updateL2name.executeUpdate();
                 } catch (SQLException ex) {
                     if (ex.getErrorCode() == ER_DUP_ENTRY) {
-                        String msg = DUPLICATE_LOW_AFFILI.getContent() + L2Name;
-                        abortModification(msg, rowIndex, L2_Affiliation); 
+                        abortModification(DUPLICATE_LOW_AFFILI, L2Name, rowIndex, L2_Affiliation); 
                         return;
                     }
                 } finally {
@@ -1910,8 +1971,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
                 if (result == ER_NO) {
                     loadBuilding(-1, bnoInteger); // Refresh building number list after update
                 } else if (result == ER_DUP_ENTRY) {
-                    String msg = DUPLICATE_BUILDING.getContent() + bnoInteger;                   
-                    abortModification(msg, rowIndex, BuildingTable);
+                    abortModification(DUPLICATE_BUILDING, bnoInteger.toString(), rowIndex, BuildingTable);
                     return;
                 }
                 //</editor-fold>            
@@ -1995,8 +2055,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
                     // Refresh room number list table after a room number update
                     loadUnitNumberTable((Integer)bldgNo, bModel.getValueAt(bIndex, 2), -1, unoInteger); 
                 } else if (result == ER_DUP_ENTRY) {
-                    String msg = DUPLICATE_UNIT.getContent() + unoInteger;  
-                    abortModification(msg, rowIndex, UnitTable);
+                    abortModification(DUPLICATE_UNIT, unoInteger.toString(), rowIndex, UnitTable);
                     return;
                 }
                 //</editor-fold>
@@ -2126,22 +2185,62 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     }//GEN-LAST:event_deleteUnit_ButtonActionPerformed
     
     private void modifyUnit_ButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modifyUnit_ButtonActionPerformed
-        prepareModification(UnitTable, modifyUnit_Button, cancelUnit_Button);
+        prepareModifyingAffiBldg(UnitTable, modifyUnit_Button, cancelUnit_Button);
     }//GEN-LAST:event_modifyUnit_ButtonActionPerformed
 
     private void modifyBuilding_ButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modifyBuilding_ButtonActionPerformed
-        // Get confirmation from the user on a building number update.
-        prepareModification(BuildingTable, modifyBuilding_Button, cancelBuilding_Button);
+        prepareModifyingAffiBldg(BuildingTable, modifyBuilding_Button, cancelBuilding_Button);
     }//GEN-LAST:event_modifyBuilding_ButtonActionPerformed
 
     private void modifyL1_ButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modifyL1_ButtonActionPerformed
-        // Get confirmation from the user on a 1st level affiliation update.
-        prepareModification(L1_Affiliation, modifyL1_Button, cancelL1_Button);
+        prepareModifyingAffiBldg(L1_Affiliation, modifyL1_Button, cancelL1_Button);
     }//GEN-LAST:event_modifyL1_ButtonActionPerformed
 
+    private void prepareModifyingAffiBldg(JTable table, JButton modifyBtn, JButton cancelBtn) {
+        TableType tableType = ((RXTable)table).getTableType();
+        int rowIndex = table.getSelectedRow();
+        int model_index = table.convertRowIndexToModel(rowIndex);
+        
+        TableModel model = table.getModel();
+        int result = JOptionPane.NO_OPTION;
+        
+        switch(tableType) {
+            //<editor-fold desc="-- Save previous attribute value">
+            case L1_TABLE:
+                prevL1Name = model.getValueAt(model_index, 1);
+                result = getUserConfirmationL1(model_index);
+                break;
+            case L2_TABLE:
+                prevL2Name = model.getValueAt(model_index, 1);
+                result = getUserConfirmationL2(model_index);
+                break;
+            case Building:
+                prevBldgNo = model.getValueAt(model_index, 1);
+                break;
+            case UnitTab:
+                prevUnitNo = model.getValueAt(model_index, 1);
+                break;                
+            default:
+                break;
+            //</editor-fold>
+        }
+        
+        if (result == JOptionPane.YES_OPTION) {
+            if (tableType == L1_TABLE || tableType == L2_TABLE) {
+                table.getColumnModel().getColumn(1).setCellEditor(new MyTableCellEditor(KOREAN));
+            }
+
+            table.editCellAt(rowIndex, 1);
+            table.getEditorComponent().requestFocus();
+
+            setFormMode(FormMode.UpdateMode);
+            modifyBtn.setEnabled(false);
+            cancelBtn.setEnabled(true);    
+        }
+    }
+    
     private void L1_AffiliationFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_L1_AffiliationFocusLost
-        if (emptyLastRowPossible(insertL1_Button, L1_Affiliation))
-        {
+        if (emptyLastRowPossible(insertL1_Button, L1_Affiliation)) {
             removeEmptyRow(insertL1_Button, L1_Affiliation);
         }
     }//GEN-LAST:event_L1_AffiliationFocusLost
@@ -2373,7 +2472,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     }
     
     private void modifyL2_ButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modifyL2_ButtonActionPerformed
-        prepareModification(L2_Affiliation, modifyL2_Button, cancelL2_Button);
+        prepareModifyingAffiBldg(L2_Affiliation, modifyL2_Button, cancelL2_Button);
     }//GEN-LAST:event_modifyL2_ButtonActionPerformed
 
     private void cancelL1_ButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelL1_ButtonActionPerformed
@@ -2381,9 +2480,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
         if (formMode == FormMode.CreateMode) {
             abortCreation(L1_TABLE);
         } else if (formMode == FormMode.UpdateMode) {
-            L1_Affiliation.getCellEditor().stopCellEditing();
-            setFormMode(FormMode.NormalMode);
-            cancelL1_Button.setEnabled(false);
+            backToNormal(L1_Affiliation, cancelL1_Button, L1_TABLE);
             loadL1_Affiliation(L1_Affiliation.getSelectedRow(), "");
         }
     }//GEN-LAST:event_cancelL1_ButtonActionPerformed
@@ -3146,16 +3243,16 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
                     if (me.getClickCount() == 2) {
                         switch (table.getTableType()) {
                             case L1_TABLE:
-                                prepareModification(table, modifyL1_Button, cancelL1_Button);                        
+                                prepareModifyingAffiBldg(table, modifyL1_Button, cancelL1_Button);                        
                                 break;
                             case L2_TABLE:
-                                prepareModification(table, modifyL2_Button, cancelL2_Button);                        
+                                prepareModifyingAffiBldg(table, modifyL2_Button, cancelL2_Button);                        
                                 break;
                             case Building:
-                                prepareModification(table, modifyBuilding_Button, cancelBuilding_Button);                        
+                                prepareModifyingAffiBldg(table, modifyBuilding_Button, cancelBuilding_Button);                        
                                 break;
                             case UnitTab:
-                                prepareModification(table, modifyUnit_Button, cancelUnit_Button);                        
+                                prepareModifyingAffiBldg(table, modifyUnit_Button, cancelUnit_Button);                        
                                 break;
                             default:
                                 break;
@@ -3189,51 +3286,6 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     static Object prevBldgNo = null;
     static Object prevL1Name = null;
     static Object prevL2Name = null;
-    
-//    private void processL1NameChangeTrial(int rowIndex) {
-//        int model_index = L1_Affiliation.convertRowIndexToModel(rowIndex);
-//        TableModel model1 = L1_Affiliation.getModel();
-//        
-//        prevL1Name = model1.getValueAt(model_index, 1);    
-//        if (model1.getValueAt(model_index, 0) != null) 
-//        {
-//            int L1_no = (int)model1.getValueAt(model_index, 2);
-//            String dialog = "";
-//            
-//            //<editor-fold desc="-- Make confirm message.">
-//            switch (language) {
-//                case KOREAN:
-//                    dialog = "다음 상위 소속 이름을 변경합니까?" 
-//                            + System.getProperty("line.separator") 
-//                            + " - 상위 소속: " + prevL1Name 
-//                            + " (관련 하위 소속: " + getL2RecordCount(L1_no) + " 개)"; 
-//                    break;
-//                    
-//                case ENGLISH:
-//                    dialog =  "Want to change the following higher affiliation?"
-//                            + System.getProperty("line.separator") 
-//                            + " - Higher Affiliation: " + prevL1Name 
-//                            + " (number of lower affiliations: " + getL2RecordCount(L1_no) + ")";
-//                    break;
-//                    
-//                default:
-//                    break;
-//            }
-//            //</editor-fold>
-//            
-//            int result = JOptionPane.showConfirmDialog(this, dialog,
-//                    AFFILIATION_MODIFY_DIALOGTITLE.getContent(),
-//                    JOptionPane.YES_NO_OPTION); 
-//
-//            if (result == JOptionPane.NO_OPTION) { 
-//                L1_Affiliation.getCellEditor().stopCellEditing();
-//            } else {
-//                setFormMode(FormMode.UpdateMode);
-//                modifyL1_Button.setEnabled(false);
-//                cancelL1_Button.setEnabled(true);
-//            }
-//        }
-//    }
 
     private void prepareInsertion(JTable listTable, 
             JButton insertButton, JButton cancelButton) 
@@ -3413,8 +3465,8 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
                 modeString.setText(MODIFY.getContent());
                 changeRadioButtonsEnabled(false);
                 changeBottomButtonsEnbled(false);   
-                (new LabelBlinker()).displayHelpMessage(csHelpLabel, 
-                        UPDATE_SAVE_HELP.getContent(), !updateBlinked);                  
+                (new LabelBlinker()).displayHelpMessage(csHelpLabel, UPDATE_SAVE_HELP.getContent(), 
+                        !updateBlinked);                  
                 updateBlinked = true;
                 adminOperationEnabled(false, deleteAll_Affiliation, ODSAffiliHelp, sampleButton, readSheet);                
                 break;
@@ -3446,14 +3498,14 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
 
     private void removeAndReturn(JTable table, JButton cancelButton) 
     {
+        setFormMode(FormMode.NormalMode);  
+        cancelButton.setEnabled(false);
         ((DefaultTableModel)table.getModel()).setRowCount(table.getRowCount() - 1);
         
         // Return to read mode as if [Enter] key pressed.
         if (table.getRowCount() > 0) {
             table.setRowSelectionInterval(0, 0);
         }
-        setFormMode(FormMode.NormalMode);  
-        cancelButton.setEnabled(false);
     }
 
     private void prepareModification(JTable table, JButton modifyButton, JButton cancelButton) 
@@ -3469,12 +3521,6 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
 
             //<editor-fold desc="-- Save previous record field value">
             switch(((RXTable)table).getTableType()) {
-                case L1_TABLE:
-                    prevL1Name = model.getValueAt(model_index, 1);
-                    break;
-                case L2_TABLE:
-                    prevL2Name = model.getValueAt(model_index, 1);
-                    break;
                 case Building:
                     prevBldgNo = model.getValueAt(model_index, 1);
                     break;
@@ -3488,66 +3534,48 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
             
             if (model.getValueAt(model_index, 0) != null)
             {
-                String dialogTitle = null;
-                String dialog = "";
-                TableType tableType = ((RXTable)table).getTableType();
+//                String dialogTitle = null;
+//                String dialog = "";
+//                TableType tableType = ((RXTable)table).getTableType();
 
                 //<editor-fold desc="-- Make dialog title and content">
-                switch (tableType) {
-                        
-                    case UnitTab:
-                        int bIndex = BuildingTable.convertRowIndexToModel(
-                                BuildingTable.getSelectedRow());
-                        int bldgNo = (Integer)BuildingTable.getModel().getValueAt(bIndex, 1);
-                        
-                        dialogTitle = UNIT_MODIFY_DIALOGTITLE.getContent();
-                        dialog = UNIT_DIAG_L1.getContent() + System.getProperty("line.separator") 
-                                + UNIT_DIAG_L2.getContent() + prevUnitNo + System.getProperty("line.separator") 
-                                + UNIT_DIAG_L3.getContent() + bldgNo;
-                        break;
-                        
-                    case Building:
-                        int modal_Index = BuildingTable.convertRowIndexToModel(rowIndex);        
-                        int bno = (Integer)BuildingTable.getModel().getValueAt(modal_Index, 2);        
-                        int count = getUnitCount(bno);                        
-                        
-                        dialogTitle = BUILDING_MODIFY_DIALOGTITLE.getContent();
-                        dialog = BLDG_DIAG_L1.getContent() + System.getProperty("line.separator") 
-                                + BLDG_DIAG_L2.getContent() + prevBldgNo + " " 
-                                + BLDG_DIAG_L3.getContent() + count + ")";
-                        break;
-                    
-                    case L2_TABLE:
-                        int indexL1 = L1_Affiliation.convertRowIndexToModel(L1_Affiliation.getSelectedRow());
-                        String nameL1 = L1_Affiliation.getModel().getValueAt(indexL1, 1).toString();
-                        
-                        dialogTitle = LOWER_MODIFY_DIALOGTITLE.getContent();
-                        dialog = AFFILI2_DIAG_L1.getContent() + System.getProperty("line.separator") 
-                                + AFFILI2_DIAG_L2.getContent() + prevL2Name + System.getProperty("line.separator") 
-                                + AFFILI2_DIAG_L3.getContent() + nameL1;
-                        break;
-
-                    case L1_TABLE:
-                        int L1_no = (int)model.getValueAt(model_index, 2);
-                        
-                        dialogTitle = AFFILIATION_MODIFY_DIALOGTITLE.getContent();
-                        dialog = AFFILI_DIAG_L1.getContent() + System.getProperty("line.separator") 
-                                + AFFILI_DIAG_L2.getContent() + prevL1Name + System.getProperty("line.separator") 
-                                + AFFILI_DIAG_L3.getContent() + getL2RecordCount(L1_no); 
-                        break;
-
-                    default:
-                        break;
-                }
+//                switch (tableType) {
+//                        
+//                    case UnitTab:
+//                        int bIndex = BuildingTable.convertRowIndexToModel(
+//                                BuildingTable.getSelectedRow());
+//                        int bldgNo = (Integer)BuildingTable.getModel().getValueAt(bIndex, 1);
+//                        
+//                        dialogTitle = UNIT_MODIFY_DIALOGTITLE.getContent();
+//                        dialog = UNIT_DIAG_L1.getContent() + System.getProperty("line.separator") 
+//                                + UNIT_DIAG_L2.getContent() + prevUnitNo + System.getProperty("line.separator") 
+//                                + UNIT_DIAG_L3.getContent() + bldgNo;
+//                        break;
+//                        
+//                    case Building:
+//                        int modal_Index = BuildingTable.convertRowIndexToModel(rowIndex);        
+//                        int bno = (Integer)BuildingTable.getModel().getValueAt(modal_Index, 2);        
+//                        int count = getUnitCount(bno);                        
+//                        
+//                        dialogTitle = BUILDING_MODIFY_DIALOGTITLE.getContent();
+//                        dialog = BLDG_DIAG_L1.getContent() + System.getProperty("line.separator") 
+//                                + BLDG_DIAG_L2.getContent() + prevBldgNo + " " 
+//                                + BLDG_DIAG_L3.getContent() + count + ")";
+//                        break;
+//                    
+//                    default:
+//                        break;
+//                }
                 //</editor-fold>
                 
-                int result = //JOptionPane.YES_OPTION;
-                        JOptionPane.showConfirmDialog(this, dialog,
-                        dialogTitle, JOptionPane.YES_NO_OPTION); 
+//                int result = //JOptionPane.YES_OPTION;
+//                        JOptionPane.showConfirmDialog(this, dialog,
+//                        dialogTitle, JOptionPane.YES_NO_OPTION); 
 
-                if (result == JOptionPane.NO_OPTION) { 
-                    table.getCellEditor().stopCellEditing();
-                } else {
+//                if (result == JOptionPane.NO_OPTION) { 
+//                    table.getCellEditor().stopCellEditing();
+//                } else 
+                {
                     setFormMode(FormMode.UpdateMode);
                     modifyButton.setEnabled(false);
                     cancelButton.setEnabled(true);
@@ -3705,13 +3733,21 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
         }            
     }
 
-    private void abortModification(String msg, int row, JTable table) {
-        JOptionPane.showConfirmDialog(null, msg,
-                ERROR_DIALOGTITLE.getContent(), 
-                JOptionPane.WARNING_MESSAGE, WARNING_MESSAGE);                       
-        if (table.editCellAt(row, 1)) {
+    private void abortModification(DialogMessages dialog, String name, int row, JTable table) {
+        abortModification(dialog.getContent() + name, row, table);
+    }
+
+    private void abortModification(DialogMessages dialog, int row, JTable table) {
+        abortModification(dialog.getContent(), row, table);
+    }
+    
+    private void abortModification(String message, int row, JTable table) {
+        JOptionPane.showConfirmDialog(null, message, ERROR_DIALOGTITLE.getContent(), 
+                JOptionPane.WARNING_MESSAGE, WARNING_MESSAGE); 
+        if (table.editCellAt(row, 1)) 
+        {
             table.getEditorComponent().requestFocus();
-        }      
+        }
     }
 
     private void manageSelection(ItemEvent evt, JTable table) {
@@ -3733,6 +3769,36 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
         } else {
             dispose();
         }  
+    }
+
+    private void backToNormal(JTable table, JButton cancelButton, TableType tableType) {
+        table.getColumnModel().getColumn(1).setCellEditor(null);
+        cancelButton.setEnabled(false);
+        setFormMode(FormMode.NormalMode);
+        changeControlEnabledForTable(tableType);
+    }
+
+    private int getUserConfirmationL1(int model_index) {
+        TableModel model = L1_Affiliation.getModel();
+        int L1_no = (int)model.getValueAt(model_index, 2);
+        String dialog = AFFILI_DIAG_L1.getContent() + System.getProperty("line.separator") 
+                + AFFILI_DIAG_L2.getContent() + prevL1Name + System.getProperty("line.separator") 
+                + AFFILI_DIAG_L3.getContent() + getL2RecordCount(L1_no); 
+
+        return JOptionPane.showConfirmDialog(this, dialog,
+                AFFILIATION_MODIFY_DIALOGTITLE.getContent(),
+                JOptionPane.YES_NO_OPTION);     
+    }
+
+    private int getUserConfirmationL2(int model_index) {
+        String nameL1 = L1_Affiliation.getModel().getValueAt(model_index, 1).toString();
+        String dialog = AFFILI2_DIAG_L1.getContent() + System.getProperty("line.separator") 
+                + AFFILI2_DIAG_L2.getContent() + prevL2Name + System.getProperty("line.separator") 
+                + AFFILI2_DIAG_L3.getContent() + nameL1;
+                        
+        return JOptionPane.showConfirmDialog(this, dialog,
+                LOWER_MODIFY_DIALOGTITLE.getContent(),
+                JOptionPane.YES_NO_OPTION);     
     }
 
     private class HdrMouseListener extends MouseAdapter {

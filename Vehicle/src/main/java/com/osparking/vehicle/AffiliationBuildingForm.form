@@ -455,6 +455,7 @@
                                     <Property name="doubleBuffered" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                                       <Connection code="true" type="code"/>
                                     </Property>
+                                    <Property name="name" type="java.lang.String" value="L1_Affiliation" noResource="true"/>
                                     <Property name="rowHeight" type="int" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                                       <Connection code="tableRowHeight" type="code"/>
                                     </Property>
@@ -464,7 +465,6 @@
                                   </Properties>
                                   <Events>
                                     <EventHandler event="focusLost" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="L1_AffiliationFocusLost"/>
-                                    <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="L1_AffiliationKeyReleased"/>
                                   </Events>
                                   <AuxValues>
                                     <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new RXTable(L1_TABLE)"/>
@@ -763,6 +763,7 @@
                                       <Connection code="true" type="code"/>
                                     </Property>
                                     <Property name="enabled" type="boolean" value="false"/>
+                                    <Property name="name" type="java.lang.String" value="L2_Affiliation" noResource="true"/>
                                     <Property name="rowHeight" type="int" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                                       <Connection code="tableRowHeight" type="code"/>
                                     </Property>
@@ -1111,6 +1112,7 @@
                                       <Connection code="true" type="code"/>
                                     </Property>
                                     <Property name="enabled" type="boolean" value="false"/>
+                                    <Property name="name" type="java.lang.String" value="BuildingTable" noResource="true"/>
                                     <Property name="rowHeight" type="int" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                                       <Connection code="tableRowHeight" type="code"/>
                                     </Property>
@@ -1417,6 +1419,7 @@
                                     <Property name="doubleBuffered" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                                       <Connection code="true" type="code"/>
                                     </Property>
+                                    <Property name="name" type="java.lang.String" value="UnitTable" noResource="true"/>
                                     <Property name="rowHeight" type="int" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                                       <Connection code="tableRowHeight" type="code"/>
                                     </Property>

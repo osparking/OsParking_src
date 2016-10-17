@@ -20,6 +20,7 @@ import static com.osparking.global.CommonData.numberCellRenderer;
 import static com.osparking.global.CommonData.tableRowHeight;
 import static com.osparking.global.Globals.DEBUG;
 import static com.osparking.global.Globals.getPrompter;
+import static com.osparking.global.Globals.logParkingException;
 import static com.osparking.global.Globals.refreshComboBox;
 import static com.osparking.vehicle.driver.ManageDrivers.driverTable;
 import java.awt.event.ActionEvent;
@@ -46,12 +47,12 @@ import com.osparking.global.names.PComboBox;
 import java.awt.AWTKeyStroke;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.im.InputContext;
 import java.util.HashSet;
 import java.util.Set;
-import javax.swing.JComponent;
+import java.util.logging.Level;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
-import javax.swing.KeyStroke;
 import javax.swing.table.DefaultTableCellRenderer;
 
 /**
@@ -221,6 +222,20 @@ public class DriverTable extends JTable {
             cellEditor = new DefaultCellEditor(ManageDrivers.affiliationL1CBox); 
         } else if (modCol == DriverCol.BuildingNo.getNumVal()) {
             cellEditor = new DefaultCellEditor(ManageDrivers.buildingCBox); 
+        } else if (modCol == DriverCol.DriverName.getNumVal()) {
+            try {
+                InputContext inCtx  =  this.getInputContext();
+
+                if (inCtx != null) {
+                    Character.Subset[] subset = new Character.Subset[1];
+
+                    subset[0] = Character.UnicodeBlock.HANGUL_SYLLABLES;
+                    inCtx.setCharacterSubsets(subset);
+                }
+            } catch(Exception e) {
+                logParkingException(Level.SEVERE, e, "while setting language ");            
+            }            
+            cellEditor = super.getCellEditor(modRow, modCol);
         } else {
             cellEditor = super.getCellEditor(modRow, modCol);
         }
@@ -249,9 +264,14 @@ public class DriverTable extends JTable {
                 });                  
             }
         };
-        JComponent compo = (JComponent)((DefaultCellEditor)cellEditor).getComponent();
-        compo.getInputMap().put(KeyStroke.getKeyStroke("ENTER"), "handleEnter");
-        compo.getActionMap().put("handleEnter", handleEnter);  
+//        JComponent compo = (JComponent)((DefaultCellEditor)cellEditor).getComponent();
+//  public class MyTableCellEditor extends AbstractCellEditor implements TableCellEditor {
+
+        //JComponent compo = (JComponent)((MyTableCellEditor)cellEditor).getComponent();
+        //compo.getInputMap().put(KeyStroke.getKeyStroke("ENTER"), "handleEnter");
+//        JComponent compo = (JComponent)((MyTableCellEditor)cellEditor).getTableCellEditorComponent(
+//                this, driverTable.getValueAt(modRow, modCol), true, modRow, modCol);
+        //compo.getActionMap().put("handleEnter", handleEnter);  
         // </editor-fold>
         return cellEditor;
     }

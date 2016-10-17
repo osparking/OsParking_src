@@ -168,6 +168,7 @@ import static com.osparking.vehicle.CommonData.invalidPhone;
 import static com.osparking.vehicle.CommonData.prependEscape;
 import static com.osparking.vehicle.CommonData.setHelpDialogLoc;
 import com.osparking.vehicle.LabelBlinker;
+import com.osparking.vehicle.MyTableCellEditor;
 import com.osparking.vehicle.ODS_HelpJDialog;
 import java.awt.AWTEvent;
 import java.awt.Color;
@@ -277,6 +278,7 @@ public class ManageDrivers extends javax.swing.JFrame {
             sorter.setSortable(i, false);
         }
         driverTable.setRowSorter(sorter);  
+        
         adminOperationEnabled(true, deleteAll_button, odsHelpButton, sampleButton, readSheet_Button);
 
         /**
@@ -2448,6 +2450,12 @@ public class ManageDrivers extends javax.swing.JFrame {
         });
 
         driversScrollPane.setViewportView(driverTable); 
+        
+        /**
+         * Fix default keyboard input language of name column of driver table to Korean.
+         */
+        TableColumn nameCol = driverTable.getColumnModel().getColumn(1);
+        nameCol.setCellEditor(new MyTableCellEditor(KOREAN));
         
         // Hide drivers table sequence number which is used by only inside the code
         TableColumnModel NumberTableModel = driverTable.getColumnModel();
