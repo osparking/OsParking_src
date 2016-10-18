@@ -1451,7 +1451,7 @@ public class Globals {
     }
     
     public static int insertLevel2Affiliation(Integer L1_No, String level2Name) {   
-        int result = 0;
+        int result = ER_YES;
         Connection conn = null;
         PreparedStatement insertL2name = null;
 
@@ -1463,16 +1463,19 @@ public class Globals {
             insertL2name.setInt(1, L1_No);
             insertL2name.setString(2, level2Name);
             result = insertL2name.executeUpdate();
+            if (result == 1) {
+                result = ER_NO;
+            }
             //</editor-fold>
         } catch (SQLException ex) {
             if (ex.getErrorCode() == ER_DUP_ENTRY) {
-                result = 2;
+                result = ER_DUP_ENTRY;
                 logParkingException(Level.SEVERE, ex, level2Name + " already exist as level 2");
             } else {
                 logParkingException(Level.SEVERE, ex, "(Failed insertion trial of '" + level2Name + "'");
             }            
         } finally {
-            closeDBstuff(conn, insertL2name, null, "insert " + L1_No + " " + level2Name);
+            closeDBstuff(conn, insertL2name, null, "insert L1-no: " + L1_No + ", L2-name: " + level2Name);
             return result;    
         }
     }     

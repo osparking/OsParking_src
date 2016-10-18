@@ -773,7 +773,6 @@
                                   </Properties>
                                   <Events>
                                     <EventHandler event="focusLost" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="L2_AffiliationFocusLost"/>
-                                    <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="L2_AffiliationKeyReleased"/>
                                   </Events>
                                   <AuxValues>
                                     <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new RXTable(L2_TABLE)"/>

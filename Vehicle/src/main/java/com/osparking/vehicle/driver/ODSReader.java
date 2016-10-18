@@ -580,7 +580,7 @@ public class ODSReader {
                             // try to insert Level 2 name with the Level 1 number
                             int result = insertLevel2Affiliation(L1_no, cellStr);
                             
-                            if (result == 1) {
+                            if (result == ER_NO) {
                                 level2Count++;
                             } else {
                                 level2Reject++;

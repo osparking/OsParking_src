@@ -238,44 +238,10 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
                     updateAffiliation(L1_Affiliation, prevL1Name, "L1_NO", cancelL1_Button, 
                             DUPLICATE_HIGH_AFFILI, L1_TABLE);
                 } else if (formMode == CreateMode) {
-                    // <editor-fold defaultstate="collapsed" desc="-- Create a high affiliation">  
-                    int rowIndex = L1_Affiliation.convertRowIndexToModel (L1_Affiliation.getSelectedRow());
-                    TableModel model = L1_Affiliation.getModel();
-                    String L1Name = ((String)model.getValueAt(rowIndex, 1)).trim();
-
-                    // Conditions to make this a new higher affiliation: Cond 1 and cond 2
-                    if (model.getValueAt(rowIndex, 0) == null) // Cond 1. Row number field is null
-                    {                     
-                        if (L1Name == null 
-                                || L1Name.isEmpty()
-                                || L1Name.equals(INSERT_TOOLTIP.getContent())) 
-                        {
-                            abortCreation(L1_TABLE);
-                            return;
-                        } else {
-                            // Cond 2. Name field has string of meaningful affiliation name
-                            // <editor-fold defaultstate="collapsed" desc="-- Insert New Higher name and Refresh the List">               
-                            int result = insertLevel1Affiliation(L1Name);
-
-                            if (result == ER_NO) {
-                                L1_Affiliation.getColumnModel().getColumn(1).setCellEditor(null);
-                                cancelL1_Button.setEnabled(false);
-                                setFormMode(FormMode.NormalMode);
-                                changeControlEnabledForTable(L1_TABLE);                                
-                                loadL1_Affiliation(-1, L1Name); // Refresh the list
-                            } else if (result == ER_DUP_ENTRY) {
-                                String msg = DUPLICATE_HIGH_AFFILI.getContent() + L1Name;
-                                JOptionPane.showConfirmDialog(null, msg,
-                                        ERROR_DIALOGTITLE.getContent(),
-                                        JOptionPane.WARNING_MESSAGE, WARNING_MESSAGE);
-                                abortCreation(L1_TABLE);
-                            }
-                            // </editor-fold>
-                        }
-                    }
-                    //</editor-fold>                    
+                    insertAffiliation(L1_Affiliation, cancelL1_Button, 
+                            DUPLICATE_HIGH_AFFILI, L1_TABLE);
                 }
-            }            
+            }
         });
         L2_Affiliation.getModel().addTableModelListener(new TableModelListener() {
            @Override
@@ -287,42 +253,8 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
                     updateAffiliation(L2_Affiliation, prevL2Name, "L2_NO", cancelL2_Button, 
                             DUPLICATE_LOW_AFFILI, L2_TABLE);
                 } else if (formMode == CreateMode) {
-                    // <editor-fold defaultstate="collapsed" desc="-- Create a high affiliation">  
-                    int rowIndex = L1_Affiliation.convertRowIndexToModel (L1_Affiliation.getSelectedRow());
-                    TableModel model = L1_Affiliation.getModel();
-                    String L1Name = ((String)model.getValueAt(rowIndex, 1)).trim();
-
-                    // Conditions to make this a new higher affiliation: Cond 1 and cond 2
-                    if (model.getValueAt(rowIndex, 0) == null) // Cond 1. Row number field is null
-                    {                     
-                        if (L1Name == null 
-                                || L1Name.isEmpty()
-                                || L1Name.equals(INSERT_TOOLTIP.getContent())) 
-                        {
-                            abortCreation(L1_TABLE);
-                            return;
-                        } else {
-                            // Cond 2. Name field has string of meaningful affiliation name
-                            // <editor-fold defaultstate="collapsed" desc="-- Insert New Higher name and Refresh the List">               
-                            int result = insertLevel1Affiliation(L1Name);
-
-                            if (result == ER_NO) {
-                                L1_Affiliation.getColumnModel().getColumn(1).setCellEditor(null);
-                                cancelL1_Button.setEnabled(false);
-                                setFormMode(FormMode.NormalMode);
-                                changeControlEnabledForTable(L1_TABLE);                                
-                                loadL1_Affiliation(-1, L1Name); // Refresh the list
-                            } else if (result == ER_DUP_ENTRY) {
-                                String msg = DUPLICATE_HIGH_AFFILI.getContent() + L1Name;
-                                JOptionPane.showConfirmDialog(null, msg,
-                                        ERROR_DIALOGTITLE.getContent(),
-                                        JOptionPane.WARNING_MESSAGE, WARNING_MESSAGE);
-                                abortCreation(L1_TABLE);
-                            }
-                            // </editor-fold>
-                        }
-                    }
-                    //</editor-fold>                    
+                    insertAffiliation(L2_Affiliation, cancelL2_Button, 
+                            DUPLICATE_LOW_AFFILI, L2_TABLE);                    
                 }
             }            
         });
@@ -380,6 +312,58 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
             }
         }         
     }
+    
+    private void insertAffiliation(JTable table, JButton cancelButton, 
+            DialogMessages diagMsg, TableType tableType) {
+        int rowIndex = table.convertRowIndexToModel (table.getSelectedRow());
+        TableModel model = table.getModel();
+        String affiliName = ((String)model.getValueAt(rowIndex, 1)).trim();
+
+        // Conditions to make this a new higher affiliation: Cond 1 and cond 2
+        if (model.getValueAt(rowIndex, 0) == null) // Cond 1. Row number field is null
+        {                     
+            if (affiliName == null 
+                    || affiliName.isEmpty()
+                    || affiliName.equals(INSERT_TOOLTIP.getContent())) 
+            {
+                abortCreation(tableType);
+                return;
+            } else {
+                // Cond 2. Name field has string of meaningful affiliation name
+                // <editor-fold defaultstate="collapsed" desc="-- Insert New Higher name and Refresh the List">
+                int result = ER_YES;
+                Object parentKey = null;
+                
+                if (tableType == L1_TABLE) {
+                    result = insertLevel1Affiliation(affiliName);
+                } else {
+                    int index = L1_Affiliation.convertRowIndexToModel(L1_Affiliation.getSelectedRow());
+                    parentKey = L1_Affiliation.getModel().getValueAt(index, 2); 
+                    
+                    result = insertLevel2Affiliation((Integer)parentKey, affiliName);
+                }
+
+                if (result == ER_NO) {
+                    table.getColumnModel().getColumn(1).setCellEditor(null);
+                    cancelButton.setEnabled(false);
+                    setFormMode(FormMode.NormalMode);
+                    changeControlEnabledForTable(tableType);  
+                    if (tableType == L1_TABLE) {
+                        loadL1_Affiliation(-1, affiliName); // Refresh the list
+                    } else {
+                        loadL2_Affiliation(parentKey, -1, affiliName); // Refresh the list                        
+                    }
+                } else if (result == ER_DUP_ENTRY) {
+                    String msg = diagMsg.getContent() + affiliName;
+                    JOptionPane.showConfirmDialog(null, msg,
+                            ERROR_DIALOGTITLE.getContent(),
+                            JOptionPane.WARNING_MESSAGE, WARNING_MESSAGE);
+                    abortCreation(tableType);
+                }
+                // </editor-fold>
+            }
+        }                
+    }    
     
     /**
      * This method is called from within the constructor to initialize the form.
@@ -881,11 +865,6 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     L2_Affiliation.addFocusListener(new java.awt.event.FocusAdapter() {
         public void focusLost(java.awt.event.FocusEvent evt) {
             L2_AffiliationFocusLost(evt);
-        }
-    });
-    L2_Affiliation.addKeyListener(new java.awt.event.KeyAdapter() {
-        public void keyReleased(java.awt.event.KeyEvent evt) {
-            L2_AffiliationKeyReleased(evt);
         }
     });
     scrollBotLeft.setViewportView(L2_Affiliation);
@@ -1745,89 +1724,6 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
         setKeyboardLanguage(L1_Affiliation, KOREAN);
         prepareInsertion(L1_Affiliation, insertL1_Button, cancelL1_Button);
     }//GEN-LAST:event_insertL1_ButtonActionPerformed
-
-    private void L2_AffiliationKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_L2_AffiliationKeyReleased
-        int rowIndex = L2_Affiliation.convertRowIndexToModel (L2_Affiliation.getSelectedRow());
-        TableModel model = L2_Affiliation.getModel();        
-        final String L2Name = ((String)model.getValueAt(rowIndex, 1)).trim();
-        
-        // Conditions to make this a new lower affiliation: Cond 1 and cond 2
-        if (model.getValueAt(rowIndex, 0) == null) // Cond 1. Row number field is null
-        {
-            // <editor-fold defaultstate="collapsed" desc="-- Create a low affiliation">   
-            if (L2Name == null 
-                    || L2Name.isEmpty()
-                    || L2Name.equals(INSERT_TOOLTIP.getContent())) 
-            {
-                abortCreation(L2_TABLE);
-                return;                
-            } else {
-                // Cond 2. Name field has string of meaningful low affiliation name
-                int index = L1_Affiliation.convertRowIndexToModel(L1_Affiliation.getSelectedRow());                
-                Object parentKey = L1_Affiliation.getModel().getValueAt(index, 2);
-
-                // <editor-fold defaultstate="collapsed" desc="-- Insert New Lower name and Refresh the List"> 
-                int result = insertLevel2Affiliation((Integer)parentKey, L2Name);
-                if (result == 1)
-                {
-                    loadL2_Affiliation(parentKey, -1, L2Name); // Refresh the list
-                } else if (result == 2) {
-                    String msg = DUPLICATE_LOW_AFFILI.getContent() + L2Name;                   
-                    JOptionPane.showConfirmDialog(null, msg,
-                            ERROR_DIALOGTITLE.getContent(), 
-                            JOptionPane.WARNING_MESSAGE, WARNING_MESSAGE);                       
-                    abortCreation(L2_TABLE);
-                }                
-                //</editor-fold>
-            }
-            //</editor-fold>            
-        }
-        else 
-        {
-            //<editor-fold desc="-- Handle building number update">
-            if (L2Name.trim().isEmpty()) {
-                abortModification(EMPTY_LOW_AFFILI, rowIndex, L2_Affiliation);                      
-                return;
-            } else {
-                int index1 = L1_Affiliation.convertRowIndexToView(
-                        L1_Affiliation.getSelectedRow());
-                Object L1_no = L1_Affiliation.getModel().getValueAt(index1, 2);
-                Object L2_no = model.getValueAt(rowIndex, 2);
-
-                int result = 0;
-                // <editor-fold defaultstate="collapsed" desc="-- update lower level affiliation">            
-                Connection conn = null;
-                PreparedStatement updateL2name = null;
-                String excepMsg = "lower level affiliation name(before update): " + prevL2Name;
-
-                try {
-                    String sql = "Update L2_Affiliation Set PARTY_NAME = ? Where L2_NO = ?";
-                    conn = getConnection();
-                    updateL2name = conn.prepareStatement(sql);
-                    updateL2name.setString(1, L2Name);
-                    updateL2name.setInt(2, (Integer)L2_no);
-
-                    result = updateL2name.executeUpdate();
-                } catch (SQLException ex) {
-                    if (ex.getErrorCode() == ER_DUP_ENTRY) {
-                        abortModification(DUPLICATE_LOW_AFFILI, L2Name, rowIndex, L2_Affiliation); 
-                        return;
-                    }
-                } finally {
-                    closeDBstuff(conn, updateL2name, null, excepMsg);
-                }                 
-                //</editor-fold>            
-                if (result == 1)
-                {
-                    loadL2_Affiliation(L1_no, -1, L2Name); // Refresh lower affiliation list
-                }
-            }
-            //</editor-fold>
-        }
-        cancelL2_Button.setEnabled(false);
-        setFormMode(FormMode.NormalMode);
-        changeControlEnabledForTable(L2_TABLE);            
-    }//GEN-LAST:event_L2_AffiliationKeyReleased
 
     private void insertL2_ButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_insertL2_ButtonActionPerformed
         setKeyboardLanguage(L2_Affiliation, KOREAN);
