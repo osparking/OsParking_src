@@ -41,8 +41,11 @@ import com.osparking.global.names.PasswordValidator;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
+import java.awt.font.FontRenderContext;
+import java.awt.geom.AffineTransform;
 import java.awt.im.InputContext;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -94,7 +97,7 @@ public class CommonData { // new Dimension(carTagWidth, 30)
     public static final int normGUIheight = 720; 
     public static final int SETTINGS_WIDTH = 800; 
     public static final int SETTINGS_HEIGHT = 840; 
-    public static final int tableRowHeight = 25; 
+    public static final int tableRowHeight = 30; 
     public static final int bigButtonWidth = 160;
     public static final int bigButtonHeight = 60;
     public static final Dimension bigButtonDim = 
@@ -271,6 +274,21 @@ public class CommonData { // new Dimension(carTagWidth, 30)
         }
     }    
     
+    public static void adminOperationEnabled(boolean flag, 
+            JButton odsHelpButton, JButton sampleButton, JButton readSheet_Button) 
+    {
+        if (flag && Globals.loginID != null && Globals.loginID.equals(ADMIN_ID)) 
+        {
+            odsHelpButton.setEnabled(true);
+            sampleButton.setEnabled(true);
+            readSheet_Button.setEnabled(true);
+        } else {
+            odsHelpButton.setEnabled(false);
+            sampleButton.setEnabled(false);
+            readSheet_Button.setEnabled(false);
+        }
+    }    
+    
     public static void adminOperationEnabled(boolean flag, JButton deleteAllVehicles, 
             JButton odsHelpButton, JButton sampleButton, JButton readSheet_Button) 
     {
@@ -349,20 +367,26 @@ public class CommonData { // new Dimension(carTagWidth, 30)
         }        
     };
     
-    public static DefaultTableCellRenderer numberCellRenderer = new DefaultTableCellRenderer() {
-        Border padding = BorderFactory.createEmptyBorder(0, 15, 0, 15);
+    public static DefaultTableCellRenderer numberCellRenderer = getCellRenderer(15);
+    
+    public static DefaultTableCellRenderer numberCellRendererW = getCellRenderer(40);
+    
+    private static DefaultTableCellRenderer getCellRenderer(final int hMargin) {
+        return new DefaultTableCellRenderer() {
+            Border padding = BorderFactory.createEmptyBorder(0, hMargin, 0, hMargin);
 
-        @Override
-        public Component getTableCellRendererComponent(JTable table, Object value, 
-                boolean isSelected, boolean hasFocus, int row, int column) 
-        {
-            super.getTableCellRendererComponent(table, value, isSelected, hasFocus,
-                    row, column);
-            setBorder(BorderFactory.createCompoundBorder(getBorder(), padding));
-            setHorizontalAlignment(JLabel.RIGHT);
-            return this;            
-        }
-    };  
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value, 
+                    boolean isSelected, boolean hasFocus, int row, int column) 
+            {
+                super.getTableCellRendererComponent(table, value, isSelected, hasFocus,
+                        row, column);
+                setBorder(BorderFactory.createCompoundBorder(getBorder(), padding));
+                setHorizontalAlignment(JLabel.RIGHT);
+                return this;            
+            }
+        };         
+    }
     
     public static void showCount(JTable RunRecordTable, JButton saveSheet_Button, 
             JLabel countValue) 
@@ -382,6 +406,25 @@ public class CommonData { // new Dimension(carTagWidth, 30)
     public static boolean cameraOneIsButton() {
         return deviceType[Camera.ordinal()][1] == CarButton.ordinal();
     }     
+    
+    public static void resizeComponentFor(Component titleLabel, String thisText) {
+        int minW = titleLabel.getMinimumSize().width, w;
+        
+        if (getStringWidth(thisText, titleLabel.getFont()) + 10 > minW) {
+            w = getStringWidth(thisText, titleLabel.getFont()) + 10;
+        } else {
+            w = minW;
+        }
+        Dimension idLabelDim = new Dimension(w, titleLabel.getPreferredSize().height);
+        titleLabel.setSize(idLabelDim);
+        titleLabel.setPreferredSize(idLabelDim);
+    }      
+    
+    public static int getStringWidth(String loginID, Font font) {
+        AffineTransform affinetransform = new AffineTransform();     
+        FontRenderContext frc = new FontRenderContext(affinetransform, true, true);     
+        return (int)((font.getStringBounds(loginID, frc)).getWidth());
+    }
 
     private static String appStr(String content, int recordCount) {
       return " -" + TABLE_DEL_DIALOG_1.getContent() + content + 

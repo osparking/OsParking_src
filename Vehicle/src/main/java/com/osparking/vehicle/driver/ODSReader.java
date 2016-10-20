@@ -18,7 +18,6 @@ package com.osparking.vehicle.driver;
 
 import static com.mysql.jdbc.MysqlErrorNumbers.ER_DUP_ENTRY;
 import static com.mysql.jdbc.MysqlErrorNumbers.ER_NO;
-import com.osparking.vehicle.AffiliationBuildingForm;
 import java.awt.Point;
 import java.io.File;
 import java.io.IOException;
@@ -40,11 +39,10 @@ import static com.osparking.global.Globals.checkOptions;
 import static com.osparking.global.Globals.closeDBstuff;
 import static com.osparking.global.Globals.initializeLoggers;
 import static com.osparking.global.Globals.insertBuilding;
-import static com.osparking.global.Globals.insertBuildingUnit;
+import static com.osparking.global.Globals.insertUnit;
 import static com.osparking.global.Globals.insertLevel1Affiliation;
 import static com.osparking.global.Globals.insertLevel2Affiliation;
 import static com.osparking.global.Globals.logParkingException;
-import static com.osparking.global.names.ControlEnums.DialogMessages.CHECK_BUILDING_ODS_DIALOG;
 import static com.osparking.global.names.ControlEnums.DialogMessages.DRIVER_ODS_READ_RESULT1;
 import static com.osparking.global.names.ControlEnums.DialogMessages.DRIVER_ODS_READ_RESULT2;
 import static com.osparking.global.names.ControlEnums.DialogMessages.DRIVER_ODS_READ_RESULT3;
@@ -60,9 +58,6 @@ import static com.osparking.global.names.ControlEnums.DialogMsg.BLDG_ODS_RES_2;
 import static com.osparking.global.names.ControlEnums.DialogMsg.BLDG_ODS_RES_3;
 import static com.osparking.global.names.ControlEnums.DialogMsg.BLDG_ODS_RES_4;
 import static com.osparking.global.names.ControlEnums.DialogMsg.BLDG_ODS_RES_5;
-import static com.osparking.global.names.ControlEnums.DialogMsg.MISSING_END_1;
-import static com.osparking.global.names.ControlEnums.DialogMsg.MISSING_END_2;
-import static com.osparking.global.names.ControlEnums.DialogMsg.MISSING_END_3;
 import static com.osparking.global.names.ControlEnums.DialogMsg.UNKNOWN_UNIT_1;
 import static com.osparking.global.names.ControlEnums.DialogMsg.UNKNOWN_UNIT_2;
 import static com.osparking.global.names.ControlEnums.DialogMsg.VEHICLE_ODS_1;
@@ -76,6 +71,8 @@ import static com.osparking.global.names.JDBCMySQL.getConnection;
 import com.osparking.global.names.OSP_enums.DriverCol;
 import com.osparking.global.names.OSP_enums.VehicleOds;
 import com.osparking.global.names.WrappedInt;
+import com.osparking.vehicle.Affiliations;
+import com.osparking.vehicle.Buildings;
 import static com.osparking.vehicle.CommonData.invalidCell;
 import static com.osparking.vehicle.CommonData.invalidName;
 import static com.osparking.vehicle.CommonData.invalidPhone;
@@ -111,41 +108,42 @@ public class ODSReader {
         }
         return sb.toString();
     }
-    
-    private static void readBuildingAndUnits(Sheet sheet) {
-        ODSReader objODSReader = new ODSReader();
-        
-        ArrayList<Point> wrongCells = new ArrayList<Point>();
-        WrappedInt buildingTotal = new WrappedInt();
-        WrappedInt unitTotal = new WrappedInt();
-
-        if (objODSReader.checkODS(sheet, wrongCells, buildingTotal, unitTotal))
-        {
-            StringBuilder sb = new StringBuilder();
-            sb.append("Following data recognized, do you want to load them?");
-            sb.append(System.getProperty("line.separator"));
-            sb.append(" - Data count: number of buildings " + buildingTotal.getValue());
-            sb.append(", number of rooms " + unitTotal.getValue());
-
-            int result = JOptionPane.showConfirmDialog(null, 
-                            sb.toString(),
-                            "Sheet Check Result", 
-                            JOptionPane.YES_NO_OPTION);            
-
-            if (result == JOptionPane.YES_OPTION) {                
-                objODSReader.readODS(sheet, null);
-            }
-        } else {
-            // display wrong cell points if existed
-            if (wrongCells.size() > 0) {
-                JOptionPane.showConfirmDialog(null, 
-                        "Cells containing data other than numbers" + 
-                            System.getProperty("line.separator") + getWrongCellPointString(wrongCells),
-                       "Sheet Cell Value Error", 
-                       JOptionPane.PLAIN_MESSAGE, WARNING_MESSAGE);                      
-            }
-        }    
-    }
+//    
+//    public void readBuildingODS(Sheet sheet, Buildings parentForm) {
+//        ODSReader objODSReader = new ODSReader();
+//        
+//        ArrayList<Point> wrongCells = new ArrayList<Point>();
+//        WrappedInt buildingTotal = new WrappedInt();
+//        WrappedInt unitTotal = new WrappedInt();
+//
+//        if (objODSReader.checkODS(sheet, wrongCells, buildingTotal, unitTotal))
+//        {
+//            StringBuilder sb = new StringBuilder();
+//            sb.append("Following data recognized, do you want to load them?");
+//            sb.append(System.getProperty("line.separator"));
+//            sb.append(" - Data count: number of buildings " + buildingTotal.getValue());
+//            sb.append(", number of rooms " + unitTotal.getValue());
+//
+//            int result = JOptionPane.showConfirmDialog(null, 
+//                            sb.toString(),
+//                            "Sheet Check Result", 
+//                            JOptionPane.YES_NO_OPTION);            
+//
+//            if (result == JOptionPane.YES_OPTION) 
+//            {                
+//                objODSReader.readODS(sheet, null);
+//            }
+//        } else {
+//            // display wrong cell points if existed
+//            if (wrongCells.size() > 0) {
+//                JOptionPane.showConfirmDialog(null, 
+//                        "Cells containing data other than numbers" + 
+//                            System.getProperty("line.separator") + getWrongCellPointString(wrongCells),
+//                       "Sheet Cell Value Error", 
+//                       JOptionPane.PLAIN_MESSAGE, WARNING_MESSAGE);                      
+//            }
+//        }    
+//    }
 
     private static void readAffiliationLevels(Sheet sheet) {
         ODSReader objODSReader = new ODSReader();
@@ -175,7 +173,7 @@ public class ODSReader {
     final int MAX_BLANK_ROW = 5;
     private static boolean upperLevelMissingWarningNotGiven = true;
     
-    public void readODS(Sheet sheet, AffiliationBuildingForm parentForm)
+    public void readBuildingODS(Sheet sheet, Buildings parentForm)
     {
         //Getting the 0th sheet for manipulation| pass sheet name as string
         MutableCell cell = null;
@@ -185,10 +183,45 @@ public class ODSReader {
         int bldgSeqNo = 0;
         int buildingCount = 0, buildingReject = 0;
         int unitCount = 0, unitReject = 0;
+        int numBlankRow = 0;
+        
         //</editor-fold>
 
         for (int nRowIndex = 0; true; nRowIndex++)
         {
+            //<editor-fold defaultstate="collapsed" desc="-- finish loading or skip a row">              
+            // check if column 1 and 2 are empty, if so, consider it a blank row
+            if (aBlankRow(sheet, nRowIndex)) {
+                numBlankRow++;
+                if (numBlankRow > MAX_BLANK_ROW) {
+                    //<editor-fold desc="-- Process end of file marker">
+                    if (parentForm != null) {
+                        parentForm.loadBuilding(0, 0);
+                    }
+
+                    StringBuilder sb = new StringBuilder();
+
+                    sb.append(BLDG_ODS_RES_1.getContent());
+                    sb.append(System.getProperty("line.separator"));
+                    sb.append(BLDG_ODS_RES_2.getContent() + buildingCount);
+                    sb.append(System.getProperty("line.separator"));
+                    sb.append(BLDG_ODS_RES_3.getContent() + buildingReject);
+                    sb.append(System.getProperty("line.separator"));
+                    sb.append(BLDG_ODS_RES_4.getContent() + unitCount);
+                    sb.append(System.getProperty("line.separator"));
+                    sb.append(BLDG_ODS_RES_5.getContent() + unitReject);
+
+                    JOptionPane.showConfirmDialog(null, sb.toString(),
+                            ODS_CHECK_RESULT_TITLE.getContent(), 
+                            JOptionPane.PLAIN_MESSAGE, INFORMATION_MESSAGE);                            
+                    //</editor-fold>
+                    return;                    
+                } else {
+                    continue;
+                }
+            }      
+            //</editor-fold>                 
+            
             boolean rowDataStarted = false;
 
             //<editor-fold defaultstate="collapsed" desc="-- Iterate through each column">               
@@ -209,31 +242,32 @@ public class ODSReader {
                     rowDataStarted = true;
                     if (nColIndex == 0) {
                         //<editor-fold defaultstate="collapsed" desc="-- Process building number column ">
-                        if (cellValue.getValue() == NUM_END_MARKER) {
-                            //<editor-fold desc="-- Process end of sheet marker">
-                            if (parentForm != null) {
-                                parentForm.loadBuilding(0, 0);
-                            }
-                            
-                            StringBuilder sb = new StringBuilder();
-                            
-                            sb.append(BLDG_ODS_RES_1.getContent());
-                            sb.append(System.getProperty("line.separator"));
-                            sb.append(BLDG_ODS_RES_2.getContent() + buildingCount);
-                            sb.append(System.getProperty("line.separator"));
-                            sb.append(BLDG_ODS_RES_3.getContent() + buildingReject);
-                            sb.append(System.getProperty("line.separator"));
-                            sb.append(BLDG_ODS_RES_4.getContent() + unitCount);
-                            sb.append(System.getProperty("line.separator"));
-                            sb.append(BLDG_ODS_RES_5.getContent() + unitReject);
-                            
-                            JOptionPane.showConfirmDialog(null, sb.toString(),
-                                    ODS_CHECK_RESULT_TITLE.getContent(), 
-                                    JOptionPane.PLAIN_MESSAGE, INFORMATION_MESSAGE);                               
-                            //</editor-fold>
-                            return;
-                        }
-                        else {
+//                        if (cellValue.getValue() == NUM_END_MARKER) {
+//                            //<editor-fold desc="-- Process end of sheet marker">
+//                            if (parentForm != null) {
+//                                parentForm.loadBuilding(0, 0);
+//                            }
+//                            
+//                            StringBuilder sb = new StringBuilder();
+//                            
+//                            sb.append(BLDG_ODS_RES_1.getContent());
+//                            sb.append(System.getProperty("line.separator"));
+//                            sb.append(BLDG_ODS_RES_2.getContent() + buildingCount);
+//                            sb.append(System.getProperty("line.separator"));
+//                            sb.append(BLDG_ODS_RES_3.getContent() + buildingReject);
+//                            sb.append(System.getProperty("line.separator"));
+//                            sb.append(BLDG_ODS_RES_4.getContent() + unitCount);
+//                            sb.append(System.getProperty("line.separator"));
+//                            sb.append(BLDG_ODS_RES_5.getContent() + unitReject);
+//                            
+//                            JOptionPane.showConfirmDialog(null, sb.toString(),
+//                                    ODS_CHECK_RESULT_TITLE.getContent(), 
+//                                    JOptionPane.PLAIN_MESSAGE, INFORMATION_MESSAGE);                               
+//                            //</editor-fold>
+//                            return;
+//                        }
+//                        else 
+                        {
                             int result = insertBuilding(cellValue.getValue());
                             
                             if (result == ER_NO) {
@@ -254,7 +288,7 @@ public class ODSReader {
                     } else {
                         //<editor-fold defaultstate="collapsed" desc="-- Process unit number columns ">
                         if (goodBuilding) {
-                            int result = insertBuildingUnit(cellValue.getValue(), bldgSeqNo);
+                            int result = insertUnit(cellValue.getValue(), bldgSeqNo);
                             // try to insert unit number with the building sequence number
                             
                             if (result == ER_NO) {
@@ -342,6 +376,16 @@ public class ODSReader {
             //<editor-fold defaultstate="collapsed" desc="-- Iterate through each column">    
             for(int nColIndex = 0; true; nColIndex++)
             {
+                // check if column 1 and 2 are empty, if so, consider it a blank row
+                if (aBlankRow(sheet, nRowIndex)) {
+                    numBlankRow++;
+                    if (numBlankRow > MAX_BLANK_ROW) {
+                        break;
+                    } else {
+                        continue;
+                    }
+                }                
+                
                 try {
                     cell = sheet.getCellAt(nColIndex, nRowIndex);
                 } catch (Exception e) {
@@ -360,9 +404,10 @@ public class ODSReader {
                 } else {
                     rowDataStarted = true;
                     if (nColIndex == 0) {
-                        if (cellStr.toUpperCase().equals(DATA_END_MARKER)) {
-                            break loops;
-                        } else {
+//                        if (cellStr.toUpperCase().equals(DATA_END_MARKER)) {
+//                            break loops;
+//                        } else 
+                        {
                             level1_Total.setValue(level1_Total.getValue() + 1);
                         }
                     } else {
@@ -372,18 +417,7 @@ public class ODSReader {
             }
             //</editor-fold>
         }
-        if (numBlankRow > MAX_BLANK_ROW) {
-            // Give warning that data end(building number '-1') mark is missing
-            String dialogMessage = MISSING_END_1.getContent() + System.getProperty("line.separator") +  
-                    MISSING_END_2.getContent() + DATA_END_MARKER + MISSING_END_3.getContent();
-            
-            JOptionPane.showConfirmDialog(null, dialogMessage,
-                            READ_ODS_FAIL_DIALOGTITLE.getContent(),
-                            JOptionPane.PLAIN_MESSAGE, WARNING_MESSAGE);                
-            return false;
-        } else {
-            return true;
-        }
+        return true;
     }    
     
     public boolean checkODS(Sheet sheet, ArrayList<Point> wrongCells,
@@ -438,13 +472,14 @@ public class ODSReader {
             }
             //</editor-fold>
         }
-        if (numBlankRow > MAX_BLANK_ROW) {
-            // Give warning that data end(building number '-1') mark is missing
-            JOptionPane.showConfirmDialog(null, CHECK_BUILDING_ODS_DIALOG.getContent(), 
-                    READ_ODS_FAIL_DIALOGTITLE.getContent(), 
-                    JOptionPane.PLAIN_MESSAGE, WARNING_MESSAGE);                
-            return false;
-        } else {
+//        if (numBlankRow > MAX_BLANK_ROW) {
+//            // Give warning that data end(building number '-1') mark is missing
+//            JOptionPane.showConfirmDialog(null, CHECK_BUILDING_ODS_DIALOG.getContent(), 
+//                    READ_ODS_FAIL_DIALOGTITLE.getContent(), 
+//                    JOptionPane.PLAIN_MESSAGE, WARNING_MESSAGE);                
+//            return false;
+//        } else 
+        {
             if (wrongCells.size() > 0) {
                 return false;
             }
@@ -497,7 +532,7 @@ public class ODSReader {
         return true;
     }    
 
-    public void readAffiliationODS(Sheet sheet, AffiliationBuildingForm parentForm) {
+    public void readAffiliationODS(Sheet sheet, Affiliations parentForm) {
         //Getting the 0th sheet for manipulation| pass sheet name as string
         MutableCell cell = null;
 
@@ -506,10 +541,45 @@ public class ODSReader {
         int L1_no = 0;
         int level1Count = 0, level1Reject = 0;
         int level2Count = 0, level2Reject = 0;
+        int numBlankRow = 0;
         //</editor-fold>
 
         for (int nRowIndex = 0; true; nRowIndex++)
         {
+            //<editor-fold defaultstate="collapsed" desc="-- finish loading or skip a row">              
+            // check if column 1 and 2 are empty, if so, consider it a blank row
+            if (aBlankRow(sheet, nRowIndex)) {
+                numBlankRow++;
+                if (numBlankRow > MAX_BLANK_ROW) {
+                    //<editor-fold desc="-- Process end of file marker">
+                    if (parentForm != null) 
+                    {
+                        parentForm.loadLev1_Table(0, "");
+                    }
+
+                    StringBuilder sb = new StringBuilder();
+
+                    sb.append(AFFI_ODS_RES_1.getContent());
+                    sb.append(System.getProperty("line.separator"));
+                    sb.append(AFFI_ODS_RES_2.getContent() + level1Count);
+                    sb.append(System.getProperty("line.separator"));
+                    sb.append(AFFI_ODS_RES_3.getContent() + level1Reject);
+                    sb.append(System.getProperty("line.separator"));
+                    sb.append(AFFI_ODS_RES_4.getContent() + level2Count);
+                    sb.append(System.getProperty("line.separator"));
+                    sb.append(AFFI_ODS_RES_5.getContent() + level2Reject);
+
+                    JOptionPane.showConfirmDialog(null, sb.toString(),
+                            ODS_CHECK_RESULT_TITLE.getContent(), 
+                            JOptionPane.PLAIN_MESSAGE, INFORMATION_MESSAGE);                               
+                    //</editor-fold>
+                    return;                    
+                } else {
+                    continue;
+                }
+            }      
+            //</editor-fold>            
+            
             boolean rowDataStarted = false;
 
             //<editor-fold defaultstate="collapsed" desc="-- Iterate through each column">               
@@ -529,49 +599,22 @@ public class ODSReader {
                     rowDataStarted = true;
                     if (nColIndex == 0) {
                         //<editor-fold defaultstate="collapsed" desc="-- Process Level 1 affiliations ">
-                        if (cellStr.equals(DATA_END_MARKER)) {
-                            //<editor-fold desc="-- Process end of file marker">
-                            if (parentForm != null) 
-                            {
-                                parentForm.loadL1_Affiliation(0, "");
-                            }
+                        int result = insertLevel1Affiliation(cellStr);
 
-                            StringBuilder sb = new StringBuilder();
-                            
-                            sb.append(AFFI_ODS_RES_1.getContent());
-                            sb.append(System.getProperty("line.separator"));
-                            sb.append(AFFI_ODS_RES_2.getContent() + level1Count);
-                            sb.append(System.getProperty("line.separator"));
-                            sb.append(AFFI_ODS_RES_3.getContent() + level1Reject);
-                            sb.append(System.getProperty("line.separator"));
-                            sb.append(AFFI_ODS_RES_4.getContent() + level2Count);
-                            sb.append(System.getProperty("line.separator"));
-                            sb.append(AFFI_ODS_RES_5.getContent() + level2Reject);
-
-                            JOptionPane.showConfirmDialog(null, sb.toString(),
-                                    ODS_CHECK_RESULT_TITLE.getContent(), 
-                                    JOptionPane.PLAIN_MESSAGE, INFORMATION_MESSAGE);                               
-                            //</editor-fold>
-                            return;
-                        }
-                        else {
-                            int result = insertLevel1Affiliation(cellStr);
-                            
-                            if (result == ER_NO) {
-                                level1Count++;
+                        if (result == ER_NO) {
+                            level1Count++;
+                            goodLevel1 = true;
+                        } else {
+                            if (result == ER_DUP_ENTRY) {
                                 goodLevel1 = true;
-                            } else {
-                                if (result == ER_DUP_ENTRY) {
-                                    goodLevel1 = true;
-                                }
-                                level1Reject++;
                             }
+                            level1Reject++;
+                        }
 
-                            if (goodLevel1) {
-                                // considering the case of level 1 is duplicate and can't be inserted
-                                // it is safer to fetch key value in a completely seperated manner.
-                                L1_no = getLevel1_No(cellStr);
-                            }
+                        if (goodLevel1) {
+                            // considering the case of level 1 is duplicate and can't be inserted
+                            // it is safer to fetch key value in a completely seperated manner.
+                            L1_no = getLevel1_No(cellStr);
                         }
                         //</editor-fold>
                     } else {
@@ -683,7 +726,7 @@ public class ODSReader {
             int result = JOptionPane.showConfirmDialog(null, sb.toString(),
                     "Sheed Scan Result", JOptionPane.YES_NO_OPTION);            
             if (result == JOptionPane.YES_OPTION) {                
-                objODSReader.readODS(sheet, null);
+                objODSReader.readBuildingODS(sheet, null);
             } else {
                 System.exit(0);
             }

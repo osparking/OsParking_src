@@ -36,7 +36,7 @@ public class ControlEnums {
     public static OsPaLang osPaLang;
     
     public enum TopForms {
-        Vehicle, CarOwner, AffiBldg, Attendant, Settings
+        Vehicle, CarOwner, Affiliation, Building, Attendant, Settings
     }
    
     public enum OsPaLang{
@@ -146,6 +146,7 @@ public class ControlEnums {
         HELP_AFFILIATION("/affiliation_Kor.png", "/affiliation_Eng.png"),
         HELP_BUILDING("/building_Kor.png", "/building_Eng.png"),
         HELP_DRIVER("/drivers.png", "/driversEng.png"),
+        HELP_UNIT_ODS("/unit_helpKor.png", "/unit_helpEng.png"),
         HELP_VEHICLE("/vehicle_Kor.png", "/vehicle_Eng.png"),
         UNIT_DEL_1("다음 호실(번호)을 삭제합니까?", "Want to delete the following unit?"),
         UNIT_DEL_2(" -호실 번호: ", " -Unit No.: "),
@@ -175,6 +176,8 @@ public class ControlEnums {
         LOGIN_FRAME_TITLE("주차관리 로그인", "Attendant Login"),
         ATTLIST_FRAME_TITLE("사용자 정보관리", "Login ID Management"),
         AFFILI_BUILD_FRAME_TITLE("소속 및 건물", "Affiliation and Building"),
+        AFFILIATION_FRAME_TITLE("소속 관리", "Manage Affiliations"),
+        BUILDING_FRAME_TITLE("건물 관리", "Manage Buildings"),
         VEHICLESFORM_FRAME_TITLE("차량 등록 관리", "Vehicle Registration"),
         DRIVER_SELECTION_FRAME_TITLE("차주 선택", "Select Driver"),
         DRIVER_LIST_FRAME_TITLE("차주 목록", "Driver List"),
@@ -260,9 +263,9 @@ public class ControlEnums {
         MY_PW_LABEL("비밀번호",  "Password"),
         CREATION_LABEL("자료 생성일",  "Creation Date"),
         AFFILIATION_LIST_LABEL("상위 소속 목록",  "Higher Affiliations"),
-        LOWER_LIST_LABEL("소속 부서 목록",  "Lower Affiliations"),
+        LOWER_LIST_LABEL("부서 목록",  "Subdivisions"),
         BUILDING_LIST_LABEL("건물(동) 목록",  "Building Numbers"), 
-        ROOM_LIST_LABEL("호실 목록",  "Rooms of Building"), 
+        UNIT_COL_COUNT_LABEL("호실 목록 폭",  "Unit Column Count"), 
         HELP_AFFIL_LABEL("소속 명칭 ods 파일 형식",  "Affiliation name list ods file content"), 
         HELP_BUILDING_LABEL("건물 호실 ods 파일 형식", "Building room number list ods file content"), 
         HELP_DRIVER_TITLE("차주 ods 파일 형식", "Driver list ods file content"), 
@@ -450,6 +453,7 @@ public class ControlEnums {
         CREATE_BTN("생성(R)", "Create"),
         DELETE_BTN("삭제(D)", "Delete"),
         MODIFY_BTN("수정(M)", "Modify"),
+        SELECT_BTN("선택(S)", "Select"),
         CANCEL_BTN("취소(C)", "Cancel"),
         SEARCH_BTN("검색(S)", "Search"),
         SAVE_AS_BTN("파일저장(A)", "Save As"),
@@ -510,6 +514,7 @@ public class ControlEnums {
     }
 
     public enum FormModeString {  
+        FETCH("조회", "Examine"),
         SEARCH("검색 ", "Searching"),
         MODIFY("수정", "Modifying"),
         CREATE("생성", "Creating");
@@ -550,6 +555,8 @@ public class ControlEnums {
         AFFILI2_DIAG_L3(" - 소속 상위 부서 : ", " - Higher affiliation : "),
         AFFILI_DEL_L1("다음 소속 및 그 하위 소속을 삭제합니까?", 
                 "Want to delete below higher and lower affiliations?"),
+        AFFILI_DEL_L2("다음 하위 소속을 삭제합니까?", 
+                "Want to delete lower affiliation below?"),
         
         AFFILI_ODS_DIAG_1("소속 자료 식별 건수입니다. 로딩을 계속합니까?", 
                 "Recognized Affiliation Names Count. Continue to Load?"),
@@ -564,6 +571,8 @@ public class ControlEnums {
         
         BLDG_DIAG_L1("다음 건물 번호를 변경합니까?", "Want to change below building number?"),
         BLDG_DIAG_L2("건물 번호 : ", "Building No.: "),
+        BLDG_DIAG_L21(" -건물 번호: ", " -Building No.: "),
+        
         BLDG_DIAG_L3("(소속 호실 수: ", "(Number of rooms : "),
         
         UNIT_DIAG_L1("다음 호실 번호를 변경합니까?", "Change below room number?"),
@@ -576,6 +585,7 @@ public class ControlEnums {
         
         AFFILI_DEL_RESULT("소속 삭제 성공!", "Successful affiliation deletion!"),
         BLDG_DEL_RESULT("건물 삭제 성공!", "Successful building deletion!"),
+        BLDG_DEL_FAIL("다음 건물 삭제에 실패하였습니다", "Building Deletion Failure."),
         
         ASK_LOGOUT(", 로그아웃 원하십니까?", ", do you want to log out?"),
         AVERAGE_WORDS(" 대 평균 통과시간: ", " car passing delay average: "),
@@ -699,6 +709,7 @@ public class ControlEnums {
         ORDER_HEADER("순번", "Order"),
         HIGHER_HEADER("상위 소속", "Higher Affili'"),
         LOWER_HEADER("하위 소속", "Lower Affili'"),
+        LOWER_COL_TITLE("부서 명칭", "Sub-division"),
         BUILDING_HEADER("건물 번호", "Building"),
         ROOM_HEADER("호실 번호", "Room No."),
         HIGHER_HEADER_SC("<html>상위 소속(<u>H</u>)</html>", "Higher Affili'"),
@@ -844,6 +855,8 @@ public class ControlEnums {
                 "모든 차량 정보가 삭제되었습니다.", "All Vehicles are Deleted"),
         VEHICLE_SAVE_ODS_FAIL_DIALOG(
                 "저장할 차량 목록이 없습니다.", "No vehicle list to save!"),
+        AFFILI_SAVE_ODS_FAIL_DIALOG(
+                "저장할 소속 목록이 없습니다.", "Empty affiliation list can't be saved!"),
         DRIVER_SAVE_ODS_FAIL_DIALOG(
                 "저장할 차주 목록이 없습니다.", "Empty driver list can't be saved!"),
         ARRIVAL_SAVE_ODS_FAIL_DIALOG(
@@ -1090,12 +1103,16 @@ public class ControlEnums {
         SAVE_OVERWRITE_DIALOG(
                 "이 파일에 덮어 쓰겠습니까?", "Do you want to overwrite it?"),
         AUTO_LOGOUT("이 자동 로그아웃 됨!", " is forced to log out!"),
-        EMPTY_HIGH_AFFILI("상위 소속 명칭이 빈 문자열입니다.", "Empty high level affiliation error."),
-        EMPTY_LOW_AFFILI("하위 부서 명칭이 빈 문자열입니다.", "Empty low level affiliation error."),
+        EMPTY_HIGH_AFFILI("빈 문자열은 상위 소속이 될 수 없습니다.", "Empty high level affiliation error."),
+        EMPTY_BUILDING("빈 문자열은 건물 번호가 될 수 없습니다.", "Empty building number error."),
+        EMPTY_UNIT("빈 문자열은 호실 번호가 될 수 없습니다.", "Empty unit number error."),
+        EMPTY_LOW_AFFILI("빈 문자열은 하위 소속이 될 수 없습니다.", "Empty low level affiliation error."),
         DUPLICATE_HIGH_AFFILI("중복되는 상위 소속 : ", "Duplicate high level affiliation : "),
+        DUPLICATE_HIGH_AFFILI2(" : 중복 상위 소속은 생성될 수 없습니다.", "Duplicate high level affiliation : "),
         DUPLICATE_LOW_AFFILI("중복되는 하위 소속 : ", "Duplicate low level affiliation : "),
-        DUPLICATE_BUILDING("중복되는 건물 번호 : ", "Duplicate building number : "),
-        DUPLICATE_UNIT("중복되는 호실 번호 : ", "Duplicate unit number : "),
+        DUPLICATE_LOW_AFFILI2(" : 중복 하위 소속은 생성될 수 없습니다.", "Duplicate low level affiliation : "),
+        DUPLICATE_BUILDING(" : 중복되는 건물은 생성될 수 없습니다.", "Duplicate building number : "),
+        DUPLICATE_UNIT(" : 중복되는 호실은 생성될 수 없습니다.", "Duplicate unit number : "),
          
         OSPARKING_STOPS("오즈파킹 가동이 종료됨.", "OsParking operation finishes."),
         REBOOT_MESSAGE("중요 설정이 변경되어," + System.getProperty("line.separator") +
@@ -1410,12 +1427,13 @@ public class ControlEnums {
     public enum MenuITemTypes{
         RECORD_MENU("각종기록", "Records"),
         ARRIVAL_MENU_ITEM("도착기록", "Arrival"),
-        BOOTING_MENU_ITEM("실행기록", "Booting"),
+        BOOTING_MENU_ITEM("실행기록", "Sys' Run"),
         LOGIN_RECORD_MENU_ITEM("로그인기록", "Login"),
         VEHICLE_MENU("<HTML>차량\u22C5차주</HTML>", "<HTML>Car\u22C5Owner</HTML>"),
         VEHICLE_MANAGE_MENU_ITEM("차량관리", "Vehicle"),
         DRIVERS_MENU_ITEM("차주관리", "Driver"),
-        AFFILIATION_MENU("<HTML>소속\u22C5건물</HTML>", "<HTML>Affili\u22C5Bldg</HTML>"),
+        AFFILIATION_MENU_ITEM("소속관리", "Affiliation</HTML>"),
+        BUILDING_MENU_ITEM("건물관리", "Building"),
         AFFILIATION_ITEM("목록관리", "Manage List"),
         USERS_ITEM("사용자", "Users"),
         SYSTEM_MENU("시스템", "System"),
