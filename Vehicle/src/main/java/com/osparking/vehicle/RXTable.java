@@ -162,22 +162,28 @@ public class RXTable extends JTable //implements TableModelListener
 //
 //  Overridden methods
 //
+    public boolean isCellEditable(int rowIndex, int colIndex) {
+        return cellEditable;
+    }    
+    
+    private boolean cellEditable = false;
+    
 	/*
 	 *  Override to provide Select All editing functionality
 	 */
-	public boolean editCellAt(int row, int column, EventObject e)
-	{
-		boolean result = super.editCellAt(row, column, e);
-
-		if (isSelectAllForMouseEvent
-		||  isSelectAllForActionEvent
-		||  isSelectAllForKeyEvent)
-		{
-			selectAll(e);
-		}
-
-		return result;
-	}
+//	public boolean editCellAt(int row, int column, EventObject e)
+//	{
+//		boolean result = super.editCellAt(row, column, e);
+//
+//		if (isSelectAllForMouseEvent
+//		||  isSelectAllForActionEvent
+//		||  isSelectAllForKeyEvent)
+//		{
+//			selectAll(e);
+//		}
+//
+//		return result;
+//	}
 
 	/*
 	 * Select the text when editing on a text related cell is started
@@ -308,6 +314,13 @@ public class RXTable extends JTable //implements TableModelListener
      */
     public void setTableType(TableType tableType) {
         this.tableType = tableType;
+    }
+
+    /**
+     * @param cellEditable the cellEditable to set
+     */
+    public void setCellEditable(boolean cellEditable) {
+        this.cellEditable = cellEditable;
     }
 
 }  // End of Class RXTable

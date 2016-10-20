@@ -158,6 +158,7 @@ import com.osparking.vehicle.driver.ODSReader;
 import static com.osparking.vehicle.driver.ODSReader.getWrongCellPointString;
 import java.awt.Color;
 import static java.awt.Color.black;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Rectangle;
@@ -165,6 +166,7 @@ import java.awt.event.ItemEvent;
 import static java.awt.event.ItemEvent.SELECTED;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.im.InputContext;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -194,6 +196,7 @@ import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
@@ -209,6 +212,9 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     private FormMode formMode = NormalMode;
     private int[] prevSelection = new int[4];
     IMainGUI mainForm = null;
+    
+    private boolean affiliL1Editable = false;
+    
     /**
      * Creates new form BuildingManageFrame
      */
@@ -227,6 +233,14 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
         this.getContentPane().setBackground(PopUpBackground);       
         adjustTables();
         adminOperationEnabled(true, deleteAll_Affiliation, ODSAffiliHelp, sampleButton, readSheet);
+        
+        /**
+         * Set default fonts for Korean columns.
+         */
+        L1_Affiliation.getColumnModel().getColumn(1).setCellEditor(
+                new TableCellEditorKor(KOREAN, L1_Affiliation.getFont()));
+        L2_Affiliation.getColumnModel().getColumn(1).setCellEditor(
+                new TableCellEditorKor(KOREAN, L2_Affiliation.getFont()));
         
         /**
          * Add table model listener to process 'enter key' for affiliation tables.
@@ -308,13 +322,17 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
             if (affiliTable == L1_Affiliation) {
                 loadL1_Affiliation(-1, affiliName); // Refresh higher affiliation list
             } else if (affiliTable == L2_Affiliation) {
+                int index = L1_Affiliation.convertRowIndexToModel(L1_Affiliation.getSelectedRow());
+                Object L1_no = L1_Affiliation.getModel().getValueAt(index, 2);
                 
+                loadL2_Affiliation(L1_no, 0, "");
             }
         }         
     }
     
     private void insertAffiliation(JTable table, JButton cancelButton, 
-            DialogMessages diagMsg, TableType tableType) {
+            DialogMessages diagMsg, TableType tableType) 
+    {
         int rowIndex = table.convertRowIndexToModel (table.getSelectedRow());
         TableModel model = table.getModel();
         String affiliName = ((String)model.getValueAt(rowIndex, 1)).trim();
@@ -398,7 +416,11 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
         topLeft = new javax.swing.JPanel();
         affiTopTitle = new javax.swing.JLabel();
         scrollTopLeft = new javax.swing.JScrollPane();
-        L1_Affiliation = new RXTable(L1_TABLE);
+        L1_Affiliation = new JTable(){
+            public boolean isCellEditable(int rowIndex, int colIndex) {
+                return affiliL1Editable;
+            }
+        };
         affiliTopRight = new javax.swing.JPanel();
         radioPanel1 = new javax.swing.JPanel();
         affiL1_Control = new javax.swing.JRadioButton();
@@ -627,18 +649,205 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
         scrollTopLeft.setMinimumSize(new java.awt.Dimension(24, 140));
         scrollTopLeft.setPreferredSize(new java.awt.Dimension(200, 140));
 
-        ((RXTable)L1_Affiliation).setSelectAllForEdit(true);
+        //((KorTable)L1_Affiliation).setSelectAllForEdit(true);
         L1_Affiliation.setAutoCreateRowSorter(true);
         L1_Affiliation.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        L1_Affiliation.setModel(new javax.swing.table.DefaultTableModel(
+        L1_Affiliation.setModel(
+            new javax.swing.table.DefaultTableModel(
+                new Object [][] {
+                    {1, "Janitor's Office", 2},
+                    {2, "Engineering Bldg", 1}
+                },
+                new String[]{
+                    ORDER_HEADER.getContent(), HIGHER_HEADER.getContent(), "L1_NO"}
+            )
+            {
+                @Override
+                public Class<?> getColumnClass(int columnIndex) {
+                    if (columnIndex == 0)
+                    return Integer.class;
+                    else
+                    return String.class;
+                }
+            }
+        );
+        ((DefaultTableCellRenderer)L1_Affiliation.getTableHeader().getDefaultRenderer())
+        .setHorizontalAlignment(JLabel.CENTER);
+        L1_Affiliation.setDoubleBuffered(true);
+        L1_Affiliation.setName("L1_Affiliation"); // NOI18N
+        L1_Affiliation.setRowHeight(tableRowHeight);
+        L1_Affiliation.setSelectionBackground(DARK_BLUE);
+        L1_Affiliation.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        L1_Affiliation.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                L1_AffiliationFocusLost(evt);
+            }
+        });
+        scrollTopLeft.setViewportView(L1_Affiliation);
+
+        topLeft.add(scrollTopLeft, java.awt.BorderLayout.CENTER);
+
+        affiliTopRight.setMinimumSize(new Dimension(buttonWidthNorm, L1_Affiliation.getSize().height));
+        affiliTopRight.setPreferredSize(new Dimension(buttonWidthNorm, L1_Affiliation.getSize().height));
+        affiliTopRight.setLayout(new java.awt.GridBagLayout());
+
+        radioPanel1.setBackground(new java.awt.Color(255, 204, 255));
+        radioPanel1.setMaximumSize(new Dimension(buttonWidthNorm - 10, buttonHeightNorm - 10));
+        radioPanel1.setMinimumSize(new Dimension(buttonWidthNorm - 10, buttonHeightNorm - 10));
+        radioPanel1.setPreferredSize(new Dimension(buttonWidthNorm - 10, buttonHeightNorm - 10));
+        radioPanel1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                radioPanel1MouseClicked(evt);
+            }
+        });
+
+        fourPanels.add(affiL1_Control);
+        affiL1_Control.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        affiL1_Control.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                affiL1_ControlItemStateChanged(evt);
+            }
+        });
+
+        javax.swing.GroupLayout radioPanel1Layout = new javax.swing.GroupLayout(radioPanel1);
+        radioPanel1.setLayout(radioPanel1Layout);
+        radioPanel1Layout.setHorizontalGroup(
+            radioPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 10, Short.MAX_VALUE)
+            .addGroup(radioPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(radioPanel1Layout.createSequentialGroup()
+                    .addGap(0, 0, Short.MAX_VALUE)
+                    .addComponent(affiL1_Control)
+                    .addGap(0, 0, Short.MAX_VALUE)))
+        );
+        radioPanel1Layout.setVerticalGroup(
+            radioPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 21, Short.MAX_VALUE)
+            .addGroup(radioPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(radioPanel1Layout.createSequentialGroup()
+                    .addGap(0, 0, Short.MAX_VALUE)
+                    .addComponent(affiL1_Control)
+                    .addGap(0, 0, Short.MAX_VALUE)))
+        );
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        affiliTopRight.add(radioPanel1, gridBagConstraints);
+
+        insertL1_Button.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        insertL1_Button.setMnemonic('R');
+        insertL1_Button.setText(CREATE_BTN.getContent());
+        insertL1_Button.setEnabled(false);
+        insertL1_Button.setMaximumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
+        insertL1_Button.setMinimumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
+        insertL1_Button.setPreferredSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
+        insertL1_Button.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                insertL1_ButtonActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.PAGE_START;
+        affiliTopRight.add(insertL1_Button, gridBagConstraints);
+
+        modifyL1_Button.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        modifyL1_Button.setMnemonic('M');
+        modifyL1_Button.setText(MODIFY_BTN.getContent());
+        modifyL1_Button.setEnabled(false);
+        modifyL1_Button.setMaximumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
+        modifyL1_Button.setMinimumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
+        modifyL1_Button.setPreferredSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
+        modifyL1_Button.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                modifyL1_ButtonActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.PAGE_START;
+        affiliTopRight.add(modifyL1_Button, gridBagConstraints);
+
+        deleteL1_Button.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        deleteL1_Button.setMnemonic('D');
+        deleteL1_Button.setText(DELETE_BTN.getContent());
+        deleteL1_Button.setEnabled(false);
+        deleteL1_Button.setMaximumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
+        deleteL1_Button.setMinimumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
+        deleteL1_Button.setPreferredSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
+        deleteL1_Button.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deleteL1_ButtonActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.PAGE_START;
+        affiliTopRight.add(deleteL1_Button, gridBagConstraints);
+
+        cancelL1_Button.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        cancelL1_Button.setMnemonic('C');
+        cancelL1_Button.setText(CANCEL_BTN.getContent());
+        cancelL1_Button.setEnabled(false);
+        cancelL1_Button.setMaximumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
+        cancelL1_Button.setMinimumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
+        cancelL1_Button.setPreferredSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
+        cancelL1_Button.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cancelL1_ButtonActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.PAGE_START;
+        affiliTopRight.add(cancelL1_Button, gridBagConstraints);
+
+        topLeft.add(affiliTopRight, java.awt.BorderLayout.EAST);
+
+        affiliationPanel.add(topLeft);
+        affiliationPanel.add(filler6);
+
+        botLeft.setMinimumSize(new java.awt.Dimension(83, 160));
+        botLeft.setPreferredSize(new java.awt.Dimension(588, 168));
+        botLeft.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                botLeftMouseClicked(evt);
+            }
+        });
+        botLeft.setLayout(new java.awt.BorderLayout(10, 0));
+
+        affiBotTitle.setFont(new java.awt.Font(font_Type, font_Style, head_font_Size));
+        affiBotTitle.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        affiBotTitle.setText(LOWER_LIST_LABEL.getContent());
+        affiBotTitle.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                affiBotTitleMouseClicked(evt);
+            }
+        });
+        botLeft.add(affiBotTitle, java.awt.BorderLayout.NORTH);
+
+        scrollBotLeft.setMaximumSize(new java.awt.Dimension(32767, 300));
+        scrollBotLeft.setMinimumSize(new java.awt.Dimension(24, 140));
+        scrollBotLeft.setPreferredSize(new java.awt.Dimension(200, 140));
+
+        ((RXTable)L2_Affiliation).setSelectAllForEdit(true);
+        L2_Affiliation.setAutoCreateRowSorter(true);
+        L2_Affiliation.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        L2_Affiliation.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {1, "Janitor's Office", 2},
-                {2, "Engineering Bldg", 1}
+                {1, "Group 1", 3},
+                {2, "Group 2", 4}
             },
-            new String[]{
+            new String [] {
                 ORDER_HEADER.getContent(),
-                HIGHER_HEADER.getContent(),
-                "L1_NO"
+                LOWER_HEADER.getContent(),
+                "PARTY_NO"
             }
         )
         {
@@ -657,202 +866,6 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
                 return String.class;
             }
         }
-    );
-    ((DefaultTableCellRenderer)L1_Affiliation.getTableHeader().getDefaultRenderer())
-    .setHorizontalAlignment(JLabel.CENTER);
-    L1_Affiliation.setDoubleBuffered(true);
-    L1_Affiliation.setName("L1_Affiliation"); // NOI18N
-    L1_Affiliation.setRowHeight(tableRowHeight);
-    L1_Affiliation.setSelectionBackground(DARK_BLUE);
-    L1_Affiliation.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-    L1_Affiliation.addFocusListener(new java.awt.event.FocusAdapter() {
-        public void focusLost(java.awt.event.FocusEvent evt) {
-            L1_AffiliationFocusLost(evt);
-        }
-    });
-    scrollTopLeft.setViewportView(L1_Affiliation);
-
-    topLeft.add(scrollTopLeft, java.awt.BorderLayout.CENTER);
-
-    affiliTopRight.setMinimumSize(new Dimension(buttonWidthNorm, L1_Affiliation.getSize().height));
-    affiliTopRight.setPreferredSize(new Dimension(buttonWidthNorm, L1_Affiliation.getSize().height));
-    affiliTopRight.setLayout(new java.awt.GridBagLayout());
-
-    radioPanel1.setBackground(new java.awt.Color(255, 204, 255));
-    radioPanel1.setMaximumSize(new Dimension(buttonWidthNorm - 10, buttonHeightNorm - 10));
-    radioPanel1.setMinimumSize(new Dimension(buttonWidthNorm - 10, buttonHeightNorm - 10));
-    radioPanel1.setPreferredSize(new Dimension(buttonWidthNorm - 10, buttonHeightNorm - 10));
-    radioPanel1.addMouseListener(new java.awt.event.MouseAdapter() {
-        public void mouseClicked(java.awt.event.MouseEvent evt) {
-            radioPanel1MouseClicked(evt);
-        }
-    });
-
-    fourPanels.add(affiL1_Control);
-    affiL1_Control.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-    affiL1_Control.addItemListener(new java.awt.event.ItemListener() {
-        public void itemStateChanged(java.awt.event.ItemEvent evt) {
-            affiL1_ControlItemStateChanged(evt);
-        }
-    });
-
-    javax.swing.GroupLayout radioPanel1Layout = new javax.swing.GroupLayout(radioPanel1);
-    radioPanel1.setLayout(radioPanel1Layout);
-    radioPanel1Layout.setHorizontalGroup(
-        radioPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-        .addGap(0, 10, Short.MAX_VALUE)
-        .addGroup(radioPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(radioPanel1Layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(affiL1_Control)
-                .addGap(0, 0, Short.MAX_VALUE)))
-    );
-    radioPanel1Layout.setVerticalGroup(
-        radioPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-        .addGap(0, 21, Short.MAX_VALUE)
-        .addGroup(radioPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(radioPanel1Layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(affiL1_Control)
-                .addGap(0, 0, Short.MAX_VALUE)))
-    );
-
-    gridBagConstraints = new java.awt.GridBagConstraints();
-    gridBagConstraints.gridx = 0;
-    gridBagConstraints.gridy = 0;
-    affiliTopRight.add(radioPanel1, gridBagConstraints);
-
-    insertL1_Button.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-    insertL1_Button.setMnemonic('R');
-    insertL1_Button.setText(CREATE_BTN.getContent());
-    insertL1_Button.setEnabled(false);
-    insertL1_Button.setMaximumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
-    insertL1_Button.setMinimumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
-    insertL1_Button.setPreferredSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
-    insertL1_Button.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent evt) {
-            insertL1_ButtonActionPerformed(evt);
-        }
-    });
-    gridBagConstraints = new java.awt.GridBagConstraints();
-    gridBagConstraints.gridx = 0;
-    gridBagConstraints.gridy = 1;
-    gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
-    gridBagConstraints.anchor = java.awt.GridBagConstraints.PAGE_START;
-    affiliTopRight.add(insertL1_Button, gridBagConstraints);
-
-    modifyL1_Button.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-    modifyL1_Button.setMnemonic('M');
-    modifyL1_Button.setText(MODIFY_BTN.getContent());
-    modifyL1_Button.setEnabled(false);
-    modifyL1_Button.setMaximumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
-    modifyL1_Button.setMinimumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
-    modifyL1_Button.setPreferredSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
-    modifyL1_Button.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent evt) {
-            modifyL1_ButtonActionPerformed(evt);
-        }
-    });
-    gridBagConstraints = new java.awt.GridBagConstraints();
-    gridBagConstraints.gridx = 0;
-    gridBagConstraints.gridy = 2;
-    gridBagConstraints.anchor = java.awt.GridBagConstraints.PAGE_START;
-    affiliTopRight.add(modifyL1_Button, gridBagConstraints);
-
-    deleteL1_Button.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-    deleteL1_Button.setMnemonic('D');
-    deleteL1_Button.setText(DELETE_BTN.getContent());
-    deleteL1_Button.setEnabled(false);
-    deleteL1_Button.setMaximumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
-    deleteL1_Button.setMinimumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
-    deleteL1_Button.setPreferredSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
-    deleteL1_Button.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent evt) {
-            deleteL1_ButtonActionPerformed(evt);
-        }
-    });
-    gridBagConstraints = new java.awt.GridBagConstraints();
-    gridBagConstraints.gridx = 0;
-    gridBagConstraints.gridy = 3;
-    gridBagConstraints.anchor = java.awt.GridBagConstraints.PAGE_START;
-    affiliTopRight.add(deleteL1_Button, gridBagConstraints);
-
-    cancelL1_Button.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-    cancelL1_Button.setMnemonic('C');
-    cancelL1_Button.setText(CANCEL_BTN.getContent());
-    cancelL1_Button.setEnabled(false);
-    cancelL1_Button.setMaximumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
-    cancelL1_Button.setMinimumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
-    cancelL1_Button.setPreferredSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
-    cancelL1_Button.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent evt) {
-            cancelL1_ButtonActionPerformed(evt);
-        }
-    });
-    gridBagConstraints = new java.awt.GridBagConstraints();
-    gridBagConstraints.gridx = 0;
-    gridBagConstraints.gridy = 4;
-    gridBagConstraints.anchor = java.awt.GridBagConstraints.PAGE_START;
-    affiliTopRight.add(cancelL1_Button, gridBagConstraints);
-
-    topLeft.add(affiliTopRight, java.awt.BorderLayout.EAST);
-
-    affiliationPanel.add(topLeft);
-    affiliationPanel.add(filler6);
-
-    botLeft.setMinimumSize(new java.awt.Dimension(83, 160));
-    botLeft.setPreferredSize(new java.awt.Dimension(588, 168));
-    botLeft.addMouseListener(new java.awt.event.MouseAdapter() {
-        public void mouseClicked(java.awt.event.MouseEvent evt) {
-            botLeftMouseClicked(evt);
-        }
-    });
-    botLeft.setLayout(new java.awt.BorderLayout(10, 0));
-
-    affiBotTitle.setFont(new java.awt.Font(font_Type, font_Style, head_font_Size));
-    affiBotTitle.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-    affiBotTitle.setText(LOWER_LIST_LABEL.getContent());
-    affiBotTitle.addMouseListener(new java.awt.event.MouseAdapter() {
-        public void mouseClicked(java.awt.event.MouseEvent evt) {
-            affiBotTitleMouseClicked(evt);
-        }
-    });
-    botLeft.add(affiBotTitle, java.awt.BorderLayout.NORTH);
-
-    scrollBotLeft.setMaximumSize(new java.awt.Dimension(32767, 300));
-    scrollBotLeft.setMinimumSize(new java.awt.Dimension(24, 140));
-    scrollBotLeft.setPreferredSize(new java.awt.Dimension(200, 140));
-
-    ((RXTable)L2_Affiliation).setSelectAllForEdit(true);
-    L2_Affiliation.setAutoCreateRowSorter(true);
-    L2_Affiliation.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-    L2_Affiliation.setModel(new javax.swing.table.DefaultTableModel(
-        new Object [][] {
-            {1, "Group 1", 3},
-            {2, "Group 2", 4}
-        },
-        new String [] {
-            ORDER_HEADER.getContent(),
-            LOWER_HEADER.getContent(),
-            "PARTY_NO"
-        }
-    )
-    {
-        public boolean isCellEditable(int row, int column)
-        {
-            if (column == 0)
-            return false;
-            else
-            return true;
-        }
-        @Override
-        public Class<?> getColumnClass(int columnIndex) {
-            if (columnIndex == 0)
-            return Integer.class;
-            else
-            return String.class;
-        }
-    }
     );
     ((DefaultTableCellRenderer)L2_Affiliation.getTableHeader().getDefaultRenderer())
     .setHorizontalAlignment(JLabel.CENTER);
@@ -2093,7 +2106,8 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     }//GEN-LAST:event_modifyL1_ButtonActionPerformed
 
     private void prepareModifyingAffiBldg(JTable table, JButton modifyBtn, JButton cancelBtn) {
-        TableType tableType = ((RXTable)table).getTableType();
+//        TableType tableType = ((KorTable)table).getTableType();
+        TableType tableType = L1_TABLE;
         int rowIndex = table.getSelectedRow();
         int model_index = table.convertRowIndexToModel(rowIndex);
         
@@ -2122,16 +2136,36 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
         }
         
         if (result == JOptionPane.YES_OPTION) {
-            if (tableType == L1_TABLE || tableType == L2_TABLE) {
-                table.getColumnModel().getColumn(1).setCellEditor(new MyTableCellEditor(KOREAN));
-            }
-
-            table.editCellAt(rowIndex, 1);
-            table.getEditorComponent().requestFocus();
-
             setFormMode(FormMode.UpdateMode);
             modifyBtn.setEnabled(false);
             cancelBtn.setEnabled(true);    
+            
+//            ((KorTable)table).setCellEditable(true);
+            setAffiliL1Editable(true);
+            
+            TableCellEditor editor = table.getCellEditor(rowIndex, 1);
+            Object value = table.getModel().getValueAt(rowIndex, 1);
+            
+            Component compo = editor.getTableCellEditorComponent(table, value, false, rowIndex, 1);
+            compo.requestFocus();
+//            Character.Subset[] subset = new Character.Subset[1];
+//            subset[0] = Character.UnicodeBlock.HANGUL_SYLLABLES;
+//            table.getInputContext().setCharacterSubsets(subset);
+            
+            if (table.editCellAt(rowIndex, 1)) {
+                table.getEditorComponent().requestFocus();
+                
+                InputContext inCxt = table.getEditorComponent().getInputContext();
+                Character.Subset[] subset = new Character.Subset[1];
+
+                subset[0] = Character.UnicodeBlock.HANGUL_SYLLABLES;
+                inCxt.setCharacterSubsets(subset);                
+                
+//                Object localeObj = table.getInputContext().
+                TableCellEditor edtr = table.getCellEditor(rowIndex, 1);
+                int i = 9;
+            }
+
         }
     }
     
@@ -2261,8 +2295,9 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
         
         //<editor-fold desc="-- Change selected panel border">
         if (selected) {
-            currTable = ((RXTable)table).getTableType();
-            switch (((RXTable)table).getTableType()) {
+            currTable = L1_TABLE;
+//            currTable = ((KorTable)table).getTableType();
+            switch (currTable) {
                 case L1_TABLE:
                     topLeft.setBorder(new SoftBevelBorder(BevelBorder.RAISED));
                     affiTopTitle.setForeground(pointColor);
@@ -2283,7 +2318,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
                     break;
             }
         } else {
-            switch (((RXTable)table).getTableType()) {
+            switch (((KorTable)table).getTableType()) {
                 case L1_TABLE:
                     topLeft.setBorder(null);
                     affiTopTitle.setForeground(black);
@@ -2334,7 +2369,8 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
         }
         table.setEnabled(selected);
         if (selected) {
-            workPanelName.setText(((RXTable)table).getTableType().getContent());
+//            workPanelName.setText(((KorTable)table).getTableType().getContent());
+            workPanelName.setText("dontknow");
         }
     }
     
@@ -3128,8 +3164,9 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     private void addClickEventListener(JTable table) {
         table.addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent me) {
-                RXTable table =(RXTable) me.getSource();
+                KorTable table =(KorTable) me.getSource();
                 Point p = me.getPoint();
+                
                 if (table.columnAtPoint(p) == 0) {
                     selectRadioButtonFor(table.getTableType());
                 } else {
@@ -3293,12 +3330,12 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     private void changeRadioButtonsEnabled(boolean b) {
         affiL1_Control.setEnabled(b);
         changeControlEnabledForTable(L1_TABLE);
-        affiL2_Control.setEnabled(b);
-        changeControlEnabledForTable(L2_TABLE);
-        buildingControl.setEnabled(b);
-        changeControlEnabledForTable(Building);
-        unitControl.setEnabled(b);
-        changeControlEnabledForTable(UnitTab);
+//        affiL2_Control.setEnabled(b);
+//        changeControlEnabledForTable(L2_TABLE);
+//        buildingControl.setEnabled(b);
+//        changeControlEnabledForTable(Building);
+//        unitControl.setEnabled(b);
+//        changeControlEnabledForTable(UnitTab);
     }
 
     private void changeBottomButtonsEnbled(boolean b) {
@@ -3403,82 +3440,82 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
             table.setRowSelectionInterval(0, 0);
         }
     }
-
-    private void prepareModification(JTable table, JButton modifyButton, JButton cancelButton) 
-    {
-        int rowIndex = table.getSelectedRow();
-        
-        if (table.editCellAt(rowIndex, 1))
-        {
-            table.getEditorComponent().requestFocus();
-            
-            int model_index = table.convertRowIndexToModel(rowIndex);
-            TableModel model = table.getModel();
-
-            //<editor-fold desc="-- Save previous record field value">
-            switch(((RXTable)table).getTableType()) {
-                case Building:
-                    prevBldgNo = model.getValueAt(model_index, 1);
-                    break;
-                case UnitTab:
-                    prevUnitNo = model.getValueAt(model_index, 1);
-                    break;
-                default:
-                    break;
-            }
-            //</editor-fold>
-            
-            if (model.getValueAt(model_index, 0) != null)
-            {
-//                String dialogTitle = null;
-//                String dialog = "";
-//                TableType tableType = ((RXTable)table).getTableType();
-
-                //<editor-fold desc="-- Make dialog title and content">
-//                switch (tableType) {
-//                        
-//                    case UnitTab:
-//                        int bIndex = BuildingTable.convertRowIndexToModel(
-//                                BuildingTable.getSelectedRow());
-//                        int bldgNo = (Integer)BuildingTable.getModel().getValueAt(bIndex, 1);
-//                        
-//                        dialogTitle = UNIT_MODIFY_DIALOGTITLE.getContent();
-//                        dialog = UNIT_DIAG_L1.getContent() + System.getProperty("line.separator") 
-//                                + UNIT_DIAG_L2.getContent() + prevUnitNo + System.getProperty("line.separator") 
-//                                + UNIT_DIAG_L3.getContent() + bldgNo;
-//                        break;
-//                        
-//                    case Building:
-//                        int modal_Index = BuildingTable.convertRowIndexToModel(rowIndex);        
-//                        int bno = (Integer)BuildingTable.getModel().getValueAt(modal_Index, 2);        
-//                        int count = getUnitCount(bno);                        
-//                        
-//                        dialogTitle = BUILDING_MODIFY_DIALOGTITLE.getContent();
-//                        dialog = BLDG_DIAG_L1.getContent() + System.getProperty("line.separator") 
-//                                + BLDG_DIAG_L2.getContent() + prevBldgNo + " " 
-//                                + BLDG_DIAG_L3.getContent() + count + ")";
-//                        break;
-//                    
-//                    default:
-//                        break;
+//
+//    private void prepareModification(JTable table, JButton modifyButton, JButton cancelButton) 
+//    {
+//        int rowIndex = table.getSelectedRow();
+//        
+//        if (table.editCellAt(rowIndex, 1))
+//        {
+//            table.getEditorComponent().requestFocus();
+//            
+//            int model_index = table.convertRowIndexToModel(rowIndex);
+//            TableModel model = table.getModel();
+//
+//            //<editor-fold desc="-- Save previous record field value">
+//            switch(((RXTable)table).getTableType()) {
+//                case Building:
+//                    prevBldgNo = model.getValueAt(model_index, 1);
+//                    break;
+//                case UnitTab:
+//                    prevUnitNo = model.getValueAt(model_index, 1);
+//                    break;
+//                default:
+//                    break;
+//            }
+//            //</editor-fold>
+//            
+//            if (model.getValueAt(model_index, 0) != null)
+//            {
+////                String dialogTitle = null;
+////                String dialog = "";
+////                TableType tableType = ((RXTable)table).getTableType();
+//
+//                //<editor-fold desc="-- Make dialog title and content">
+////                switch (tableType) {
+////                        
+////                    case UnitTab:
+////                        int bIndex = BuildingTable.convertRowIndexToModel(
+////                                BuildingTable.getSelectedRow());
+////                        int bldgNo = (Integer)BuildingTable.getModel().getValueAt(bIndex, 1);
+////                        
+////                        dialogTitle = UNIT_MODIFY_DIALOGTITLE.getContent();
+////                        dialog = UNIT_DIAG_L1.getContent() + System.getProperty("line.separator") 
+////                                + UNIT_DIAG_L2.getContent() + prevUnitNo + System.getProperty("line.separator") 
+////                                + UNIT_DIAG_L3.getContent() + bldgNo;
+////                        break;
+////                        
+////                    case Building:
+////                        int modal_Index = BuildingTable.convertRowIndexToModel(rowIndex);        
+////                        int bno = (Integer)BuildingTable.getModel().getValueAt(modal_Index, 2);        
+////                        int count = getUnitCount(bno);                        
+////                        
+////                        dialogTitle = BUILDING_MODIFY_DIALOGTITLE.getContent();
+////                        dialog = BLDG_DIAG_L1.getContent() + System.getProperty("line.separator") 
+////                                + BLDG_DIAG_L2.getContent() + prevBldgNo + " " 
+////                                + BLDG_DIAG_L3.getContent() + count + ")";
+////                        break;
+////                    
+////                    default:
+////                        break;
+////                }
+//                //</editor-fold>
+//                
+////                int result = //JOptionPane.YES_OPTION;
+////                        JOptionPane.showConfirmDialog(this, dialog,
+////                        dialogTitle, JOptionPane.YES_NO_OPTION); 
+//
+////                if (result == JOptionPane.NO_OPTION) { 
+////                    table.getCellEditor().stopCellEditing();
+////                } else 
+//                {
+//                    setFormMode(FormMode.UpdateMode);
+//                    modifyButton.setEnabled(false);
+//                    cancelButton.setEnabled(true);
 //                }
-                //</editor-fold>
-                
-//                int result = //JOptionPane.YES_OPTION;
-//                        JOptionPane.showConfirmDialog(this, dialog,
-//                        dialogTitle, JOptionPane.YES_NO_OPTION); 
-
-//                if (result == JOptionPane.NO_OPTION) { 
-//                    table.getCellEditor().stopCellEditing();
-//                } else 
-                {
-                    setFormMode(FormMode.UpdateMode);
-                    modifyButton.setEnabled(false);
-                    cancelButton.setEnabled(true);
-                }
-            }
-        }
-    }
+//            }
+//        }
+//    }
 
     private void addDummyFirstRow(DefaultTableModel model) {
         if (model.getRowCount() == 0) {
@@ -3668,7 +3705,8 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     }
 
     private void backToNormal(JTable table, JButton cancelButton, TableType tableType) {
-        table.getColumnModel().getColumn(1).setCellEditor(null);
+//        ((KorTable)table).setCellEditable(false);
+        setAffiliL1Editable(false);
         cancelButton.setEnabled(false);
         setFormMode(FormMode.NormalMode);
         changeControlEnabledForTable(tableType);
@@ -3697,6 +3735,13 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
                 JOptionPane.YES_NO_OPTION);     
     }
 
+    /**
+     * @param affiliL1Editable the affiliL1Editable to set
+     */
+    public void setAffiliL1Editable(boolean affiliL1Editable) {
+        this.affiliL1Editable = affiliL1Editable;
+    }
+
     private class HdrMouseListener extends MouseAdapter {
         JTable table = null;
         private HdrMouseListener(JTable table) {
@@ -3704,7 +3749,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
         }
 
         public void mouseClicked(MouseEvent evt) {
-            selectRadioButtonFor(((RXTable) table).getTableType());
+            selectRadioButtonFor(((KorTable) table).getTableType());
         }
     }
 }

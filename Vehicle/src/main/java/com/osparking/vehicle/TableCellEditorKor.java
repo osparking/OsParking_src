@@ -19,11 +19,12 @@ package com.osparking.vehicle;
 import static com.osparking.global.Globals.logParkingException;
 import com.osparking.global.names.ControlEnums;
 import static com.osparking.global.names.ControlEnums.OsPaLang.KOREAN;
+import java.awt.Color;
 import java.awt.Component;
+import java.awt.Font;
 import java.awt.im.InputContext;
 import java.util.logging.Level;
 import javax.swing.AbstractCellEditor;
-import javax.swing.DefaultCellEditor;
 import javax.swing.JComponent;
 import javax.swing.JTable;
 import javax.swing.JTextField;
@@ -33,19 +34,20 @@ import javax.swing.table.TableCellEditor;
  *
  * @author Open Source Parking, Inc.(www.osparking.com)
  */
-//public class MyTableCellEditor extends DefaultCellEditor implements TableCellEditor {
-public class MyTableCellEditor extends AbstractCellEditor implements TableCellEditor {
+public class TableCellEditorKor extends AbstractCellEditor implements TableCellEditor {
 
     JComponent component = new JTextField();
     ControlEnums.OsPaLang language;
 
-    public MyTableCellEditor(ControlEnums.OsPaLang language) {
+    public TableCellEditorKor(ControlEnums.OsPaLang language, Font font) {
         this.language = language;
+        component.setFont(font);
+        component.setForeground(Color.BLUE);    
     }
 
-    public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected,
-            int row, int col) {
-      
+    public Component getTableCellEditorComponent(
+            JTable table, Object value, boolean isSelected, int row, int col) 
+    {
         ((JTextField)component).setText((String)value);
       
         try {
