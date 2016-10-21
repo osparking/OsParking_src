@@ -100,6 +100,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Locale;
 import java.util.logging.Level;
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -1109,6 +1110,16 @@ public class AffiliationGUI extends javax.swing.JFrame {
         
             L1_Affiliation.getColumnModel().getColumn(1).setCellEditor(editor);              
             
+            
+            InputContext inCtx  =  table.getInputContext();
+        
+            if (inCtx != null) {
+                Character.Subset[] subset = new Character.Subset[1];
+                subset[0] = Character.UnicodeBlock.HANGUL_SYLLABLES;
+                inCtx.setCharacterSubsets(subset);
+            }
+            
+            table.getInputContext().selectInputMethod(Locale.KOREAN);
             TableCellEditor editor2 = table.getCellEditor(model_index, 1);
             System.out.println("Editor 2: " + editor2);
             if (table.editCellAt(model_index, 1)) 
