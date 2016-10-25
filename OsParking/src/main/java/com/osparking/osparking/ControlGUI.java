@@ -3517,14 +3517,14 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
         initializeLoggers();
         checkOptions(args);
         
+        readSettings();
         if (listFileNotFound()) {
-            language = Locale.KOREAN; // KOREAN;
+            language = Locale.KOREAN;
             IS_FIRST_FUN = true;            
             initSystemSettings();
             initEBoardSettings();
         }
 
-        readSettings();
         EBD_DisplaySettings = readEBoardSettings();
         Thread.currentThread().setPriority((Thread.MAX_PRIORITY));
         /* Create and display the form */
