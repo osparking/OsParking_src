@@ -50,6 +50,7 @@ import static com.osparking.global.Globals.head_font_Size;
 import static com.osparking.global.Globals.initializeLoggers;
 import static com.osparking.global.Globals.logParkingException;
 import static com.osparking.global.Globals.loginID;
+import com.osparking.global.IMainGUI;
 import static com.osparking.global.names.ControlEnums.ButtonTypes.*;
 import static com.osparking.global.names.ControlEnums.LabelContent.SEARCH_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.SELECT_DRIVER_HELP;
@@ -95,12 +96,14 @@ public class DriverSelection extends javax.swing.JFrame {
     private String currSearchString = null;       
     private List<String> prevKeyList = new ArrayList<String>();
     private List<String> currKeyList = new ArrayList<String>();    
+    IMainGUI mainForm = null;
     
     /**
      * Creates new form DriverSelection
      */
-    public DriverSelection(VehiclesForm vehicleForm, int seqNo) {
+    public DriverSelection(VehiclesForm vehicleForm, IMainGUI mainForm, int seqNo) {
         this.vehicleForm = vehicleForm;
+        this.mainForm = mainForm;
         if (vehicleForm != null)
             vehicleForm.setEnabled(false);
         this.seqNo = seqNo;
@@ -467,7 +470,7 @@ public class DriverSelection extends javax.swing.JFrame {
         if (loginID != null ||
                 loginID == null && findLoginIdentity() != null) 
         {
-            ManageDrivers driverManageForm = new ManageDrivers(null, this);
+            ManageDrivers driverManageForm = new ManageDrivers(mainForm, this);
             driverManageForm.setVisible(true);
         }
     }//GEN-LAST:event_manageDriversButtonActionPerformed
@@ -487,7 +490,7 @@ public class DriverSelection extends javax.swing.JFrame {
     private void manageDriversButtonKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_manageDriversButtonKeyReleased
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) 
         {
-            ManageDrivers driverManageForm = new ManageDrivers(null, this);
+            ManageDrivers driverManageForm = new ManageDrivers(mainForm, this);
             driverManageForm.setVisible(true);
         }
     }//GEN-LAST:event_manageDriversButtonKeyReleased
@@ -617,7 +620,7 @@ public class DriverSelection extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new DriverSelection(null, 0).setVisible(true);
+                new DriverSelection(null, null, 0).setVisible(true);
             }
         });
     }
