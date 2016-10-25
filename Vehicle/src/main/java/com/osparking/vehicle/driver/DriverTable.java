@@ -16,6 +16,7 @@
  */
 package com.osparking.vehicle.driver;
 
+import static com.osparking.global.CommonData.centerCellRenderer;
 import static com.osparking.global.CommonData.numberCellRenderer;
 import static com.osparking.global.CommonData.tableRowHeight;
 import static com.osparking.global.Globals.DEBUG;
@@ -74,10 +75,7 @@ public class DriverTable extends JTable {
         setModel(new DriverTableModel(rowData, columnNames, parent));
         
         ((DefaultTableCellRenderer)getTableHeader().getDefaultRenderer())
-            .setHorizontalAlignment(JLabel.CENTER);
-        
-        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
-        centerRenderer.setHorizontalAlignment(JLabel.CENTER);        
+            .setHorizontalAlignment(JLabel.CENTER);    
         
         for (DriverCol col : DriverCol.values()) {
             if (col == DriverCol.RowNo ||
@@ -86,7 +84,7 @@ public class DriverTable extends JTable {
             {
                 getColumnModel().getColumn(col.getNumVal()).setCellRenderer(numberCellRenderer);
             } else if (col != DriverCol.SEQ_NO) {
-                getColumnModel().getColumn(col.getNumVal()).setCellRenderer(centerRenderer);
+                getColumnModel().getColumn(col.getNumVal()).setCellRenderer(centerCellRenderer);
             }
         }
         

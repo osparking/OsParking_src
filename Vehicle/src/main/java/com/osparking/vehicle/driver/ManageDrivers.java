@@ -2461,7 +2461,7 @@ public class ManageDrivers extends javax.swing.JFrame {
         TableColumnModel NumberTableModel = driverTable.getColumnModel();
         hiddenSN = NumberTableModel.getColumn(DriverCol.SEQ_NO.getNumVal());
         
-        NumberTableModel.removeColumn(hiddenSN);        
+        NumberTableModel.removeColumn(hiddenSN);       
         
         driverTable.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);        
         

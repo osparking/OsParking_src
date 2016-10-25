@@ -18,6 +18,9 @@ package com.osparking.vehicle.driver;
 
 import static com.osparking.global.CommonData.buttonHeightNorm;
 import static com.osparking.global.CommonData.buttonWidthNorm;
+import static com.osparking.global.CommonData.centerCellRenderer;
+import static com.osparking.global.CommonData.leftCellRenderer;
+import static com.osparking.global.CommonData.numberCellRenderer;
 import static com.osparking.global.CommonData.putCellCenter;
 import static com.osparking.global.CommonData.rejectNonNumericKeys;
 import static com.osparking.global.CommonData.setKeyboardLanguage;
@@ -112,6 +115,7 @@ public class DriverSelection extends javax.swing.JFrame {
         
         adjustSkinnyTable();
         currSearchString = formSearchString(currKeyList);
+        fixColumnAlignment();
         loadSkinnyDriverTable(seqNo);
         attachEnterHandler(searchName);
         attachEnterHandler(searchCell); 
@@ -132,9 +136,9 @@ public class DriverSelection extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        northPanel = new javax.swing.JPanel();
         westPanel = new javax.swing.JPanel();
-        wholePanel = new javax.swing.JPanel();
+        northPanel = new javax.swing.JPanel();
+        filler5 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 40), new java.awt.Dimension(0, 40), new java.awt.Dimension(32767, 40));
         titlePanel = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         csHelpPanel = new javax.swing.JPanel();
@@ -144,48 +148,54 @@ public class DriverSelection extends javax.swing.JFrame {
         fixDriverButton = new javax.swing.JButton();
         filler22 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 32767));
         searchButton = new javax.swing.JButton();
+        filler23 = new javax.swing.Box.Filler(new java.awt.Dimension(40, 0), new java.awt.Dimension(40, 0), new java.awt.Dimension(40, 32767));
         filler4 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 10), new java.awt.Dimension(0, 10), new java.awt.Dimension(32767, 10));
         searchPanel = new javax.swing.JPanel();
+        filler8 = new javax.swing.Box.Filler(new java.awt.Dimension(40, 0), new java.awt.Dimension(40, 0), new java.awt.Dimension(40, 32767));
         jLabel3 = new javax.swing.JLabel();
-        filler6 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(5, 0), new java.awt.Dimension(10, 32767));
         searchName = new javax.swing.JTextField();
-        filler7 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(5, 0), new java.awt.Dimension(10, 32767));
         searchCell = new javax.swing.JTextField();
+        filler9 = new javax.swing.Box.Filler(new java.awt.Dimension(40, 0), new java.awt.Dimension(40, 0), new java.awt.Dimension(40, 32767));
         driversPanel = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         skinnyDriverTable = new javax.swing.JTable();
+        eastPanel = new javax.swing.JPanel();
+        southPanel = new javax.swing.JPanel();
         filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 10), new java.awt.Dimension(0, 10), new java.awt.Dimension(32767, 10));
         bottomButtonPanel = new javax.swing.JPanel();
+        filler6 = new javax.swing.Box.Filler(new java.awt.Dimension(40, 0), new java.awt.Dimension(40, 0), new java.awt.Dimension(40, 32767));
         manageDriversButton = new javax.swing.JButton();
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
         closeFormButton = new javax.swing.JButton();
-        southPanel = new javax.swing.JPanel();
-        eastPanel = new javax.swing.JPanel();
+        filler7 = new javax.swing.Box.Filler(new java.awt.Dimension(40, 0), new java.awt.Dimension(40, 0), new java.awt.Dimension(40, 32767));
+        filler10 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 40), new java.awt.Dimension(0, 40), new java.awt.Dimension(32767, 40));
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle(DRIVER_SELECTION_FRAME_TITLE.getContent());
-        setMinimumSize(new java.awt.Dimension(400, 535));
+        setMaximumSize(new java.awt.Dimension(550, 571));
+        setMinimumSize(new java.awt.Dimension(410, 571));
+        setPreferredSize(new java.awt.Dimension(410, 571));
         setResizable(false);
+        setSize(new java.awt.Dimension(410, 571));
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 formWindowClosing(evt);
             }
         });
 
-        northPanel.setMaximumSize(new java.awt.Dimension(32767, 25));
-        northPanel.setMinimumSize(new java.awt.Dimension(10, 25));
-        northPanel.setPreferredSize(new java.awt.Dimension(100, 40));
-        getContentPane().add(northPanel, java.awt.BorderLayout.NORTH);
-
         westPanel.setMinimumSize(new java.awt.Dimension(40, 10));
         westPanel.setPreferredSize(new java.awt.Dimension(40, 100));
         getContentPane().add(westPanel, java.awt.BorderLayout.WEST);
 
-        wholePanel.setLayout(new javax.swing.BoxLayout(wholePanel, javax.swing.BoxLayout.Y_AXIS));
+        northPanel.setMaximumSize(new java.awt.Dimension(550, 211));
+        northPanel.setMinimumSize(new java.awt.Dimension(400, 211));
+        northPanel.setPreferredSize(new java.awt.Dimension(400, 211));
+        northPanel.setLayout(new javax.swing.BoxLayout(northPanel, javax.swing.BoxLayout.Y_AXIS));
+        northPanel.add(filler5);
 
         titlePanel.setMaximumSize(new java.awt.Dimension(32767, 30));
         titlePanel.setMinimumSize(new java.awt.Dimension(120, 30));
-        titlePanel.setPreferredSize(new java.awt.Dimension(120, 30));
+        titlePanel.setPreferredSize(new java.awt.Dimension(320, 30));
         titlePanel.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 0, 0));
 
         jLabel1.setFont(new java.awt.Font(font_Type, font_Style, head_font_Size));
@@ -196,9 +206,9 @@ public class DriverSelection extends javax.swing.JFrame {
         jLabel1.setPreferredSize(new java.awt.Dimension(120, 28));
         titlePanel.add(jLabel1);
 
-        wholePanel.add(titlePanel);
+        northPanel.add(titlePanel);
 
-        csHelpPanel.setPreferredSize(new java.awt.Dimension(100, 40));
+        csHelpPanel.setPreferredSize(new java.awt.Dimension(320, 40));
 
         csHelpText.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         csHelpText.setForeground(Color.gray);
@@ -210,22 +220,22 @@ public class DriverSelection extends javax.swing.JFrame {
         csHelpPanel.setLayout(csHelpPanelLayout);
         csHelpPanelLayout.setHorizontalGroup(
             csHelpPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(csHelpText, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 320, Short.MAX_VALUE)
+            .addComponent(csHelpText, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 409, Short.MAX_VALUE)
         );
         csHelpPanelLayout.setVerticalGroup(
             csHelpPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(csHelpPanelLayout.createSequentialGroup()
                 .addGap(6, 6, 6)
                 .addComponent(csHelpText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(10, 10, 10))
         );
 
-        wholePanel.add(csHelpPanel);
-        wholePanel.add(filler3);
+        northPanel.add(csHelpPanel);
+        northPanel.add(filler3);
 
-        topButtonPanel.setMaximumSize(new java.awt.Dimension(32767, 45));
-        topButtonPanel.setMinimumSize(new java.awt.Dimension(272, 45));
-        topButtonPanel.setPreferredSize(new java.awt.Dimension(242, 45));
+        topButtonPanel.setMaximumSize(new java.awt.Dimension(550, 45));
+        topButtonPanel.setMinimumSize(new java.awt.Dimension(400, 45));
+        topButtonPanel.setPreferredSize(new java.awt.Dimension(400, 45));
         topButtonPanel.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT, 0, 0));
 
         fixDriverButton.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
@@ -266,29 +276,33 @@ public class DriverSelection extends javax.swing.JFrame {
             }
         });
         topButtonPanel.add(searchButton);
+        topButtonPanel.add(filler23);
 
-        wholePanel.add(topButtonPanel);
-        wholePanel.add(filler4);
+        northPanel.add(topButtonPanel);
+        northPanel.add(filler4);
 
-        searchPanel.setMaximumSize(new java.awt.Dimension(2147483647, 28));
-        searchPanel.setLayout(new javax.swing.BoxLayout(searchPanel, javax.swing.BoxLayout.X_AXIS));
+        searchPanel.setMaximumSize(new java.awt.Dimension(550, 28));
+        searchPanel.setMinimumSize(new java.awt.Dimension(400, 28));
+        searchPanel.setPreferredSize(new java.awt.Dimension(400, 28));
+        searchPanel.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 0, 0));
+        searchPanel.add(filler8);
 
         jLabel3.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel3.setText(SEARCH_LABEL.getContent());
-        jLabel3.setMaximumSize(new java.awt.Dimension(30, 28));
-        jLabel3.setMinimumSize(new java.awt.Dimension(60, 15));
-        jLabel3.setPreferredSize(new java.awt.Dimension(60, 28));
+        jLabel3.setMaximumSize(new Dimension(rnMax, 28));
+        jLabel3.setMinimumSize(new Dimension(rnPref, 28));
+        jLabel3.setPreferredSize(new Dimension(rnPref, 28));
         searchPanel.add(jLabel3);
-        searchPanel.add(filler6);
 
         searchName.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         searchName.setForeground(tipColor);
         searchName.setHorizontalAlignment(javax.swing.JTextField.LEFT);
         searchName.setText(DRIVER_TF.getContent());
         searchName.setToolTipText(DRIVER_INPUT_TOOLTIP.getContent());
-        searchName.setMinimumSize(new java.awt.Dimension(6, 28));
-        searchName.setPreferredSize(new java.awt.Dimension(95, 28));
+        searchName.setMaximumSize(new Dimension(nmMax, 28));
+        searchName.setMinimumSize(new Dimension(nmPref, 28));
+        searchName.setPreferredSize(new Dimension(nmPref, 28));
         searchName.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 searchNameFocusGained(evt);
@@ -308,15 +322,15 @@ public class DriverSelection extends javax.swing.JFrame {
             }
         });
         searchPanel.add(searchName);
-        searchPanel.add(filler7);
 
         searchCell.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         searchCell.setForeground(tipColor);
         searchCell.setHorizontalAlignment(javax.swing.JTextField.LEFT);
         searchCell.setText(CELL_PHONE_TF.getContent());
         searchCell.setToolTipText(CELL_PHONE_INPUT_TOOLTIP.getContent());
-        searchCell.setMinimumSize(new java.awt.Dimension(6, 28));
-        searchCell.setPreferredSize(new java.awt.Dimension(145, 28));
+        searchCell.setMaximumSize(new Dimension(celMax, 28));
+        searchCell.setMinimumSize(new Dimension(celPref, 28));
+        searchCell.setPreferredSize(new Dimension(celPref-7, 28));
         searchCell.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 searchCellFocusGained(evt);
@@ -339,13 +353,20 @@ public class DriverSelection extends javax.swing.JFrame {
             }
         });
         searchPanel.add(searchCell);
+        searchPanel.add(filler9);
 
-        wholePanel.add(searchPanel);
+        northPanel.add(searchPanel);
 
-        driversPanel.setPreferredSize(new java.awt.Dimension(400, 300));
+        getContentPane().add(northPanel, java.awt.BorderLayout.NORTH);
+
+        driversPanel.setMaximumSize(new java.awt.Dimension(1470, 32767));
+        driversPanel.setMinimumSize(new java.awt.Dimension(320, 300));
+        driversPanel.setPreferredSize(new java.awt.Dimension(320, 300));
         driversPanel.setLayout(new javax.swing.BoxLayout(driversPanel, javax.swing.BoxLayout.LINE_AXIS));
 
-        jScrollPane1.setPreferredSize(new java.awt.Dimension(300, 93));
+        jScrollPane1.setMaximumSize(new java.awt.Dimension(470, 1000));
+        jScrollPane1.setMinimumSize(new java.awt.Dimension(320, 300));
+        jScrollPane1.setPreferredSize(new java.awt.Dimension(320, 300));
 
         skinnyDriverTable.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         skinnyDriverTable.getTableHeader().setFont(new java.awt.Font(font_Type, font_Style, font_Size));
@@ -384,10 +405,22 @@ public class DriverSelection extends javax.swing.JFrame {
 
         driversPanel.add(jScrollPane1);
 
-        wholePanel.add(driversPanel);
-        wholePanel.add(filler2);
+        getContentPane().add(driversPanel, java.awt.BorderLayout.CENTER);
 
-        bottomButtonPanel.setLayout(new javax.swing.BoxLayout(bottomButtonPanel, javax.swing.BoxLayout.LINE_AXIS));
+        eastPanel.setMinimumSize(new java.awt.Dimension(40, 10));
+        eastPanel.setPreferredSize(new java.awt.Dimension(40, 100));
+        getContentPane().add(eastPanel, java.awt.BorderLayout.EAST);
+
+        southPanel.setMaximumSize(new java.awt.Dimension(32767, 40));
+        southPanel.setMinimumSize(new java.awt.Dimension(10, 40));
+        southPanel.setPreferredSize(new java.awt.Dimension(400, 100));
+        southPanel.setLayout(new javax.swing.BoxLayout(southPanel, javax.swing.BoxLayout.Y_AXIS));
+        southPanel.add(filler2);
+
+        bottomButtonPanel.setMinimumSize(new java.awt.Dimension(302, 25));
+        bottomButtonPanel.setPreferredSize(new java.awt.Dimension(320, 25));
+        bottomButtonPanel.setLayout(new javax.swing.BoxLayout(bottomButtonPanel, javax.swing.BoxLayout.X_AXIS));
+        bottomButtonPanel.add(filler6);
 
         manageDriversButton.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         manageDriversButton.setMnemonic('m');
@@ -425,19 +458,12 @@ public class DriverSelection extends javax.swing.JFrame {
             }
         });
         bottomButtonPanel.add(closeFormButton);
+        bottomButtonPanel.add(filler7);
 
-        wholePanel.add(bottomButtonPanel);
+        southPanel.add(bottomButtonPanel);
+        southPanel.add(filler10);
 
-        getContentPane().add(wholePanel, java.awt.BorderLayout.CENTER);
-
-        southPanel.setMaximumSize(new java.awt.Dimension(32767, 40));
-        southPanel.setMinimumSize(new java.awt.Dimension(10, 40));
-        southPanel.setPreferredSize(new java.awt.Dimension(100, 40));
         getContentPane().add(southPanel, java.awt.BorderLayout.SOUTH);
-
-        eastPanel.setMinimumSize(new java.awt.Dimension(40, 10));
-        eastPanel.setPreferredSize(new java.awt.Dimension(40, 100));
-        getContentPane().add(eastPanel, java.awt.BorderLayout.EAST);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -633,12 +659,17 @@ public class DriverSelection extends javax.swing.JFrame {
     private javax.swing.JPanel driversPanel;
     private javax.swing.JPanel eastPanel;
     private javax.swing.Box.Filler filler1;
+    private javax.swing.Box.Filler filler10;
     private javax.swing.Box.Filler filler2;
     private javax.swing.Box.Filler filler22;
+    private javax.swing.Box.Filler filler23;
     private javax.swing.Box.Filler filler3;
     private javax.swing.Box.Filler filler4;
+    private javax.swing.Box.Filler filler5;
     private javax.swing.Box.Filler filler6;
     private javax.swing.Box.Filler filler7;
+    private javax.swing.Box.Filler filler8;
+    private javax.swing.Box.Filler filler9;
     public javax.swing.JButton fixDriverButton;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
@@ -654,7 +685,6 @@ public class DriverSelection extends javax.swing.JFrame {
     private javax.swing.JPanel titlePanel;
     private javax.swing.JPanel topButtonPanel;
     private javax.swing.JPanel westPanel;
-    private javax.swing.JPanel wholePanel;
     // End of variables declaration//GEN-END:variables
 
     public void loadSkinnyDriverTable(int seqNo) {
@@ -724,6 +754,15 @@ public class DriverSelection extends javax.swing.JFrame {
         searchButton.setEnabled(false);
     }
 
+    final int rnPref = 70;
+    final int rnMax = (int)(rnPref * 1.5);
+    
+    final int nmPref = 90;
+    final int nmMax = (int)(nmPref * 1.5);
+    
+    final int celPref = 170;
+    final int celMax = (int)(celPref * 1.5);
+    
     private void adjustSkinnyTable() {
         // Hide drivers table sequence number which is used by only inside the code
         TableColumnModel skinnyModel = skinnyDriverTable.getColumnModel();
@@ -731,9 +770,9 @@ public class DriverSelection extends javax.swing.JFrame {
         skinnyModel.getColumn(0).setCellRenderer(putCellCenter);
 
         // <editor-fold defaultstate="collapsezd" desc="-- Adjust Column Width ">                    
-        SetAColumnWidth(skinnyModel.getColumn(0), 60, 60, 60); // 0: row number
-        SetAColumnWidth(skinnyModel.getColumn(NAME), 100, 100, 100); // 1: driver name
-        SetAColumnWidth(skinnyModel.getColumn(CELL), 160, 160, 160); // 2: cell phone
+        SetAColumnWidth(skinnyModel.getColumn(0), rnPref, rnPref, rnMax); // 0: row number
+        SetAColumnWidth(skinnyModel.getColumn(NAME), nmPref, nmPref, nmMax); // 1: driver name
+        SetAColumnWidth(skinnyModel.getColumn(CELL), celPref, celPref, celMax); // 2: cell phone
         //</editor-fold>        
         // <editor-fold defaultstate="collapsed" desc="-- Hide Some Columns">                         
         skinnyModel.removeColumn(skinnyModel.getColumn(SEQ_NO));
@@ -808,6 +847,13 @@ public class DriverSelection extends javax.swing.JFrame {
         } else {
             searchButton.setEnabled(true);
         }        
+    }
+
+    private void fixColumnAlignment() {
+        TableColumnModel colModel = skinnyDriverTable.getColumnModel();
+        colModel.getColumn(0).setCellRenderer(numberCellRenderer);
+        colModel.getColumn(1).setCellRenderer(centerCellRenderer);
+        colModel.getColumn(2).setCellRenderer(leftCellRenderer);
     }
 
     private class DriverSelectionListener implements ListSelectionListener {
