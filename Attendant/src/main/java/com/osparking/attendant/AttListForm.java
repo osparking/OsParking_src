@@ -2084,15 +2084,19 @@ public class AttListForm extends javax.swing.JFrame {
         String adminAuthority = attModel.getValueAt(usersTable.getSelectedRow(), 2).toString();
         boolean wasManager = adminAuthority.equals("Y");
         
-        if (managerCheckBox.isSelected() && wasManager || 
-                !managerCheckBox.isSelected() && !wasManager) 
-        {
-            changeSaveButtonEnabled(managerCheckBox, true);
-        } else 
-            if (managerCheckBox.isSelected() && !wasManager || 
-                    !managerCheckBox.isSelected() && wasManager) 
-        {
+        if (formMode == CreateMode && managerCheckBox.isSelected()) {
             changeSaveButtonEnabled(managerCheckBox, false);
+        } else {
+            if (managerCheckBox.isSelected() && wasManager || 
+                    !managerCheckBox.isSelected() && !wasManager) 
+            {
+                changeSaveButtonEnabled(managerCheckBox, true);
+            } else 
+                if (managerCheckBox.isSelected() && !wasManager || 
+                        !managerCheckBox.isSelected() && wasManager) 
+            {
+                changeSaveButtonEnabled(managerCheckBox, false);
+            }
         }
     }//GEN-LAST:event_managerCheckBoxActionPerformed
 
