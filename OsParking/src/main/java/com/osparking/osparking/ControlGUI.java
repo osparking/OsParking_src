@@ -2522,7 +2522,7 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
         LogoutUser.setEnabled(loggedIn);
         VehiclesButton.setEnabled(loggedIn);  
         UsersButton.setEnabled(loggedIn);  
-        SettingsItem.setEnabled(isAdmin);
+        SettingsItem.setEnabled(loggedIn && isAdmin);
     }
     
     private int recordSystemStart() {
