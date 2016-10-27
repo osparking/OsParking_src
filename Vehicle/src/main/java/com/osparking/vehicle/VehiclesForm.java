@@ -255,7 +255,7 @@ public class VehiclesForm extends javax.swing.JFrame {
             seqNo = Integer.parseInt((String)vehiclesTable.getModel().getValueAt(
                     vehiclesTable.getSelectedRow(), VehicleCol.SeqNo.getNumVal()));
         }
-        new DriverSelection(mySelf, seqNo).setVisible(true);
+        new DriverSelection(mySelf, mainForm, seqNo).setVisible(true);
     }
             
     private void fineTuneColumnWidth() {

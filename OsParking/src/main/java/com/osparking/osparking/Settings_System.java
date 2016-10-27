@@ -2656,14 +2656,15 @@ public class Settings_System extends javax.swing.JFrame implements IDataMan {
         if (OptnLoggingLevelComboBox.getSelectedIndex() == OpLogLevel.SettingsChange.ordinal()) {
             helpText += LOGGIND_DIALOG_A.getContent() + System.lineSeparator() 
                     + System.lineSeparator() 
-                    + LOGGIND_DIALOG_B.getContent() + System.lineSeparator() 
-                    + LOGGIND_DIALOG_C.getContent() + System.lineSeparator()
-                    + LOGGIND_DIALOG_D.getContent() + System.lineSeparator() 
-                    + LOGGIND_DIALOG_E.getContent() + System.lineSeparator();
+                    + LOGGIND_DIALOG_B.getContent() + System.lineSeparator();
+
         } else
         if (OptnLoggingLevelComboBox.getSelectedIndex() == OpLogLevel.UserCarChange.ordinal()) {
             helpText += LOGGIND_DIALOG_A.getContent() + System.lineSeparator() 
                     + System.lineSeparator() 
+                    + LOGGIND_DIALOG_C.getContent() + System.lineSeparator()
+                    + LOGGIND_DIALOG_D.getContent() + System.lineSeparator() 
+                    + LOGGIND_DIALOG_E.getContent() + System.lineSeparator()
                     + LOGGIND_DIALOG_F.getContent() + System.lineSeparator();
         }
 

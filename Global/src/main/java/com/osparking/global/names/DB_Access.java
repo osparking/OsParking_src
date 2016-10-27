@@ -37,8 +37,6 @@ import static com.osparking.global.names.ControlEnums.DialogTitleTypes.DEFAULT_U
 import static com.osparking.global.names.ControlEnums.LabelContent.DEFAULT_USER_LINE1;
 import static com.osparking.global.names.ControlEnums.LabelContent.DEFAULT_USER_LINE2;
 import static com.osparking.global.names.ControlEnums.LabelContent.GATE_LABEL;
-//import static com.osparking.global.names.ControlEnums.Languages.ENGLISH;
-//import static com.osparking.global.names.ControlEnums.Languages.KOREAN;
 import static com.osparking.global.names.ControlEnums.MsgContent.OS_PARKINGLOT;
 import com.osparking.global.names.ControlEnums.OsPaLang;
 import com.osparking.global.names.ControlEnums.OsPaTable;

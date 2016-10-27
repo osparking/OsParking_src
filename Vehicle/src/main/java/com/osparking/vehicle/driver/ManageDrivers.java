@@ -2461,7 +2461,7 @@ public class ManageDrivers extends javax.swing.JFrame {
         TableColumnModel NumberTableModel = driverTable.getColumnModel();
         hiddenSN = NumberTableModel.getColumn(DriverCol.SEQ_NO.getNumVal());
         
-        NumberTableModel.removeColumn(hiddenSN);        
+        NumberTableModel.removeColumn(hiddenSN);       
         
         driverTable.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);        
         
@@ -2779,7 +2779,7 @@ public class ManageDrivers extends javax.swing.JFrame {
         if (lower_Item == null) {
             return "";
         }
-        int lower_Index = lower_Item.getKeys().length - 1;
+        int lower_Index = 0;
         
         attachNumberCondition(cond, "L1_NO", "L2_NO", 
                 (Integer)((ConvComboBoxItem)searchL1ComboBox.getSelectedItem()).getKeyValue(),
@@ -2789,7 +2789,7 @@ public class ManageDrivers extends javax.swing.JFrame {
          * Append building-unit condition if applicable.
          */        
         lower_Item = (InnoComboBoxItem)searchUnitComboBox.getSelectedItem();
-        lower_Index = lower_Item.getKeys().length - 1;
+        lower_Index = 0;
         attachNumberCondition(cond, "B_SEQ_NO", "U_SEQ_NO", (Integer)
                 ((ConvComboBoxItem)searchBuildingComboBox.getSelectedItem()).getKeyValue(),
                 (Integer)(lower_Item.getKeys()[lower_Index]));   
