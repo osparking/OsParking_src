@@ -26,7 +26,6 @@ import static com.osparking.global.CommonData.buttonWidthNorm;
 import static com.osparking.global.CommonData.buttonWidthWide;
 import static com.osparking.global.CommonData.getStringWidth;
 import static com.osparking.global.CommonData.numberCellRenderer;
-import static com.osparking.global.CommonData.resizeComponentFor;
 import static com.osparking.global.CommonData.tableRowHeight;
 import static com.osparking.global.CommonData.tipColor;
 import static com.osparking.global.Globals.OSPiconList;
@@ -83,6 +82,7 @@ import static com.osparking.global.names.ControlEnums.TableType.L1_TABLE;
 import static com.osparking.global.names.ControlEnums.TableType.L2_TABLE;
 import static com.osparking.global.names.ControlEnums.TableTypes.HIGHER_HEADER;
 import static com.osparking.global.names.ControlEnums.TableTypes.ORDER_HEADER;
+import static com.osparking.global.names.ControlEnums.TitleTypes.AFFILIATION_FRAME_TITLE;
 import static com.osparking.global.names.ControlEnums.ToolTipContent.DRIVER_ODS_UPLOAD_SAMPLE_DOWNLOAD;
 import static com.osparking.global.names.ControlEnums.ToolTipContent.INSERT_TOOLTIP;
 import static com.osparking.global.names.DB_Access.readSettings;
@@ -92,6 +92,7 @@ import java.awt.Dimension;
 import java.awt.Rectangle;
 import java.awt.event.ItemEvent;
 import static java.awt.event.ItemEvent.SELECTED;
+import java.awt.event.MouseEvent;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -102,7 +103,6 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import static javax.swing.JOptionPane.INFORMATION_MESSAGE;
-import static javax.swing.JOptionPane.WARNING_MESSAGE;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
@@ -406,9 +406,10 @@ public class Affiliations extends javax.swing.JFrame {
         filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 40), new java.awt.Dimension(0, 40), new java.awt.Dimension(32767, 40));
         westPanel = new javax.swing.JPanel();
         wholePanel = new javax.swing.JPanel();
+        levs_Panel = new javax.swing.JPanel();
         lev1_Panel = new javax.swing.JPanel();
         title1_Panel = new javax.swing.JPanel();
-        affiTopTitle = new javax.swing.JLabel();
+        lev1_Title = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         lev1_Table = new javax.swing.JTable(){
             public boolean isCellEditable(int rowIndex, int colIndex) {
@@ -418,28 +419,43 @@ public class Affiliations extends javax.swing.JFrame {
         ;
         radio1Panel = new javax.swing.JPanel();
         lev1_Radio = new javax.swing.JRadioButton();
+        lev2_Panel = new javax.swing.JPanel();
+        title2_Panel = new javax.swing.JPanel();
+        lev2_Title = new javax.swing.JLabel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        lev2_Table = new javax.swing.JTable(){
+            public boolean isCellEditable(int rowIndex, int colIndex) {
+                return lev_Editable[currLevel];
+            }
+        }
+        ;
+        radio2Panel = new javax.swing.JPanel();
+        lev2_Radio = new javax.swing.JRadioButton();
         recordMenuPanel = new javax.swing.JPanel();
         insertSaveButton = new javax.swing.JButton();
         updateSaveButton = new javax.swing.JButton();
         deleteButton = new javax.swing.JButton();
         cancelButton = new javax.swing.JButton();
+        filler5 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 20), new java.awt.Dimension(0, 20), new java.awt.Dimension(32767, 20));
         jSeparator1 = new javax.swing.JSeparator();
         southPanel = new javax.swing.JPanel();
         tableMenuPanel = new javax.swing.JPanel();
         filler3 = new javax.swing.Box.Filler(new java.awt.Dimension(40, 0), new java.awt.Dimension(40, 0), new java.awt.Dimension(40, 32767));
         sampleButton = new javax.swing.JButton();
-        ODSAffiliHelp = new javax.swing.JButton();
         readSheet = new javax.swing.JButton();
         saveSheet_Button = new javax.swing.JButton();
         filler8 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
         closeFormButton = new javax.swing.JButton();
         filler4 = new javax.swing.Box.Filler(new java.awt.Dimension(40, 0), new java.awt.Dimension(40, 0), new java.awt.Dimension(40, 32767));
+        jPanel1 = new javax.swing.JPanel();
+        ODSAffiliHelp = new javax.swing.JButton();
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 40), new java.awt.Dimension(0, 40), new java.awt.Dimension(32767, 40));
         eastPanel = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setMinimumSize(new java.awt.Dimension(540, 498));
-        setPreferredSize(new java.awt.Dimension(540, 618));
+        setTitle(AFFILIATION_FRAME_TITLE.getContent());
+        setMinimumSize(new java.awt.Dimension(540, 486));
+        setPreferredSize(new java.awt.Dimension(540, 600));
 
         topPanel.setMinimumSize(new java.awt.Dimension(530, 76));
         topPanel.setPreferredSize(new java.awt.Dimension(530, 76));
@@ -490,7 +506,7 @@ public class Affiliations extends javax.swing.JFrame {
 
         getContentPane().add(topPanel, java.awt.BorderLayout.NORTH);
 
-        westPanel.setPreferredSize(new java.awt.Dimension(40, 626));
+        westPanel.setPreferredSize(new java.awt.Dimension(40, 0));
 
         javax.swing.GroupLayout westPanelLayout = new javax.swing.GroupLayout(westPanel);
         westPanel.setLayout(westPanelLayout);
@@ -500,26 +516,27 @@ public class Affiliations extends javax.swing.JFrame {
         );
         westPanelLayout.setVerticalGroup(
             westPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 626, Short.MAX_VALUE)
+            .addGap(0, 355, Short.MAX_VALUE)
         );
 
         getContentPane().add(westPanel, java.awt.BorderLayout.WEST);
 
         wholePanel.setMinimumSize(new java.awt.Dimension(460, 20));
-        wholePanel.setPreferredSize(new java.awt.Dimension(460, 626));
+        wholePanel.setPreferredSize(new java.awt.Dimension(460, 340));
+        wholePanel.setLayout(new javax.swing.BoxLayout(wholePanel, javax.swing.BoxLayout.Y_AXIS));
 
-        lev1_Panel.setMinimumSize(new java.awt.Dimension(200, 200));
+        levs_Panel.setMinimumSize(new java.awt.Dimension(457, 224));
+        levs_Panel.setPreferredSize(new java.awt.Dimension(460, 290));
+
+        lev1_Panel.setMinimumSize(new java.awt.Dimension(200, 214));
         lev1_Panel.setPreferredSize(new java.awt.Dimension(220, 360));
 
-        affiTopTitle.setFont(new java.awt.Font(font_Type, font_Style, head_font_Size));
-        affiTopTitle.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        affiTopTitle.setText(AFFILIATION_LIST_LABEL.getContent());
-        affiTopTitle.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                affiTopTitleMouseClicked(evt);
-            }
-        });
-        title1_Panel.add(affiTopTitle);
+        lev1_Title.setFont(new java.awt.Font(font_Type, font_Style, head_font_Size));
+        lev1_Title.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lev1_Title.setText(AFFILIATION_LIST_LABEL.getContent());
+        title1_Panel.add(lev1_Title);
+
+        jScrollPane1.setPreferredSize(new java.awt.Dimension(454, 200));
 
         lev1_Table.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         lev1_Table.getTableHeader().setFont(new java.awt.Font(font_Type, font_Style, font_Size));
@@ -551,7 +568,6 @@ public class Affiliations extends javax.swing.JFrame {
         radio1Panel.setMaximumSize(new java.awt.Dimension(32767, 31));
 
         affi_Group.add(lev1_Radio);
-        lev1_Radio.setSelected(true);
         lev1_Radio.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 lev1_RadioItemStateChanged(evt);
@@ -563,20 +579,112 @@ public class Affiliations extends javax.swing.JFrame {
         lev1_Panel.setLayout(lev1_PanelLayout);
         lev1_PanelLayout.setHorizontalGroup(
             lev1_PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(title1_Panel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
             .addComponent(radio1Panel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(title1_Panel, javax.swing.GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
         );
         lev1_PanelLayout.setVerticalGroup(
             lev1_PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(lev1_PanelLayout.createSequentialGroup()
                 .addComponent(title1_Panel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 487, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 192, Short.MAX_VALUE)
                 .addGap(0, 0, 0)
                 .addComponent(radio1Panel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(2, 2, 2))
         );
+
+        lev2_Panel.setMinimumSize(new java.awt.Dimension(200, 214));
+        lev2_Panel.setPreferredSize(new java.awt.Dimension(220, 360));
+
+        lev2_Title.setFont(new java.awt.Font(font_Type, font_Style, head_font_Size));
+        lev2_Title.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lev2_Title.setText(AFFILIATION_LIST_LABEL.getContent());
+        title2_Panel.add(lev2_Title);
+
+        lev2_Table.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        lev2_Table.setModel(
+            new javax.swing.table.DefaultTableModel(
+                new Object [][] {
+                    {1, "Janitor's Office", 2},
+                    {2, "Engineering Bldg", 1}
+                },
+                new String[]{
+                    ORDER_HEADER.getContent(), HIGHER_HEADER.getContent(), "L1_NO"}
+            )
+            {  @Override
+                public Class<?> getColumnClass(int columnIndex) {
+                    if (columnIndex == 0)
+                    return Integer.class;
+                    else
+                    return String.class;
+                }
+            }
+        );
+        lev2_Table.setName("L1_Affiliation"); // NOI18N
+        lev2_Table.setRowHeight(tableRowHeight);
+        jScrollPane2.setViewportView(lev2_Table);
+
+        radio2Panel.setMaximumSize(new java.awt.Dimension(32767, 31));
+
+        affi_Group.add(lev2_Radio);
+        lev2_Radio.setSelected(true);
+        radio2Panel.add(lev2_Radio);
+
+        javax.swing.GroupLayout lev2_PanelLayout = new javax.swing.GroupLayout(lev2_Panel);
+        lev2_Panel.setLayout(lev2_PanelLayout);
+        lev2_PanelLayout.setHorizontalGroup(
+            lev2_PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(title2_Panel, javax.swing.GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+            .addComponent(radio2Panel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        lev2_PanelLayout.setVerticalGroup(
+            lev2_PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(lev2_PanelLayout.createSequentialGroup()
+                .addComponent(title2_Panel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, 0)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 192, Short.MAX_VALUE)
+                .addGap(0, 0, 0)
+                .addComponent(radio2Panel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(2, 2, 2))
+        );
+
+        javax.swing.GroupLayout levs_PanelLayout = new javax.swing.GroupLayout(levs_Panel);
+        levs_Panel.setLayout(levs_PanelLayout);
+        levs_PanelLayout.setHorizontalGroup(
+            levs_PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 460, Short.MAX_VALUE)
+            .addGroup(levs_PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(levs_PanelLayout.createSequentialGroup()
+                    .addContainerGap()
+                    .addComponent(lev1_Panel, javax.swing.GroupLayout.DEFAULT_SIZE, 203, Short.MAX_VALUE)
+                    .addGap(245, 245, 245)))
+            .addGroup(levs_PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, levs_PanelLayout.createSequentialGroup()
+                    .addGap(245, 245, 245)
+                    .addComponent(lev2_Panel, javax.swing.GroupLayout.DEFAULT_SIZE, 203, Short.MAX_VALUE)
+                    .addContainerGap()))
+        );
+        levs_PanelLayout.setVerticalGroup(
+            levs_PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 270, Short.MAX_VALUE)
+            .addGroup(levs_PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(levs_PanelLayout.createSequentialGroup()
+                    .addContainerGap()
+                    .addComponent(lev1_Panel, javax.swing.GroupLayout.DEFAULT_SIZE, 250, Short.MAX_VALUE)
+                    .addContainerGap()))
+            .addGroup(levs_PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(levs_PanelLayout.createSequentialGroup()
+                    .addContainerGap()
+                    .addComponent(lev2_Panel, javax.swing.GroupLayout.DEFAULT_SIZE, 250, Short.MAX_VALUE)
+                    .addContainerGap()))
+        );
+
+        wholePanel.add(levs_Panel);
+
+        recordMenuPanel.setMaximumSize(new java.awt.Dimension(32767, 35));
+        recordMenuPanel.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 5, 0));
 
         insertSaveButton.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         insertSaveButton.setMnemonic('R');
@@ -633,39 +741,23 @@ public class Affiliations extends javax.swing.JFrame {
         });
         recordMenuPanel.add(cancelButton);
 
-        jSeparator1.setMinimumSize(new java.awt.Dimension(50, 20));
-        jSeparator1.setPreferredSize(new java.awt.Dimension(50, 20));
+        wholePanel.add(recordMenuPanel);
+        wholePanel.add(filler5);
 
-        javax.swing.GroupLayout wholePanelLayout = new javax.swing.GroupLayout(wholePanel);
-        wholePanel.setLayout(wholePanelLayout);
-        wholePanelLayout.setHorizontalGroup(
-            wholePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(recordMenuPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(wholePanelLayout.createSequentialGroup()
-                .addComponent(lev1_Panel, javax.swing.GroupLayout.DEFAULT_SIZE, 214, Short.MAX_VALUE)
-                .addGap(255, 255, 255))
-            .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
-        wholePanelLayout.setVerticalGroup(
-            wholePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(wholePanelLayout.createSequentialGroup()
-                .addComponent(lev1_Panel, javax.swing.GroupLayout.DEFAULT_SIZE, 545, Short.MAX_VALUE)
-                .addGap(0, 0, 0)
-                .addComponent(recordMenuPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(30, 30, 30))
-        );
+        jSeparator1.setMaximumSize(new java.awt.Dimension(32767, 40));
+        jSeparator1.setMinimumSize(new java.awt.Dimension(50, 40));
+        jSeparator1.setPreferredSize(new java.awt.Dimension(50, 40));
+        wholePanel.add(jSeparator1);
 
         getContentPane().add(wholePanel, java.awt.BorderLayout.CENTER);
 
-        southPanel.setMinimumSize(new java.awt.Dimension(530, 110));
-        southPanel.setPreferredSize(new java.awt.Dimension(10, 85));
+        southPanel.setMinimumSize(new java.awt.Dimension(530, 80));
+        southPanel.setPreferredSize(new java.awt.Dimension(10, 80));
         southPanel.setLayout(new javax.swing.BoxLayout(southPanel, javax.swing.BoxLayout.Y_AXIS));
 
-        tableMenuPanel.setMaximumSize(new Dimension(4000, 50));
-        tableMenuPanel.setMinimumSize(new Dimension(150, 50));
-        tableMenuPanel.setPreferredSize(new Dimension(300, 45));
+        tableMenuPanel.setMaximumSize(new Dimension(4000, buttonHeightNorm));
+        tableMenuPanel.setMinimumSize(new Dimension(150, buttonHeightNorm));
+        tableMenuPanel.setPreferredSize(new Dimension(300, buttonHeightNorm));
 
         sampleButton.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         sampleButton.setMnemonic('S');
@@ -678,20 +770,6 @@ public class Affiliations extends javax.swing.JFrame {
         sampleButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 sampleButtonActionPerformed(evt);
-            }
-        });
-
-        ODSAffiliHelp.setBackground(new java.awt.Color(153, 255, 153));
-        ODSAffiliHelp.setFont(new java.awt.Font("Dotum", 1, 14)); // NOI18N
-        ODSAffiliHelp.setIcon(getQuest20_Icon());
-        ODSAffiliHelp.setAlignmentY(0.0F);
-        ODSAffiliHelp.setMargin(new java.awt.Insets(2, 4, 2, 4));
-        ODSAffiliHelp.setMinimumSize(new java.awt.Dimension(20, 20));
-        ODSAffiliHelp.setOpaque(false);
-        ODSAffiliHelp.setPreferredSize(new java.awt.Dimension(25, 25));
-        ODSAffiliHelp.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                ODSAffiliHelpActionPerformed(evt);
             }
         });
 
@@ -734,6 +812,24 @@ public class Affiliations extends javax.swing.JFrame {
             }
         });
 
+        jPanel1.setPreferredSize(new Dimension(25, buttonHeightNorm));
+        jPanel1.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 0, 0));
+
+        ODSAffiliHelp.setBackground(new java.awt.Color(153, 255, 153));
+        ODSAffiliHelp.setFont(new java.awt.Font("Dotum", 1, 14)); // NOI18N
+        ODSAffiliHelp.setIcon(getQuest20_Icon());
+        ODSAffiliHelp.setAlignmentY(0.0F);
+        ODSAffiliHelp.setMargin(new java.awt.Insets(2, 4, 2, 4));
+        ODSAffiliHelp.setMinimumSize(new java.awt.Dimension(20, 20));
+        ODSAffiliHelp.setOpaque(false);
+        ODSAffiliHelp.setPreferredSize(new java.awt.Dimension(25, 25));
+        ODSAffiliHelp.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ODSAffiliHelpActionPerformed(evt);
+            }
+        });
+        jPanel1.add(ODSAffiliHelp);
+
         javax.swing.GroupLayout tableMenuPanelLayout = new javax.swing.GroupLayout(tableMenuPanel);
         tableMenuPanel.setLayout(tableMenuPanelLayout);
         tableMenuPanelLayout.setHorizontalGroup(
@@ -743,7 +839,7 @@ public class Affiliations extends javax.swing.JFrame {
                 .addGap(0, 0, 0)
                 .addComponent(sampleButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0)
-                .addComponent(ODSAffiliHelp, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0)
                 .addComponent(readSheet, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0)
@@ -757,21 +853,17 @@ public class Affiliations extends javax.swing.JFrame {
         );
         tableMenuPanelLayout.setVerticalGroup(
             tableMenuPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(filler3, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(filler4, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addGroup(tableMenuPanelLayout.createSequentialGroup()
-                .addGroup(tableMenuPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(filler3, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(filler4, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(tableMenuPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addComponent(ODSAffiliHelp, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGroup(tableMenuPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(saveSheet_Button, javax.swing.GroupLayout.DEFAULT_SIZE, 30, Short.MAX_VALUE)
-                            .addComponent(readSheet, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(sampleButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(closeFormButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                    .addGroup(tableMenuPanelLayout.createSequentialGroup()
-                        .addGap(4, 4, 4)
-                        .addComponent(filler8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(10, 10, 10))
+                .addGap(4, 4, 4)
+                .addComponent(filler8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(tableMenuPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addComponent(saveSheet_Button, javax.swing.GroupLayout.DEFAULT_SIZE, 30, Short.MAX_VALUE)
+                .addComponent(readSheet, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(sampleButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(closeFormButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         southPanel.add(tableMenuPanel);
@@ -779,7 +871,7 @@ public class Affiliations extends javax.swing.JFrame {
 
         getContentPane().add(southPanel, java.awt.BorderLayout.SOUTH);
 
-        eastPanel.setPreferredSize(new java.awt.Dimension(40, 626));
+        eastPanel.setPreferredSize(new java.awt.Dimension(40, 0));
 
         javax.swing.GroupLayout eastPanelLayout = new javax.swing.GroupLayout(eastPanel);
         eastPanel.setLayout(eastPanelLayout);
@@ -789,7 +881,7 @@ public class Affiliations extends javax.swing.JFrame {
         );
         eastPanelLayout.setVerticalGroup(
             eastPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 626, Short.MAX_VALUE)
+            .addGap(0, 355, Short.MAX_VALUE)
         );
 
         getContentPane().add(eastPanel, java.awt.BorderLayout.EAST);
@@ -822,8 +914,8 @@ public class Affiliations extends javax.swing.JFrame {
                 }
                 lev1_Table.setRowSelectionInterval(rowIndex, rowIndex);
 
-                ((DefaultTableModel)lev1_Table.getModel()).
-                        setValueAt(INSERT_TOOLTIP.getContent(), rowIndex, 1);
+//                ((DefaultTableModel)lev1_Table.getModel()).
+//                        setValueAt(INSERT_TOOLTIP.getContent(), rowIndex, 1);
 
                 
                 setLev_Editable(currLevel, true);
@@ -1333,7 +1425,6 @@ public class Affiliations extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel GUI_Title_Panel;
     private javax.swing.JButton ODSAffiliHelp;
-    private javax.swing.JLabel affiTopTitle;
     private javax.swing.ButtonGroup affi_Group;
     private javax.swing.JButton cancelButton;
     private javax.swing.JButton closeFormButton;
@@ -1343,15 +1434,25 @@ public class Affiliations extends javax.swing.JFrame {
     private javax.swing.Box.Filler filler2;
     private javax.swing.Box.Filler filler3;
     private javax.swing.Box.Filler filler4;
+    private javax.swing.Box.Filler filler5;
     private javax.swing.Box.Filler filler8;
     private javax.swing.JButton insertSaveButton;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JPanel lev1_Panel;
     private javax.swing.JRadioButton lev1_Radio;
     private javax.swing.JTable lev1_Table;
+    private javax.swing.JLabel lev1_Title;
+    private javax.swing.JPanel lev2_Panel;
+    private javax.swing.JRadioButton lev2_Radio;
+    private javax.swing.JTable lev2_Table;
+    private javax.swing.JLabel lev2_Title;
+    private javax.swing.JPanel levs_Panel;
     private javax.swing.JLabel modeString;
     private javax.swing.JPanel radio1Panel;
+    private javax.swing.JPanel radio2Panel;
     private javax.swing.JButton readSheet;
     private javax.swing.JPanel recordMenuPanel;
     private javax.swing.JButton sampleButton;
@@ -1359,6 +1460,7 @@ public class Affiliations extends javax.swing.JFrame {
     private javax.swing.JPanel southPanel;
     private javax.swing.JPanel tableMenuPanel;
     private javax.swing.JPanel title1_Panel;
+    private javax.swing.JPanel title2_Panel;
     private javax.swing.JPanel topPanel;
     private javax.swing.JButton updateSaveButton;
     private javax.swing.JPanel westPanel;

@@ -175,6 +175,8 @@ public class ControlEnums {
         LOGIN_FRAME_TITLE("주차관리 로그인", "Attendant Login"),
         ATTLIST_FRAME_TITLE("사용자 정보관리", "Login ID Management"),
         AFFILI_BUILD_FRAME_TITLE("소속 및 건물", "Affiliation and Building"),
+        AFFILIATION_FRAME_TITLE("소속 관리", "Manage Affiliations"),
+        BUILDING_FRAME_TITLE("건물 관리", "Manage Buildings"),
         VEHICLESFORM_FRAME_TITLE("차량 등록 관리", "Vehicle Registration"),
         DRIVER_SELECTION_FRAME_TITLE("차주 선택", "Select Driver"),
         DRIVER_LIST_FRAME_TITLE("차주 목록", "Driver List"),
