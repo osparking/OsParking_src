@@ -43,9 +43,11 @@ import static com.osparking.global.Globals.initializeLoggers;
 import static com.osparking.global.Globals.insertLevel1Affiliation;
 import static com.osparking.global.Globals.insertLevel2Affiliation;
 import static com.osparking.global.Globals.isManager;
+import static com.osparking.global.Globals.language;
 import static com.osparking.global.Globals.logParkingException;
 import static com.osparking.global.Globals.loginID;
 import static com.osparking.global.Globals.removeEmptyRow;
+import static com.osparking.global.Globals.setComponentSize;
 import com.osparking.global.IMainGUI;
 import com.osparking.global.names.ControlEnums;
 import static com.osparking.global.names.ControlEnums.ButtonTypes.CANCEL_BTN;
@@ -61,6 +63,7 @@ import com.osparking.global.names.ControlEnums.DialogMessages;
 import static com.osparking.global.names.ControlEnums.DialogMessages.DUPLICATE_HIGH_AFFILI2;
 import static com.osparking.global.names.ControlEnums.DialogMessages.EMPTY_HIGH_AFFILI;
 import static com.osparking.global.names.ControlEnums.DialogMessages.EMPTY_LOW_AFFILI;
+import static com.osparking.global.names.ControlEnums.DialogMessages.LEVEL2_NAME_DIALOG;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.DELETE_DIALOGTITLE;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.DELETE_RESULT_DIALOGTITLE;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.ERROR_DIALOGTITLE;
@@ -72,8 +75,12 @@ import static com.osparking.global.names.ControlEnums.FormModeString.CREATE;
 import static com.osparking.global.names.ControlEnums.FormModeString.MODIFY;
 import static com.osparking.global.names.ControlEnums.FormModeString.SEARCH;
 import static com.osparking.global.names.ControlEnums.LabelContent.AFFILIATION_LIST_LABEL;
+import static com.osparking.global.names.ControlEnums.LabelContent.LOWER_LABEL;
+import static com.osparking.global.names.ControlEnums.LabelContent.LOWER_LIST_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.MODE_LABEL;
+import static com.osparking.global.names.ControlEnums.MsgContent.AFFILI2_DIAG_L2;
 import static com.osparking.global.names.ControlEnums.MsgContent.AFFILI_DEL_L1;
+import static com.osparking.global.names.ControlEnums.MsgContent.AFFILI_DEL_L2;
 import static com.osparking.global.names.ControlEnums.MsgContent.AFFILI_DEL_RESULT;
 import static com.osparking.global.names.ControlEnums.MsgContent.AFFILI_DIAG_L2;
 import static com.osparking.global.names.ControlEnums.MsgContent.AFFILI_DIAG_L3;
@@ -81,6 +88,7 @@ import static com.osparking.global.names.ControlEnums.OsPaLang.KOREAN;
 import static com.osparking.global.names.ControlEnums.TableType.L1_TABLE;
 import static com.osparking.global.names.ControlEnums.TableType.L2_TABLE;
 import static com.osparking.global.names.ControlEnums.TableTypes.HIGHER_HEADER;
+import static com.osparking.global.names.ControlEnums.TableTypes.LOWER_COL_TITLE;
 import static com.osparking.global.names.ControlEnums.TableTypes.ORDER_HEADER;
 import static com.osparking.global.names.ControlEnums.TitleTypes.AFFILIATION_FRAME_TITLE;
 import static com.osparking.global.names.ControlEnums.ToolTipContent.DRIVER_ODS_UPLOAD_SAMPLE_DOWNLOAD;
@@ -92,17 +100,18 @@ import java.awt.Dimension;
 import java.awt.Rectangle;
 import java.awt.event.ItemEvent;
 import static java.awt.event.ItemEvent.SELECTED;
-import java.awt.event.MouseEvent;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Locale;
 import java.util.logging.Level;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import static javax.swing.JOptionPane.INFORMATION_MESSAGE;
+import javax.swing.JRadioButton;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
@@ -157,7 +166,12 @@ public class Affiliations extends javax.swing.JFrame {
         });        
 
         adjustAffiliationTable(lev1_Table);
+        adjustAffiliationTable(lev2_Table);
         addAffiliationSelectionListener();      
+        setComponentSize(insertSaveButton, 
+                new Dimension(buttonWidthNorm, buttonHeightNorm));
+//        insertSaveButton.setPreferredSize(
+//                new Dimension(buttonWidthNorm, buttonHeightNorm));
         
         loadLev1_Table(0, "");    
         setFormMode(NormalMode);
@@ -277,7 +291,7 @@ public class Affiliations extends javax.swing.JFrame {
 
             if (affiliTable == lev1_Table) {
                 loadLev1_Table(-1, affiliName); // Refresh higher affiliation list
-//            } else if (affiliTable == L2_Affiliation) {
+//            } else if (affiliTable == lev2_Table) {
 //                int index = lev1_Table.convertRowIndexToModel(lev1_Table.getSelectedRow());
 //                Object L1_no = lev1_Table.getModel().getValueAt(index, 2);
 //                
@@ -454,8 +468,8 @@ public class Affiliations extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle(AFFILIATION_FRAME_TITLE.getContent());
-        setMinimumSize(new java.awt.Dimension(540, 486));
-        setPreferredSize(new java.awt.Dimension(540, 600));
+        setMinimumSize(new java.awt.Dimension(540, 496));
+        setPreferredSize(new java.awt.Dimension(540, 617));
 
         topPanel.setMinimumSize(new java.awt.Dimension(530, 76));
         topPanel.setPreferredSize(new java.awt.Dimension(530, 76));
@@ -525,8 +539,9 @@ public class Affiliations extends javax.swing.JFrame {
         wholePanel.setPreferredSize(new java.awt.Dimension(460, 340));
         wholePanel.setLayout(new javax.swing.BoxLayout(wholePanel, javax.swing.BoxLayout.Y_AXIS));
 
-        levs_Panel.setMinimumSize(new java.awt.Dimension(457, 224));
+        levs_Panel.setMinimumSize(new java.awt.Dimension(457, 245));
         levs_Panel.setPreferredSize(new java.awt.Dimension(460, 290));
+        levs_Panel.setLayout(new javax.swing.BoxLayout(levs_Panel, javax.swing.BoxLayout.X_AXIS));
 
         lev1_Panel.setMinimumSize(new java.awt.Dimension(200, 214));
         lev1_Panel.setPreferredSize(new java.awt.Dimension(220, 360));
@@ -563,11 +578,17 @@ public class Affiliations extends javax.swing.JFrame {
         lev1_Table.getColumnModel().getColumn(0).setCellRenderer(numberCellRenderer);
         lev1_Table.setName("L1_Affiliation"); // NOI18N
         lev1_Table.setRowHeight(tableRowHeight);
+        lev1_Table.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lev1_TableMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(lev1_Table);
 
         radio1Panel.setMaximumSize(new java.awt.Dimension(32767, 31));
 
         affi_Group.add(lev1_Radio);
+        lev1_Radio.setSelected(true);
         lev1_Radio.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 lev1_RadioItemStateChanged(evt);
@@ -580,7 +601,7 @@ public class Affiliations extends javax.swing.JFrame {
         lev1_PanelLayout.setHorizontalGroup(
             lev1_PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(radio1Panel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(title1_Panel, javax.swing.GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
+            .addComponent(title1_Panel, javax.swing.GroupLayout.DEFAULT_SIZE, 230, Short.MAX_VALUE)
             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
         );
         lev1_PanelLayout.setVerticalGroup(
@@ -588,29 +609,32 @@ public class Affiliations extends javax.swing.JFrame {
             .addGroup(lev1_PanelLayout.createSequentialGroup()
                 .addComponent(title1_Panel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 192, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 212, Short.MAX_VALUE)
                 .addGap(0, 0, 0)
                 .addComponent(radio1Panel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(2, 2, 2))
         );
+
+        levs_Panel.add(lev1_Panel);
 
         lev2_Panel.setMinimumSize(new java.awt.Dimension(200, 214));
         lev2_Panel.setPreferredSize(new java.awt.Dimension(220, 360));
 
         lev2_Title.setFont(new java.awt.Font(font_Type, font_Style, head_font_Size));
         lev2_Title.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lev2_Title.setText(AFFILIATION_LIST_LABEL.getContent());
+        lev2_Title.setText(LOWER_LIST_LABEL.getContent());
         title2_Panel.add(lev2_Title);
 
+        lev2_Table.getTableHeader().setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         lev2_Table.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         lev2_Table.setModel(
             new javax.swing.table.DefaultTableModel(
                 new Object [][] {
-                    {1, "Janitor's Office", 2},
-                    {2, "Engineering Bldg", 1}
+                    {1, "Group 1", 3},
+                    {2, "Group 2", 4}
                 },
                 new String[]{
-                    ORDER_HEADER.getContent(), HIGHER_HEADER.getContent(), "L1_NO"}
+                    ORDER_HEADER.getContent(), LOWER_COL_TITLE.getContent(), "PARTY_NO"}
             )
             {  @Override
                 public Class<?> getColumnClass(int columnIndex) {
@@ -621,21 +645,42 @@ public class Affiliations extends javax.swing.JFrame {
                 }
             }
         );
+        ((DefaultTableCellRenderer)lev2_Table.getTableHeader().getDefaultRenderer())
+        .setHorizontalAlignment(JLabel.CENTER);
+        lev2_Table.setEnabled(false);
+        lev2_Table.getColumnModel().getColumn(0)
+        .setCellRenderer(numberCellRenderer);
         lev2_Table.setName("L1_Affiliation"); // NOI18N
         lev2_Table.setRowHeight(tableRowHeight);
+        lev2_Table.setSelectionBackground(DARK_BLUE);
+        lev2_Table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        lev2_Table.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                //        L2_AffiliationFocusLost(evt);
+            }
+        });
+        lev2_Table.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lev2_TableMouseClicked(evt);
+            }
+        });
         jScrollPane2.setViewportView(lev2_Table);
 
         radio2Panel.setMaximumSize(new java.awt.Dimension(32767, 31));
 
         affi_Group.add(lev2_Radio);
-        lev2_Radio.setSelected(true);
+        lev2_Radio.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                lev2_RadioItemStateChanged(evt);
+            }
+        });
         radio2Panel.add(lev2_Radio);
 
         javax.swing.GroupLayout lev2_PanelLayout = new javax.swing.GroupLayout(lev2_Panel);
         lev2_Panel.setLayout(lev2_PanelLayout);
         lev2_PanelLayout.setHorizontalGroup(
             lev2_PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(title2_Panel, javax.swing.GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
+            .addComponent(title2_Panel, javax.swing.GroupLayout.DEFAULT_SIZE, 230, Short.MAX_VALUE)
             .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
             .addComponent(radio2Panel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
@@ -644,42 +689,13 @@ public class Affiliations extends javax.swing.JFrame {
             .addGroup(lev2_PanelLayout.createSequentialGroup()
                 .addComponent(title2_Panel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 192, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                 .addGap(0, 0, 0)
                 .addComponent(radio2Panel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(2, 2, 2))
         );
 
-        javax.swing.GroupLayout levs_PanelLayout = new javax.swing.GroupLayout(levs_Panel);
-        levs_Panel.setLayout(levs_PanelLayout);
-        levs_PanelLayout.setHorizontalGroup(
-            levs_PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 460, Short.MAX_VALUE)
-            .addGroup(levs_PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(levs_PanelLayout.createSequentialGroup()
-                    .addContainerGap()
-                    .addComponent(lev1_Panel, javax.swing.GroupLayout.DEFAULT_SIZE, 203, Short.MAX_VALUE)
-                    .addGap(245, 245, 245)))
-            .addGroup(levs_PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, levs_PanelLayout.createSequentialGroup()
-                    .addGap(245, 245, 245)
-                    .addComponent(lev2_Panel, javax.swing.GroupLayout.DEFAULT_SIZE, 203, Short.MAX_VALUE)
-                    .addContainerGap()))
-        );
-        levs_PanelLayout.setVerticalGroup(
-            levs_PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 270, Short.MAX_VALUE)
-            .addGroup(levs_PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(levs_PanelLayout.createSequentialGroup()
-                    .addContainerGap()
-                    .addComponent(lev1_Panel, javax.swing.GroupLayout.DEFAULT_SIZE, 250, Short.MAX_VALUE)
-                    .addContainerGap()))
-            .addGroup(levs_PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(levs_PanelLayout.createSequentialGroup()
-                    .addContainerGap()
-                    .addComponent(lev2_Panel, javax.swing.GroupLayout.DEFAULT_SIZE, 250, Short.MAX_VALUE)
-                    .addContainerGap()))
-        );
+        levs_Panel.add(lev2_Panel);
 
         wholePanel.add(levs_Panel);
 
@@ -692,7 +708,7 @@ public class Affiliations extends javax.swing.JFrame {
         insertSaveButton.setEnabled(false);
         insertSaveButton.setMaximumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
         insertSaveButton.setMinimumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
-        insertSaveButton.setPreferredSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
+        insertSaveButton.setPreferredSize(new java.awt.Dimension(80, 25));
         insertSaveButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 insertSaveButtonActionPerformed(evt);
@@ -1051,49 +1067,82 @@ public class Affiliations extends javax.swing.JFrame {
     
     private void deleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteButtonActionPerformed
         // Delete currently selected higher affiliation
-        int viewIndex = lev1_Table.getSelectedRow();
-        if (viewIndex == -1)
-        {
-            return;
+        JTable table;
+        if (currLevel == 1) {
+            table = lev1_Table;
+        } else {
+            table = lev2_Table;
         }
-        String affiliation = (String)lev1_Table.getValueAt(viewIndex, 1);
-        int modal_Index = lev1_Table.convertRowIndexToModel(viewIndex);
-        int L1_no = (int)lev1_Table.getModel().getValueAt(modal_Index, 2);
-        int count = getL2RecordCount(L1_no);
+            
+        int viewIndex = table.getSelectedRow();
+        
+        if (viewIndex == -1) {
+            return;
+        } else {            
+            String affiliation = (String)table.getValueAt(viewIndex, 1);
+            int modal_Index = table.convertRowIndexToModel(viewIndex);
+            int key_No = (int)table.getModel().getValueAt(modal_Index, 2);
+            
+            String message;
+            
+            if (currLevel == 1) {
+                int count = getL2RecordCount(key_No);
 
-        String dialogMessage = AFFILI_DEL_L1.getContent() + System.getProperty("line.separator")
-        + AFFILI_DIAG_L2.getContent() + affiliation + System.getProperty("line.separator")
-        + AFFILI_DIAG_L3.getContent() + count;
-
-        int result = JOptionPane.showConfirmDialog(this, dialogMessage,
-            DELETE_DIALOGTITLE.getContent(),
-            JOptionPane.YES_NO_OPTION);
-
-        if (result == JOptionPane.YES_OPTION) {
-            //<editor-fold desc="delete upper level affliation (unit name)">
-            String excepMsg = "(In deletion of: " + affiliation + ")";
-            String sql = "Delete From L1_Affiliation Where L1_no = ?";
-
-            result = deleteHigherRow(excepMsg, sql, L1_no);
-
-            if (result == 1) {
-                loadLev1_Table(viewIndex, ""); // Deliver the index of deleted row
-
-                dialogMessage = AFFILI_DEL_RESULT.getContent() +
-                System.getProperty("line.separator") +
-                AFFILI_DIAG_L2.getContent() + affiliation;
-
-                JOptionPane.showConfirmDialog(this, dialogMessage,
-                    DELETE_RESULT_DIALOGTITLE.getContent(),
-                    JOptionPane.PLAIN_MESSAGE, INFORMATION_MESSAGE);
+                message = AFFILI_DEL_L1.getContent() + 
+                        System.getProperty("line.separator") + 
+                        AFFILI_DIAG_L2.getContent() + affiliation + 
+                        System.getProperty("line.separator") + 
+                        AFFILI_DIAG_L3.getContent() + count;
+            } else {
+                message = AFFILI_DEL_L2.getContent() +
+                        System.getProperty("line.separator") + 
+                        LEVEL2_NAME_DIALOG.getContent() + " : " + affiliation;                
             }
-            //</editor-fold>
+            
+            int result = JOptionPane.showConfirmDialog(this, message,
+                DELETE_DIALOGTITLE.getContent(),
+                JOptionPane.YES_NO_OPTION);
+
+            if (result == JOptionPane.YES_OPTION) {
+                //<editor-fold desc="delete upper level affliation (unit name)">
+                String excepMsg;
+                String sql;
+                
+                if (currLevel == 1) {
+                    excepMsg = "(In deletion of: " + affiliation + ")";
+                    sql = "Delete From L1_Affiliation Where L1_no = ?";
+                } else {
+                    excepMsg = "(Deletion of Lower Party No: " + key_No + ")";
+                    sql = "Delete From L2_Affiliation Where L2_no = ?";
+                }
+                
+                result = deleteAffiliation(excepMsg, sql, key_No);
+
+                if (result == 1) {
+                    if (currLevel == 1) {
+                        loadLev1_Table(viewIndex, ""); // Deliver the index of deleted row
+
+                        message = AFFILI_DEL_RESULT.getContent() + System.getProperty("line.separator") +
+                                AFFILI_DIAG_L2.getContent() + affiliation;
+                    } else {
+                        int index1 = lev1_Table.convertRowIndexToView(lev1_Table.getSelectedRow());
+                        Object L1_No = lev1_Table.getModel().getValueAt(index1, 2);                    
+                        loadLev2_Table((Integer)L1_No, viewIndex, ""); // Deliver the deleted L2 affiliation name
+
+                        message = AFFILI_DEL_RESULT.getContent() + System.getProperty("line.separator") +
+                                AFFILI2_DIAG_L2.getContent() + affiliation;
+                    }
+                    JOptionPane.showConfirmDialog(this, message,
+                            DELETE_RESULT_DIALOGTITLE.getContent(),
+                            JOptionPane.PLAIN_MESSAGE, INFORMATION_MESSAGE);                        
+                }
+                //</editor-fold>
+            }
         }
     }//GEN-LAST:event_deleteButtonActionPerformed
-
     
     // Delete currently selected table row
-    private int deleteHigherRow(String excepMsg, String sql, int bldg_seq_no) 
+    private int deleteAffiliation(String excepMsg, String sql, int key_No) 
     {
         //<editor-fold desc="-- Actual deletion of a building number">
         Connection conn = null;
@@ -1103,8 +1152,7 @@ public class Affiliations extends javax.swing.JFrame {
         try {
             conn = getConnection();
             createBuilding = conn.prepareStatement(sql);
-            createBuilding.setInt(1, bldg_seq_no);
-
+            createBuilding.setInt(1, key_No);
             result = createBuilding.executeUpdate();
         } catch (SQLException ex) {
             logParkingException(Level.SEVERE, ex, excepMsg);
@@ -1171,20 +1219,8 @@ public class Affiliations extends javax.swing.JFrame {
     }    
     
     private void lev1_RadioItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_lev1_RadioItemStateChanged
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                manageSelection(evt, lev1_Table);
-                changeControlEnabledForTable(L1_TABLE);
-            }
-
-            private void manageSelection(ItemEvent evt, JTable table) {
-                if (evt.getStateChange() == SELECTED) {
-                    table.setSelectionBackground(DARK_BLUE);
-                } else {
-                    table.setSelectionBackground(LIGHT_BLUE);
-                }
-            }
-        });
+        currLevel = 1;
+        applyTableChange(evt, lev1_Table, lev1_Radio);
     }//GEN-LAST:event_lev1_RadioItemStateChanged
 
     private void affiTopTitleMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_affiTopTitleMouseClicked
@@ -1205,7 +1241,7 @@ public class Affiliations extends javax.swing.JFrame {
 //            saveODSfileName(this, L1_Affiliation, odsFileChooser,
 //                USER_SAVE_ODS_FAIL_DIALOG.getContent(), L1_TABLE.getContent());
 //        } else if (affiL2_Control.isSelected()) {
-//            saveODSfileName(this, L2_Affiliation, odsFileChooser,
+//            saveODSfileName(this, lev2_Table, odsFileChooser,
 //                USER_SAVE_ODS_FAIL_DIALOG.getContent(), affiBotTitle.getText());
 //        } else if (buildingControl.isSelected()) {
 //            saveODSfileName(this, BuildingTable, odsFileChooser,
@@ -1268,6 +1304,19 @@ public class Affiliations extends javax.swing.JFrame {
     private void closeFormButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_closeFormButtonActionPerformed
         tryToCloseSettingsForm();
     }//GEN-LAST:event_closeFormButtonActionPerformed
+
+    private void lev2_RadioItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_lev2_RadioItemStateChanged
+        currLevel = 2;
+        applyTableChange(evt, lev2_Table, lev2_Radio);
+    }//GEN-LAST:event_lev2_RadioItemStateChanged
+
+    private void lev1_TableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lev1_TableMouseClicked
+        lev1_Radio.setSelected(true);
+    }//GEN-LAST:event_lev1_TableMouseClicked
+
+    private void lev2_TableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lev2_TableMouseClicked
+        lev2_Radio.setSelected(true);
+    }//GEN-LAST:event_lev2_TableMouseClicked
 
     private void backToNormal(JTable table, ControlEnums.TableType tableType) {
         setFormMode(FormMode.NormalMode);
@@ -1362,10 +1411,10 @@ public class Affiliations extends javax.swing.JFrame {
                 changeItemsEnabled(lev1_Table, lev1_Radio.isSelected());
                 break;
             case L2_TABLE: 
-//                changeItemsEnabled(L2_Affiliation, affiL2_Control.isSelected(),
+//                changeItemsEnabled(lev2_Table, affiL2_Control.isSelected(),
 //                        insertL2_Button, modifyL2_Button, deleteL2_Button);
 //                if (!affiL2_Control.isSelected()) {
-//                    addDummyFirstRow((DefaultTableModel)L2_Affiliation.getModel());
+//                    addDummyFirstRow((DefaultTableModel)lev2_Table.getModel());
 //                }
                 break;
             default:
@@ -1484,6 +1533,95 @@ public class Affiliations extends javax.swing.JFrame {
         lev_Editable[index] = b;
     }
 
+    private void loadLev2_Table(Object L1_no, int viewIndex, String l2Name) {
+        if (L1_no == null)
+        {
+            lev2_Title.setText(LOWER_LIST_LABEL.getContent());
+//            insertL2_Button.setEnabled(false);
+//            ((DefaultTableModel) lev2_Table.getModel()).setRowCount(0);
+        }
+        else 
+        {
+            int L1_index = lev1_Table.
+                    convertRowIndexToModel(lev1_Table.getSelectedRow());
+            String L1_Affil = lev1_Table.getModel().getValueAt(L1_index, 1).toString();
+            
+            String label = "";
+            
+            if (language == Locale.KOREAN) {
+                label = L1_Affil + LOWER_LABEL.getContent();
+            } else if (language == Locale.ENGLISH) {
+                label = LOWER_LABEL.getContent() + L1_Affil; 
+            } else {
+            }  
+            lev2_Title.setText(label);
+            
+            Connection conn = null;
+            Statement selectStmt = null;
+            ResultSet rs = null;
+            String excepMsg = "change selected L2 name to " + l2Name + " for L1 no: " + L1_no;
+
+            DefaultTableModel model = (DefaultTableModel) lev2_Table.getModel();
+            int model_index = -1;
+            
+            // List lower affiliations of a higher affiliation whose key value is L1_NO
+            try {
+                //<editor-fold defaultstate="collapsed" desc="-- List all lower affiliations of a higher affiliation">                
+                conn = getConnection();
+                selectStmt = conn.createStatement();
+                StringBuffer sb = new StringBuffer();
+                sb.append(" SELECT @ROWNUM := @ROWNUM + 1 AS recNo, ");
+                sb.append("   PARTY_NAME, L2_NO");
+                sb.append(" FROM L2_affiliation, (SELECT @rownum := 0) r");
+                sb.append(" WHERE L1_NO = " + (int)L1_no);
+                sb.append(" ORDER BY party_name");
+
+                rs = selectStmt.executeQuery(sb.toString());
+                model.setRowCount(0);
+                while (rs.next()) {
+                    if (viewIndex == -1) { // After creation/update, first find the new/modified affiliation name
+                        if (l2Name.equals(rs.getString("PARTY_NAME"))) {
+                            model_index = model.getRowCount();
+                        }
+                    }                       
+                    model.addRow(new Object[] {
+                         rs.getInt("recNo"),  rs.getString("PARTY_NAME"), rs.getInt("L2_NO")
+                    });
+                }
+                if (!lev2_Radio.isSelected()) {
+//                    addDummyFirstRow(model);
+                }
+                //</editor-fold>
+            } catch (SQLException ex) {
+                logParkingException(Level.SEVERE, ex, excepMsg);
+            } finally {
+                closeDBstuff(conn, selectStmt, rs, excepMsg);
+            }     
+            
+            int numRows = model.getRowCount();
+            if (numRows > 0) {
+                if (viewIndex == -1) // handle the case of a newly created affiliation.
+                {
+                    viewIndex = lev2_Table.convertRowIndexToView(model_index);
+                } else {
+                    // "number of remaining rows == deleted row index" means the row deleted was the last row
+                    // In this case, highlight the previous row                    
+                    if (viewIndex == numRows)
+                    { 
+                        viewIndex--; 
+                    }
+                }
+                if (viewIndex != NO_HIGHLIGHT) {
+                    highlightTableRow(lev2_Table, viewIndex);  
+                }
+                if (isManager) {
+                    updateSaveButton.setEnabled(true);                
+                    deleteButton.setEnabled(true);                      
+                }
+            }                                
+        }            
+    }
+    final int NO_HIGHLIGHT = -2;
     private void addAffiliationSelectionListener() {
         ListSelectionModel cellSelectionModel = lev1_Table.getSelectionModel();
         cellSelectionModel.addListSelectionListener (new ListSelectionListener ()
@@ -1500,7 +1638,7 @@ public class Affiliations extends javax.swing.JFrame {
                                 Object L1_no = lev1_Table.getModel().getValueAt(index1, 2);
                                 updateSaveButton.setEnabled(L1_no != null && isManager ? true : false);
                                 deleteButton.setEnabled(L1_no != null && isManager ? true : false);
-//                                loadL2_Affiliation(L1_no, 0, "");
+                                loadLev2_Table(L1_no, NO_HIGHLIGHT, "");
                             }
                             else
                             {
@@ -1508,8 +1646,8 @@ public class Affiliations extends javax.swing.JFrame {
                             }
 
                             // clear L2List selection
-//                            L2_Affiliation.removeEditor();
-//                            L2_Affiliation.getSelectionModel().clearSelection();  
+//                            lev2_Table.removeEditor();
+//                            lev2_Table.getSelectionModel().clearSelection();  
 
                             // Delete an empty row if existed
                             if (emptyLastRowPossible(insertSaveButton, lev1_Table))
@@ -1522,7 +1660,7 @@ public class Affiliations extends javax.swing.JFrame {
             }
         }); 
         
-//        cellSelectionModel = L2_Affiliation.getSelectionModel();
+//        cellSelectionModel = lev2_Table.getSelectionModel();
 //        cellSelectionModel.addListSelectionListener (new ListSelectionListener ()
 //        {
 //            public void valueChanged(ListSelectionEvent  e) {
@@ -1530,10 +1668,10 @@ public class Affiliations extends javax.swing.JFrame {
 //                    public void run() {
 //                        if (!e.getValueIsAdjusting())
 //                        {
-//                            int index2 = followAndGetTrueIndex(L2_Affiliation);
+//                            int index2 = followAndGetTrueIndex(lev2_Table);
 //                            if (index2 >= 0)
 //                            {
-//                                Object L2_no = L2_Affiliation.getModel().getValueAt(index2, 2);
+//                                Object L2_no = lev2_Table.getModel().getValueAt(index2, 2);
 //                                deleteL2_Button.setEnabled(L2_no != null && isManager ? true : false); 
 //                                modifyL2_Button.setEnabled(L2_no != null && isManager ? true : false);
 //                            }
@@ -1544,9 +1682,9 @@ public class Affiliations extends javax.swing.JFrame {
 //                            }
 //
 //                            // Delete an empty row if existed
-//                            if (emptyLastRowPossible(insertL2_Button, L2_Affiliation))
+//                            if (emptyLastRowPossible(insertL2_Button, lev2_Table))
 //                            {
-//                                removeEmptyRow(insertL2_Button, L2_Affiliation);
+//                                removeEmptyRow(insertL2_Button, lev2_Table);
 //                            }
 //                        }
 //                    }
@@ -1572,5 +1710,22 @@ public class Affiliations extends javax.swing.JFrame {
         JOptionPane.showMessageDialog(this, message, ERROR_DIALOGTITLE.getContent(), 
                 JOptionPane.WARNING_MESSAGE); 
         removeToNormal(table);
+    }
+
+    private void applyTableChange(ItemEvent evt, JTable lev_Table, JRadioButton lev_Radio) {
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                manageSelection(evt, lev_Table);
+                changeItemsEnabled(lev_Table, lev_Radio.isSelected());                
+            }
+
+            private void manageSelection(ItemEvent evt, JTable table) {
+                if (evt.getStateChange() == SELECTED) {
+                    table.setSelectionBackground(DARK_BLUE);
+                } else {
+                    table.setSelectionBackground(LIGHT_BLUE);
+                }
+            }
+        });
     }
 }
