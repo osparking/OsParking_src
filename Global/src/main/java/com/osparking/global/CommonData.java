@@ -41,8 +41,11 @@ import com.osparking.global.names.PasswordValidator;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
+import java.awt.font.FontRenderContext;
+import java.awt.geom.AffineTransform;
 import java.awt.im.InputContext;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -382,6 +385,25 @@ public class CommonData { // new Dimension(carTagWidth, 30)
     public static boolean cameraOneIsButton() {
         return deviceType[Camera.ordinal()][1] == CarButton.ordinal();
     }     
+    
+    public static void resizeComponentFor(Component titleLabel, String thisText) {
+        int minW = titleLabel.getMinimumSize().width, w;
+        
+        if (getStringWidth(thisText, titleLabel.getFont()) + 10 > minW) {
+            w = getStringWidth(thisText, titleLabel.getFont()) + 10;
+        } else {
+            w = minW;
+        }
+        Dimension idLabelDim = new Dimension(w, titleLabel.getPreferredSize().height);
+        titleLabel.setSize(idLabelDim);
+        titleLabel.setPreferredSize(idLabelDim);
+    }      
+    
+    public static int getStringWidth(String loginID, Font font) {
+        AffineTransform affinetransform = new AffineTransform();     
+        FontRenderContext frc = new FontRenderContext(affinetransform, true, true);     
+        return (int)((font.getStringBounds(loginID, frc)).getWidth());
+    }
 
     private static String appStr(String content, int recordCount) {
       return " -" + TABLE_DEL_DIALOG_1.getContent() + content + 

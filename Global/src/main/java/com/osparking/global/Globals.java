@@ -1481,8 +1481,10 @@ public class Globals {
     }     
 
     public static void highlightTableRow(JTable table, int rowIndex) {
-        table.getSelectionModel().setSelectionInterval(rowIndex, rowIndex);
-        table.scrollRectToVisible(new Rectangle(table.getCellRect(rowIndex, 2, true)));
+//        table.getSelectionModel().setSelectionInterval(rowIndex, rowIndex);
+        table.changeSelection(rowIndex, 0, false, false);
+        table.scrollRectToVisible(new Rectangle(table.getCellRect(rowIndex, 1, true)));
+//        table.scrollRectToVisible(new Rectangle(table.getCellRect(rowIndex, 2, true)));
     }   
     
     public static void rejectEmptyInput(JTable thisTable, int rowIndex, String msg) {

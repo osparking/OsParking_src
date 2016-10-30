@@ -381,7 +381,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
                 // </editor-fold>
             }
         }                
-    }    
+    }
     
     /**
      * This method is called from within the constructor to initialize the form.
@@ -397,6 +397,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
         fourPanels = new javax.swing.ButtonGroup();
         saveFileChooser = new javax.swing.JFileChooser();
         northPanel = new javax.swing.JPanel();
+        westPanel = new javax.swing.JPanel();
         wholePanel = new javax.swing.JPanel();
         topPanel = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
@@ -467,6 +468,8 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
         modifyUnit_Button = new javax.swing.JButton();
         deleteUnit_Button = new javax.swing.JButton();
         cancelUnit_Button = new javax.swing.JButton();
+        eastPanel = new javax.swing.JPanel();
+        southPanel = new javax.swing.JPanel();
         bottomPanel = new javax.swing.JPanel();
         h30_5 = new javax.swing.Box.Filler(new java.awt.Dimension(40, 30), new java.awt.Dimension(40, 30), new java.awt.Dimension(40, 30));
         closePanel = new javax.swing.JPanel();
@@ -478,9 +481,6 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
         sampleButton = new javax.swing.JButton();
         filler8 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
         closeFormButton = new javax.swing.JButton();
-        southPanel = new javax.swing.JPanel();
-        eastPanel = new javax.swing.JPanel();
-        westPanel = new javax.swing.JPanel();
 
         odsFileChooser.setCurrentDirectory(ODS_DIRECTORY);
         odsFileChooser.setFileFilter(new OdsFileOnly());
@@ -492,7 +492,8 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle(AFFILI_BUILD_FRAME_TITLE.getContent());
         setBackground(PopUpBackground);
-        setMinimumSize(new Dimension(750, normGUIheight + 30));
+        setMinimumSize(new Dimension(500, normGUIheight + 30));
+        setPreferredSize(new java.awt.Dimension(500, 594));
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 formWindowClosing(evt);
@@ -505,7 +506,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
         northPanel.setLayout(northPanelLayout);
         northPanelLayout.setHorizontalGroup(
             northPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 729, Short.MAX_VALUE)
+            .addGap(0, 0, Short.MAX_VALUE)
         );
         northPanelLayout.setVerticalGroup(
             northPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -513,6 +514,21 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
         );
 
         getContentPane().add(northPanel, java.awt.BorderLayout.NORTH);
+
+        westPanel.setPreferredSize(new java.awt.Dimension(40, 514));
+
+        javax.swing.GroupLayout westPanelLayout = new javax.swing.GroupLayout(westPanel);
+        westPanel.setLayout(westPanelLayout);
+        westPanelLayout.setHorizontalGroup(
+            westPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        westPanelLayout.setVerticalGroup(
+            westPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 539, Short.MAX_VALUE)
+        );
+
+        getContentPane().add(westPanel, java.awt.BorderLayout.WEST);
 
         wholePanel.setLayout(new java.awt.BorderLayout());
 
@@ -1409,6 +1425,25 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
 
     wholePanel.add(BigMidPanel, java.awt.BorderLayout.CENTER);
 
+    getContentPane().add(wholePanel, java.awt.BorderLayout.CENTER);
+
+    eastPanel.setPreferredSize(new java.awt.Dimension(40, 514));
+
+    javax.swing.GroupLayout eastPanelLayout = new javax.swing.GroupLayout(eastPanel);
+    eastPanel.setLayout(eastPanelLayout);
+    eastPanelLayout.setHorizontalGroup(
+        eastPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addGap(0, 0, Short.MAX_VALUE)
+    );
+    eastPanelLayout.setVerticalGroup(
+        eastPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addGap(0, 539, Short.MAX_VALUE)
+    );
+
+    getContentPane().add(eastPanel, java.awt.BorderLayout.LINE_END);
+
+    southPanel.setPreferredSize(new java.awt.Dimension(729, 40));
+
     bottomPanel.setMaximumSize(new java.awt.Dimension(2147483647, 100));
     bottomPanel.setMinimumSize(new java.awt.Dimension(200, 100));
     bottomPanel.setPreferredSize(new java.awt.Dimension(200, 100));
@@ -1536,54 +1571,28 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
 
     bottomPanel.add(closePanel, java.awt.BorderLayout.CENTER);
 
-    wholePanel.add(bottomPanel, java.awt.BorderLayout.SOUTH);
-
-    getContentPane().add(wholePanel, java.awt.BorderLayout.CENTER);
-
-    southPanel.setPreferredSize(new java.awt.Dimension(729, 40));
-
     javax.swing.GroupLayout southPanelLayout = new javax.swing.GroupLayout(southPanel);
     southPanel.setLayout(southPanelLayout);
     southPanelLayout.setHorizontalGroup(
         southPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-        .addGap(0, 729, Short.MAX_VALUE)
+        .addGap(0, 649, Short.MAX_VALUE)
+        .addGroup(southPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(southPanelLayout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(bottomPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 649, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE)))
     );
     southPanelLayout.setVerticalGroup(
         southPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-        .addGap(0, 40, Short.MAX_VALUE)
+        .addGap(0, 100, Short.MAX_VALUE)
+        .addGroup(southPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(southPanelLayout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(bottomPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE)))
     );
 
     getContentPane().add(southPanel, java.awt.BorderLayout.SOUTH);
-
-    eastPanel.setPreferredSize(new java.awt.Dimension(40, 514));
-
-    javax.swing.GroupLayout eastPanelLayout = new javax.swing.GroupLayout(eastPanel);
-    eastPanel.setLayout(eastPanelLayout);
-    eastPanelLayout.setHorizontalGroup(
-        eastPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-        .addGap(0, 40, Short.MAX_VALUE)
-    );
-    eastPanelLayout.setVerticalGroup(
-        eastPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-        .addGap(0, 514, Short.MAX_VALUE)
-    );
-
-    getContentPane().add(eastPanel, java.awt.BorderLayout.LINE_END);
-
-    westPanel.setPreferredSize(new java.awt.Dimension(40, 514));
-
-    javax.swing.GroupLayout westPanelLayout = new javax.swing.GroupLayout(westPanel);
-    westPanel.setLayout(westPanelLayout);
-    westPanelLayout.setHorizontalGroup(
-        westPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-        .addGap(0, 40, Short.MAX_VALUE)
-    );
-    westPanelLayout.setVerticalGroup(
-        westPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-        .addGap(0, 514, Short.MAX_VALUE)
-    );
-
-    getContentPane().add(westPanel, java.awt.BorderLayout.WEST);
 
     pack();
     }// </editor-fold>//GEN-END:initComponents

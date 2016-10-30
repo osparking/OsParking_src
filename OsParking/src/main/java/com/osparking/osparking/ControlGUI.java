@@ -26,6 +26,7 @@ import static com.osparking.global.CommonData.ImgWidth;
 import static com.osparking.global.CommonData.cameraOneIsButton;
 import static com.osparking.global.CommonData.dummyMessages;
 import static com.osparking.global.CommonData.metaKeyLabel;
+import static com.osparking.global.CommonData.resizeComponentFor;
 import static com.osparking.global.CommonData.tipColor;
 import com.osparking.global.Globals;
 import static com.osparking.global.Globals.*;
@@ -61,7 +62,6 @@ import static com.osparking.global.names.ControlEnums.LabelContent.GATE_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.OPEN_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.RATE_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.STATUS_LABEL;
-import static com.osparking.global.names.ControlEnums.OsPaLang.KOREAN;
 import static com.osparking.global.names.ControlEnums.MenuITemTypes.AFFILIATION_MENU;
 import static com.osparking.global.names.ControlEnums.MenuITemTypes.ARRIVAL_MENU_ITEM;
 import static com.osparking.global.names.ControlEnums.MenuITemTypes.BOOTING_MENU_ITEM;
@@ -176,14 +176,11 @@ import com.osparking.vehicle.driver.ManageDrivers;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.font.FontRenderContext;
-import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import static java.awt.image.BufferedImage.TYPE_BYTE_GRAY;
 import java.awt.image.DataBufferInt;
@@ -687,13 +684,6 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
                 bigImage.setVisible(true);               
             }        
         }
-    }   
-    
-    private int getStringWidth(String loginID) {
-        AffineTransform affinetransform = new AffineTransform();     
-        FontRenderContext frc = new FontRenderContext(affinetransform, true, true);     
-        Font font = UserIDLabelMenu.getFont();
-        return (int)((font.getStringBounds(loginID, frc)).getWidth());
     }
     
     /**
@@ -717,17 +707,8 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
             loginID = Globals.loginID;
         }
         
-        int minW = UserIDLabelMenu.getMinimumSize().width, w;
-        
-        if (getStringWidth(loginID) + 10 > minW) {
-            w = UserIDLabelMenu.getMaximumSize().width;
-        } else {
-            w = minW;
-        }
-        Dimension idLabelDim = new Dimension(w, UserIDLabelMenu.getPreferredSize().height);
-        UserIDLabelMenu.setSize(idLabelDim);
-        UserIDLabelMenu.setPreferredSize(idLabelDim);
-        UserIDLabelMenu.setText(loginID);
+        resizeComponentFor(UserIDLabelMenu, loginID);
+        UserIDLabelMenu.setText(loginID);        
     }    
     
     public void actionPerformed(ActionEvent e) {

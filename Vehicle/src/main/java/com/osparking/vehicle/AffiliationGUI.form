@@ -60,7 +60,7 @@
               <EmptySpace max="-2" attributes="0"/>
               <Component id="jPanel5" min="-2" max="-2" attributes="0"/>
               <EmptySpace min="-2" pref="21" max="-2" attributes="0"/>
-              <Component id="csHelpLabel" pref="15" max="32767" attributes="0"/>
+              <Component id="csHelpLabel" pref="59" max="32767" attributes="0"/>
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" max="-2" attributes="0">
                   <Component id="all_L1_Panel" max="32767" attributes="0"/>
