@@ -262,7 +262,7 @@ public class ControlEnums {
         MY_PW_LABEL("비밀번호",  "Password"),
         CREATION_LABEL("자료 생성일",  "Creation Date"),
         AFFILIATION_LIST_LABEL("상위 소속 목록",  "Higher Affiliations"),
-        LOWER_LIST_LABEL("*** 부서 목록",  "*** sub-divisions"),
+        LOWER_LIST_LABEL("부서 목록",  "Subdivisions"),
         BUILDING_LIST_LABEL("건물(동) 목록",  "Building Numbers"), 
         ROOM_LIST_LABEL("호실 목록",  "Rooms of Building"), 
         HELP_AFFIL_LABEL("소속 명칭 ods 파일 형식",  "Affiliation name list ods file content"), 
@@ -512,6 +512,7 @@ public class ControlEnums {
     }
 
     public enum FormModeString {  
+        FETCH("조회", "Examine"),
         SEARCH("검색 ", "Searching"),
         MODIFY("수정", "Modifying"),
         CREATE("생성", "Creating");
@@ -849,6 +850,8 @@ public class ControlEnums {
                 "모든 차량 정보가 삭제되었습니다.", "All Vehicles are Deleted"),
         VEHICLE_SAVE_ODS_FAIL_DIALOG(
                 "저장할 차량 목록이 없습니다.", "No vehicle list to save!"),
+        AFFILI_SAVE_ODS_FAIL_DIALOG(
+                "저장할 소속 목록이 없습니다.", "Empty affiliation list can't be saved!"),
         DRIVER_SAVE_ODS_FAIL_DIALOG(
                 "저장할 차주 목록이 없습니다.", "Empty driver list can't be saved!"),
         ARRIVAL_SAVE_ODS_FAIL_DIALOG(
@@ -1096,10 +1099,11 @@ public class ControlEnums {
                 "이 파일에 덮어 쓰겠습니까?", "Do you want to overwrite it?"),
         AUTO_LOGOUT("이 자동 로그아웃 됨!", " is forced to log out!"),
         EMPTY_HIGH_AFFILI("빈 문자열은 상위 소속이 될 수 없습니다.", "Empty high level affiliation error."),
-        EMPTY_LOW_AFFILI("하위 부서 명칭이 빈 문자열입니다.", "Empty low level affiliation error."),
+        EMPTY_LOW_AFFILI("빈 문자열은 하위 소속이 될 수 없습니다.", "Empty low level affiliation error."),
         DUPLICATE_HIGH_AFFILI("중복되는 상위 소속 : ", "Duplicate high level affiliation : "),
         DUPLICATE_HIGH_AFFILI2(" : 중복 상위 소속은 생성될 수 없습니다.", "Duplicate high level affiliation : "),
         DUPLICATE_LOW_AFFILI("중복되는 하위 소속 : ", "Duplicate low level affiliation : "),
+        DUPLICATE_LOW_AFFILI2(" : 중복 하위 소속은 생성될 수 없습니다.", "Duplicate low level affiliation : "),
         DUPLICATE_BUILDING("중복되는 건물 번호 : ", "Duplicate building number : "),
         DUPLICATE_UNIT("중복되는 호실 번호 : ", "Duplicate unit number : "),
          

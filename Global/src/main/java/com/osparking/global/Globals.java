@@ -29,8 +29,6 @@ import static com.osparking.global.names.ControlEnums.ComboBoxItemTypes.LOWER_HI
 import static com.osparking.global.names.ControlEnums.ComboBoxItemTypes.ROOM_BUILDING_CB_ITEM;
 import static com.osparking.global.names.ControlEnums.ComboBoxItemTypes.ROOM_CB_ITEM;
 import static com.osparking.global.names.ControlEnums.DialogMessages.CONN_TRIAL;
-import com.osparking.global.names.ControlEnums.OsPaLang;
-import static com.osparking.global.names.ControlEnums.OsPaLang.KOREAN;
 import static com.osparking.global.names.ControlEnums.TextType.DISCONN_MSG;
 import com.osparking.global.names.ConvComboBoxItem;
 import static com.osparking.global.names.DB_Access.PIC_HEIGHT;
@@ -128,6 +126,7 @@ import java.awt.Container;
 import java.util.Locale;
 import javax.imageio.ImageIO;
 import javax.swing.JComboBox;
+import javax.swing.JViewport;
 
 /**
  * Defines names and methods used globally in the Parking Lot manager application developed by 
@@ -1212,6 +1211,34 @@ public class Globals {
         {
             return false;
         }
+    }   
+    
+    /**
+     * Position a cell at the center of the visible area of a JTable.
+     * @param table table that has the visible area
+     * @param rowIndex row of the cell to put at the center
+     * @param vColIndex column of the cell to put at the center
+     */
+    public static void scrollToCenter(JTable table, int rowIndex, int vColIndex) {
+        if (!(table.getParent() instanceof JViewport)) {
+          return;
+        }
+        JViewport viewport = (JViewport) table.getParent();
+        Rectangle rect = table.getCellRect(rowIndex, vColIndex, true);
+        Rectangle viewRect = viewport.getViewRect();
+        
+        rect.setLocation(rect.x - viewRect.x, rect.y - viewRect.y);
+
+        int centerX = (viewRect.width - rect.width) / 2;
+        int centerY = (viewRect.height - rect.height) / 2;
+        if (rect.x < centerX) {
+          centerX = -centerX;
+        }
+        if (rect.y < centerY) {
+          centerY = -centerY;
+        }
+        rect.translate(centerX, centerY);
+        viewport.scrollRectToVisible(rect);
     }    
     
     public static int followAndGetTrueIndex(JTable theTable) {
@@ -1482,8 +1509,10 @@ public class Globals {
 
     public static void highlightTableRow(JTable table, int rowIndex) {
 //        table.getSelectionModel().setSelectionInterval(rowIndex, rowIndex);
-        table.changeSelection(rowIndex, 0, false, false);
-        table.scrollRectToVisible(new Rectangle(table.getCellRect(rowIndex, 1, true)));
+        table.changeSelection(rowIndex, 1, false, false);
+        scrollToCenter(table, rowIndex, 1);
+        
+//        table.scrollRectToVisible(new Rectangle(table.getCellRect(rowIndex, 1, true)));
 //        table.scrollRectToVisible(new Rectangle(table.getCellRect(rowIndex, 2, true)));
     }   
     

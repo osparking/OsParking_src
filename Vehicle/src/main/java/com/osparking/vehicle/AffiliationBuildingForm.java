@@ -525,7 +525,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
         );
         westPanelLayout.setVerticalGroup(
             westPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 539, Short.MAX_VALUE)
+            .addGap(0, 456, Short.MAX_VALUE)
         );
 
         getContentPane().add(westPanel, java.awt.BorderLayout.WEST);
@@ -1437,12 +1437,12 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
     );
     eastPanelLayout.setVerticalGroup(
         eastPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-        .addGap(0, 539, Short.MAX_VALUE)
+        .addGap(0, 456, Short.MAX_VALUE)
     );
 
     getContentPane().add(eastPanel, java.awt.BorderLayout.LINE_END);
 
-    southPanel.setPreferredSize(new java.awt.Dimension(729, 40));
+    southPanel.setPreferredSize(new java.awt.Dimension(729, 100));
 
     bottomPanel.setMaximumSize(new java.awt.Dimension(2147483647, 100));
     bottomPanel.setMinimumSize(new java.awt.Dimension(200, 100));

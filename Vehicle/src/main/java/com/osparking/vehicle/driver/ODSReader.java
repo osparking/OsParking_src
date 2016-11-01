@@ -76,6 +76,7 @@ import static com.osparking.global.names.JDBCMySQL.getConnection;
 import com.osparking.global.names.OSP_enums.DriverCol;
 import com.osparking.global.names.OSP_enums.VehicleOds;
 import com.osparking.global.names.WrappedInt;
+import com.osparking.vehicle.Affiliations;
 import static com.osparking.vehicle.CommonData.invalidCell;
 import static com.osparking.vehicle.CommonData.invalidName;
 import static com.osparking.vehicle.CommonData.invalidPhone;
@@ -372,18 +373,7 @@ public class ODSReader {
             }
             //</editor-fold>
         }
-        if (numBlankRow > MAX_BLANK_ROW) {
-            // Give warning that data end(building number '-1') mark is missing
-            String dialogMessage = MISSING_END_1.getContent() + System.getProperty("line.separator") +  
-                    MISSING_END_2.getContent() + DATA_END_MARKER + MISSING_END_3.getContent();
-            
-            JOptionPane.showConfirmDialog(null, dialogMessage,
-                            READ_ODS_FAIL_DIALOGTITLE.getContent(),
-                            JOptionPane.PLAIN_MESSAGE, WARNING_MESSAGE);                
-            return false;
-        } else {
-            return true;
-        }
+        return true;
     }    
     
     public boolean checkODS(Sheet sheet, ArrayList<Point> wrongCells,
@@ -497,7 +487,7 @@ public class ODSReader {
         return true;
     }    
 
-    public void readAffiliationODS(Sheet sheet, AffiliationBuildingForm parentForm) {
+    public void readAffiliationODS(Sheet sheet, Affiliations parentForm) {
         //Getting the 0th sheet for manipulation| pass sheet name as string
         MutableCell cell = null;
 
@@ -506,10 +496,45 @@ public class ODSReader {
         int L1_no = 0;
         int level1Count = 0, level1Reject = 0;
         int level2Count = 0, level2Reject = 0;
+        int numBlankRow = 0;
         //</editor-fold>
 
         for (int nRowIndex = 0; true; nRowIndex++)
         {
+            //<editor-fold defaultstate="collapsed" desc="-- finish loading or skip a row">              
+            // check if column 1 and 2 are empty, if so, consider it a blank row
+            if (aBlankRow(sheet, nRowIndex)) {
+                numBlankRow++;
+                if (numBlankRow > MAX_BLANK_ROW) {
+                    //<editor-fold desc="-- Process end of file marker">
+                    if (parentForm != null) 
+                    {
+                        parentForm.loadLev1_Table(0, "");
+                    }
+
+                    StringBuilder sb = new StringBuilder();
+
+                    sb.append(AFFI_ODS_RES_1.getContent());
+                    sb.append(System.getProperty("line.separator"));
+                    sb.append(AFFI_ODS_RES_2.getContent() + level1Count);
+                    sb.append(System.getProperty("line.separator"));
+                    sb.append(AFFI_ODS_RES_3.getContent() + level1Reject);
+                    sb.append(System.getProperty("line.separator"));
+                    sb.append(AFFI_ODS_RES_4.getContent() + level2Count);
+                    sb.append(System.getProperty("line.separator"));
+                    sb.append(AFFI_ODS_RES_5.getContent() + level2Reject);
+
+                    JOptionPane.showConfirmDialog(null, sb.toString(),
+                            ODS_CHECK_RESULT_TITLE.getContent(), 
+                            JOptionPane.PLAIN_MESSAGE, INFORMATION_MESSAGE);                               
+                    //</editor-fold>
+                    return;                    
+                } else {
+                    continue;
+                }
+            }      
+            //</editor-fold>            
+            
             boolean rowDataStarted = false;
 
             //<editor-fold defaultstate="collapsed" desc="-- Iterate through each column">               
@@ -529,49 +554,49 @@ public class ODSReader {
                     rowDataStarted = true;
                     if (nColIndex == 0) {
                         //<editor-fold defaultstate="collapsed" desc="-- Process Level 1 affiliations ">
-                        if (cellStr.equals(DATA_END_MARKER)) {
-                            //<editor-fold desc="-- Process end of file marker">
-                            if (parentForm != null) 
-                            {
-                                parentForm.loadL1_Affiliation(0, "");
-                            }
+//                        if (cellStr.equals(DATA_END_MARKER)) 
+//                        {
+//                            //<editor-fold desc="-- Process end of file marker">
+//                            if (parentForm != null) 
+//                            {
+//                                parentForm.loadLev1_Table(0, "");
+//                            }
+//
+//                            StringBuilder sb = new StringBuilder();
+//                            
+//                            sb.append(AFFI_ODS_RES_1.getContent());
+//                            sb.append(System.getProperty("line.separator"));
+//                            sb.append(AFFI_ODS_RES_2.getContent() + level1Count);
+//                            sb.append(System.getProperty("line.separator"));
+//                            sb.append(AFFI_ODS_RES_3.getContent() + level1Reject);
+//                            sb.append(System.getProperty("line.separator"));
+//                            sb.append(AFFI_ODS_RES_4.getContent() + level2Count);
+//                            sb.append(System.getProperty("line.separator"));
+//                            sb.append(AFFI_ODS_RES_5.getContent() + level2Reject);
+//
+//                            JOptionPane.showConfirmDialog(null, sb.toString(),
+//                                    ODS_CHECK_RESULT_TITLE.getContent(), 
+//                                    JOptionPane.PLAIN_MESSAGE, INFORMATION_MESSAGE);                               
+//                            //</editor-fold>
+//                            return;
+//                        }
+//                        else 
+                        int result = insertLevel1Affiliation(cellStr);
 
-                            StringBuilder sb = new StringBuilder();
-                            
-                            sb.append(AFFI_ODS_RES_1.getContent());
-                            sb.append(System.getProperty("line.separator"));
-                            sb.append(AFFI_ODS_RES_2.getContent() + level1Count);
-                            sb.append(System.getProperty("line.separator"));
-                            sb.append(AFFI_ODS_RES_3.getContent() + level1Reject);
-                            sb.append(System.getProperty("line.separator"));
-                            sb.append(AFFI_ODS_RES_4.getContent() + level2Count);
-                            sb.append(System.getProperty("line.separator"));
-                            sb.append(AFFI_ODS_RES_5.getContent() + level2Reject);
-
-                            JOptionPane.showConfirmDialog(null, sb.toString(),
-                                    ODS_CHECK_RESULT_TITLE.getContent(), 
-                                    JOptionPane.PLAIN_MESSAGE, INFORMATION_MESSAGE);                               
-                            //</editor-fold>
-                            return;
-                        }
-                        else {
-                            int result = insertLevel1Affiliation(cellStr);
-                            
-                            if (result == ER_NO) {
-                                level1Count++;
+                        if (result == ER_NO) {
+                            level1Count++;
+                            goodLevel1 = true;
+                        } else {
+                            if (result == ER_DUP_ENTRY) {
                                 goodLevel1 = true;
-                            } else {
-                                if (result == ER_DUP_ENTRY) {
-                                    goodLevel1 = true;
-                                }
-                                level1Reject++;
                             }
+                            level1Reject++;
+                        }
 
-                            if (goodLevel1) {
-                                // considering the case of level 1 is duplicate and can't be inserted
-                                // it is safer to fetch key value in a completely seperated manner.
-                                L1_no = getLevel1_No(cellStr);
-                            }
+                        if (goodLevel1) {
+                            // considering the case of level 1 is duplicate and can't be inserted
+                            // it is safer to fetch key value in a completely seperated manner.
+                            L1_no = getLevel1_No(cellStr);
                         }
                         //</editor-fold>
                     } else {
