@@ -20,6 +20,7 @@ import static com.osparking.global.CommonData.ODS_FILEPATH;
 import static com.osparking.global.names.ControlEnums.DialogMessages.OVERWRITE_WARNING_DIALOG;
 import static com.osparking.global.names.ControlEnums.DialogMessages.OVERWRITE_WARNING_TITLE;
 import static com.osparking.global.names.ControlEnums.DialogMessages.USER_DELETE_CONF_3;
+import static com.osparking.global.names.ControlEnums.DialogTitleTypes.ERROR_DIALOGTITLE;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.ODS_SAVE_TITLE;
 import static com.osparking.global.names.ControlEnums.LabelContent.ODS_SAVE_DIALOG_1;
 import static com.osparking.global.names.ControlEnums.LabelContent.ODS_SAVE_DIALOG_2;
@@ -180,7 +181,10 @@ public class DataSheet {
             OOUtils.open(file);
             //</editor-fold>
         } catch (IOException ex) {
-            System.out.println("File save exception: " + ex.getMessage());
+            JOptionPane.showMessageDialog(null, 
+                    "ods file writing failure : " + System.lineSeparator() +
+                            ex.getMessage(), ERROR_DIALOGTITLE.getContent(), 
+                    JOptionPane.WARNING_MESSAGE);             
         }                
     }
 

@@ -736,11 +736,6 @@ public class Affiliations extends javax.swing.JFrame {
         lev2_Table.setRowHeight(tableRowHeight);
         lev2_Table.setSelectionBackground(DARK_BLUE);
         lev2_Table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        lev2_Table.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                //        L2_AffiliationFocusLost(evt);
-            }
-        });
         lev2_Table.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 lev2_TableMouseClicked(evt);
@@ -1015,6 +1010,7 @@ public class Affiliations extends javax.swing.JFrame {
 
     private void enableRadioButtons(boolean b) {
         lev1_Radio.setEnabled(b);
+        lev2_Radio.setEnabled(b);
     }    
     
     /**
@@ -1228,7 +1224,6 @@ public class Affiliations extends javax.swing.JFrame {
     }//GEN-LAST:event_lev1_RadioItemStateChanged
 
     private void affiTopTitleMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_affiTopTitleMouseClicked
-//        affiL1_Control.setSelected(true);
     }//GEN-LAST:event_affiTopTitleMouseClicked
 
     private void readSheetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_readSheetActionPerformed
@@ -1302,8 +1297,9 @@ public class Affiliations extends javax.swing.JFrame {
             //<editor-fold defaultstate="collapsed" desc="-- Read names and put put them in the model">
             StringBuffer sb = new StringBuffer();
             sb.append("Select l1.PARTY_NAME L1_Name, l2.PARTY_NAME L2_Name ");
-            sb.append("From l1_affiliation l1, l2_affiliation l2 ");
-            sb.append("Where l1.L1_NO = l2.L1_NO");
+            sb.append("From l1_affiliation l1 ");
+            sb.append("Left Outer Join l2_affiliation l2 ");
+            sb.append("On l1.L1_NO = l2.L1_NO");
             
             conn = getConnection();
             selectStmt = conn.createStatement();
@@ -1318,7 +1314,12 @@ public class Affiliations extends javax.swing.JFrame {
                     prevL1 = currL1;
                     model.addRow(new Object[] {currL1, ""});
                 }
-                model.addRow(new Object[] {"",  rs.getString("L2_Name")});
+                
+                String l2Name = rs.getString("L2_Name");
+
+                if (l2Name != null) {
+                    model.addRow(new Object[] {"", l2Name});
+                }
             }
             //</editor-fold>
         } catch (SQLException ex) {
@@ -1377,27 +1378,27 @@ public class Affiliations extends javax.swing.JFrame {
     }//GEN-LAST:event_lev2_RadioItemStateChanged
 
     private void lev1_TableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lev1_TableMouseClicked
-        lev1_Radio.setSelected(true);
+        changeTableSelection(1);
     }//GEN-LAST:event_lev1_TableMouseClicked
 
     private void lev2_TableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lev2_TableMouseClicked
-        lev2_Radio.setSelected(true);
+        changeTableSelection(2);
     }//GEN-LAST:event_lev2_TableMouseClicked
 
     private void radio1PanelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_radio1PanelMouseClicked
-        lev1_Radio.setSelected(true);
+        changeTableSelection(1);
     }//GEN-LAST:event_radio1PanelMouseClicked
 
     private void radio2PanelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_radio2PanelMouseClicked
-        lev2_Radio.setSelected(true);
+        changeTableSelection(2);
     }//GEN-LAST:event_radio2PanelMouseClicked
 
     private void title1_PanelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_title1_PanelMouseClicked
-        lev1_Radio.setSelected(true);
+        changeTableSelection(1);
     }//GEN-LAST:event_title1_PanelMouseClicked
 
     private void title2_PanelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_title2_PanelMouseClicked
-        lev2_Radio.setSelected(true);
+        changeTableSelection(2);
     }//GEN-LAST:event_title2_PanelMouseClicked
 
     private void backToNormal(JTable table) {
@@ -1406,9 +1407,7 @@ public class Affiliations extends javax.swing.JFrame {
         updateSaveButton.setMnemonic('M');
             
         setLev_Editable(currLevel, false);
-        
         table.getCellEditor().stopCellEditing();
-//        changeControlEnabledForTable(tableType);
         if (table == lev1_Table) {
             changeItemsEnabled(table, lev1_Radio.isSelected());
         } else {
@@ -1416,9 +1415,6 @@ public class Affiliations extends javax.swing.JFrame {
         }
     }    
     
-    ControlEnums.TableType currTable = null;
-    
-
     private int followAndGetTrueIndex(JTable theTable) {
         theTable.scrollRectToVisible(
                 new Rectangle(theTable.getCellRect(theTable.getSelectedRow(), 0, true)));
@@ -1637,8 +1633,10 @@ public class Affiliations extends javax.swing.JFrame {
             }
         });
     }
+    
     final int NO_HIGHLIGHT = -2;
     final int HIGHLIGHT_NEW = -1;
+    
     private void addAffiliationSelectionListener(JTable table) {
         ListSelectionModel cellSelectionModel = table.getSelectionModel();
         cellSelectionModel.addListSelectionListener (new ListSelectionListener ()
@@ -1788,10 +1786,12 @@ public class Affiliations extends javax.swing.JFrame {
         table.getTableHeader().addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if (table == lev1_Table) {
-                    lev1_Radio.setSelected(true);
-                } else {
-                    lev2_Radio.setSelected(true);
+                if (formMode == NormalMode) {
+                    if (table == lev1_Table) {
+                        lev1_Radio.setSelected(true);
+                    } else {
+                        lev2_Radio.setSelected(true);
+                    }
                 }
             }
         });
@@ -1799,10 +1799,10 @@ public class Affiliations extends javax.swing.JFrame {
     
     /**
      * Fix enable/disable affiliation management buttons in one place.
-     *    Button     : Insert   Update   Delete   Cancel
-     *  Form Mod     : !update  !insert  normal   !normal  
-     * Row selection :   N/A    selected selected selected
-     *  User level   : -------------- Manager --------------
+     *        Button : Insert     Update     Delete     Cancel
+     *      Form Mod : !update    !insert    normal     !normal  
+     * Row selection :   N/A      selected   selected   selected
+     *    User level : -------------- Manager ------------------
      */
     private void fixButtonEnabled() {
         if (isManager) {
@@ -1854,6 +1854,27 @@ public class Affiliations extends javax.swing.JFrame {
             updateSaveButton.setEnabled(false);
             deleteButton.setEnabled(false);
             cancelButton.setEnabled(false);
+        }
+    }
+
+    /**
+     * Changes table under consideration via a Radio button selection.
+     * This method is called from four places:
+     * <p><ul>
+     * <li>Table title
+     * <li>Table column heading
+     * <li>Table row clicking
+     * <li>Table radio and its surrounding panel.
+     * </ul></p>
+     * @param tab_no table number, either 1 or 2.
+     */
+    private void changeTableSelection(int tab_no) {
+        if (formMode == NormalMode) {
+            if (tab_no == 1) {
+                lev1_Radio.setSelected(true);
+            } else {
+                lev2_Radio.setSelected(true);
+            }
         }
     }
 }

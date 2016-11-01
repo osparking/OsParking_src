@@ -489,7 +489,7 @@
                       </Events>
                       <AuxValues>
                         <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new javax.swing.JTable(){&#xa;    public boolean isCellEditable(int rowIndex, int colIndex) {&#xa;        return lev_Editable[currLevel];&#xa;    }&#xa;}&#xa;"/>
-                        <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="lev2_Table.setSelectionBackground(DARK_BLUE);&#xa;lev2_Table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);&#xa;lev2_Table.addFocusListener(new java.awt.event.FocusAdapter() {&#xa;    public void focusLost(java.awt.event.FocusEvent evt) {&#xa;//        L2_AffiliationFocusLost(evt);&#xa;    }&#xa;});"/>
+                        <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="lev2_Table.setSelectionBackground(DARK_BLUE);&#xa;lev2_Table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);"/>
                         <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="lev2_Table.getTableHeader().setFont(new java.awt.Font(font_Type, font_Style, font_Size));"/>
                       </AuxValues>
                     </Component>
