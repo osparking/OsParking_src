@@ -367,20 +367,26 @@ public class CommonData { // new Dimension(carTagWidth, 30)
         }        
     };
     
-    public static DefaultTableCellRenderer numberCellRenderer = new DefaultTableCellRenderer() {
-        Border padding = BorderFactory.createEmptyBorder(0, 15, 0, 15);
+    public static DefaultTableCellRenderer numberCellRenderer = getCellRenderer(15);
+    
+    public static DefaultTableCellRenderer numberCellRendererW = getCellRenderer(40);
+    
+    private static DefaultTableCellRenderer getCellRenderer(final int hMargin) {
+        return new DefaultTableCellRenderer() {
+            Border padding = BorderFactory.createEmptyBorder(0, hMargin, 0, hMargin);
 
-        @Override
-        public Component getTableCellRendererComponent(JTable table, Object value, 
-                boolean isSelected, boolean hasFocus, int row, int column) 
-        {
-            super.getTableCellRendererComponent(table, value, isSelected, hasFocus,
-                    row, column);
-            setBorder(BorderFactory.createCompoundBorder(getBorder(), padding));
-            setHorizontalAlignment(JLabel.RIGHT);
-            return this;            
-        }
-    };  
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value, 
+                    boolean isSelected, boolean hasFocus, int row, int column) 
+            {
+                super.getTableCellRendererComponent(table, value, isSelected, hasFocus,
+                        row, column);
+                setBorder(BorderFactory.createCompoundBorder(getBorder(), padding));
+                setHorizontalAlignment(JLabel.RIGHT);
+                return this;            
+            }
+        };         
+    }
     
     public static void showCount(JTable RunRecordTable, JButton saveSheet_Button, 
             JLabel countValue) 

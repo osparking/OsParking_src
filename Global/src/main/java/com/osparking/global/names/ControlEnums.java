@@ -264,7 +264,6 @@ public class ControlEnums {
         AFFILIATION_LIST_LABEL("상위 소속 목록",  "Higher Affiliations"),
         LOWER_LIST_LABEL("부서 목록",  "Subdivisions"),
         BUILDING_LIST_LABEL("건물(동) 목록",  "Building Numbers"), 
-        ROOM_LIST_LABEL("호실 목록",  "Rooms of Building"), 
         HELP_AFFIL_LABEL("소속 명칭 ods 파일 형식",  "Affiliation name list ods file content"), 
         HELP_BUILDING_LABEL("건물 호실 ods 파일 형식", "Building room number list ods file content"), 
         HELP_DRIVER_TITLE("차주 ods 파일 형식", "Driver list ods file content"), 
@@ -569,6 +568,8 @@ public class ControlEnums {
         
         BLDG_DIAG_L1("다음 건물 번호를 변경합니까?", "Want to change below building number?"),
         BLDG_DIAG_L2("건물 번호 : ", "Building No.: "),
+        BLDG_DIAG_L21(" -건물 번호: ", " -Building No.: "),
+        
         BLDG_DIAG_L3("(소속 호실 수: ", "(Number of rooms : "),
         
         UNIT_DIAG_L1("다음 호실 번호를 변경합니까?", "Change below room number?"),
@@ -581,6 +582,7 @@ public class ControlEnums {
         
         AFFILI_DEL_RESULT("소속 삭제 성공!", "Successful affiliation deletion!"),
         BLDG_DEL_RESULT("건물 삭제 성공!", "Successful building deletion!"),
+        BLDG_DEL_FAIL("다음 건물 삭제에 실패하였습니다", "Building Deletion Failure."),
         
         ASK_LOGOUT(", 로그아웃 원하십니까?", ", do you want to log out?"),
         AVERAGE_WORDS(" 대 평균 통과시간: ", " car passing delay average: "),
@@ -1099,13 +1101,15 @@ public class ControlEnums {
                 "이 파일에 덮어 쓰겠습니까?", "Do you want to overwrite it?"),
         AUTO_LOGOUT("이 자동 로그아웃 됨!", " is forced to log out!"),
         EMPTY_HIGH_AFFILI("빈 문자열은 상위 소속이 될 수 없습니다.", "Empty high level affiliation error."),
+        EMPTY_BUILDING("빈 문자열은 건물 번호가 될 수 없습니다.", "Empty building number error."),
+        EMPTY_UNIT("빈 문자열은 호실 번호가 될 수 없습니다.", "Empty unit number error."),
         EMPTY_LOW_AFFILI("빈 문자열은 하위 소속이 될 수 없습니다.", "Empty low level affiliation error."),
         DUPLICATE_HIGH_AFFILI("중복되는 상위 소속 : ", "Duplicate high level affiliation : "),
         DUPLICATE_HIGH_AFFILI2(" : 중복 상위 소속은 생성될 수 없습니다.", "Duplicate high level affiliation : "),
         DUPLICATE_LOW_AFFILI("중복되는 하위 소속 : ", "Duplicate low level affiliation : "),
         DUPLICATE_LOW_AFFILI2(" : 중복 하위 소속은 생성될 수 없습니다.", "Duplicate low level affiliation : "),
-        DUPLICATE_BUILDING("중복되는 건물 번호 : ", "Duplicate building number : "),
-        DUPLICATE_UNIT("중복되는 호실 번호 : ", "Duplicate unit number : "),
+        DUPLICATE_BUILDING(" : 중복되는 건물은 생성될 수 없습니다.", "Duplicate building number : "),
+        DUPLICATE_UNIT(" : 중복되는 호실은 생성될 수 없습니다.", "Duplicate unit number : "),
          
         OSPARKING_STOPS("오즈파킹 가동이 종료됨.", "OsParking operation finishes."),
         REBOOT_MESSAGE("중요 설정이 변경되어," + System.getProperty("line.separator") +

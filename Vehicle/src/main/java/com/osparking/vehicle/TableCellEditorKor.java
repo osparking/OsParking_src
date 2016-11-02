@@ -48,7 +48,13 @@ public class TableCellEditorKor extends AbstractCellEditor implements TableCellE
     public Component getTableCellEditorComponent(
             JTable table, Object value, boolean isSelected, int row, int col) 
     {
-        ((JTextField)component).setText((String)value);
+        if (value == null) {
+//            ((JTextField)component).setText("");
+        } else if (value.getClass() == Integer.class) {
+            ((JTextField)component).setText(Integer.toString((Integer)value));
+        } else {
+            ((JTextField)component).setText((String)value);
+        }
       
         try {
             InputContext inCtx  =  table.getInputContext();

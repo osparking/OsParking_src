@@ -593,8 +593,8 @@ public class DataGUI extends javax.swing.JFrame {
         /**
          * First, insert building numbers.
          */
-        String insertSQL = "INSERT INTO `building_table` VALUES (192,1),(193,2),(194,3),"
-                + "(195,4),(196,5),(197,6)";
+        String insertSQL = "INSERT INTO `building_table` VALUES (192,101),(193,102),(194,103),"
+                + "(195,104),(196,105),(197,106)";
         int result = insertRecords(insertSQL, BUILDING);
         
         /**

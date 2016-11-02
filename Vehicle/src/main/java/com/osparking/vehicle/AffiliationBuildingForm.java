@@ -51,7 +51,7 @@ import static com.osparking.global.Globals.head_font_Size;
 import static com.osparking.global.Globals.highlightTableRow;
 import static com.osparking.global.Globals.initializeLoggers;
 import static com.osparking.global.Globals.insertBuilding;
-import static com.osparking.global.Globals.insertBuildingUnit;
+import static com.osparking.global.Globals.insertUnit;
 import static com.osparking.global.Globals.insertLevel1Affiliation;
 import static com.osparking.global.Globals.insertLevel2Affiliation;
 import static com.osparking.global.Globals.isManager;
@@ -152,6 +152,7 @@ import static com.osparking.global.names.OSP_enums.ODS_TYPE.AFFILIATION;
 import static com.osparking.global.names.OSP_enums.ODS_TYPE.BUILDING;
 import com.osparking.global.names.OdsFileOnly;
 import com.osparking.global.names.WrappedInt;
+import static com.osparking.vehicle.CommonData.adjustColumnWidth;
 import static com.osparking.vehicle.CommonData.setHelpDialogLoc;
 import static com.osparking.vehicle.CommonData.wantToSaveFile;
 import com.osparking.vehicle.driver.ODSReader;
@@ -1943,7 +1944,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
                 // Cond 2: Unit Number has a good decimal number string
                 // <editor-fold defaultstate="collapsed" desc="-- Actual creation of a new room number"> 
                 int unit_no = (Integer)unoInteger; 
-                int result = insertBuildingUnit(unit_no, (Integer)bldgSeqNoObj);
+                int result = insertUnit(unit_no, (Integer)bldgSeqNoObj);
                 
                 if (result == ER_NO) {
                     loadUnitNumberTable(bldgNo, (Integer)bldgSeqNoObj, -1, unit_no); // Refresh the list
@@ -1999,7 +2000,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
         } else {
             int modal_Index = BuildingTable.convertRowIndexToModel(viewIndex);        
             int bldg_no = (Integer)BuildingTable.getModel().getValueAt(modal_Index, 1);
-            int bldg_seq_no = (Integer)BuildingTable.getModel().getValueAt(modal_Index, 2);        
+            int bldg_seq_no = (Integer)BuildingTable.getModel().getValueAt(modal_Index, 2);
             int count = getUnitCount(bldg_seq_no);
 
             String message = BLDG_DELETE_L1.getContent() + System.getProperty("line.separator") 
@@ -2011,7 +2012,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
                     JOptionPane.YES_NO_OPTION); 
         
             if (result == JOptionPane.YES_OPTION) {
-                String excepMsg = "(while deleting building No: " + bldg_no + ")";            
+                String excepMsg = "(while deleting building No: " + bldg_no + ")";
                 String sql = "Delete From BUILDING_TABLE Where SEQ_NO = ?";                
 
                 result = deleteHigherRow(excepMsg, sql, bldg_seq_no);
@@ -2024,7 +2025,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
 
                     JOptionPane.showConfirmDialog(this, message,
                                 DELETE_RESULT_DIALOGTITLE.getContent(),
-                                JOptionPane.PLAIN_MESSAGE, INFORMATION_MESSAGE);                
+                                JOptionPane.PLAIN_MESSAGE, INFORMATION_MESSAGE);
                 }
             }
         }
@@ -2035,17 +2036,18 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
      * @param evt 
      */
     private void deleteUnit_ButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteUnit_ButtonActionPerformed
-        int uIndex = UnitTable.getSelectedRow();
-        if (uIndex == -1)
+        int viewIndex = UnitTable.getSelectedRow();
+        if (viewIndex == -1)
         {
             return;
         }
-        int unitNo = (Integer)UnitTable.getValueAt(uIndex, 1);
-        int modal_Index = UnitTable.convertRowIndexToModel(uIndex);                
-        int seqNo = (Integer)UnitTable.getModel().getValueAt(modal_Index, 2);
+        
+        int modal_Index = UnitTable.convertRowIndexToModel(viewIndex);                
+        int bu_No = (Integer)UnitTable.getValueAt(viewIndex, 1);
+        int bu_seq_no = (Integer)UnitTable.getModel().getValueAt(modal_Index, 2);
         
         String dialog = UNIT_DEL_1.getContent() + System.getProperty("line.separator") + 
-                UNIT_DEL_2.getContent() + unitNo;
+                UNIT_DEL_2.getContent() + bu_No;
         
         int result = JOptionPane.showConfirmDialog(this, dialog,
                 DELETE_DIALOGTITLE.getContent(), 
@@ -2055,7 +2057,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
             // <editor-fold defaultstate="collapsed" desc="-- Deletion of a room number">
             Connection conn = null;
             PreparedStatement deleteUnit = null;
-            String excepMsg = "(failed deletion of unit no: " + unitNo + ")";
+            String excepMsg = "(failed deletion of unit no: " + bu_No + ")";
 
             result = 0;
             try {
@@ -2063,7 +2065,7 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
 
                 conn = getConnection();
                 deleteUnit = conn.prepareStatement(sql);
-                deleteUnit.setInt(1, seqNo);
+                deleteUnit.setInt(1, bu_seq_no);
 
                 result = deleteUnit.executeUpdate();
             } catch (SQLException ex) {
@@ -2083,17 +2085,17 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
                 /**
                  * Refresh room number list after a room has been deleted.
                  */
-                loadUnitNumberTable(bldgNo, bldgSeqNo, uIndex, unitNo); 
+                loadUnitNumberTable(bldgNo, bldgSeqNo, viewIndex, bu_No); 
 
                 dialog = UNIT_DEL_RES_1.getContent() + System.getProperty("line.separator") + 
-                        UNIT_DEL_2.getContent() + unitNo;
+                        UNIT_DEL_2.getContent() + bu_No;
                 
                 JOptionPane.showConfirmDialog(this, dialog,
                         DELETE_RESULT_DIALOGTITLE.getContent(), 
                         JOptionPane.PLAIN_MESSAGE, INFORMATION_MESSAGE);
             } else {
                 dialog = UNIT_DEL_FAIL.getContent() +  System.getProperty("line.separator") + 
-                        UNIT_DEL_2.getContent() + unitNo;
+                        UNIT_DEL_2.getContent() + bu_No;
                 
                 JOptionPane.showConfirmDialog(this, dialog, 
                         DELETE_RESULT_DIALOGTITLE.getContent(), 
@@ -2960,10 +2962,21 @@ public class AffiliationBuildingForm extends javax.swing.JFrame {
                 // In this case, highlight the previous row      
                 viewIndex--;
             }
-            highlightTableRow(BuildingTable, viewIndex);
-        }
-        else
-        {
+
+            final int highRow = viewIndex;
+            java.awt.EventQueue.invokeLater(new Runnable() {
+                public void run() {
+                    highlightTableRow(BuildingTable, highRow);
+                }
+            });            
+
+            // Adjust first column width checking row count, etc.
+            adjustColumnWidth(BuildingTable, numRows);
+            
+            if (isManager) {
+                saveSheet_Button.setEnabled(true);
+            }             
+        } else {
             loadUnitNumberTable(0, null, 0, 0);
         }
         //</editor-fold>

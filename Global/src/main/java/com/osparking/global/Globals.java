@@ -1421,7 +1421,7 @@ public class Globals {
         }        
     }     
     
-    public static int insertBuildingUnit(int unitNo, int bldgSeqNo) {   
+    public static int insertUnit(int unitNo, int bldgSeqNo) {   
         int result = ER_YES;
         Connection conn = null; 
         PreparedStatement insertUnit = null;

@@ -17,7 +17,9 @@
 package com.osparking.vehicle;
 
 import static com.osparking.global.CommonData.ODS_FILEPATH;
+import static com.osparking.global.CommonData.getStringWidth;
 import static com.osparking.global.Globals.getNumericDigitCount;
+import com.osparking.global.names.ControlEnums;
 import java.awt.Component;
 import java.awt.Point;
 import java.io.File;
@@ -28,6 +30,8 @@ import java.nio.channels.FileChannel;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
+import javax.swing.JTable;
+import javax.swing.table.TableColumn;
 
 /**
  *
@@ -61,6 +65,23 @@ public class CommonData {
         
     static int count = 0;
 
+    public static void tableColumnLanguage(JTable table, int i, ControlEnums.OsPaLang lang) {
+        table.getColumnModel().getColumn(i).setCellEditor(
+                new TableCellEditorKor(lang, table.getFont()));
+    }    
+    
+    public static void adjustColumnWidth(JTable lev_Table, int numRows) {
+        String countStr = Integer.toString(numRows);
+        int numWidthFont = getStringWidth(countStr, lev_Table.getFont());
+        int width = numWidthFont + 40;
+        TableColumn column = lev_Table.getColumnModel().getColumn(0);
+
+        if (column.getPreferredWidth() < width) {
+            column.setPreferredWidth(width); 
+            column.setMinWidth(width); 
+        }
+    }    
+    
     public static String prependEscape(String searchKey) {
         return searchKey.replace("!", "!!")
                 .replace("!", "!!")

@@ -40,7 +40,7 @@ import static com.osparking.global.Globals.checkOptions;
 import static com.osparking.global.Globals.closeDBstuff;
 import static com.osparking.global.Globals.initializeLoggers;
 import static com.osparking.global.Globals.insertBuilding;
-import static com.osparking.global.Globals.insertBuildingUnit;
+import static com.osparking.global.Globals.insertUnit;
 import static com.osparking.global.Globals.insertLevel1Affiliation;
 import static com.osparking.global.Globals.insertLevel2Affiliation;
 import static com.osparking.global.Globals.logParkingException;
@@ -77,6 +77,7 @@ import com.osparking.global.names.OSP_enums.DriverCol;
 import com.osparking.global.names.OSP_enums.VehicleOds;
 import com.osparking.global.names.WrappedInt;
 import com.osparking.vehicle.Affiliations;
+import com.osparking.vehicle.Buildings;
 import static com.osparking.vehicle.CommonData.invalidCell;
 import static com.osparking.vehicle.CommonData.invalidName;
 import static com.osparking.vehicle.CommonData.invalidPhone;
@@ -113,7 +114,7 @@ public class ODSReader {
         return sb.toString();
     }
     
-    private static void readBuildingAndUnits(Sheet sheet) {
+    public void readBuildingODS(Sheet sheet, Buildings parentForm) {
         ODSReader objODSReader = new ODSReader();
         
         ArrayList<Point> wrongCells = new ArrayList<Point>();
@@ -255,7 +256,7 @@ public class ODSReader {
                     } else {
                         //<editor-fold defaultstate="collapsed" desc="-- Process unit number columns ">
                         if (goodBuilding) {
-                            int result = insertBuildingUnit(cellValue.getValue(), bldgSeqNo);
+                            int result = insertUnit(cellValue.getValue(), bldgSeqNo);
                             // try to insert unit number with the building sequence number
                             
                             if (result == ER_NO) {

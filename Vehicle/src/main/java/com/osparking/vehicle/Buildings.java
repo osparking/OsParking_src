@@ -27,7 +27,9 @@ import static com.osparking.global.CommonData.buttonHeightNorm;
 import static com.osparking.global.CommonData.buttonWidthNorm;
 import static com.osparking.global.CommonData.buttonWidthWide;
 import static com.osparking.global.CommonData.downloadSample;
+import static com.osparking.global.CommonData.getStringWidth;
 import static com.osparking.global.CommonData.numberCellRenderer;
+import static com.osparking.global.CommonData.numberCellRendererW;
 import static com.osparking.global.CommonData.pointColor;
 import static com.osparking.global.CommonData.tableRowHeight;
 import static com.osparking.global.CommonData.tipColor;
@@ -44,8 +46,8 @@ import static com.osparking.global.Globals.getQuest20_Icon;
 import static com.osparking.global.Globals.head_font_Size;
 import static com.osparking.global.Globals.highlightTableRow;
 import static com.osparking.global.Globals.initializeLoggers;
-import static com.osparking.global.Globals.insertLevel1Affiliation;
-import static com.osparking.global.Globals.insertLevel2Affiliation;
+import static com.osparking.global.Globals.insertBuilding;
+import static com.osparking.global.Globals.insertUnit;
 import static com.osparking.global.Globals.isManager;
 import static com.osparking.global.Globals.language;
 import static com.osparking.global.Globals.logParkingException;
@@ -65,11 +67,12 @@ import static com.osparking.global.names.ControlEnums.ButtonTypes.SAVE_BTN;
 import static com.osparking.global.names.ControlEnums.ButtonTypes.SAVE_ODS_BTN;
 import com.osparking.global.names.ControlEnums.DialogMessages;
 import static com.osparking.global.names.ControlEnums.DialogMessages.AFFILI_SAVE_ODS_FAIL_DIALOG;
-import static com.osparking.global.names.ControlEnums.DialogMessages.DUPLICATE_HIGH_AFFILI2;
-import static com.osparking.global.names.ControlEnums.DialogMessages.DUPLICATE_LOW_AFFILI2;
-import static com.osparking.global.names.ControlEnums.DialogMessages.EMPTY_HIGH_AFFILI;
-import static com.osparking.global.names.ControlEnums.DialogMessages.EMPTY_LOW_AFFILI;
-import static com.osparking.global.names.ControlEnums.DialogMessages.LEVEL2_NAME_DIALOG;
+import static com.osparking.global.names.ControlEnums.DialogMessages.DUPLICATE_BUILDING;
+import static com.osparking.global.names.ControlEnums.DialogMessages.DUPLICATE_UNIT;
+import static com.osparking.global.names.ControlEnums.DialogMsg.UNIT_DEL_1;
+import static com.osparking.global.names.ControlEnums.DialogMsg.UNIT_DEL_2;
+import static com.osparking.global.names.ControlEnums.DialogMsg.UNIT_DEL_FAIL;
+import static com.osparking.global.names.ControlEnums.DialogMsg.UNIT_DEL_RES_1;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.DELETE_DIALOGTITLE;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.DELETE_RESULT_DIALOGTITLE;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.ERROR_DIALOGTITLE;
@@ -82,34 +85,33 @@ import static com.osparking.global.names.ControlEnums.FormModeString.CREATE;
 import static com.osparking.global.names.ControlEnums.FormModeString.FETCH;
 import static com.osparking.global.names.ControlEnums.FormModeString.MODIFY;
 import static com.osparking.global.names.ControlEnums.LabelContent.AFFILIATION_LABEL;
-import static com.osparking.global.names.ControlEnums.LabelContent.AFFILIATION_LIST_LABEL;
+import static com.osparking.global.names.ControlEnums.LabelContent.BUILDING_LIST_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.COUNT_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.HELP_AFFIL_LABEL;
-import static com.osparking.global.names.ControlEnums.LabelContent.LOWER_LABEL;
-import static com.osparking.global.names.ControlEnums.LabelContent.LOWER_LIST_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.MODE_LABEL;
-import static com.osparking.global.names.ControlEnums.MsgContent.AFFILI2_DIAG_L2;
-import static com.osparking.global.names.ControlEnums.MsgContent.AFFILI_DEL_L1;
-import static com.osparking.global.names.ControlEnums.MsgContent.AFFILI_DEL_L2;
-import static com.osparking.global.names.ControlEnums.MsgContent.AFFILI_DEL_RESULT;
-import static com.osparking.global.names.ControlEnums.MsgContent.AFFILI_DIAG_L2;
-import static com.osparking.global.names.ControlEnums.MsgContent.AFFILI_DIAG_L3;
+import static com.osparking.global.names.ControlEnums.LabelContent.UNIT_LABEL;
 import static com.osparking.global.names.ControlEnums.MsgContent.AFFILI_ODS_DIAG_1;
 import static com.osparking.global.names.ControlEnums.MsgContent.AFFILI_ODS_DIAG_2;
 import static com.osparking.global.names.ControlEnums.MsgContent.AFFILI_ODS_DIAG_3;
-import static com.osparking.global.names.ControlEnums.OsPaLang.KOREAN;
-import static com.osparking.global.names.ControlEnums.TableTypes.HIGHER_HEADER;
-import static com.osparking.global.names.ControlEnums.TableTypes.LOWER_COL_TITLE;
+import static com.osparking.global.names.ControlEnums.MsgContent.BLDG_DELETE_L1;
+import static com.osparking.global.names.ControlEnums.MsgContent.BLDG_DELETE_L3;
+import static com.osparking.global.names.ControlEnums.MsgContent.BLDG_DEL_FAIL;
+import static com.osparking.global.names.ControlEnums.MsgContent.BLDG_DEL_RESULT;
+import static com.osparking.global.names.ControlEnums.MsgContent.BLDG_DIAG_L2;
+import static com.osparking.global.names.ControlEnums.MsgContent.BLDG_DIAG_L21;
+import static com.osparking.global.names.ControlEnums.OsPaLang.ENGLISH;
+import static com.osparking.global.names.ControlEnums.TableTypes.BUILDING_HEADER;
+import static com.osparking.global.names.ControlEnums.TableTypes.BUILD_ROOM_HEADER;
 import static com.osparking.global.names.ControlEnums.TableTypes.ORDER_HEADER;
-import static com.osparking.global.names.ControlEnums.TitleTypes.AFFILIATION_FRAME_TITLE;
+import static com.osparking.global.names.ControlEnums.TableTypes.ROOM_HEADER;
+import static com.osparking.global.names.ControlEnums.TitleTypes.BUILDING_FRAME_TITLE;
 import static com.osparking.global.names.ControlEnums.ToolTipContent.DRIVER_ODS_UPLOAD_SAMPLE_DOWNLOAD;
-import static com.osparking.global.names.ControlEnums.ToolTipContent.INSERT_TOOLTIP;
+import static com.osparking.global.names.ControlEnums.ToolTipContent.NUMBER_FORMAT_ERROR_MSG;
 import static com.osparking.global.names.DB_Access.readSettings;
 import static com.osparking.global.names.JDBCMySQL.getConnection;
 import com.osparking.global.names.OSP_enums.ODS_TYPE;
 import com.osparking.global.names.OdsFileOnly;
 import com.osparking.global.names.WrappedInt;
-import static com.osparking.vehicle.CommonData.adjustColumnWidth;
 import static com.osparking.vehicle.CommonData.setHelpDialogLoc;
 import static com.osparking.vehicle.CommonData.tableColumnLanguage;
 import static com.osparking.vehicle.CommonData.wantToSaveFile;
@@ -135,7 +137,6 @@ import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import static javax.swing.JOptionPane.INFORMATION_MESSAGE;
 import javax.swing.JRadioButton;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
@@ -155,20 +156,20 @@ import org.jopendocument.dom.spreadsheet.SpreadSheet;
  *
  * @author Open Source Parking, Inc.(www.osparking.com)
  */
-public class Affiliations extends javax.swing.JFrame {
+public class Buildings extends javax.swing.JFrame {
     private boolean lev_Editable[] = {false, false, false};
     private int currLevel = 1;
     private ControlEnums.FormMode formMode = NormalMode;
     IMainGUI mainForm = null;
     private boolean isStand_Alone = false;
     
-    static Object prevL1Name = null;
-    static Object prevL2Name = null;    
+    static Object prevUnitNo = null;
+    static Object prevBldgNo = null;
 
     /**
      * Creates new form Affiliations
      */
-    public Affiliations(IMainGUI mainForm) {
+    public Buildings(IMainGUI mainForm) {
         initComponents();
         setIconImages(OSPiconList);
         
@@ -176,213 +177,67 @@ public class Affiliations extends javax.swing.JFrame {
         if (mainForm == null) {
             isStand_Alone = true;
         }        
-        
+           
         /**
          * Set default input language to Korean for 2 affiliation tables.
          */
-        tableColumnLanguage(lev1_Table, 1, KOREAN);
-        tableColumnLanguage(lev2_Table, 1, KOREAN);
+        tableColumnLanguage(BuildingTable, 1, ENGLISH);
+        tableColumnLanguage(UnitTable, 1, ENGLISH);        
         
         /**
-         * Add table model listener to complete update and create operation.
+         * Add table model listener for insertion(=creation) or update completion.
          */
-        addTableListener(lev1_Table, prevL1Name, "L1_NO", DUPLICATE_HIGH_AFFILI2);
-        addTableListener(lev2_Table, prevL2Name, "L2_NO", DUPLICATE_LOW_AFFILI2);
+        addTableListener(BuildingTable, prevBldgNo, "BLDG_NO", DUPLICATE_BUILDING);
+        addTableListener(UnitTable, prevUnitNo, "UNIT_NO", DUPLICATE_UNIT);
 
-        adjustAffiliationTable(lev1_Table);
-        adjustAffiliationTable(lev2_Table);
-        addAffiliationSelectionListener(lev1_Table);      
-        addAffiliationSelectionListener(lev2_Table);  
+        adjustTableDimension(BuildingTable);
+        adjustTableDimension(UnitTable);
+        addRowSelectionListener(BuildingTable);      
+        addRowSelectionListener(UnitTable);  
         
-        addHeaderMouseListener(lev1_Table);
-        addHeaderMouseListener(lev2_Table);
+        addHeaderMouseListener(BuildingTable);
+        addHeaderMouseListener(UnitTable);
+        
         setComponentSize(insertSaveButton, new Dimension(buttonWidthNorm, buttonHeightNorm));
         
-        loadLev1_Table(0, "");    
+        loadBuilding(0, 0);
         setFormMode(NormalMode);
-        changeItemsEnabled(lev1_Table, true);
+        changeItemsEnabled(BuildingTable, true);
     }
 
-    private void insertAffiliation(JTable table, ControlEnums.DialogMessages diagMsg) 
-    {
-        if (table.getSelectedRow() == -1) {
-            return;
-        }
-        
-        int rowIndex = table.convertRowIndexToModel (table.getSelectedRow());
-        TableModel model = table.getModel();
-        String affiliName = ((String)model.getValueAt(rowIndex, 1)).trim();
-
-        // Conditions to make this a new higher affiliation: Cond 1 and cond 2
-        if (model.getValueAt(rowIndex, 0) == null) // Cond 1. Row number field is null
-        {                     
-            if (affiliName == null 
-                    || affiliName.isEmpty()
-                    || affiliName.equals(INSERT_TOOLTIP.getContent())) 
-            {
-                DialogMessages message = 
-                        (table == lev1_Table ? EMPTY_HIGH_AFFILI : EMPTY_LOW_AFFILI);
-                abortInsertion(message.getContent(), table);
-                return;
-            } else {
-                // Cond 2. Name field has string of meaningful affiliation name
-                // <editor-fold defaultstate="collapsed" desc="-- Insert New Higher name and Refresh the List">
-                int result = ER_YES;
-                Object parentKey = null;
-                
-                if (currLevel == 1) {
-                    result = insertLevel1Affiliation(affiliName);
-                } else {
-                    int index = lev1_Table.convertRowIndexToModel(lev1_Table.getSelectedRow());
-                    parentKey = lev1_Table.getModel().getValueAt(index, 2); 
-                    
-                    result = insertLevel2Affiliation((Integer)parentKey, affiliName);
-                }
-
-                if (result == ER_NO) {
-                    setFormMode(FormMode.NormalMode);
-                    insertSaveButton.setText(CREATE_BTN.getContent());
-                    insertSaveButton.setMnemonic('R');                        
-                    
-                    setLev_Editable(currLevel, false);
-                    table.getCellEditor().stopCellEditing();
-                    if (currLevel == 1) {
-                        changeItemsEnabled(lev1_Table, lev1_Radio.isSelected());
-                        loadLev1_Table(-1, affiliName); // Refresh the list
-                    } else {
-                        changeItemsEnabled(lev2_Table, lev2_Radio.isSelected());
-                        loadLev2_Table(parentKey, -1, affiliName); // Refresh the list                        
-                    }
-                } else if (result == ER_DUP_ENTRY) {
-                    abortInsertion(affiliName + diagMsg.getContent(), table);
-                }
-                // </editor-fold>
-            }
-        }                
-    }    
-
-    private void abortModification(ControlEnums.DialogMessages dialog, String name, JTable table) {
-        abortModification(name + dialog.getContent(), table);
-    }
-
-    private void abortModification(ControlEnums.DialogMessages dialog, JTable table) {
-        abortModification(dialog.getContent(), table);
-    }
-    
-    private void abortModification(String message, JTable table) {
-        JOptionPane.showMessageDialog(this, message, ERROR_DIALOGTITLE.getContent(), 
-                JOptionPane.WARNING_MESSAGE); 
-        backToNormal(table);
-        if (table == lev1_Table) {
-            loadLev1_Table(table.getSelectedRow(), "");
-        } else {
-            int index1 = followAndGetTrueIndex(lev1_Table);
-            Object L1_no = lev1_Table.getModel().getValueAt(index1, 2);
-            
-            loadLev2_Table(L1_no, table.getSelectedRow(), "");
-        }
-    }    
-    
-    private void updateAffiliation(JTable affiliTable, Object prevAffiliName, String keyCol, 
-            ControlEnums.DialogMessages msgForDuplicate) 
-    {
-        // <editor-fold defaultstate="collapsed" desc="-- Update high affiliation name">
-        int rowIndex = affiliTable.convertRowIndexToModel (affiliTable.getSelectedRow());
-        TableModel model = affiliTable.getModel();
-        String affiliName = ((String)model.getValueAt(rowIndex, 1)).trim();    
-        
-        if (affiliName.isEmpty()) {
-            abortModification(
-                    affiliTable == lev1_Table ? EMPTY_HIGH_AFFILI : EMPTY_LOW_AFFILI, 
-                    affiliTable);                      
-            return;            
-        } 
-        Object keyVal = model.getValueAt(rowIndex, 2);
-        int result = 0;
-        Connection conn = null;
-        PreparedStatement pUpdateStmt = null;
-        
-        try {
-            String sql = "Update " + affiliTable.getName() + " Set PARTY_NAME = ? Where " + 
-                    keyCol + " = ?";
-
-            conn = getConnection();
-            pUpdateStmt = conn.prepareStatement(sql);
-            pUpdateStmt.setString(1, affiliName);
-            pUpdateStmt.setInt(2, (Integer)keyVal);
-            result = pUpdateStmt.executeUpdate();
-        } catch (SQLException ex) {
-            if (ex.getErrorCode() == ER_DUP_ENTRY) {
-                abortModification(msgForDuplicate, affiliName, affiliTable);                      
-                return;
-            }
-        } finally {
-            closeDBstuff(conn, pUpdateStmt, null, 
-                    "(Original " + affiliTable.getName() + "name : " + prevAffiliName + ")");
-        }    
-        if (result == 1) {
-            backToNormal(affiliTable);
-
-            if (affiliTable == lev1_Table) {
-                loadLev1_Table(-1, affiliName); // Refresh higher affiliation list
-            } else {
-                int index = lev1_Table.convertRowIndexToModel(lev1_Table.getSelectedRow());
-                Object L1_no = lev1_Table.getModel().getValueAt(index, 2);
-                
-                loadLev2_Table(L1_no, HIGHLIGHT_NEW, affiliName);
-            }
-        }         
-    }
-        
-    private void adjustAffiliationTable(JTable AffiliationTable) {
-        
-        // Hide affiliation number field which is used internally.
-        TableColumnModel BelongModel = AffiliationTable.getColumnModel();
-        BelongModel.removeColumn(BelongModel.getColumn(2));
-        
-        // Decrease the first column width
-        TableColumn column = AffiliationTable.getColumnModel().getColumn(0);
-        column.setPreferredWidth(50); //row number column is narrow
-        column.setMinWidth(50); //row number column is narrow
-        column.setMaxWidth(10000); //row number column is narrow
-        
-        column = AffiliationTable.getColumnModel().getColumn(1);
-        column.setPreferredWidth(150); //row number column is narrow
-        column.setMinWidth(150); //row number column is narrow
-        column.setMaxWidth(30000); //row number column is narrow        
-    }     
-    
-    public void loadLev1_Table(int viewIndexToHighlight, String insertedName) {
-
+    /**
+     * 
+     * @param viewIndex
+     * @param bldgNo building number of the row to highlight(select)
+     */
+    public void loadBuilding(int viewIndex, int bldgNo) {
         Connection conn = null;
         Statement selectStmt = null;
         ResultSet rs = null;
-        String excepMsg = "(load upper and lower level affiliations)";
-
-        DefaultTableModel model = (DefaultTableModel) lev1_Table.getModel();
-        int model_Index = 0;
-        
+        String excepMsg = "(upload building and unit number list)";
+                
+        DefaultTableModel model = (DefaultTableModel) BuildingTable.getModel();
+        int model_Index = 0;            
         try {
-            //<editor-fold defaultstate="collapsed" desc="-- Load higher level affiliations">
-            StringBuffer sb = new StringBuffer();
-            sb.append(" SELECT @ROWNUM := @ROWNUM + 1 AS recNo, PARTY_NAME, L1_NO ");
-            sb.append(" FROM L1_Affiliation, (SELECT @rownum := 0) r ");
-            sb.append(" ORDER BY party_name");
-            
+            // <editor-fold defaultstate="collapsed" desc="-- Load building number list">
             conn = getConnection();
             selectStmt = conn.createStatement();
-            rs = selectStmt.executeQuery(sb.toString());
             
+            StringBuffer sb = new StringBuffer();
+            sb.append(" SELECT @ROWNUM := @ROWNUM + 1 AS recNo, BLDG_NO, SEQ_NO");
+            sb.append(" FROM Building_Table, (SELECT @rownum := 0) r ");
+            sb.append(" ORDER BY BLDG_NO");
+            
+            rs = selectStmt.executeQuery(sb.toString());
+
             model.setRowCount(0);
             while (rs.next()) {
-                if (viewIndexToHighlight == -1) // loading right after a new affiliation is created
-                {
-                    if (insertedName.equals(rs.getString("PARTY_NAME")))
-                    {
-                        model_Index = model.getRowCount();  // store index to select
+                if (viewIndex == HIGHLIGHT_NEW) { // the case of a new building creation
+                    if (bldgNo == rs.getInt("BLDG_NO")) {
+                        model_Index = model.getRowCount();
                     }
                 }
-                model.addRow(new Object[] {rs.getInt("recNo"),  rs.getString("PARTY_NAME"), rs.getInt("L1_NO")});
+                model.addRow(new Object[] {rs.getInt("recNo"),  rs.getInt("BLDG_NO"), rs.getInt("SEQ_NO")});
             }
             //</editor-fold>
         } catch (SQLException ex) {
@@ -390,44 +245,303 @@ public class Affiliations extends javax.swing.JFrame {
         } finally {
             closeDBstuff(conn, selectStmt, rs, excepMsg);
         }
-        
-        saveSheet_Button.setEnabled(false);
-        
-        // <editor-fold defaultstate="collapsed" desc="-- Selection of a higher affiliation and loading of its lower affil'">
+        // <editor-fold defaultstate="collapsed" desc="-- highlight a building and load its room list">
         int numRows = model.getRowCount();
         if (numRows > 0)
         {
-            if (viewIndexToHighlight == -1) // loading right after a new affiliation is created
-            {
-                viewIndexToHighlight = lev1_Table.convertRowIndexToView(model_Index);
-            } else if (viewIndexToHighlight == numRows)
-            {
-                // "number of remaining rows == deleted row index" means the row deleted was the last row
-                // In this case, highlight the previous row
-                viewIndexToHighlight--;
+            if (viewIndex == HIGHLIGHT_NEW) { // handle the case of a new building creation
+                viewIndex = BuildingTable.convertRowIndexToView(model_Index);
+            } else if (viewIndex == numRows) {
+                // "number of remaining rows == deleted row index" means
+                // the row deleted was the last row
+                // In this case, highlight the previous row      
+                viewIndex--;
             }
             
-            final int highRow = viewIndexToHighlight;
+            final int highRow = viewIndex;
             java.awt.EventQueue.invokeLater(new Runnable() {
                 public void run() {
-                    highlightTableRow(lev1_Table, highRow);
+                    highlightTableRow(BuildingTable, highRow);
                 }
             });
             
             // Adjust first column width checking row count, etc.
-            adjustColumnWidth(lev1_Table, numRows);
+            adjustColumnWidth(BuildingTable, numRows);
             
             if (isManager) {
                 saveSheet_Button.setEnabled(true);
-            }            
+            }              
         } else {
-            loadLev2_Table(null, 0, "");
+            loadUnit(0, null, 0, 0);
         }
-        lev1_Count.setText(Integer.toString(numRows));
-        fixButtonEnabled();        
+        bldg_Count.setText(Integer.toString(numRows));
+        fixButtonEnabled();
         //</editor-fold>
+    }    
+    
+    /**
+     * Load unit numbers from DB and use them to refresh the unit_Table.
+     * @param bldgNo human readable building number
+     * @param bldg_seq_no DB key for the building number
+     * @param viewIndex row index to highlight on the list
+     * @param unitNo human readable unit number
+     */
+    private void loadUnit(int bldgNo, Object bldg_seq_no, int viewIndex, int unitNo) 
+    {
+        if (bldg_seq_no == null)
+        {
+            Unit_Title.setText(UNIT_LABEL.getContent());
+            ((DefaultTableModel) UnitTable.getModel()).setRowCount(0);
+        } else {
+            String label = null;
+            
+            if (language == Locale.KOREAN) {
+                label = bldgNo + UNIT_LABEL.getContent();
+            } else if (language == Locale.ENGLISH) {
+                label = UNIT_LABEL.getContent() + bldgNo; 
+            }              
+            
+            Unit_Title.setText(label); 
+            
+            Connection conn = null;
+            Statement selectStmt = null;
+            ResultSet rs = null;
+            String excepMsg = "refresh unit list that belongs to building no: " + bldgNo;
+                
+            DefaultTableModel model = (DefaultTableModel) UnitTable.getModel();
+            int model_index = -1;    
+            
+            // List up room numbers on the table for room numbers
+            try {            
+                // <editor-fold defaultstate="collapsed" desc="-- Load Room Numbers of a Building">                
+                StringBuffer sb = new StringBuffer();
+                sb.append(" SELECT @ROWNUM := @ROWNUM + 1 AS recNo, ");
+                sb.append("   UNIT_NO, SEQ_NO");
+                sb.append(" FROM BUILDING_UNIT, (SELECT @rownum := 0) r");
+                sb.append(" WHERE BLDG_SEQ_NO = " + bldg_seq_no.toString());
+                sb.append(" ORDER BY UNIT_NO");
+
+                conn = getConnection();
+                selectStmt = conn.createStatement();
+                rs = selectStmt.executeQuery(sb.toString());
+                model.setRowCount(0);
+                while (rs.next()) {
+                    if (viewIndex == HIGHLIGHT_NEW) { // Handle the case of a new Unit creation
+                        if (unitNo == rs.getInt("UNIT_NO")) {
+                            model_index = model.getRowCount();
+                        }
+                    }                    
+                    model.addRow(new Object[] 
+                        {rs.getInt("recNo"),  rs.getInt("UNIT_NO"), rs.getInt("SEQ_NO")});
+                }
+                //</editor-fold>
+            } catch (SQLException ex) {
+                logParkingException(Level.SEVERE, ex, excepMsg);
+            } finally {
+                closeDBstuff(conn, selectStmt, rs, excepMsg);
+            }
+                
+            // "number of remaining rows == deleted row index" means the row deleted was the last row
+            // In this case, highlight the previous row               
+            int numRows = model.getRowCount();
+            if (numRows > 0) {
+                if (viewIndex == -1) { // handle the case of new room creation
+                    viewIndex = UnitTable.convertRowIndexToView(model_index);
+                } else if (viewIndex == numRows) { 
+                    viewIndex--; // when the row deleted was the last row
+                }
+                
+                final int highRow = viewIndex;
+                if (viewIndex != NO_HIGHLIGHT) {
+                    java.awt.EventQueue.invokeLater(new Runnable() {
+                        public void run() {
+                            highlightTableRow(UnitTable, highRow);
+                        }
+                    });                    
+                }
+                adjustColumnWidth(UnitTable, numRows);                
+            }
+            unit_Count.setText(Integer.toString(numRows));
+        }
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                fixButtonEnabled();
+            }
+        });        
+    }    
+    
+    /**
+     * Check if the string at 1st column of the hightlighted row is OK.
+     * @return 
+     */
+    private IntCheckResult checkBldgUnitNumber(JTable table) {
+        if (table.getSelectedRow() == -1) {
+            return new IntCheckResult(true, null, 0);
+        }        
+        
+        int rowIndex = table.convertRowIndexToModel (table.getSelectedRow());
+        TableModel model = table.getModel();
+        String inputStr = (String)(model.getValueAt(rowIndex, 1));
+        
+        Integer bunInteger = tryParseInt(inputStr);
+        
+        if (bunInteger == null) {
+//            abortInsertion(NUMBER_FORMAT_ERROR_MSG.getContent(), table);
+            return new IntCheckResult(true, NUMBER_FORMAT_ERROR_MSG.getContent(), 0);
+        }  
+//        
+//        if (bunInteger == null) {
+//            DialogMessages message = 
+//                    (table == BuildingTable ? EMPTY_BUILDING : EMPTY_UNIT);
+////            abortInsertion(message.getContent(), table);
+//            return new IntCheckResult(true, NUMBER_FORMAT_ERROR_MSG.getContent(), 0);
+//        }   
+        return new IntCheckResult(false, null, bunInteger);
     }
     
+    private void insertBldgUnit(JTable table, ControlEnums.DialogMessages diagMsg) 
+    {
+        //if (model.getValueAt(rowIndex, 0) == null) {                     
+        IntCheckResult checkResult = checkBldgUnitNumber(table);
+        Integer bunInteger;
+        
+        if (checkResult.isBadFormat()) {
+            abortInsertion(checkResult.getAbortMsg(), table);
+            return;
+        } else {
+            bunInteger = checkResult.value;
+        }
+        
+        // <editor-fold defaultstate="collapsed" desc="-- Insert New Higher name and Refresh the List">
+        int result = ER_YES;
+        TableModel bModel = BuildingTable.getModel();
+        int bIndex = BuildingTable.convertRowIndexToModel(BuildingTable.getSelectedRow());
+        Object bldgSeqNoObj = bModel.getValueAt(bIndex, 2);
+
+        if (currLevel == 1) {
+            result = insertBuilding(bunInteger);
+        } else {
+            result = insertUnit(bunInteger, (Integer)bldgSeqNoObj);                    
+        }
+
+        if (result == ER_NO) {
+            setFormMode(FormMode.NormalMode);
+            insertSaveButton.setText(CREATE_BTN.getContent());
+            insertSaveButton.setMnemonic('R');                        
+
+            setLev_Editable(currLevel, false);
+            table.getCellEditor().stopCellEditing();
+            if (currLevel == 1) {
+                changeItemsEnabled(BuildingTable, bldg_Radio.isSelected());
+                loadBuilding(HIGHLIGHT_NEW, bunInteger);
+            } else {
+                int bldgNo = (Integer)bModel.getValueAt(bIndex, 1);
+
+                changeItemsEnabled(UnitTable, lev2_Radio.isSelected());
+                loadUnit(bldgNo, bldgSeqNoObj, HIGHLIGHT_NEW, bunInteger);
+            }
+        } else if (result == ER_DUP_ENTRY) {
+            abortInsertion(bunInteger + diagMsg.getContent(), table);
+        }
+        // </editor-fold>
+    }    
+
+    private void abortModification(DialogMessages dialog, String name, int row, JTable table) {
+        abortModification(dialog.getContent() + name, row, table);
+    }
+
+    private void abortModification(DialogMessages dialog, int row, JTable table) {
+        abortModification(dialog.getContent(), row, table);
+    }
+    
+    private void abortModification(String message, int row, JTable table) {
+        JOptionPane.showMessageDialog(this, message, ERROR_DIALOGTITLE.getContent(), 
+                JOptionPane.WARNING_MESSAGE); 
+        backToNormal(table);
+        if (table == BuildingTable) {
+            loadBuilding(row, 0);
+        } else {
+            int bIndex = BuildingTable.convertRowIndexToModel(BuildingTable.getSelectedRow());
+            int bldgNo = (Integer)BuildingTable.getModel().getValueAt(bIndex, 1);
+            Object bldgSeqNoObj = BuildingTable.getModel().getValueAt(bIndex, 2);               
+            
+            loadUnit(bldgNo, bldgSeqNoObj, row, 0);
+        }
+    }
+    
+    private void updateBldgUnit(JTable buTable, Object prevAffiliName, 
+            String updateCol, ControlEnums.DialogMessages msgForDuplicate) 
+    {
+        // <editor-fold defaultstate="collapsed" desc="-- Update high affiliation name">
+        int rowIndex = buTable.convertRowIndexToModel (buTable.getSelectedRow());
+        TableModel model = buTable.getModel();
+        IntCheckResult checkResult = checkBldgUnitNumber(buTable);
+        Integer bunInteger;
+        
+        if (checkResult.isBadFormat()) {
+            abortModification(checkResult.getAbortMsg(), rowIndex, buTable);
+            return;
+        } else {
+            bunInteger = checkResult.value;
+        }        
+        
+        Object keyVal = model.getValueAt(rowIndex, 2);
+        int result = 0;
+        Connection conn = null;
+        PreparedStatement pUpdateStmt = null;
+        
+        try {
+            String sql = "Update " + buTable.getName() + " Set " + updateCol + 
+                    " = ? Where SEQ_NO = ?";
+
+            conn = getConnection();
+            pUpdateStmt = conn.prepareStatement(sql);
+            pUpdateStmt.setInt(1, bunInteger);
+            pUpdateStmt.setInt(2, (Integer)keyVal);
+            result = pUpdateStmt.executeUpdate();
+        } catch (SQLException ex) {
+            if (ex.getErrorCode() == ER_DUP_ENTRY) {
+                abortModification(bunInteger.toString() + msgForDuplicate.getContent(), 
+                        rowIndex, buTable);
+                return;
+            }
+        } finally {
+            closeDBstuff(conn, pUpdateStmt, null, 
+                    "(Original " + buTable.getName() + "name : " + prevAffiliName + ")");
+        }    
+        if (result == 1) {
+            backToNormal(buTable);
+
+            if (buTable == BuildingTable) {
+                loadBuilding(HIGHLIGHT_NEW, bunInteger);
+            } else {
+                int bIndex = BuildingTable.convertRowIndexToModel(BuildingTable.getSelectedRow());
+                int bldgNo = (Integer)BuildingTable.getModel().getValueAt(bIndex, 1);
+                Object bldgSeqNoObj = BuildingTable.getModel().getValueAt(bIndex, 2);                
+                
+                loadUnit(bldgNo, bldgSeqNoObj, -1, bunInteger);
+            }
+        }         
+    }
+        
+    private void adjustTableDimension(JTable AffiliationTable) {
+        
+        // Hide affiliation number field which is used internally.
+        TableColumnModel BelongModel = AffiliationTable.getColumnModel();
+        BelongModel.removeColumn(BelongModel.getColumn(2));
+        
+        // Decrease the first column width
+        TableColumn column = AffiliationTable.getColumnModel().getColumn(0);
+        column.setPreferredWidth(60); //row number column is narrow
+        column.setMinWidth(60); //row number column is narrow
+        column.setMaxWidth(10000); //row number column is narrow
+        
+        column = AffiliationTable.getColumnModel().getColumn(1);
+        column.setPreferredWidth(130); //row number column is narrow
+        column.setMinWidth(130); //row number column is narrow
+        column.setMaxWidth(30000); //row number column is narrow        
+    }     
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -450,27 +564,28 @@ public class Affiliations extends javax.swing.JFrame {
         levs_Panel = new javax.swing.JPanel();
         lev1_Panel = new javax.swing.JPanel();
         title1_Panel = new javax.swing.JPanel();
-        lev1_Title = new javax.swing.JLabel();
+        Building_Title = new javax.swing.JLabel();
         count1_Panel = new javax.swing.JPanel();
         countLabel = new javax.swing.JLabel();
-        lev1_Count = new javax.swing.JLabel();
+        bldg_Count = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        lev1_Table = new javax.swing.JTable(){
+        BuildingTable = new javax.swing.JTable(){
             public boolean isCellEditable(int rowIndex, int colIndex) {
                 return lev_Editable[currLevel];
             }
         }
         ;
         radio1Panel = new javax.swing.JPanel();
-        lev1_Radio = new javax.swing.JRadioButton();
+        bldg_Radio = new javax.swing.JRadioButton();
+        filler4 = new javax.swing.Box.Filler(new java.awt.Dimension(40, 0), new java.awt.Dimension(40, 0), new java.awt.Dimension(40, 32767));
         lev2_Panel = new javax.swing.JPanel();
         title2_Panel = new javax.swing.JPanel();
-        lev2_Title = new javax.swing.JLabel();
+        Unit_Title = new javax.swing.JLabel();
         count2_Panel = new javax.swing.JPanel();
         countLabel1 = new javax.swing.JLabel();
-        lev2_Count = new javax.swing.JLabel();
+        unit_Count = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        lev2_Table = new javax.swing.JTable(){
+        UnitTable = new javax.swing.JTable(){
             public boolean isCellEditable(int rowIndex, int colIndex) {
                 return lev_Editable[currLevel];
             }
@@ -505,9 +620,8 @@ public class Affiliations extends javax.swing.JFrame {
         odsFileChooser.setFileFilter(new OdsFileOnly());
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle(AFFILIATION_FRAME_TITLE.getContent());
+        setTitle(BUILDING_FRAME_TITLE.getContent());
         setMinimumSize(new java.awt.Dimension(560, 609));
-        setPreferredSize(new java.awt.Dimension(560, 609));
 
         topPanel.setMinimumSize(new java.awt.Dimension(530, 76));
         topPanel.setPreferredSize(new java.awt.Dimension(530, 76));
@@ -593,10 +707,10 @@ public class Affiliations extends javax.swing.JFrame {
         });
         title1_Panel.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 5, 0));
 
-        lev1_Title.setFont(new java.awt.Font(font_Type, font_Style, head_font_Size));
-        lev1_Title.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lev1_Title.setText(AFFILIATION_LIST_LABEL.getContent());
-        title1_Panel.add(lev1_Title);
+        Building_Title.setFont(new java.awt.Font(font_Type, font_Style, head_font_Size));
+        Building_Title.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        Building_Title.setText(BUILDING_LIST_LABEL.getContent());
+        title1_Panel.add(Building_Title);
 
         lev1_Panel.add(title1_Panel);
 
@@ -609,46 +723,42 @@ public class Affiliations extends javax.swing.JFrame {
         countLabel.setText(COUNT_LABEL.getContent());
         count1_Panel.add(countLabel);
 
-        lev1_Count.setForeground(pointColor);
-        lev1_Count.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        lev1_Count.setText("0");
-        count1_Panel.add(lev1_Count);
+        bldg_Count.setForeground(pointColor);
+        bldg_Count.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        bldg_Count.setText("0");
+        count1_Panel.add(bldg_Count);
 
         lev1_Panel.add(count1_Panel);
 
         jScrollPane1.setPreferredSize(new java.awt.Dimension(454, 200));
 
-        lev1_Table.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        lev1_Table.getTableHeader().setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        lev1_Table.setModel(
+        BuildingTable.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        BuildingTable.getTableHeader().setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        BuildingTable.setModel(
             new javax.swing.table.DefaultTableModel(
-                new Object [][] {
-                    {1, "Janitor's Office", 2},
-                    {2, "Engineering Bldg", 1}
-                },
-                new String[]{
-                    ORDER_HEADER.getContent(), HIGHER_HEADER.getContent(), "L1_NO"}
+                new Object [][] {{1, 101, 5}, {2, 102, 6}},
+                new String [] {
+                    ORDER_HEADER.getContent(), BUILDING_HEADER.getContent(), "SEQ_NO"}
             )
             {  @Override
                 public Class<?> getColumnClass(int columnIndex) {
-                    if (columnIndex == 0)
                     return Integer.class;
-                    else
-                    return String.class;
                 }
             }
         );
-        ((DefaultTableCellRenderer)lev1_Table.getTableHeader().getDefaultRenderer())
+        ((DefaultTableCellRenderer)BuildingTable.getTableHeader().getDefaultRenderer())
         .setHorizontalAlignment(JLabel.CENTER);
-        lev1_Table.getColumnModel().getColumn(0).setCellRenderer(numberCellRenderer);
-        lev1_Table.setName("L1_Affiliation"); // NOI18N
-        lev1_Table.setRowHeight(tableRowHeight);
-        lev1_Table.addMouseListener(new java.awt.event.MouseAdapter() {
+        BuildingTable.getColumnModel().getColumn(0).setCellRenderer(numberCellRenderer);
+        BuildingTable.getColumnModel().getColumn(1).setCellRenderer(numberCellRendererW);
+        BuildingTable.setEnabled(false);
+        BuildingTable.setName("Building_Table"); // NOI18N
+        BuildingTable.setRowHeight(tableRowHeight);
+        BuildingTable.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                lev1_TableMouseClicked(evt);
+                BuildingTableMouseClicked(evt);
             }
         });
-        jScrollPane1.setViewportView(lev1_Table);
+        jScrollPane1.setViewportView(BuildingTable);
 
         lev1_Panel.add(jScrollPane1);
 
@@ -659,18 +769,19 @@ public class Affiliations extends javax.swing.JFrame {
             }
         });
 
-        affi_Group.add(lev1_Radio);
-        lev1_Radio.setSelected(true);
-        lev1_Radio.addItemListener(new java.awt.event.ItemListener() {
+        affi_Group.add(bldg_Radio);
+        bldg_Radio.setSelected(true);
+        bldg_Radio.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
-                lev1_RadioItemStateChanged(evt);
+                bldg_RadioItemStateChanged(evt);
             }
         });
-        radio1Panel.add(lev1_Radio);
+        radio1Panel.add(bldg_Radio);
 
         lev1_Panel.add(radio1Panel);
 
         levs_Panel.add(lev1_Panel);
+        levs_Panel.add(filler4);
 
         lev2_Panel.setMinimumSize(new java.awt.Dimension(200, 214));
         lev2_Panel.setPreferredSize(new java.awt.Dimension(220, 340));
@@ -684,10 +795,10 @@ public class Affiliations extends javax.swing.JFrame {
         });
         title2_Panel.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 5, 0));
 
-        lev2_Title.setFont(new java.awt.Font(font_Type, font_Style, head_font_Size));
-        lev2_Title.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lev2_Title.setText(LOWER_LIST_LABEL.getContent());
-        title2_Panel.add(lev2_Title);
+        Unit_Title.setFont(new java.awt.Font(font_Type, font_Style, head_font_Size));
+        Unit_Title.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        Unit_Title.setText(UNIT_LABEL.getContent());
+        title2_Panel.add(Unit_Title);
 
         lev2_Panel.add(title2_Panel);
 
@@ -700,48 +811,54 @@ public class Affiliations extends javax.swing.JFrame {
         countLabel1.setText(COUNT_LABEL.getContent());
         count2_Panel.add(countLabel1);
 
-        lev1_Count.setForeground(pointColor);
-        lev2_Count.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        lev2_Count.setForeground(pointColor);
-        lev2_Count.setText("0");
-        count2_Panel.add(lev2_Count);
+        bldg_Count.setForeground(pointColor);
+        unit_Count.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        unit_Count.setForeground(pointColor);
+        unit_Count.setText("0");
+        count2_Panel.add(unit_Count);
 
         lev2_Panel.add(count2_Panel);
 
         jScrollPane2.setPreferredSize(new java.awt.Dimension(454, 200));
 
-        lev2_Table.getTableHeader().setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        lev2_Table.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        lev2_Table.setModel(
+        UnitTable.getTableHeader().setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        UnitTable.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        UnitTable.setModel(
             new javax.swing.table.DefaultTableModel(
-                new Object [][] {},
-                new String[]{
-                    ORDER_HEADER.getContent(), LOWER_COL_TITLE.getContent(), "PARTY_NO"}
-            )
+                new Object [][] {{1, 803, 1}, {2, 805, 2}},
+                new String [] {
+                    ORDER_HEADER.getContent(), ROOM_HEADER.getContent(), "SEQ_NO"})
             {  @Override
                 public Class<?> getColumnClass(int columnIndex) {
-                    if (columnIndex == 0)
                     return Integer.class;
-                    else
-                    return String.class;
                 }
             }
         );
-        ((DefaultTableCellRenderer)lev2_Table.getTableHeader().getDefaultRenderer())
+        ((DefaultTableCellRenderer)UnitTable.getTableHeader().getDefaultRenderer())
         .setHorizontalAlignment(JLabel.CENTER);
-        lev2_Table.setEnabled(false);
-        lev2_Table.getColumnModel().getColumn(0)
-        .setCellRenderer(numberCellRenderer);
-        lev2_Table.setName("L2_Affiliation"); // NOI18N
-        lev2_Table.setRowHeight(tableRowHeight);
-        lev2_Table.setSelectionBackground(DARK_BLUE);
-        lev2_Table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        lev2_Table.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                lev2_TableMouseClicked(evt);
+        UnitTable.setEnabled(false);
+        UnitTable.getColumnModel().getColumn(0).setCellRenderer(numberCellRenderer);
+        UnitTable.getColumnModel().getColumn(1).setCellRenderer(numberCellRendererW);
+        UnitTable.setName("Building_Unit"); // NOI18N
+        UnitTable.setRowHeight(tableRowHeight);
+        UnitTable.setSelectionBackground(DARK_BLUE);
+        UnitTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        UnitTable.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                UnitTableFocusLost(evt);
             }
         });
-        jScrollPane2.setViewportView(lev2_Table);
+        UnitTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                UnitTableMouseClicked(evt);
+            }
+        });
+        UnitTable.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                UnitTableKeyReleased(evt);
+            }
+        });
+        jScrollPane2.setViewportView(UnitTable);
 
         lev2_Panel.add(jScrollPane2);
 
@@ -941,17 +1058,17 @@ public class Affiliations extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void insertSaveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_insertSaveButtonActionPerformed
-        if (lev1_Radio.isSelected()) {
+        if (bldg_Radio.isSelected()) {
             if (formMode == NormalMode) {
-                createAffiliation(lev1_Table);
+                createBldgUnit(BuildingTable);
             } else {
-                lev1_Table.getCellEditor().stopCellEditing();                
+                BuildingTable.getCellEditor().stopCellEditing();                
             }
         } else {
             if (formMode == NormalMode) {
-                createAffiliation(lev2_Table);
+                createBldgUnit(UnitTable);
             } else {
-                lev2_Table.getCellEditor().stopCellEditing();                
+                UnitTable.getCellEditor().stopCellEditing();                
             }
         }
     }//GEN-LAST:event_insertSaveButtonActionPerformed
@@ -962,17 +1079,17 @@ public class Affiliations extends javax.swing.JFrame {
                 case NormalMode:
                     // <editor-fold defaultstate="collapsed" desc="-- Prepare to update user information">
                     if (currLevel == 1)
-                        startModify(lev1_Table);
+                        startModify(BuildingTable);
                     else 
-                        startModify(lev2_Table);
+                        startModify(UnitTable);
                     // </editor-fold>                
                     break;
                 case UpdateMode:
                     // <editor-fold defaultstate="collapsed" desc="-- save modified user information ">
                     if (currLevel == 1)
-                        lev1_Table.getCellEditor().stopCellEditing();
+                        BuildingTable.getCellEditor().stopCellEditing();
                     else 
-                        lev2_Table.getCellEditor().stopCellEditing();
+                        UnitTable.getCellEditor().stopCellEditing();
                     // </editor-fold>                
                     break;
                 default:
@@ -997,9 +1114,9 @@ public class Affiliations extends javax.swing.JFrame {
         TableModel model = table.getModel();
 
         if (currLevel == 1) {
-            prevL1Name = model.getValueAt(model_index, 1);
+            prevBldgNo = model.getValueAt(model_index, 1);
         } else {
-            prevL2Name = model.getValueAt(model_index, 1);
+            prevUnitNo = model.getValueAt(model_index, 1);
         }
 
         setLev_Editable(currLevel, true);
@@ -1009,7 +1126,7 @@ public class Affiliations extends javax.swing.JFrame {
     }
 
     private void enableRadioButtons(boolean b) {
-        lev1_Radio.setEnabled(b);
+        bldg_Radio.setEnabled(b);
         lev2_Radio.setEnabled(b);
     }    
     
@@ -1061,10 +1178,11 @@ public class Affiliations extends javax.swing.JFrame {
     private void deleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteButtonActionPerformed
         // Delete currently selected higher affiliation
         JTable table;
+        
         if (currLevel == 1) {
-            table = lev1_Table;
+            table = BuildingTable;
         } else {
-            table = lev2_Table;
+            table = UnitTable;
         }
             
         int viewIndex = table.getSelectedRow();
@@ -1072,67 +1190,131 @@ public class Affiliations extends javax.swing.JFrame {
         if (viewIndex == -1) {
             return;
         } else {            
-            String affiliation = (String)table.getValueAt(viewIndex, 1);
             int modal_Index = table.convertRowIndexToModel(viewIndex);
-            int key_No = (int)table.getModel().getValueAt(modal_Index, 2);
+            int bu_No = (Integer)table.getModel().getValueAt(modal_Index, 1);
+            int bu_seq_no = (Integer)table.getModel().getValueAt(modal_Index, 2);
             
-            String message;
+            String message = null;
             
             if (currLevel == 1) {
-                int count = getL2RecordCount(key_No);
+                int count = getUnitCount(bu_seq_no);
 
-                message = AFFILI_DEL_L1.getContent() + 
-                        System.getProperty("line.separator") + 
-                        AFFILI_DIAG_L2.getContent() + affiliation + 
-                        System.getProperty("line.separator") + 
-                        AFFILI_DIAG_L3.getContent() + count;
+                message = BLDG_DELETE_L1.getContent() + System.getProperty("line.separator") 
+                        + BLDG_DIAG_L2.getContent() + bu_No + BLDG_DELETE_L3.getContent() 
+                        + count + ")";
             } else {
-                message = AFFILI_DEL_L2.getContent() +
-                        System.getProperty("line.separator") + 
-                        LEVEL2_NAME_DIALOG.getContent() + " : " + affiliation;                
+                message = UNIT_DEL_1.getContent() + System.getProperty("line.separator") 
+                        + UNIT_DEL_2.getContent() + bu_No;            
             }
             
             int result = JOptionPane.showConfirmDialog(this, message,
-                DELETE_DIALOGTITLE.getContent(),
-                JOptionPane.YES_NO_OPTION);
+                    DELETE_DIALOGTITLE.getContent(), JOptionPane.YES_NO_OPTION);
 
             if (result == JOptionPane.YES_OPTION) {
                 //<editor-fold desc="delete upper level affliation (unit name)">
-                String excepMsg;
-                String sql;
+                String excepMsg = null;
+                String sql = null;
                 
                 if (currLevel == 1) {
-                    excepMsg = "(In deletion of: " + affiliation + ")";
-                    sql = "Delete From L1_Affiliation Where L1_no = ?";
+                    excepMsg = "(while deleting building No: " + bu_No + ")";
+                    sql = "Delete From BUILDING_TABLE Where SEQ_NO = ?";
                 } else {
-                    excepMsg = "(Deletion of Lower Party No: " + key_No + ")";
-                    sql = "Delete From L2_Affiliation Where L2_no = ?";
+                    excepMsg = "(failed deletion of unit no: " + bu_No + ")";
+                    sql = "Delete From BUILDING_UNIT Where SEQ_NO = ?";
                 }
                 
-                result = deleteAffiliation(excepMsg, sql, key_No);
+                result = deleteBldgUnit(excepMsg, sql, bu_seq_no);
 
                 if (result == 1) {
                     if (currLevel == 1) {
-                        loadLev1_Table(viewIndex, ""); // Deliver the index of deleted row
+                        loadBuilding(viewIndex, 0); // Deliver the index of deleted row
+                        message = BLDG_DEL_RESULT.getContent()
+                                +  System.getProperty("line.separator") 
+                                + BLDG_DIAG_L2.getContent() + bu_No;
 
-                        message = AFFILI_DEL_RESULT.getContent() + System.getProperty("line.separator") +
-                                AFFILI_DIAG_L2.getContent() + affiliation;
+                        JOptionPane.showMessageDialog(this, message,
+                                    DELETE_RESULT_DIALOGTITLE.getContent(),
+                                    JOptionPane.PLAIN_MESSAGE);
                     } else {
-                        int index1 = lev1_Table.convertRowIndexToView(lev1_Table.getSelectedRow());
-                        Object L1_No = lev1_Table.getModel().getValueAt(index1, 2);                    
-                        loadLev2_Table((Integer)L1_No, viewIndex, ""); // Deliver the deleted L2 affiliation name
+                        int bIndex = BuildingTable.convertRowIndexToView(
+                                BuildingTable.getSelectedRow());
+                        int bldgNo = (Integer)(BuildingTable.getModel().getValueAt(bIndex, 1));  
+                        int bldgSeqNo = (Integer)(BuildingTable.getModel().getValueAt(bIndex, 2));
+                        
+                        loadUnit(bldgNo, bldgSeqNo, modal_Index, bu_No);
+                        message = UNIT_DEL_RES_1.getContent()
+                                + System.getProperty("line.separator") 
+                                + UNIT_DEL_2.getContent() + bu_No;
 
-                        message = AFFILI_DEL_RESULT.getContent() + System.getProperty("line.separator") +
-                                AFFILI2_DIAG_L2.getContent() + affiliation;
+                        JOptionPane.showMessageDialog(this, message,
+                                DELETE_RESULT_DIALOGTITLE.getContent(), 
+                                JOptionPane.PLAIN_MESSAGE);   
                     }
-                    JOptionPane.showConfirmDialog(this, message,
-                            DELETE_RESULT_DIALOGTITLE.getContent(),
-                            JOptionPane.PLAIN_MESSAGE, INFORMATION_MESSAGE);                        
+                } else {
+                    if (currLevel == 1) {
+                        message = BLDG_DEL_FAIL.getContent()
+                                + System.getProperty("line.separator") 
+                                + BLDG_DIAG_L21.getContent() + bu_No;
+                    } else {
+                        message = UNIT_DEL_FAIL.getContent() 
+                                + System.getProperty("line.separator") 
+                                + UNIT_DEL_2.getContent() + bu_No;
+                    }
+
+                    JOptionPane.showMessageDialog(this, message, 
+                            DELETE_RESULT_DIALOGTITLE.getContent(), 
+                            JOptionPane.PLAIN_MESSAGE);                       
                 }
                 //</editor-fold>
             }
         }
     }//GEN-LAST:event_deleteButtonActionPerformed
+    
+    private int getUnitCount(int bldg_seq_no ) {
+        Connection conn = null;
+        PreparedStatement pstmt = null;    
+        ResultSet rs = null;
+        String excepMsg = "get count of units that belong to a buliding (no: " + bldg_seq_no + ")";
+        
+        int result = -1;
+        try {
+            conn = getConnection();
+            pstmt = conn.prepareStatement("Select count(*) from BUILDING_UNIT where BLDG_SEQ_NO = ?");
+            pstmt.setInt(1, bldg_seq_no);
+            rs = pstmt.executeQuery();
+            rs.next();
+            result = rs.getInt(1);
+        }
+        catch(Exception ex) {
+            logParkingException(Level.SEVERE, ex, excepMsg);
+        } finally {
+            closeDBstuff(conn, pstmt, rs, excepMsg);
+        }
+        return result;
+    }    
+    
+    // Delete currently selected table row
+    private int deleteBldgUnit(String excepMsg, String sql, int bu_seq_no) 
+    {
+        //<editor-fold desc="-- Actual deletion of a building number">
+        Connection conn = null;
+        PreparedStatement createBuilding = null;
+        int result = 0;
+        
+        try {
+            conn = getConnection();
+            createBuilding = conn.prepareStatement(sql);
+            createBuilding.setInt(1, bu_seq_no);
+
+            result = createBuilding.executeUpdate();
+        } catch (SQLException ex) {
+            logParkingException(Level.SEVERE, ex, excepMsg);
+        } finally {
+            closeDBstuff(conn, createBuilding, null, excepMsg);
+            return result;
+        }    
+        //</editor-fold>        
+    }    
     
     // Delete currently selected table row
     private int deleteAffiliation(String excepMsg, String sql, int key_No) 
@@ -1182,19 +1364,22 @@ public class Affiliations extends javax.swing.JFrame {
     
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
         // Stop creating or updating a level 1 affiliation.
-        JTable table = (currLevel == 1 ? lev1_Table : lev2_Table);
+        JTable table = (currLevel == 1 ? BuildingTable : UnitTable);
         
         if (formMode == FormMode.CreateMode) {
             removeToNormal(table);
         } else if (formMode == FormMode.UpdateMode) {
             backToNormal(table);
+            int index = followAndGetTrueIndex(table);
+            
             if (currLevel == 1) {
-                loadLev1_Table(table.getSelectedRow(), "");
+                loadBuilding(index, 0);
             } else { 
-                int index1 = followAndGetTrueIndex(lev1_Table);
-                Object L1_no = lev1_Table.getModel().getValueAt(index1, 2);
-                    
-                loadLev2_Table(L1_no, table.getSelectedRow(), "");                
+                int bIndex = followAndGetTrueIndex(BuildingTable);
+                int bldgNo = (Integer)BuildingTable.getModel().getValueAt(bIndex, 1);
+                Object bldgSeqNoObj = BuildingTable.getModel().getValueAt(bIndex, 2);                   
+                
+                loadUnit(bldgNo, bldgSeqNoObj, index, 0);
             }
         }
     }//GEN-LAST:event_cancelButtonActionPerformed
@@ -1206,8 +1391,10 @@ public class Affiliations extends javax.swing.JFrame {
         insertSaveButton.setMnemonic('R');                     
         
         setLev_Editable(currLevel, false);
-        table.getCellEditor().stopCellEditing();
-        JRadioButton radioBtn = (table == lev1_Table ? lev1_Radio : lev2_Radio);
+        if (table.getCellEditor() != null) {
+            table.getCellEditor().stopCellEditing();
+        }
+        JRadioButton radioBtn = (table == BuildingTable ? bldg_Radio : lev2_Radio);
         changeItemsEnabled(table, radioBtn.isSelected());
         
         ((DefaultTableModel)table.getModel()).setRowCount(table.getRowCount() - 1);
@@ -1218,10 +1405,10 @@ public class Affiliations extends javax.swing.JFrame {
         }
     }    
     
-    private void lev1_RadioItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_lev1_RadioItemStateChanged
+    private void bldg_RadioItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_bldg_RadioItemStateChanged
         currLevel = 1;
-        applyTableChange(evt, lev1_Table, lev1_Radio);
-    }//GEN-LAST:event_lev1_RadioItemStateChanged
+        applyTableChange(evt, BuildingTable, bldg_Radio);
+    }//GEN-LAST:event_bldg_RadioItemStateChanged
 
     private void affiTopTitleMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_affiTopTitleMouseClicked
     }//GEN-LAST:event_affiTopTitleMouseClicked
@@ -1265,7 +1452,7 @@ public class Affiliations extends javax.swing.JFrame {
                                 ODS_CHECK_RESULT_TITLE.getContent(), 
                                 JOptionPane.YES_NO_OPTION);            
                         if (result == JOptionPane.YES_OPTION) {                
-                            objODSReader.readAffiliationODS(sheet, this);
+                            objODSReader.readBuildingODS(sheet, this);
                         }
                     }                     
                 }
@@ -1280,6 +1467,12 @@ public class Affiliations extends javax.swing.JFrame {
      * @param evt 
      */
     private void saveSheet_ButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveSheet_ButtonActionPerformed
+       
+        /**
+         * Get the unit item count to list on one line in the range 1 to 15.
+         */
+        UnitColCount dlg = new UnitColCount(this, true);
+        Integer colCount = dlg.showDialog();
         /**
          * Prepare a model for the temporary JTable 'table'.
          */
@@ -1291,34 +1484,34 @@ public class Affiliations extends javax.swing.JFrame {
         Connection conn = null;
         Statement selectStmt = null;
         ResultSet rs = null;
-        String excepMsg = "(load affiliations to save into ods format)";
+        String excepMsg = "(load buildings to save in an ods file)";
         
         try {
             //<editor-fold defaultstate="collapsed" desc="-- Read names and put put them in the model">
             StringBuffer sb = new StringBuffer();
-            sb.append("Select l1.PARTY_NAME L1_Name, l2.PARTY_NAME L2_Name ");
-            sb.append("From l1_affiliation l1 ");
-            sb.append("Left Outer Join l2_affiliation l2 ");
-            sb.append("On l1.L1_NO = l2.L1_NO");
+            sb.append("Select bt.BLDG_NO, ut.UNIT_NO ");
+            sb.append("From building_table bt ");
+            sb.append("Left outer join building_unit ut ");
+            sb.append("On bt.SEQ_NO = ut.BLDG_SEQ_NO ");
             
             conn = getConnection();
             selectStmt = conn.createStatement();
             rs = selectStmt.executeQuery(sb.toString());
             
-            String prevL1 = null, currL1;
+            Integer prevBN = null, currBN;
             
             model.setRowCount(0);
             while (rs.next()) {
-                currL1 = rs.getString("L1_Name");
-                if (!currL1.equals(prevL1)) {
-                    prevL1 = currL1;
-                    model.addRow(new Object[] {currL1, ""});
+                currBN = rs.getInt("BLDG_NO");
+                if (!currBN.equals(prevBN)) {
+                    prevBN = currBN;
+                    model.addRow(new Object[] {currBN, ""});
                 }
                 
-                String l2Name = rs.getString("L2_Name");
+                Integer unit_no = rs.getInt("UNIT_NO");
 
-                if (l2Name != null) {
-                    model.addRow(new Object[] {"", l2Name});
+                if (unit_no != null) {
+                    model.addRow(new Object[] {"", unit_no});
                 }
             }
             //</editor-fold>
@@ -1328,7 +1521,7 @@ public class Affiliations extends javax.swing.JFrame {
             closeDBstuff(conn, selectStmt, rs, excepMsg);
         }        
         saveODSfileName(this, table, odsFileChooser,
-            AFFILI_SAVE_ODS_FAIL_DIALOG.getContent(), AFFILIATION_LABEL.getContent());
+            AFFILI_SAVE_ODS_FAIL_DIALOG.getContent(), BUILD_ROOM_HEADER.getContent());
     }//GEN-LAST:event_saveSheet_ButtonActionPerformed
 
     private void ODSAffiliHelpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ODSAffiliHelpActionPerformed
@@ -1374,16 +1567,16 @@ public class Affiliations extends javax.swing.JFrame {
 
     private void lev2_RadioItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_lev2_RadioItemStateChanged
         currLevel = 2;
-        applyTableChange(evt, lev2_Table, lev2_Radio);
+        applyTableChange(evt, UnitTable, lev2_Radio);
     }//GEN-LAST:event_lev2_RadioItemStateChanged
 
-    private void lev1_TableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lev1_TableMouseClicked
+    private void BuildingTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BuildingTableMouseClicked
         changeTableSelection(1);
-    }//GEN-LAST:event_lev1_TableMouseClicked
+    }//GEN-LAST:event_BuildingTableMouseClicked
 
-    private void lev2_TableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lev2_TableMouseClicked
+    private void UnitTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_UnitTableMouseClicked
         changeTableSelection(2);
-    }//GEN-LAST:event_lev2_TableMouseClicked
+    }//GEN-LAST:event_UnitTableMouseClicked
 
     private void radio1PanelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_radio1PanelMouseClicked
         changeTableSelection(1);
@@ -1401,6 +1594,14 @@ public class Affiliations extends javax.swing.JFrame {
         changeTableSelection(2);
     }//GEN-LAST:event_title2_PanelMouseClicked
 
+    private void UnitTableKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_UnitTableKeyReleased
+        // TODO add your handling code here:
+    }//GEN-LAST:event_UnitTableKeyReleased
+
+    private void UnitTableFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_UnitTableFocusLost
+        // TODO add your handling code here:
+    }//GEN-LAST:event_UnitTableFocusLost
+
     private void backToNormal(JTable table) {
         setFormMode(FormMode.NormalMode);
         updateSaveButton.setText(MODIFY_BTN.getContent());
@@ -1408,8 +1609,8 @@ public class Affiliations extends javax.swing.JFrame {
             
         setLev_Editable(currLevel, false);
         table.getCellEditor().stopCellEditing();
-        if (table == lev1_Table) {
-            changeItemsEnabled(table, lev1_Radio.isSelected());
+        if (table == BuildingTable) {
+            changeItemsEnabled(table, bldg_Radio.isSelected());
         } else {
             changeItemsEnabled(table, lev2_Radio.isSelected());
         }
@@ -1454,14 +1655,15 @@ public class Affiliations extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Affiliations.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Buildings.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Affiliations.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Buildings.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Affiliations.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Buildings.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Affiliations.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Buildings.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         initializeLoggers();
@@ -1471,12 +1673,10 @@ public class Affiliations extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-//                new Affiliations().setVisible(true);
-
                 if (loginID != null ||
                         loginID == null && findLoginIdentity() != null) 
                 {
-                    Affiliations runForm = new Affiliations(null);
+                    Buildings runForm = new Buildings(null);
                     runForm.setVisible(true);
                     runForm.setDefaultCloseOperation(
                             javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -1487,9 +1687,15 @@ public class Affiliations extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTable BuildingTable;
+    private javax.swing.JLabel Building_Title;
     private javax.swing.JPanel GUI_Title_Panel;
     private javax.swing.JButton ODSAffiliHelp;
+    private javax.swing.JTable UnitTable;
+    private javax.swing.JLabel Unit_Title;
     private javax.swing.ButtonGroup affi_Group;
+    private javax.swing.JLabel bldg_Count;
+    private javax.swing.JRadioButton bldg_Radio;
     private javax.swing.JButton cancelButton;
     private javax.swing.JButton closeFormButton;
     private javax.swing.JPanel count1_Panel;
@@ -1501,22 +1707,16 @@ public class Affiliations extends javax.swing.JFrame {
     private javax.swing.Box.Filler filler1;
     private javax.swing.Box.Filler filler2;
     private javax.swing.Box.Filler filler3;
+    private javax.swing.Box.Filler filler4;
     private javax.swing.Box.Filler filler5;
     private javax.swing.Box.Filler filler6;
     private javax.swing.JButton insertSaveButton;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JSeparator jSeparator1;
-    private javax.swing.JLabel lev1_Count;
     private javax.swing.JPanel lev1_Panel;
-    private javax.swing.JRadioButton lev1_Radio;
-    private javax.swing.JTable lev1_Table;
-    private javax.swing.JLabel lev1_Title;
-    private javax.swing.JLabel lev2_Count;
     private javax.swing.JPanel lev2_Panel;
     private javax.swing.JRadioButton lev2_Radio;
-    private javax.swing.JTable lev2_Table;
-    private javax.swing.JLabel lev2_Title;
     private javax.swing.JPanel levs_Panel;
     private javax.swing.JLabel modeString;
     private javax.swing.JFileChooser odsFileChooser;
@@ -1532,6 +1732,7 @@ public class Affiliations extends javax.swing.JFrame {
     private javax.swing.JPanel title1_Panel;
     private javax.swing.JPanel title2_Panel;
     private javax.swing.JPanel topPanel;
+    private javax.swing.JLabel unit_Count;
     private javax.swing.JButton updateSaveButton;
     private javax.swing.JPanel westPanel;
     private javax.swing.JPanel wholePanel;
@@ -1542,102 +1743,10 @@ public class Affiliations extends javax.swing.JFrame {
         lev_Editable[index] = b;
     }
 
-    private void loadLev2_Table(Object L1_no, int viewIndex, String l2Name) {
-        if (L1_no == null)
-        {
-            lev2_Title.setText(LOWER_LIST_LABEL.getContent());
-            ((DefaultTableModel) lev2_Table.getModel()).setRowCount(0);
-        } else {
-            int L1_index = lev1_Table.
-                    convertRowIndexToModel(lev1_Table.getSelectedRow());
-            String L1_Affil = lev1_Table.getModel().getValueAt(L1_index, 1).toString();
-            
-            String label = "";
-            
-            if (language == Locale.KOREAN) {
-                label = L1_Affil + LOWER_LABEL.getContent();
-            } else if (language == Locale.ENGLISH) {
-                label = LOWER_LABEL.getContent() + L1_Affil; 
-            } else {
-            }  
-            lev2_Title.setText(label);
-            
-            Connection conn = null;
-            Statement selectStmt = null;
-            ResultSet rs = null;
-            String excepMsg = "change selected L2 name to " + l2Name + " for L1 no: " + L1_no;
-
-            DefaultTableModel model = (DefaultTableModel) lev2_Table.getModel();
-            int model_index = -1;
-            
-            // List lower affiliations of a higher affiliation whose key value is L1_NO
-            try {
-                //<editor-fold defaultstate="collapsed" desc="-- List all lower affiliations of a higher affiliation">                
-                conn = getConnection();
-                selectStmt = conn.createStatement();
-                StringBuffer sb = new StringBuffer();
-                sb.append(" SELECT @ROWNUM := @ROWNUM + 1 AS recNo, ");
-                sb.append("   PARTY_NAME, L2_NO");
-                sb.append(" FROM L2_affiliation, (SELECT @rownum := 0) r");
-                sb.append(" WHERE L1_NO = " + (int)L1_no);
-                sb.append(" ORDER BY party_name");
-
-                rs = selectStmt.executeQuery(sb.toString());
-                model.setRowCount(0);
-                while (rs.next()) {
-                    if (viewIndex == HIGHLIGHT_NEW) { // After creation/update, first find the new/modified affiliation name
-                        if (l2Name.equals(rs.getString("PARTY_NAME"))) {
-                            model_index = model.getRowCount();
-                        }
-                    }                       
-                    model.addRow(new Object[] {
-                         rs.getInt("recNo"),  rs.getString("PARTY_NAME"), rs.getInt("L2_NO")
-                    });
-                }
-                //</editor-fold>
-            } catch (SQLException ex) {
-                logParkingException(Level.SEVERE, ex, excepMsg);
-            } finally {
-                closeDBstuff(conn, selectStmt, rs, excepMsg);
-            }     
-            
-            int numRows = model.getRowCount();
-            if (numRows > 0) {
-                if (viewIndex == -1) // handle the case of a newly created affiliation.
-                {
-                    viewIndex = lev2_Table.convertRowIndexToView(model_index);
-                } else {
-                    // "number of remaining rows == deleted row index" means the row deleted was the last row
-                    // In this case, highlight the previous row                    
-                    if (viewIndex == numRows)
-                    { 
-                        viewIndex--; 
-                    }
-                }
-                
-                final int highRow = viewIndex;
-                if (viewIndex != NO_HIGHLIGHT) {
-                    java.awt.EventQueue.invokeLater(new Runnable() {
-                        public void run() {
-                            highlightTableRow(lev2_Table, highRow);
-                        }
-                    });                    
-                }
-                adjustColumnWidth(lev2_Table, numRows);
-            }
-            lev2_Count.setText(Integer.toString(numRows));
-        }
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                fixButtonEnabled();
-            }
-        });
-    }
-    
     final int NO_HIGHLIGHT = -2;
     final int HIGHLIGHT_NEW = -1;
     
-    private void addAffiliationSelectionListener(JTable table) {
+    private void addRowSelectionListener(JTable table) {
         ListSelectionModel cellSelectionModel = table.getSelectionModel();
         cellSelectionModel.addListSelectionListener (new ListSelectionListener ()
         {
@@ -1647,30 +1756,32 @@ public class Affiliations extends javax.swing.JFrame {
                         if (!e.getValueIsAdjusting())
                         {
                             int index = followAndGetTrueIndex(table);
-                            if (index >= 0) 
-                            {
+                            
+                            if (index >= 0) {
                                 Object key_no = table.getModel().getValueAt(index, 2);
                                 
-                                if (table == lev1_Table) {
-                                    loadLev2_Table(key_no, NO_HIGHLIGHT, "");
+                                if (table == BuildingTable) {
+                                    Object bnoObj = table.getModel().getValueAt(index, 1);
+                                    
+                                    if (bnoObj != null) {
+                                        loadUnit((Integer)bnoObj, key_no, NO_HIGHLIGHT, 0);
+                                    }
+                                }
+                            } else {
+                                if (table == BuildingTable) {
+                                    loadUnit(0, null, 0, 0);
                                 }
                             }
-                            else
-                            {
-                                if (table == lev1_Table) {
-                                    loadLev2_Table(null, 0, "");
-                                }
-                            }
-                            if (table == lev1_Table) {
+                            if (table == BuildingTable) {
                                 // clear L2List selection
-                                lev2_Table.removeEditor();
-                                lev2_Table.getSelectionModel().clearSelection();
+                                UnitTable.removeEditor();
+                                UnitTable.getSelectionModel().clearSelection();
                             }
 
                             // Delete an empty row if existed
                             if (emptyLastRowPossible(insertSaveButton, table))
                             {
-                                removeEmptyRow(insertSaveButton, table);                    
+                                removeEmptyRow(insertSaveButton, table);
                             }
                         }
                     }
@@ -1719,55 +1830,62 @@ public class Affiliations extends javax.swing.JFrame {
 
     int originalRow = -1;
     
-    private void createAffiliation(JTable lev_Table) {
+    private void createBldgUnit(JTable buTable) {
         //<editor-fold desc="--Prepare to create a new affiliation">
-        originalRow = lev_Table.getSelectedRow();
+        originalRow = buTable.getSelectedRow();
         /**
          * Change management button enabled properties.
          */                
         insertSaveButton.setText(SAVE_BTN.getContent());
         insertSaveButton.setMnemonic('s');            
 
-        DefaultTableModel model = (DefaultTableModel)lev_Table.getModel();
-        model.setRowCount(lev_Table.getRowCount() + 1);
-        int rowIndex = lev_Table.getRowCount() - 1;
+        DefaultTableModel model = (DefaultTableModel)buTable.getModel();
+        model.setRowCount(buTable.getRowCount() + 1);
+        int rowIndex = buTable.getRowCount() - 1;
 
-        if (lev_Table.getValueAt(rowIndex, 1) != null) 
+        if (buTable.getValueAt(rowIndex, 1) != null) 
         {
             rowIndex = 0;
         }
-        lev_Table.setRowSelectionInterval(rowIndex, rowIndex);
+        buTable.setRowSelectionInterval(rowIndex, rowIndex);
 
         setLev_Editable(currLevel, true);
-        lev_Table.scrollRectToVisible(
-                new Rectangle(lev_Table.getCellRect(rowIndex, 0, true)));
+        buTable.scrollRectToVisible(
+                new Rectangle(buTable.getCellRect(rowIndex, 0, true)));
         
-        if (lev_Table.editCellAt(rowIndex, 1))
+        if (buTable.editCellAt(rowIndex, 1))
         {
-            lev_Table.getEditorComponent().requestFocus();
+            buTable.getEditorComponent().requestFocus();
         }
         setFormMode(FormMode.CreateMode);
         //</editor-fold>
     }
-//
-//    private void tableColumnLanguage(JTable table, int i, OsPaLang lang) {
-//        table.getColumnModel().getColumn(i).setCellEditor(
-//                new TableCellEditorKor(lang, table.getFont()));
-//    }
 
-    private void addTableListener(JTable lev_Table, Object prevName, String column, 
+    private void addTableListener(JTable buTable, Object prevName, String updateCol, 
             DialogMessages message) 
     {
-        lev_Table.getModel().addTableModelListener(new TableModelListener() {
+        buTable.getModel().addTableModelListener(new TableModelListener() {
            @Override
             public void tableChanged(TableModelEvent e) {
                 if (formMode == UpdateMode) {
-                    updateAffiliation(lev_Table, prevName, column, message);
+                    updateBldgUnit(buTable, prevName, updateCol, message);
                 } else if (formMode == CreateMode) {
-                    insertAffiliation(lev_Table, message);
+                    insertBldgUnit(buTable, message);
                 }
             }
         });   
+    }
+
+    private void adjustColumnWidth(JTable lev_Table, int numRows) {
+        String countStr = Integer.toString(numRows);
+        int numWidthFont = getStringWidth(countStr, lev_Table.getFont());
+        int width = numWidthFont + 40;
+        TableColumn column = lev_Table.getColumnModel().getColumn(0);
+
+        if (column.getPreferredWidth() < width) {
+            column.setPreferredWidth(width); 
+            column.setMinWidth(width); 
+        }
     }
 
     private void addHeaderMouseListener(final JTable table) {
@@ -1775,8 +1893,8 @@ public class Affiliations extends javax.swing.JFrame {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (formMode == NormalMode) {
-                    if (table == lev1_Table) {
-                        lev1_Radio.setSelected(true);
+                    if (table == BuildingTable) {
+                        bldg_Radio.setSelected(true);
                     } else {
                         lev2_Radio.setSelected(true);
                     }
@@ -1803,7 +1921,7 @@ public class Affiliations extends javax.swing.JFrame {
                 insertSaveButton.setEnabled(true);
             }
             
-            JTable table = (currLevel == 1 ? lev1_Table : lev2_Table);
+            JTable table = (currLevel == 1 ? BuildingTable : UnitTable);
             boolean rowSelected = table.getSelectedRow() != -1;
 
             /**
@@ -1859,10 +1977,18 @@ public class Affiliations extends javax.swing.JFrame {
     private void changeTableSelection(int tab_no) {
         if (formMode == NormalMode) {
             if (tab_no == 1) {
-                lev1_Radio.setSelected(true);
+                bldg_Radio.setSelected(true);
             } else {
                 lev2_Radio.setSelected(true);
             }
+        }
+    }
+
+    private Integer tryParseInt(String inputStr) {
+        try {
+            return Integer.parseInt(inputStr);
+        } catch (NumberFormatException e) {
+            return null;
         }
     }
 }
