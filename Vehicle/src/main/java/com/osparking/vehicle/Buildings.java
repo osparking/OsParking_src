@@ -69,6 +69,7 @@ import com.osparking.global.names.ControlEnums.DialogMessages;
 import static com.osparking.global.names.ControlEnums.DialogMessages.AFFILI_SAVE_ODS_FAIL_DIALOG;
 import static com.osparking.global.names.ControlEnums.DialogMessages.DUPLICATE_BUILDING;
 import static com.osparking.global.names.ControlEnums.DialogMessages.DUPLICATE_UNIT;
+import static com.osparking.global.names.ControlEnums.DialogMsg.NON_NUMERIC_DATA;
 import static com.osparking.global.names.ControlEnums.DialogMsg.UNIT_DEL_1;
 import static com.osparking.global.names.ControlEnums.DialogMsg.UNIT_DEL_2;
 import static com.osparking.global.names.ControlEnums.DialogMsg.UNIT_DEL_FAIL;
@@ -77,6 +78,7 @@ import static com.osparking.global.names.ControlEnums.DialogTitleTypes.DELETE_DI
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.DELETE_RESULT_DIALOGTITLE;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.ERROR_DIALOGTITLE;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.ODS_CHECK_RESULT_TITLE;
+import static com.osparking.global.names.ControlEnums.DialogTitleTypes.READ_ODS_FAIL_DIALOGTITLE;
 import com.osparking.global.names.ControlEnums.FormMode;
 import static com.osparking.global.names.ControlEnums.FormMode.CreateMode;
 import static com.osparking.global.names.ControlEnums.FormMode.NormalMode;
@@ -84,21 +86,20 @@ import static com.osparking.global.names.ControlEnums.FormMode.UpdateMode;
 import static com.osparking.global.names.ControlEnums.FormModeString.CREATE;
 import static com.osparking.global.names.ControlEnums.FormModeString.FETCH;
 import static com.osparking.global.names.ControlEnums.FormModeString.MODIFY;
-import static com.osparking.global.names.ControlEnums.LabelContent.AFFILIATION_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.BUILDING_LIST_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.COUNT_LABEL;
-import static com.osparking.global.names.ControlEnums.LabelContent.HELP_AFFIL_LABEL;
+import static com.osparking.global.names.ControlEnums.LabelContent.HELP_BUILDING_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.MODE_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.UNIT_LABEL;
-import static com.osparking.global.names.ControlEnums.MsgContent.AFFILI_ODS_DIAG_1;
-import static com.osparking.global.names.ControlEnums.MsgContent.AFFILI_ODS_DIAG_2;
-import static com.osparking.global.names.ControlEnums.MsgContent.AFFILI_ODS_DIAG_3;
 import static com.osparking.global.names.ControlEnums.MsgContent.BLDG_DELETE_L1;
 import static com.osparking.global.names.ControlEnums.MsgContent.BLDG_DELETE_L3;
 import static com.osparking.global.names.ControlEnums.MsgContent.BLDG_DEL_FAIL;
 import static com.osparking.global.names.ControlEnums.MsgContent.BLDG_DEL_RESULT;
 import static com.osparking.global.names.ControlEnums.MsgContent.BLDG_DIAG_L2;
 import static com.osparking.global.names.ControlEnums.MsgContent.BLDG_DIAG_L21;
+import static com.osparking.global.names.ControlEnums.MsgContent.BLDG_ODS_DIAG_1;
+import static com.osparking.global.names.ControlEnums.MsgContent.BLDG_ODS_DIAG_2;
+import static com.osparking.global.names.ControlEnums.MsgContent.BLDG_ODS_DIAG_3;
 import static com.osparking.global.names.ControlEnums.OsPaLang.ENGLISH;
 import static com.osparking.global.names.ControlEnums.TableTypes.BUILDING_HEADER;
 import static com.osparking.global.names.ControlEnums.TableTypes.BUILD_ROOM_HEADER;
@@ -116,7 +117,9 @@ import static com.osparking.vehicle.CommonData.setHelpDialogLoc;
 import static com.osparking.vehicle.CommonData.tableColumnLanguage;
 import static com.osparking.vehicle.CommonData.wantToSaveFile;
 import com.osparking.vehicle.driver.ODSReader;
+import static com.osparking.vehicle.driver.ODSReader.getWrongCellPointString;
 import java.awt.Dimension;
+import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.ItemEvent;
 import static java.awt.event.ItemEvent.SELECTED;
@@ -130,6 +133,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -137,6 +141,7 @@ import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import static javax.swing.JOptionPane.WARNING_MESSAGE;
 import javax.swing.JRadioButton;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
@@ -445,15 +450,15 @@ public class Buildings extends javax.swing.JFrame {
         }
         // </editor-fold>
     }    
-
-    private void abortModification(DialogMessages dialog, String name, int row, JTable table) {
-        abortModification(dialog.getContent() + name, row, table);
-    }
-
-    private void abortModification(DialogMessages dialog, int row, JTable table) {
-        abortModification(dialog.getContent(), row, table);
-    }
-    
+//
+//    private void abortModification(DialogMessages dialog, String name, int row, JTable table) {
+//        abortModification(dialog.getContent() + name, row, table);
+//    }
+//
+//    private void abortModification(DialogMessages dialog, int row, JTable table) {
+//        abortModification(dialog.getContent(), row, table);
+//    }
+//    
     private void abortModification(String message, int row, JTable table) {
         JOptionPane.showMessageDialog(this, message, ERROR_DIALOGTITLE.getContent(), 
                 JOptionPane.WARNING_MESSAGE); 
@@ -604,7 +609,7 @@ public class Buildings extends javax.swing.JFrame {
         southPanel = new javax.swing.JPanel();
         tableMenuPanel = new javax.swing.JPanel();
         sampleButton = new javax.swing.JButton();
-        ODSAffiliHelp = new javax.swing.JButton();
+        ODSBldgHelp = new javax.swing.JButton();
         readSheet = new javax.swing.JButton();
         saveSheet_Button = new javax.swing.JButton();
         filler3 = new javax.swing.Box.Filler(new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 0), new java.awt.Dimension(32767, 0));
@@ -976,20 +981,20 @@ public class Buildings extends javax.swing.JFrame {
         });
         tableMenuPanel.add(sampleButton);
 
-        ODSAffiliHelp.setBackground(new java.awt.Color(153, 255, 153));
-        ODSAffiliHelp.setFont(new java.awt.Font("Dotum", 1, 14)); // NOI18N
-        ODSAffiliHelp.setIcon(getQuest20_Icon());
-        ODSAffiliHelp.setAlignmentY(0.0F);
-        ODSAffiliHelp.setMargin(new java.awt.Insets(2, 4, 2, 4));
-        ODSAffiliHelp.setMinimumSize(new java.awt.Dimension(20, 20));
-        ODSAffiliHelp.setOpaque(false);
-        ODSAffiliHelp.setPreferredSize(new java.awt.Dimension(25, 25));
-        ODSAffiliHelp.addActionListener(new java.awt.event.ActionListener() {
+        ODSBldgHelp.setBackground(new java.awt.Color(153, 255, 153));
+        ODSBldgHelp.setFont(new java.awt.Font("Dotum", 1, 14)); // NOI18N
+        ODSBldgHelp.setIcon(getQuest20_Icon());
+        ODSBldgHelp.setAlignmentY(0.0F);
+        ODSBldgHelp.setMargin(new java.awt.Insets(2, 4, 2, 4));
+        ODSBldgHelp.setMinimumSize(new java.awt.Dimension(20, 20));
+        ODSBldgHelp.setOpaque(false);
+        ODSBldgHelp.setPreferredSize(new java.awt.Dimension(25, 25));
+        ODSBldgHelp.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                ODSAffiliHelpActionPerformed(evt);
+                ODSBldgHelpActionPerformed(evt);
             }
         });
-        tableMenuPanel.add(ODSAffiliHelp);
+        tableMenuPanel.add(ODSBldgHelp);
 
         readSheet.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         readSheet.setMnemonic('O');
@@ -1141,21 +1146,21 @@ public class Buildings extends javax.swing.JFrame {
                 modeString.setText(CREATE.getContent());
                 enableRadioButtons(false);
                 changeBottomButtonsEnbled(false);   
-                adminOperationEnabled(false, ODSAffiliHelp, sampleButton, readSheet);                
+                adminOperationEnabled(false, ODSBldgHelp, sampleButton, readSheet);                
                 break;   
                 
             case NormalMode:               
                 modeString.setText(FETCH.getContent());
                 enableRadioButtons(true);
                 changeBottomButtonsEnbled(true);
-                adminOperationEnabled(true, ODSAffiliHelp, sampleButton, readSheet);                
+                adminOperationEnabled(true, ODSBldgHelp, sampleButton, readSheet);                
                 break;
                 
             case UpdateMode:
                 modeString.setText(MODIFY.getContent());
                 enableRadioButtons(false);
                 changeBottomButtonsEnbled(false);   
-                adminOperationEnabled(false, ODSAffiliHelp, sampleButton, readSheet);                
+                adminOperationEnabled(false, ODSBldgHelp, sampleButton, readSheet);                
                 break;
                 
             default:
@@ -1315,53 +1320,7 @@ public class Buildings extends javax.swing.JFrame {
         }    
         //</editor-fold>        
     }    
-    
-    // Delete currently selected table row
-    private int deleteAffiliation(String excepMsg, String sql, int key_No) 
-    {
-        //<editor-fold desc="-- Actual deletion of a building number">
-        Connection conn = null;
-        PreparedStatement createBuilding = null;
-        int result = 0;
-        
-        try {
-            conn = getConnection();
-            createBuilding = conn.prepareStatement(sql);
-            createBuilding.setInt(1, key_No);
-            result = createBuilding.executeUpdate();
-        } catch (SQLException ex) {
-            logParkingException(Level.SEVERE, ex, excepMsg);
-        } finally {
-            closeDBstuff(conn, createBuilding, null, excepMsg);
-            return result;
-        }    
-        //</editor-fold>        
-    }    
-    
-    private int getL2RecordCount(int L1_no) {
-        int result = -1;
-        
-        Connection conn = null;
-        PreparedStatement pstmt = null;    
-        ResultSet rs = null;
-        String excepMsg = "getting count of L2 record that belong to L1 no: " + L1_no;
-
-        String sql = "Select count(*) from L2_Affiliation where L1_NO = ?";
-        try {
-            conn = getConnection();
-            pstmt = conn.prepareStatement(sql);
-            pstmt.setInt(1, L1_no);
-            rs = pstmt.executeQuery();
-            rs.next();
-            result = rs.getInt(1);
-        } catch(Exception ex) {
-            logParkingException(Level.SEVERE, ex, excepMsg);
-        } finally {
-            closeDBstuff(conn, pstmt, rs, excepMsg);
-        }
-        return result;        
-    }    
-    
+ 
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
         // Stop creating or updating a level 1 affiliation.
         JTable table = (currLevel == 1 ? BuildingTable : UnitTable);
@@ -1414,10 +1373,10 @@ public class Buildings extends javax.swing.JFrame {
     }//GEN-LAST:event_affiTopTitleMouseClicked
 
     private void readSheetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_readSheetActionPerformed
-        loadAffiliationsFromODS();
+        loadBuildingsFromODS();
     }//GEN-LAST:event_readSheetActionPerformed
 
-    private void loadAffiliationsFromODS() {
+    private void loadBuildingsFromODS() {
         try {
             int returnVal = odsFileChooser.showOpenDialog(this);
             if (returnVal == JFileChooser.APPROVE_OPTION) {                
@@ -1433,33 +1392,47 @@ public class Buildings extends javax.swing.JFrame {
                 if (sheet != null)
                 {
                     ODSReader objODSReader = new ODSReader();
+                
+                    ArrayList<Point> wrongCells = new ArrayList<Point>();
+                    WrappedInt buildingTotal = new WrappedInt();
+                    WrappedInt unitTotal = new WrappedInt();
 
-                    WrappedInt level1_total = new WrappedInt();
-                    WrappedInt level2_total = new WrappedInt();
-
-                    if (objODSReader.checkAffiliationODS(sheet, level1_total, level2_total))
+                    if (objODSReader.checkODS(sheet, wrongCells, buildingTotal, unitTotal))
                     {
                         StringBuilder sb = new StringBuilder();
 
-                        sb.append(AFFILI_ODS_DIAG_1.getContent());
+                        sb.append(BLDG_ODS_DIAG_1.getContent());
                         sb.append(System.getProperty("line.separator"));
                         sb.append(System.getProperty("line.separator"));
-                        sb.append(AFFILI_ODS_DIAG_2.getContent() + level1_total.getValue());
+                        sb.append(BLDG_ODS_DIAG_2.getContent() + buildingTotal.getValue());
                         sb.append(System.getProperty("line.separator"));
-                        sb.append(AFFILI_ODS_DIAG_3.getContent() + level2_total.getValue());
+                        sb.append(BLDG_ODS_DIAG_3.getContent() + unitTotal.getValue());                        
                         
                         int result = JOptionPane.showConfirmDialog(null, sb.toString(),
                                 ODS_CHECK_RESULT_TITLE.getContent(), 
                                 JOptionPane.YES_NO_OPTION);            
                         if (result == JOptionPane.YES_OPTION) {                
                             objODSReader.readBuildingODS(sheet, this);
+//                            objODSReader.readODS(sheet, null);
+                            loadBuilding(0, 0);
                         }
-                    }                     
+                    } else {
+                        // display wrong cell points if existed
+                        if (wrongCells.size() > 0) {
+                            String dialog = NON_NUMERIC_DATA.getContent()
+                                    + System.getProperty("line.separator") 
+                                    + getWrongCellPointString(wrongCells);
+                            
+                            JOptionPane.showConfirmDialog(null, dialog,
+                                    READ_ODS_FAIL_DIALOGTITLE.getContent(), 
+                                    JOptionPane.PLAIN_MESSAGE, WARNING_MESSAGE);                      
+                        }
+                    }
                 }
             }
         } catch (Exception ex) {
-            logParkingException(Level.SEVERE, ex, "(User Action: upload affiliation data from an ods sheet)");             
-        }               
+            logParkingException(Level.SEVERE, ex, "(User action: read user list ods file sheet)");
+        }            
     }    
 
     /**
@@ -1473,13 +1446,19 @@ public class Buildings extends javax.swing.JFrame {
          */
         UnitColCount dlg = new UnitColCount(this, true);
         Integer colCount = dlg.showDialog();
+        
+        if (colCount == null) {
+            return;
+        }
         /**
          * Prepare a model for the temporary JTable 'table'.
          */
         DefaultTableModel model = new DefaultTableModel();
         JTable table = new JTable(model);
-        model.addColumn("");
-        model.addColumn("");
+        
+        for (int i = 0; i <= colCount; i++) {
+            model.addColumn("");
+        }
         
         Connection conn = null;
         Statement selectStmt = null;
@@ -1501,9 +1480,17 @@ public class Buildings extends javax.swing.JFrame {
             Integer prevBN = null, currBN;
             
             model.setRowCount(0);
+            
+            ArrayList<Integer> unitList = new ArrayList<Integer>();
+            unitList.add(null);
             while (rs.next()) {
                 currBN = rs.getInt("BLDG_NO");
                 if (!currBN.equals(prevBN)) {
+                    if (unitList.size() > 1) {
+                        model.addRow(unitList.toArray());
+                        unitList.clear();
+                        unitList.add(null);                        
+                    }
                     prevBN = currBN;
                     model.addRow(new Object[] {currBN, ""});
                 }
@@ -1511,9 +1498,21 @@ public class Buildings extends javax.swing.JFrame {
                 Integer unit_no = rs.getInt("UNIT_NO");
 
                 if (unit_no != null) {
-                    model.addRow(new Object[] {"", unit_no});
+                    // Append unit number to a unit-list
+                    unitList.add(unit_no);
+                    // if unit-list has colCount item, then add a row to Model
+                    if (unitList.size() == colCount + 1) {
+                        model.addRow(unitList.toArray());
+                        unitList.clear();
+                        unitList.add(null);
+                    }
                 }
             }
+            if (unitList.size() > 1) {
+                model.addRow(unitList.toArray());
+                unitList.clear();
+                unitList.add(null);                        
+            }            
             //</editor-fold>
         } catch (SQLException ex) {
             logParkingException(Level.SEVERE, ex, excepMsg);
@@ -1524,18 +1523,18 @@ public class Buildings extends javax.swing.JFrame {
             AFFILI_SAVE_ODS_FAIL_DIALOG.getContent(), BUILD_ROOM_HEADER.getContent());
     }//GEN-LAST:event_saveSheet_ButtonActionPerformed
 
-    private void ODSAffiliHelpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ODSAffiliHelpActionPerformed
+    private void ODSBldgHelpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ODSBldgHelpActionPerformed
         JDialog helpDialog;
 
-        helpDialog = new ODS_HelpJDialog(this, false, HELP_AFFIL_LABEL.getContent(),
-            ODS_TYPE.AFFILIATION);
+        helpDialog = new ODS_HelpJDialog(this, false, HELP_BUILDING_LABEL.getContent(),
+            ODS_TYPE.BUILDING);
             
-        setHelpDialogLoc(ODSAffiliHelp, helpDialog);
+        setHelpDialogLoc(ODSBldgHelp, helpDialog);
         helpDialog.setVisible(true);
-    }//GEN-LAST:event_ODSAffiliHelpActionPerformed
+    }//GEN-LAST:event_ODSBldgHelpActionPerformed
 
     private void sampleButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sampleButtonActionPerformed
-        String sampleFile = "/affiliations";
+        String sampleFile = "/buildings";
 
         // Ask user the name and location for the ods file to save
         StringBuffer odsFullPath = new StringBuffer();
@@ -1690,7 +1689,7 @@ public class Buildings extends javax.swing.JFrame {
     private javax.swing.JTable BuildingTable;
     private javax.swing.JLabel Building_Title;
     private javax.swing.JPanel GUI_Title_Panel;
-    private javax.swing.JButton ODSAffiliHelp;
+    private javax.swing.JButton ODSBldgHelp;
     private javax.swing.JTable UnitTable;
     private javax.swing.JLabel Unit_Title;
     private javax.swing.ButtonGroup affi_Group;

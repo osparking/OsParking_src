@@ -1342,7 +1342,7 @@ public class Affiliations extends javax.swing.JFrame {
     }//GEN-LAST:event_ODSAffiliHelpActionPerformed
 
     private void sampleButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sampleButtonActionPerformed
-        String sampleFile = "/affiliations";
+        String sampleFile = "/affiliations_Kor";
 
         // Ask user the name and location for the ods file to save
         StringBuffer odsFullPath = new StringBuffer();

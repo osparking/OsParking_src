@@ -16,18 +16,33 @@
  */
 package com.osparking.vehicle;
 
+import static com.osparking.global.CommonData.buttonHeightNorm;
+import static com.osparking.global.CommonData.buttonWidthNorm;
+import com.osparking.global.Globals;
+import static com.osparking.global.Globals.font_Size;
+import static com.osparking.global.Globals.font_Style;
+import static com.osparking.global.Globals.font_Type;
+import static com.osparking.global.names.ControlEnums.ButtonTypes.CANCEL_BTN;
+import static com.osparking.global.names.ControlEnums.ButtonTypes.SELECT_BTN;
+import static com.osparking.global.names.ControlEnums.DialogMsg.HELP_UNIT_ODS;
+import static com.osparking.global.names.ControlEnums.LabelContent.UNIT_COL_COUNT_LABEL;
+import java.awt.Dimension;
+import javax.swing.ImageIcon;
+
 /**
  *
  * @author Open Source Parking, Inc.(www.osparking.com)
  */
 public class UnitColCount extends javax.swing.JDialog {
     Integer result = null;
+    
     /**
      * Creates new form UnitColCount
      */
     public UnitColCount(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        setLocationRelativeTo(parent);
     }
     
     public Integer showDialog() {
@@ -44,88 +59,167 @@ public class UnitColCount extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jComboBox1 = new javax.swing.JComboBox();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
+        leftMarginPanel = new javax.swing.JPanel();
+        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 40), new java.awt.Dimension(0, 40), new java.awt.Dimension(32767, 40));
+        centerPanel = new javax.swing.JPanel();
+        countCBoxPanel = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        setCountBtn = new javax.swing.JButton();
-        setCountBtn1 = new javax.swing.JButton();
+        filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(5, 0), new java.awt.Dimension(5, 0), new java.awt.Dimension(5, 32767));
+        colCountCBox = new javax.swing.JComboBox();
+        imagePanel = new javax.swing.JPanel();
+        helpImgLabel = new javax.swing.JLabel();
+        bottomButtonPanel = new javax.swing.JPanel();
+        filler3 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 20), new java.awt.Dimension(0, 20), new java.awt.Dimension(32767, 20));
+        twoButtonPanel = new javax.swing.JPanel();
+        selectBtn = new javax.swing.JButton();
+        cancelBtn = new javax.swing.JButton();
+        rightMarginPanel = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle(UNIT_COL_COUNT_LABEL.getContent());
+        setMaximumSize(new java.awt.Dimension(460, 387));
+        setMinimumSize(new java.awt.Dimension(460, 387));
+        setPreferredSize(new java.awt.Dimension(460, 387));
+        setResizable(false);
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] {
+        leftMarginPanel.setMinimumSize(new java.awt.Dimension(40, 100));
+        leftMarginPanel.setPreferredSize(new java.awt.Dimension(40, 278));
+
+        javax.swing.GroupLayout leftMarginPanelLayout = new javax.swing.GroupLayout(leftMarginPanel);
+        leftMarginPanel.setLayout(leftMarginPanelLayout);
+        leftMarginPanelLayout.setHorizontalGroup(
+            leftMarginPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 40, Short.MAX_VALUE)
+        );
+        leftMarginPanelLayout.setVerticalGroup(
+            leftMarginPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 197, Short.MAX_VALUE)
+        );
+
+        getContentPane().add(leftMarginPanel, java.awt.BorderLayout.WEST);
+        getContentPane().add(filler1, java.awt.BorderLayout.NORTH);
+
+        centerPanel.setMaximumSize(new java.awt.Dimension(368, 217));
+        centerPanel.setMinimumSize(new java.awt.Dimension(368, 217));
+        centerPanel.setPreferredSize(new java.awt.Dimension(368, 217));
+        centerPanel.setLayout(new java.awt.BorderLayout());
+
+        countCBoxPanel.setMaximumSize(new java.awt.Dimension(368, 40));
+        countCBoxPanel.setMinimumSize(new java.awt.Dimension(368, 40));
+        countCBoxPanel.setPreferredSize(new java.awt.Dimension(368, 40));
+        countCBoxPanel.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 0, 0));
+
+        jLabel1.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        jLabel1.setText(UNIT_COL_COUNT_LABEL.getContent());
+        countCBoxPanel.add(jLabel1);
+        countCBoxPanel.add(filler2);
+
+        colCountCBox.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        colCountCBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] {
             "1", "2", "3", "4", "5", "6", "7", "8", "9", "10",
             "11", "12", "13", "14", "15"
         }));
-        jComboBox1.setSelectedItem("5");
+        colCountCBox.setSelectedItem("5");
+        colCountCBox.setMinimumSize(new java.awt.Dimension(60, 25));
+        colCountCBox.setPreferredSize(new java.awt.Dimension(60, 25));
+        countCBoxPanel.add(colCountCBox);
 
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jScrollPane1.setViewportView(jTextArea1);
+        centerPanel.add(countCBoxPanel, java.awt.BorderLayout.PAGE_START);
 
-        jLabel1.setText("jLabel1");
+        imagePanel.setMaximumSize(new java.awt.Dimension(368, 177));
+        imagePanel.setMinimumSize(new java.awt.Dimension(368, 100));
 
-        setCountBtn.setText("jButton1");
-        setCountBtn.addActionListener(new java.awt.event.ActionListener() {
+        helpImgLabel.setIcon(new ImageIcon(new Globals().getClass().getResource(HELP_UNIT_ODS.getContent())));
+        helpImgLabel.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        helpImgLabel.setMaximumSize(new java.awt.Dimension(368, 177));
+        helpImgLabel.setMinimumSize(new java.awt.Dimension(368, 177));
+        helpImgLabel.setPreferredSize(new java.awt.Dimension(368, 177));
+
+        javax.swing.GroupLayout imagePanelLayout = new javax.swing.GroupLayout(imagePanel);
+        imagePanel.setLayout(imagePanelLayout);
+        imagePanelLayout.setHorizontalGroup(
+            imagePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(helpImgLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+        );
+        imagePanelLayout.setVerticalGroup(
+            imagePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(helpImgLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+        );
+
+        centerPanel.add(imagePanel, java.awt.BorderLayout.CENTER);
+
+        getContentPane().add(centerPanel, java.awt.BorderLayout.CENTER);
+
+        bottomButtonPanel.setMaximumSize(new java.awt.Dimension(368, 100));
+        bottomButtonPanel.setMinimumSize(new java.awt.Dimension(368, 100));
+        bottomButtonPanel.setPreferredSize(new java.awt.Dimension(368, 100));
+        bottomButtonPanel.setLayout(new javax.swing.BoxLayout(bottomButtonPanel, javax.swing.BoxLayout.Y_AXIS));
+        bottomButtonPanel.add(filler3);
+
+        twoButtonPanel.setMaximumSize(new java.awt.Dimension(368, 45));
+        twoButtonPanel.setMinimumSize(new java.awt.Dimension(368, 45));
+        twoButtonPanel.setPreferredSize(new java.awt.Dimension(368, 45));
+
+        selectBtn.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        selectBtn.setMnemonic('S');
+        selectBtn.setText(SELECT_BTN.getContent());
+        selectBtn.setMaximumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
+        selectBtn.setMinimumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
+        selectBtn.setPreferredSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
+        selectBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                setCountBtnActionPerformed(evt);
+                selectBtnActionPerformed(evt);
             }
         });
+        twoButtonPanel.add(selectBtn);
 
-        setCountBtn1.setText("jButton1");
-        setCountBtn1.addActionListener(new java.awt.event.ActionListener() {
+        cancelBtn.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        cancelBtn.setMnemonic('C');
+        cancelBtn.setText(CANCEL_BTN.getContent());
+        cancelBtn.setMaximumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
+        cancelBtn.setMinimumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
+        cancelBtn.setPreferredSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
+        cancelBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                setCountBtn1ActionPerformed(evt);
+                cancelBtnActionPerformed(evt);
             }
         });
+        twoButtonPanel.add(cancelBtn);
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(132, 132, 132)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(96, 96, 96)
-                        .addComponent(setCountBtn)
-                        .addGap(46, 46, 46)
-                        .addComponent(setCountBtn1)))
-                .addContainerGap(100, Short.MAX_VALUE))
+        bottomButtonPanel.add(twoButtonPanel);
+
+        getContentPane().add(bottomButtonPanel, java.awt.BorderLayout.SOUTH);
+
+        rightMarginPanel.setMinimumSize(new java.awt.Dimension(40, 100));
+        rightMarginPanel.setPreferredSize(new java.awt.Dimension(40, 278));
+
+        javax.swing.GroupLayout rightMarginPanelLayout = new javax.swing.GroupLayout(rightMarginPanel);
+        rightMarginPanel.setLayout(rightMarginPanelLayout);
+        rightMarginPanelLayout.setHorizontalGroup(
+            rightMarginPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 40, Short.MAX_VALUE)
         );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(45, 45, 45)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(setCountBtn)
-                    .addComponent(setCountBtn1))
-                .addContainerGap(32, Short.MAX_VALUE))
+        rightMarginPanelLayout.setVerticalGroup(
+            rightMarginPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 197, Short.MAX_VALUE)
         );
+
+        getContentPane().add(rightMarginPanel, java.awt.BorderLayout.EAST);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void setCountBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_setCountBtnActionPerformed
-        result = 5; 
-    }//GEN-LAST:event_setCountBtnActionPerformed
+    private void selectBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectBtnActionPerformed
+        result =  Integer.parseInt((String)(colCountCBox.getSelectedItem()));
+        setVisible(false);
+        dispose();        
+    }//GEN-LAST:event_selectBtnActionPerformed
 
-    private void setCountBtn1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_setCountBtn1ActionPerformed
-        result = 5; 
+    private void cancelBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelBtnActionPerformed
+        result = null;
         setVisible(false);
         dispose();
-    }//GEN-LAST:event_setCountBtn1ActionPerformed
+    }//GEN-LAST:event_cancelBtnActionPerformed
 
     /**
      * @param args the command line arguments
@@ -170,11 +264,20 @@ public class UnitColCount extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JComboBox jComboBox1;
+    private javax.swing.JPanel bottomButtonPanel;
+    private javax.swing.JButton cancelBtn;
+    private javax.swing.JPanel centerPanel;
+    private javax.swing.JComboBox colCountCBox;
+    private javax.swing.JPanel countCBoxPanel;
+    private javax.swing.Box.Filler filler1;
+    private javax.swing.Box.Filler filler2;
+    private javax.swing.Box.Filler filler3;
+    private javax.swing.JLabel helpImgLabel;
+    private javax.swing.JPanel imagePanel;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextArea jTextArea1;
-    private javax.swing.JButton setCountBtn;
-    private javax.swing.JButton setCountBtn1;
+    private javax.swing.JPanel leftMarginPanel;
+    private javax.swing.JPanel rightMarginPanel;
+    private javax.swing.JButton selectBtn;
+    private javax.swing.JPanel twoButtonPanel;
     // End of variables declaration//GEN-END:variables
 }
