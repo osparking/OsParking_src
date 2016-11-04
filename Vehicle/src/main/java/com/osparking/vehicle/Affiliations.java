@@ -19,18 +19,7 @@ package com.osparking.vehicle;
 import static com.mysql.jdbc.MysqlErrorNumbers.ER_DUP_ENTRY;
 import static com.mysql.jdbc.MysqlErrorNumbers.ER_NO;
 import static com.mysql.jdbc.MysqlErrorNumbers.ER_YES;
-import static com.osparking.global.CommonData.DARK_BLUE;
-import static com.osparking.global.CommonData.LIGHT_BLUE;
-import static com.osparking.global.CommonData.ODS_DIRECTORY;
-import static com.osparking.global.CommonData.adminOperationEnabled;
-import static com.osparking.global.CommonData.buttonHeightNorm;
-import static com.osparking.global.CommonData.buttonWidthNorm;
-import static com.osparking.global.CommonData.buttonWidthWide;
-import static com.osparking.global.CommonData.downloadSample;
-import static com.osparking.global.CommonData.numberCellRenderer;
-import static com.osparking.global.CommonData.pointColor;
-import static com.osparking.global.CommonData.tableRowHeight;
-import static com.osparking.global.CommonData.tipColor;
+import static com.osparking.global.CommonData.*;
 import static com.osparking.global.DataSheet.saveODSfileName;
 import static com.osparking.global.Globals.OSPiconList;
 import static com.osparking.global.Globals.checkOptions;
@@ -406,17 +395,10 @@ public class Affiliations extends javax.swing.JFrame {
                 // In this case, highlight the previous row
                 viewIndexToHighlight--;
             }
-            
-            final int highRow = viewIndexToHighlight;
-            java.awt.EventQueue.invokeLater(new Runnable() {
-                public void run() {
-                    highlightTableRow(lev1_Table, highRow);
-                }
-            });
+            highlightTableRow(lev1_Table, viewIndexToHighlight);
             
             // Adjust first column width checking row count, etc.
             adjustColumnWidth(lev1_Table, numRows);
-            
             if (isManager) {
                 saveSheet_Button.setEnabled(true);
             }            
@@ -424,7 +406,9 @@ public class Affiliations extends javax.swing.JFrame {
             loadLev2_Table(null, 0, "");
         }
         lev1_Count.setText(Integer.toString(numRows));
-        fixButtonEnabled();        
+        CommonData.fixButtonEnabled(currLevel == 1 ? lev1_Table : lev2_Table, formMode, 
+                insertSaveButton, updateSaveButton, deleteButton, cancelButton,
+                closeFormButton);
         //</editor-fold>
     }
     
@@ -1021,6 +1005,7 @@ public class Affiliations extends javax.swing.JFrame {
         
         switch (formMode) {
             case CreateMode:
+                enableTables(false);
                 modeString.setText(CREATE.getContent());
                 enableRadioButtons(false);
                 changeBottomButtonsEnbled(false);   
@@ -1028,6 +1013,7 @@ public class Affiliations extends javax.swing.JFrame {
                 break;   
                 
             case NormalMode:               
+                enableTables(true);
                 modeString.setText(FETCH.getContent());
                 enableRadioButtons(true);
                 changeBottomButtonsEnbled(true);
@@ -1035,6 +1021,7 @@ public class Affiliations extends javax.swing.JFrame {
                 break;
                 
             case UpdateMode:
+                enableTables(false);
                 modeString.setText(MODIFY.getContent());
                 enableRadioButtons(false);
                 changeBottomButtonsEnbled(false);   
@@ -1044,7 +1031,9 @@ public class Affiliations extends javax.swing.JFrame {
             default:
                 break;
         }
-        fixButtonEnabled();        
+        CommonData.fixButtonEnabled(currLevel == 1 ? lev1_Table : lev2_Table, formMode, 
+                insertSaveButton, updateSaveButton, deleteButton, cancelButton,
+                closeFormButton);        
     }    
 
     private void changeBottomButtonsEnbled(boolean b) {
@@ -1617,11 +1606,7 @@ public class Affiliations extends javax.swing.JFrame {
                 
                 final int highRow = viewIndex;
                 if (viewIndex != NO_HIGHLIGHT) {
-                    java.awt.EventQueue.invokeLater(new Runnable() {
-                        public void run() {
-                            highlightTableRow(lev2_Table, highRow);
-                        }
-                    });                    
+                    highlightTableRow(lev2_Table, highRow);
                 }
                 adjustColumnWidth(lev2_Table, numRows);
             }
@@ -1629,7 +1614,9 @@ public class Affiliations extends javax.swing.JFrame {
         }
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                fixButtonEnabled();
+                CommonData.fixButtonEnabled(currLevel == 1 ? lev1_Table : lev2_Table, formMode, 
+                        insertSaveButton, updateSaveButton, deleteButton, cancelButton,
+                        closeFormButton);                
             }
         });
     }
@@ -1704,7 +1691,9 @@ public class Affiliations extends javax.swing.JFrame {
                 manageSelection(evt, lev_Table);
                 
                 changeItemsEnabled(lev_Table, lev_Radio.isSelected());                
-                fixButtonEnabled();
+                CommonData.fixButtonEnabled(currLevel == 1 ? lev1_Table : lev2_Table, formMode, 
+                        insertSaveButton, updateSaveButton, deleteButton, cancelButton,
+                        closeFormButton);                
             }
 
             private void manageSelection(ItemEvent evt, JTable table) {
@@ -1784,66 +1773,6 @@ public class Affiliations extends javax.swing.JFrame {
             }
         });
     }
-    
-    /**
-     * Fix enable/disable affiliation management buttons in one place.
-     *        Button : Insert     Update     Delete     Cancel
-     *      Form Mod : !update    !insert    normal     !normal  
-     * Row selection :   N/A      selected   selected   selected
-     *    User level : -------------- Manager ------------------
-     */
-    private void fixButtonEnabled() {
-        if (isManager) {
-            /**
-             * Insert Button
-             */
-            if (formMode == UpdateMode) {
-                insertSaveButton.setEnabled(false);
-            } else {
-                insertSaveButton.setEnabled(true);
-            }
-            
-            JTable table = (currLevel == 1 ? lev1_Table : lev2_Table);
-            boolean rowSelected = table.getSelectedRow() != -1;
-
-            /**
-             * Update button
-             */
-            if (formMode != CreateMode && rowSelected) {
-                updateSaveButton.setEnabled(true);
-            } else {
-                updateSaveButton.setEnabled(false);
-            }
-            
-            /**
-             * Delete button
-             */
-            if (formMode == NormalMode && rowSelected) {
-                deleteButton.setEnabled(true);
-            } else {
-                deleteButton.setEnabled(false);
-            }
-            
-            /**
-             * Cancel button
-             */
-            if (formMode != NormalMode && rowSelected) {
-                cancelButton.setEnabled(true);
-                closeFormButton.setEnabled(false);
-            } else {
-                cancelButton.setEnabled(false);
-                closeFormButton.setEnabled(true);
-            }
-        } else {
-            /**
-             * Disable each button for a non-manager user.
-             */
-            insertSaveButton.setEnabled(false);
-            updateSaveButton.setEnabled(false);
-            deleteButton.setEnabled(false);
-            cancelButton.setEnabled(false);
-        }
-    }
 
     /**
      * Changes table under consideration via a Radio button selection.
@@ -1864,5 +1793,10 @@ public class Affiliations extends javax.swing.JFrame {
                 lev2_Radio.setSelected(true);
             }
         }
+    }
+
+    private void enableTables(boolean enable) {
+        lev1_Table.setEnabled(enable);
+        lev2_Table.setEnabled(enable);
     }
 }

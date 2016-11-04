@@ -36,7 +36,7 @@ public class ControlEnums {
     public static OsPaLang osPaLang;
     
     public enum TopForms {
-        Vehicle, CarOwner, AffiBldg, Attendant, Settings
+        Vehicle, CarOwner, Affiliation, Building, Attendant, Settings
     }
    
     public enum OsPaLang{
@@ -1427,12 +1427,13 @@ public class ControlEnums {
     public enum MenuITemTypes{
         RECORD_MENU("각종기록", "Records"),
         ARRIVAL_MENU_ITEM("도착기록", "Arrival"),
-        BOOTING_MENU_ITEM("실행기록", "Booting"),
+        BOOTING_MENU_ITEM("실행기록", "Sys' Run"),
         LOGIN_RECORD_MENU_ITEM("로그인기록", "Login"),
         VEHICLE_MENU("<HTML>차량\u22C5차주</HTML>", "<HTML>Car\u22C5Owner</HTML>"),
         VEHICLE_MANAGE_MENU_ITEM("차량관리", "Vehicle"),
         DRIVERS_MENU_ITEM("차주관리", "Driver"),
-        AFFILIATION_MENU("<HTML>소속\u22C5건물</HTML>", "<HTML>Affili\u22C5Bldg</HTML>"),
+        AFFILIATION_MENU_ITEM("소속관리", "Affiliation</HTML>"),
+        BUILDING_MENU_ITEM("건물관리", "Building"),
         AFFILIATION_ITEM("목록관리", "Manage List"),
         USERS_ITEM("사용자", "Users"),
         SYSTEM_MENU("시스템", "System"),

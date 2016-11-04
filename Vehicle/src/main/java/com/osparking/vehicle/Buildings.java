@@ -262,17 +262,10 @@ public class Buildings extends javax.swing.JFrame {
                 // In this case, highlight the previous row      
                 viewIndex--;
             }
-            
-            final int highRow = viewIndex;
-            java.awt.EventQueue.invokeLater(new Runnable() {
-                public void run() {
-                    highlightTableRow(BuildingTable, highRow);
-                }
-            });
+            highlightTableRow(BuildingTable, viewIndex);
             
             // Adjust first column width checking row count, etc.
             adjustColumnWidth(BuildingTable, numRows);
-            
             if (isManager) {
                 saveSheet_Button.setEnabled(true);
             }              
@@ -280,7 +273,9 @@ public class Buildings extends javax.swing.JFrame {
             loadUnit(0, null, 0, 0);
         }
         bldg_Count.setText(Integer.toString(numRows));
-        fixButtonEnabled();
+        CommonData.fixButtonEnabled(currLevel == 1 ? BuildingTable : UnitTable, formMode, 
+                insertSaveButton, updateSaveButton, deleteButton, cancelButton,
+                closeFormButton);        
         //</editor-fold>
     }    
     
@@ -356,13 +351,8 @@ public class Buildings extends javax.swing.JFrame {
                     viewIndex--; // when the row deleted was the last row
                 }
                 
-                final int highRow = viewIndex;
                 if (viewIndex != NO_HIGHLIGHT) {
-                    java.awt.EventQueue.invokeLater(new Runnable() {
-                        public void run() {
-                            highlightTableRow(UnitTable, highRow);
-                        }
-                    });                    
+                    highlightTableRow(UnitTable, viewIndex);
                 }
                 adjustColumnWidth(UnitTable, numRows);                
             }
@@ -370,7 +360,9 @@ public class Buildings extends javax.swing.JFrame {
         }
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                fixButtonEnabled();
+                CommonData.fixButtonEnabled(currLevel == 1 ? BuildingTable : UnitTable, formMode, 
+                        insertSaveButton, updateSaveButton, deleteButton, cancelButton,
+                        closeFormButton);                   
             }
         });        
     }    
@@ -391,16 +383,8 @@ public class Buildings extends javax.swing.JFrame {
         Integer bunInteger = tryParseInt(inputStr);
         
         if (bunInteger == null) {
-//            abortInsertion(NUMBER_FORMAT_ERROR_MSG.getContent(), table);
             return new IntCheckResult(true, NUMBER_FORMAT_ERROR_MSG.getContent(), 0);
         }  
-//        
-//        if (bunInteger == null) {
-//            DialogMessages message = 
-//                    (table == BuildingTable ? EMPTY_BUILDING : EMPTY_UNIT);
-////            abortInsertion(message.getContent(), table);
-//            return new IntCheckResult(true, NUMBER_FORMAT_ERROR_MSG.getContent(), 0);
-//        }   
         return new IntCheckResult(false, null, bunInteger);
     }
     
@@ -450,15 +434,7 @@ public class Buildings extends javax.swing.JFrame {
         }
         // </editor-fold>
     }    
-//
-//    private void abortModification(DialogMessages dialog, String name, int row, JTable table) {
-//        abortModification(dialog.getContent() + name, row, table);
-//    }
-//
-//    private void abortModification(DialogMessages dialog, int row, JTable table) {
-//        abortModification(dialog.getContent(), row, table);
-//    }
-//    
+   
     private void abortModification(String message, int row, JTable table) {
         JOptionPane.showMessageDialog(this, message, ERROR_DIALOGTITLE.getContent(), 
                 JOptionPane.WARNING_MESSAGE); 
@@ -848,19 +824,9 @@ public class Buildings extends javax.swing.JFrame {
         UnitTable.setRowHeight(tableRowHeight);
         UnitTable.setSelectionBackground(DARK_BLUE);
         UnitTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        UnitTable.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                UnitTableFocusLost(evt);
-            }
-        });
         UnitTable.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 UnitTableMouseClicked(evt);
-            }
-        });
-        UnitTable.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                UnitTableKeyReleased(evt);
             }
         });
         jScrollPane2.setViewportView(UnitTable);
@@ -1143,6 +1109,7 @@ public class Buildings extends javax.swing.JFrame {
         
         switch (formMode) {
             case CreateMode:
+                enableTables(false);
                 modeString.setText(CREATE.getContent());
                 enableRadioButtons(false);
                 changeBottomButtonsEnbled(false);   
@@ -1150,6 +1117,7 @@ public class Buildings extends javax.swing.JFrame {
                 break;   
                 
             case NormalMode:               
+                enableTables(true);
                 modeString.setText(FETCH.getContent());
                 enableRadioButtons(true);
                 changeBottomButtonsEnbled(true);
@@ -1157,6 +1125,7 @@ public class Buildings extends javax.swing.JFrame {
                 break;
                 
             case UpdateMode:
+                enableTables(false);
                 modeString.setText(MODIFY.getContent());
                 enableRadioButtons(false);
                 changeBottomButtonsEnbled(false);   
@@ -1166,7 +1135,9 @@ public class Buildings extends javax.swing.JFrame {
             default:
                 break;
         }
-        fixButtonEnabled();        
+        CommonData.fixButtonEnabled(currLevel == 1 ? BuildingTable : UnitTable, formMode, 
+                insertSaveButton, updateSaveButton, deleteButton, cancelButton,
+                closeFormButton);           
     }    
 
     private void changeBottomButtonsEnbled(boolean b) {
@@ -1593,14 +1564,6 @@ public class Buildings extends javax.swing.JFrame {
         changeTableSelection(2);
     }//GEN-LAST:event_title2_PanelMouseClicked
 
-    private void UnitTableKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_UnitTableKeyReleased
-        // TODO add your handling code here:
-    }//GEN-LAST:event_UnitTableKeyReleased
-
-    private void UnitTableFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_UnitTableFocusLost
-        // TODO add your handling code here:
-    }//GEN-LAST:event_UnitTableFocusLost
-
     private void backToNormal(JTable table) {
         setFormMode(FormMode.NormalMode);
         updateSaveButton.setText(MODIFY_BTN.getContent());
@@ -1814,7 +1777,9 @@ public class Buildings extends javax.swing.JFrame {
                 manageSelection(evt, lev_Table);
                 
                 changeItemsEnabled(lev_Table, lev_Radio.isSelected());                
-                fixButtonEnabled();
+                CommonData.fixButtonEnabled(currLevel == 1 ? BuildingTable : UnitTable, formMode, 
+                        insertSaveButton, updateSaveButton, deleteButton, cancelButton,
+                        closeFormButton);                   
             }
 
             private void manageSelection(ItemEvent evt, JTable table) {
@@ -1901,66 +1866,6 @@ public class Buildings extends javax.swing.JFrame {
             }
         });
     }
-    
-    /**
-     * Fix enable/disable affiliation management buttons in one place.
-     *        Button : Insert     Update     Delete     Cancel
-     *      Form Mod : !update    !insert    normal     !normal  
-     * Row selection :   N/A      selected   selected   selected
-     *    User level : -------------- Manager ------------------
-     */
-    private void fixButtonEnabled() {
-        if (isManager) {
-            /**
-             * Insert Button
-             */
-            if (formMode == UpdateMode) {
-                insertSaveButton.setEnabled(false);
-            } else {
-                insertSaveButton.setEnabled(true);
-            }
-            
-            JTable table = (currLevel == 1 ? BuildingTable : UnitTable);
-            boolean rowSelected = table.getSelectedRow() != -1;
-
-            /**
-             * Update button
-             */
-            if (formMode != CreateMode && rowSelected) {
-                updateSaveButton.setEnabled(true);
-            } else {
-                updateSaveButton.setEnabled(false);
-            }
-            
-            /**
-             * Delete button
-             */
-            if (formMode == NormalMode && rowSelected) {
-                deleteButton.setEnabled(true);
-            } else {
-                deleteButton.setEnabled(false);
-            }
-            
-            /**
-             * Cancel button
-             */
-            if (formMode != NormalMode && rowSelected) {
-                cancelButton.setEnabled(true);
-                closeFormButton.setEnabled(false);
-            } else {
-                cancelButton.setEnabled(false);
-                closeFormButton.setEnabled(true);
-            }
-        } else {
-            /**
-             * Disable each button for a non-manager user.
-             */
-            insertSaveButton.setEnabled(false);
-            updateSaveButton.setEnabled(false);
-            deleteButton.setEnabled(false);
-            cancelButton.setEnabled(false);
-        }
-    }
 
     /**
      * Changes table under consideration via a Radio button selection.
@@ -1989,5 +1894,10 @@ public class Buildings extends javax.swing.JFrame {
         } catch (NumberFormatException e) {
             return null;
         }
+    }
+
+    private void enableTables(boolean enable) {
+        BuildingTable.setEnabled(enable);
+        UnitTable.setEnabled(enable);
     }
 }

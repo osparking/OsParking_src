@@ -62,9 +62,10 @@ import static com.osparking.global.names.ControlEnums.LabelContent.GATE_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.OPEN_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.RATE_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.STATUS_LABEL;
-import static com.osparking.global.names.ControlEnums.MenuITemTypes.AFFILIATION_MENU;
+import static com.osparking.global.names.ControlEnums.MenuITemTypes.AFFILIATION_MENU_ITEM;
 import static com.osparking.global.names.ControlEnums.MenuITemTypes.ARRIVAL_MENU_ITEM;
 import static com.osparking.global.names.ControlEnums.MenuITemTypes.BOOTING_MENU_ITEM;
+import static com.osparking.global.names.ControlEnums.MenuITemTypes.BUILDING_MENU_ITEM;
 import static com.osparking.global.names.ControlEnums.MenuITemTypes.DRIVERS_MENU_ITEM;
 import static com.osparking.global.names.ControlEnums.MenuITemTypes.ID_DEFAULT;
 import static com.osparking.global.names.ControlEnums.MenuITemTypes.ID_LABEL_STR;
@@ -102,6 +103,7 @@ import static com.osparking.global.names.ControlEnums.ToolTipContent.CAR_ENTRY_T
 import com.osparking.global.names.ControlEnums.TopForms;
 import static com.osparking.global.names.ControlEnums.TopForms.Attendant;
 import static com.osparking.global.names.ControlEnums.TopForms.Settings;
+import static com.osparking.global.names.ControlEnums.TopForms.Vehicle;
 import com.osparking.global.names.DB_Access;
 import static com.osparking.global.names.DB_Access.deviceType;
 import static com.osparking.global.names.DB_Access.enteranceAllowed;
@@ -170,7 +172,8 @@ import com.osparking.osparking.device.SendGateOpenTask;
 import com.osparking.osparking.statistics.DeviceCommand;
 import com.osparking.osparking.statistics.PassingDelayStat;
 import com.osparking.statistics.CarArrivals;
-import com.osparking.vehicle.AffiliationBuildingForm;
+import com.osparking.vehicle.Affiliations;
+import com.osparking.vehicle.Buildings;
 import com.osparking.vehicle.VehiclesForm;
 import com.osparking.vehicle.driver.ManageDrivers;
 import java.awt.Component;
@@ -824,7 +827,8 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
         VehicleMenu = new javax.swing.JMenu();
         VehicleListItem = new javax.swing.JMenuItem();
         DriverListItem = new javax.swing.JMenuItem();
-        AffiliBldgItem = new javax.swing.JMenuItem();
+        AffiliationItem = new javax.swing.JMenuItem();
+        BuildingItem = new javax.swing.JMenuItem();
         CommandMenu = new javax.swing.JMenu();
         AttendantListItem = new javax.swing.JMenuItem();
         SettingsItem = new javax.swing.JMenuItem();
@@ -1446,7 +1450,7 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
         });
         RecordsMenu.add(EntryRecordItem);
 
-        RunRecordItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_B, java.awt.event.InputEvent.ALT_MASK));
+        RunRecordItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_R, java.awt.event.InputEvent.ALT_MASK));
         RunRecordItem.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         RunRecordItem.setText(BOOTING_MENU_ITEM.getContent());
         RunRecordItem.setEnabled(false);
@@ -1501,16 +1505,26 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
         });
         VehicleMenu.add(DriverListItem);
 
-        AffiliBldgItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F, java.awt.event.InputEvent.ALT_MASK));
-        AffiliBldgItem.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        AffiliBldgItem.setText(AFFILIATION_MENU.getContent());
-        AffiliBldgItem.setEnabled(false);
-        AffiliBldgItem.addActionListener(new java.awt.event.ActionListener() {
+        AffiliationItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F, java.awt.event.InputEvent.ALT_MASK));
+        AffiliationItem.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        AffiliationItem.setText(AFFILIATION_MENU_ITEM.getContent());
+        AffiliationItem.setEnabled(false);
+        AffiliationItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                AffiliBldgItemActionPerformed(evt);
+                AffiliationItemActionPerformed(evt);
             }
         });
-        VehicleMenu.add(AffiliBldgItem);
+        VehicleMenu.add(AffiliationItem);
+
+        BuildingItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_B, java.awt.event.InputEvent.ALT_MASK));
+        BuildingItem.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        BuildingItem.setText(BUILDING_MENU_ITEM.getContent());
+        BuildingItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BuildingItemActionPerformed(evt);
+            }
+        });
+        VehicleMenu.add(BuildingItem);
 
         visibleMenuBar.add(VehicleMenu);
 
@@ -1723,8 +1737,7 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
     }
     
     private void processVehicleList(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_processVehicleList
-//        (new VehiclesForm()).setVisible(true);      
-        displayTopForm(TopForms.Vehicle);
+        displayTopForm(Vehicle);
     }//GEN-LAST:event_processVehicleList
 
     private void VehiclesButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_VehiclesButtonActionPerformed
@@ -1736,7 +1749,6 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
     }//GEN-LAST:event_UsersButtonActionPerformed
 
     private void SettingsItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SettingsItemActionPerformed
-//        displaySystemSettings();
         displayTopForm(Settings);
     }//GEN-LAST:event_SettingsItemActionPerformed
 
@@ -1954,17 +1966,13 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
         askUserIntentionOnProgramStop(false);
     }//GEN-LAST:event_QuitActionPerformed
 
-    private void AffiliBldgItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AffiliBldgItemActionPerformed
-//        java.awt.EventQueue.invokeLater(new Runnable() {
-//            public void run() {
-//                if (affiliationBuildingForm == null) {
-//                    affiliationBuildingForm = 
-//                }
-//                affiliationBuildingForm.setVisible(true);
-//            }
-//        });
-        displayTopForm(TopForms.AffiBldg);
-    }//GEN-LAST:event_AffiliBldgItemActionPerformed
+    private void AffiliationItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AffiliationItemActionPerformed
+        displayTopForm(TopForms.Affiliation);
+    }//GEN-LAST:event_AffiliationItemActionPerformed
+
+    private void BuildingItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BuildingItemActionPerformed
+        displayTopForm(TopForms.Building);
+    }//GEN-LAST:event_BuildingItemActionPerformed
 
     LedProtocol ledNoticeProtocol = new LedProtocol(); 
 
@@ -2270,8 +2278,12 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
                 topForm = new ManageDrivers(this, null);
                 break;
                 
-            case AffiBldg:
-                topForm = new AffiliationBuildingForm(this);
+            case Affiliation:
+                topForm = new Affiliations(this);
+                break;
+                
+            case Building:
+                topForm = new Buildings(this);
                 break;
                 
             case Attendant:
@@ -2299,8 +2311,9 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
     
     // <editor-fold defaultstate="collapsed" desc="-- Form Control Items ">
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JMenuItem AffiliBldgItem;
+    private javax.swing.JMenuItem AffiliationItem;
     private javax.swing.JMenuItem AttendantListItem;
+    private javax.swing.JMenuItem BuildingItem;
     private javax.swing.JButton CarIOListButton;
     private javax.swing.JLabel ClockLabel;
     private javax.swing.JMenuItem CloseProgramItem;
@@ -2494,7 +2507,7 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
         VehicleListItem.setEnabled(b);
         EntryRecordItem.setEnabled(b);        
         DriverListItem.setEnabled(b);
-        AffiliBldgItem.setEnabled(b);
+        AffiliationItem.setEnabled(b);
     }
 
     private void MenuItems_setEnabled(boolean loggedIn) {

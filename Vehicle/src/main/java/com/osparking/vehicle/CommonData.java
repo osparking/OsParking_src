@@ -19,7 +19,11 @@ package com.osparking.vehicle;
 import static com.osparking.global.CommonData.ODS_FILEPATH;
 import static com.osparking.global.CommonData.getStringWidth;
 import static com.osparking.global.Globals.getNumericDigitCount;
+import static com.osparking.global.Globals.isManager;
 import com.osparking.global.names.ControlEnums;
+import static com.osparking.global.names.ControlEnums.FormMode.CreateMode;
+import static com.osparking.global.names.ControlEnums.FormMode.NormalMode;
+import static com.osparking.global.names.ControlEnums.FormMode.UpdateMode;
 import java.awt.Component;
 import java.awt.Point;
 import java.io.File;
@@ -65,6 +69,70 @@ public class CommonData {
         
     static int count = 0;
 
+    /**
+     * Fix enable/disable affiliation management buttons in one place.
+     *      Contitions to enable these buttons -
+     *        Button : Insert     Update     Delete     Cancel
+     *                 -----------------------------------------
+     *      Form Mod : !update    !insert    normal     !normal  
+     *      Row sel' :   N/A      selected   selected   selected
+     *    User level : Manager    Manager    Manager    Manager
+     */
+    public static void fixButtonEnabled(JTable table, ControlEnums.FormMode formMode, 
+                JButton insertSaveButton, JButton updateSaveButton, 
+                JButton deleteButton, JButton cancelButton, JButton closeFormButton) 
+    {
+        if (isManager) {
+            /**
+             * Insert Button
+             */
+            if (formMode == UpdateMode) {
+                insertSaveButton.setEnabled(false);
+            } else {
+                insertSaveButton.setEnabled(true);
+            }
+            
+            boolean rowSelected = table.getSelectedRow() != -1;
+
+            /**
+             * Update button
+             */
+            if (formMode != CreateMode && rowSelected) {
+                updateSaveButton.setEnabled(true);
+            } else {
+                updateSaveButton.setEnabled(false);
+            }
+            
+            /**
+             * Delete button
+             */
+            if (formMode == NormalMode && rowSelected) {
+                deleteButton.setEnabled(true);
+            } else {
+                deleteButton.setEnabled(false);
+            }
+            
+            /**
+             * Cancel button
+             */
+            if (formMode != NormalMode && rowSelected) {
+                cancelButton.setEnabled(true);
+                closeFormButton.setEnabled(false);
+            } else {
+                cancelButton.setEnabled(false);
+                closeFormButton.setEnabled(true);
+            }
+        } else {
+            /**
+             * Disable each button for a non-manager user.
+             */
+            insertSaveButton.setEnabled(false);
+            updateSaveButton.setEnabled(false);
+            deleteButton.setEnabled(false);
+            cancelButton.setEnabled(false);
+        }
+    }    
+    
     public static void tableColumnLanguage(JTable table, int i, ControlEnums.OsPaLang lang) {
         table.getColumnModel().getColumn(i).setCellEditor(
                 new TableCellEditorKor(lang, table.getFont()));
