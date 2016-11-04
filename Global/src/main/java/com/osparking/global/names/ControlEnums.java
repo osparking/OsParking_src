@@ -16,6 +16,7 @@
  */
 package com.osparking.global.names;
 
+import static com.osparking.global.CommonData.PASS_MAX;
 import static com.osparking.global.names.ControlEnums.ComboBoxItemTypes.RTOL_CB_ITEM;
 import static com.osparking.global.names.ControlEnums.LabelContent.LANGUAGE_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.TYPE_LABEL;
@@ -395,7 +396,7 @@ public class ControlEnums {
                 ARRIVAL_TIME_PANEL_TITLE.getContent() + " option selection" + System.lineSeparator() +
                         "recorded to OsParking."),
         
-        UPDATE_SAVE_HELP("자료 갱신 후 [엔터] 키로 마감(=저장)할 것!",
+        UPDATE_SAVE_HELP("자료 수정 후 [엔터] 키로 마감(=저장)할 것!",
                 "Press enter after the data modification!"),
         DEFAULT_USER_LINE1("[생성된 기본 아이디]", "[Created Default User ID]"),
         DEFAULT_USER_LINE2("- 아이디 목록: ", "- ID List: "),
@@ -757,9 +758,9 @@ public class ControlEnums {
         MISSING_PORT_DIALOG_1("장치 포트 부재 내역 : ", "Missing device port details : "),
         MISSING_PORT_DIALOG_2("  - 입구 번호 : ", "  - Gate No. :"),
         MISSING_PORT_DIALOG_3("  - 장치 종류 : ", "  - Device Type : "),
-        USER_UPDATE_1("아래 사용자 정보가 갱신되었습니다.", "Below user information modified."),
+        USER_UPDATE_1("아래 사용자 정보가 수정 되었습니다.", "Below user information modified."),
         USER_UPDATE_2("- 사용자 아이디 : ", "- User ID : "),
-        USER_UPDATE_A("아래 사용자 정보 갱신에 실패하였습니다.", "User information update failure Notice."),
+        USER_UPDATE_A("아래 사용자 정보 수정에 실패하였습니다.", "User information update failure Notice."),
         NAME_ADMIN("관리자", "Administrator"),
         NAME_MANAGER("운영자", "Operator"),
         NAME_GUEST("김손님", "Guest Kim"),
@@ -904,14 +905,14 @@ public class ControlEnums {
         MISSING_NAME_2(" 포기!", ""),
         USER_RIGHTS_DESCRIPTION("1. 관리자(ID: admin) : 상급" + System.getProperty("line.separator") +
                 "    - 매니저 및 일반에 대한 모든 권한" + System.getProperty("line.separator") +
-                "      (모든 권한: 삽입, 갱신, 삭제)" + System.getProperty("line.separator") +
+                "      (모든 권한: 생성, 수정, 삭제)" + System.getProperty("line.separator") +
                 System.getProperty("line.separator") +
                 "2. 매니저(첵크된 계정) : 중급" + System.getProperty("line.separator") +
                 "    - 일반에 대한 모든 권한" + System.getProperty("line.separator") +
                 "      (일반에 매니저 권한 부여 불가)" + System.getProperty("line.separator") +
                 System.getProperty("line.separator") +
                 "3. 일반 : 하급" +System.getProperty("line.separator") +
-                "    - 자기 계정에 대한 갱신 권한" + System.getProperty("line.separator") +
+                "    - 자기 계정 정보 수정 권한" + System.getProperty("line.separator") +
                 System.getProperty("line.separator") +
                 "4. 사용자 전체" +System.getProperty("line.separator") +
                 "    - 모두 자기 계정 속성 변경 가능" + System.getProperty("line.separator") +
@@ -1039,20 +1040,20 @@ public class ControlEnums {
         
         PW_FOURDIGIT_DIALOG("  - 정확히 네 자리 숫자", "  - Exact four digit number"),
         
-        PW_SIXDIGIT_DIALOG("  - 6 ~ 40자로 구성\n"
+        PW_SIXDIGIT_DIALOG("  - 6 ~ " + PASS_MAX + "자로 구성\n"
                 + "  - 영문 문자(a-z,A~Z)를 한 글자 이상 포함\n"
                 + "  - 숫자(0-9)를 한 글자 이상 포함",
-                "  - consists of 6 to 40 characters\n"
+                "  - consists of 6 to " + PASS_MAX + " characters\n"
                 + "  - contains at least one English alphabet (a-z,A~Z)\n"
                 + "  - includes more than one number key(0-9)"),
         
         PW_COMPLEX_DIALOG(
-                "  - 8 ~ 40자로 구성\n"
+                "  - 8 ~ " + PASS_MAX + "자로 구성\n"
                 + "  - 영문 소문자(a~z) 한 글자 이상 포함\n"
                 + "  - 영문 대문자(A~Z) 한 글자 이상 포함\n"
                 + "  - 숫자(0-9) 한 자 이상 포함\n"
                 + "  - 다음 특수 문자 중 한 글자 이상 포함",
-                "  - consists of 8 to 40 characters\n"
+                "  - consists of 8 to " + PASS_MAX + " characters\n"
                 + "  - contains at least one lower case alphabet (a-z)\n"
                 + "  - contains at least one upper case alphabet (A-Z)\n"
                 + "  - includes more than one number key(0-9)\n"
@@ -1063,7 +1064,7 @@ public class ControlEnums {
         ROOM_IN_DIALOG("호실 번호", "Room number"),
         LEVEL1_NAME_DIALOG("상위 소속", "Higher Affiliation"),
         LEVEL2_NAME_DIALOG("하위 소속", "Lower Affiliation"),
-        VEHICLE_MODIFY_FAIL_DAILOG("정보 갱신 실패 차량: ", "modification failed vehicle: "),
+        VEHICLE_MODIFY_FAIL_DAILOG("정보 수정 실패 차량: ", "modification failed vehicle: "),
         UPDATE_E_BOARD_DIALOG("전광판 변경 설정을 저장합니까?", "Want to save E-board update?"),
         READ_ODS_FAIL_DIALOG("잘못된 형식의 자료가 포함되어 있습니다.", "Cells that include wrong formatted data"),
         
@@ -1243,7 +1244,7 @@ public class ControlEnums {
         INTERRUPT_MSG("입차", "Interrupt"),
         DISCONN_MSG("단절됨", "disconnected"),
         CONN_MSG("연결됨", "connected"),
-        ON_ARTIFI_ERROR_MSG("인공 오류 삽입", "Artificial error is on"),
+        ON_ARTIFI_ERROR_MSG("인공 오류 발생", "Artificial error is on"),
         ERROR_RATE_MSG2("에러율 : ", "prob of error: "),
         ERROR_MSG("에러 ", "error"),
         ERROR_CHECK_BOX_MSG("에러 체크 박스를 먼저 선택해주세요. ",

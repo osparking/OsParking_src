@@ -18,9 +18,9 @@ package com.osparking.gatebar;
 
 import com.osparking.deviceglobal.AcceptManagerTask;
 import com.osparking.deviceglobal.DeviceGUI;
-import static com.osparking.deviceglobal.DeviceGlobals.displayErrorRate;
-import static com.osparking.deviceglobal.DeviceGlobals.displayRateLimit;
 import static com.osparking.deviceglobal.DeviceGlobals.setIconList;
+import static com.osparking.global.CommonData.displayPercent;
+import static com.osparking.global.CommonData.displayRateLimit;
 import static com.osparking.global.Globals.*;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -208,7 +208,9 @@ public class GateBarGUI extends javax.swing.JFrame implements DeviceGUI {
         aboutPanel = new javax.swing.JPanel();
         filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(5, 0), new java.awt.Dimension(5, 0), new java.awt.Dimension(5, 32767));
         seeLicenseButton = new javax.swing.JButton();
-        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
+        filler6 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
+        percentLabel = new javax.swing.JLabel();
+        filler3 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
         textFieldPanel = new javax.swing.JPanel();
         criticalInfoTextField = new javax.swing.JTextField();
 
@@ -362,7 +364,14 @@ errorCheckBox.addActionListener(new java.awt.event.ActionListener() {
         }
     });
     aboutPanel.add(seeLicenseButton);
-    aboutPanel.add(filler1);
+    aboutPanel.add(filler6);
+
+    percentLabel.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+    percentLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+    percentLabel.setText("0%");
+    percentLabel.setEnabled(false);
+    aboutPanel.add(percentLabel);
+    aboutPanel.add(filler3);
 
     wholePanel.add(aboutPanel);
 
@@ -409,13 +418,17 @@ errorCheckBox.addActionListener(new java.awt.event.ActionListener() {
 
     private void errorCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_errorCheckBoxActionPerformed
         if (getErrorCheckBox().isSelected()) {
-            displayErrorRate(criticalInfoTextField, ERROR_RATE);         
+            ERROR_RATE = 0.01f;                 
             errIncButton.setEnabled(true);
             errDecButton.setEnabled(true);
+            displayPercent(criticalInfoTextField, ERROR_RATE, percentLabel, true);
         } else {
-            criticalInfoTextField.setText("No artificial error.");            
+            criticalInfoTextField.setText("No artificial error.");
+            ERROR_RATE = 0.0f;
             errIncButton.setEnabled(false);
             errDecButton.setEnabled(false);
+            percentLabel.setEnabled(false);
+            percentLabel.setText(getPercentString(ERROR_RATE));                
         }        
     }//GEN-LAST:event_errorCheckBoxActionPerformed
 
@@ -430,7 +443,7 @@ errorCheckBox.addActionListener(new java.awt.event.ActionListener() {
     private void errIncButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_errIncButtonActionPerformed
         if (ERROR_RATE < 0.9) {
             ERROR_RATE += 0.1f;
-            displayErrorRate(criticalInfoTextField, ERROR_RATE);
+            displayPercent(criticalInfoTextField, ERROR_RATE, percentLabel, true);
         } else {
             displayRateLimit(criticalInfoTextField, ERROR_RATE, true);
         }
@@ -439,9 +452,9 @@ errorCheckBox.addActionListener(new java.awt.event.ActionListener() {
     private void errDecButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_errDecButtonActionPerformed
         if (ERROR_RATE > 0.10) {
             ERROR_RATE -= 0.1f;
-            displayErrorRate(criticalInfoTextField, ERROR_RATE);
+            displayPercent(criticalInfoTextField, ERROR_RATE, percentLabel, true);
         } else {
-            displayRateLimit(criticalInfoTextField, ERROR_RATE, false);
+            displayPercent(criticalInfoTextField, ERROR_RATE, percentLabel, false);
         }
     }//GEN-LAST:event_errDecButtonActionPerformed
 
@@ -768,15 +781,17 @@ errorCheckBox.addActionListener(new java.awt.event.ActionListener() {
     private javax.swing.JButton errIncButton;
     javax.swing.JCheckBox errorCheckBox;
     private javax.swing.JPanel errorPanel;
-    private javax.swing.Box.Filler filler1;
     private javax.swing.Box.Filler filler2;
+    private javax.swing.Box.Filler filler3;
     private javax.swing.Box.Filler filler4;
     private javax.swing.Box.Filler filler5;
+    private javax.swing.Box.Filler filler6;
     private javax.swing.JTextField gateID_TextField;
     private javax.swing.JPanel gatePanel;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     javax.swing.JTextField managerIPaddr;
+    private javax.swing.JLabel percentLabel;
     private javax.swing.JButton seeLicenseButton;
     private javax.swing.JPanel settingPanel;
     private javax.swing.JPanel textFieldPanel;

@@ -17,6 +17,7 @@
 package com.osparking.osparking.statistics;
 
 import static com.osparking.global.Globals.getFormattedRealNumber;
+import static com.osparking.global.Globals.getPercentString;
 import static com.osparking.global.names.ControlEnums.MsgContent.ACK_AVG;
 import static com.osparking.global.names.ControlEnums.MsgContent.ACK_MAX;
 import static com.osparking.global.names.ControlEnums.MsgContent.NO_STAT;
@@ -108,7 +109,7 @@ public class DeviceCommand {
             sb.append(System.lineSeparator());
 
             sb.append("      " + RESEND.getContent());
-            sb.append(getFormattedRealNumber(commResendCntTot/(float)commandCount, 2));
+            sb.append(getPercentString(commResendCntTot/(float)commandCount));
             sb.append(System.lineSeparator());
         }
         return sb.toString();

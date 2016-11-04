@@ -1782,12 +1782,20 @@ public class Globals {
      * @param precision number of digits after decimal point
      * @return 
      */
+    public static String getPercentString(double realNumber) {
+        double percentNumber = realNumber * 100;
+        DecimalFormat df = new DecimalFormat();
+        df.setMaximumFractionDigits(0);
+        df.setMinimumFractionDigits(0);
+        return df.format(percentNumber) + "%"; 
+    }    
+    
     public static String getFormattedRealNumber(double realNumber, int precision) {
         DecimalFormat df = new DecimalFormat();
         df.setMaximumFractionDigits(precision);
         df.setMinimumFractionDigits(precision);
         return df.format(realNumber); 
-    }    
+    }      
 
     /**
      * Depending on the log type passed, calculates folder(directory) path name and date string.

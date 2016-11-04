@@ -17,7 +17,7 @@
 package com.osparking.deviceglobal;
 
 import com.osparking.global.Globals;
-import static com.osparking.global.Globals.getFormattedRealNumber;
+import static com.osparking.global.Globals.getPercentString;
 import static com.osparking.global.Globals.noArtificialErrorInserted;
 import static com.osparking.global.names.ControlEnums.DialogMessages.DEV_TYPE_ERROR_MSG1;
 import static com.osparking.global.names.ControlEnums.DialogMessages.DEV_TYPE_ERROR_MSG2;
@@ -78,22 +78,7 @@ public class DeviceGlobals {
                 iconList.add(new ImageIcon(iconURL).getImage());
             }
         }         
-    }  
-    
-    public static void displayErrorRate(JTextField displayField, float rate) {
-        displayField.setText("Artificial error rate : " + getFormattedRealNumber(rate, 2));
-    }    
-
-    static Toolkit toolkit = null;
-    
-    public static void displayRateLimit(JTextField displayField, float rate, boolean isMax) {
-        if (toolkit == null) {
-            toolkit = Toolkit.getDefaultToolkit();
-        }
-        toolkit.beep();
-        displayField.setText("Current error rate(=" + getFormattedRealNumber(rate, 2)
-                + ") is " + (isMax ? "max!" : "min!"));
-    } 
+    }   
     
     public static void sayIamHere(DeviceGUI deviceGUI) {
         if (noArtificialErrorInserted(deviceGUI.getErrorCheckBox())) 

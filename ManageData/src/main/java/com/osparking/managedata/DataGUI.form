@@ -382,7 +382,7 @@
       <SubComponents>
         <Component class="javax.swing.JButton" name="insertDrivers">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Insert 1K Owners"/>
+            <Property name="text" type="java.lang.String" value="Insert 1,000 Owners"/>
             <Property name="toolTipText" type="java.lang.String" value="Inserts 1000 drivers with random affiliation."/>
           </Properties>
           <Events>
@@ -461,7 +461,7 @@
       <SubComponents>
         <Component class="javax.swing.JButton" name="insertVehicles">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Insert 1K Cars"/>
+            <Property name="text" type="java.lang.String" value="Insert 1,000 Cars"/>
             <Property name="toolTipText" type="java.lang.String" value="Inserts 1000 cars with many random properties. 4 of them are with images."/>
           </Properties>
           <Events>

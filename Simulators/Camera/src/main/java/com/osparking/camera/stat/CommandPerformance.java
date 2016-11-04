@@ -18,6 +18,7 @@ package com.osparking.camera.stat;
 
 import static com.osparking.global.Globals.ERROR_RATE;
 import static com.osparking.global.Globals.getFormattedRealNumber;
+import static com.osparking.global.Globals.getPercentString;
 
 /**
  *
@@ -74,7 +75,7 @@ public class CommandPerformance {
 
             if (errorInserted) {
                 sb.append(" (error: ");
-                sb.append(getFormattedRealNumber(ERROR_RATE, 2));
+                sb.append(getPercentString(ERROR_RATE));
                 sb.append(")");
             }
             sb.append(System.lineSeparator());
@@ -86,7 +87,7 @@ public class CommandPerformance {
             sb.append(System.lineSeparator());
 
             sb.append("    Re-transmission/" + commandName+  ": ");
-            sb.append(getFormattedRealNumber(commResendCntTot/countF, 2));
+            sb.append(getPercentString(commResendCntTot/countF));
             //sb.append(System.lineSeparator());
         }
         return sb.toString();

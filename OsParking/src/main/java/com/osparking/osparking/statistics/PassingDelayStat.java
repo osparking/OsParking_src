@@ -23,6 +23,7 @@ import static com.osparking.global.names.DB_Access.recordPerformance;
 import static com.osparking.global.names.DB_Access.statCount;
 import static com.osparking.global.Globals.GENERAL_DEVICE;
 import static com.osparking.global.Globals.getFormattedRealNumber;
+import static com.osparking.global.Globals.getPercentString;
 import static com.osparking.global.Globals.logParkingOperation;
 import static com.osparking.global.Globals.timeFormat;
 import static com.osparking.global.names.ControlEnums.LabelContent.VEHICLES_LABEL;
@@ -118,8 +119,8 @@ public class PassingDelayStat {
         String resultString = null;
 
         if (passingDelayPreviousAverageMs < 0) {
-            String rate = getFormattedRealNumber(((float)PVcount/statCount), 2);
-            resultString = "(wait: " + rate + ")";
+            String rate = getPercentString(((float)PVcount/statCount));
+            resultString = "(data accumulation rate : " + rate + ")";
         }
         else 
             resultString = getFormattedRealNumber(passingDelayPreviousAverageMs, 1) + "ms on " 

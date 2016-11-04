@@ -307,7 +307,7 @@ public class DataGUI extends javax.swing.JFrame {
 
         jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder("Car Owners"));
 
-        insertDrivers.setText("Insert 1K Owners");
+        insertDrivers.setText("Insert 1,000 Owners");
         insertDrivers.setToolTipText("Inserts 1000 drivers with random affiliation.");
         insertDrivers.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -362,7 +362,7 @@ public class DataGUI extends javax.swing.JFrame {
 
         jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder("Vehicles"));
 
-        insertVehicles.setText("Insert 1K Cars");
+        insertVehicles.setText("Insert 1,000 Cars");
         insertVehicles.setToolTipText("Inserts 1000 cars with many random properties. 4 of them are with images.");
         insertVehicles.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

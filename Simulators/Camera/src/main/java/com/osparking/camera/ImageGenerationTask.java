@@ -121,7 +121,7 @@ public class ImageGenerationTask extends TimerTask {
             if (cameraGUI.isSHUT_DOWN())
                 return;
             
-            if (!cameraGUI.isCameraPausing() // pause button not pressed
+            if (cameraGUI.isCameraRunning() // pause button not pressed
                     && ! cameraGUI.imageTransmissionTimer.hasTask()
                     && cameraGUI.imageID_Acked
                     && (rand.nextFloat() < 0.5f)

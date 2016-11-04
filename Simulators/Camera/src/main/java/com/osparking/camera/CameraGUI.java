@@ -33,10 +33,10 @@ import static javax.swing.JOptionPane.WARNING_MESSAGE;
 import com.osparking.camera.stat.CommandPerformance;
 import com.osparking.deviceglobal.AcceptManagerTask;
 import com.osparking.deviceglobal.DeviceGUI;
-import static com.osparking.deviceglobal.DeviceGlobals.displayErrorRate;
-import static com.osparking.deviceglobal.DeviceGlobals.displayRateLimit;
 import static com.osparking.deviceglobal.DeviceGlobals.setIconList;
 import static com.osparking.global.CommonData.cameraOneIsButton;
+import static com.osparking.global.CommonData.displayPercent;
+import static com.osparking.global.CommonData.displayRateLimit;
 import static com.osparking.global.CommonData.dummyMessages;
 import java.awt.Component;
 import java.awt.Container;
@@ -72,7 +72,7 @@ import javax.swing.JCheckBox;
 public class CameraGUI extends javax.swing.JFrame implements DeviceGUI {
     public static final Object MUTEX_OUT = new Object();
     private byte cameraID = 0;    
-    private boolean cameraPausing;
+    private boolean cameraRunning = true;
     
     private CameraReader reader = null;
     private Object socketMUTEX = new Object();
@@ -219,7 +219,7 @@ public class CameraGUI extends javax.swing.JFrame implements DeviceGUI {
         filler7 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 32767));
         settingPanel = new javax.swing.JPanel();
         ipPanel = new javax.swing.JPanel();
-        filler26 = new javax.swing.Box.Filler(new java.awt.Dimension(50, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(50, 32767));
+        filler26 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 32767));
         jLabel3 = new javax.swing.JLabel();
         filler27 = new javax.swing.Box.Filler(new java.awt.Dimension(50, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(50, 32767));
         managerIPaddr = new javax.swing.JTextField();
@@ -244,14 +244,14 @@ public class CameraGUI extends javax.swing.JFrame implements DeviceGUI {
         filler19 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
         exitButton = new javax.swing.JButton();
         error_Panel = new javax.swing.JPanel();
-        filler11 = new javax.swing.Box.Filler(new java.awt.Dimension(50, 0), new java.awt.Dimension(50, 0), new java.awt.Dimension(50, 32767));
+        filler11 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 32767));
         errorCheckBox = new javax.swing.JCheckBox();
         filler23 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 32767));
         errIncButton = new javax.swing.JButton();
         filler24 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 32767));
         errDecButton = new javax.swing.JButton();
         filler25 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 32767));
-        filler16 = new javax.swing.Box.Filler(new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 32767));
+        percentLabel = new javax.swing.JLabel();
         left_Third_Panel = new javax.swing.JPanel();
         seeLicenseButton = new javax.swing.JButton();
         filler5 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
@@ -423,7 +423,7 @@ public class CameraGUI extends javax.swing.JFrame implements DeviceGUI {
         error_Panel.add(filler11);
 
         errorCheckBox.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        errorCheckBox.setText("error");
+        errorCheckBox.setText("Error");
         errorCheckBox.setToolTipText("");
         errorCheckBox.setEnabled(false);
         errorCheckBox.setHorizontalTextPosition(javax.swing.SwingConstants.LEADING);
@@ -481,7 +481,11 @@ public class CameraGUI extends javax.swing.JFrame implements DeviceGUI {
         errDecButton.setPreferredSize(
             new Dimension(iconMinus.getIconWidth(), iconMinus.getIconHeight()));
         error_Panel.add(filler25);
-        error_Panel.add(filler16);
+
+        percentLabel.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        percentLabel.setText("0%");
+        percentLabel.setEnabled(false);
+        error_Panel.add(percentLabel);
 
         settingPanel.add(error_Panel);
 
@@ -572,12 +576,14 @@ public class CameraGUI extends javax.swing.JFrame implements DeviceGUI {
     }//GEN-LAST:event_showAckTm_ButtonActionPerformed
 
     private void pauseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pauseButtonActionPerformed
-        if (isCameraPausing() ) {
-            pauseButton.setText("Pause");
-        } else {
+        if (isCameraRunning() ) {
             pauseButton.setText("Continue");
+            addMessageLine(messageTextArea, "Operation Stopped");            
+        } else {
+            pauseButton.setText("Pause");
+            addMessageLine(messageTextArea, "Operation Restarted");            
         }
-        setCameraPausing(!isCameraPausing());
+        setCameraRunning(!isCameraRunning());
     }//GEN-LAST:event_pauseButtonActionPerformed
     
     private void acceptConnectionRequest() {
@@ -647,20 +653,24 @@ public class CameraGUI extends javax.swing.JFrame implements DeviceGUI {
 
     private void errorCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_errorCheckBoxActionPerformed
         if (errorCheckBox.isSelected()) {
-            displayErrorRate(criticalInfoTextField, ERROR_RATE);                     
+            ERROR_RATE = 0.01f;            
             errIncButton.setEnabled(true);
             errDecButton.setEnabled(true);
+            displayPercent(criticalInfoTextField, ERROR_RATE, percentLabel, true);             
         } else {
             criticalInfoTextField.setText("No artificial error.");            
+            ERROR_RATE = 0.0f;
             errIncButton.setEnabled(false);
             errDecButton.setEnabled(false);
+            percentLabel.setEnabled(false);
+            percentLabel.setText(getPercentString(ERROR_RATE));
         }
     }//GEN-LAST:event_errorCheckBoxActionPerformed
 
     private void errIncButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_errIncButtonActionPerformed
         if (ERROR_RATE < 0.9) {
             ERROR_RATE += 0.1f;
-            displayErrorRate(criticalInfoTextField, ERROR_RATE);
+            displayPercent(criticalInfoTextField, ERROR_RATE, percentLabel, true);            
         } else {
             displayRateLimit(criticalInfoTextField, ERROR_RATE, true);
         }
@@ -669,9 +679,9 @@ public class CameraGUI extends javax.swing.JFrame implements DeviceGUI {
     private void errDecButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_errDecButtonActionPerformed
         if (ERROR_RATE > 0.10) {
             ERROR_RATE -= 0.1f;
-            displayErrorRate(criticalInfoTextField, ERROR_RATE);
+            displayPercent(criticalInfoTextField, ERROR_RATE, percentLabel, true);            
         } else {
-            displayRateLimit(criticalInfoTextField, ERROR_RATE, false);
+            displayPercent(criticalInfoTextField, ERROR_RATE, percentLabel, false);
         }
     }//GEN-LAST:event_errDecButtonActionPerformed
 
@@ -758,7 +768,6 @@ public class CameraGUI extends javax.swing.JFrame implements DeviceGUI {
     private javax.swing.Box.Filler filler1;
     private javax.swing.Box.Filler filler11;
     private javax.swing.Box.Filler filler12;
-    private javax.swing.Box.Filler filler16;
     private javax.swing.Box.Filler filler17;
     private javax.swing.Box.Filler filler18;
     private javax.swing.Box.Filler filler19;
@@ -790,6 +799,7 @@ public class CameraGUI extends javax.swing.JFrame implements DeviceGUI {
     private javax.swing.JScrollPane messageScrollPane;
     private javax.swing.JTextArea messageTextArea;
     private javax.swing.JButton pauseButton;
+    private javax.swing.JLabel percentLabel;
     private javax.swing.JLabel picLabel;
     private javax.swing.JPanel picPanel;
     private javax.swing.JButton seeLicenseButton;
@@ -827,8 +837,8 @@ public class CameraGUI extends javax.swing.JFrame implements DeviceGUI {
         which means the sendPicTask can proceed with the next car arrival. 
         -- false, otherwise.
      */
-    public boolean isCameraPausing() {
-        return cameraPausing;
+    public boolean isCameraRunning() {
+        return cameraRunning;
     }
 
     /**
@@ -900,10 +910,10 @@ public class CameraGUI extends javax.swing.JFrame implements DeviceGUI {
     }
 
     /**
-     * @param cameraPausing the cameraPausing to set
+     * @param cameraRunning the cameraPausing to set
      */
-    public void setCameraPausing(boolean cameraPausing) {
-        this.cameraPausing = cameraPausing;
+    public void setCameraRunning(boolean cameraRunning) {
+        this.cameraRunning = cameraRunning;
     }
 
     /**
@@ -1032,6 +1042,17 @@ public class CameraGUI extends javax.swing.JFrame implements DeviceGUI {
     public JCheckBox getErrorCheckBox() {
         return errorCheckBox;
     }
+
+//    private void displayPercent(boolean b) {
+//        if (b) {
+//            displayErrorRate(criticalInfoTextField, ERROR_RATE);            
+//            percentLabel.setText(getPercentString(ERROR_RATE));
+//        } else {
+//            displayRateLimit(criticalInfoTextField, ERROR_RATE, false);
+//            percentLabel.setText(getPercentString(ERROR_RATE));
+//        }
+//        percentLabel.setEnabled(b);
+//    }
 }
 
 class CameraTraversalPolicy extends FocusTraversalPolicy {

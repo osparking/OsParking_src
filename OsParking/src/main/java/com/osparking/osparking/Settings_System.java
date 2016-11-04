@@ -672,8 +672,8 @@ public class Settings_System extends javax.swing.JFrame implements IDataMan {
 
         PWStrengthChoiceComboBox.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         PWStrengthChoiceComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        PWStrengthChoiceComboBox.setMaximumSize(new java.awt.Dimension(32767, 30));
-        PWStrengthChoiceComboBox.setMinimumSize(new java.awt.Dimension(150, 30));
+        PWStrengthChoiceComboBox.setMaximumSize(new java.awt.Dimension(32767, 23));
+        PWStrengthChoiceComboBox.setMinimumSize(new java.awt.Dimension(150, 23));
         PWStrengthChoiceComboBox.setName("PWStrengthChoiceComboBox"); // NOI18N
         PWStrengthChoiceComboBox.setPreferredSize(new java.awt.Dimension(150, 23));
         PWStrengthChoiceComboBox.addItemListener(new java.awt.event.ItemListener() {

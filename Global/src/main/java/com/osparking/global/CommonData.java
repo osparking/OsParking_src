@@ -22,6 +22,7 @@ import static com.osparking.global.Globals.font_Size;
 import static com.osparking.global.Globals.font_Style;
 import static com.osparking.global.Globals.font_Type;
 import static com.osparking.global.Globals.getBufferedImage;
+import static com.osparking.global.Globals.getPercentString;
 import static com.osparking.global.Globals.getTagNumber;
 import static com.osparking.global.Globals.logParkingException;
 import com.osparking.global.names.ControlEnums;
@@ -60,6 +61,7 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.border.Border;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
@@ -75,6 +77,7 @@ public class CommonData { // new Dimension(carTagWidth, 30)
      */
     public static PasswordValidator pwValidator = null;
     public static final int FIRST_ROW = 0;
+    public static final int PASS_MAX = 20;
     
     public static final String ODS_FILE_DIR = "ods";
     public static final String ADMIN_ID = "admin";
@@ -123,6 +126,30 @@ public class CommonData { // new Dimension(carTagWidth, 30)
     static {
         putCellCenter.setHorizontalAlignment(JLabel.CENTER);    
     }
+
+    static Toolkit toolkit = null;
+    
+    public static void displayRateLimit(JTextField displayField, float rate, boolean isMax) {
+        if (toolkit == null) {
+            toolkit = Toolkit.getDefaultToolkit();
+        }
+        toolkit.beep();
+        displayField.setText("Current error rate(=" + getPercentString(rate)
+                + ") is " + (isMax ? "max!" : "min!"));
+    }     
+    
+    public static void displayPercent(JTextField infoField, float E_RATE, JLabel perLabel, 
+            boolean enable) 
+    {
+        if (enable) {
+            infoField.setText("Artificial error rate : " + getPercentString(E_RATE));
+            perLabel.setText(getPercentString(E_RATE));
+        } else {
+            displayRateLimit(infoField, E_RATE, false);
+            perLabel.setText(getPercentString(E_RATE));
+        }
+        perLabel.setEnabled(enable);
+    }    
     
     /**
      * Set keyboard input language for a component.

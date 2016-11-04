@@ -16,6 +16,7 @@
  */
 package com.osparking.global.names;
 
+import static com.osparking.global.CommonData.PASS_MAX;
 import static com.osparking.global.names.ControlEnums.DialogMessages.PW_COMPLEX_DIALOG;
 import static com.osparking.global.names.ControlEnums.DialogMessages.PW_FOURDIGIT_DIALOG;
 import static com.osparking.global.names.ControlEnums.DialogMessages.PW_SIXDIGIT_DIALOG;
@@ -35,10 +36,13 @@ public class PasswordValidator {
     private Pattern pattern;
     private Matcher matcher;
 
-    private static final String PW_PATTERN_4DIGITS = "((?=\\d{4}).{4,4})";
-    private static final String PW_PATTERN_6ALNUM = "((?=.*[a-zA-Z])(?=.*\\d).{6,40})";
+    private static final String PW_PATTERN_4DIGITS 
+            = "((?=\\d{4}).{4,4})";
+    private static final String PW_PATTERN_6ALNUM 
+            = "((?=.*[a-zA-Z])(?=.*\\d).{6," + PASS_MAX + "})";
         // one Upper, one Lower, one digit, one special char, 
-    private static final String PW_PATTERN_COMPLEX = "((?=.*[a-z])(?=.*\\d)(?=.*[A-Z])(?=.*[!@#$%&*()]).{8,40})";
+    private static final String PW_PATTERN_COMPLEX 
+            = "((?=.*[a-z])(?=.*\\d)(?=.*[A-Z])(?=.*[!@#$%&*()]).{8," + PASS_MAX + "})";
 
     public PasswordValidator() {
         if (pwStrengthLevel == PWStrengthLevel.FourDigit.ordinal()) 

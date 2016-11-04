@@ -18,9 +18,9 @@ package com.osparking.e_board;
 
 import com.osparking.deviceglobal.AcceptManagerTask;
 import com.osparking.deviceglobal.DeviceGUI;
-import static com.osparking.deviceglobal.DeviceGlobals.displayErrorRate;
-import static com.osparking.deviceglobal.DeviceGlobals.displayRateLimit;
 import static com.osparking.deviceglobal.DeviceGlobals.setIconList;
+import static com.osparking.global.CommonData.displayPercent;
+import static com.osparking.global.CommonData.displayRateLimit;
 import com.osparking.global.names.EBD_DisplaySetting;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -201,7 +201,9 @@ public class A_EBD_GUI extends javax.swing.JFrame implements DeviceGUI {
         connectionLED = new javax.swing.JLabel();
         PID_Label1 = new javax.swing.JLabel();
         IDtextField = new javax.swing.JTextField();
+        jPanel2 = new javax.swing.JPanel();
         seeLicenseButton = new javax.swing.JButton();
+        percentLabel = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -236,6 +238,7 @@ public class A_EBD_GUI extends javax.swing.JFrame implements DeviceGUI {
 
         errorCheckBox.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         errorCheckBox.setText("error");
+        errorCheckBox.setActionCommand("Error");
         errorCheckBox.setEnabled(false);
         errorCheckBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -326,6 +329,31 @@ public class A_EBD_GUI extends javax.swing.JFrame implements DeviceGUI {
             }
         });
 
+        percentLabel.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        percentLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        percentLabel.setText("0%");
+        percentLabel.setEnabled(false);
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addComponent(seeLicenseButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(percentLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(0, 0, 0)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(percentLabel)
+                    .addComponent(seeLicenseButton))
+                .addGap(0, 0, 0))
+        );
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -333,29 +361,25 @@ public class A_EBD_GUI extends javax.swing.JFrame implements DeviceGUI {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(criticalInfoTextField)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(criticalInfoTextField)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(topTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(botTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(0, 3, Short.MAX_VALUE)))
-                        .addContainerGap())
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(7, 7, 7)
-                                .addComponent(PID_Label1)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(IDtextField, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(IPaddrTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addComponent(seeLicenseButton))
-                        .addGap(0, 104, Short.MAX_VALUE))))
+                            .addComponent(topTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(botTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGroup(layout.createSequentialGroup()
+                                    .addGap(7, 7, 7)
+                                    .addComponent(PID_Label1)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(layout.createSequentialGroup()
+                                            .addComponent(IDtextField, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                            .addComponent(IPaddrTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -372,10 +396,10 @@ public class A_EBD_GUI extends javax.swing.JFrame implements DeviceGUI {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(seeLicenseButton)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 13, Short.MAX_VALUE)
+                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(criticalInfoTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addGap(18, 18, 18))
         );
 
         layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {IDtextField, IPaddrTextField});
@@ -402,20 +426,24 @@ public class A_EBD_GUI extends javax.swing.JFrame implements DeviceGUI {
 
     private void errorCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_errorCheckBoxActionPerformed
         if (errorCheckBox.isSelected()) {
-            displayErrorRate(criticalInfoTextField, ERROR_RATE);         
+            ERROR_RATE = 0.01f;            
             errIncButton.setEnabled(true);
             errDecButton.setEnabled(true);
+            displayPercent(criticalInfoTextField, ERROR_RATE, percentLabel, true);            
         } else {
-            criticalInfoTextField.setText("No artificial error.");            
+            criticalInfoTextField.setText("No artificial error.");
+            ERROR_RATE = 0.0f;
             errIncButton.setEnabled(false);
             errDecButton.setEnabled(false);
+            percentLabel.setEnabled(false);
+            percentLabel.setText(getPercentString(ERROR_RATE));            
         }
     }//GEN-LAST:event_errorCheckBoxActionPerformed
 
     private void errIncButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_errIncButtonActionPerformed
         if (ERROR_RATE < 0.9) {
             ERROR_RATE += 0.1f;
-            displayErrorRate(criticalInfoTextField, ERROR_RATE);
+            displayPercent(criticalInfoTextField, ERROR_RATE, percentLabel, true);
         } else {
             displayRateLimit(criticalInfoTextField, ERROR_RATE, true);
         }            
@@ -424,9 +452,9 @@ public class A_EBD_GUI extends javax.swing.JFrame implements DeviceGUI {
     private void errDecButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_errDecButtonActionPerformed
         if (ERROR_RATE > 0.10) {
             ERROR_RATE -= 0.1f;
-            displayErrorRate(criticalInfoTextField, ERROR_RATE);
+            displayPercent(criticalInfoTextField, ERROR_RATE, percentLabel, true);            
         } else {
-            displayRateLimit(criticalInfoTextField, ERROR_RATE, false);
+            displayPercent(criticalInfoTextField, ERROR_RATE, percentLabel, false);            
         }
     }//GEN-LAST:event_errDecButtonActionPerformed
     
@@ -521,6 +549,8 @@ public class A_EBD_GUI extends javax.swing.JFrame implements DeviceGUI {
     private javax.swing.JButton errIncButton;
     javax.swing.JCheckBox errorCheckBox;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JLabel percentLabel;
     private javax.swing.JButton seeLicenseButton;
     public javax.swing.JTextField topTextField;
     private javax.swing.ButtonGroup torbBG;

@@ -1819,8 +1819,6 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
     }//GEN-LAST:event_carEntryButtonActionPerformed
 
     private void DriverListItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DriverListItemActionPerformed
-//        ManageDrivers driversForm = new ManageDrivers(null);
-//        driversForm.setVisible(true);    
         displayTopForm(TopForms.CarOwner);
     }//GEN-LAST:event_DriverListItemActionPerformed
 
@@ -1832,8 +1830,8 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
         if (getErrorCheckBox().isSelected()) {
             addMessageLine(MessageTextArea, ON_ARTIFI_ERROR_MSG.getContent());
             addMessageLine(MessageTextArea, 
-                    "\t" + ARTIF_ERROR_RATE.getContent() + getFormattedRealNumber(ERROR_RATE, 2));
-            errorLabel.setText(RATE_LABEL.getContent() + getFormattedRealNumber(ERROR_RATE, 2));
+                    "\t" + ARTIF_ERROR_RATE.getContent() + getPercentString(ERROR_RATE));
+            errorLabel.setText(RATE_LABEL.getContent() + getPercentString(ERROR_RATE));
             
             // Enable error rate change buttons
             errIncButton.setEnabled(true);
@@ -1866,7 +1864,7 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
     private void errIncButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_errIncButtonActionPerformed
         if (ERROR_RATE < 0.9) {
              ERROR_RATE += 0.1f;
-            errorLabel.setText(RATE_LABEL.getContent() + getFormattedRealNumber(ERROR_RATE, 2));
+            errorLabel.setText(RATE_LABEL.getContent() + getPercentString(ERROR_RATE));
          } else {
             displayRateLimit(ARTI_CURR_ERR_LIMIT_2.getContent());            
          }
@@ -1875,7 +1873,7 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
     private void errDecButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_errDecButtonActionPerformed
         if (ERROR_RATE > 0.10) {
             ERROR_RATE -= 0.1f;
-            errorLabel.setText(RATE_LABEL.getContent() + getFormattedRealNumber(ERROR_RATE, 2));
+            errorLabel.setText(RATE_LABEL.getContent() + getPercentString(ERROR_RATE));
         } else {
             displayRateLimit(ARTI_CURR_ERR_LIMIT_b.getContent());            
         }
@@ -1889,7 +1887,7 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
             //<editor-fold desc="-- Show detailed performance statistics">
             perfDesc.append(ARTIF_ERROR_RATE.getContent());
             if (errorCheckBox.isSelected()) {
-                perfDesc.append(getFormattedRealNumber(ERROR_RATE, 2));
+                perfDesc.append(getPercentString(ERROR_RATE));
             } else {
                 perfDesc.append("N/A");
             }
@@ -2216,7 +2214,7 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
     private void displayRateLimit(String limitDescription) {
         toolkit.beep();
         addMessageLine(MessageTextArea, ARTI_CURR_ERR_LIMIT_1.getContent()
-                + getFormattedRealNumber(ERROR_RATE, 2) + limitDescription);
+                + getPercentString(ERROR_RATE) + limitDescription);
     }
 
     /**

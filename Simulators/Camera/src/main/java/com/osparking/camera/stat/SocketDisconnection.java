@@ -16,8 +16,8 @@
  */
 package com.osparking.camera.stat;
 
-import java.util.logging.Level;
 import static com.osparking.global.Globals.getFormattedRealNumber;
+import java.util.logging.Level;
 import static com.osparking.global.Globals.logParkingException;
 
 /**
