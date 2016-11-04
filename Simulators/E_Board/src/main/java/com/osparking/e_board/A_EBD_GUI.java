@@ -504,8 +504,11 @@ public class A_EBD_GUI extends javax.swing.JFrame implements DeviceGUI {
 
                 if (displayID > gateCount ) {
                     JOptionPane.showMessageDialog(null, 
-                            "Currently " + gateCount + " E-Board programs are running" + System.lineSeparator() 
-                            + "No more e-board programs can run", "E-Board Count Exceeded", 
+                            "Currently " + gateCount 
+                                    + " E-Board programs are running" 
+                                    + System.lineSeparator() 
+                                    + "No more e-board programs can run",
+                            "E-Board Count Exceeded", 
                             JOptionPane.OK_OPTION);
                     return;
                 }
@@ -514,7 +517,8 @@ public class A_EBD_GUI extends javax.swing.JFrame implements DeviceGUI {
                 A_EBD_GUI mainGUI = new A_EBD_GUI(displayID);
                 mainGUI.setVisible(true);
                 if (!DEBUG_FLAG) {
-                    shortLicenseDialog(mainGUI, "E-Board Simulator Program", "upper left");
+                    shortLicenseDialog(mainGUI, 
+                            "E-Board Simulator Program", "upper left");
                 }
             }
         });

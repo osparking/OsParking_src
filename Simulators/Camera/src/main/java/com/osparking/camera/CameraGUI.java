@@ -62,8 +62,8 @@ import java.util.List;
 import javax.swing.JCheckBox;
 
 /**
- * Camera Simulator GUI -- Part of OsParking simulator package which is developed by Open Source 
- * Parking Inc.
+ * Camera Simulator GUI -- Part of OsParking simulator package which is 
+ * developed by Open Source Parking Inc.
  * <p>Company Web Site : <a href="http://www.osparking.com">http://www.osparking.com</a><p>
  * <p>(Company logo: <img src ="doc-files/64px.png"/>)</p>
  * 
