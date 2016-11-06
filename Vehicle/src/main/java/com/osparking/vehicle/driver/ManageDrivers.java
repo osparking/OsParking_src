@@ -122,7 +122,6 @@ import static com.osparking.global.names.ControlEnums.LabelContent.REQUIRE_FIELD
 import static com.osparking.global.names.ControlEnums.LabelContent.SEARCH_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.SEARCH_MODE_LABEL;
 import static com.osparking.global.names.ControlEnums.OsPaLang.KOREAN;
-import static com.osparking.global.names.ControlEnums.MenuITemTypes.META_KEY_LABEL;
 import com.osparking.global.names.ControlEnums.OsPaTable;
 import static com.osparking.global.names.ControlEnums.OsPaTable.CarDriver;
 import static com.osparking.global.names.ControlEnums.TitleTypes.DRIVER_LIST_FRAME_TITLE;
@@ -635,7 +634,7 @@ public class ManageDrivers extends javax.swing.JFrame {
         searchL2ComboBox = new PComboBox<InnoComboBoxItem>();
         searchBuildingComboBox = new PComboBox();
         searchUnitComboBox = new PComboBox();
-        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(15, 0), new java.awt.Dimension(15, 0), new java.awt.Dimension(15, 32767));
+        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(95, 0), new java.awt.Dimension(95, 0), new java.awt.Dimension(95, 32767));
         driversScrollPane = new javax.swing.JScrollPane();
         driversTable = new javax.swing.JTable();
         filler15_5 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 15), new java.awt.Dimension(0, 15), new java.awt.Dimension(32767, 15));
@@ -678,7 +677,8 @@ public class ManageDrivers extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle(DRIVER_LIST_FRAME_TITLE.getContent());
-        setMinimumSize(new Dimension(normGUIwidth, normGUIheight));
+        setMinimumSize(new Dimension(normGUIwidth + 80, normGUIheight+61));
+        setPreferredSize(new Dimension(normGUIwidth + 80, normGUIheight+61));
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 formWindowClosing(evt);
@@ -733,7 +733,6 @@ public class ManageDrivers extends javax.swing.JFrame {
         jPanel1.setPreferredSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
         jPanel1.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 0, 0));
 
-        myMetaKeyLabel.setText(META_KEY_LABEL.getContent());
         myMetaKeyLabel.setMaximumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
         myMetaKeyLabel.setMinimumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
         myMetaKeyLabel.setPreferredSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
@@ -862,7 +861,9 @@ public class ManageDrivers extends javax.swing.JFrame {
         wholePanel.add(topButtonPanel);
         wholePanel.add(filler15_6);
 
-        searchPanel.setMaximumSize(new java.awt.Dimension(2095, 28));
+        searchPanel.setMaximumSize(new java.awt.Dimension(2095, 30));
+        searchPanel.setMinimumSize(new java.awt.Dimension(240, 30));
+        searchPanel.setPreferredSize(new Dimension(driversScrollPane.getSize().width, 30));
         searchPanel.setLayout(new javax.swing.BoxLayout(searchPanel, javax.swing.BoxLayout.LINE_AXIS));
 
         jLabel3.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
@@ -2138,23 +2139,23 @@ public class ManageDrivers extends javax.swing.JFrame {
             // <editor-fold defaultstate="collapsed" desc="-- load car driver list">     
             // <editor-fold defaultstate="collapsed" desc="-- construct SQL statement">  
             StringBuffer sb = new StringBuffer(); 
-            sb.append("SELECT @ROWNUM := @ROWNUM + 1 recNo, TA.* ");
+            sb.append("SELECT @ROWNUM := @ROWNUM + 1 recNo, TA.*, count(TA.PLATE_NUMBER) CAR_CNT ");
             sb.append("FROM (SELECT CD.NAME,  CD.CELLPHONE, CD.PHONE,"); 
             sb.append("    L1.PARTY_NAME AS L1_NAME, L2.PARTY_NAME L2_NAME,");
-            sb.append("    BT.BLDG_NO, BU.UNIT_NO, CD.SEQ_NO CD_SEQ_NO,");
+            sb.append("    BT.BLDG_NO, BU.UNIT_NO, V.PLATE_NUMBER, CD.SEQ_NO CD_SEQ_NO,");
             sb.append("    L2.L1_NO, CD.L2_NO, BT.SEQ_NO B_SEQ_NO,");
             sb.append("    CD.UNIT_SEQ_NO U_SEQ_NO");
             sb.append("  FROM CARDRIVER CD");
             sb.append("  LEFT JOIN L2_affiliation L2 ON CD.L2_NO = L2.L2_NO");
             sb.append("  LEFT JOIN L1_affiliation L1 ON L2.L1_NO = L1.L1_NO");
             sb.append("  LEFT JOIN building_unit BU ON UNIT_SEQ_NO = BU.SEQ_NO");
-            sb.append("  LEFT JOIN building_table BT ON BLDG_SEQ_NO = BT.SEQ_NO) TA,");
+            sb.append("  LEFT JOIN building_table BT ON BLDG_SEQ_NO = BT.SEQ_NO");
+            sb.append("  LEFT JOIN vehicles V ON CD.SEQ_NO = V.DRIVER_SEQ_NO) TA,");
             sb.append("  (SELECT @rownum := 0) r ");
 
             prevSearchCondition = currSearchCondition;
             prevSearchString = currSearchString;
             prevKeyList = currKeyList;            
-            
             if (currSearchCondition.length() > 0 || currSearchString.length() > 0) {
                 sb.append(" Where ");
                 if (currSearchCondition.length() > 0) {
@@ -2167,7 +2168,7 @@ public class ManageDrivers extends javax.swing.JFrame {
                     sb.append(currSearchString);
                 }
             }    
-            
+            sb.append("  GROUP BY CD_SEQ_NO");
             sb.append(" ORDER BY NAME, L1_NAME, TA.L2_NAME, TA.BLDG_NO, TA.UNIT_NO");
             //</editor-fold>
             
@@ -2225,7 +2226,7 @@ public class ManageDrivers extends javax.swing.JFrame {
                 
                 model.addRow(new Object[] {
                      rs.getInt("recNo"),   rs.getString("NAME"), rs.getString("CELLPHONE"),
-                     rs.getString("PHONE"),  L1Item, L2Item, bldgItem, unitItem,
+                     rs.getString("PHONE"),  L1Item, L2Item, bldgItem, unitItem, rs.getInt("CAR_CNT"),
                      rs.getInt("CD_SEQ_NO")
                 });
                 //</editor-fold>
@@ -2434,6 +2435,7 @@ public class ManageDrivers extends javax.swing.JFrame {
             LOWER_HEADER.getContent(), 
             BUILDING_HEADER.getContent(), 
             ROOM_HEADER.getContent(), 
+            CARS_HEADER.getContent(), 
             "CD_SEQ_NO"};
         
         driverTable = new DriverTable(data, columnNames, this);
@@ -2461,7 +2463,9 @@ public class ManageDrivers extends javax.swing.JFrame {
         TableColumnModel NumberTableModel = driverTable.getColumnModel();
         hiddenSN = NumberTableModel.getColumn(DriverCol.SEQ_NO.getNumVal());
         
-        NumberTableModel.removeColumn(hiddenSN);       
+        NumberTableModel.removeColumn(hiddenSN);     
+        
+        Dimension dim = driversScrollPane.getSize();
         
         driverTable.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);        
         
@@ -2477,6 +2481,7 @@ public class ManageDrivers extends javax.swing.JFrame {
         SetAColumnWidth(tcm.getColumn(5), DTCW_L2, DTCW_L2, DTCW_L2* DTCW_MAX); // 5: affiliation level 2
         SetAColumnWidth(tcm.getColumn(6), DTCW_BN, DTCW_BN, DTCW_BN* DTCW_MAX); // 6: building number
         SetAColumnWidth(tcm.getColumn(7), DTCW_UN, DTCW_UN, DTCW_UN* DTCW_MAX); // 7: building unit number  
+        SetAColumnWidth(tcm.getColumn(8), DTCW_RN, DTCW_RN, DTCW_RN); // 8: Car Count
         //</editor-fold>
         
         addDriverSelectionListener();

@@ -370,7 +370,6 @@ public class AttListForm extends javax.swing.JFrame {
         titlePanel = new javax.swing.JPanel();
         attendantGUI_title = new javax.swing.JLabel();
         topInPanel2 = new javax.swing.JPanel();
-        myMetaKeyLabel = new javax.swing.JLabel();
         adminAuth2CheckBox = new javax.swing.JCheckBox();
         listTopPanel = new javax.swing.JPanel();
         countLabel = new javax.swing.JLabel();
@@ -1067,14 +1066,6 @@ public class AttListForm extends javax.swing.JFrame {
         topInPanel2.setMinimumSize(new java.awt.Dimension(267, 26));
         topInPanel2.setPreferredSize(new java.awt.Dimension(267, 26));
 
-        myMetaKeyLabel.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        myMetaKeyLabel.setText(META_KEY_LABEL.getContent());
-        myMetaKeyLabel.setMaximumSize(new Dimension(buttonWidthNorm, buttonHeightShort));
-        myMetaKeyLabel.setMinimumSize(new Dimension(buttonWidthNorm, buttonHeightShort));
-        myMetaKeyLabel.setPreferredSize(new Dimension(buttonWidthNorm, buttonHeightShort));
-        myMetaKeyLabel.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        myMetaKeyLabel.setForeground(tipColor);
-
         adminAuth2CheckBox.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         adminAuth2CheckBox.setText(MANAGER_HEADER.getContent());
         adminAuth2CheckBox.setToolTipText("");
@@ -1087,17 +1078,14 @@ public class AttListForm extends javax.swing.JFrame {
         topInPanel2Layout.setHorizontalGroup(
             topInPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, topInPanel2Layout.createSequentialGroup()
-                .addComponent(myMetaKeyLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 415, Short.MAX_VALUE)
+                .addContainerGap(491, Short.MAX_VALUE)
                 .addComponent(adminAuth2CheckBox))
         );
         topInPanel2Layout.setVerticalGroup(
             topInPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, topInPanel2Layout.createSequentialGroup()
                 .addGap(0, 0, 0)
-                .addGroup(topInPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(adminAuth2CheckBox)
-                    .addComponent(myMetaKeyLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addComponent(adminAuth2CheckBox))
         );
 
         centerPanel.add(topInPanel2);
@@ -2762,7 +2750,6 @@ public class AttListForm extends javax.swing.JFrame {
     private javax.swing.JPanel modePanel;
     private javax.swing.JLabel modeString;
     private javax.swing.JButton multiFuncButton;
-    private javax.swing.JLabel myMetaKeyLabel;
     private javax.swing.JLabel nameLabel;
     private javax.swing.JLabel nameReqLabel;
     private javax.swing.JPasswordField new1Password;

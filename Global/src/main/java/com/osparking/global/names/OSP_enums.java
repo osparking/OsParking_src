@@ -191,7 +191,8 @@ public class OSP_enums {
         AffiliationL2(5),
         BuildingNo(6),
         UnitNo(7),
-        SEQ_NO(8);
+        CARS(8),
+        SEQ_NO(9);
 
         private int numVal;
 

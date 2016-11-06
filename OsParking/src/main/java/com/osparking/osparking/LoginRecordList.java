@@ -121,9 +121,7 @@ public class LoginRecordList extends javax.swing.JFrame {
         wholePanel = new javax.swing.JPanel();
         LoginRecordListTopPanel = new javax.swing.JPanel();
         titlePanel = new javax.swing.JPanel();
-        leftSideLabel = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        myMetaKeyLabel = new javax.swing.JLabel();
         filler13 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 20), new java.awt.Dimension(0, 20), new java.awt.Dimension(32767, 20));
         datePanel = new javax.swing.JPanel();
         filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(20, 0), new java.awt.Dimension(50, 0), new java.awt.Dimension(70, 0));
@@ -168,11 +166,6 @@ public class LoginRecordList extends javax.swing.JFrame {
 
         titlePanel.setLayout(new javax.swing.BoxLayout(titlePanel, javax.swing.BoxLayout.LINE_AXIS));
 
-        leftSideLabel.setMaximumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
-        leftSideLabel.setMinimumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
-        leftSideLabel.setPreferredSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
-        titlePanel.add(leftSideLabel);
-
         jLabel3.setFont(new java.awt.Font(font_Type, font_Style, head_font_Size));
         jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel3.setText(LOGIN_RECORD_FRAME_TITLE.getContent());
@@ -182,14 +175,6 @@ public class LoginRecordList extends javax.swing.JFrame {
         jLabel3.setMinimumSize(new java.awt.Dimension(105, 40));
         jLabel3.setPreferredSize(new java.awt.Dimension(105, 40));
         titlePanel.add(jLabel3);
-
-        myMetaKeyLabel.setText(META_KEY_LABEL.getContent());
-        myMetaKeyLabel.setMaximumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
-        myMetaKeyLabel.setMinimumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
-        myMetaKeyLabel.setPreferredSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
-        myMetaKeyLabel.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        myMetaKeyLabel.setForeground(tipColor);
-        titlePanel.add(myMetaKeyLabel);
 
         LoginRecordListTopPanel.add(titlePanel);
         LoginRecordListTopPanel.add(filler13);
@@ -485,8 +470,6 @@ public class LoginRecordList extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JLabel leftSideLabel;
-    private javax.swing.JLabel myMetaKeyLabel;
     private javax.swing.JFileChooser saveFileChooser;
     private javax.swing.JButton saveSheet_Button;
     private javax.swing.JButton searchButton;

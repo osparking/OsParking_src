@@ -946,7 +946,6 @@ public class VehiclesForm extends javax.swing.JFrame {
 
         metaKeyPanel.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 0, 0));
 
-        metaLabel.setText(MenuITemTypes.META_KEY_LABEL.getContent());
         metaLabel.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         metaLabel.setForeground(tipColor);
         metaKeyPanel.add(metaLabel);

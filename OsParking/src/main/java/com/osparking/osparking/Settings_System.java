@@ -82,7 +82,7 @@ import static com.osparking.global.names.ControlEnums.ComboBoxItemTypes.COMPLEX_
 import static com.osparking.global.names.ControlEnums.ComboBoxItemTypes.DAY_SUFFIX;
 import static com.osparking.global.names.ControlEnums.ComboBoxItemTypes.E_BOARD_LOGGING_CB_ITEM;
 import static com.osparking.global.names.ControlEnums.ComboBoxItemTypes.FOUR_DIGIT_CB_ITEM;
-import static com.osparking.global.names.ControlEnums.ComboBoxItemTypes.NO_LOGGING_CB_ITEM;
+import static com.osparking.global.names.ControlEnums.ComboBoxItemTypes.BASIC_LOGGING_CB_ITEM;
 import static com.osparking.global.names.ControlEnums.ComboBoxItemTypes.SETTINGS_LOGGING_CB_ITEM;
 import static com.osparking.global.names.ControlEnums.ComboBoxItemTypes.SIX_DIGIT_CB_ITEM;
 import static com.osparking.global.names.ControlEnums.DialogMessages.FAIL_SAVE_SETTINGS_DIALOG;
@@ -162,7 +162,6 @@ import static com.osparking.global.names.ControlEnums.LabelContent.WRONG_LANG_DI
 import static com.osparking.global.names.ControlEnums.LabelContent.WRONG_LANG_DIALOG_3;
 import static com.osparking.global.names.ControlEnums.LabelContent.WRONG_LANG_DIALOG_4;
 import static com.osparking.global.names.ControlEnums.OsPaLang.KOREAN;
-import static com.osparking.global.names.ControlEnums.MenuITemTypes.META_KEY_LABEL;
 import static com.osparking.global.names.ControlEnums.MsgContent.AVERAGE_WORDS;
 import static com.osparking.global.names.ControlEnums.MsgContent.RECENT_WORD;
 import static com.osparking.global.names.ControlEnums.TitleTypes.CHECK_IP_TITLE;
@@ -2554,7 +2553,6 @@ public class Settings_System extends javax.swing.JFrame implements IDataMan {
 
         myMetaKeyLabel.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         myMetaKeyLabel.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        myMetaKeyLabel.setText(META_KEY_LABEL.getContent());
         myMetaKeyLabel.setVerticalAlignment(javax.swing.SwingConstants.TOP);
         myMetaKeyLabel.setMaximumSize(new java.awt.Dimension(100, 25));
         myMetaKeyLabel.setMinimumSize(new java.awt.Dimension(100, 25));
@@ -4005,7 +4003,7 @@ public class Settings_System extends javax.swing.JFrame implements IDataMan {
         for (OpLogLevel level : OpLogLevel.values()) {
             switch (level) {
                 case LogAlways:
-                    OptnLoggingLevelComboBox.addItem(NO_LOGGING_CB_ITEM.getContent());
+                    OptnLoggingLevelComboBox.addItem(BASIC_LOGGING_CB_ITEM.getContent());
                     break;
                 case SettingsChange:
                     OptnLoggingLevelComboBox.addItem(SETTINGS_LOGGING_CB_ITEM.getContent());

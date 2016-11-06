@@ -48,7 +48,10 @@
       <Connection code="DRIVER_LIST_FRAME_TITLE.getContent()" type="code"/>
     </Property>
     <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-      <Connection code="new Dimension(normGUIwidth, normGUIheight)" type="code"/>
+      <Connection code="new Dimension(normGUIwidth + 80, normGUIheight+61)" type="code"/>
+    </Property>
+    <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+      <Connection code="new Dimension(normGUIwidth + 80, normGUIheight+61)" type="code"/>
     </Property>
   </Properties>
   <SyntheticProperties>
@@ -236,9 +239,6 @@
               <SubComponents>
                 <Component class="javax.swing.JLabel" name="myMetaKeyLabel">
                   <Properties>
-                    <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                      <Connection code="META_KEY_LABEL.getContent()" type="code"/>
-                    </Property>
                     <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                       <Connection code="new Dimension(buttonWidthNorm, buttonHeightNorm)" type="code"/>
                     </Property>
@@ -546,7 +546,13 @@
         <Container class="javax.swing.JPanel" name="searchPanel">
           <Properties>
             <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-              <Dimension value="[2095, 28]"/>
+              <Dimension value="[2095, 30]"/>
+            </Property>
+            <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+              <Dimension value="[240, 30]"/>
+            </Property>
+            <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+              <Connection code="new Dimension(driversScrollPane.getSize().width, 30)" type="code"/>
             </Property>
           </Properties>
 
@@ -818,13 +824,13 @@
             <Component class="javax.swing.Box$Filler" name="filler1">
               <Properties>
                 <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                  <Dimension value="[15, 32767]"/>
+                  <Dimension value="[95, 32767]"/>
                 </Property>
                 <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                  <Dimension value="[15, 0]"/>
+                  <Dimension value="[95, 0]"/>
                 </Property>
                 <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                  <Dimension value="[15, 0]"/>
+                  <Dimension value="[95, 0]"/>
                 </Property>
               </Properties>
               <AuxValues>

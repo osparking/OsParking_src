@@ -234,9 +234,7 @@ public class CarArrivals extends javax.swing.JFrame {
         wholePanel = new javax.swing.JPanel();
         titlePanel = new javax.swing.JPanel();
         seeLicenseButton = new javax.swing.JButton();
-        filler16 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
         titleLabel = new javax.swing.JLabel();
-        filler17 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
         myMetaKeyLabel = new javax.swing.JLabel();
         filler_h10_18 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 10), new java.awt.Dimension(0, 10), new java.awt.Dimension(32767, 10));
         searchPanel = new javax.swing.JPanel();
@@ -391,21 +389,20 @@ public class CarArrivals extends javax.swing.JFrame {
         titlePanel.setMaximumSize(new java.awt.Dimension(2147483647, 40));
         titlePanel.setMinimumSize(new java.awt.Dimension(110, 40));
         titlePanel.setPreferredSize(new java.awt.Dimension(210, 40));
-        titlePanel.setLayout(new javax.swing.BoxLayout(titlePanel, javax.swing.BoxLayout.LINE_AXIS));
+        titlePanel.setLayout(new java.awt.BorderLayout());
 
         seeLicenseButton.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         seeLicenseButton.setText(LicenseButton.getContent());
         seeLicenseButton.setMargin(new java.awt.Insets(2, 0, 2, 0));
         seeLicenseButton.setMaximumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
         seeLicenseButton.setMinimumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
-        seeLicenseButton.setPreferredSize(new java.awt.Dimension(90, 40));
+        seeLicenseButton.setPreferredSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
         seeLicenseButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 seeLicenseButtonActionPerformed(evt);
             }
         });
-        titlePanel.add(seeLicenseButton);
-        titlePanel.add(filler16);
+        titlePanel.add(seeLicenseButton, java.awt.BorderLayout.WEST);
 
         titleLabel.setFont(new java.awt.Font(font_Type, font_Style, head_font_Size));
         titleLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -413,16 +410,14 @@ public class CarArrivals extends javax.swing.JFrame {
         titleLabel.setMaximumSize(new java.awt.Dimension(200, 28));
         titleLabel.setMinimumSize(new java.awt.Dimension(200, 28));
         titleLabel.setPreferredSize(new java.awt.Dimension(200, 28));
-        titlePanel.add(titleLabel);
-        titlePanel.add(filler17);
+        titlePanel.add(titleLabel, java.awt.BorderLayout.CENTER);
 
-        myMetaKeyLabel.setText(META_KEY_LABEL.getContent());
         myMetaKeyLabel.setMaximumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
         myMetaKeyLabel.setMinimumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
-        myMetaKeyLabel.setPreferredSize(new java.awt.Dimension(90, 40));
+        myMetaKeyLabel.setPreferredSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
         myMetaKeyLabel.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         myMetaKeyLabel.setForeground(tipColor);
-        titlePanel.add(myMetaKeyLabel);
+        titlePanel.add(myMetaKeyLabel, java.awt.BorderLayout.EAST);
 
         wholePanel.add(titlePanel);
         wholePanel.add(filler_h10_18);
@@ -2069,8 +2064,6 @@ public class CarArrivals extends javax.swing.JFrame {
     private javax.swing.JPanel detailBottom;
     private javax.swing.JPanel detailTop;
     private javax.swing.JPanel detailWhole;
-    private javax.swing.Box.Filler filler16;
-    private javax.swing.Box.Filler filler17;
     private javax.swing.Box.Filler filler18;
     private javax.swing.Box.Filler filler20;
     private javax.swing.Box.Filler filler21;
