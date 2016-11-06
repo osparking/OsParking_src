@@ -242,7 +242,6 @@ public class ManageDrivers extends javax.swing.JFrame {
         modiSave_Button.setText(MODIFY_BTN.getContent());
         deleteButton.setText(DELETE_BTN.getContent());
         cancelButton.setText(CANCEL_BTN.getContent());
-        deleteAll_button.setText(DELETE_ALL_BTN.getContent());
         readSheet_Button.setText(READ_ODS_BTN.getContent());
         saveSheet_Button.setText(SAVE_ODS_BTN.getContent());
         closeFormButton.setText(CLOSE_BTN.getContent());
@@ -278,7 +277,7 @@ public class ManageDrivers extends javax.swing.JFrame {
         }
         driverTable.setRowSorter(sorter);  
         
-        adminOperationEnabled(true, deleteAll_button, odsHelpButton, sampleButton, readSheet_Button);
+        adminOperationEnabled(true, odsHelpButton, sampleButton, readSheet_Button);
 
         /**
          * Initialize table with real driver information
@@ -371,7 +370,7 @@ public class ManageDrivers extends javax.swing.JFrame {
             saveSheet_Button.setEnabled(false);
         }
     }    
-    
+    final int formHight_Tune = 49;
     /**
      * @param newMode the formMode to set
      */
@@ -387,8 +386,7 @@ public class ManageDrivers extends javax.swing.JFrame {
                 insertSave_Button.setMnemonic('s');
                 modiSave_Button.setEnabled(false);
                 deleteButton.setEnabled(false);
-                deleteAll_button.setEnabled(false);
-                adminOperationEnabled(false, deleteAll_button, odsHelpButton, sampleButton, readSheet_Button);
+                adminOperationEnabled(false, odsHelpButton, sampleButton, readSheet_Button);
                 tipLabel.setVisible(true);
                 break;
                 
@@ -399,7 +397,7 @@ public class ManageDrivers extends javax.swing.JFrame {
                 modiSave_Button.setText(SAVE_BTN.getContent());
                 modiSave_Button.setMnemonic('s');
                 deleteButton.setEnabled(false);
-                adminOperationEnabled(false, deleteAll_button, odsHelpButton, sampleButton, readSheet_Button);
+                adminOperationEnabled(false, odsHelpButton, sampleButton, readSheet_Button);
                 tipLabel.setVisible(true);                
                 break;
                 
@@ -419,7 +417,7 @@ public class ManageDrivers extends javax.swing.JFrame {
                     modiSave_Button.setEnabled(isManager);
                     deleteButton.setEnabled(isManager);
                 }
-                adminOperationEnabled(true, deleteAll_button, odsHelpButton, sampleButton, readSheet_Button);
+                adminOperationEnabled(true, odsHelpButton, sampleButton, readSheet_Button);
                 tipLabel.setVisible(false);
                 break;
             default:
@@ -592,7 +590,6 @@ public class ManageDrivers extends javax.swing.JFrame {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
-        java.awt.GridBagConstraints gridBagConstraints;
 
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
@@ -639,20 +636,23 @@ public class ManageDrivers extends javax.swing.JFrame {
         driversTable = new javax.swing.JTable();
         filler15_5 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 15), new java.awt.Dimension(0, 15), new java.awt.Dimension(32767, 15));
         bottomButtonPanel = new javax.swing.JPanel();
-        leftButtons = new javax.swing.JPanel();
         insertSave_Button = new javax.swing.JButton();
+        filler10 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 32767));
         modiSave_Button = new javax.swing.JButton();
+        filler11 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 32767));
         deleteButton = new javax.swing.JButton();
+        filler12 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 32767));
         cancelButton = new javax.swing.JButton();
-        rightButtons = new javax.swing.JPanel();
-        deleteAll_button = new javax.swing.JButton();
-        readSheet_Button = new javax.swing.JButton();
-        saveSheet_Button = new javax.swing.JButton();
-        closeFormButton = new javax.swing.JButton();
-        HelpPanel = new javax.swing.JPanel();
-        odsHelpButton = new javax.swing.JButton();
-        filler6 = new javax.swing.Box.Filler(new java.awt.Dimension(5, 0), new java.awt.Dimension(5, 0), new java.awt.Dimension(5, 32767));
+        filler7 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(32767, 0));
         sampleButton = new javax.swing.JButton();
+        filler9 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 32767));
+        odsHelpButton = new javax.swing.JButton();
+        filler8 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 32767));
+        readSheet_Button = new javax.swing.JButton();
+        filler6 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 32767));
+        saveSheet_Button = new javax.swing.JButton();
+        filler13 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(32767, 0));
+        closeFormButton = new javax.swing.JButton();
         eastPanel = new javax.swing.JPanel();
         southPanel = new javax.swing.JPanel();
 
@@ -677,8 +677,8 @@ public class ManageDrivers extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle(DRIVER_LIST_FRAME_TITLE.getContent());
-        setMinimumSize(new Dimension(normGUIwidth + 80, normGUIheight+61));
-        setPreferredSize(new Dimension(normGUIwidth + 80, normGUIheight+61));
+        setMinimumSize(new Dimension(normGUIwidth + 80, -5 * tableRowHeight + normGUIheight + formHight_Tune));
+        setPreferredSize(new Dimension(normGUIwidth + 80, normGUIheight+79));
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 formWindowClosing(evt);
@@ -1118,13 +1118,9 @@ public class ManageDrivers extends javax.swing.JFrame {
         wholePanel.add(driversScrollPane);
         wholePanel.add(filler15_5);
 
-        bottomButtonPanel.setMaximumSize(new java.awt.Dimension(33727, 70));
-        bottomButtonPanel.setPreferredSize(new java.awt.Dimension(902, 70));
-
-        leftButtons.setMaximumSize(new java.awt.Dimension(32767, 40));
-        leftButtons.setMinimumSize(new java.awt.Dimension(300, 40));
-        leftButtons.setPreferredSize(new java.awt.Dimension(400, 40));
-        leftButtons.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 10, 0));
+        bottomButtonPanel.setMaximumSize(new java.awt.Dimension(33727, 40));
+        bottomButtonPanel.setPreferredSize(new java.awt.Dimension(902, 40));
+        bottomButtonPanel.setLayout(new javax.swing.BoxLayout(bottomButtonPanel, javax.swing.BoxLayout.LINE_AXIS));
 
         insertSave_Button.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         insertSave_Button.setMnemonic('r');
@@ -1137,7 +1133,8 @@ public class ManageDrivers extends javax.swing.JFrame {
                 insertSave_ButtonActionPerformed(evt);
             }
         });
-        leftButtons.add(insertSave_Button);
+        bottomButtonPanel.add(insertSave_Button);
+        bottomButtonPanel.add(filler10);
 
         modiSave_Button.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         modiSave_Button.setMnemonic('m');
@@ -1151,7 +1148,8 @@ public class ManageDrivers extends javax.swing.JFrame {
                 modiSave_ButtonActionPerformed(evt);
             }
         });
-        leftButtons.add(modiSave_Button);
+        bottomButtonPanel.add(modiSave_Button);
+        bottomButtonPanel.add(filler11);
 
         deleteButton.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         deleteButton.setMnemonic('d');
@@ -1165,7 +1163,8 @@ public class ManageDrivers extends javax.swing.JFrame {
                 deleteButtonActionPerformed(evt);
             }
         });
-        leftButtons.add(deleteButton);
+        bottomButtonPanel.add(deleteButton);
+        bottomButtonPanel.add(filler12);
 
         cancelButton.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         cancelButton.setMnemonic('C');
@@ -1179,91 +1178,24 @@ public class ManageDrivers extends javax.swing.JFrame {
                 cancelButtonActionPerformed(evt);
             }
         });
-        leftButtons.add(cancelButton);
+        bottomButtonPanel.add(cancelButton);
+        bottomButtonPanel.add(filler7);
 
-        rightButtons.setAlignmentX(1.0F);
-        rightButtons.setMaximumSize(new java.awt.Dimension(32767, 70));
-        rightButtons.setMinimumSize(new java.awt.Dimension(350, 70));
-        rightButtons.setPreferredSize(new java.awt.Dimension(470, 70));
-        java.awt.GridBagLayout rightButtonsLayout = new java.awt.GridBagLayout();
-        rightButtonsLayout.columnWidths = new int[] {0, 10, 0, 10, 0, 10, 0, 10, 0};
-        rightButtonsLayout.rowHeights = new int[] {0, 0, 0};
-        rightButtons.setLayout(rightButtonsLayout);
-
-        deleteAll_button.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        deleteAll_button.setMnemonic('a');
-        deleteAll_button.setText("전체삭제(E)");
-        deleteAll_button.setEnabled(false);
-        deleteAll_button.setMargin(new java.awt.Insets(0, 0, 0, 0));
-        deleteAll_button.setMaximumSize(new Dimension(CommonData.buttonWidthWide, buttonHeightNorm));
-        deleteAll_button.setMinimumSize(new Dimension(CommonData.buttonWidthWide, buttonHeightNorm));
-        deleteAll_button.setPreferredSize(new Dimension(CommonData.buttonWidthWide, buttonHeightNorm));
-        deleteAll_button.addActionListener(new java.awt.event.ActionListener() {
+        sampleButton.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        sampleButton.setMnemonic('P');
+        sampleButton.setText(SAMPLE_BTN.getContent());
+        sampleButton.setToolTipText(DRIVER_ODS_UPLOAD_SAMPLE_DOWNLOAD.getContent());
+        sampleButton.setEnabled(false);
+        sampleButton.setMaximumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
+        sampleButton.setMinimumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
+        sampleButton.setPreferredSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
+        sampleButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                deleteAll_buttonActionPerformed(evt);
+                sampleButtonActionPerformed(evt);
             }
         });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        rightButtons.add(deleteAll_button, gridBagConstraints);
-
-        readSheet_Button.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        readSheet_Button.setMnemonic('O');
-        readSheet_Button.setText("ods읽기");
-        readSheet_Button.setEnabled(false);
-        readSheet_Button.setMargin(new java.awt.Insets(0, 0, 0, 0));
-        readSheet_Button.setMaximumSize(new Dimension(CommonData.buttonWidthWide, buttonHeightNorm));
-        readSheet_Button.setMinimumSize(new Dimension(CommonData.buttonWidthWide, buttonHeightNorm));
-        readSheet_Button.setPreferredSize(new Dimension(CommonData.buttonWidthWide, buttonHeightNorm));
-        readSheet_Button.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                readSheet_ButtonActionPerformed(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 0;
-        rightButtons.add(readSheet_Button, gridBagConstraints);
-
-        saveSheet_Button.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        saveSheet_Button.setMnemonic('A');
-        saveSheet_Button.setText("ods저장(A)");
-        saveSheet_Button.setEnabled(false);
-        saveSheet_Button.setMargin(new java.awt.Insets(0, 0, 0, 0));
-        saveSheet_Button.setMaximumSize(new Dimension(CommonData.buttonWidthWide, buttonHeightNorm));
-        saveSheet_Button.setMinimumSize(new Dimension(CommonData.buttonWidthWide, buttonHeightNorm));
-        saveSheet_Button.setPreferredSize(new Dimension(CommonData.buttonWidthWide, buttonHeightNorm));
-        saveSheet_Button.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                saveSheet_ButtonActionPerformed(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
-        gridBagConstraints.gridy = 0;
-        rightButtons.add(saveSheet_Button, gridBagConstraints);
-
-        closeFormButton.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        closeFormButton.setMnemonic('c');
-        closeFormButton.setText("닫기(C)");
-        closeFormButton.setMaximumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
-        closeFormButton.setMinimumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
-        closeFormButton.setPreferredSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
-        closeFormButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                closeFormButtonActionPerformed(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 6;
-        gridBagConstraints.gridy = 0;
-        rightButtons.add(closeFormButton, gridBagConstraints);
-
-        HelpPanel.setMaximumSize(new java.awt.Dimension(110, 70));
-        HelpPanel.setMinimumSize(new java.awt.Dimension(110, 30));
-        HelpPanel.setPreferredSize(new java.awt.Dimension(110, 30));
-        HelpPanel.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 0, 0));
+        bottomButtonPanel.add(sampleButton);
+        bottomButtonPanel.add(filler9);
 
         odsHelpButton.setBackground(new java.awt.Color(153, 255, 153));
         odsHelpButton.setFont(new java.awt.Font("Dotum", 1, 14)); // NOI18N
@@ -1281,43 +1213,53 @@ public class ManageDrivers extends javax.swing.JFrame {
                 odsHelpButtonActionPerformed(evt);
             }
         });
-        HelpPanel.add(odsHelpButton);
-        HelpPanel.add(filler6);
+        bottomButtonPanel.add(odsHelpButton);
+        bottomButtonPanel.add(filler8);
 
-        sampleButton.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        sampleButton.setMnemonic('P');
-        sampleButton.setText(SAMPLE_BTN.getContent());
-        sampleButton.setToolTipText(DRIVER_ODS_UPLOAD_SAMPLE_DOWNLOAD.getContent());
-        sampleButton.setEnabled(false);
-        sampleButton.setMaximumSize(new java.awt.Dimension(80, 30));
-        sampleButton.setMinimumSize(new java.awt.Dimension(80, 30));
-        sampleButton.setPreferredSize(new java.awt.Dimension(80, 30));
-        sampleButton.addActionListener(new java.awt.event.ActionListener() {
+        readSheet_Button.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        readSheet_Button.setMnemonic('O');
+        readSheet_Button.setText("ods읽기");
+        readSheet_Button.setEnabled(false);
+        readSheet_Button.setMargin(new java.awt.Insets(0, 0, 0, 0));
+        readSheet_Button.setMaximumSize(new Dimension(CommonData.buttonWidthWide, buttonHeightNorm));
+        readSheet_Button.setMinimumSize(new Dimension(CommonData.buttonWidthWide, buttonHeightNorm));
+        readSheet_Button.setPreferredSize(new Dimension(CommonData.buttonWidthWide, buttonHeightNorm));
+        readSheet_Button.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                sampleButtonActionPerformed(evt);
+                readSheet_ButtonActionPerformed(evt);
             }
         });
-        HelpPanel.add(sampleButton);
+        bottomButtonPanel.add(readSheet_Button);
+        bottomButtonPanel.add(filler6);
 
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 2;
-        rightButtons.add(HelpPanel, gridBagConstraints);
+        saveSheet_Button.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        saveSheet_Button.setMnemonic('A');
+        saveSheet_Button.setText("ods저장(A)");
+        saveSheet_Button.setEnabled(false);
+        saveSheet_Button.setMargin(new java.awt.Insets(0, 0, 0, 0));
+        saveSheet_Button.setMaximumSize(new Dimension(CommonData.buttonWidthWide, buttonHeightNorm));
+        saveSheet_Button.setMinimumSize(new Dimension(CommonData.buttonWidthWide, buttonHeightNorm));
+        saveSheet_Button.setPreferredSize(new Dimension(CommonData.buttonWidthWide, buttonHeightNorm));
+        saveSheet_Button.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                saveSheet_ButtonActionPerformed(evt);
+            }
+        });
+        bottomButtonPanel.add(saveSheet_Button);
+        bottomButtonPanel.add(filler13);
 
-        javax.swing.GroupLayout bottomButtonPanelLayout = new javax.swing.GroupLayout(bottomButtonPanel);
-        bottomButtonPanel.setLayout(bottomButtonPanelLayout);
-        bottomButtonPanelLayout.setHorizontalGroup(
-            bottomButtonPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(bottomButtonPanelLayout.createSequentialGroup()
-                .addComponent(leftButtons, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(rightButtons, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-        );
-        bottomButtonPanelLayout.setVerticalGroup(
-            bottomButtonPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(leftButtons, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-            .addComponent(rightButtons, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-        );
+        closeFormButton.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        closeFormButton.setMnemonic('c');
+        closeFormButton.setText("닫기(C)");
+        closeFormButton.setMaximumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
+        closeFormButton.setMinimumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
+        closeFormButton.setPreferredSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
+        closeFormButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                closeFormButtonActionPerformed(evt);
+            }
+        });
+        bottomButtonPanel.add(closeFormButton);
 
         wholePanel.add(bottomButtonPanel);
 
@@ -1383,44 +1325,7 @@ public class ManageDrivers extends javax.swing.JFrame {
     }//GEN-LAST:event_insertSave_ButtonActionPerformed
 
     static int creatingRowM = -1;    
-    
-    private void deleteAll_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteAll_buttonActionPerformed
-        int driverCount = getRecordCount(CarDriver, -1);
-        int vehiclecount = getRecordCount(OsPaTable.Vehicles, -1);
-        
-        String dialogMessage = DELETE_ALL_DRIVER_P1.getContent() + System.lineSeparator() +
-                DELETE_ALL_DRIVER_P2.getContent() + driverCount + System.lineSeparator() +
-                DELETE_ALL_DRIVER_P3.getContent() + vehiclecount;
-        
-        int result = JOptionPane.showConfirmDialog(this, dialogMessage,
-                DELETE_ALL_DAILOGTITLE.getContent(),
-                JOptionPane.YES_NO_OPTION);
-
-        if (result == JOptionPane.YES_OPTION) {
-            Connection conn = null;
-            PreparedStatement deleteDrivers = null;
-            String excepMsg = "every driver deletion";
-
-            result = 0;
-            try {
-                String sql = "Delete From cardriver";
-                
-                conn = getConnection();
-                deleteDrivers = conn.prepareStatement(sql);
-                result = deleteDrivers.executeUpdate();
-            } catch (SQLException ex) {
-                logParkingException(Level.SEVERE, ex, "(All Driver Deletion)");
-            } finally {
-                closeDBstuff(conn, deleteDrivers, null, excepMsg);
-            }
-
-            loadDriverData(UNKNOWN, "", "");
-            JOptionPane.showConfirmDialog(this, DRIVER_DELETE_ALL_RESULT_DAILOG.getContent(),
-                    DELETE_ALL_RESULT_DIALOGTITLE.getContent(),
-                    JOptionPane.PLAIN_MESSAGE, INFORMATION_MESSAGE);
-        }
-    }//GEN-LAST:event_deleteAll_buttonActionPerformed
-   
+       
     private void modiSave_ButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modiSave_ButtonActionPerformed
         int rowV = driverTable.getSelectedRow();
         int rowM = driverTable.convertRowIndexToModel(rowV);
@@ -2265,7 +2170,6 @@ public class ManageDrivers extends javax.swing.JFrame {
         
     // <editor-fold defaultstate="collapsed" desc="-- Netbeans Generated Control Item Variables ">                               
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JPanel HelpPanel;
     private javax.swing.JPanel balancer;
     private javax.swing.JPanel bottomButtonPanel;
     private javax.swing.JButton cancelButton;
@@ -2273,12 +2177,15 @@ public class ManageDrivers extends javax.swing.JFrame {
     public javax.swing.JButton closeFormButton;
     private javax.swing.JLabel countLbl;
     private javax.swing.JLabel countValue;
-    private javax.swing.JButton deleteAll_button;
     private javax.swing.JButton deleteButton;
     private javax.swing.JScrollPane driversScrollPane;
     public static javax.swing.JTable driversTable;
     private javax.swing.JPanel eastPanel;
     private javax.swing.Box.Filler filler1;
+    private javax.swing.Box.Filler filler10;
+    private javax.swing.Box.Filler filler11;
+    private javax.swing.Box.Filler filler12;
+    private javax.swing.Box.Filler filler13;
     private javax.swing.Box.Filler filler15_5;
     private javax.swing.Box.Filler filler15_6;
     private javax.swing.Box.Filler filler2;
@@ -2287,6 +2194,9 @@ public class ManageDrivers extends javax.swing.JFrame {
     private javax.swing.Box.Filler filler5;
     private javax.swing.Box.Filler filler6;
     private javax.swing.Box.Filler filler66;
+    private javax.swing.Box.Filler filler7;
+    private javax.swing.Box.Filler filler8;
+    private javax.swing.Box.Filler filler9;
     private javax.swing.JLabel formModeLabel;
     public javax.swing.JButton insertSave_Button;
     private javax.swing.JLabel jLabel2;
@@ -2294,14 +2204,12 @@ public class ManageDrivers extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
-    private javax.swing.JPanel leftButtons;
     private javax.swing.JButton modiSave_Button;
     private javax.swing.JLabel myMetaKeyLabel;
     private javax.swing.JPanel northPanel;
     private javax.swing.JFileChooser odsFileChooser;
     private javax.swing.JButton odsHelpButton;
     private javax.swing.JButton readSheet_Button;
-    private javax.swing.JPanel rightButtons;
     private javax.swing.JButton sampleButton;
     private javax.swing.JFileChooser saveFileChooser;
     private javax.swing.JButton saveSheet_Button;

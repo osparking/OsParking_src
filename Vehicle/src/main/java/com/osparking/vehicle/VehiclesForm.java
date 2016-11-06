@@ -214,7 +214,7 @@ public class VehiclesForm extends javax.swing.JFrame {
         loadSearchBox();
         attachEventListenerToVehicleTable();
         
-        adminOperationEnabled(true, deleteAllVehicles, odsHelpButton, sampleButton, readSheet_Button);
+        adminOperationEnabled(true, odsHelpButton, sampleButton, readSheet_Button);
         loadVehicleTable(FIRST_ROW, "");
         driverTextField.addActionListener(new ActionListener(){
             @Override
@@ -386,14 +386,11 @@ public class VehiclesForm extends javax.swing.JFrame {
         cancel_Button = new javax.swing.JButton();
         filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
         rightButtons = new javax.swing.JPanel();
-        deleteAllVehicles = new javax.swing.JButton();
+        sampleButton = new javax.swing.JButton();
+        odsHelpButton = new javax.swing.JButton();
         readSheet_Button = new javax.swing.JButton();
         saveSheet_Button = new javax.swing.JButton();
         closeFormButton = new javax.swing.JButton();
-        HelpPanel = new javax.swing.JPanel();
-        odsHelpButton = new javax.swing.JButton();
-        filler6 = new javax.swing.Box.Filler(new java.awt.Dimension(5, 0), new java.awt.Dimension(5, 0), new java.awt.Dimension(5, 32767));
-        sampleButton = new javax.swing.JButton();
         filler40_2 = new javax.swing.Box.Filler(new java.awt.Dimension(40, 0), new java.awt.Dimension(40, 0), new java.awt.Dimension(40, 32767));
         southPanel = new javax.swing.JPanel();
 
@@ -406,8 +403,8 @@ public class VehiclesForm extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle(VEHICLESFORM_FRAME_TITLE.getContent());
-        setMinimumSize(new Dimension(normGUIwidth, normGUIheight + 61));
-        setPreferredSize(new Dimension(normGUIwidth, normGUIheight + 61));
+        setMinimumSize(new Dimension(normGUIwidth, -6 * tableRowHeight + normGUIheight + formHight_Tune));
+        setPreferredSize(new Dimension(normGUIwidth, normGUIheight + formHight_Tune));
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 formWindowClosing(evt);
@@ -1285,13 +1282,13 @@ public class VehiclesForm extends javax.swing.JFrame {
 
         wholePanel.add(centerPanel, java.awt.BorderLayout.CENTER);
 
-        allButtonsPanel.setPreferredSize(new java.awt.Dimension(1270, 95));
+        allButtonsPanel.setPreferredSize(new java.awt.Dimension(1270, 55));
         allButtonsPanel.setLayout(new javax.swing.BoxLayout(allButtonsPanel, javax.swing.BoxLayout.Y_AXIS));
         allButtonsPanel.add(filler55);
 
-        centerThridPanel.setMaximumSize(new java.awt.Dimension(33397, 70));
-        centerThridPanel.setMinimumSize(new java.awt.Dimension(769, 70));
-        centerThridPanel.setPreferredSize(new java.awt.Dimension(769, 70));
+        centerThridPanel.setMaximumSize(new java.awt.Dimension(33397, 40));
+        centerThridPanel.setMinimumSize(new java.awt.Dimension(769, 40));
+        centerThridPanel.setPreferredSize(new java.awt.Dimension(769, 40));
 
         insertSave_Button.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
         insertSave_Button.setMnemonic('r');
@@ -1344,85 +1341,31 @@ public class VehiclesForm extends javax.swing.JFrame {
             }
         });
 
-        rightButtons.setMaximumSize(new java.awt.Dimension(470, 70));
-        rightButtons.setMinimumSize(new java.awt.Dimension(470, 70));
-        rightButtons.setPreferredSize(new java.awt.Dimension(470, 70));
+        rightButtons.setMaximumSize(new java.awt.Dimension(470, 40));
+        rightButtons.setMinimumSize(new java.awt.Dimension(470, 40));
+        rightButtons.setPreferredSize(new java.awt.Dimension(470, 40));
         java.awt.GridBagLayout rightButtonsLayout = new java.awt.GridBagLayout();
-        rightButtonsLayout.columnWidths = new int[] {0, 10, 0, 10, 0, 10, 0};
-        rightButtonsLayout.rowHeights = new int[] {0, 0, 0};
+        rightButtonsLayout.columnWidths = new int[] {0, 10, 0, 10, 0, 10, 0, 10, 0};
+        rightButtonsLayout.rowHeights = new int[] {0};
         rightButtons.setLayout(rightButtonsLayout);
 
-        deleteAllVehicles.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        deleteAllVehicles.setMnemonic('e');
-        deleteAllVehicles.setText(DELETE_ALL_BTN.getContent());
-        deleteAllVehicles.setEnabled(false);
-        deleteAllVehicles.setMaximumSize(new Dimension(CommonData.buttonWidthWide, buttonHeightNorm));
-        deleteAllVehicles.setMinimumSize(new Dimension(CommonData.buttonWidthWide, buttonHeightNorm));
-        deleteAllVehicles.setPreferredSize(new Dimension(CommonData.buttonWidthWide, buttonHeightNorm));
-        deleteAllVehicles.addActionListener(new java.awt.event.ActionListener() {
+        sampleButton.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        sampleButton.setMnemonic('P');
+        sampleButton.setText(SAMPLE_BTN.getContent());
+        sampleButton.setToolTipText(DRIVER_ODS_UPLOAD_SAMPLE_DOWNLOAD.getContent());
+        sampleButton.setEnabled(false);
+        sampleButton.setMaximumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
+        sampleButton.setMinimumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
+        sampleButton.setPreferredSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
+        sampleButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                deleteAllVehiclesActionPerformed(evt);
+                sampleButtonActionPerformed(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
-        rightButtons.add(deleteAllVehicles, gridBagConstraints);
-
-        readSheet_Button.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        readSheet_Button.setMnemonic('o');
-        readSheet_Button.setText(READ_ODS_BTN.getContent());
-        readSheet_Button.setEnabled(false);
-        readSheet_Button.setMaximumSize(new Dimension(CommonData.buttonWidthWide, buttonHeightNorm));
-        readSheet_Button.setMinimumSize(new Dimension(CommonData.buttonWidthWide, buttonHeightNorm));
-        readSheet_Button.setPreferredSize(new Dimension(CommonData.buttonWidthWide, buttonHeightNorm));
-        readSheet_Button.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                readSheet_ButtonActionPerformed(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 0;
-        rightButtons.add(readSheet_Button, gridBagConstraints);
-
-        saveSheet_Button.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        saveSheet_Button.setMnemonic('a');
-        saveSheet_Button.setText(SAVE_ODS_BTN.getContent());
-        saveSheet_Button.setEnabled(false);
-        saveSheet_Button.setMaximumSize(new Dimension(CommonData.buttonWidthWide, buttonHeightNorm));
-        saveSheet_Button.setMinimumSize(new Dimension(CommonData.buttonWidthWide, buttonHeightNorm));
-        saveSheet_Button.setPreferredSize(new Dimension(CommonData.buttonWidthWide, buttonHeightNorm));
-        saveSheet_Button.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                saveSheet_ButtonActionPerformed(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
-        gridBagConstraints.gridy = 0;
-        rightButtons.add(saveSheet_Button, gridBagConstraints);
-
-        closeFormButton.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        closeFormButton.setMnemonic('c');
-        closeFormButton.setText(CLOSE_BTN.getContent());
-        closeFormButton.setMaximumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
-        closeFormButton.setMinimumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
-        closeFormButton.setPreferredSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
-        closeFormButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                closeFormButtonActionPerformed(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 6;
-        gridBagConstraints.gridy = 0;
-        rightButtons.add(closeFormButton, gridBagConstraints);
-
-        HelpPanel.setMaximumSize(new java.awt.Dimension(110, 70));
-        HelpPanel.setMinimumSize(new java.awt.Dimension(110, 30));
-        HelpPanel.setPreferredSize(new java.awt.Dimension(110, 30));
-        HelpPanel.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 0, 0));
+        rightButtons.add(sampleButton, gridBagConstraints);
 
         odsHelpButton.setBackground(new java.awt.Color(153, 255, 153));
         odsHelpButton.setFont(new java.awt.Font("Dotum", 1, 14)); // NOI18N
@@ -1440,28 +1383,60 @@ public class VehiclesForm extends javax.swing.JFrame {
                 odsHelpButtonActionPerformed(evt);
             }
         });
-        HelpPanel.add(odsHelpButton);
-        HelpPanel.add(filler6);
-
-        sampleButton.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        sampleButton.setMnemonic('P');
-        sampleButton.setText(SAMPLE_BTN.getContent());
-        sampleButton.setToolTipText(DRIVER_ODS_UPLOAD_SAMPLE_DOWNLOAD.getContent());
-        sampleButton.setEnabled(false);
-        sampleButton.setMaximumSize(new java.awt.Dimension(80, 30));
-        sampleButton.setMinimumSize(new java.awt.Dimension(80, 30));
-        sampleButton.setPreferredSize(new java.awt.Dimension(80, 30));
-        sampleButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                sampleButtonActionPerformed(evt);
-            }
-        });
-        HelpPanel.add(sampleButton);
-
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 2;
-        rightButtons.add(HelpPanel, gridBagConstraints);
+        gridBagConstraints.gridy = 0;
+        rightButtons.add(odsHelpButton, gridBagConstraints);
+
+        readSheet_Button.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        readSheet_Button.setMnemonic('o');
+        readSheet_Button.setText(READ_ODS_BTN.getContent());
+        readSheet_Button.setEnabled(false);
+        readSheet_Button.setMaximumSize(new Dimension(CommonData.buttonWidthWide, buttonHeightNorm));
+        readSheet_Button.setMinimumSize(new Dimension(CommonData.buttonWidthWide, buttonHeightNorm));
+        readSheet_Button.setPreferredSize(new Dimension(CommonData.buttonWidthWide, buttonHeightNorm));
+        readSheet_Button.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                readSheet_ButtonActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 0;
+        rightButtons.add(readSheet_Button, gridBagConstraints);
+
+        saveSheet_Button.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        saveSheet_Button.setMnemonic('a');
+        saveSheet_Button.setText(SAVE_ODS_BTN.getContent());
+        saveSheet_Button.setEnabled(false);
+        saveSheet_Button.setMaximumSize(new Dimension(CommonData.buttonWidthWide, buttonHeightNorm));
+        saveSheet_Button.setMinimumSize(new Dimension(CommonData.buttonWidthWide, buttonHeightNorm));
+        saveSheet_Button.setPreferredSize(new Dimension(CommonData.buttonWidthWide, buttonHeightNorm));
+        saveSheet_Button.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                saveSheet_ButtonActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridy = 0;
+        rightButtons.add(saveSheet_Button, gridBagConstraints);
+
+        closeFormButton.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        closeFormButton.setMnemonic('c');
+        closeFormButton.setText(CLOSE_BTN.getContent());
+        closeFormButton.setMaximumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
+        closeFormButton.setMinimumSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
+        closeFormButton.setPreferredSize(new Dimension(buttonWidthNorm, buttonHeightNorm));
+        closeFormButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                closeFormButtonActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 8;
+        gridBagConstraints.gridy = 0;
+        rightButtons.add(closeFormButton, gridBagConstraints);
 
         javax.swing.GroupLayout centerThridPanelLayout = new javax.swing.GroupLayout(centerThridPanel);
         centerThridPanel.setLayout(centerThridPanelLayout);
@@ -1482,7 +1457,7 @@ public class VehiclesForm extends javax.swing.JFrame {
                         .addComponent(filler2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addContainerGap())
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, centerThridPanelLayout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 246, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 243, Short.MAX_VALUE)
                         .addComponent(rightButtons, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
         );
         centerThridPanelLayout.setVerticalGroup(
@@ -1527,6 +1502,8 @@ public class VehiclesForm extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    final int formHight_Tune = 75;
+    
     private void insertSave_ButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_insertSave_ButtonActionPerformed
         
         if (getFormMode() == FormMode.NormalMode) {
@@ -1628,38 +1605,6 @@ public class VehiclesForm extends javax.swing.JFrame {
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         closeFrameGracefully();
     }//GEN-LAST:event_formWindowClosing
-
-    private void deleteAllVehiclesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteAllVehiclesActionPerformed
-
-        int result = JOptionPane.showConfirmDialog(this, VEHICLE_DELETE_ALL_DAILOG.getContent(),
-                        DELETE_ALL_DAILOGTITLE.getContent(), 
-                        JOptionPane.YES_NO_OPTION);
-
-        if (result == JOptionPane.YES_OPTION) {
-            Connection conn = null;
-            PreparedStatement deleteVehicles = null;
-            String excepMsg = "(All Vehicle Deletion)";
-            result = 0;
-
-            try {
-                conn = getConnection();
-                deleteVehicles = conn.prepareStatement("Delete From vehicles");
-                result = deleteVehicles.executeUpdate();
-            } catch (SQLException ex) {
-                logParkingException(Level.SEVERE, ex, excepMsg);
-            } finally {
-                closeDBstuff(conn, deleteVehicles, null, excepMsg);
-            }
-
-            if (result >= 1) {
-                loadVehicleTable(0, "");
-                
-                JOptionPane.showConfirmDialog(this, VEHICLE_DELETE_ALL_RESULT_DAILOG.getContent(),
-                    DELETE_ALL_RESULT_DIALOGTITLE.getContent(),
-                    JOptionPane.PLAIN_MESSAGE, INFORMATION_MESSAGE);
-            }
-        }        
-    }//GEN-LAST:event_deleteAllVehiclesActionPerformed
 
     private void searchButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchButtonActionPerformed
         loadVehicleTable(FIRST_ROW, "");
@@ -2070,7 +2015,6 @@ public class VehiclesForm extends javax.swing.JFrame {
 
     // <editor-fold defaultstate="collapsed" desc="-- automaticically defined variables">                              
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JPanel HelpPanel;
     private javax.swing.JPanel RequiredPanel1;
     private javax.swing.JPanel aboutjPanel;
     private javax.swing.JPanel allButtonsPanel;
@@ -2090,7 +2034,6 @@ public class VehiclesForm extends javax.swing.JFrame {
     private javax.swing.JLabel countValue;
     private javax.swing.JLabel creationLabel;
     private javax.swing.JTextField creationTextField;
-    private javax.swing.JButton deleteAllVehicles;
     private javax.swing.JButton deleteButton;
     private javax.swing.JPanel detailPanel;
     private javax.swing.JTextField disallowReason;
@@ -2107,7 +2050,6 @@ public class VehiclesForm extends javax.swing.JFrame {
     private javax.swing.Box.Filler filler50;
     private javax.swing.Box.Filler filler53;
     private javax.swing.Box.Filler filler55;
-    private javax.swing.Box.Filler filler6;
     private javax.swing.JLabel formModeLabel;
     private javax.swing.JLabel formTitleLabel;
     public javax.swing.JButton insertSave_Button;
@@ -2450,7 +2392,7 @@ public class VehiclesForm extends javax.swing.JFrame {
                 insertSave_Button.setText(SAVE_BTN.getContent());
                 insertSave_Button.setMnemonic('s');
                 makeVehicleInfoFieldsEditable(true);
-                adminOperationEnabled(false, deleteAllVehicles, odsHelpButton, sampleButton, readSheet_Button);
+                adminOperationEnabled(false, odsHelpButton, sampleButton, readSheet_Button);
                 break;
                 
             case UpdateMode:
@@ -2461,7 +2403,7 @@ public class VehiclesForm extends javax.swing.JFrame {
                 modiSave_Button.setMnemonic('s');
                 deleteButton.setEnabled(false);
                 makeVehicleInfoFieldsEditable(true);
-                adminOperationEnabled(false, deleteAllVehicles, odsHelpButton, sampleButton, readSheet_Button);
+                adminOperationEnabled(false, odsHelpButton, sampleButton, readSheet_Button);
                 break;
                 
             case NormalMode:
@@ -2481,7 +2423,7 @@ public class VehiclesForm extends javax.swing.JFrame {
                     deleteButton.setEnabled(isManager);
                 }                
                 makeVehicleInfoFieldsEditable(false);
-                adminOperationEnabled(true, deleteAllVehicles, odsHelpButton, sampleButton, readSheet_Button);                
+                adminOperationEnabled(true, odsHelpButton, sampleButton, readSheet_Button);                
                 break;
             default:
                 formModeLabel.setText("");
@@ -2516,7 +2458,6 @@ public class VehiclesForm extends javax.swing.JFrame {
         
         // enable or disable related buttons
         selectDriverButton.setEnabled(b);      
-        deleteAllVehicles.setEnabled(!b);
         readSheet_Button.setEnabled(!b);
     }
     
