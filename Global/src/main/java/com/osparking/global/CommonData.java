@@ -17,14 +17,17 @@
 package com.osparking.global;
 
 import static com.osparking.global.DataSheet.noOverwritePossibleExistingSameFile;
+import static com.osparking.global.Globals.GENERAL_DEVICE;
 import static com.osparking.global.Globals.closeDBstuff;
 import static com.osparking.global.Globals.font_Size;
 import static com.osparking.global.Globals.font_Style;
 import static com.osparking.global.Globals.font_Type;
 import static com.osparking.global.Globals.getBufferedImage;
+import static com.osparking.global.Globals.getPathAndDay;
 import static com.osparking.global.Globals.getPercentString;
 import static com.osparking.global.Globals.getTagNumber;
 import static com.osparking.global.Globals.logParkingException;
+import static com.osparking.global.Globals.logParkingExceptionStatus;
 import com.osparking.global.names.ControlEnums;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.DELETE_RESULT_DIALOGTITLE;
 import static com.osparking.global.names.ControlEnums.LabelContent.TABLE_DEL_DIALOG_1;
@@ -65,7 +68,10 @@ import javax.swing.JTextField;
 import javax.swing.border.Border;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 import org.jopendocument.dom.OOUtils;
+import org.jopendocument.dom.spreadsheet.Sheet;
+import org.jopendocument.dom.spreadsheet.SpreadSheet;
 
 /** new Dimension(CommonData.bigButtonWidth, bigButtonHeight)
  *
@@ -128,6 +134,71 @@ public class CommonData { // new Dimension(carTagWidth, 30)
     }
 
     static Toolkit toolkit = null;
+    
+    public static void checkOdsExistance(String fnInfix, int dev_ID, String disc1, 
+            String disc2, JTextField criticalField, File[] odsFile, TableModel model) 
+    {
+        //<editor-fold desc="-- Prepare log file to store 'E-Board display interrupt' message Sequence Number">
+        StringBuilder pathname = new StringBuilder();
+        StringBuilder daySB = new StringBuilder();
+
+        getPathAndDay("operation", pathname, daySB);
+
+        /**
+         * Full path name of today's ods file for interrupt command logging.
+         */
+        String odsFilePath = pathname + File.separator 
+                + daySB.toString() + fnInfix + dev_ID + ".ods";
+        try {
+            odsFile[0] = new File(odsFilePath);
+            if (!odsFile[0].exists() || odsFile[0].isDirectory()) {
+                SpreadSheet.createEmpty(model).saveAs(odsFile[0]);
+                appendOdsLine(odsFile[0], "#" + dev_ID + disc1, disc2, criticalField);
+            }            
+        } catch (IOException ex) {
+            logParkingExceptionStatus(Level.SEVERE, ex, "while preparing log file", 
+                    criticalField, GENERAL_DEVICE);
+        } catch (Exception ex) {
+            logParkingExceptionStatus(Level.SEVERE, ex, "while preparing log text file", 
+                    criticalField, GENERAL_DEVICE);
+        }  
+        //</editor-fold>        
+    }    
+    
+    public static void appendOdsLine(File odsFile, String currID, String prevID,
+            JTextField criticalField) {
+        try {
+            Sheet sheet = SpreadSheet.createFromFile(odsFile).getSheet(0);
+            
+            sheet.ensureRowCount(sheet.getRowCount() + 1);
+            sheet.getCellAt(0, sheet.getRowCount() - 1).setValue(currID);
+            
+            sheet.getCellAt(1, sheet.getRowCount() - 1).setValue(prevID);
+            
+            sheet.getSpreadSheet().saveAs(odsFile);
+        } catch (IOException ex) {
+            logParkingExceptionStatus(Level.SEVERE, ex, "Creating a sheet from ods file",
+                    criticalField, 0);            
+        } catch (Exception e) {
+            logParkingExceptionStatus(Level.SEVERE, e, "Exception a sheet from ods file",
+                    criticalField, 0);            
+        }
+    }  
+    
+    public static void appendOdsLine(File odsFile, String seqNo, JTextField criticalField) {
+        try {
+            Sheet sheet = SpreadSheet.createFromFile(odsFile).getSheet(0);
+            sheet.ensureRowCount(sheet.getRowCount() + 1);
+            sheet.getCellAt(0, sheet.getRowCount() - 1).setValue(seqNo);
+            sheet.getSpreadSheet().saveAs(odsFile);
+        } catch (IOException ex) {
+            logParkingExceptionStatus(Level.SEVERE, ex, "Creating a sheet from ods file",
+                    criticalField, 0);            
+        } catch (Exception e) {
+            logParkingExceptionStatus(Level.SEVERE, e, "Exception a sheet from ods file",
+                    criticalField, 0);            
+        }
+    }        
     
     public static void displayRateLimit(JTextField displayField, float rate, boolean isMax) {
         if (toolkit == null) {

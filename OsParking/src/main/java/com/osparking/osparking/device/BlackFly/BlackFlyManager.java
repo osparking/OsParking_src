@@ -69,7 +69,7 @@ public class BlackFlyManager extends Thread implements
 
     private Socket socket = null;
     
-    FileWriter fw;
+//    FileWriter fw;
     
     PGRGuid guid = new PGRGuid(); //It is used to uniquely identify a camera. 
     GigECamera camera = new GigECamera();
@@ -137,7 +137,6 @@ public class BlackFlyManager extends Thread implements
         this.mainForm = mainForm;
         this.cameraID = cameraID;
         
-        fw = mainForm.getIDLogFile()[Camera.ordinal()][cameraID];
         String dllName = "";
         if (Platform.isWindows())
             dllName = "ANPRS_OCR";

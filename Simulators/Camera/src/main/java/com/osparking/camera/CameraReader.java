@@ -28,25 +28,13 @@ import com.osparking.global.names.DeviceReader;
 import static com.osparking.global.Globals.isConnected;
 import static com.osparking.global.Globals.logParkingException;
 import static com.osparking.global.Globals.noArtificialErrorInserted;
-import static com.osparking.global.names.ControlEnums.DialogMessages.DEV_TYPE_ERROR_MSG1;
-import static com.osparking.global.names.ControlEnums.DialogMessages.DEV_TYPE_ERROR_MSG2;
-import static com.osparking.global.names.ControlEnums.DialogMessages.DEV_TYPE_ERROR_MSG3;
-import static com.osparking.global.names.ControlEnums.DialogMessages.DEV_TYPE_ERROR_MSG4;
-import static com.osparking.global.names.ControlEnums.DialogTitleTypes.ERROR_DIALOGTITLE;
 import static com.osparking.global.names.ControlEnums.LabelContent.CAMERA_LABEL;
-import static com.osparking.global.names.ControlEnums.LabelContent.GATE_LABEL;
-import static com.osparking.global.names.ControlEnums.LabelContent.TYPE_LABEL;
-import static com.osparking.global.names.ControlEnums.MenuITemTypes.SETTING_MENU_ITEM;
-import static com.osparking.global.names.ControlEnums.MenuITemTypes.SYSTEM_MENU;
 import static com.osparking.global.names.OSP_enums.DeviceType.Camera;
 import com.osparking.global.names.OSP_enums.MsgCode;
 import static com.osparking.global.names.OSP_enums.MsgCode.AreYouThere;
 import static com.osparking.global.names.OSP_enums.MsgCode.Img_ACK;
 import static com.osparking.global.names.OSP_enums.MsgCode.JustBooted;
 import java.util.logging.Level;
-import javax.swing.JOptionPane;
-import static javax.swing.JOptionPane.WARNING_MESSAGE;
-import org.jsoup.Jsoup;
 
 /**
  * thread dedicated to read the socket input stream from the manager.

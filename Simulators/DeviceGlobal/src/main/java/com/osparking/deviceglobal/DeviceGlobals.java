@@ -17,7 +17,9 @@
 package com.osparking.deviceglobal;
 
 import com.osparking.global.Globals;
-import static com.osparking.global.Globals.getPercentString;
+import static com.osparking.global.Globals.GENERAL_DEVICE;
+import static com.osparking.global.Globals.getPathAndDay;
+import static com.osparking.global.Globals.logParkingExceptionStatus;
 import static com.osparking.global.Globals.noArtificialErrorInserted;
 import static com.osparking.global.names.ControlEnums.DialogMessages.DEV_TYPE_ERROR_MSG1;
 import static com.osparking.global.names.ControlEnums.DialogMessages.DEV_TYPE_ERROR_MSG2;
@@ -30,14 +32,18 @@ import static com.osparking.global.names.ControlEnums.MenuITemTypes.SETTING_MENU
 import static com.osparking.global.names.ControlEnums.MenuITemTypes.SYSTEM_MENU;
 import static com.osparking.global.names.OSP_enums.MsgCode.IAmHere;
 import java.awt.Image;
-import java.awt.Toolkit;
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
+import java.util.logging.Level;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import static javax.swing.JOptionPane.WARNING_MESSAGE;
 import javax.swing.JTextField;
+import javax.swing.table.TableModel;
+import org.jopendocument.dom.spreadsheet.Sheet;
+import org.jopendocument.dom.spreadsheet.SpreadSheet;
 import org.jsoup.Jsoup;
 
 /**
@@ -45,8 +51,7 @@ import org.jsoup.Jsoup;
  * @author Open Source Parking Inc.
  */
 
-
-public class DeviceGlobals {
+public class DeviceGlobals {  
     
     public static void showCheckDeviceTypeDialog(String device, int ebdID, int msgCode) {
         JOptionPane.showConfirmDialog(null, 

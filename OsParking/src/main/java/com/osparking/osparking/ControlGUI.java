@@ -23,7 +23,9 @@ import com.osparking.attendant.LoginWindowEvent;
 import static com.osparking.global.CommonData.ADMIN_ID;
 import static com.osparking.global.CommonData.ImgHeight;
 import static com.osparking.global.CommonData.ImgWidth;
+import static com.osparking.global.CommonData.appendOdsLine;
 import static com.osparking.global.CommonData.cameraOneIsButton;
+import static com.osparking.global.CommonData.checkOdsExistance;
 import static com.osparking.global.CommonData.dummyMessages;
 import static com.osparking.global.CommonData.metaKeyLabel;
 import static com.osparking.global.CommonData.resizeComponentFor;
@@ -230,6 +232,8 @@ import javax.swing.ListSelectionModel;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 import org.bytedeco.javacpp.FlyCapture2;
 
 /**
@@ -633,41 +637,41 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
         }        
     }
     
-    private void prepareIDLogFile(DeviceType devType, int gateNo) {
-        StringBuilder pathname = new StringBuilder();
-        StringBuilder daySB = new StringBuilder();
-
-        getPathAndDay("operation", pathname, daySB);
-
-        // full path name of the today's text file for Open command ID logging
-        String barOpenLogFilePathname = pathname + File.separator 
-                + daySB.toString() + "_" + devType + "_" + gateNo + ".txt";
-        try {
-            IDLogFile[devType.ordinal()][gateNo] = new FileWriter(barOpenLogFilePathname, false); 
-            String header = "";
-            
-            switch (devType) {
-                case Camera:
-                    header = "* IDs of images came from Camera #" + gateNo
-                            + System.lineSeparator() + "<current> <previous>";
-                    break;
-                case E_Board:
-                    header = "* Seq' numbers of display INTERRUPT messages sent to E-Board #" + gateNo
-                            + System.lineSeparator() + "<Sequence number>";
-                    break;
-                case GateBar:
-                    header = "* ID numbers of Open commands sent to Gate #" + gateNo 
-                            + System.lineSeparator() + "<ID number>(negative: random attendant)";
-                    break;
-            }
-            IDLogFile[devType.ordinal()][gateNo].write(header + System.lineSeparator());
-            IDLogFile[devType.ordinal()][gateNo].flush();
-        } catch (FileNotFoundException ex) {
-            logParkingExceptionStatus(Level.SEVERE, ex, "prepare logging file", getStatusTextField(), GENERAL_DEVICE);
-        } catch (IOException ex) {
-            logParkingExceptionStatus(Level.SEVERE, ex, "prepare logging file", getStatusTextField(), GENERAL_DEVICE);
-        }                 
-    }      
+//    private void prepareIDLogFile(DeviceType devType, int gateNo) {
+//        StringBuilder pathname = new StringBuilder();
+//        StringBuilder daySB = new StringBuilder();
+//
+//        getPathAndDay("operation", pathname, daySB);
+//
+//        // full path name of the today's text file for Open command ID logging
+//        String barOpenLogFilePathname = pathname + File.separator 
+//                + daySB.toString() + "_" + devType + "_" + gateNo + ".txt";
+//        try {
+//            IDLogFile[devType.ordinal()][gateNo] = new FileWriter(barOpenLogFilePathname, false); 
+//            String header = "";
+//            
+//            switch (devType) {
+////                case Camera:
+////                    header = "* IDs of images came from Camera #" + gateNo
+////                            + System.lineSeparator() + "<current> <previous>";
+////                    break;
+//                case E_Board:
+//                    header = "* Seq' numbers of display INTERRUPT messages sent to E-Board #" + gateNo
+//                            + System.lineSeparator() + "<Sequence number>";
+//                    break;
+//                case GateBar:
+//                    header = "* ID numbers of Open commands sent to Gate #" + gateNo 
+//                            + System.lineSeparator() + "<ID number>(negative: random attendant)";
+//                    break;
+//            }
+//            IDLogFile[devType.ordinal()][gateNo].write(header + System.lineSeparator());
+//            IDLogFile[devType.ordinal()][gateNo].flush();
+//        } catch (FileNotFoundException ex) {
+//            logParkingExceptionStatus(Level.SEVERE, ex, "prepare logging file", getStatusTextField(), GENERAL_DEVICE);
+//        } catch (IOException ex) {
+//            logParkingExceptionStatus(Level.SEVERE, ex, "prepare logging file", getStatusTextField(), GENERAL_DEVICE);
+//        }                 
+//    }      
     
     /**
      * @return the perfomStatistics
@@ -1687,12 +1691,6 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
                         if (DEBUG) {
                             insertDebugPanel();
                             errorCheckBox.setEnabled(DEBUG);
-
-                            for (DeviceType type : DeviceType.values()) {     
-                                for (int gNo = 1; gNo <= gateCount; gNo++) {
-                                    prepareIDLogFile(type, gNo); // Camera image ID log file.
-                                }
-                            }
                         } else {
                             removeDebugPanel();
                         }                        
@@ -2967,6 +2965,12 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
     
     Object AckFileMutex = new Object();
     
+    String[] columnsBar = new String[] {"Command ID", "(negative: random attendant)"};
+    String[] columnsEBD = new String[] {"Inter' SN", ""};
+    TableModel modelBar = new DefaultTableModel(null, columnsBar);    
+    TableModel modelEBD = new DefaultTableModel(null, columnsEBD);    
+    File[] odsFileBar = new File[1];    
+    File[] odsFileEBD = new File[1];    
     /**
      * Gives a gate open command after initializing ACK flag and sender timer.
      * 
@@ -2976,22 +2980,19 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
      */
     public void raiseGateBar(byte gateNo, int openCommandID, int carPassingDelayMs) {
         // the increment operator generates a unique ID for each open command created.
-
         if (deviceManagers[GateBar.ordinal()][gateNo].isNeverConnected()) {
             return;
         }
         
         if (DEBUG) {
-            try {
-                /**
-                 * Save gate open command ID for a book keeping
-                 */
-                getIDLogFile()[GateBar.ordinal()][gateNo].write(openCommandID + System.lineSeparator());
-                getIDLogFile()[GateBar.ordinal()][gateNo].flush();
-            } catch (IOException ex) {
-                logParkingExceptionStatus(Level.SEVERE, ex, "saving open ID", 
-                        getStatusTextField(), GENERAL_DEVICE);
-            }
+            /**
+             * Save gate open command ID for a book keeping
+             */
+            checkOdsExistance("_GateBar_", gateNo, 
+                    " Gate Bar", "is where the open command is sent to",
+                    getStatusTextField(), odsFileBar, modelBar);
+            appendOdsLine(odsFileBar[0], Integer.toString(openCommandID), 
+                    getStatusTextField());                
         }
         ParkingTimer openCmdTimer = getOpenGateCmdTimer()[gateNo];
         synchronized (openCmdTimer) {
@@ -3000,8 +3001,10 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
             } else {
                 if (openCmdTimer.hasTask()) {
                     if (DEBUG) {
-                        int resends = ((SendGateOpenTask)openCmdTimer.getParkingTask()).getResendCount();
-                        logParkingOperation(OpLogLevel.LogAlways, "Open ID: " + openCommandIDs[gateNo] 
+                        int resends = ((SendGateOpenTask)openCmdTimer.getParkingTask())
+                                .getResendCount();
+                        logParkingOperation(OpLogLevel.LogAlways, 
+                                "Open ID: " + openCommandIDs[gateNo] 
                                 + " cancelled after " + resends + " trials", gateNo);
                     }
                     openCmdTimer.cancelTask();
@@ -3208,16 +3211,16 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
                     /**
                      * Save EBD interrupt message serial numbers for book keeping
                      */
-                    try {
-                        getIDLogFile()[E_Board.ordinal()][gateNo]
-                                .write(imageSN * 2 + EBD_Row.TOP.ordinal() + System.lineSeparator());
-                        getIDLogFile()[E_Board.ordinal()][gateNo]
-                                .write(imageSN * 2 + EBD_Row.BOTTOM.ordinal() + System.lineSeparator());
-                        getIDLogFile()[E_Board.ordinal()][gateNo].flush();
-                    } catch (IOException ex) {
-                        logParkingExceptionStatus(Level.SEVERE, ex, "saving open ID", getStatusTextField(), 
-                                GENERAL_DEVICE);
-                    }    
+                    checkOdsExistance("_E_Board_", gateNo, 
+                            " E-Board", "is the interrupt target",
+                            getStatusTextField(), odsFileEBD, modelEBD);
+                    appendOdsLine(odsFileEBD[0], 
+                            Integer.toString(imageSN * 2 + EBD_Row.TOP.ordinal()), 
+                            getStatusTextField());                       
+                    appendOdsLine(odsFileEBD[0], 
+                            Integer.toString(imageSN * 2 + EBD_Row.BOTTOM.ordinal()), 
+                            getStatusTextField());                       
+                    
                 }
                 //</editor-fold>
             }

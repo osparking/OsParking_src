@@ -54,12 +54,15 @@ import com.osparking.global.names.OSP_enums.VersionType;
 import com.osparking.global.names.ParkingTimer;
 import com.osparking.global.names.ToleranceLevel;
 import java.awt.Image;
+import java.io.File;
 import static java.lang.Math.min;
 import java.net.Inet4Address;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JCheckBox;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 
 /**
  * Camera Simulator GUI -- Part of OsParking simulator package which is 
@@ -109,6 +112,9 @@ public class CameraGUI extends javax.swing.JFrame implements DeviceGUI {
     
     Timer LED_Timer = null;
     private Object socketConnection = new Object();    
+    
+    String[] columns = new String[] {"Image-ID", "-"};
+    TableModel model = new DefaultTableModel(null, columns);
     
     private boolean SHUT_DOWN = false;
     
@@ -170,15 +176,16 @@ public class CameraGUI extends javax.swing.JFrame implements DeviceGUI {
         
         reader = new CameraReader((this));
         reader.start();
-        
+
         acceptConnectionRequest();
     }
+
+    File odsFile = null;
     
     /**
      * Determine the ID of sendPicTask being created considering the IDs of cameras already generated.
      * @return a proper ID number for a sendPicTask
      */
-//    private byte getUniqueCameraID() {
     public static byte getUniqueCameraID() {
         byte currID = 1; // minimum ID number
         JustOneLock ua;
@@ -895,14 +902,6 @@ public class CameraGUI extends javax.swing.JFrame implements DeviceGUI {
     }
 
     /**
-     * @return the managerIP_TextField
-     */
-//    public javax.swing.JTextField getManagerIP_TextField() {
-////        return getManagerIPaddr();
-//        return managerIPaddr;
-//    }
-
-    /**
      * @param managerIP_TextField the managerIP_TextField to set
      */
     public void setManagerIP_TextField(javax.swing.JTextField managerIP_TextField) {
@@ -985,7 +984,7 @@ public class CameraGUI extends javax.swing.JFrame implements DeviceGUI {
         imageID_Acked = false;
         this.imageFileNo = imageFileNo;
         imageGenerationTimeMs = System.currentTimeMillis();
-
+        
         getImageTransmissionTimer().reschedule(new ImageTransmissionTask(this, generationSN, imageFileNo));
 
         // reflect this car arrival to the camera GUI
@@ -1042,17 +1041,6 @@ public class CameraGUI extends javax.swing.JFrame implements DeviceGUI {
     public JCheckBox getErrorCheckBox() {
         return errorCheckBox;
     }
-
-//    private void displayPercent(boolean b) {
-//        if (b) {
-//            displayErrorRate(criticalInfoTextField, ERROR_RATE);            
-//            percentLabel.setText(getPercentString(ERROR_RATE));
-//        } else {
-//            displayRateLimit(criticalInfoTextField, ERROR_RATE, false);
-//            percentLabel.setText(getPercentString(ERROR_RATE));
-//        }
-//        percentLabel.setEnabled(b);
-//    }
 }
 
 class CameraTraversalPolicy extends FocusTraversalPolicy {

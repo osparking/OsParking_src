@@ -80,7 +80,7 @@ public class ImageTransmissionTask implements Runnable {
                 try {
                     System.out.println("before image trans");
                     cameraGUI.getSocketMUTEX().wait();
-                    System.out.println("before image trans");
+                    System.out.println("after image trans");
                 } catch (InterruptedException ex) {
                     logParkingException(Level.SEVERE, ex, "wait socket connection", cameraGUI.getID());
                 }

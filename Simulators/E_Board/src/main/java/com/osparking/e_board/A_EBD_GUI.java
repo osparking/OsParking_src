@@ -58,9 +58,12 @@ import static com.osparking.global.names.OSP_enums.DisplayArea.BOTTOM_ROW;
 import static com.osparking.global.names.OSP_enums.DisplayArea.TOP_ROW;
 import com.osparking.global.names.ParkingTimer;
 import java.awt.Image;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JCheckBox;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 
 /**
  * E-Board Simulator GUI -- Part of OsParking simulator package which is developed by Open Source 
@@ -93,6 +96,10 @@ public class A_EBD_GUI extends javax.swing.JFrame implements DeviceGUI {
     public int[] prevMsgSN = new int[2]; // the Serial Number of the most recently processed display message
     
     boolean finishingOperation = false;
+    
+    String[] columns = new String[] {"Curr ID", "Prev ID"};
+    public TableModel model = new DefaultTableModel(null, columns);        
+    File[] odsFile = new File[1];
     
     /**
      * Creates new form Display

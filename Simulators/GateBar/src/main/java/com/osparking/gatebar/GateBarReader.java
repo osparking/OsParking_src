@@ -18,8 +18,8 @@ package com.osparking.gatebar;
 
 import static com.osparking.deviceglobal.DeviceGlobals.sayIamHere;
 import static com.osparking.deviceglobal.DeviceGlobals.showCheckDeviceTypeDialog;
-import java.io.File;
-import java.io.FileNotFoundException;
+import static com.osparking.global.CommonData.appendOdsLine;
+import static com.osparking.global.CommonData.checkOdsExistance;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.net.Socket;
@@ -29,14 +29,10 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.logging.Level;
 import com.osparking.global.names.DeviceReader;
-import com.osparking.global.Globals;
 import static com.osparking.global.Globals.DEBUG_FLAG;
-import static com.osparking.global.Globals.GENERAL_DEVICE;
 import static com.osparking.global.Globals.closeSocket;
-import static com.osparking.global.Globals.getPathAndDay;
 import static com.osparking.global.Globals.isConnected;
 import static com.osparking.global.Globals.logParkingException;
-import static com.osparking.global.Globals.logParkingExceptionStatus;
 import static com.osparking.global.Globals.noArtificialErrorInserted;
 import static com.osparking.global.Globals.timeFormat;
 import static com.osparking.global.names.ControlEnums.LabelContent.GATE_BAR_LABEL;
@@ -46,7 +42,6 @@ import static com.osparking.global.names.OSP_enums.MsgCode.AreYouThere;
 import static com.osparking.global.names.OSP_enums.MsgCode.JustBooted;
 import static com.osparking.global.names.OSP_enums.MsgCode.Open;
 import static com.osparking.global.names.OSP_enums.MsgCode.Open_ACK;
-import com.osparking.global.names.OSP_enums.OpLogLevel;
 
 /**
  *
@@ -68,30 +63,11 @@ public class GateBarReader extends Thread implements DeviceReader {
         barID = gateBarGUI.getID();
         
         if (DEBUG_FLAG) {
-            //<editor-fold desc="-- Create file for 'E-Board display interrupt' message Sequence Number logging">
-            StringBuilder pathname = new StringBuilder();
-            StringBuilder daySB = new StringBuilder();
-
-            getPathAndDay("operation", pathname, daySB);
-
-            // full path name of the today's text file for gate Open command ID logging
-            String operationLogFilePathname = pathname + File.separator 
-                    + daySB.toString() + "_GateOpen_" + barID + ".txt";
-            try {
-                logFileWriter = new FileWriter(operationLogFilePathname, false); 
-                logFileWriter.write("#" + barID + " Gate Bar Received Open Command IDs"
-                        + System.lineSeparator());
-                logFileWriter.write("<current> < previous>" + System.lineSeparator());
-                logFileWriter.flush();
-            } catch (FileNotFoundException ex) {
-                logParkingExceptionStatus(Level.SEVERE, ex, "while preparing log file", 
-                        gateBarGUI.getCriticalInfoTextField(), GENERAL_DEVICE);
-            } catch (IOException ex) {
-                logParkingExceptionStatus(Level.SEVERE, ex, "while preparing log text file", 
-                        gateBarGUI.getCriticalInfoTextField(), GENERAL_DEVICE);
-            }  
-            //</editor-fold>
-        }        
+            checkOdsExistance("_GateOpen_", barID, 
+                    " Gate Bar", "Received Open Command IDs", 
+                    this.gateBarGUI.getCriticalInfoTextField(),
+                    this.gateBarGUI.odsFile, this.gateBarGUI.model);
+        }
     }
         
     public void run() {
@@ -170,8 +146,14 @@ public class GateBarReader extends Thread implements DeviceReader {
                                 if (cmdID != gateBarGUI.prevCommandID) {
                                     gateBarGUI.orderOpenGate(delayMS);
                                     if (DEBUG_FLAG) {
-                                        System.out.println("open gate cmd ID: " + cmdID);
-                                        saveOpenCommandID(cmdID, gateBarGUI.prevCommandID);
+                                        checkOdsExistance("_GateOpen_", barID, 
+                                                " Gate Bar", "Received Open Command IDs", 
+                                                gateBarGUI.getCriticalInfoTextField(),
+                                                gateBarGUI.odsFile, gateBarGUI.model);
+                                        appendOdsLine(gateBarGUI.odsFile[0], 
+                                                Integer.toString(cmdID), 
+                                                Integer.toString(gateBarGUI.prevCommandID),
+                                                gateBarGUI.getCriticalInfoTextField());
                                     }
                                     gateBarGUI.prevCommandID = cmdID;
                                 }
@@ -230,21 +212,6 @@ public class GateBarReader extends Thread implements DeviceReader {
         this.managerSocket = managerSocket;
     }
 
-    private void saveOpenCommandID(int cmdID, int prevCommandID) throws IOException {
-
-        String message = cmdID + " " + prevCommandID + System.lineSeparator();
-        Globals.logParkingOperation(OpLogLevel.LogAlways, message, barID);
-        
-        try 
-        {
-            logFileWriter.write(message);
-            logFileWriter.flush();
-        } catch (FileNotFoundException ex) {
-            logParkingExceptionStatus(Level.SEVERE, ex, "while saving open command ID", 
-                    gateBarGUI.criticalInfoTextField, barID);
-        }
-    }
-
     public void disconnectSocket(Exception e, String reason) {
         logParkingException(Level.INFO, e, reason, barID);
         synchronized(gateBarGUI.getSocketMUTEX()) {
@@ -261,16 +228,4 @@ public class GateBarReader extends Thread implements DeviceReader {
         disconnectSocket(null, cause);
         setSHUT_DOWN(true);        
     }
-
-//    private void sayIamHere(DeviceGUI deviceGUI) {
-//        if (noArtificialErrorInserted(deviceGUI.getErrorCheckBox())) 
-//        {
-//            try {
-//                getManagerSocket().getOutputStream().write(IAmHere.ordinal());
-//            } catch (IOException ex) {
-//                disconnectSocket(ex,  "while saying I'am here.");                 
-//            }
-//            deviceGUI.getTolerance().assignMAX();
-//        }
-//    }
 }

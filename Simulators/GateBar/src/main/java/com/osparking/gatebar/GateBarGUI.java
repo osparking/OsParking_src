@@ -59,12 +59,19 @@ import static com.osparking.global.names.OSP_enums.DeviceType.GateBar;
 import com.osparking.global.names.ParkingTimer;
 import com.osparking.global.names.ToleranceLevel;
 import java.awt.Image;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 import javax.swing.ImageIcon;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 import no.geosoft.cc.graphics.*;
 
 import no.geosoft.cc.geometry.Matrix4x4;
+import org.jopendocument.dom.spreadsheet.Sheet;
+import org.jopendocument.dom.spreadsheet.SpreadSheet;
 
 /**
  * Gate Bar Simulator GUI -- Part of OsParking simulator package which is developed by Open Source 
@@ -484,9 +491,6 @@ errorCheckBox.addActionListener(new java.awt.event.ActionListener() {
             java.util.logging.Logger.getLogger(GateBarGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
 
         initializeLoggers();
         checkOptions(args);
@@ -604,6 +608,10 @@ errorCheckBox.addActionListener(new java.awt.event.ActionListener() {
     public javax.swing.JCheckBox getErrorCheckBox() {
         return errorCheckBox;
     }
+
+    String[] columns = new String[] {"Curr ID", "Prev ID"};
+    public TableModel model = new DefaultTableModel(null, columns);    
+    public File[] odsFile = new File[1];
 
     private class BarRotator extends TimerTask
     {

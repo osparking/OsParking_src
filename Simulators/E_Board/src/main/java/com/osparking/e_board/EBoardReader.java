@@ -18,9 +18,10 @@ package com.osparking.e_board;
 
 import static com.osparking.deviceglobal.DeviceGlobals.sayIamHere;
 import static com.osparking.deviceglobal.DeviceGlobals.showCheckDeviceTypeDialog;
+import static com.osparking.global.CommonData.appendOdsLine;
+import static com.osparking.global.CommonData.checkOdsExistance;
 import java.io.File;
 import com.osparking.global.names.EBD_DisplaySetting;
-import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.net.Socket;
@@ -33,15 +34,11 @@ import java.util.logging.Level;
 import static com.osparking.global.names.DB_Access.EBD_flowCycle;
 import static com.osparking.global.names.DB_Access.readEBoardUsageSettings;
 import com.osparking.global.names.DeviceReader;
-import com.osparking.global.Globals;
 import com.osparking.global.names.OSP_enums.*;
 import static com.osparking.global.Globals.DEBUG_FLAG;
-import static com.osparking.global.Globals.GENERAL_DEVICE;
 import static com.osparking.global.Globals.closeSocket;
-import static com.osparking.global.Globals.getPathAndDay;
 import static com.osparking.global.Globals.isConnected;
 import static com.osparking.global.Globals.logParkingException;
-import static com.osparking.global.Globals.logParkingExceptionStatus;
 import static com.osparking.global.Globals.noArtificialErrorInserted;
 import static com.osparking.global.Globals.stringLengthInPixels;
 import static com.osparking.global.Globals.timeFormat;
@@ -55,6 +52,8 @@ import static com.osparking.global.names.OSP_enums.EBD_DisplayUsage.DEFAULT_TOP_
 import static com.osparking.global.names.OSP_enums.MsgCode.EBD_ACK;
 import static com.osparking.global.names.OSP_enums.MsgCode.JustBooted;
 import java.net.SocketTimeoutException;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 
 /**
  *
@@ -78,29 +77,9 @@ public class EBoardReader extends Thread implements DeviceReader {
         ebdID = eBoardGUI.getID();
         
         if (DEBUG_FLAG) {
-            //<editor-fold desc="-- Prepare log file to store 'E-Board display interrupt' message Sequence Number">
-            StringBuilder pathname = new StringBuilder();
-            StringBuilder daySB = new StringBuilder();
-
-            getPathAndDay("operation", pathname, daySB);
-
-            // full path name of the today's text file for display interrupt command SN logging
-            String operationLogFilePathname = pathname + File.separator 
-                    + daySB.toString() + "_E_Board_" + ebdID + ".txt";
-            try {
-                logFileWriter = new FileWriter(operationLogFilePathname, false); 
-                logFileWriter.write("#" + ebdID + " Electronic Display Received Interrupt IDs" 
-                        + System.lineSeparator());
-                logFileWriter.write("<current> <previous>" + System.lineSeparator());
-                logFileWriter.flush();
-            } catch (FileNotFoundException ex) {
-                logParkingExceptionStatus(Level.SEVERE, ex, "prepare logging file", 
-                        eBoardGUI.getCriticalInfoTextField(), GENERAL_DEVICE);
-            } catch (IOException ex) {
-                logParkingExceptionStatus(Level.SEVERE, ex, "prepare logging file", 
-                        eBoardGUI.getCriticalInfoTextField(), GENERAL_DEVICE);
-            }  
-            //</editor-fold>
+            checkOdsExistance("_E_Board_", ebdID, 
+                    " Electronic Display", "Received Interrupt IDs", 
+                    eBoardGUI.getCriticalInfoTextField(), odsFile, model);
         }
     }
         
@@ -276,7 +255,14 @@ public class EBoardReader extends Thread implements DeviceReader {
                                     // decode message field by field and apply the result to display
                                     interruptCurrentDisplay(coreBytes);
                                     if (DEBUG_FLAG) {
-                                        saveMsgSN(msgSN, eBoardGUI.prevMsgSN[coreBytes[0]]);
+                                        checkOdsExistance("_E_Board_", ebdID, 
+                                                " Electronic Display", "Received Interrupt IDs",
+                                                eBoardGUI.getCriticalInfoTextField(),
+                                                eBoardGUI.odsFile, eBoardGUI.model);                                        
+                                        appendOdsLine(eBoardGUI.odsFile[0], 
+                                                Integer.toString(msgSN), 
+                                                Integer.toString(eBoardGUI.prevMsgSN[coreBytes[0]]),
+                                                eBoardGUI.getCriticalInfoTextField());                                            
                                     }
                                     eBoardGUI.prevMsgSN[coreBytes[0]] = msgSN;
                                 }
@@ -444,23 +430,6 @@ public class EBoardReader extends Thread implements DeviceReader {
         //</editor-fold>
     }
 
-    private synchronized void saveMsgSN(int currMsgSN, int prevMsgSN) {
-        String message = currMsgSN + " " + prevMsgSN + System.lineSeparator();
-        
-        Globals.logParkingOperation(OpLogLevel.LogAlways, message, ebdID);
-        
-        try {
-            logFileWriter.write(message);
-            logFileWriter.flush();
-        } catch (FileNotFoundException ex) {
-            logParkingExceptionStatus(Level.SEVERE, ex, "display msg SN logging module", 
-                    eBoardGUI.getCriticalInfoTextField(), ebdID);
-        } catch (IOException ex) {
-            logParkingExceptionStatus(Level.SEVERE, ex, "EBD msg SN logging module", 
-                    eBoardGUI.getCriticalInfoTextField(), ebdID);
-        }             
-    }
-
     public void disconnectSocket(Exception e, String reason) {
         
         logParkingException(Level.INFO, e, reason, ebdID);
@@ -483,4 +452,8 @@ public class EBoardReader extends Thread implements DeviceReader {
         disconnectSocket(null, cause);
         setSHUT_DOWN(true);
     }
+    
+    String[] columns = new String[] {"Curr ID", "Prev ID"};
+    TableModel model = new DefaultTableModel(null, columns);       
+    File[] odsFile = new File[1];
 }

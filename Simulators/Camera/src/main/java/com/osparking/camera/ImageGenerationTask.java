@@ -16,20 +16,17 @@
  */
 package com.osparking.camera;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.IOException;
+import static com.osparking.global.CommonData.appendOdsLine;
+import static com.osparking.global.CommonData.checkOdsExistance;
 import java.util.Date;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.logging.Level;
-import com.osparking.global.Globals;
 import static com.osparking.global.Globals.*;
 import static com.osparking.global.Globals.PULSE_PERIOD;
-import com.osparking.global.names.OSP_enums.OpLogLevel;
-import java.util.logging.Logger;
+import java.io.File;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 
 /**
  * Simulates an LPR(License Plate Recognition) camera shutter.
@@ -54,16 +51,18 @@ public class ImageGenerationTask extends TimerTask {
      * ensures a ordered usage of the managerSocket which is used by two tasks simultaneously.
      */
     public static Object SocketMUTEX = new Object();
-//    boolean SHUT_DOWN = false;
 
     /**
      * Bed on which camera sleeps and never sends car image to the manager while socket is disconnected.
      * ManagerSocketReader wakes the camera up when it sees ID_Ack sent from the manager.
      */
     public Object ID_confirmed = new Object(); // ID_confirmed is a portable bed brand.
-    
     Object managerConnection = new Object();
-        
+    
+    String[] columns = new String[] {"Image ID", ""};
+    TableModel model = new DefaultTableModel(null, columns);       
+    File[] odsFile = new File[1];
+    
     //</editor-fold>
 
     /**
@@ -78,28 +77,6 @@ public class ImageGenerationTask extends TimerTask {
 
         long seed = (new Date()).getTime();
         rand = new Random(seed + 157 + cameraID);
-        
-        // prepare a text file to log normal operation like uniquely creationed image ID
-        if (DEBUG_FLAG) {
-            //<editor-fold desc="--prepare logger file to save car image ID">
-            StringBuilder pathname = new StringBuilder();
-            StringBuilder daySB = new StringBuilder();
-
-            getPathAndDay("operation", pathname, daySB);
-
-            // full path name of the today's text file for Open command ID logging
-            String imageIDLogFilePathname = pathname + File.separator 
-                    + daySB.toString() + "_Image_ID_" + cameraGUI.getID() + ".txt";
-            try {
-                cameraGUI.imageID_logFile = new FileWriter(imageIDLogFilePathname, false);
-                cameraGUI.imageID_logFile.write("#" + cameraGUI.getID() + " Camera Generated Image IDs" 
-                        + System.lineSeparator());
-            } catch (IOException ex) {
-                logParkingExceptionStatus(Level.SEVERE, ex, "image ID logging file preparation", 
-                        cameraGUI.getCriticalInfoTextField(), 0);
-            }
-            //</editor-fold>
-        }            
     }
     
     /**
@@ -143,9 +120,12 @@ public class ImageGenerationTask extends TimerTask {
                     imageFileNo = getNextCarNum(rand, imageFileNo);
                     cameraGUI.sendCarImage(imageFileNo, ++cameraGUI.generationSN);
                     if (DEBUG_FLAG) {
-                        Globals.logParkingOperation(OpLogLevel.UserCarChange, 
-                            "Generated image ID : " + Integer.toString(cameraGUI.generationSN), cameraGUI.getID());
-                        saveImageIDsent(cameraGUI.generationSN);
+                        // prepare a text file to log normal operation like uniquely creationed image ID
+                        checkOdsExistance("_Image_ID_", cameraID, " Camera", "Generated Image IDs",
+                                cameraGUI.getCriticalInfoTextField(), odsFile, model);                        
+                        appendOdsLine(odsFile[0], 
+                                Integer.toString(cameraGUI.generationSN),
+                                cameraGUI.getCriticalInfoTextField());
                     }                    
                 }
             }
@@ -188,16 +168,5 @@ public class ImageGenerationTask extends TimerTask {
     }              
     //</editor-fold>
 
-    private void saveImageIDsent(int ackedImgID) {
-        try {
-            cameraGUI.imageID_logFile.write(Integer.toString(ackedImgID) + System.lineSeparator());
-            cameraGUI.imageID_logFile.flush();
-        } catch (FileNotFoundException ex1) {
-            logParkingExceptionStatus(Level.SEVERE, ex1, "open command ID logging module",
-                    cameraGUI.getCriticalInfoTextField(), 0);
-        } catch (IOException ex2) {
-            logParkingExceptionStatus(Level.SEVERE, ex2, "open command ID logging module",
-                    cameraGUI.getCriticalInfoTextField(), 0);
-        }
-    }    
+
 }

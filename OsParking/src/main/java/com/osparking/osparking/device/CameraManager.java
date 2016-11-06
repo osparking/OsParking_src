@@ -16,11 +16,12 @@
  */
 package com.osparking.osparking.device;
 
+import static com.osparking.global.CommonData.appendOdsLine;
+import static com.osparking.global.CommonData.checkOdsExistance;
 import com.osparking.global.Globals;
 import com.osparking.global.names.IDevice;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.net.Socket;
@@ -37,6 +38,9 @@ import com.osparking.global.names.OSP_enums.MsgCode;
 import static com.osparking.global.names.OSP_enums.MsgCode.CarImage;
 import static com.osparking.global.names.OSP_enums.MsgCode.IAmHere;
 import static com.osparking.global.names.OSP_enums.MsgCode.JustBooted;
+import java.io.File;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 
 /**
  * Maintains communication with a camera  thru a socket as long as the socket is connected,
@@ -76,6 +80,9 @@ public class CameraManager extends Thread implements IDevice.IManager, IDevice.I
     byte[] messageImg_ACK = new byte[5];
     //</editor-fold>    
     private boolean neverConnected = true;
+    String[] columns = new String[] {"Curr ID", "Prev ID"};
+    TableModel model = new DefaultTableModel(null, columns);    
+    File[] odsFile = new File[1];
 
     /**
      * Initializes some data members and starts socket reader thread.
@@ -88,6 +95,11 @@ public class CameraManager extends Thread implements IDevice.IManager, IDevice.I
         super("osp_Camera_" + cameraID + "_Manager");
         this.mainForm = mainForm;
         this.cameraID = cameraID;
+//        if (DEBUG_FLAG) {
+//            checkOdsExistance("_Camera_", cameraID, 
+//                    " IDs of", "images came from Camera", 
+//                    mainForm.getStatusTextField(), odsFile, model);
+//        }        
     }    
     
     /**.
@@ -215,7 +227,14 @@ public class CameraManager extends Thread implements IDevice.IManager, IDevice.I
                                 if (currImgSN != mainForm.prevImgSN[cameraID]) {
                                     // handle a brand new image sent from the camera
                                     if (DEBUG) {
-                                        saveImageID(currImgSN, mainForm.prevImgSN[cameraID]);
+                                        if (cameraID != 0) {
+                                            checkOdsExistance("_Camera_", cameraID, 
+                                                    " Camera", "is where the images are from",
+                                                    mainForm.getStatusTextField(), odsFile, model);
+                                            appendOdsLine(odsFile[0], Integer.toString(currImgSN), 
+                                                    Integer.toString(mainForm.prevImgSN[cameraID]),
+                                                    mainForm.getStatusTextField());
+                                        }
                                     }
                                     mainForm.prevImgSN[cameraID] = currImgSN;
                                     
@@ -343,23 +362,16 @@ public class CameraManager extends Thread implements IDevice.IManager, IDevice.I
         interrupt();
     }
 
-    private synchronized void saveImageID(int currentID, int previousID) {
-        if (cameraID == 0)
-            return; 
-        String message = currentID + " " + previousID + System.lineSeparator();
-
-        try {
-            fw = mainForm.getIDLogFile()[Camera.ordinal()][cameraID];
-            fw.write(message);
-            fw.flush();
-        } catch (FileNotFoundException ex) {
-            logParkingExceptionStatus(Level.SEVERE, ex, "car image ID logging module", 
-                    mainForm.getStatusTextField(), cameraID);
-        } catch (IOException ex) {
-            logParkingExceptionStatus(Level.SEVERE, ex, "car image ID logging module", 
-                    mainForm.getStatusTextField(), cameraID);
-        }        
-    }
+//    private synchronized void saveImageID(int currentID, int previousID) {
+//        if (cameraID == 0)
+//            return; 
+//
+//        checkOdsExistance("_Camera_", cameraID, " Camera", "is where the images are ",
+//                mainForm.getStatusTextField(), odsFile, model);
+//        appendOdsLine(odsFile[0], Integer.toString(currentID), 
+//                Integer.toString(previousID),
+//                mainForm.getStatusTextField());
+//    }
 
     @Override
     public void setSocket(Socket socket) {
