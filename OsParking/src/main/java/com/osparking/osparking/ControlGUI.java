@@ -104,6 +104,7 @@ import static com.osparking.global.names.ControlEnums.TextType.NO_APP_MSG;
 import static com.osparking.global.names.ControlEnums.TextType.ON_ARTIFI_ERROR_MSG;
 import static com.osparking.global.names.ControlEnums.ToolTipContent.CAR_ENTRY_TOOLTIP;
 import com.osparking.global.names.ControlEnums.TopForms;
+import static com.osparking.global.names.ControlEnums.TopForms.Arrivals;
 import static com.osparking.global.names.ControlEnums.TopForms.Attendant;
 import static com.osparking.global.names.ControlEnums.TopForms.Settings;
 import static com.osparking.global.names.ControlEnums.TopForms.Vehicle;
@@ -2292,6 +2293,10 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
                 topForm = new Settings_System(this);
                 break;
                 
+            case Arrivals:
+                topForm = new CarArrivals(this);
+                break;
+                
             default:
                 break;
         }
@@ -2312,12 +2317,27 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
     public void setStatPan(DisplayStatFrame statPan) {
         this.statPan = statPan;
     }
+    
+//    private CarArrivals arrivals = null;
 
+//    /**
+//     * @return the arrivals
+//     */
+//    public CarArrivals getArrivals() {
+//        return arrivals;
+//    }
+
+//    /**
+//     * @param arrivals the arrivals to set
+//     */
+//    public void setArrivals(CarArrivals arrivals) {
+//        this.arrivals = arrivals;
+//    }
+    
     class ManageArrivalList extends Thread {
         public void run() {
             Thread.currentThread().setPriority(Thread.MIN_PRIORITY);
-            CarArrivals arrivals = new CarArrivals();
-            arrivals.setVisible(true);
+            displayTopForm(Arrivals);
         }
     }
     
@@ -2878,6 +2898,13 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
                 entry += "-" + barOptn.getContent();
             }
             listModel.add(0, new CarAdmission(entry, arrSeqNo));
+            
+            /**
+             * Update car arrival list GUI if it were in display.
+             */
+            if (getTopForms()[Arrivals.ordinal()] != null) {
+                ((CarArrivals)(topForms[Arrivals.ordinal()])).loadArrivalsListTable(true);
+            }
             
             // display entry image on the label for the gate
             listSelectionModel[gateNo].setSelectionInterval(0, 0);

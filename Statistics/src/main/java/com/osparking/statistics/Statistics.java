@@ -62,7 +62,7 @@ public class Statistics {
             /* Create and display the form */
             java.awt.EventQueue.invokeLater(new Runnable() {
                 public void run() {
-                    CarArrivals vehicleArrivals = new CarArrivals();
+                    CarArrivals vehicleArrivals = new CarArrivals(null);
                     vehicleArrivals.setDefaultCloseOperation(
                             javax.swing.WindowConstants.EXIT_ON_CLOSE);
                     vehicleArrivals.setVisible(true);

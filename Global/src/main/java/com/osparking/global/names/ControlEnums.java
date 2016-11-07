@@ -37,7 +37,7 @@ public class ControlEnums {
     public static OsPaLang osPaLang;
     
     public enum TopForms {
-        Vehicle, CarOwner, Affiliation, Building, Attendant, Settings
+        Vehicle, CarOwner, Affiliation, Building, Attendant, Settings, Arrivals
     }
    
     public enum OsPaLang{

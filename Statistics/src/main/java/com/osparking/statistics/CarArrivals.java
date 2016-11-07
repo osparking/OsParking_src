@@ -42,6 +42,8 @@ import com.osparking.global.names.ConvComboBoxItem;
 import static com.osparking.global.names.DB_Access.SEARCH_PERIOD;
 import static com.osparking.global.names.DB_Access.locale;
 import static com.osparking.global.Globals.*;
+import com.osparking.global.IMainGUI;
+import com.osparking.global.names.ControlEnums;
 import com.osparking.global.names.ControlEnums.BarOperation;
 import static com.osparking.global.names.ControlEnums.ButtonTypes.CLEAR_BTN;
 import static com.osparking.global.names.ControlEnums.ButtonTypes.CLOSE_BTN;
@@ -73,7 +75,6 @@ import static com.osparking.global.names.ControlEnums.LabelContent.VISIT_PURPOSE
 import static com.osparking.global.names.ControlEnums.LabelContent.VISIT_UNIT;
 import static com.osparking.global.names.ControlEnums.LabelContent.WHERE_TO_LABEL;
 import static com.osparking.global.names.ControlEnums.OsPaLang.KOREAN;
-import static com.osparking.global.names.ControlEnums.MenuITemTypes.META_KEY_LABEL;
 import static com.osparking.global.names.ControlEnums.TitleTypes.*;
 import static com.osparking.global.names.ControlEnums.TableTypes.ARRIVAL_TIME_HEADER;
 import static com.osparking.global.names.ControlEnums.TableTypes.CAR_TAG_HEADER;
@@ -147,6 +148,7 @@ import javax.swing.table.TableColumnModel;
  * @author Open Source Parking Inc.
  */
 public class CarArrivals extends javax.swing.JFrame {
+    IMainGUI mainGUI = null;
     BufferedImage originalImg = null;
     ListSelectionListener valueChangeListener = null; 
     
@@ -166,7 +168,8 @@ public class CarArrivals extends javax.swing.JFrame {
     /**
      * Creates new form CarArrivals
      */
-    public CarArrivals() {
+    public CarArrivals(IMainGUI mainForm) {
+        mainGUI = mainForm;
         initComponents();
         changedControls = new ChangedComponentClear(clearSearchPropertiesButton);
         changeTableColumnHoriAlignment();
@@ -230,6 +233,7 @@ public class CarArrivals extends javax.swing.JFrame {
         affiliationGroup = new javax.swing.ButtonGroup();
         saveFileChooser = new javax.swing.JFileChooser();
         wholeTop = new javax.swing.JPanel();
+        jButton1 = new javax.swing.JButton();
         wholeEast = new javax.swing.JPanel();
         wholePanel = new javax.swing.JPanel();
         titlePanel = new javax.swing.JPanel();
@@ -351,15 +355,27 @@ public class CarArrivals extends javax.swing.JFrame {
         wholeTop.setMinimumSize(new java.awt.Dimension(0, 40));
         wholeTop.setPreferredSize(new java.awt.Dimension(0, 40));
 
+        jButton1.setText("jButton1");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout wholeTopLayout = new javax.swing.GroupLayout(wholeTop);
         wholeTop.setLayout(wholeTopLayout);
         wholeTopLayout.setHorizontalGroup(
             wholeTopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, wholeTopLayout.createSequentialGroup()
+                .addContainerGap(825, Short.MAX_VALUE)
+                .addComponent(jButton1)
+                .addGap(104, 104, 104))
         );
         wholeTopLayout.setVerticalGroup(
             wholeTopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 40, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, wholeTopLayout.createSequentialGroup()
+                .addGap(0, 15, Short.MAX_VALUE)
+                .addComponent(jButton1))
         );
 
         getContentPane().add(wholeTop, java.awt.BorderLayout.NORTH);
@@ -1698,6 +1714,9 @@ public class CarArrivals extends javax.swing.JFrame {
 
     private void closeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_closeButtonActionPerformed
         Thread.currentThread().setPriority(Thread.MAX_PRIORITY);
+        if (mainGUI != null) {
+            mainGUI.getTopForms()[ControlEnums.TopForms.Arrivals.ordinal()] = null;
+        }
         this.dispose();
     }//GEN-LAST:event_closeButtonActionPerformed
     
@@ -2023,6 +2042,10 @@ public class CarArrivals extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_searchBuildingComboBoxItemStateChanged
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        loadArrivalsListTable(true);
+    }//GEN-LAST:event_jButton1ActionPerformed
+
     // <editor-fold defaultstate="collapsed" desc="-- Variables defined via GUI creation">
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.toedter.calendar.JDateChooser BeginDateChooser;
@@ -2082,6 +2105,7 @@ public class CarArrivals extends javax.swing.JFrame {
     private javax.swing.JPanel gatePanel;
     private javax.swing.JLabel imageLabel;
     private javax.swing.JPanel imagePanel;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel12;
@@ -2138,7 +2162,7 @@ public class CarArrivals extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
     // </editor-fold>
 
-    private void loadArrivalsListTable(boolean selectTop) {
+    public void loadArrivalsListTable(boolean selectTop) {
         DefaultTableModel model = (DefaultTableModel) arrivalsList.getModel();  
         
         // <editor-fold defaultstate="collapsed" desc="-- construct SQL statement">  
