@@ -588,6 +588,7 @@ public class AttListForm extends javax.swing.JFrame {
         isIDreqLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         isIDreqLabel.setText("*");
         isIDreqLabel.setToolTipText("");
+        isIDreqLabel.setEnabled(false);
         isIDreqLabel.setMaximumSize(new java.awt.Dimension(24, 26));
         isIDreqLabel.setMinimumSize(new java.awt.Dimension(24, 21));
         isIDreqLabel.setPreferredSize(new java.awt.Dimension(24, 26));
@@ -2017,15 +2018,21 @@ public class AttListForm extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 String tempEmail = emailAddrText.getText().trim();
+                
                 if (tempEmail.length() == 0) {
                     // when e-mail address isn't entered, check button is to be disabled
                     Email_usable = true;
                     checkEmailButton.setEnabled(false);
                 } else {
-                    if (Email_usable || !checkEmailButton.isEnabled()) {
-                        if (!(tempEmail.equals(usableEmail))) {
-                            Email_usable = false;
-                            usableEmail = null;
+                    if (formMode == CreateMode) {
+                        checkEmailButton.setEnabled(true);
+                    } else {
+                        TableModel attModel = usersTable.getModel();
+                        int row = usersTable.getSelectedRow();
+                        String oriEmail = attModel.getValueAt(row, 5).toString();
+                        if (tempEmail.equals(oriEmail)) {
+                            checkEmailButton.setEnabled(false);
+                        } else {
                             checkEmailButton.setEnabled(true);
                         }
                     }
@@ -2562,12 +2569,14 @@ public class AttListForm extends javax.swing.JFrame {
         this.formMode = formMode;
         switch (formMode) {
             case CreateMode:
+                isIDreqLabel.setEnabled(true);
                 modeString.setText(CREATE.getContent());
                 legendLLabel.setText(CREATE_COND.getContent());
                 changeUserPasswordEnabled(true);
                 setSearchEnabled(false);
                 break;
             case NormalMode:
+                isIDreqLabel.setEnabled(false);
                 modeString.setText(SEARCH.getContent());
                 legendLLabel.setText(DATA_COND.getContent());
                 if (isDeletableByMe(userIDText.getText())) {
@@ -2578,6 +2587,7 @@ public class AttListForm extends javax.swing.JFrame {
                 setSearchEnabled(true);
                 break;
             case UpdateMode:
+                isIDreqLabel.setEnabled(false);                
                 modeString.setText(MODIFY.getContent());
                 legendLLabel.setText(MODIFY_COND.getContent());
                 changeUserPasswordEnabled(true);
