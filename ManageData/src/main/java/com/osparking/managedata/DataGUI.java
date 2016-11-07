@@ -81,6 +81,8 @@ public class DataGUI extends javax.swing.JFrame {
         updateVehicleCount();
         this.settingsForm = settingsForm;
         progressBarMan = new ProgressBarMan(this);
+        
+        changeEnabled();
     }
 
     /**
@@ -526,7 +528,9 @@ public class DataGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_manager5ActionPerformed
 
     private void updateAttendantCount() {
-        attendantCount.setText(String.valueOf(getRecordCount(Users_osp, -1)));    
+        int count = getRecordCount(Users_osp, -1);
+        attendantCount.setText(String.valueOf(count));    
+        deleteAll_no_admin.setEnabled(count > 1); // Admin always exists
     }
     
     private void general100ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_general100ActionPerformed
@@ -961,17 +965,26 @@ public class DataGUI extends javax.swing.JFrame {
         if (getConfirmCode(msg) == JOptionPane.YES_OPTION) {
             deleteTable(this, Vehicles, null, VEHICLE.getContent());
             vehicleCount.setText(String.valueOf(getRecordCount(Vehicles, -1)));
+            updateVehicleCount();
         }
     }//GEN-LAST:event_deleteVehiclesActionPerformed
 
     private void updateBuildingCount() {
-        buildCount.setText(String.valueOf(getRecordCount(Building_table, -1)));    
-        unitCount.setText(String.valueOf(getRecordCount(Building_unit, -1)));    
+        int bdCount = getRecordCount(Building_table, -1);
+        int buCount = getRecordCount(Building_unit, -1);
+        
+        buildCount.setText(String.valueOf(bdCount));    
+        unitCount.setText(String.valueOf(buCount));   
+        updateDelAffiEnabled(-1, -1, bdCount, buCount);
     }
     
     private void updateAffiliCount() {
-        L1_Count.setText(String.valueOf(getRecordCount(L1_affiliation, -1)));    
-        L2_Count.setText(String.valueOf(getRecordCount(L2_affiliation, -1)));            
+        int l1Count = getRecordCount(L1_affiliation, -1);
+        int l2Count = getRecordCount(L2_affiliation, -1);
+        
+        L1_Count.setText(String.valueOf(l1Count));    
+        L2_Count.setText(String.valueOf(l2Count));            
+        updateDelAffiEnabled(l1Count, l2Count, -1, -1);
     }
     
     private void deleteAffiliationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteAffiliationActionPerformed
@@ -987,14 +1000,17 @@ public class DataGUI extends javax.swing.JFrame {
 
     private void deleteLoginsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteLoginsActionPerformed
         deleteTable(this, LoginRecord, null, LOG_IN.getContent());
+        deleteLogins.setEnabled(getRecordCount(LoginRecord, -1) > 0);
     }//GEN-LAST:event_deleteLoginsActionPerformed
 
     private void deleteSysRunActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteSysRunActionPerformed
         deleteTable(this, SystemRun, null, SYS_RUN.getContent());
+        deleteSysRun.setEnabled(getRecordCount(SystemRun, -1) > 0);        
     }//GEN-LAST:event_deleteSysRunActionPerformed
 
     private void deleteArrivalsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteArrivalsActionPerformed
         deleteTable(this, Car_arrival, null, ARRIVAL.getContent());
+        deleteArrivals.setEnabled(getRecordCount(Car_arrival, -1) > 0);        
     }//GEN-LAST:event_deleteArrivalsActionPerformed
 
     private int createUser(String idCore, int suffix, boolean isManager) {
@@ -1222,11 +1238,17 @@ public class DataGUI extends javax.swing.JFrame {
     }
 
     private void updateDriverCount() {
-        driverCount.setText(String.valueOf(getRecordCount(CarDriver, -1)));        
+        int count = getRecordCount(CarDriver, -1);
+        
+        driverCount.setText(String.valueOf(count));     
+        deleteDrivers.setEnabled(count > 0);        
     }
 
     private void updateVehicleCount() {
-        vehicleCount.setText(String.valueOf(getRecordCount(Vehicles, -1)));
+        int count = getRecordCount(Vehicles, -1);
+        
+        vehicleCount.setText(String.valueOf(count));
+        deleteVehicles.setEnabled(count > 0);        
     }
 
     /**
@@ -1392,6 +1414,47 @@ public class DataGUI extends javax.swing.JFrame {
         root.getGlassPane().setVisible(false);   
         setCursor(null);
     }    
+
+    private void changeEnabled() {
+        deleteLogins.setEnabled(getRecordCount(LoginRecord, -1) > 0);
+        deleteSysRun.setEnabled(getRecordCount(SystemRun, -1) > 0);        
+        deleteArrivals.setEnabled(getRecordCount(Car_arrival, -1) > 0);    
+    }
+    
+    private void updateDelAffiEnabled(int l1Count, int l2Count, int bdCount, int buCount) {
+        
+        boolean l1_exists = false;
+        if (l1Count == -1) {
+            l1_exists = getRecordCount(L1_affiliation, -1) > 0;
+        } else {
+            l1_exists = l1Count > 0;
+        }
+        
+        boolean l2_exists = false;
+        if (l2Count == -1) {
+            l2_exists = getRecordCount(L2_affiliation, -1) > 0;
+        } else {
+            l2_exists = l2Count > 0;
+        }
+        
+        boolean bd_exists = false;
+        if (bdCount == -1) {
+            bd_exists = getRecordCount(Building_table, -1) > 0;
+        } else {
+            bd_exists = bdCount > 0;
+        }
+        
+        boolean bu_exists = false;
+        if (buCount == -1) {
+            bu_exists = getRecordCount(Building_unit, -1) > 0;
+        } else {
+            bu_exists = buCount > 0;
+        }
+
+        deleteAffiliation.setEnabled(l1_exists || l2_exists ||
+                bd_exists || bu_exists);
+        
+    }
     
     public enum PhoneType {
         cellPhone,
