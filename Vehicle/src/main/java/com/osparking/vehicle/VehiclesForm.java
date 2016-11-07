@@ -319,6 +319,7 @@ public class VehiclesForm extends javax.swing.JFrame {
         RequiredPanel1 = new javax.swing.JPanel();
         legendLLabel = new javax.swing.JLabel();
         filler42 = new javax.swing.Box.Filler(new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 32767));
+        sym_1 = new javax.swing.JLabel();
         legendString = new javax.swing.JLabel();
         jSeparator2 = new javax.swing.JSeparator();
         detailPanel = new javax.swing.JPanel();
@@ -532,8 +533,17 @@ public class VehiclesForm extends javax.swing.JFrame {
         RequiredPanel1.add(legendLLabel);
         RequiredPanel1.add(filler42);
 
+        sym_1.setFont(new java.awt.Font(font_Type, font_Style, font_Size+3));
+        sym_1.setForeground(new java.awt.Color(255, 0, 0));
+        sym_1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        sym_1.setText("*");
+        sym_1.setMaximumSize(new java.awt.Dimension(16, 30));
+        sym_1.setMinimumSize(new java.awt.Dimension(16, 21));
+        sym_1.setPreferredSize(new java.awt.Dimension(16, 21));
+        RequiredPanel1.add(sym_1);
+
         legendString.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        legendString.setText("\u25CF " + REQUIRED1_LABEL.getContent());
+        legendString.setText(REQUIRED1_LABEL.getContent());
         legendString.setMaximumSize(new java.awt.Dimension(1100, 30));
         legendString.setMinimumSize(new java.awt.Dimension(155, 21));
         legendString.setPreferredSize(new java.awt.Dimension(155, 21));
@@ -884,9 +894,10 @@ public class VehiclesForm extends javax.swing.JFrame {
         gridBagConstraints.gridy = 22;
         detailPanel.add(creationTextField, gridBagConstraints);
 
-        isTagReqLabel.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        isTagReqLabel.setFont(new java.awt.Font(font_Type, font_Style, font_Size+3));
+        isTagReqLabel.setForeground(new java.awt.Color(255, 0, 0));
         isTagReqLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        isTagReqLabel.setText("\u25CF");
+        isTagReqLabel.setText("*");
         isTagReqLabel.setToolTipText("");
         isTagReqLabel.setMaximumSize(new java.awt.Dimension(24, 26));
         isTagReqLabel.setMinimumSize(new java.awt.Dimension(24, 21));
@@ -896,9 +907,10 @@ public class VehiclesForm extends javax.swing.JFrame {
         gridBagConstraints.gridy = 2;
         detailPanel.add(isTagReqLabel, gridBagConstraints);
 
-        isIDreqLabel1.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        isIDreqLabel1.setFont(new java.awt.Font(font_Type, font_Style, font_Size+3));
+        isIDreqLabel1.setForeground(new java.awt.Color(255, 0, 0));
         isIDreqLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        isIDreqLabel1.setText("\u25CF");
+        isIDreqLabel1.setText("*");
         isIDreqLabel1.setToolTipText("");
         isIDreqLabel1.setMaximumSize(new java.awt.Dimension(24, 26));
         isIDreqLabel1.setMinimumSize(new java.awt.Dimension(24, 21));
@@ -2101,6 +2113,7 @@ public class VehiclesForm extends javax.swing.JFrame {
     private javax.swing.JButton seeLicenseButton;
     private javax.swing.JButton selectDriverButton;
     private javax.swing.JPanel southPanel;
+    private javax.swing.JLabel sym_1;
     private javax.swing.JLabel tarTagLabel;
     private javax.swing.JPanel titleBelow;
     private javax.swing.JPanel titlePanelReal;
@@ -2444,10 +2457,15 @@ public class VehiclesForm extends javax.swing.JFrame {
             carTagTextField.setEditable(true);
             carTagTextField.setEnabled(true);
             isTagReqLabel.setEnabled(true);
+            isIDreqLabel1.setEnabled(true);
         } else {
             carTagTextField.setEditable(false);
             carTagTextField.setEnabled(false);
             isTagReqLabel.setEnabled(false);
+            isIDreqLabel1.setEnabled(false);
+        }
+        if (getFormMode() == FormMode.UpdateMode) {
+            isIDreqLabel1.setEnabled(true);
         }
         notiCheckBox.setEnabled(b);
         wholeCheckBox.setEnabled(b);

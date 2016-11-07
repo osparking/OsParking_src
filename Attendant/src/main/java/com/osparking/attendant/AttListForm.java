@@ -30,6 +30,8 @@ import static com.osparking.global.CommonData.normGUIwidth;
 import static com.osparking.global.CommonData.pointColor;
 import static com.osparking.global.CommonData.putCellCenter;
 import static com.osparking.global.CommonData.pwValidator;
+import static com.osparking.global.CommonData.requiredChar;
+import static com.osparking.global.CommonData.resizeComponentFor;
 import static com.osparking.global.CommonData.setKeyboardLanguage;
 import static com.osparking.global.CommonData.tableRowHeight;
 import static com.osparking.global.CommonData.tipColor;
@@ -109,8 +111,6 @@ import static com.osparking.global.names.ControlEnums.FormModeString.SEARCH;
 import com.osparking.global.names.ControlEnums.LabelContent;
 import static com.osparking.global.names.ControlEnums.LabelContent.*;
 import static com.osparking.global.names.ControlEnums.OsPaLang.KOREAN;
-import static com.osparking.global.names.ControlEnums.MenuITemTypes.META_KEY_LABEL;
-import static com.osparking.global.names.ControlEnums.OsPaLang.ENGLISH;
 import static com.osparking.global.names.ControlEnums.TableTypes.CELL_PHONE_HEADER;
 import static com.osparking.global.names.ControlEnums.TableTypes.CREATED_HEADER;
 import static com.osparking.global.names.ControlEnums.TableTypes.EMAIL_HEADER;
@@ -330,7 +330,10 @@ public class AttListForm extends javax.swing.JFrame {
         RequiredPanel1 = new javax.swing.JPanel();
         legendLLabel = new javax.swing.JLabel();
         filler42 = new javax.swing.Box.Filler(new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 32767));
-        legendString = new javax.swing.JLabel();
+        sym_1 = new javax.swing.JLabel();
+        legend_1 = new javax.swing.JLabel();
+        sym_2 = new javax.swing.JLabel();
+        legend_2 = new javax.swing.JLabel();
         jSeparator2 = new javax.swing.JSeparator();
         userDetailsPanel = new javax.swing.JPanel();
         userIDLabel = new javax.swing.JLabel();
@@ -520,12 +523,40 @@ public class AttListForm extends javax.swing.JFrame {
         RequiredPanel1.add(legendLLabel);
         RequiredPanel1.add(filler42);
 
-        legendString.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
-        legendString.setText("\u25CF " + REQUIRED1_LABEL.getContent() + ",  \uu25B2 " + REQUIRED2_LABEL.getContent());
-        legendString.setMaximumSize(new java.awt.Dimension(1100, 30));
-        legendString.setMinimumSize(new java.awt.Dimension(155, 21));
-        legendString.setPreferredSize(new java.awt.Dimension(155, 21));
-        RequiredPanel1.add(legendString);
+        sym_1.setFont(new java.awt.Font(font_Type, font_Style, font_Size+3));
+        sym_1.setForeground(new java.awt.Color(255, 0, 0));
+        sym_1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        sym_1.setText("*");
+        sym_1.setMaximumSize(new java.awt.Dimension(16, 30));
+        sym_1.setMinimumSize(new java.awt.Dimension(16, 21));
+        sym_1.setPreferredSize(new java.awt.Dimension(16, 21));
+        RequiredPanel1.add(sym_1);
+
+        legend_1.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        legend_1.setText(REQUIRED1_LABEL.getContent() + ", ");
+        legend_1.setMaximumSize(new java.awt.Dimension(80, 30));
+        legend_1.setMinimumSize(new java.awt.Dimension(40, 21));
+        legend_1.setName(""); // NOI18N
+        legend_1.setPreferredSize(new java.awt.Dimension(40, 21));
+        resizeComponentFor(legend_1, REQUIRED1_LABEL.getContent() + ", ");
+        RequiredPanel1.add(legend_1);
+
+        sym_2.setFont(new java.awt.Font(font_Type, font_Style, font_Size+3));
+        sym_2.setForeground(new java.awt.Color(0, 0, 255));
+        sym_2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        sym_2.setText("*");
+        sym_2.setMaximumSize(new java.awt.Dimension(16, 30));
+        sym_2.setMinimumSize(new java.awt.Dimension(16, 21));
+        sym_2.setPreferredSize(new java.awt.Dimension(16, 21));
+        RequiredPanel1.add(sym_2);
+
+        legend_2.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        legend_2.setText(REQUIRED2_LABEL.getContent());
+        legend_2.setMaximumSize(new java.awt.Dimension(320, 30));
+        legend_2.setMinimumSize(new java.awt.Dimension(50, 21));
+        legend_2.setName(""); // NOI18N
+        legend_2.setPreferredSize(new java.awt.Dimension(50, 21));
+        RequiredPanel1.add(legend_2);
 
         westPanel.add(RequiredPanel1);
 
@@ -552,9 +583,10 @@ public class AttListForm extends javax.swing.JFrame {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         userDetailsPanel.add(userIDLabel, gridBagConstraints);
 
-        isIDreqLabel.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        isIDreqLabel.setFont(new java.awt.Font(font_Type, font_Style, font_Size+3));
+        isIDreqLabel.setForeground(new java.awt.Color(255, 0, 0));
         isIDreqLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        isIDreqLabel.setText("\u25CF");
+        isIDreqLabel.setText("*");
         isIDreqLabel.setToolTipText("");
         isIDreqLabel.setMaximumSize(new java.awt.Dimension(24, 26));
         isIDreqLabel.setMinimumSize(new java.awt.Dimension(24, 21));
@@ -668,9 +700,10 @@ public class AttListForm extends javax.swing.JFrame {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         userDetailsPanel.add(nameLabel, gridBagConstraints);
 
-        nameReqLabel.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        nameReqLabel.setFont(new java.awt.Font(font_Type, font_Style, font_Size+3));
+        nameReqLabel.setForeground(new java.awt.Color(255, 0, 0));
         nameReqLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        nameReqLabel.setText("\u25CF");
+        nameReqLabel.setText("*");
         nameReqLabel.setMaximumSize(new java.awt.Dimension(24, 26));
         nameReqLabel.setMinimumSize(new java.awt.Dimension(24, 21));
         nameReqLabel.setPreferredSize(new java.awt.Dimension(24, 26));
@@ -715,9 +748,10 @@ public class AttListForm extends javax.swing.JFrame {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         userDetailsPanel.add(jLabel5, gridBagConstraints);
 
-        cellReqLabel.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        cellReqLabel.setFont(new java.awt.Font(font_Type, font_Style, font_Size+3));
+        cellReqLabel.setForeground(new java.awt.Color(0, 0, 255));
         cellReqLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        cellReqLabel.setText("\u25B2");
+        cellReqLabel.setText("*");
         cellReqLabel.setToolTipText(CELL_PHONE_TOOLTIP.getContent());
         cellReqLabel.setMaximumSize(new java.awt.Dimension(24, 26));
         cellReqLabel.setMinimumSize(new java.awt.Dimension(24, 21));
@@ -757,9 +791,10 @@ public class AttListForm extends javax.swing.JFrame {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         userDetailsPanel.add(jLabel6, gridBagConstraints);
 
-        phoneReqLabel.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        phoneReqLabel.setFont(new java.awt.Font(font_Type, font_Style, font_Size+3));
+        phoneReqLabel.setForeground(new java.awt.Color(0, 0, 255));
         phoneReqLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        phoneReqLabel.setText("\u25B2");
+        phoneReqLabel.setText("*");
         phoneReqLabel.setToolTipText(CELL_PHONE_TOOLTIP.getContent());
         phoneReqLabel.setMaximumSize(new java.awt.Dimension(24, 26));
         phoneReqLabel.setMinimumSize(new java.awt.Dimension(24, 21));
@@ -882,9 +917,10 @@ public class AttListForm extends javax.swing.JFrame {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         userDetailsPanel.add(newPW1Label, gridBagConstraints);
 
-        newPW1ReqLabel.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        newPW1ReqLabel.setFont(new java.awt.Font(font_Type, font_Style, font_Size+3));
+        newPW1ReqLabel.setForeground(new java.awt.Color(255, 0, 0));
         newPW1ReqLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        newPW1ReqLabel.setText("\u25CF");
+        newPW1ReqLabel.setText("*");
         newPW1ReqLabel.setToolTipText("");
         newPW1ReqLabel.setEnabled(false);
         newPW1ReqLabel.setMaximumSize(new java.awt.Dimension(24, 26));
@@ -948,9 +984,10 @@ public class AttListForm extends javax.swing.JFrame {
         gridBagConstraints.gridy = 20;
         userDetailsPanel.add(newPW2Label, gridBagConstraints);
 
-        newPW2ReqLabel.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        newPW2ReqLabel.setFont(new java.awt.Font(font_Type, font_Style, font_Size+3));
+        newPW2ReqLabel.setForeground(new java.awt.Color(255, 0, 0));
         newPW2ReqLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        newPW2ReqLabel.setText("\u25CF");
+        newPW2ReqLabel.setText("*");
         newPW2ReqLabel.setToolTipText("");
         newPW2ReqLabel.setEnabled(false);
         newPW2ReqLabel.setMaximumSize(new java.awt.Dimension(24, 26));
@@ -989,9 +1026,10 @@ public class AttListForm extends javax.swing.JFrame {
         gridBagConstraints.gridy = 22;
         userDetailsPanel.add(userPWLabel, gridBagConstraints);
 
-        userPWReqLabel.setFont(new java.awt.Font(font_Type, font_Style, font_Size));
+        userPWReqLabel.setFont(new java.awt.Font(font_Type, font_Style, font_Size+3));
+        userPWReqLabel.setForeground(new java.awt.Color(255, 0, 0));
         userPWReqLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        userPWReqLabel.setText("\u25CF");
+        userPWReqLabel.setText("*");
         userPWReqLabel.setEnabled(false);
         userPWReqLabel.setMaximumSize(new java.awt.Dimension(24, 26));
         userPWReqLabel.setMinimumSize(new java.awt.Dimension(24, 21));
@@ -1862,8 +1900,7 @@ public class AttListForm extends javax.swing.JFrame {
             // </editor-fold>    
 
             // <editor-fold defaultstate="collapsed" desc="-- Change labels of password fields">
-            newPW1ReqLabel.setText("\u25CF");
-            newPW2ReqLabel.setText("\u25CF");
+            changeRequiredSymbolVisibility(true);
             changePWLabel.setEnabled(false);
             getContentPane().repaint();
             // </editor-fold>   
@@ -1917,6 +1954,7 @@ public class AttListForm extends javax.swing.JFrame {
     private void changePWCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_changePWCheckBoxActionPerformed
         changeSaveButtonEnabled(changePWCheckBox, !changePWCheckBox.isSelected());
         ChangeNewPasswordEnabled(changePWCheckBox.isSelected());
+        changeRequiredSymbolVisibility(changePWCheckBox.isSelected());
     }//GEN-LAST:event_changePWCheckBoxActionPerformed
 
     private void checkEmailButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkEmailButtonActionPerformed
@@ -2214,8 +2252,7 @@ public class AttListForm extends javax.swing.JFrame {
     private void revokeCreationMode() {
         // Reset properties set for a new user as it was.
         // <editor-fold defaultstate="collapsed" desc="-- Reset Password LabelsText">
-        newPW1ReqLabel.setText("");
-        newPW2ReqLabel.setText("");
+        changeRequiredSymbolVisibility(false);
         changePWLabel.setEnabled(true);
         newPW1Label.setText(NEW_PW_LABLE.getContent());
         newPW2Label.setText(REPEAT_PW_LABEL.getContent());
@@ -2657,6 +2694,16 @@ public class AttListForm extends javax.swing.JFrame {
         }
     }
 
+    private void changeRequiredSymbolVisibility(boolean selected) {
+        if (selected) {
+            newPW1ReqLabel.setText("*");
+            newPW2ReqLabel.setText("*");
+        } else {
+            newPW1ReqLabel.setText("");
+            newPW2ReqLabel.setText("");
+        }
+    }
+
     private static class Ctrl_F_Action extends AbstractAction {
         JTextField searchText; 
         public Ctrl_F_Action(JTextField searchText) {
@@ -2742,7 +2789,8 @@ public class AttListForm extends javax.swing.JFrame {
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JLabel legendLLabel;
-    private javax.swing.JLabel legendString;
+    private javax.swing.JLabel legend_1;
+    private javax.swing.JLabel legend_2;
     private javax.swing.JPanel listTopPanel;
     private javax.swing.JCheckBox managerCheckBox;
     private javax.swing.JButton managerHelpButton;
@@ -2769,6 +2817,8 @@ public class AttListForm extends javax.swing.JFrame {
     private javax.swing.JTextField searchText;
     private javax.swing.JPanel southPanel;
     private javax.swing.JPanel spacePanel1;
+    private javax.swing.JLabel sym_1;
+    private javax.swing.JLabel sym_2;
     private javax.swing.JPanel titlePanel;
     private javax.swing.JPanel topInPanel2;
     private javax.swing.JPanel topPanel;

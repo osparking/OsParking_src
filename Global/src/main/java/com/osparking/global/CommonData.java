@@ -134,6 +134,7 @@ public class CommonData { // new Dimension(carTagWidth, 30)
     }
 
     static Toolkit toolkit = null;
+    public static String requiredChar = Character.toString((char)10035);
     
     public static void checkOdsExistance(String fnInfix, int dev_ID, String disc1, 
             String disc2, JTextField criticalField, File[] odsFile, TableModel model) 
