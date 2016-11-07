@@ -46,6 +46,7 @@ import static com.osparking.global.names.ControlEnums.ButtonTypes.USERS_BTN;
 import static com.osparking.global.names.ControlEnums.ButtonTypes.VEHICLES_BTN;
 import static com.osparking.global.names.ControlEnums.DialogMessages.ARTIF_ERROR_RATE;
 import static com.osparking.global.names.ControlEnums.DialogMessages.AUTO_LOGOUT;
+import static com.osparking.global.names.ControlEnums.DialogMessages.DEVICE_DISCONN_COUNT;
 import static com.osparking.global.names.ControlEnums.DialogMessages.FIRST_RUN_MSG;
 import static com.osparking.global.names.ControlEnums.DialogMessages.OSPARKING_STOPS;
 import static com.osparking.global.names.ControlEnums.DialogMessages.PASSING_DELAY_AVG;
@@ -1877,71 +1878,72 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
         }
     }//GEN-LAST:event_errDecButtonActionPerformed
 
+    static String indent4 = "    ";
     private void showStatisticsBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showStatisticsBtnActionPerformed
         // show camera sockConnStat statistics
+        if (getStatPan() != null) {
+            getStatPan().setVisible(true);
+            return;
+        } 
         StringBuffer perfDesc = new StringBuffer();
 
-        if (DEBUG) {
-            //<editor-fold desc="-- Show detailed performance statistics">
-            perfDesc.append(ARTIF_ERROR_RATE.getContent());
-            if (errorCheckBox.isSelected()) {
-                perfDesc.append(getPercentString(ERROR_RATE));
-            } else {
-                perfDesc.append("N/A");
+        //<editor-fold desc="-- Show detailed performance statistics">
+        perfDesc.append("[" + DEVICE_DISCONN_COUNT.getContent() + "]" + System.lineSeparator());
+        for (DeviceType type : DeviceType.values()) {
+            for (int gateNo = 1; gateNo <= gateCount; gateNo++ ) {
+                perfDesc.append(indent4);
+                perfDesc.append(type.getContent() + " #" + gateNo 
+                        + getSockConnStat()[type.ordinal()][gateNo].getPerformanceDescription());
             }
             perfDesc.append(System.lineSeparator());
-
-            for (DeviceType type : DeviceType.values()) {
-                for (int gateNo = 1; gateNo <= gateCount; gateNo++ ) {
-                    perfDesc.append("            ");
-                    perfDesc.append(type.getContent() + " #" + gateNo 
-                            + getSockConnStat()[type.ordinal()][gateNo].getPerformanceDescription());
-                }
-                perfDesc.append(System.lineSeparator());
-            }
-
-            StringBuffer gateBar = new StringBuffer();
-            for (DeviceType type : DeviceType.values()) {
-                for (int gateNo = 1; gateNo <= gateCount; gateNo++) {
-                    DeviceCommand deviceCommand = getPerfomStatistics()[type.ordinal()][gateNo];
-                    
-                    if (deviceCommand != null && deviceCommand.hasData()) 
-                    {
-                        gateBar.append("            ");
-                        gateBar.append(getDevType(type, (byte)gateNo) + "#" + gateNo + "- "
-                                + getPerfomStatistics()[type.ordinal()][gateNo].getPerformanceDescription());
-                    }
-                }   
-            }
-            perfDesc.append(gateBar);
-            //perfDesc.append(System.lineSeparator());        
-            perfDesc.append("            ");
-            //</editor-fold>
         }
+
+        StringBuffer gateBar = new StringBuffer();
+        for (DeviceType type : DeviceType.values()) {
+            for (int gateNo = 1; gateNo <= gateCount; gateNo++) {
+                DeviceCommand deviceCommand = getPerfomStatistics()[type.ordinal()][gateNo];
+
+                if (deviceCommand != null && deviceCommand.hasData()) 
+                {
+                    gateBar.append(indent4);
+                    gateBar.append(getDevType(type, (byte)gateNo) + "#" + gateNo + "- "
+                            + getPerfomStatistics()[type.ordinal()][gateNo].getPerformanceDescription());
+                }
+            }   
+        }
+        perfDesc.append(gateBar);
+        //</editor-fold>
         
         /**
          * Display major performance statistics.
          */
-        
         perfDesc.append("[" + PASSING_DELAY_AVG.getContent() + "(ms)]" + System.lineSeparator());
         
         fetchPassingDelay();
         for (int gateNo = 1; gateNo <= gateCount; gateNo++) {
-            perfDesc.append("            " + GATE_LABEL.getContent() + "#" + gateNo + " :");
+            perfDesc.append(indent4 + GATE_LABEL.getContent() + "#" + gateNo + " :");
             perfDesc.append(getPassingDelayStat()[gateNo].getPassingDelayAvg());
             perfDesc.append(System.lineSeparator());        
         }  
-        perfDesc.append("            ");
-        perfDesc.append(P_DELAY_DEF_1.getContent() + System.lineSeparator() 
-                + "    <" + P_DELAY_DEF_2.getContent() + "> ~" + System.lineSeparator());
-        perfDesc.append("    ");
-        perfDesc.append("<" + P_DELAY_DEF_3.getContent() + ">." + System.lineSeparator());
+        perfDesc.append(System.lineSeparator());        
         
-        addMessageLine(MessageTextArea, perfDesc.toString());        
-        MessageTextArea.setCaretPosition(MessageTextArea.getDocument().getLength() 
-                - perfDesc.length() - 2); // places the caret at the bottom of the display area        
+        perfDesc.append("* " + ARTIF_ERROR_RATE.getContent());
+        if (errorCheckBox.isSelected()) {
+            perfDesc.append(getPercentString(ERROR_RATE));
+        } else {
+            perfDesc.append("N/A(=0%)");
+        }
+        perfDesc.append(System.lineSeparator());
+        perfDesc.append(P_DELAY_DEF_1.getContent() + System.lineSeparator());
+        perfDesc.append(indent4 + "<" + P_DELAY_DEF_2.getContent() + "> ~ ");
+        perfDesc.append("<" + P_DELAY_DEF_3.getContent() + ">" + System.lineSeparator());
+        
+        setStatPan(new DisplayStatFrame(perfDesc.toString(), this));
+        getStatPan().setVisible(true);
     }//GEN-LAST:event_showStatisticsBtnActionPerformed
 
+    private DisplayStatFrame statPan = null;
+    
     private void LogoutUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LogoutUserActionPerformed
         processLogOut(false);
     }//GEN-LAST:event_LogoutUserActionPerformed
@@ -2295,6 +2297,20 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
         }
         
         return topForm;
+    }
+
+    /**
+     * @return the statPan
+     */
+    public DisplayStatFrame getStatPan() {
+        return statPan;
+    }
+
+    /**
+     * @param statPan the statPan to set
+     */
+    public void setStatPan(DisplayStatFrame statPan) {
+        this.statPan = statPan;
     }
 
     class ManageArrivalList extends Thread {

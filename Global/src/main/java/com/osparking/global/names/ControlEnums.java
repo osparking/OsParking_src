@@ -203,6 +203,7 @@ public class ControlEnums {
         REBOOT_POPUP("자동 종료 안내", "Reboot System"), 
         SELECT_BTN("선택(T)", "Select"),        
         BOTTOM_PANEL_TITLE("하단", "BOTTOM"),
+        STAT_FORM_TITLE("서버 가동 성능 통계", "Server Run Performance Statistics"),
         DisallowedTitle("임시 불허 차량", "Temporarily Disallowed Car");
         
         TitleTypes(String korean, String english) {
@@ -765,6 +766,7 @@ public class ControlEnums {
         NAME_ADMIN("관리자", "Administrator"),
         NAME_MANAGER("운영자", "Operator"),
         NAME_GUEST("김손님", "Guest Kim"),
+        DEVICE_DISCONN_COUNT("장치별 소켓 단절 건수", "Socket Disconnection Count"),
         PASSING_DELAY_AVG("통과 지연 평균 : ", "Passing Delay Average"),
         ARTIF_ERROR_RATE("인공 오류율 : ", "Artificial error rate: "),
         CONN_TRIAL("연결시도 장치 : ", "Device to connect : "),
