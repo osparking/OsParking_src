@@ -118,6 +118,7 @@ import static com.osparking.global.names.ControlEnums.LabelContent.FLOWING_LABEL
 import static com.osparking.global.names.ControlEnums.LabelContent.GATE_BAR_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.GATE_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.GATE_NAME_LABEL;
+import static com.osparking.global.names.ControlEnums.LabelContent.GATE_NAME_LABEL2;
 import static com.osparking.global.names.ControlEnums.LabelContent.GATE_NUM_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.IMG_KEEP_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.IP_ADDR_ERROR_1;
@@ -127,7 +128,7 @@ import static com.osparking.global.names.ControlEnums.LabelContent.LANGUAGE_HELP
 import static com.osparking.global.names.ControlEnums.LabelContent.LANGUAGE_HELP_2;
 import static com.osparking.global.names.ControlEnums.LabelContent.LANGUAGE_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.LEVEL_LABEL;
-import static com.osparking.global.names.ControlEnums.LabelContent.LIMIT_DESCRIPTION;
+import static com.osparking.global.names.ControlEnums.LabelContent.LIMIT_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.LOGGIND_DIALOG_1;
 import static com.osparking.global.names.ControlEnums.LabelContent.LOGGIND_DIALOG_2;
 import static com.osparking.global.names.ControlEnums.LabelContent.LOGGIND_DIALOG_3;
@@ -3399,18 +3400,22 @@ public class Settings_System extends javax.swing.JFrame implements IDataMan {
     }//GEN-LAST:event_GateBar4_connTypeCBoxItemStateChanged
 
     private void TextFieldGateName2KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TextFieldGateName2KeyReleased
+        checkGateNameLength(2, evt);        
         setButtonEnabled_If_GateNameChanged(2);
     }//GEN-LAST:event_TextFieldGateName2KeyReleased
 
     private void TextFieldGateName1KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TextFieldGateName1KeyReleased
+        checkGateNameLength(1, evt);
         setButtonEnabled_If_GateNameChanged(1);
     }//GEN-LAST:event_TextFieldGateName1KeyReleased
 
     private void TextFieldGateName3KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TextFieldGateName3KeyReleased
+        checkGateNameLength(3, evt);        
         setButtonEnabled_If_GateNameChanged(3);
     }//GEN-LAST:event_TextFieldGateName3KeyReleased
 
     private void TextFieldGateName4KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TextFieldGateName4KeyReleased
+        checkGateNameLength(4, evt);        
         setButtonEnabled_If_GateNameChanged(4);
     }//GEN-LAST:event_TextFieldGateName4KeyReleased
 
@@ -3592,7 +3597,7 @@ public class Settings_System extends javax.swing.JFrame implements IDataMan {
         {
             getToolkit().beep();
             JOptionPane.showConfirmDialog(this, LOT_NAME_LABEL.getContent() + " " +
-                    LIMIT_DESCRIPTION.getContent() + " : " + PARKING_LOT_NAME_LENGTH_MAX,
+                    LIMIT_LABEL.getContent() + " : " + PARKING_LOT_NAME_LENGTH_MAX,
                     ERROR_DIALOGTITLE.getContent(), JOptionPane.PLAIN_MESSAGE, WARNING_MESSAGE);            
             evt.consume();
         }
@@ -4801,6 +4806,23 @@ public class Settings_System extends javax.swing.JFrame implements IDataMan {
                 break;
         }
         return subType;
+    }
+
+    private void checkGateNameLength(int gateNo, KeyEvent evt) {
+        JTextField gateNameField 
+                = (JTextField) getComponentByName("TextFieldGateName" + gateNo);
+        String gateName = gateNameField.getText().trim();
+        
+        if (gateName.length() > GATE_NAME_LENGTH_MAX) {
+            gateNameField.setText(gateNames[gateNo]);
+            getToolkit().beep();
+            JOptionPane.showConfirmDialog(this, GATE_NAME_LABEL2.getContent() + " " 
+                    + System.lineSeparator() + System.lineSeparator() 
+                    + LIMIT_LABEL.getContent() + GATE_NAME_LENGTH_MAX,
+                    ERROR_DIALOGTITLE.getContent(), 
+                    JOptionPane.PLAIN_MESSAGE, WARNING_MESSAGE);
+            evt.consume();
+        }
     }
 
     private static class COM_ID_Usage {

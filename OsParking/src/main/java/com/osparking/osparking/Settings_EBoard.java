@@ -57,7 +57,7 @@ import static com.osparking.global.names.ControlEnums.LabelContent.FLOW2L_CONF_0
 import static com.osparking.global.names.ControlEnums.LabelContent.FLOW2L_CONF_1;
 import static com.osparking.global.names.ControlEnums.LabelContent.FLOW2L_CONF_2;
 import static com.osparking.global.names.ControlEnums.LabelContent.FONT_LABEL;
-import static com.osparking.global.names.ControlEnums.LabelContent.LIMIT_DESCRIPTION;
+import static com.osparking.global.names.ControlEnums.LabelContent.LIMIT_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.MESSAGE_LABEL;
 import static com.osparking.global.names.ControlEnums.LabelContent.PANEL_LABEL;
 import static com.osparking.global.names.ControlEnums.OsPaLang.KOREAN;
@@ -1866,7 +1866,7 @@ public class Settings_EBoard extends javax.swing.JFrame {
         {
             getToolkit().beep();
             JOptionPane.showConfirmDialog(this, MESSAGE_LABEL.getContent() + " " +
-                    LIMIT_DESCRIPTION.getContent() + " : " + VERBATIM_CONTENT_LENGTH_MAX,
+                    LIMIT_LABEL.getContent() + " : " + VERBATIM_CONTENT_LENGTH_MAX,
                     ERROR_DIALOGTITLE.getContent(), JOptionPane.PLAIN_MESSAGE, WARNING_MESSAGE);            
             evt.consume();
         }
