@@ -1370,12 +1370,6 @@ public class ManageDrivers extends javax.swing.JFrame {
     }//GEN-LAST:event_modiSave_ButtonActionPerformed
 
     private void deleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteButtonActionPerformed
-        int rowV = driverTable.getSelectedRow();
-        int rowM = -1;
-        if (rowV != -1)
-            rowM = driverTable.convertRowIndexToModel(rowV);
-        int colV = driverTable.getSelectedColumn();        
-
         // delete a driver's record currently selected 
         int[] deleteIndice = driverTable.getSelectedRows();
         if (deleteIndice.length == 0)
@@ -1391,18 +1385,25 @@ public class ManageDrivers extends javax.swing.JFrame {
         int count = getRecordCount(OsPaTable.Vehicles, CD_SEQ_NO);
 
         if (deleteIndice.length == 1) {
-            String dialogMessage = OWNER_DEL_CONF_1.getContent() + System.getProperty("line.separator") +
-                            OWNER_DEL_CONF_2.getContent() + driverName + OWNER_DEL_CONF_3.getContent() + 
-                    count + OWNER_DEL_CONF_4.getContent();
+            String dialogMessage = OWNER_DEL_CONF_1.getContent() 
+                    + System.getProperty("line.separator") 
+                    + System.getProperty("line.separator") 
+                    + OWNER_DEL_CONF_2.getContent() + driverName 
+                    + OWNER_DEL_CONF_3.getContent() + count 
+                    + OWNER_DEL_CONF_4.getContent();
 
             result = JOptionPane.showConfirmDialog(this, dialogMessage,
                         DELETE_DIALOGTITLE.getContent(), 
                         JOptionPane.YES_NO_OPTION);
         } else {
-            String dialogMessage = M_OWNER_DEL_CONF_1.getContent() + deleteIndice.length + 
-                    M_OWNER_DEL_CONF_2.getContent() + System.getProperty("line.separator") + 
-                    M_OWNER_DEL_CONF_3.getContent() + driverName + 
-                    M_OWNER_DEL_CONF_4.getContent() + count + M_OWNER_DEL_CONF_5.getContent();
+            String dialogMessage = M_OWNER_DEL_CONF_1.getContent() 
+                    + deleteIndice.length 
+                    + M_OWNER_DEL_CONF_2.getContent() 
+                    + System.getProperty("line.separator") 
+                    + System.getProperty("line.separator") 
+                    + M_OWNER_DEL_CONF_3.getContent() + driverName 
+                    + M_OWNER_DEL_CONF_4.getContent() + count 
+                    + M_OWNER_DEL_CONF_5.getContent();
 
             result = JOptionPane.showConfirmDialog(this, dialogMessage, 
                         DELETE_DIALOGTITLE.getContent(), 

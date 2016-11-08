@@ -59,6 +59,7 @@ import static com.osparking.global.names.ControlEnums.DialogMessages.DUPLICATE_L
 import static com.osparking.global.names.ControlEnums.DialogMessages.EMPTY_HIGH_AFFILI;
 import static com.osparking.global.names.ControlEnums.DialogMessages.EMPTY_LOW_AFFILI;
 import static com.osparking.global.names.ControlEnums.DialogMessages.LEVEL2_NAME_DIALOG;
+import static com.osparking.global.names.ControlEnums.DialogMessages.OWNER_RECORD_DIALOG;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.DELETE_DIALOGTITLE;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.DELETE_RESULT_DIALOGTITLE;
 import static com.osparking.global.names.ControlEnums.DialogTitleTypes.ERROR_DIALOGTITLE;
@@ -93,6 +94,7 @@ import static com.osparking.global.names.ControlEnums.TableTypes.ORDER_HEADER;
 import static com.osparking.global.names.ControlEnums.TitleTypes.AFFILIATION_FRAME_TITLE;
 import static com.osparking.global.names.ControlEnums.ToolTipContent.DRIVER_ODS_UPLOAD_SAMPLE_DOWNLOAD;
 import static com.osparking.global.names.ControlEnums.ToolTipContent.INSERT_TOOLTIP;
+import com.osparking.global.names.DB_Access;
 import static com.osparking.global.names.DB_Access.readSettings;
 import static com.osparking.global.names.JDBCMySQL.getConnection;
 import com.osparking.global.names.OSP_enums.ODS_TYPE;
@@ -1069,16 +1071,26 @@ public class Affiliations extends javax.swing.JFrame {
             
             if (currLevel == 1) {
                 int count = getL2RecordCount(key_No);
+                int ownerCnt = getL1CarOwnerCount(key_No);
 
                 message = AFFILI_DEL_L1.getContent() + 
                         System.getProperty("line.separator") + 
+                        System.getProperty("line.separator") + 
                         AFFILI_DIAG_L2.getContent() + affiliation + 
                         System.getProperty("line.separator") + 
-                        AFFILI_DIAG_L3.getContent() + count;
-            } else {
-                message = AFFILI_DEL_L2.getContent() +
+                        AFFILI_DIAG_L3.getContent() + count +
                         System.getProperty("line.separator") + 
-                        LEVEL2_NAME_DIALOG.getContent() + " : " + affiliation;                
+                        OWNER_RECORD_DIALOG.getContent() + ownerCnt;                
+            } else {
+                int ownerCnt = DB_Access.getRecordCount("cardriver", "L2_NO", 
+                        Integer.toString(key_No));
+                
+                message = AFFILI_DEL_L2.getContent() + 
+                        System.getProperty("line.separator") + 
+                        System.getProperty("line.separator") + 
+                        LEVEL2_NAME_DIALOG.getContent() + " : " + affiliation +              
+                        System.getProperty("line.separator") + 
+                        OWNER_RECORD_DIALOG.getContent() + ownerCnt;                
             }
             
             int result = JOptionPane.showConfirmDialog(this, message,
@@ -1798,5 +1810,31 @@ public class Affiliations extends javax.swing.JFrame {
     private void enableTables(boolean enable) {
         lev1_Table.setEnabled(enable);
         lev2_Table.setEnabled(enable);
+    }
+
+    private int getL1CarOwnerCount(int L1_no) {
+        int result = -1;
+        
+        Connection conn = null;
+        PreparedStatement pstmt = null;    
+        ResultSet rs = null;
+        String excepMsg = "getting driver count of L1 record that belong to L1 no: " + L1_no;
+        String sql = "Select count(*) From cardriver " 
+                + "Where cardriver.L2_NO IN " 
+                + "(Select L2_NO From l2_affiliation Where L1_NO = ?)";
+        
+        try {
+            conn = getConnection();
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, L1_no);
+            rs = pstmt.executeQuery();
+            rs.next();
+            result = rs.getInt(1);
+        } catch(Exception ex) {
+            logParkingException(Level.SEVERE, ex, excepMsg);
+        } finally {
+            closeDBstuff(conn, pstmt, rs, excepMsg);
+        }
+        return result;   
     }
 }

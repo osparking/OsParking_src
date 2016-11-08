@@ -69,6 +69,7 @@ import com.osparking.global.names.ControlEnums.DialogMessages;
 import static com.osparking.global.names.ControlEnums.DialogMessages.AFFILI_SAVE_ODS_FAIL_DIALOG;
 import static com.osparking.global.names.ControlEnums.DialogMessages.DUPLICATE_BUILDING;
 import static com.osparking.global.names.ControlEnums.DialogMessages.DUPLICATE_UNIT;
+import static com.osparking.global.names.ControlEnums.DialogMessages.OWNER_RECORD_DIALOG;
 import static com.osparking.global.names.ControlEnums.DialogMsg.NON_NUMERIC_DATA;
 import static com.osparking.global.names.ControlEnums.DialogMsg.UNIT_DEL_1;
 import static com.osparking.global.names.ControlEnums.DialogMsg.UNIT_DEL_2;
@@ -108,6 +109,7 @@ import static com.osparking.global.names.ControlEnums.TableTypes.ROOM_HEADER;
 import static com.osparking.global.names.ControlEnums.TitleTypes.BUILDING_FRAME_TITLE;
 import static com.osparking.global.names.ControlEnums.ToolTipContent.DRIVER_ODS_UPLOAD_SAMPLE_DOWNLOAD;
 import static com.osparking.global.names.ControlEnums.ToolTipContent.NUMBER_FORMAT_ERROR_MSG;
+import com.osparking.global.names.DB_Access;
 import static com.osparking.global.names.DB_Access.readSettings;
 import static com.osparking.global.names.JDBCMySQL.getConnection;
 import com.osparking.global.names.OSP_enums.ODS_TYPE;
@@ -1168,19 +1170,34 @@ public class Buildings extends javax.swing.JFrame {
         } else {            
             int modal_Index = table.convertRowIndexToModel(viewIndex);
             int bu_No = (Integer)table.getModel().getValueAt(modal_Index, 1);
-            int bu_seq_no = (Integer)table.getModel().getValueAt(modal_Index, 2);
-            
+            /**
+             * seq_no is of building or unit depending on delete target.
+             */
+            int seq_no = (Integer)table.getModel().getValueAt(modal_Index, 2);
             String message = null;
             
             if (currLevel == 1) {
-                int count = getUnitCount(bu_seq_no);
-
-                message = BLDG_DELETE_L1.getContent() + System.getProperty("line.separator") 
-                        + BLDG_DIAG_L2.getContent() + bu_No + BLDG_DELETE_L3.getContent() 
-                        + count + ")";
+                int count = getUnitCount(seq_no);
+                int ownerCnt = getBdCarOwnerCount(seq_no);
+                
+                message = BLDG_DELETE_L1.getContent() 
+                        + System.getProperty("line.separator") 
+                        + System.getProperty("line.separator") 
+                        + BLDG_DIAG_L21.getContent() + bu_No
+                        + System.getProperty("line.separator") 
+                        + BLDG_DELETE_L3.getContent() + count 
+                        + System.getProperty("line.separator") 
+                        + OWNER_RECORD_DIALOG.getContent() + ownerCnt;
             } else {
-                message = UNIT_DEL_1.getContent() + System.getProperty("line.separator") 
-                        + UNIT_DEL_2.getContent() + bu_No;            
+                int ownerCnt = DB_Access.getRecordCount("cardriver", "unit_seq_no", 
+                        Integer.toString(seq_no));
+                
+                message = UNIT_DEL_1.getContent() 
+                        + System.getProperty("line.separator") 
+                        + System.getProperty("line.separator") 
+                        + UNIT_DEL_2.getContent() + bu_No
+                        + System.getProperty("line.separator") 
+                        + OWNER_RECORD_DIALOG.getContent() + ownerCnt;
             }
             
             int result = JOptionPane.showConfirmDialog(this, message,
@@ -1192,14 +1209,14 @@ public class Buildings extends javax.swing.JFrame {
                 String sql = null;
                 
                 if (currLevel == 1) {
-                    excepMsg = "(while deleting building No: " + bu_No + ")";
+                    excepMsg = "(failed deletion of  Bldg No: " + bu_No + ")";
                     sql = "Delete From BUILDING_TABLE Where SEQ_NO = ?";
                 } else {
                     excepMsg = "(failed deletion of unit no: " + bu_No + ")";
                     sql = "Delete From BUILDING_UNIT Where SEQ_NO = ?";
                 }
                 
-                result = deleteBldgUnit(excepMsg, sql, bu_seq_no);
+                result = deleteBldgUnit(excepMsg, sql, seq_no);
 
                 if (result == 1) {
                     if (currLevel == 1) {
@@ -1899,5 +1916,32 @@ public class Buildings extends javax.swing.JFrame {
     private void enableTables(boolean enable) {
         BuildingTable.setEnabled(enable);
         UnitTable.setEnabled(enable);
+    }
+
+    private int getBdCarOwnerCount(int seq_no) {
+        int result = -1;
+        
+        Connection conn = null;
+        PreparedStatement pstmt = null;    
+        ResultSet rs = null;
+        String excepMsg = 
+                "getting driver count of Bldg record that belong to seq no: " + seq_no;
+        String sql = "Select count(*) From cardriver CO " 
+                + "Where CO.UNIT_SEQ_NO IN (Select SEQ_NO "
+                + "From building_unit UT Where UT.BLDG_SEQ_NO = ?);";
+        
+        try {
+            conn = getConnection();
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, seq_no);
+            rs = pstmt.executeQuery();
+            rs.next();
+            result = rs.getInt(1);
+        } catch(Exception ex) {
+            logParkingException(Level.SEVERE, ex, excepMsg);
+        } finally {
+            closeDBstuff(conn, pstmt, rs, excepMsg);
+        }
+        return result;  
     }
 }
