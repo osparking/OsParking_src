@@ -106,7 +106,7 @@ import com.osparking.global.names.OdsFileOnly;
 import static com.osparking.vehicle.CommonData.CABH_NORM;
 import static com.osparking.vehicle.CommonData.CABW_NORM;
 import static com.osparking.vehicle.CommonData.CABW_WIDE;
-import static com.osparking.vehicle.driver.ManageDrivers.mayResolveComplex;
+import static com.osparking.vehicle.driver.CarOwners.mayResolveComplex;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;

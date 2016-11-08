@@ -857,7 +857,7 @@ public class ODSReader {
         }
     }
 
-    void readDriverODS(Sheet sheet, ManageDrivers parentForm) {
+    void readDriverODS(Sheet sheet, CarOwners parentForm) {
         int driverCount = 0, driverReject = 0;
         int duplicateCount = 0;
         int numBlankRow = 0;

@@ -67,7 +67,7 @@ import static com.osparking.global.names.OSP_enums.DriverCol.BuildingNo;
 import static com.osparking.global.names.OSP_enums.DriverCol.UnitNo;
 import com.osparking.global.names.OSP_enums.PermissionType;
 import com.osparking.global.names.PComboBox;
-import static com.osparking.vehicle.driver.ManageDrivers.mayPropagateBackward;
+import static com.osparking.vehicle.driver.CarOwners.mayPropagateBackward;
 import java.awt.Dimension;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;

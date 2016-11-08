@@ -179,7 +179,7 @@ import com.osparking.statistics.CarArrivals;
 import com.osparking.vehicle.Affiliations;
 import com.osparking.vehicle.Buildings;
 import com.osparking.vehicle.VehiclesForm;
-import com.osparking.vehicle.driver.ManageDrivers;
+import com.osparking.vehicle.driver.CarOwners;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
@@ -2274,7 +2274,7 @@ public final class ControlGUI extends javax.swing.JFrame implements ActionListen
                 break;
                 
             case CarOwner:
-                topForm = new ManageDrivers(this, null);
+                topForm = new CarOwners(this, null);
                 break;
                 
             case Affiliation:

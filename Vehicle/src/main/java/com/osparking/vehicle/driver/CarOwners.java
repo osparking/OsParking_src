@@ -189,7 +189,7 @@ import org.jopendocument.dom.spreadsheet.SpreadSheet;
  *
  * @author Open Source Parking Inc.
  */
-public class ManageDrivers extends javax.swing.JFrame {
+public class CarOwners extends javax.swing.JFrame {
 
     private FormMode formMode = FormMode.NormalMode; 
     private DriverSelection driverSelectionForm = null; 
@@ -221,7 +221,7 @@ public class ManageDrivers extends javax.swing.JFrame {
     /**
      * Creates new form ManageDrivers
      */
-    public ManageDrivers(IMainGUI mainForm, DriverSelection driverSelectionForm) {
+    public CarOwners(IMainGUI mainForm, DriverSelection driverSelectionForm) {
         initComponents();
         this.mainForm = mainForm;
         if (mainForm == null) {
@@ -678,7 +678,6 @@ public class ManageDrivers extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle(DRIVER_LIST_FRAME_TITLE.getContent());
         setMinimumSize(new Dimension(normGUIwidth + 80, -5 * tableRowHeight + normGUIheight + formHight_Tune));
-        setPreferredSize(new Dimension(normGUIwidth + 80, normGUIheight+79));
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 formWindowClosing(evt);
@@ -1991,14 +1990,15 @@ public class ManageDrivers extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(ManageDrivers.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(CarOwners.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(ManageDrivers.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(CarOwners.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(ManageDrivers.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(CarOwners.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(ManageDrivers.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(CarOwners.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         initializeLoggers();
@@ -2008,7 +2008,7 @@ public class ManageDrivers extends javax.swing.JFrame {
             /* Create and display the form */
             java.awt.EventQueue.invokeLater(new Runnable() {
                 public void run() {
-                    ManageDrivers mainForm = new ManageDrivers(null, null);
+                    CarOwners mainForm = new CarOwners(null, null);
                     mainForm.setLocation(0, 0);
                     mainForm.setVisible(true);
                 }

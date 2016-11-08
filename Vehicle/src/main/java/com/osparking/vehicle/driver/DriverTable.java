@@ -23,7 +23,7 @@ import static com.osparking.global.Globals.DEBUG;
 import static com.osparking.global.Globals.getPrompter;
 import static com.osparking.global.Globals.logParkingException;
 import static com.osparking.global.Globals.refreshComboBox;
-import static com.osparking.vehicle.driver.ManageDrivers.driverTable;
+import static com.osparking.vehicle.driver.CarOwners.driverTable;
 import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
@@ -68,9 +68,9 @@ public class DriverTable extends JTable {
      */
     static int updateRow = -1;    
     
-    ManageDrivers parent = null;
+    CarOwners parent = null;
     
-    public DriverTable(Object[][] rowData, Object[] columnNames, ManageDrivers parent) {
+    public DriverTable(Object[][] rowData, Object[] columnNames, CarOwners parent) {
         this.parent = parent;
         setModel(new DriverTableModel(rowData, columnNames, parent));
         
@@ -154,11 +154,11 @@ public class DriverTable extends JTable {
         /** 
          * row index translation for the table model
          */
-        int modRow = ManageDrivers.driverTable.convertRowIndexToModel(row);
+        int modRow = CarOwners.driverTable.convertRowIndexToModel(row);
         /** 
          * column index translation for the table model
          */        
-        int modCol = ManageDrivers.driverTable.convertColumnIndexToModel(column);
+        int modCol = CarOwners.driverTable.convertColumnIndexToModel(column);
         
         /**
          * If a driver is being created or updated and the row index differs from it
@@ -217,9 +217,9 @@ public class DriverTable extends JTable {
             cellEditor = new DefaultCellEditor(comboBox);
             //</editor-fold>
         } else if (modCol == DriverCol.AffiliationL1.getNumVal()) {
-            cellEditor = new DefaultCellEditor(ManageDrivers.affiliationL1CBox); 
+            cellEditor = new DefaultCellEditor(CarOwners.affiliationL1CBox); 
         } else if (modCol == DriverCol.BuildingNo.getNumVal()) {
-            cellEditor = new DefaultCellEditor(ManageDrivers.buildingCBox); 
+            cellEditor = new DefaultCellEditor(CarOwners.buildingCBox); 
         } else if (modCol == DriverCol.DriverName.getNumVal()) {
             try {
                 InputContext inCtx  =  this.getInputContext();
@@ -274,7 +274,7 @@ public class DriverTable extends JTable {
         return cellEditor;
     }
 
-    public static void finalizeDataEntry(ManageDrivers parent){
+    public static void finalizeDataEntry(CarOwners parent){
       
         if (driverTable.getCellEditor() != null) {
             driverTable.getCellEditor().stopCellEditing();

@@ -23,13 +23,13 @@ import javax.swing.table.DefaultTableModel;
  * @author Open Source Parking Inc.
  */
 class DriverTableModel extends DefaultTableModel {
-    private ManageDrivers parent = null;
+    private CarOwners parent = null;
 
     public DriverTableModel() {
     }
     
     public DriverTableModel(Object[][] rowData, Object[] columnNames, 
-            ManageDrivers parent) {
+            CarOwners parent) {
         super(rowData, columnNames);
         this.parent = parent;        
     }
@@ -65,14 +65,14 @@ class DriverTableModel extends DefaultTableModel {
     /**
      * @return the parent
      */
-    public ManageDrivers getParent() {
+    public CarOwners getParent() {
         return parent;
     }
 
     /**
      * @param parent the parent to set
      */
-    public void setParent(ManageDrivers parent) {
+    public void setParent(CarOwners parent) {
         this.parent = parent;
     }
 }

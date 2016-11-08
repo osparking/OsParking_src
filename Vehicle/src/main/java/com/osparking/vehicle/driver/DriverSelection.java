@@ -496,7 +496,7 @@ public class DriverSelection extends javax.swing.JFrame {
         if (loginID != null ||
                 loginID == null && findLoginIdentity() != null) 
         {
-            ManageDrivers driverManageForm = new ManageDrivers(mainForm, this);
+            CarOwners driverManageForm = new CarOwners(mainForm, this);
             driverManageForm.setVisible(true);
         }
     }//GEN-LAST:event_manageDriversButtonActionPerformed
@@ -516,7 +516,7 @@ public class DriverSelection extends javax.swing.JFrame {
     private void manageDriversButtonKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_manageDriversButtonKeyReleased
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) 
         {
-            ManageDrivers driverManageForm = new ManageDrivers(mainForm, this);
+            CarOwners driverManageForm = new CarOwners(mainForm, this);
             driverManageForm.setVisible(true);
         }
     }//GEN-LAST:event_manageDriversButtonKeyReleased
