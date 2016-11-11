@@ -94,6 +94,12 @@ public class ImageTransmissionTask implements Runnable {
                 if (cameraGUI.getReader().getManagerSocket() != null) {
                     cameraGUI.getReader().disconnectSocket(e, "while sending car image"); 
                 }
+            } catch (Exception enull) {
+                if (cameraGUI.getReader().getManagerSocket() == null) {
+                    System.out.println("camera socket is null");
+                } else {
+                    System.out.println("camera socke is not null but other exception");
+                }
             }
         }
     }
