@@ -1,6 +1,6 @@
 #OsParking- Korean, English, 3 real devices
 
-OsParking(ff) supports both English & Korean GUI, simulator and real hardware idevice support fo 3 kinds of devices(camera, E-board and gate bari), needs OsParking-DB(another OsParking repository)
+OsParking(ff) supports both English & Korean GUI, simulators and real hardware idevices of 3 different types - camera, E-board and gate barrier). Before you are able to compile this OsParking source resository you need to clone OsParking-DB(another OsParking repository) and install it to your computer as instructed in the DB repo'
 
 OsParking (\ˈäz...\ˈ)pronounced 'Oz'Parking, as in The Wizard of Oz) is an Open Source Parking Lot Management Software. In an extended sense, it is a term which describes a simulation package that includes OsParking(manager) and three device simulators(Camera, E-Board, GateBar).
 
