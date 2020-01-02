@@ -24,7 +24,8 @@ Softwares Needed to Run OsParkingCam
 
 Additionally Needed Softwares for the Developers
 
-1. IDE used: netbeans 8.0.2 or later
+1. IDE used: netbeans 8.0.2 or later(for master branch), 
+Eclipse 2019-09 R(for eclipse branch)
 
 2. IDE augmenting Maven : apache-maven-3.3.3 or later
 
