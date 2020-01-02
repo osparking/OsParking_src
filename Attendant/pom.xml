@@ -26,7 +26,8 @@
         <dependency>
             <groupId>commons-validator</groupId>
             <artifactId>commons-validator</artifactId>
-            <version>1.4.1</version>
+            <version>1.6</version>
+            <type>jar</type>
         </dependency>
         <dependency>
             <groupId>org.jopendocument</groupId>
@@ -48,6 +49,12 @@
             <groupId>net.proteanit.sql</groupId>
             <artifactId>rs2xml</artifactId>
             <version>1.0</version>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>org.jsoup</groupId>
+            <artifactId>jsoup</artifactId>
+            <version>1.11.2</version>
             <type>jar</type>
         </dependency>
     </dependencies>       

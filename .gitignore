@@ -33,6 +33,7 @@ hs_err_pid*
 log/
 target/
 LIB/
+opencv/
 #
 #
 # current directory specific folder
